@@ -11,7 +11,13 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0"
+        "php": ">=5.6.0",
+        "slim/slim": "^3.1",
+        "slim/twig-view": "^2.0",
+        "monolog/monolog": "^1.17",
+        "wolfmoritz/session": "^1.0",
+        "erusev/parsedown": "^1.6",
+        "eoghanobrien/php-simple-mail": "^1.7",
         },
     "autoload": {
         "psr-4": {
