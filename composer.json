@@ -23,6 +23,5 @@
         "psr-4": {
             "Piton\\": "app/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
