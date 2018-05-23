@@ -5,10 +5,10 @@ $container = $app->getContainer();
 
 // Twig templates
 $container['view'] = function ($c) {
-    // Array of directories to look for templates, in order or priority
+    // Array of directories to look for templates, in order of priority
     $templatePaths = [
         ROOT_DIR . 'templates/',
-        'admin' => ROOT_DIR . 'templates/admin/',
+        'admin' => ROOT_DIR . 'vendor/pitoncms/engine/templates/admin/',
     ];
 
     $view = new Slim\Views\Twig($templatePaths, [
