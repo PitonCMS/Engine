@@ -58,4 +58,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
 ALTER TABLE `page_element`
 ADD CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE;
 
+INSERT INTO `page` (`title`,`url`,`url_locked`,`template`,`deletable`,`created_by`,`created_date`,`updated_by`,`updated_date`)
+  VALUES ('Home', 'home', 'Y', 'home.html', 'N', 1, now(), 1, now());
+
 SET FOREIGN_KEY_CHECKS=1;

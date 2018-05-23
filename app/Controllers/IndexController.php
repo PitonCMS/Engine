@@ -27,7 +27,7 @@ class IndexController extends BaseController
         }
 
         // Load page elements
-        $page->elements = $this->indexPageletKeys($PageElementMapper->findPageElementsByPageId($page->id));
+        $page->elements = $PageElementMapper->findPageElementsByPageId($page->id);
 
         // Make sure the .html file extension is appended to the template name
         $template = preg_replace('/\.html$/i', '', $page->template);

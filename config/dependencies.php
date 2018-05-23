@@ -7,7 +7,8 @@ $container = $app->getContainer();
 $container['view'] = function ($c) {
     // Array of directories to look for templates, in order of priority
     $templatePaths = [
-        ROOT_DIR . 'templates/',
+        // ROOT_DIR . 'templates/', // TODO Add theme director
+        ROOT_DIR . 'templates/default/',
         'admin' => ROOT_DIR . 'vendor/pitoncms/engine/templates/admin/',
     ];
 
