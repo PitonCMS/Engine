@@ -61,8 +61,8 @@ $app->group('/admin', function () {
 
     // Delete Page ELement
     $this->get('/deletepageelement/{id:[0-9]{0,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->deletePageELement($request, $response, $args);
-    })->setName('deletePageELement');
+        return (new Piton\Controllers\AdminPageController($this))->deletePageElement($request, $response, $args);
+    })->setName('deletePageElement');
 })->add(function ($request, $response, $next) {
     // Authentication
     $security = $this->securityHandler;

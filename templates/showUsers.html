@@ -9,7 +9,7 @@
       {% for user in users %}
       <div>
         <input type="email" name="email[]" maxlength="60" value="{{ user.email }}" autocomplete="off">
-        <a class="delete-button" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Remove User</a>
+        <a class="delete-confirm" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Remove User</a>
       </div>
       {% endfor %}
       <button type="button" class="add-user-row">Add User</button>

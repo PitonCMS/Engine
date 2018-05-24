@@ -4,29 +4,28 @@
 
   <section id="admin">
       <div class="container">
-          <div class="pagelet-edit-padding">
-              <h2 class="text-danger">Add / Edit Content</h2>
-              <h3>For the {{ pagelet.title }} Page</h3>
+          <div class="page-element-edit-padding">
+              <h2 class="text-danger">{% if element.id %}Edit{% else %}Add{% endif %} Content</h2>
+              <h3>For the {{ element.title }} Page</h3>
 
-            <form action="{{ pathFor('savePagelet') }}" method="post" accept-charset="utf-8">
-
-              <input type="hidden" name="page_id" value="{{ pagelet.page_id }}">
-              <input type="hidden" name="id" value="{{ pagelet.id }}">
+            <form action="{{ pathFor('savePageElement') }}" method="post" accept-charset="utf-8">
+              <input type="hidden" name="page_id" value="{{ element.page_id }}">
+              <input type="hidden" name="id" value="{{ element.id }}">
 
               <div class="form-group">
-                <label><h6>Section Name</h6></label>
-                <input class="form-control" type="text" name="name" maxlength="60" placeholder="Section name" value="{{ pagelet.name }}" required>
+                <label><h6>Element Name</h6></label>
+                <input class="form-control" type="text" name="name" maxlength="60" placeholder="Element name" value="{{ element.name }}" required>
               </div>
 
               <div class="form-group">
                 <label><h6>Content</h6></label>
-                <textarea class="form-control" id="mde" rows="10" name="content">{{ pagelet.content }}</textarea>
+                <textarea class="form-control mde" id="mde" rows="10" name="content_raw">{{ element.content_raw }}</textarea>
               </div>
             <div class="form-group">
               <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
               <button class="btn btn-success" type="submit" name="button">Save</button>
-              {% if pagelet.id %}
-              <a class="btn btn-danger" href="{{ pathFor('deletePagelet', {'id': pagelet.id}) }}">Delete</a>
+              {% if element.id %}
+              <a class="btn btn-danger delete-confirm" href="{{ pathFor('deletePageElement', {'id': element.id}) }}">Delete</a>
               {% endif %}
             </div>
 

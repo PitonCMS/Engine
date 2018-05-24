@@ -4,7 +4,7 @@
 
 <section id="admin">
     <div class="container">
-        <h1 class="page-title">Pages Management</h1>
+        <h1 class="page-title">Page Management</h1>
         <div class="link-container">
             <div class="menu-link">
                 <a href="{{ pathFor('editPage') }}">
@@ -31,11 +31,11 @@
             <div class>
 
                 <li>
-                    <a href="{{ pathFor('editPagelet') }}?page_id={{ p.id }}">Add Content</a>
+                    <a href="{{ pathFor('editPageElement') }}?page_id={{ p.id }}">Add Element</a>
                 </li>
-                {% for pl in p.pagelets %}
+                {% for el in p.elements %}
                 <li>
-                    <a href="{{ pathFor('editPagelet', {'id': pl.id}) }}">Edit {{ pl.name }}</a>
+                    <a href="{{ pathFor('editPageElement', {'id': el.id}) }}">Edit {{ el.name }}</a>
                 </li>
                 {% endfor %}
             </div>

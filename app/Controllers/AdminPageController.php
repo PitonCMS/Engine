@@ -28,7 +28,7 @@ class AdminPageController extends BaseController
             }
         }
 
-        return $this->container->view->render($response, '@admin/pages.html', ['pages' => $pages]);
+        return $this->container->view->render($response, '@admin/showPages.html', ['pages' => $pages]);
     }
 
     /**
@@ -88,7 +88,8 @@ class AdminPageController extends BaseController
     /**
      * Delete Page
      *
-     * Delete page. SQL Foreign Key Constraints cascade to page element records
+     * SQL Foreign Key Constraints cascade to page element records.
+     * Home page is not deletable
      */
     public function deletePage($request, $response, $args)
     {
@@ -97,8 +98,14 @@ class AdminPageController extends BaseController
         $PageMapper = $mapper('PageMapper');
 
         // Delete page
-        $page = $PageMapper->make();
-        $page->id = $args['id'];
+        $page = $PageMapper->findById($args['id']);
+
+        // Check if page is deletable
+        if ($page->deletable === 'N') {
+            return $response->withRedirect($this->container->router->pathFor('editPage', ['id' => $args['id']]));
+        }
+
+        // Delete page
         $page = $PageMapper->delete($page);
 
         // Redirect back to show pages
@@ -115,19 +122,24 @@ class AdminPageController extends BaseController
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
+        $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
 
-        // Fetch page, or create blank array
-        if ($args['id']) {
+        // Fetch page element, or create blank element
+        if (isset($args['id'])) {
             $pageElement = $PageElementMapper->findById($args['id']);
         } else {
             $pageElement = $PageElementMapper->make();
         }
 
-        // Pass in page ID if missing (new page element content)
+        // Pass in page ID if missing (for new page element content)
         if (empty($pageElement->page_id)) {
             $pageElement->page_id = $request->getQueryParam('page_id');
         }
+
+        // Get page header for display
+        $page = $PageMapper->findById($pageElement->page_id);
+        $pageElement->title = $page->title;
 
         return $this->container->view->render($response, '@admin/editPageElement.html', ['element' => $pageElement]);
     }
