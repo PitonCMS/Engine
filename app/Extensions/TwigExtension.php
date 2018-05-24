@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom Extensions for Twig
+ * Custom Piton Extensions for Twig
  */
 namespace Piton\Extensions;
 
@@ -8,11 +8,6 @@ use Interop\Container\ContainerInterface;
 
 class TwigExtension extends \Twig_Extension
 {
-    /**
-     * @var \Slim\Interfaces\RouterInterface
-     */
-    private $router;
-
     /**
      * @var string|\Slim\Http\Uri
      */
@@ -24,17 +19,20 @@ class TwigExtension extends \Twig_Extension
     private $container;
 
     /**
-     * Application Settings
-     * @var array
+     * @var Array
      */
-    private $settings = [];
+    private $pageList;
 
+    /**
+     * Constructor
+     *
+     * @param obj Interop\Container\ContainerInterface
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->router = $container['router'];
-        $this->uri = $container['request']->getUri();
+        $this->uri = $container->request->getUri();
         $this->container = $container;
-        $this->settings = $container->settings;
+        $this->pageList = $this->getPages();
     }
 
     // Identifer
@@ -49,7 +47,7 @@ class TwigExtension extends \Twig_Extension
     public function getGlobals()
     {
         return [
-            'setting' => $this->settings
+            'pageList' => $this->pageList,
         ];
     }
 
@@ -69,8 +67,8 @@ class TwigExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('pathFor', array($this, 'pathFor')),
             new \Twig_SimpleFunction('baseUrl', array($this, 'baseUrl')),
-            new \Twig_SimpleFunction('basePath', array($this, 'getBasePath')),
-            new \Twig_SimpleFunction('inUrl', array($this, 'isInUrl')),
+            new \Twig_SimpleFunction('basePath', array($this, 'basePath')),
+            new \Twig_SimpleFunction('inUrl', array($this, 'inUrl')),
             new \Twig_SimpleFunction('checked', array($this, 'checked')),
         ];
     }
@@ -85,7 +83,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function pathFor($name, $data = [], $queryParams = [])
     {
-        return $this->router->pathFor($name, $data, $queryParams);
+        return $this->container->router->pathFor($name, $data, $queryParams);
     }
 
     /**
@@ -101,9 +99,7 @@ class TwigExtension extends \Twig_Extension
             return $this->uri;
         }
 
-        if (method_exists($this->uri, 'getBaseUrl')) {
-            return $this->uri->getBaseUrl();
-        }
+        return $this->uri->getBaseUrl();
     }
 
     /**
@@ -115,11 +111,9 @@ class TwigExtension extends \Twig_Extension
      * @param void
      * @return string The base path segments
      */
-    public function getBasePath()
+    public function basePath()
     {
-        if (method_exists($this->uri, 'getBasePath')) {
-            return $this->uri->getBasePath();
-        }
+        return $this->uri->getBasePath();
     }
 
     /**
@@ -129,7 +123,7 @@ class TwigExtension extends \Twig_Extension
      * @param string $segment URL segment to find
      * @return boolean
      */
-    public function isInUrl($segmentToTest = null)
+    public function inUrl($segmentToTest = null)
     {
         // Verify we have a segment to find
         if ($segmentToTest === null) {
@@ -159,5 +153,18 @@ class TwigExtension extends \Twig_Extension
     public function checked($value = 0)
     {
         return ($value == 1 || $value == 'Y') ? 'checked="checked"' : '';
+    }
+
+    /**
+     * Get All Pages
+     *
+     * Loads all page records into global Twig array $this->pageList[]
+     */
+    protected function getPages()
+    {
+        $mapper = $this->container->dataMapper;
+        $PageMapper = $mapper('PageMapper');
+
+        return $PageMapper->find();
     }
 }
