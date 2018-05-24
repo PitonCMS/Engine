@@ -24,10 +24,10 @@ $app->group('/admin', function () {
         return (new Piton\Controllers\AdminController($this))->saveUsers($request, $response, $args);
     })->setName('saveUsers');
 
-    // Remove User
-    $this->get('/removeuser/{id:[0-9]{1,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->removeUser($request, $response, $args);
-    })->setName('removeUser');
+    // Delete User
+    $this->get('/deleteuser/{id:[0-9]{1,}}', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminController($this))->deleteUser($request, $response, $args);
+    })->setName('deleteUser');
 
     // Show All Pages
     $this->get('/pages', function ($request, $response, $args) {

@@ -57,11 +57,11 @@ class AdminController extends BaseController
     }
 
     /**
-     * Remove User
+     * Delete User
      *
-     * Remove user email to deny access
+     * Delete user email to deny access
      */
-    public function removeUser($request, $response, $args)
+    public function deleteUser($request, $response, $args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;

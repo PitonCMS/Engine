@@ -6,18 +6,13 @@
   <div class="container">
     <h2>Users</h2>
     <form action="{{ pathFor('saveUsers') }}" id="user-emails" method="post" accept-charset="utf-8">
+      {% for user in users %}
       <div>
-        Primary Account {{ users.default }}
-      </div>
-      {% for user in users.other %}
-      <div>
-        <a href="{{ pathFor('removeUser', {'id': user.id}) }}">Remove</a>
         <input type="email" name="email[]" maxlength="60" value="{{ user.email }}" autocomplete="off">
+        <a class="delete-button" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Remove User</a>
       </div>
       {% endfor %}
-      <div class="addEmail">
-        <input type="email" name="email[]" maxlength="60" value="" autocomplete="off" placeholder="Email address">
-      </div>
+      <button type="button" class="add-user-row">Add User</button>
       <button type="submit" name="button">Save</button>
     </form>
   </div>
