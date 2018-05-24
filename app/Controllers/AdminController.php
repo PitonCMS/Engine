@@ -12,7 +12,7 @@ class AdminController extends BaseController
      */
     public function home($request, $response, $args)
     {
-        return $this->container->view->render($response, '@admin/home.html', ['page' => $page]);
+        return $this->container->view->render($response, '@admin/home.html');
     }
 
     /**
@@ -28,7 +28,7 @@ class AdminController extends BaseController
         // Fetch users
         $users = $UserMapper->find();
 
-        return $this->container->view->render($response, '@admin/users.html', ['users' => $users]);
+        return $this->container->view->render($response, '@admin/showUsers.html', ['users' => $users]);
     }
 
     /**

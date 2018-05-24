@@ -1,0 +1,43 @@
+{% extends '@admin/includes/admin_base.html' %}
+
+{% block body %}
+
+<section id="admin">
+  <div class="container">
+    <h1 class="text-danger">Add / Edit a Page </h1>
+    <form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
+      <input type="hidden" name="id" value="{{ page.id }}">
+      <div>
+        <label>Title</label>
+        <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
+      </div>
+
+      <div>
+        <label>URL</label>
+        /
+        <input type="text" name="url" maxlength="500" placeholder="URL slug" value="{{ page.url }}" required>
+      </div>
+
+      <div>
+        <label>Template (TODO: Select list of template files</label>
+        /
+        <input type="text" name="template" maxlength="60" placeholder="Change to select list of files" value="{{ page.template }}">
+      </div>
+
+      <div>
+        <label>Meta Description</label>
+        <input type="text" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+      </div>
+
+      <a href="{{ pathFor('showPages') }}">Cancel</a>
+      <button type="submit" name="button">Save</button>
+      {% if page.id %}
+      <a href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
+      {% endif %}
+    </form>
+
+  </div>
+</section>
+
+
+{% endblock %}

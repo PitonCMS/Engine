@@ -29,7 +29,7 @@ class LoginController extends BaseController
      */
     public function showLoginForm($request, $response, $args)
     {
-        $this->container->view->render($response, '@admin/loginByEmailForm.html');
+        $this->container->view->render($response, '@admin/login.html');
     }
 
     /**
@@ -42,20 +42,13 @@ class LoginController extends BaseController
         // Get dependencies
         $session = $this->container->sessionHandler;
         $email = $this->container->emailHandler;
-        $config = $this->container->settings;
         $security = $this->container->securityHandler;
         $mapper = $this->container->dataMapper;
         $UserMapper = $mapper('UserMapper');
         $body = $request->getParsedBody();
 
-        // Create primary admin user from config file (user ID = 1)
-        $primaryUser = $UserMapper->make();
-        $primaryUser->id = 1;
-        $primaryUser->email = $config['user']['email'];
-
-        // Fetch other users, and append primary admin user to array
+        // Fetch all users
         $userList = $UserMapper->find();
-        $userList[] = $primaryUser;
 
         // Clean provided email
         $providedEmail = strtolower(trim($body['email']));
@@ -90,12 +83,13 @@ class LoginController extends BaseController
             // Get request details to create login link and email to user
             $scheme = $request->getUri()->getScheme();
             $host = $request->getUri()->getHost();
-            $link = $scheme . '://' . $host . $this->container->router->pathFor('processLoginToken', ['token' => $token]);
+            $link = $scheme . '://' . $host;
+            $link .= $this->container->router->pathFor('processLoginToken', ['token' => $token]);
 
             // Send message
-            $email->setFrom($config['site']['senderEmail'], $config['site']['title'])
+            $email->setFrom('send@' . $host, 'PitonCMS')
                 ->setTo($providedEmail, '')
-                ->setSubject($config['site']['title'] . ' Login')
+                ->setSubject('PitonCMS Login')
                 ->setMessage("Click to login\n\n {$link}")
                 ->send();
         }

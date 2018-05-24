@@ -1,0 +1,49 @@
+{% extends '@admin/includes/admin_base.html' %}
+
+{% block body %}
+
+<section id="admin">
+    <div class="container">
+        <h1 class="page-title">Pages Management</h1>
+        <div class="link-container">
+            <div class="menu-link">
+                <a href="{{ pathFor('editPage') }}">
+                    <i class="fas fa-plus" alt="Create Page"></i> Add New Page</a>
+            </div>
+        </div>
+
+        <h2 class="page-title">Current Pages</h2>
+        {% for p in pages %}
+        <div class="link-container">
+            <ul>
+                <li>
+                    <h4>{{ p.title }} Page</h4>
+                </li>
+                <li>
+                    <a href="{{ pathFor('editPage', {'id': p.id}) }}">Edit {{ p.title }}</a>
+                </li>
+                <li>URL: {{ p.url }}</li>
+                <li>Template: {{ p.template|default('
+                    <none>') }}</li>
+                <li> Meta Desc: {{ p.meta_description }}</li>
+            </ul>
+
+            <div class>
+
+                <li>
+                    <a href="{{ pathFor('editPagelet') }}?page_id={{ p.id }}">Add Content</a>
+                </li>
+                {% for pl in p.pagelets %}
+                <li>
+                    <a href="{{ pathFor('editPagelet', {'id': pl.id}) }}">Edit {{ pl.name }}</a>
+                </li>
+                {% endfor %}
+            </div>
+        </div>
+        <hr> {% else %}
+        <strong>No pages found</strong>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

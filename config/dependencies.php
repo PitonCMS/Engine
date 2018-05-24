@@ -9,7 +9,7 @@ $container['view'] = function ($c) {
     $templatePaths = [
         // ROOT_DIR . 'templates/', // TODO Add theme director
         ROOT_DIR . 'templates/default/',
-        'admin' => ROOT_DIR . 'vendor/pitoncms/engine/templates/admin/',
+        'admin' => ROOT_DIR . 'vendor/pitoncms/engine/templates/',
     ];
 
     $view = new Slim\Views\Twig($templatePaths, [

@@ -1,0 +1,19 @@
+{% extends 'includes/_base_layout.html' %}
+
+{% block body %}
+
+ <div id="login">
+    <div class="container mb-4">
+        <h3>Login</h3>
+          <form action="{{ pathFor('requestLoginToken') }}" method="post" accept-charset="utf-8">
+              <div class="form-group">
+                <input class="form-control" type="email" placeholder="Enter Registered Email" name="email" maxlength="60" value="" id="email-login" autofocus="autofocus" required>
+              </div>
+              <button class="btn btn-primary" type="submit" name="button" value="requestToken">Login</button>
+            </form>
+      </div>
+      <hr>
+ </div>
+
+{% endblock %}
+

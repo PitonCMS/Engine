@@ -68,6 +68,6 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     protected function renderHtmlNotFoundOutput(ServerRequestInterface $request)
     {
         // Render and return temmplate as string
-        return $this->view->fetch('default/notFound.html');
+        return $this->view->fetch('notFound.html');
     }
 }

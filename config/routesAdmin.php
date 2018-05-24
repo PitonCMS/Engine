@@ -49,20 +49,20 @@ $app->group('/admin', function () {
         return (new Piton\Controllers\AdminPageController($this))->deletePage($request, $response, $args);
     })->setName('deletePage');
 
-    // Edit Pagelet, or Create Pagelet
-    $this->get('/editpagelet[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->editPagelet($request, $response, $args);
-    })->setName('editPagelet');
+    // Edit Page Element, or Create Page Element
+    $this->get('/editpageelement[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminPageController($this))->editPageElement($request, $response, $args);
+    })->setName('editPageElement');
 
-    // Save Pagelet
-    $this->post('/savepagelet', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->savePagelet($request, $response, $args);
-    })->setName('savePagelet');
+    // Save Page Element
+    $this->post('/savepageelement', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminPageController($this))->savePageElement($request, $response, $args);
+    })->setName('savePageElement');
 
-    // Delete Pagelet
-    $this->get('/deletepagelet/{id:[0-9]{0,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->deletePagelet($request, $response, $args);
-    })->setName('deletePagelet');
+    // Delete Page ELement
+    $this->get('/deletepageelement/{id:[0-9]{0,}}', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminPageController($this))->deletePageELement($request, $response, $args);
+    })->setName('deletePageELement');
 })->add(function ($request, $response, $next) {
     // Authentication
     $security = $this->securityHandler;
@@ -99,7 +99,7 @@ $app->post('/requestlogintoken/', function ($request, $response, $args) {
 })->setName('requestLoginToken');
 
 // Accept and validate login token and set session
-$app->get('/logintoken/{token:[a-zA-Z0-9]{64}}', function ($request, $response, $args) {
+$app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($request, $response, $args) {
     return (new Piton\Controllers\LoginController($this))->processLoginToken($request, $response, $args);
 })->setName('processLoginToken');
 
