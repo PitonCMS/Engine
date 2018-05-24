@@ -43,7 +43,7 @@ class AdminPageController extends BaseController
         $PageMapper = $mapper('PageMapper');
 
         // Fetch page, or create blank array
-        if ($args['id']) {
+        if (isset($args['id'])) {
             $page = $PageMapper->findById($args['id']);
         } else {
             $page = $PageMapper->make();
@@ -69,8 +69,8 @@ class AdminPageController extends BaseController
         $page->title = $request->getParsedBodyParam('title');
         $page->template = $request->getParsedBodyParam('template');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
-        $page->url_locked = strtolower(trim($request->getParsedBodyParam('url_locked')));
-        $page->deletable = strtolower(trim($request->getParsedBodyParam('deletable')));
+        $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
+        $page->deletable = 'Y'; // TODO strtolower(trim($request->getParsedBodyParam('deletable')));
 
         // Prep URL
         $page->url = strtolower(trim($request->getParsedBodyParam('url')));
