@@ -26,8 +26,8 @@ class IndexController extends BaseController
             return $this->notFound($request, $response);
         }
 
-        // Load page elements
-        $page->elements = $PageElementMapper->findPageElementsByPageId($page->id);
+        // Add page elements
+        $page->elements = $this->indexPageElementKeys($PageElementMapper->findPageElementsByPageId($page->id));
 
         // Make sure the .html file extension is appended to the template name
         $template = preg_replace('/\.html$/i', '', $page->template);

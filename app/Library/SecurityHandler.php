@@ -2,7 +2,7 @@
 /**
  * Security Handler
  *
- * Manages Authorization and Authentication
+ * Manages Authentication
  */
 namespace Piton\Library;
 
@@ -54,7 +54,7 @@ class SecurityHandler
      */
     public function endAuthenticatedSession()
     {
-        $this->session->destroy();
+        $this->session->unsetData($this->loggedInKey);
     }
 
     /**

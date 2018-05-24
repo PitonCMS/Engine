@@ -23,31 +23,6 @@ class PageElementMapper extends DataMapperAbstract
         $this->sql .= ' where page_id = ?';
         $this->bindValues[] = $id;
 
-        $pageElements = $this->find();
-
-        // Index array
-        if ($pageElements) {
-            $pageElements = $this->indexPageElementKeys($pageElements);
-        }
-
-        return $pageElements;
-    }
-
-    /**
-     * Index Page Element Keys
-     *
-     * Accepts array of page element objects, and reindexes array using the page element name as key
-     * @param array of Piton\Models\DomainObject
-     * @return array
-     */
-    protected function indexPageElementKeys(array $elements)
-    {
-        $newArray = [];
-
-        foreach ($elements as $row) {
-            $newArray[$row->name] = $row;
-        }
-
-        return $newArray;
+        return $this->find();
     }
 }
