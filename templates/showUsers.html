@@ -1,21 +1,23 @@
-{% extends '@admin/includes/admin_base.html' %}
+{% extends '@admin/includes/_adminBase.html' %}
 
 {% block body %}
 
-<section id="admin">
-  <div class="container">
-    <h2>Users</h2>
-    <form action="{{ pathFor('saveUsers') }}" id="user-emails" method="post" accept-charset="utf-8">
-      {% for user in users %}
-      <div>
-        <input type="email" name="email[]" maxlength="60" value="{{ user.email }}" autocomplete="off">
-        <a class="delete-confirm" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Remove User</a>
+    <div class="row">
+      <div class="col">
+      <h2>Manage Users</h2>
+      <form class="jsUserForm" action="{{ pathFor('saveUsers') }}" method="post" accept-charset="utf-8">
+        {% for user in users %}
+        <div class="form-group form-inline">
+          <input type="email" class="form-control" name="email[]" maxlength="60" value="{{ user.email }}" autocomplete="off">
+          <a class="btn btn-danger ml-2 jsDeleteConfirm" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Delete User</a>
+        </div>
+        {% endfor %}
+        <button type="button" class="btn btn-success jsAddUserRow">Add User</button>
+        <hr>
+        <a class="btn btn-warning" href="{{ pathFor('adminHome') }}">Cancel</a>
+        <button type="submit" name="button" class="btn btn-primary">Save Users</button>
+      </form>
       </div>
-      {% endfor %}
-      <button type="button" class="add-user-row">Add User</button>
-      <button type="submit" name="button">Save</button>
-    </form>
-  </div>
-</section>
+    </div>
 
 {% endblock %}
