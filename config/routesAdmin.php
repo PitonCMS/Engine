@@ -63,6 +63,16 @@ $app->group('/admin', function () {
     $this->get('/deletepageelement/{id:[0-9]{0,}}', function ($request, $response, $args) {
         return (new Piton\Controllers\AdminPageController($this))->deletePageElement($request, $response, $args);
     })->setName('deletePageElement');
+
+    // Show Settings
+    $this->get('/settings', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminController($this))->showSettings($request, $response, $args);
+    })->setName('showSettings');
+
+    // Save Settings
+    $this->post('/savesettings', function ($request, $response, $args) {
+        return (new Piton\Controllers\AdminController($this))->saveSettings($request, $response, $args);
+    })->setName('saveSettings');
 })->add(function ($request, $response, $next) {
     // Authentication
     $security = $this->securityHandler;

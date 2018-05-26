@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `category` varchar(60) NOT NULL,
   `setting_key` varchar(40) NOT NULL,
   `setting_value` varchar(150) NULL DEFAULT NULL,
+  `label` varchar(60) NULL DEFAULT NULL,
+  `restricted` enum('N','Y') NOT NULL DEFAULT 'N',
   `created_by` int(11) NOT NULL DEFAULT '1',
   `created_date` datetime NOT NULL,
   `updated_by` int(11) NOT NULL DEFAULT '1',
@@ -78,7 +80,7 @@ ADD CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `pag
 INSERT INTO `page` (`title`, `url`, `url_locked`, `template`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES ('Home', 'home', 'Y', 'home.html', 'Y', 1, now(), 1, now());
 
-INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES ('site', 'theme', 'default', 1, now(), 1, now());
+INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `label`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+  VALUES ('site', 'theme', 'default', 'Theme', 1, now(), 1, now());
 
 SET FOREIGN_KEY_CHECKS=1;

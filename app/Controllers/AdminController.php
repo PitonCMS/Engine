@@ -75,4 +75,49 @@ class AdminController extends BaseController
         // Redirect back to list of users
         return $response->withRedirect($this->container->router->pathFor('showUsers'));
     }
+
+    /**
+     * Show Settings
+     *
+     * List all site configuration settings
+     */
+    public function showSettings($request, $response, $args)
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $SettingMapper = $mapper('SettingMapper');
+
+
+        // Fetch settings
+        $settings = $SettingMapper->find();
+
+        return $this->container->view->render($response, '@admin/showSettings.html', ['settings' => $settings]);
+    }
+
+    /**
+     * Save Settings
+     *
+     * Save all site configuration settings
+     */
+    public function saveSettings($request, $response, $args)
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $SettingMapper = $mapper('SettingMapper');
+
+        $allSettings = $request->getParsedBodyParam('setting');
+
+        // Save settings
+        foreach ($allSettings['category'] as $key => $row) {
+            $setting = $SettingMapper->make();
+            $setting->id = $allSettings['id'][$key];
+            $setting->category = $allSettings['category'][$key];
+            $setting->setting_key = $allSettings['setting_key'][$key];
+            $setting->setting_value = $allSettings['setting_value'][$key];
+            $SettingMapper->save($setting);
+        }
+
+        // Redirect back to list of settings
+        return $response->withRedirect($this->container->router->pathFor('showSettings'));
+    }
 }
