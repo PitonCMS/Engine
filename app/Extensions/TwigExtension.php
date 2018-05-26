@@ -47,7 +47,9 @@ class TwigExtension extends \Twig_Extension
     public function getGlobals()
     {
         return [
-            'pageList' => $this->pageList,
+            'site' => [
+                'pages' => $this->pageList,
+            ],
         ];
     }
 

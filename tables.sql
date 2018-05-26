@@ -59,10 +59,26 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   UNIQUE KEY `page_id_name_uq` (`page_id`, `name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `setting` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(60) NOT NULL,
+  `setting_key` varchar(40) NOT NULL,
+  `setting_value` varchar(150) NULL DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT '1',
+  `created_date` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL DEFAULT '1',
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `setting_category_key_idx` (`category`, `setting_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
 ALTER TABLE `page_element`
 ADD CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE;
 
-INSERT INTO `page` (`title`,`url`,`url_locked`,`template`,`deletable`,`created_by`,`created_date`,`updated_by`,`updated_date`)
+INSERT INTO `page` (`title`, `url`, `url_locked`, `template`, `deletable`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES ('Home', 'home', 'Y', 'home.html', 'N', 1, now(), 1, now());
+
+INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+  VALUES ('site', 'theme', 'default', 1, now(), 1, now());
 
 SET FOREIGN_KEY_CHECKS=1;
