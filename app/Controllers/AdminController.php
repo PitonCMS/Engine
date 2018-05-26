@@ -87,7 +87,6 @@ class AdminController extends BaseController
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
 
-
         // Fetch settings
         $settings = $SettingMapper->find();
 

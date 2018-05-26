@@ -48,7 +48,8 @@ class TwigExtension extends \Twig_Extension
     {
         return [
             'site' => [
-                'pages' => $this->pageList,
+                'pages' => $this->getPages(),
+                'setting' => $this->getSettings(),
             ],
         ];
     }
@@ -155,6 +156,27 @@ class TwigExtension extends \Twig_Extension
     public function checked($value = 0)
     {
         return ($value == 1 || $value == 'Y') ? 'checked="checked"' : '';
+    }
+
+    /**
+     * Get All Site Settings from Database
+     *
+     * Loads all site settings from setting table to global Twig array $this->pageList[]
+     */
+    protected function getSettings()
+    {
+        $mapper = $this->container->dataMapper;
+        $SettingMapper = $mapper('SettingMapper');
+
+        $settings = $SettingMapper->find();
+
+        // Create new array keyed by the setting category.key
+        $newArray = [];
+        foreach ($settings as $row) {
+            $newArray[$row->category][$row->setting_key] = $row->setting_value;
+        }
+
+        return $newArray;
     }
 
     /**
