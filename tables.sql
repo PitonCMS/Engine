@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `meta_description` varchar(320) NULL DEFAULT NULL,
   `sort` int(11) NULL DEFAULT NULL,
   `template` varchar(60) DEFAULT NULL,
-  `deletable` enum('N','Y') NOT NULL DEFAULT 'Y',
+  `restricted` enum('N','Y') NOT NULL DEFAULT 'N',
   `created_by` int(11) NOT NULL DEFAULT '1',
   `created_date` datetime NOT NULL,
   `updated_by` int(11) NOT NULL DEFAULT '1',
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
 ALTER TABLE `page_element`
 ADD CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE;
 
-INSERT INTO `page` (`title`, `url`, `url_locked`, `template`, `deletable`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES ('Home', 'home', 'Y', 'home.html', 'N', 1, now(), 1, now());
+INSERT INTO `page` (`title`, `url`, `url_locked`, `template`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+  VALUES ('Home', 'home', 'Y', 'home.html', 'Y', 1, now(), 1, now());
 
 INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES ('site', 'theme', 'default', 1, now(), 1, now());

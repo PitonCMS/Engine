@@ -7,7 +7,7 @@ namespace Piton\Models;
 class PageMapper extends DataMapperAbstract
 {
     protected $table = 'page';
-    protected $modifiableColumns = ['title', 'url', 'url_locked', 'meta_description', 'sort', 'template', 'deletable'];
+    protected $modifiableColumns = ['title', 'url', 'url_locked', 'meta_description', 'sort', 'template', 'restricted'];
 
     /**
      * Get Single Pages by URL

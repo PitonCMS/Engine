@@ -2,44 +2,46 @@
 
 {% block body %}
 
-<section id="admin">
-  <div class="container">
-    <h1 class="text-danger">{% if page.id %}Edit{% else %}Add{% endif %} Page</h1>
+  <div class="row">
+    <div class="col">
+    <h1>{% if page.id %}Edit{% else %}Add{% endif %} Page</h1>
     <form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
       <input type="hidden" name="id" value="{{ page.id }}">
-      <div>
+      <div class="form-group">
         <label>Title</label>
-        <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
+        <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
       </div>
 
-      <div>
-        <label>URL</label>
-        /{% if page.url != 'home' %}
-        <input type="text" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required>
+      <div class="form-group">
+        <label>URL /</label>
+        {% if page.url != 'home' %}
+        <input type="text" class="form-control" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required>
         {% else %}
         <span>{{ page.url }}</span>
         {% endif %}
+        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces.</small>
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Template Name</label>
-        <input type="text" name="template" maxlength="60" placeholder="Change to select list of files" value="{{ page.template }}">
+        <input type="text" class="form-control" name="template" maxlength="60" placeholder="Change to select list of files" value="{{ page.template }}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Meta Description</label>
-        <input type="text" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+        <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+        <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
       </div>
 
-      <a href="{{ pathFor('showPages') }}">Cancel</a>
-      <button type="submit" name="button">Save</button>
-      {% if page.id %}
-      <a class="delete-confirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
+      <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
+      <button class="btn btn-primary" type="submit" name="button">Save</button>
+      {% if page.id and page.restricted != 'Y' %}
+      <a class="btn btn-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
       {% endif %}
     </form>
 
+    </div>
   </div>
-</section>
 
 
 {% endblock %}

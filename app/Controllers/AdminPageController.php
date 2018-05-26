@@ -70,7 +70,7 @@ class AdminPageController extends BaseController
         $page->template = $request->getParsedBodyParam('template');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
         $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
-        $page->deletable = 'Y'; // TODO strtolower(trim($request->getParsedBodyParam('deletable')));
+        $page->restricted = 'Y'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
 
         // Prep URL
         $page->url = strtolower(trim($request->getParsedBodyParam('url')));
@@ -89,7 +89,7 @@ class AdminPageController extends BaseController
      * Delete Page
      *
      * SQL Foreign Key Constraints cascade to page element records.
-     * Home page is not deletable
+     * Home page is not restricted from being deleted
      */
     public function deletePage($request, $response, $args)
     {
@@ -100,8 +100,8 @@ class AdminPageController extends BaseController
         // Delete page
         $page = $PageMapper->findById($args['id']);
 
-        // Check if page is deletable
-        if ($page->deletable === 'N') {
+        // Check if page is restricted
+        if ($page->restricted === 'Y') {
             return $response->withRedirect($this->container->router->pathFor('editPage', ['id' => $args['id']]));
         }
 

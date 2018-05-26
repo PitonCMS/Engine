@@ -2,48 +2,32 @@
 
 {% block body %}
 
-<section id="admin">
-    <div class="container">
-        <h1 class="page-title">Page Management</h1>
-        <div class="link-container">
-            <div class="menu-link">
-                <a href="{{ pathFor('editPage') }}">
-                    <i class="fas fa-plus" alt="Create Page"></i> Add New Page</a>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col">
+    <h1>Pages</h1>
+    <a href="{{ pathFor('editPage') }}">Add Page</a>
+    <hr>
 
-        <h2 class="page-title">Current Pages</h2>
-        {% for p in pages %}
-        <div class="link-container">
-            <ul>
-                <li>
-                    <h4>{{ p.title }} Page</h4>
-                </li>
-                <li>
-                    <a href="{{ pathFor('editPage', {'id': p.id}) }}">Edit {{ p.title }}</a>
-                </li>
-                <li>URL: {{ p.url }}</li>
-                <li>Template: {{ p.template|default('
-                    <none>') }}</li>
-                <li> Meta Desc: {{ p.meta_description }}</li>
-            </ul>
-
-            <div class>
-
-                <li>
-                    <a href="{{ pathFor('editPageElement') }}?page_id={{ p.id }}">Add Element</a>
-                </li>
-                {% for el in p.elements %}
-                <li>
-                    <a href="{{ pathFor('editPageElement', {'id': el.id}) }}">Edit {{ el.name }}</a>
-                </li>
-                {% endfor %}
-            </div>
-        </div>
-        <hr> {% else %}
-        <strong>No pages found</strong>
+    {% for p in pages %}
+    <div class="card mb-4" style="width: 18rem;">
+      <div class="card-header">
+        <span class="h5 card-title">{{ p.title }}</span>
+      </div>
+      <div class="card-body">
+        <h6 class="card-text"><i>/{{ p.url }}</i></h6>
+        <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
+        <a class="card-link" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
+        <hr>
+        <a class="card-link" href="{{ pathFor('editPageElement') }}?page_id={{ p.id }}">Add Element</a>
+        {% for el in p.elements %}
+        <a class="card-link" href="{{ pathFor('editPageElement', {'id': el.id}) }}">{{ el.name }}</a>
         {% endfor %}
+      </div>
     </div>
-</section>
+    {% else %}
+    <strong>No pages found</strong>
+    {% endfor %}
+  </div>
+</div>
 
 {% endblock %}
