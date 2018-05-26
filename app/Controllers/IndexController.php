@@ -31,7 +31,7 @@ class IndexController extends BaseController
 
         // Make sure the .html file extension is appended to the template name
         $template = preg_replace('/\.html$/i', '', $page->template);
-        $template = $template . '.html';
+        $template = 'pages/' . $template . '.html';
 
         return $this->container->view->render($response, $template, ['page' => $page]);
     }
