@@ -5,12 +5,19 @@ $container = $app->getContainer();
 
 // Twig templates
 $container['view'] = function ($c) {
+    // Get theme from settings
+    $siteSettings = $c['siteSettings'];
+    $theme = $siteSettings('site', 'theme');
+
     // Array of directories to look for templates, in order of priority
-    $templatePaths = [
-        // ROOT_DIR . 'templates/', // TODO Add theme director
-        ROOT_DIR . 'templates/default/',
-        'admin' => ROOT_DIR . 'vendor/pitoncms/engine/templates/',
-    ];
+    // Start with custom theme
+    if (is_dir(ROOT_DIR . 'templates/' . $theme)) {
+        $templatePaths[] = ROOT_DIR . 'templates/' . $theme;
+    }
+
+    // Add other template directories
+    $templatePaths[] = ROOT_DIR . 'templates/default/';
+    $templatePaths['admin'] = ROOT_DIR . 'vendor/pitoncms/engine/templates/';
 
     $view = new Slim\Views\Twig($templatePaths, [
         'cache' => ROOT_DIR . 'twigcache',
@@ -95,4 +102,34 @@ $container['dataMapper'] = function ($c) {
 // Markdown parser
 $container['markdownParser'] = function ($c) {
     return new Parsedown();
+};
+
+// Load Configuration Settings from DB
+$container['siteSettings'] = function ($c) {
+    return function ($category, $key, $default = null) use ($c) {
+        static $settingsArray = [];
+
+        if (isset($settingsArray[$category][$key])) {
+            return $settingsArray[$category][$key];
+        }
+
+        // Otherwise load up settings from DB
+        $dataMapper = $c['dataMapper'];
+        $SettingMapper = $dataMapper('SettingMapper');
+
+        $settings = $SettingMapper->find();
+
+        // Create new multi-dimensional array keyed by the setting category, key
+        foreach ($settings as $row) {
+            $settingsArray[$row->category][$row->setting_key] = $row->setting_value;
+        }
+
+        // Last check to make sure the keys provided work
+        if (isset($settingsArray[$category][$key])) {
+            return $settingsArray[$category][$key];
+        }
+
+        // Have nothing to share
+        return $default;
+    };
 };

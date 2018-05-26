@@ -24,6 +24,11 @@ class TwigExtension extends \Twig_Extension
     private $pageList;
 
     /**
+     * @var Array
+     */
+    private $siteSettings;
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
@@ -33,6 +38,7 @@ class TwigExtension extends \Twig_Extension
         $this->uri = $container->request->getUri();
         $this->container = $container;
         $this->pageList = $this->getPages();
+        $this->siteSettings = $this->getSettings();
     }
 
     // Identifer
@@ -48,8 +54,8 @@ class TwigExtension extends \Twig_Extension
     {
         return [
             'site' => [
-                'pages' => $this->getPages(),
-                'setting' => $this->getSettings(),
+                'pages' => $this->pageList,
+                'setting' => $this->siteSettings,
             ],
         ];
     }
@@ -170,7 +176,7 @@ class TwigExtension extends \Twig_Extension
 
         $settings = $SettingMapper->find();
 
-        // Create new array keyed by the setting category.key
+        // Create new multi-dimensional array keyed by the setting category, key
         $newArray = [];
         foreach ($settings as $row) {
             $newArray[$row->category][$row->setting_key] = $row->setting_value;
