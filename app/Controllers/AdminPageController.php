@@ -72,7 +72,7 @@ class AdminPageController extends BaseController
         $page->template = $request->getParsedBodyParam('template');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
         $page->restricted = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
-test
+
         // Prep URL
         $page->url = strtolower(trim($request->getParsedBodyParam('url')));
         $page->url = preg_replace('/[^a-z0-9\s-]/', '', $page->url);
