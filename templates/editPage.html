@@ -14,11 +14,7 @@
 
       <div class="form-group">
         <label>URL /</label>
-        {% if page.url != 'home' %}
-        <input type="text" class="form-control" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required>
-        {% else %}
-        <span>{{ page.url }}</span>
-        {% endif %}
+        <input type="text" class="form-control" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required {% if page.url == 'home' %}readonly{% endif %}>
         <small class="form-text text-muted">Link to page. Use lowercase, with no spaces.</small>
       </div>
 

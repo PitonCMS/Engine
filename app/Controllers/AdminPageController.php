@@ -67,11 +67,12 @@ class AdminPageController extends BaseController
         $page = $PageMapper->make();
         $page->id = $request->getParsedBodyParam('id');
         $page->title = $request->getParsedBodyParam('title');
+        $page->url = $request->getParsedBodyParam('url');
+        $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
         $page->template = $request->getParsedBodyParam('template');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
-        $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
-        $page->restricted = 'Y'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
-
+        $page->restricted = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
+test
         // Prep URL
         $page->url = strtolower(trim($request->getParsedBodyParam('url')));
         $page->url = preg_replace('/[^a-z0-9\s-]/', '', $page->url);
