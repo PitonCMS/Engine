@@ -1,6 +1,6 @@
 <?php
 /**
- * Not Found Handler
+ * Piton Not Found Handler
  *
  * Extends the Slim NotFound handler
  */
@@ -45,7 +45,7 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
         // Get request URL
         $path = $request->getUri()->getPath();
 
-        // If request is for a file or image then stop
+        // If request is for a file or image then just return the 404 status and stop
         if (preg_match('/^.*\.(jpg|jpeg|png|gif)$/i', $path)) {
             return $response->withStatus(404);
         }
@@ -68,6 +68,6 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     protected function renderHtmlNotFoundOutput(ServerRequestInterface $request)
     {
         // Render and return temmplate as string
-        return $this->view->fetch('notFound.html');
+        return $this->view->fetch('pages/notFound.html');
     }
 }
