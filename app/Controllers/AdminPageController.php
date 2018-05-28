@@ -163,7 +163,7 @@ class AdminPageController extends BaseController
         $page->page_id = $request->getParsedBodyParam('page_id');
         $page->name = $request->getParsedBodyParam('name');
         $page->content_raw = $request->getParsedBodyParam('content_raw');
-        $page->content = $markdown->text($request->getParsedBodyParam('content'));
+        $page->content = $markdown->text($request->getParsedBodyParam('content_raw'));
 
         // Save
         $page = $PageElementMapper->save($page);
