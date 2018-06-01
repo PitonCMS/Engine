@@ -4,3 +4,4 @@ logs/
 twigcache/
 .sass-cache/
 *.xml
+vendor/*

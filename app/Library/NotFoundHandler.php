@@ -13,11 +13,15 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
 {
     /**
      * Twig View Handler
+     *
+     * @var \Slim\Views\Twig
      */
     protected $view;
 
     /**
      * Monolog Logger
+     *
+     * @var \Monolog\Logger
      */
     protected $logger;
 
@@ -33,7 +37,7 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     }
 
     /**
-     * Invoke not found handler
+     * Invoke not found handler as callable
      *
      * @param  ServerRequestInterface $request  The most recent Request object
      * @param  ResponseInterface      $response The most recent Response object
@@ -46,7 +50,7 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
         $path = $request->getUri()->getPath();
 
         // If request is for a file or image then just return the 404 status and stop
-        if (preg_match('/^.*\.(jpg|jpeg|png|gif)$/i', $path)) {
+        if (preg_match('/^.*\.(jpg|jpeg|png|gif|css|js)$/i', $path)) {
             return $response->withStatus(404);
         }
 
@@ -58,7 +62,7 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     }
 
     /**
-     * Return a response for text/html content not found
+     * Return a custom not found page
      *
      * @param  ServerRequestInterface $request  The most recent Request object
      * @param  ResponseInterface      $response The most recent Response object
