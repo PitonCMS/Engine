@@ -81,6 +81,6 @@ INSERT INTO `page` (`title`, `url`, `url_locked`, `template`, `restricted`, `cre
   VALUES ('Home', 'home', 'Y', 'home.html', 'Y', 1, now(), 1, now());
 
 INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `label`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES ('site', 'theme', 'default', 'Theme', 1, now(), 1, now());
+  VALUES ('global', 'theme', 'default', 'Theme', 1, now(), 1, now());
 
 SET FOREIGN_KEY_CHECKS=1;

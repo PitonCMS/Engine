@@ -21,7 +21,7 @@ class TwigExtension extends \Twig_Extension
     /**
      * @var Array
      */
-    private $pageList;
+    private $sitePages;
 
     /**
      * @var Array
@@ -37,8 +37,8 @@ class TwigExtension extends \Twig_Extension
     {
         $this->uri = $container->request->getUri();
         $this->container = $container;
-        $this->pageList = $this->getPages();
-        $this->siteSettings = $this->getSettings();
+        $this->sitePages = isset($container['settings']['pages']) ? $container['settings']['pages'] : null;
+        $this->siteSettings = isset($container['settings']['site']) ? $container['settings']['site'] : null;
     }
 
     // Identifer
@@ -54,7 +54,7 @@ class TwigExtension extends \Twig_Extension
     {
         return [
             'site' => [
-                'pages' => $this->pageList,
+                'pages' => $this->sitePages,
                 'setting' => $this->siteSettings,
             ],
         ];
@@ -162,39 +162,5 @@ class TwigExtension extends \Twig_Extension
     public function checked($value = 0)
     {
         return ($value == 1 || $value == 'Y') ? 'checked="checked"' : '';
-    }
-
-    /**
-     * Get All Site Settings from Database
-     *
-     * Loads all site settings from setting table to global Twig array $this->pageList[]
-     */
-    protected function getSettings()
-    {
-        $mapper = $this->container->dataMapper;
-        $SettingMapper = $mapper('SettingMapper');
-
-        $settings = $SettingMapper->find();
-
-        // Create new multi-dimensional array keyed by the setting category, key
-        $newArray = [];
-        foreach ($settings as $row) {
-            $newArray[$row->category][$row->setting_key] = $row->setting_value;
-        }
-
-        return $newArray;
-    }
-
-    /**
-     * Get All Pages
-     *
-     * Loads all page records into global Twig array $this->pageList[]
-     */
-    protected function getPages()
-    {
-        $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
-
-        return $PageMapper->find();
     }
 }

@@ -1,18 +1,17 @@
 <?php
 // Dependency Injection Container (DIC) Configuration
 
-$container = $app->getContainer();
-
 // Twig templates
 $container['view'] = function ($c) {
-    // Get theme from settings
-    $siteSettings = $c['siteSettings'];
-    $theme = $siteSettings('site', 'theme');
+    $settings = $c->get('settings');
 
-    // Array of directories to look for templates, in order of priority
-    // Start with custom theme
-    if (is_dir(ROOT_DIR . 'templates/' . $theme)) {
-        $templatePaths[] = ROOT_DIR . 'templates/' . $theme;
+    // Array of directories for templates, in order of priority, starting with custom theme
+    if (isset($settings['site']['global']['theme'])) {
+        $theme = $settings['site']['global']['theme'];
+
+        if (is_dir(ROOT_DIR . 'templates/' . $theme)) {
+            $templatePaths[] = ROOT_DIR . 'templates/' . $theme;
+        }
     }
 
     // Add other template directories
@@ -21,7 +20,7 @@ $container['view'] = function ($c) {
 
     $view = new Slim\Views\Twig($templatePaths, [
         'cache' => ROOT_DIR . 'twigcache',
-        'debug' => !$c->get('settings')['production'],
+        'debug' => !$settings['production'],
         'autoescape' => false,
     ]);
 
@@ -29,7 +28,7 @@ $container['view'] = function ($c) {
     $view->addExtension(new Piton\Extensions\TwigExtension($c));
 
     // Load Twig debugger if in development
-    if ($c->get('settings')['production'] === false) {
+    if ($settings['production'] === false) {
         $view->addExtension(new Twig_Extension_Debug());
     }
 
@@ -102,34 +101,4 @@ $container['dataMapper'] = function ($c) {
 // Markdown parser
 $container['markdownParser'] = function ($c) {
     return new Parsedown();
-};
-
-// Load Configuration Settings from DB
-$container['siteSettings'] = function ($c) {
-    return function ($category, $key, $default = null) use ($c) {
-        static $settingsArray = [];
-
-        if (isset($settingsArray[$category][$key])) {
-            return $settingsArray[$category][$key];
-        }
-
-        // Otherwise load up settings from DB
-        $dataMapper = $c['dataMapper'];
-        $SettingMapper = $dataMapper('SettingMapper');
-
-        $settings = $SettingMapper->find();
-
-        // Create new multi-dimensional array keyed by the setting category, key
-        foreach ($settings as $row) {
-            $settingsArray[$row->category][$row->setting_key] = $row->setting_value;
-        }
-
-        // Last check to make sure the keys provided work
-        if (isset($settingsArray[$category][$key])) {
-            return $settingsArray[$category][$key];
-        }
-
-        // Have nothing to share
-        return $default;
-    };
 };

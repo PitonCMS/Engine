@@ -22,7 +22,7 @@ class IndexController extends BaseController
         $page = $PageMapper->findPageByUrl($args['url']);
 
         // Send 404 if not found
-        if (!$page) {
+        if (!isset($page)) {
             return $this->notFound($request, $response);
         }
 

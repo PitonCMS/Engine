@@ -34,13 +34,15 @@ return call_user_func(
             $config['displayErrorDetails'] = true;
         }
 
-        // Create the application
+        // Create the Slim application and get container
         $app = new Slim\App(['settings' => $config]);
+        $container = $app->getContainer();
 
         // Load dependencies
         require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
         // Load middleware
+        require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
         // Load admin routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
