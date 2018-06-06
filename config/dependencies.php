@@ -57,7 +57,7 @@ $container['database'] = function ($c) {
     $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']};charset=utf8mb4";
 
     // Return connection
-    return new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
+    return new \PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
 };
 
 // Custom error handling (overwrite Slim errorHandler to add logging)
