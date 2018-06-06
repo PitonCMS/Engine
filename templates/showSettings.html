@@ -7,13 +7,11 @@
         <h2>Configure Site Settings</h2>
         <form class="" action="{{ pathFor('saveSettings') }}" method="post" accept-charset="utf-8">
 
-            {% for s in settings if s.category == 'site' %}
+            {% for s in settings %}
             <div class="form-group ">
                 <label>{{ s.label }}</label>
                 <input type="text" class="form-control" name="setting[setting_value][]" maxlength="60" value="{{ s.setting_value }}" autocomplete="off">
                 <input type="hidden" name="setting[id][]" value="{{ s.id }}">
-                <input type="hidden" name="setting[category][]" value="{{ s.category }}">
-                <input type="hidden" name="setting[setting_key][]" value="{{ s.setting_key }}">
             </div>
             {% endfor %}
 

@@ -107,11 +107,9 @@ class AdminController extends BaseController
         $allSettings = $request->getParsedBodyParam('setting');
 
         // Save settings
-        foreach ($allSettings['category'] as $key => $row) {
+        foreach ($allSettings['id'] as $key => $row) {
             $setting = $SettingMapper->make();
             $setting->id = $allSettings['id'][$key];
-            $setting->category = $allSettings['category'][$key];
-            $setting->setting_key = $allSettings['setting_key'][$key];
             $setting->setting_value = $allSettings['setting_value'][$key];
             $SettingMapper->save($setting);
         }

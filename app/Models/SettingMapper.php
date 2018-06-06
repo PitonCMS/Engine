@@ -7,7 +7,7 @@ namespace Piton\Models;
 class SettingMapper extends DataMapperAbstract
 {
     protected $table = 'setting';
-    protected $modifiableColumns = ['category', 'setting_key', 'setting_value'];
+    protected $modifiableColumns = ['setting_value'];
 
     /**
      * Insert a Record
