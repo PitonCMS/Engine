@@ -92,6 +92,12 @@ class TwigExtension extends \Twig_Extension
      */
     public function pathFor($name, $data = [], $queryParams = [])
     {
+        // The `pathfor('showPage', {'url': 'home'})` route should be an alias for `pathFor('home')`
+        if ($name === 'showPage' && isset($data['url']) && $data['url'] === 'home') {
+            $name = 'home';
+            unset($data['url']);
+        }
+
         return $this->container->router->pathFor($name, $data, $queryParams);
     }
 
