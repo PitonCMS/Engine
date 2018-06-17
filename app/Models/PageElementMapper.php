@@ -7,20 +7,19 @@ namespace Piton\Models;
 class PageElementMapper extends DataMapperAbstract
 {
     protected $table = 'page_element';
-    protected $modifiableColumns = ['page_id', 'name', 'content_raw', 'content'];
+    protected $modifiableColumns = ['page_section_id', 'name', 'title', 'content_raw', 'content'];
 
     /**
-     * Get Pages Elements by Page ID
+     * Get Pages Elements by Page Section ID
      *
-     * Returns associative array of domain objects, indexed by page_element.name
      * @param int Page ID
      * @return mixed
      */
-    public function findPageElementsByPageId($id)
+    public function findPageElementsByPageSectionId($id)
     {
         // Get page headers
         $this->makeSelect();
-        $this->sql .= ' where page_id = ?';
+        $this->sql .= ' where page_section_id = ?';
         $this->bindValues[] = $id;
 
         return $this->find();

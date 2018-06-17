@@ -71,6 +71,12 @@ abstract class DataMapperAbstract
     protected static $dbh;
 
     /**
+     * PDO Fetch Mode
+     * @var PDO Fetch Mode Constant
+     */
+    protected $fetchMode = PDO::FETCH_CLASS;
+
+    /**
      * Session User ID
      * @var Int
      */
@@ -267,6 +273,7 @@ abstract class DataMapperAbstract
     {
         $this->sql = null;
         $this->bindValues = [];
+        $this->fetchMode = PDO::FETCH_CLASS;
     }
 
     /**
@@ -506,7 +513,11 @@ abstract class DataMapperAbstract
 
         // If a select statement was executed, set fetch mode
         if (stristr($this->sql, 'select')) {
-            $this->statement->setFetchMode(PDO::FETCH_CLASS, __NAMESPACE__ . '\\' . $this->domainObjectClass);
+            if ($this->fetchMode === PDO::FETCH_CLASS) {
+                $this->statement->setFetchMode($this->fetchMode, __NAMESPACE__ . '\\' . $this->domainObjectClass);
+            } else {
+                $this->statement->setFetchMode($this->fetchMode);
+            }
         }
 
         return $outcome;

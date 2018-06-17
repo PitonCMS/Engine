@@ -6,8 +6,9 @@ $container['view'] = function ($c) {
     $settings = $c->get('settings');
 
     // Array of directories for templates, in order of priority, starting with custom theme
-    if (isset($settings['site']['global']['theme'])) {
-        $theme = $settings['site']['global']['theme'];
+    $templatePaths = [];
+    if (isset($settings['site']['theme'])) {
+        $theme = $settings['site']['theme'];
 
         if (is_dir(ROOT_DIR . 'templates/' . $theme)) {
             $templatePaths[] = ROOT_DIR . 'templates/' . $theme;

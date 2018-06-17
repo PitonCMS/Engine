@@ -16,23 +16,15 @@ class IndexController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
 
         // Fetch pages
-        $page = $PageMapper->findPageByUrl($args['url']);
+        $page = $PageMapper->findPageData($args['url']);
 
         // Send 404 if not found
         if (!isset($page)) {
             return $this->notFound($request, $response);
         }
 
-        // Add page elements
-        $page->elements = $this->indexPageElementKeys($PageElementMapper->findPageElementsByPageId($page->id));
-
-        // Make sure the .html file extension is appended to the template name
-        $template = preg_replace('/\.html$/i', '', $page->template);
-        $template = 'pages/' . $template . '.html';
-
-        return $this->container->view->render($response, $template, ['page' => $page]);
+        return $this->container->view->render($response, 'pages/' . $page['template'], ['page' => $page]);
     }
 }

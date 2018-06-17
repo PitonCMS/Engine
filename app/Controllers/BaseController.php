@@ -37,28 +37,4 @@ class BaseController
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($request, $response);
     }
-
-    /**
-     * Index Page Element Keys
-     *
-     * Accepts array of page element objects, and returns associative array using the page element name as key
-     * @param array of Piton\Models\DomainObject
-     * @return array
-     */
-    protected function indexPageElementKeys(array $elements)
-    {
-        $newArray = [];
-
-        // Check if we have something to process
-        if (empty($elements)) {
-            return $elements;
-        }
-
-        // Create associative array
-        foreach ($elements as $row) {
-            $newArray[$row->name] = $row;
-        }
-
-        return $newArray;
-    }
 }

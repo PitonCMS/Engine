@@ -6,7 +6,7 @@ namespace Piton\Extensions;
 
 use Interop\Container\ContainerInterface;
 
-class TwigExtension extends \Twig_Extension
+class TwigExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * @var string|\Slim\Http\Uri
@@ -55,7 +55,7 @@ class TwigExtension extends \Twig_Extension
         return [
             'site' => [
                 'pages' => $this->sitePages,
-                'setting' => $this->siteSettings,
+                'settings' => $this->siteSettings,
             ],
         ];
     }

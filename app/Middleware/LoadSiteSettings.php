@@ -78,7 +78,7 @@ class LoadSiteSettings
 
         // Create new multi-dimensional array keyed by the setting category and key
         foreach ($siteSettings as $row) {
-            $this->settings[$row->category][$row->setting_key] = $row->setting_value;
+            $this->settings[$row->setting_key] = $row->setting_value;
         }
     }
 
@@ -98,8 +98,9 @@ class LoadSiteSettings
 
         // Build pages array with necessary data
         foreach ($pages as $row) {
-            $this->pages[] = [
-                'id' =>$row->id,
+            $this->pages[$row->name] = [
+                'id' => $row->id,
+                'name' => $row->name,
                 'title' =>$row->title,
                 'url' =>$row->url,
                 'meta_description' =>$row->meta_description,
