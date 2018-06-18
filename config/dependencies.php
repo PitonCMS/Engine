@@ -101,5 +101,5 @@ $container['dataMapper'] = function ($c) {
 
 // Markdown parser
 $container['markdownParser'] = function ($c) {
-    return new Parsedown();
+    return new Piton\Extensions\MDParser();
 };
