@@ -167,6 +167,6 @@ class TwigExtension extends \Twig_Extension implements \Twig_Extension_GlobalsIn
      */
     public function checked($value = 0)
     {
-        return ($value == 1 || $value == 'Y') ? 'checked="checked"' : '';
+        return ($value == 1 || $value == 'Y') ? 'checked' : '';
     }
 }
