@@ -14,74 +14,88 @@ $app->group('/admin', function () {
         return (new Piton\Controllers\AdminController($this))->home($request, $response, $args);
     })->setName('adminHome');
 
-    // Show Users
-    $this->get('/users', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->showUsers($request, $response, $args);
-    })->setName('showUsers');
+    // User routes
+    $this->group('/user', function() {
+        // Show Users
+        $this->get('[/]', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminController($this))->showUsers($request, $response, $args);
+        })->setName('showUsers');
 
-    // Save Users
-    $this->post('/saveusers', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->saveUsers($request, $response, $args);
-    })->setName('saveUsers');
+        // Save Users
+        $this->post('/save', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminController($this))->saveUsers($request, $response, $args);
+        })->setName('saveUsers');
 
-    // Delete User
-    $this->get('/deleteuser/{id:[0-9]{1,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->deleteUser($request, $response, $args);
-    })->setName('deleteUser');
+        // Delete User
+        $this->get('/delete/{id:[0-9]{1,}}', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminController($this))->deleteUser($request, $response, $args);
+        })->setName('deleteUser');
+    });
+    // End user routes
 
-    // Show All Pages
-    $this->get('/pages', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->showPages($request, $response, $args);
-    })->setName('showPages');
+    // Page route
+    $this->group('/page', function() {
+        // Show All Pages
+        $this->get('[/]', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminPageController($this))->showPages($request, $response, $args);
+        })->setName('showPages');
 
-    // Edit Page, or Create Page
-    $this->get('/editpage[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->editPage($request, $response, $args);
-    })->setName('editPage');
+        // Edit Page, or Create Page
+        $this->get('/edit[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminPageController($this))->editPage($request, $response, $args);
+        })->setName('editPage');
 
-    // Save Page
-    $this->post('/savepage', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->savePage($request, $response, $args);
-    })->setName('savePage');
+        // Save Page
+        $this->post('/save', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminPageController($this))->savePage($request, $response, $args);
+        })->setName('savePage');
 
-    // Delete Page
-    $this->get('/deletepage/{id:[0-9]{0,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->deletePage($request, $response, $args);
-    })->setName('deletePage');
+        // Delete Page
+        $this->get('/delete/{id:[0-9]{0,}}', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminPageController($this))->deletePage($request, $response, $args);
+        })->setName('deletePage');
 
-    // Edit Page Element, or Create Page Element
-    $this->get('/editpageelement[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->editPageElement($request, $response, $args);
-    })->setName('editPageElement');
+        // Page elements
+        $this->group('/element', function () {
+            // Edit Page Element, or Create Page Element
+            $this->get('/edit[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
+                return (new Piton\Controllers\AdminPageController($this))->editPageElement($request, $response, $args);
+            })->setName('editPageElement');
 
-    // Save Page Element
-    $this->post('/savepageelement', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->savePageElement($request, $response, $args);
-    })->setName('savePageElement');
+            // Save Page Element
+            $this->post('/save', function ($request, $response, $args) {
+                return (new Piton\Controllers\AdminPageController($this))->savePageElement($request, $response, $args);
+            })->setName('savePageElement');
 
-    // Delete Page ELement
-    $this->get('/deletepageelement/{id:[0-9]{0,}}', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminPageController($this))->deletePageElement($request, $response, $args);
-    })->setName('deletePageElement');
+            // Delete Page ELement
+            $this->get('/delete/{id:[0-9]{0,}}', function ($request, $response, $args) {
+                return (new Piton\Controllers\AdminPageController($this))->deletePageElement($request, $response, $args);
+            })->setName('deletePageElement');
+        });
+        // End page elements
+    });
+    // End page routes
 
-    // Show Settings
-    $this->get('/settings', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->showSettings($request, $response, $args);
-    })->setName('showSettings');
+    // Settings
+    $this->group('/settings', function () {
+        // Show Settings
+        $this->get('[/]', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminController($this))->showSettings($request, $response, $args);
+        })->setName('showSettings');
 
-    // Save Settings
-    $this->post('/savesettings', function ($request, $response, $args) {
-        return (new Piton\Controllers\AdminController($this))->saveSettings($request, $response, $args);
-    })->setName('saveSettings');
+        // Save Settings
+        $this->post('/save', function ($request, $response, $args) {
+            return (new Piton\Controllers\AdminController($this))->saveSettings($request, $response, $args);
+        })->setName('saveSettings');
+    });
+    // End settings
 })->add(function ($request, $response, $next) {
     // Authentication
     $security = $this->securityHandler;
 
     if (!$security->isAuthenticated()) {
-        // Failed authentication, redirect away
-        $notFound = $this->notFoundHandler;
-
-        return $notFound($request, $response);
+        // Failed authentication, redirect to login
+        return $response->withRedirect($this->router->pathFor('showLoginForm'));
     }
 
     // Next call

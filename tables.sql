@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `session` (
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL,
-  `admin` enum('N','Y') NOT NULL DEFAULT 'N',
+  `role` char(1) NULL DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT '1',
   `created_date` datetime NOT NULL,
   `updated_by` int(11) NOT NULL DEFAULT '1',
