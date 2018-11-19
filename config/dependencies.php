@@ -26,7 +26,9 @@ $container['view'] = function ($c) {
     ]);
 
     // Custom Twig Extensions
-    $view->addExtension(new Piton\Extensions\PitonTwigBaseExtension($c));
+    // TODO Load Admin/Site extension conditionally based on route at this point the app lifecycle?
+    $view->addExtension(new Piton\Extensions\PitonTwigAdminExtension($c));
+    // $view->addExtension(new Piton\Extensions\PitonTwigSiteExtension($c));
 
     // Load Twig debugger if in development
     if ($settings['production'] === false) {

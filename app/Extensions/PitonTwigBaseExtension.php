@@ -1,6 +1,8 @@
 <?php
 /**
- * Custom Piton Extensions for Twig
+ * Custom Piton Base Extension for Twig
+ *
+ * Has core Twig properties and functions used on public and on admin sites.
  */
 namespace Piton\Extensions;
 
