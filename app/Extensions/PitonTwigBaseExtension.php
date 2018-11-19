@@ -6,7 +6,7 @@ namespace Piton\Extensions;
 
 use Interop\Container\ContainerInterface;
 
-class TwigExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class PitonTwigBaseExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * @var string|\Slim\Http\Uri

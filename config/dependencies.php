@@ -26,7 +26,7 @@ $container['view'] = function ($c) {
     ]);
 
     // Custom Twig Extensions
-    $view->addExtension(new Piton\Extensions\TwigExtension($c));
+    $view->addExtension(new Piton\Extensions\PitonTwigBaseExtension($c));
 
     // Load Twig debugger if in development
     if ($settings['production'] === false) {
