@@ -44,6 +44,8 @@ class AdminSettingController extends BaseController
             $setting->id = $allSettings['id'][$key];
             $setting->setting_value = $allSettings['setting_value'][$key];
             $SettingMapper->save($setting);
+
+            // TODO If changing themes, copy assets folder to public/theme
         }
 
         // Redirect back to list of settings

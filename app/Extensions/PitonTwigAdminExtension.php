@@ -38,18 +38,28 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
     public function getFunctions()
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('adminSomething', array($this, 'adminSomething')),
+            new \Twig_SimpleFunction('getThemes', array($this, 'getThemes')),
         ]);
     }
 
     /**
-     * Get Path for Named Route
+     * Get Array of Themes
      *
      * @param none
-     * @return string
+     * @return array
      */
-    public function adminSomething()
+    public function getThemes()
     {
-        return 'Admin';
+        $themes = ['default'];
+        foreach(new \DirectoryIterator(ROOT_DIR . 'templates/') as $dirObject) {
+            // Ignore dot files, and skip default theme as we will force that option to the top
+            if(!$dirObject->isDir() || $dirObject->isDot() || $dirObject->getFilename() === 'default') {
+                continue;
+            }
+
+            $themes[] = $dirObject->getFilename();
+        }
+
+        return $themes;
     }
 }

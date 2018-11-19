@@ -8,11 +8,25 @@
         <form class="" action="{{ pathFor('saveSettings') }}" method="post" accept-charset="utf-8">
 
             {% for s in settings %}
+            {% if s.setting_key == 'theme' %}
+            <div class="form-group">
+              <label>{{ s.label }}</label>
+              <input type="hidden" name="setting[id][]" value="{{ s.id }}">
+              <input type="hidden" name="setting[originalValue][]" value="{{ s.setting_value }}">
+              <select class="form-control" name="setting[setting_value][]">
+                {% for t in getThemes() %}
+                <option value="{{ t }}" {% if t == s.setting_value %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            {% else %}
+
             <div class="form-group ">
                 <label>{{ s.label }}</label>
                 <input type="text" class="form-control" name="setting[setting_value][]" maxlength="60" value="{{ s.setting_value }}" autocomplete="off">
                 <input type="hidden" name="setting[id][]" value="{{ s.id }}">
             </div>
+            {% endif %}
             {% endfor %}
 
           <a class="btn btn-warning" href="{{ pathFor('adminHome') }}">Cancel</a>
