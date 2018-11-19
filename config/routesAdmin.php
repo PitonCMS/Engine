@@ -18,17 +18,17 @@ $app->group('/admin', function () {
     $this->group('/user', function() {
         // Show Users
         $this->get('[/]', function ($request, $response, $args) {
-            return (new Piton\Controllers\AdminController($this))->showUsers($request, $response, $args);
+            return (new Piton\Controllers\AdminUserController($this))->showUsers($request, $response, $args);
         })->setName('showUsers');
 
         // Save Users
         $this->post('/save', function ($request, $response, $args) {
-            return (new Piton\Controllers\AdminController($this))->saveUsers($request, $response, $args);
+            return (new Piton\Controllers\AdminUserController($this))->saveUsers($request, $response, $args);
         })->setName('saveUsers');
 
         // Delete User
         $this->get('/delete/{id:[0-9]{1,}}', function ($request, $response, $args) {
-            return (new Piton\Controllers\AdminController($this))->deleteUser($request, $response, $args);
+            return (new Piton\Controllers\AdminUserController($this))->deleteUser($request, $response, $args);
         })->setName('deleteUser');
     });
     // End user routes
@@ -80,12 +80,12 @@ $app->group('/admin', function () {
     $this->group('/settings', function () {
         // Show Settings
         $this->get('[/]', function ($request, $response, $args) {
-            return (new Piton\Controllers\AdminController($this))->showSettings($request, $response, $args);
+            return (new Piton\Controllers\AdminSettingController($this))->showSettings($request, $response, $args);
         })->setName('showSettings');
 
         // Save Settings
         $this->post('/save', function ($request, $response, $args) {
-            return (new Piton\Controllers\AdminController($this))->saveSettings($request, $response, $args);
+            return (new Piton\Controllers\AdminSettingController($this))->saveSettings($request, $response, $args);
         })->setName('saveSettings');
     });
     // End settings
