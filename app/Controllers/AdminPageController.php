@@ -24,7 +24,7 @@ class AdminPageController extends BaseController
         // If we found pages, then loop through to get page elements
         if ($pages) {
             foreach ($pages as $key => $row) {
-                $pages[$key]->elements = $PageElementMapper->findPageElementsByPageId($row->id);
+                $pages[$key]->elements = $PageElementMapper->findPageElementsByPageSectionId($row->id);
             }
         }
 
