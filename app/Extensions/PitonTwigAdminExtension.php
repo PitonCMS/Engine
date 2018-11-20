@@ -51,7 +51,7 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
     public function getThemes()
     {
         $themes = ['default'];
-        foreach(new \DirectoryIterator(ROOT_DIR . 'templates/') as $dirObject) {
+        foreach(new \DirectoryIterator(ROOT_DIR . 'themes/') as $dirObject) {
             // Ignore dot files, and skip default theme as we will force that option to the top
             if(!$dirObject->isDir() || $dirObject->isDot() || $dirObject->getFilename() === 'default') {
                 continue;

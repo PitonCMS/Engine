@@ -10,13 +10,13 @@ $container['view'] = function ($c) {
     if (isset($settings['site']['theme'])) {
         $theme = $settings['site']['theme'];
 
-        if (is_dir(ROOT_DIR . 'templates/' . $theme)) {
-            $templatePaths[] = ROOT_DIR . 'templates/' . $theme;
+        if (is_dir(ROOT_DIR . 'themes/' . $theme . '/templates/')) {
+            $templatePaths[] = ROOT_DIR . 'themes/' . $theme . '/templates/';
         }
     }
 
     // Add other template directories
-    $templatePaths[] = ROOT_DIR . 'templates/default/';
+    $templatePaths[] = ROOT_DIR . 'themes/default/templates/';
     $templatePaths['admin'] = ROOT_DIR . 'vendor/pitoncms/engine/templates/';
 
     $view = new Slim\Views\Twig($templatePaths, [
