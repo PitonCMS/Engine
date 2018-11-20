@@ -13,22 +13,22 @@ class PitonTwigBaseExtension extends \Twig_Extension implements \Twig_Extension_
     /**
      * @var string|\Slim\Http\Uri
      */
-    private $uri;
+    protected $uri;
 
     /**
      * @var Interop\Container\ContainerInterface
      */
-    private $container;
+    protected $container;
 
     /**
      * @var Array
      */
-    private $sitePages;
+    protected $sitePages;
 
     /**
      * @var Array
      */
-    private $siteSettings;
+    protected $siteSettings;
 
     /**
      * Constructor

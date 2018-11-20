@@ -24,11 +24,16 @@ $container['view'] = function ($c) {
         'debug' => !$settings['production'],
         'autoescape' => false,
     ]);
+    $currentPath = $c->request->getUri()->getPath();
+
 
     // Custom Twig Extensions
-    // TODO Load Admin/Site extension conditionally based on route at this point the app lifecycle?
-    $view->addExtension(new Piton\Extensions\PitonTwigAdminExtension($c));
-    // $view->addExtension(new Piton\Extensions\PitonTwigSiteExtension($c));
+    // TODO Is this a useless optimization to separate backend from frontend Twig extensions?
+    if (substr($currentPath, 0, 6) === '/admin') {
+        $view->addExtension(new Piton\Extensions\PitonTwigAdminExtension($c));
+    } else {
+        $view->addExtension(new Piton\Extensions\PitonTwigSiteExtension($c));
+    }
 
     // Load Twig debugger if in development
     if ($settings['production'] === false) {
