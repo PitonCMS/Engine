@@ -94,17 +94,8 @@ class LoadSiteSettings
         $PageMapper = $dataMapper('PageMapper');
 
         // Fetch all settings
-        $pages = $PageMapper->find();
+        $this->pages = $PageMapper->find();
 
-        // Build pages array with necessary data
-        foreach ($pages as $row) {
-            $this->pages[$row->name] = [
-                'id' => $row->id,
-                'name' => $row->name,
-                'title' =>$row->title,
-                'url' =>$row->url,
-                'meta_description' =>$row->meta_description,
-            ];
-        }
+        return;
     }
 }

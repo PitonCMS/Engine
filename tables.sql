@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sort` int(11) NULL DEFAULT '1',
-  `name` varchar(60) NOT NULL,
+  `name` varchar(60) NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `url` varchar(150) NOT NULL,
   `url_locked` enum('N','Y') NOT NULL DEFAULT 'N',
