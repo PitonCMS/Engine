@@ -15,12 +15,16 @@
       <div class="form-group">
         <label>URL /</label>
         <input type="text" class="form-control" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required {% if page.url == 'home' %}readonly{% endif %}>
-        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces.</small>
+        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL is restricted from being changed.</small>
       </div>
 
       <div class="form-group">
-        <label>Template Name</label>
-        <input type="text" class="form-control" name="template" maxlength="60" placeholder="Change to select list of files" value="{{ page.template }}">
+        <label>Page Layout</label>
+        <select class="form-control" name="layout" value="{{ page.layout }}">
+          {% for pl in page.themeLayouts %}
+          <option value="{{ pl }}" {%if pl == page.layout %}selected{% endif %}>{{ pl }}</option>
+          {% endfor %}
+        </select>
       </div>
 
       <div class="form-group">

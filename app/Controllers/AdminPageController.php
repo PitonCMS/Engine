@@ -41,6 +41,7 @@ class AdminPageController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
+        $settings = $this->container->get('settings');
 
         // Fetch page, or create blank array
         if (isset($args['id'])) {
@@ -48,6 +49,24 @@ class AdminPageController extends BaseController
         } else {
             $page = $PageMapper->make();
         }
+
+        // Get layout templates
+        $layouts = [];
+        $ignoreLayouts = ['notFound.html','_base_layout.html'];
+        foreach(new \DirectoryIterator(ROOT_DIR . 'themes/' . $settings['site']['theme'] . '/templates/layouts/') as $dirObject) {
+            if(
+                $dirObject->isDir() ||
+                $dirObject->isDot() ||
+                substr($dirObject->getFilename(), 0, 1) === '.' ||
+                in_array($dirObject->getFilename(), $ignoreLayouts)
+            ) {
+                continue;
+            }
+
+            $layouts[] = $dirObject->getFilename();
+        }
+
+        $page->themeLayouts = $layouts;
 
         return $this->container->view->render($response, '@admin/editPage.html', ['page' => $page]);
     }
@@ -69,7 +88,7 @@ class AdminPageController extends BaseController
         $page->title = $request->getParsedBodyParam('title');
         $page->url = $request->getParsedBodyParam('url');
         $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
-        $page->template = $request->getParsedBodyParam('template');
+        $page->layout = $request->getParsedBodyParam('layout');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
         $page->restricted = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
 

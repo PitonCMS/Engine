@@ -25,6 +25,6 @@ class IndexController extends BaseController
             return $this->notFound($request, $response);
         }
 
-        return $this->container->view->render($response, 'layouts/' . $page['template'], ['page' => $page]);
+        return $this->container->view->render($response, 'layouts/' . $page['layout'], ['page' => $page]);
     }
 }

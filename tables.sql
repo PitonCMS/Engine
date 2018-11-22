@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `url` varchar(150) NOT NULL,
   `url_locked` enum('N','Y') NOT NULL DEFAULT 'N',
   `meta_description` varchar(320) NULL DEFAULT NULL,
-  `template` varchar(60) DEFAULT NULL,
+  `layout` varchar(60) DEFAULT NULL,
   `restricted` enum('N','Y') NOT NULL DEFAULT 'N',
   `created_by` int(11) NOT NULL DEFAULT '1',
   `created_date` datetime NOT NULL,

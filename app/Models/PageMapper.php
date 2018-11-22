@@ -14,7 +14,7 @@ class PageMapper extends DataMapperAbstract
         'url_locked',
         'meta_description',
         'sort',
-        'template',
+        'layout',
         'restricted'
     ];
 
@@ -51,7 +51,7 @@ select
     p.title,
     p.url,
     p.meta_description,
-    p.template,
+    p.layout,
     p.restricted,
     ps.id section_id,
     ps.name section_name,
@@ -106,7 +106,7 @@ SQL;
         $page['name'] = $data[0]['name'];
         $page['url'] = $data[0]['url'];
         $page['meta_description'] = $data[0]['meta_description'];
-        $page['template'] = $data[0]['template'];
+        $page['layout'] = $data[0]['layout'];
         $page['restricted'] = $data[0]['restricted'];
 
         // Loop through remainder of data to assign sections and elements
