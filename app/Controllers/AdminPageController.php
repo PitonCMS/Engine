@@ -16,17 +16,9 @@ class AdminPageController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
 
         // Fetch pages
         $pages = $PageMapper->find();
-
-        // If we found pages, then loop through to get page elements
-        if ($pages) {
-            foreach ($pages as $key => $row) {
-                $pages[$key]->elements = $PageElementMapper->findPageElementsByPageSectionId($row->id);
-            }
-        }
 
         return $this->container->view->render($response, '@admin/showPages.html', ['pages' => $pages]);
     }
@@ -41,32 +33,25 @@ class AdminPageController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
+        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
         $settings = $this->container->get('settings');
 
-        // Fetch page, or create blank array
-        if (isset($args['id'])) {
+        // Fetch page, or create new page
+        if (is_numeric($args['id'])) {
             $page = $PageMapper->findById($args['id']);
-        } else {
+            $page->elements = $PageSectionElementMapper->getSectionElementsByPageId($args['id']);
+        } elseif (is_string($args['id'])) {
+            // New page
             $page = $PageMapper->make();
+            $page->layout = $args['id'] . '.html';
         }
 
-        // Get layout templates
-        $layouts = [];
-        $ignoreLayouts = ['notFound.html','_base_layout.html'];
-        foreach(new \DirectoryIterator(ROOT_DIR . 'themes/' . $settings['site']['theme'] . '/templates/layouts/') as $dirObject) {
-            if(
-                $dirObject->isDir() ||
-                $dirObject->isDot() ||
-                substr($dirObject->getFilename(), 0, 1) === '.' ||
-                in_array($dirObject->getFilename(), $ignoreLayouts)
-            ) {
-                continue;
-            }
-
-            $layouts[] = $dirObject->getFilename();
-        }
-
-        $page->themeLayouts = $layouts;
+        // Get page definition
+        // TODO Handle error if no layout json file found
+        $layout = pathinfo($page->layout, PATHINFO_FILENAME);
+        $layoutDefintion = ROOT_DIR . 'themes/' . $settings['site']['theme'] . '/templates/layouts/' . $layout . '.json';
+        $pageDefinition = file_get_contents($layoutDefintion);
+        $page->definition = json_decode($pageDefinition, true);
 
         return $this->container->view->render($response, '@admin/editPage.html', ['page' => $page]);
     }
@@ -81,16 +66,17 @@ class AdminPageController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
+        $PageElementMapper = $mapper('PageElementMapper');
+        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
+        $markdown = $this->container->markdownParser;
 
-        // Create page
+        // Create page object and populate POST data
         $page = $PageMapper->make();
         $page->id = $request->getParsedBodyParam('id');
         $page->title = $request->getParsedBodyParam('title');
-        $page->url = $request->getParsedBodyParam('url');
         $page->url_locked = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('url_locked')));
         $page->layout = $request->getParsedBodyParam('layout');
         $page->meta_description = $request->getParsedBodyParam('meta_description');
-        $page->restricted = 'N'; // TODO strtolower(trim($request->getParsedBodyParam('restricted')));
 
         // Prep URL
         $page->url = strtolower(trim($request->getParsedBodyParam('url')));
@@ -98,8 +84,32 @@ class AdminPageController extends BaseController
         $page->url = preg_replace('/[\s-]+/', ' ', $page->url);
         $page->url = preg_replace('/[\s]/', '-', $page->url);
 
-        // Save
+        // Save Page and get ID
         $page = $PageMapper->save($page);
+
+        // Save page section elements
+        foreach ($request->getParsedBodyParam('section_name') as $key => $value) {
+            // Save element
+            $pageElement = $PageElementMapper->make();
+            $pageElement->id = $request->getParsedBodyParam('element_id')[$key];
+            $pageElement->element_type = $request->getParsedBodyParam('element_type')[$key];
+            $pageElement->title = $request->getParsedBodyParam('element_title')[$key];
+            $pageElement->content_raw = $request->getParsedBodyParam('content_raw')[$key];
+            $pageElement->content = $markdown->text($request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->collection_id = $request->getParsedBodyParam('collection_id')[$key];
+            $pageElement->media_id = $request->getParsedBodyParam('media_id')[$key];
+            $pageElement->media_path = $request->getParsedBodyParam('media_path')[$key];
+            $pageElement = $PageElementMapper->save($pageElement);
+
+            // Save section element map
+            $pageSectionElementMap = $PageSectionElementMapper->make();
+            $pageSectionElementMap->id = $request->getParsedBodyParam('section_element_id')[$key];
+            $pageSectionElementMap->page_id = $page->id;
+            $pageSectionElementMap->section_name = $request->getParsedBodyParam('section_name')[$key];
+            $pageSectionElementMap->element_id = $pageElement->id;
+            $pageSectionElementMap->element_sort = $request->getParsedBodyParam('element_sort')[$key];
+            $PageSectionElementMapper->save($pageSectionElementMap);
+        }
 
         // Redirect back to show page
         return $response->withRedirect($this->container->router->pathFor('showPages'));
@@ -108,7 +118,6 @@ class AdminPageController extends BaseController
     /**
      * Delete Page
      *
-     * SQL Foreign Key Constraints cascade to page element records.
      * Home page is not restricted from being deleted
      */
     public function deletePage($request, $response, $args)
@@ -116,96 +125,58 @@ class AdminPageController extends BaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
-
-        // Delete page
-        $page = $PageMapper->findById($args['id']);
-
-        // Check if page is restricted
-        if ($page->restricted === 'Y') {
-            return $response->withRedirect($this->container->router->pathFor('editPage', ['id' => $args['id']]));
-        }
+        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
 
         // Delete page
         $page = $PageMapper->delete($page);
 
-        // Redirect back to show pages
-        return $response->withRedirect($this->container->router->pathFor('showPages'));
-    }
-
-    /**
-     * Edit Element Content
-     *
-     * Edit new page element, or edit existing page element
-     * Query by page_element.id, or create new content by passing in the page_id
-     */
-    public function editPageElement($request, $response, $args)
-    {
-        // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
-
-        // Fetch page element, or create blank element
-        if (isset($args['id'])) {
-            $pageElement = $PageElementMapper->findById($args['id']);
-        } else {
-            $pageElement = $PageElementMapper->make();
-        }
-
-        // Pass in page ID if missing (for new page element content)
-        if (empty($pageElement->page_id)) {
-            $pageElement->page_id = $request->getQueryParam('page_id');
-        }
-
-        // Get page header for display
-        $page = $PageMapper->findById($pageElement->page_id);
-        $pageElement->title = $page->title;
-
-        return $this->container->view->render($response, '@admin/editPageElement.html', ['element' => $pageElement]);
-    }
-
-    /**
-     * Save Element Content
-     *
-     * Save new page element, or update existing page element
-     */
-    public function savePageElement($request, $response, $args)
-    {
-        // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $PageElementMapper = $mapper('PageElementMapper');
-        $markdown = $this->container->markdownParser;
-
-        // Create page
-        $page = $PageElementMapper->make();
-        $page->id = $request->getParsedBodyParam('id');
-        $page->page_id = $request->getParsedBodyParam('page_id');
-        $page->name = $request->getParsedBodyParam('name');
-        $page->content_raw = $request->getParsedBodyParam('content_raw');
-        $page->content = $markdown->text($request->getParsedBodyParam('content_raw'));
-
-        // Save
-        $page = $PageElementMapper->save($page);
-
-        // Redirect back to show page
-        return $response->withRedirect($this->container->router->pathFor('showPages'));
-    }
-
-    /**
-     * Delete Element
-     */
-    public function deletePageElement($request, $response, $args)
-    {
-        // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $PageElementMapper = $mapper('PageElementMapper');
-
-        // Delete page element
-        $pageElment = $PageElementMapper->make();
-        $pageElment->id = $args['id'];
-        $pageElment = $PageElementMapper->delete($pageElment);
+        // Delete page section element map
+        $PageSectionElementMapper->deleteSectionElementsByPageId($page->id);
 
         // Redirect back to show pages
         return $response->withRedirect($this->container->router->pathFor('showPages'));
+    }
+
+    /**
+     * Fetch New Element Form
+     *
+     * Responds to ajax requests for element form
+     */
+    public function fetchElementForm($request, $response, $args)
+    {
+        $parsedBody = $request->getParsedBody();
+
+        $form['sectionCodeName'] = $parsedBody['sectionCodeName'];
+        $form['elementType'] = $parsedBody['elementType'];
+        $form['elementSort'] = 1;
+
+        $elementFormHtml = $this->container->view->fetch('@admin/elementBaseFormRender.html', ['data' => $form]);
+
+        // Set the response type
+        $r = $response->withHeader('Content-Type', 'application/json');
+
+        return $r->write(json_encode(["html" => $elementFormHtml]));
+    }
+
+    /**
+     * Delete Section Element
+     *
+     * Ajax request
+     */
+    public function deletePageSectionElement($request, $response, $args)
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
+
+        // Delete section element
+        $sectionElement = $PageSectionElementMapper->make();
+        $sectionElement->id = $args['id'];
+        $PageSectionElementMapper->delete($sectionElement);
+
+        // Set the response type
+        $r = $response->withHeader('Content-Type', 'application/json');
+
+        return $r->write(json_encode(["status" => "success"]));
     }
 }

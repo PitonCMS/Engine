@@ -1,12 +1,18 @@
 {% extends '@admin/includes/_adminBase.html' %}
 
+{% import "@admin/elementBaseForm.html" as form %}
+
 {% block body %}
 
   <div class="row">
     <div class="col">
-    <h1>{% if page.id %}Edit{% else %}Add{% endif %} Page</h1>
+    <h1>{% if page.id %}Edit{% else %}Add{% endif %} {{ page.definition.pageName }} Page</h1>
+    {% if page.definition.pageLayoutDescription %}
+    <p class="lead">{{ page.definition.pageLayoutDescription }}</p>
+    {% endif %}
     <form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
       <input type="hidden" name="id" value="{{ page.id }}">
+      <input type="hidden" name="layout" value="{{ page.layout }}">
       <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
@@ -19,25 +25,36 @@
       </div>
 
       <div class="form-group">
-        <label>Page Layout</label>
-        <select class="form-control" name="layout" value="{{ page.layout }}">
-          {% for pl in page.themeLayouts %}
-          <option value="{{ pl }}" {%if pl == page.layout %}selected{% endif %}>{{ pl }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="form-group">
         <label>Meta Description</label>
         <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
         <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
       </div>
 
-      <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
-      <button class="btn btn-primary" type="submit" name="button">Save</button>
-      {% if page.id and page.restricted != 'Y' %}
-      <a class="btn btn-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
-      {% endif %}
+      {% for section in page.definition.sections %}
+      <div class="p-2 mb-2 jsSectionParent" style="/*TODO add to styles*/ border: 1px solid grey;">
+        <h2>{{ section.name }} Section</h2>
+        {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}">Add New Element</button>
+        <button class="btn btn-success btn-sm" type="button" >TODO Add Existing Element</button>
+        <hr>
+
+        {% for el in page.elements if el.section_name == section.codeName %}
+          {{ form.elementForm(el.section_element_id, el.section_name, el.element_id, el.element_type, el.element_sort, el.title, el.content_raw, el.collection_id, el.media_id, el.media_path) }}
+        {% else %}
+          <h5>Click "Add Element" to build this section.</h5>
+        {% endfor %}
+
+      </div>
+      {% endfor %}
+
+      <!-- Control Buttons -->
+      <div class="form-group">
+        <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
+        <button class="btn btn-primary" type="submit" name="button" title="Save page.">Save</button>
+        {% if page.id %}
+        <a class="btn btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
+        {% endif %}
+      </div>
     </form>
 
     </div>

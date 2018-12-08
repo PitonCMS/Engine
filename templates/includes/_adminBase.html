@@ -9,6 +9,7 @@
     <title>PitonCMS</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet"/>
     <link href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
     <link href="{{ basePath() }}/assets/admin/css/adminstyle.css" rel="stylesheet">
   </head>
@@ -23,15 +24,59 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{{ pathFor('showPages') }}">Pages</a>
-          </li>
+
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Pages</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ pathFor('showPages') }}">All Pages</a>
+              <div class="dropdown-divider"></div>
+              {% for tl in getThemeLayouts()  %}
+              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': tl}) }}">Add {{ tl }} Page</a>
+              {% endfor %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/#">All Page Elements</a>
+              <a class="dropdown-item" href="/#">Add Page Element</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Navigation</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/#">Navigations</a>
+              <a class="dropdown-item" href="/#">Add Navigation</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Media</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/#">All Media</a>
+              <a class="dropdown-item" href="/#">Outdoors</a>
+              <a class="dropdown-item" href="/#">Funny Cats</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/#">Add Media Group</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Collections</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/#">Suppliers</a>
+              <a class="dropdown-item" href="/#">Things to do</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/#">Add Collection</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://pitoncms.com" id="setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ pathFor('showSettings') }}">Settings</a>
               <a class="dropdown-item" href="{{ pathFor('showUsers') }}">Users</a>
             </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ pathFor('logout') }}" title="Logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -44,15 +89,18 @@
 
     </main><!-- /.container -->
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
     <script src="{{ basePath() }}/assets/admin/js/admin.js"></script>
     <script>
-      var simplemde = new SimpleMDE({
-          element: document.getElementById('jsMde'),
+      [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
+        var simplemde = new SimpleMDE({
+          element: element,
           forceSync: true
+        });
       });
     </script>
 

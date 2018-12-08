@@ -1,0 +1,88 @@
+{# Element Base Form #}
+
+{% macro elementForm(sectionElementId, sectionCodeName, elementId, elementType, elementSort, elementTitle, contentRaw, collectionId, mediaId, mediaPath) %}
+
+{% set arrayKey = uniqueArrayKey() %}
+
+<div class="card mb-2 jsElementParent">
+	<input type="hidden" name="section_name[{{ arrayKey }}]" value="{{ sectionCodeName }}">
+  <input type="hidden" name="section_element_id[{{ arrayKey }}]" value="{{ sectionElementId }}">
+	<input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ elementId }}">
+  <h5 class="card-header">Element</h5>
+	<div class="card-body">
+  	<div class="form-group">
+  		<label>Sort</label>
+  		<input type="text" style="width: 40px;" name="element_sort[{{ arrayKey }}]" value="{{ elementSort }}">
+      TODO: Make Drag and Drop
+  	</div>
+  	<div class="form-group form-inline jsElementType">
+  		<div class="form-check form-check-inline">
+  			<label class="form-check-label">
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="text" {{ checked(elementType|default('text') == 'text') }}> Text
+  			</label>
+  		</div>
+  		<div class="form-check form-check-inline">
+  			<label class="form-check-label">
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="media" {{ checked(elementType == 'media') }}> Media
+  			</label>
+  		</div>
+      <div class="form-check form-check-inline">
+        <label class="form-check-label">
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" {{ checked(elementType == 'hero') }}> Hero Image
+        </label>
+      </div>
+  		<div class="form-check form-check-inline">
+  			<label class="form-check-label">
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="collection" {{ checked(elementType == 'collection') }}> Collection
+  			</label>
+  		</div>
+      <div class="form-check form-check-inline">
+        <label class="form-check-label">
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="mediaGroup" {{ checked(elementType == 'mediaGroup') }}> Media Group
+        </label>
+      </div>
+  		<div class="form-check form-check-inline">
+  			<label class="form-check-label">
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="contactForm" {{ checked(elementType == 'contact') }}> Contact Form
+  			</label>
+  		</div>
+  		<div class="form-check form-check-inline">
+  			<label class="form-check-label">
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="calendar" {{ checked(elementType == 'calendar') }}> Calendar
+  			</label>
+  		</div>
+  	</div>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ elementTitle }}" placeholder="Element Title" autocomplete="off">
+    </div>
+  	<div class="form-group">
+  		<label>Content</label>
+  		<textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ contentRaw }}</textarea>
+  	</div>
+    <div class="form-group jsElementOptional jsElementMediaPath {% if elementType == 'media' or elementType == 'hero' %}d-block{% else %}d-none{% endif %}">
+      <label>Media Path (TODO)</label>
+      <input type="text" class="form-control" name="media_path[{{ arrayKey }}]" value="{{ mediaPath }}" placeholder="Media path" autocomplete="off">
+    </div>
+    <div class="form-group jsElementOptional jsElementCollection {% if elementType == 'collection' %}d-block{% else %}d-none{% endif %}">
+    <label>Collection (TODO)</label>
+      <select class="form-control">
+        <option>Collection 1</option>
+        <option>Collection 2</option>
+        <option>Collection 3</option>
+      </select>
+    </div>
+    <div class="form-group jsElementOptional jsElementMediaGroup {% if elementType == 'mediaGroup' %}d-block{% else %}d-none{% endif %}">
+    <label>Media Group (TODO)</label>
+      <select class="form-control">
+        <option>Group 1</option>
+        <option>Group 2</option>
+        <option>Group 3</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-outline-danger btn-sm jsDeleteSectionElement" type="button" data-section-element-id="{{ sectionElementId }}" title="Delete element from section, but does not delete the same element from other pages.">Delete Section Element</button>
+    </div>
+  </div>
+</div>
+{% endmacro elementForm %}

@@ -169,6 +169,6 @@ class PitonTwigBaseExtension extends \Twig_Extension implements \Twig_Extension_
      */
     public function checked($value = 0)
     {
-        return ($value == 1 || $value == 'Y') ? 'checked' : '';
+        return ($value == 1 || $value == 'Y' || $value == true) ? 'checked' : '';
     }
 }

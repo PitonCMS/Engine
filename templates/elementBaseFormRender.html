@@ -1,0 +1,15 @@
+{#
+    Render element base form for ajax calls in page editor
+#}
+
+{% import "@admin/elementBaseForm.html" as form %}
+
+{{
+    form.elementForm(
+        "",
+        data.sectionCodeName,
+        "",
+        data.elementType,
+        data.elementSort
+    )
+}}

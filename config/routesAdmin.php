@@ -15,7 +15,7 @@ $app->group('/admin', function () {
     })->setName('adminHome');
 
     // User routes
-    $this->group('/user', function() {
+    $this->group('/user', function () {
         // Show Users
         $this->get('[/]', function ($request, $response, $args) {
             return (new Piton\Controllers\AdminUserController($this))->showUsers($request, $response, $args);
@@ -34,14 +34,14 @@ $app->group('/admin', function () {
     // End user routes
 
     // Page route
-    $this->group('/page', function() {
+    $this->group('/page', function () {
         // Show All Pages
         $this->get('[/]', function ($request, $response, $args) {
             return (new Piton\Controllers\AdminPageController($this))->showPages($request, $response, $args);
         })->setName('showPages');
 
-        // Edit Page, or Create Page
-        $this->get('/edit[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
+        // Edit Page, or Create New Page
+        $this->get('/edit[/{id}]', function ($request, $response, $args) {
             return (new Piton\Controllers\AdminPageController($this))->editPage($request, $response, $args);
         })->setName('editPage');
 
@@ -55,22 +55,21 @@ $app->group('/admin', function () {
             return (new Piton\Controllers\AdminPageController($this))->deletePage($request, $response, $args);
         })->setName('deletePage');
 
+        // Page Section
+        $this->group('/section', function () {
+            // Delete Section ELement
+            $this->get('/deleteelement/{id:[0-9]{0,}}', function ($request, $response, $args) {
+                return (new Piton\Controllers\AdminPageController($this))->deletePageSectionElement($request, $response, $args);
+            });
+        });
+        // End page section
+
         // Page elements
         $this->group('/element', function () {
-            // Edit Page Element, or Create Page Element
-            $this->get('/edit[/{id:[0-9]{0,}}]', function ($request, $response, $args) {
-                return (new Piton\Controllers\AdminPageController($this))->editPageElement($request, $response, $args);
-            })->setName('editPageElement');
-
-            // Save Page Element
-            $this->post('/save', function ($request, $response, $args) {
-                return (new Piton\Controllers\AdminPageController($this))->savePageElement($request, $response, $args);
-            })->setName('savePageElement');
-
-            // Delete Page ELement
-            $this->get('/delete/{id:[0-9]{0,}}', function ($request, $response, $args) {
-                return (new Piton\Controllers\AdminPageController($this))->deletePageElement($request, $response, $args);
-            })->setName('deletePageElement');
+            // Fetch element form
+            $this->post('/fetch', function ($request, $response, $args) {
+                return (new Piton\Controllers\AdminPageController($this))->fetchElementForm($request, $response, $args);
+            });
         });
         // End page elements
     });

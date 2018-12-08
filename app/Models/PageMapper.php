@@ -8,32 +8,13 @@ class PageMapper extends DataMapperAbstract
 {
     protected $table = 'page';
     protected $modifiableColumns = [
-        'name',
         'title',
         'url',
         'url_locked',
-        'meta_description',
-        'sort',
         'layout',
-        'restricted'
+        'meta_description',
+        'published_date'
     ];
-
-    /**
-     * Get Single Pages by URL
-     *
-     * Returns domain object
-     * @param string, /URL
-     * @return mixed
-     */
-    public function findPageByUrl($url)
-    {
-        // Get page headers
-        $this->makeSelect();
-        $this->sql .= ' where url = ?';
-        $this->bindValues[] = $url;
-
-        return $this->findRow();
-    }
 
     /**
      * Get Page Data
@@ -47,23 +28,25 @@ class PageMapper extends DataMapperAbstract
         $this->sql = <<<'SQL'
 select
     p.id,
-    p.name,
     p.title,
     p.url,
+    p.url_locked,
     p.meta_description,
     p.layout,
-    p.restricted,
-    ps.id section_id,
-    ps.name section_name,
-    ps.title section_title,
+    p.published_date,
+    pse.section_name,
+    pse.element_sort,
     pe.id element_id,
-    pe.name element_name,
+    pe.element_type,
     pe.title element_title,
     pe.content_raw,
-    pe.content
+    pe.content,
+    pe.collection_id,
+    pe.media_id,
+    pe.media_path
 from page p
-left outer join page_section ps on p.id = ps.page_id
-left outer join page_element pe on pe.page_section_id = ps.id
+left outer join page_section_element_map pse on p.id = pse.page_id
+left outer join page_element pe on pe.id = pse.element_id
 where
 SQL;
 
@@ -75,7 +58,7 @@ SQL;
             $this->bindValues[] = $identifier;
         }
 
-        $this->sql .= ' order by ps.sort, pe.sort';
+        $this->sql .= ' order by pse.section_name, pse.element_sort';
         $this->fetchMode = \PDO::FETCH_ASSOC;
         $data = $this->find();
 
@@ -96,32 +79,30 @@ SQL;
     protected function processPageData($data)
     {
         // Do nothing if there is no data to process
-        if (!isset($data)) {
+        if (!isset($data[0]['id'])) {
             return $data;
         }
 
         // First assign page level properties from first array element
         $page = [];
         $page['id'] = $data[0]['id'];
-        $page['name'] = $data[0]['name'];
+        $page['title'] = $data[0]['title'];
         $page['url'] = $data[0]['url'];
+        $page['url_locked'] = $data[0]['url_locked'];
         $page['meta_description'] = $data[0]['meta_description'];
         $page['layout'] = $data[0]['layout'];
-        $page['restricted'] = $data[0]['restricted'];
+        $page['published_date'] = $data[0]['published_date'];
 
-        // Loop through remainder of data to assign sections and elements
+        // Loop through remainder of section element data to assign sections and elements
         foreach ($data as $row) {
-            // Section data
-            $page['sections'][$row['section_name']]['id'] = $row['section_id'];
-            $page['sections'][$row['section_name']]['name'] = $row['section_name'];
-            $page['sections'][$row['section_name']]['title'] = $row['section_title'];
-
-            // Element data
-            $page['sections'][$row['section_name']]['elements'][$row['element_name']]['id'] = $row['element_id'];
-            $page['sections'][$row['section_name']]['elements'][$row['element_name']]['name'] = $row['element_name'];
-            $page['sections'][$row['section_name']]['elements'][$row['element_name']]['title'] = $row['element_title'];
-            $page['sections'][$row['section_name']]['elements'][$row['element_name']]['content_raw'] = $row['content_raw'];
-            $page['sections'][$row['section_name']]['elements'][$row['element_name']]['content'] = $row['content'];
+            $page['sections'][$row['section_name']][$row['element_id']]['element_id'] = $row['element_id'];
+            $page['sections'][$row['section_name']][$row['element_id']]['element_type'] = $row['element_type'];
+            $page['sections'][$row['section_name']][$row['element_id']]['element_title'] = $row['element_title'];
+            $page['sections'][$row['section_name']][$row['element_id']]['content_raw'] = $row['content_raw'];
+            $page['sections'][$row['section_name']][$row['element_id']]['content'] = $row['content'];
+            $page['sections'][$row['section_name']][$row['element_id']]['collection_id'] = $row['collection_id'];
+            $page['sections'][$row['section_name']][$row['element_id']]['media_id'] = $row['media_id'];
+            $page['sections'][$row['section_name']][$row['element_id']]['media_path'] = $row['media_path'];
         }
 
         return $page;

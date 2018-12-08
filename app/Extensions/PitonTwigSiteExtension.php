@@ -39,6 +39,7 @@ class PitonTwigSiteExtension extends PitonTwigBaseExtension
     {
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('assetsPath', array($this, 'assetsPath')),
+            new \Twig_SimpleFunction('fetchElementHtml', array($this, 'fetchElementHtml'), array('is_safe' => array('html'))),
         ]);
     }
 
@@ -51,5 +52,27 @@ class PitonTwigSiteExtension extends PitonTwigBaseExtension
     public function assetsPath()
     {
         return $this->basePath() . '/assets/' . $this->siteSettings['theme'];
+    }
+
+    /**
+     * Fetch Element
+     *
+     * @param string elementType Matches include of the same name
+     * @param string title
+     * @param string content
+     * @return string HTML
+     */
+    public function fetchElementHtml($elementType, $title = null, $content = null, $collectionId = null, $mediaId = null, $mediaPath = null)
+    {
+        // Assign data
+        $data['title'] = $title;
+        $data['content'] = $content;
+        $data['mediaPath'] = $mediaPath;
+
+        // Return template
+        $includeElement = $elementType . '.html';
+        // TODO Put in some sort of error handling if include element does not exist
+
+        return $this->container->view->fetch("includes/$includeElement", ['data' => $data]);
     }
 }
