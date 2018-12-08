@@ -39,7 +39,7 @@
         <hr>
 
         {% for el in page.elements if el.section_name == section.codeName %}
-          {{ form.elementForm(el.section_element_id, el.section_name, el.element_id, el.element_type, el.element_sort, el.title, el.content_raw, el.collection_id, el.media_id, el.media_path) }}
+          {{ form.elementForm(el.section_element_id, el.section_name, el.element_id, el.element_type, el.element_sort, el.title, el.content_raw, el.collection_id, el.media_id, el.media_path, section.elementTypeOptions) }}
         {% else %}
           <h5>Click "Add Element" to build this section.</h5>
         {% endfor %}

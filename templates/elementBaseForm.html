@@ -1,6 +1,6 @@
 {# Element Base Form #}
 
-{% macro elementForm(sectionElementId, sectionCodeName, elementId, elementType, elementSort, elementTitle, contentRaw, collectionId, mediaId, mediaPath) %}
+{% macro elementForm(sectionElementId, sectionCodeName, elementId, elementType, elementSort, elementTitle, contentRaw, collectionId, mediaId, mediaPath, elementTypeOptions) %}
 
 {% set arrayKey = uniqueArrayKey() %}
 
@@ -16,41 +16,55 @@
       TODO: Make Drag and Drop
   	</div>
   	<div class="form-group form-inline jsElementType">
+      {% if 'text' in elementTypeOptions|default('text') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
   				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="text" {{ checked(elementType|default('text') == 'text') }}> Text
   			</label>
   		</div>
+      {% endif %}
+      {% if 'media' in elementTypeOptions|default('media') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
   				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="media" {{ checked(elementType == 'media') }}> Media
   			</label>
   		</div>
+      {% endif %}
+      {% if 'hero' in elementTypeOptions|default('hero') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
           <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" {{ checked(elementType == 'hero') }}> Hero Image
         </label>
       </div>
+      {% endif %}
+      {% if 'collection' in elementTypeOptions|default('collection') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
   				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="collection" {{ checked(elementType == 'collection') }}> Collection
   			</label>
   		</div>
+      {% endif %}
+      {% if 'mediaGroup' in elementTypeOptions|default('mediaGroup') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
           <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="mediaGroup" {{ checked(elementType == 'mediaGroup') }}> Media Group
         </label>
       </div>
+      {% endif %}
+      {% if 'contact' in elementTypeOptions|default('contact') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
   				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="contactForm" {{ checked(elementType == 'contact') }}> Contact Form
   			</label>
   		</div>
+      {% endif %}
+      {% if 'calendar' in elementTypeOptions|default('calendar') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
   				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="calendar" {{ checked(elementType == 'calendar') }}> Calendar
   			</label>
   		</div>
+      {% endif %}
   	</div>
     <div class="form-group">
       <label>Title</label>

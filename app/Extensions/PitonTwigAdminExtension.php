@@ -80,6 +80,7 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
             if ($dirObject->isDir() ||
                 $dirObject->isDot() ||
                 substr($dirObject->getFilename(), 0, 1) === '.' ||
+                substr($dirObject->getFilename(), 0, 1) === '_' ||
                 substr($dirObject->getFilename(), -5) === '.json'
             ) {
                 continue;

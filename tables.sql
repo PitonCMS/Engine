@@ -96,13 +96,13 @@ INSERT INTO `page` (`id`, `title`, `url`, `url_locked`, `layout`, `meta_descript
 
 INSERT INTO `page_element` (`id`, `element_type`, `title`, `content_raw`, `content`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES
-    (1, 'hero', 'First Section First Element', '# Element Content', '<h1>Element Content</h1>', 1, now(), 1, now()),
-    (2, 'text', 'First Section Second Element', '# Element Content', '<h1>Element Content</h1>', 1, now(), 1, now());
+    (1, 'hero', 'Hero Image', 'Call to Action!', '<p>Call to Action!</p>', 1, now(), 1, now()),
+    (2, 'text', 'Main Body Text', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>', 1, now(), 1, now());
 
 INSERT INTO `page_section_element_map` (`id`, `page_id`, `section_name`, `element_id`, `element_sort`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES
-    (1, 1, 'hero', 1, 1, 1, now(), 1, now()),
-    (2, 1, 'text', 2, 1, 1, now(), 1, now());
+    (1, 1, 'aboveTheFoldHero', 1, 1, 1, now(), 1, now()),
+    (2, 1, 'introBlock', 2, 1, 1, now(), 1, now());
 
 INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `label`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES ('global', 'theme', 'default', 'Theme', 1, now(), 1, now());

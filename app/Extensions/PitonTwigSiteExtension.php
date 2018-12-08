@@ -73,6 +73,6 @@ class PitonTwigSiteExtension extends PitonTwigBaseExtension
         $includeElement = $elementType . '.html';
         // TODO Put in some sort of error handling if include element does not exist
 
-        return $this->container->view->fetch("includes/$includeElement", ['data' => $data]);
+        return $this->container->view->fetch("elements/$includeElement", ['data' => $data]);
     }
 }

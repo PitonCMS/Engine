@@ -5,7 +5,6 @@
   <div class="row">
     <div class="col">
     <h1>Pages</h1>
-    <a href="{{ pathFor('editPage') }}">Add Page</a>
     <hr>
 
     {% for p in pages %}
@@ -17,11 +16,6 @@
         <h6 class="card-text"><i>/{{ p.url }}</i></h6>
         <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
         <a class="card-link" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
-        <hr>
-        <a class="card-link" href="{{ pathFor('editPageElement') }}?page_id={{ p.id }}">Add Element</a>
-        {% for el in p.elements %}
-        <a class="card-link" href="{{ pathFor('editPageElement', {'id': el.id}) }}">{{ el.name }}</a>
-        {% endfor %}
       </div>
     </div>
     {% else %}
