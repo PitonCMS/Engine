@@ -86,7 +86,7 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
                 continue;
             }
 
-            $layouts[] = rtrim($dirObject->getFilename(), '.html');
+            $layouts[] = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
         }
 
         return $layouts;
