@@ -34,7 +34,9 @@
       <div class="p-2 mb-2 jsSectionParent" style="/*TODO add to styles*/ border: 1px solid grey;">
         <h2>{{ section.name }} Section</h2>
         {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}">Add New Element</button>
+
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add New Element</button>
+
         <button class="btn btn-success btn-sm" type="button" >TODO Add Existing Element</button>
         <hr>
 
