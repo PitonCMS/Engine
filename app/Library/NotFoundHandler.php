@@ -26,6 +26,13 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     protected $logger;
 
     /**
+     * Template Path
+     *
+     * @var string
+     */
+    protected $templatePath;
+
+    /**
      * Constructor
      *
      * @param Slim\Views\Twig $view Slim Twig view handler
@@ -46,8 +53,14 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
     {
-        // Get request URL
+        // Get request URL to determine if this was thrown in /admin or on the public site
         $path = $request->getUri()->getPath();
+
+        // Set notFound template path context
+        $this->templatePath = 'core/notFound.html';
+        if (explode('/', $path)[1] === 'admin') {
+            $this->templatePath = '@admin/notFound.html';
+        }
 
         // If request is for a file or image then just return the 404 status and stop
         if (preg_match('/^.*\.(jpg|jpeg|png|gif|css|js)$/i', $path)) {
@@ -72,6 +85,6 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     protected function renderHtmlNotFoundOutput(ServerRequestInterface $request)
     {
         // Render and return temmplate as string
-        return $this->view->fetch('core/notFound.html');
+        return $this->view->fetch($this->templatePath);
     }
 }

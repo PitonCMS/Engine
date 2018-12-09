@@ -127,7 +127,14 @@ class AdminPageController extends BaseController
         $PageMapper = $mapper('PageMapper');
         $PageSectionElementMapper = $mapper('PageSectionElementMapper');
 
+        // Verify we have a page ID to act on
+        if (!is_numeric($args['id'])) {
+            $this->notFound($request, $response);
+        }
+
         // Delete page
+        $page = $PageMapper->make();
+        $page->id = $args['id'];
         $page = $PageMapper->delete($page);
 
         // Delete page section element map
