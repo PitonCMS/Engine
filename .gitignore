@@ -1,7 +1,2 @@
 # Things to ignore
-config/config.local.php
-logs/
-twigcache/
-.sass-cache/
-*.xml
 vendor/*
