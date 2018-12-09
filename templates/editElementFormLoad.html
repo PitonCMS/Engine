@@ -1,0 +1,35 @@
+{#
+    Render element form and load dynamically in page editor
+
+    The form.elementForm() macro signature. Because this is a new element, some values such as ID do not apply: (
+    sectionElementId,
+    sectionCodeName,
+    elementId,
+    elementType,
+    elementSort,
+    elementTitle,
+    contentRaw,
+    collectionId,
+    mediaId,
+    mediaPath,
+    elementTypeOptions
+    )
+#}
+
+{% import "@admin/editElementForm.html" as form %}
+
+{{
+    form.elementForm(
+        "",
+        data.sectionCodeName,
+        "",
+        data.elementType,
+        data.elementSort,
+        "",
+        "",
+        "",
+        "",
+        "",
+        data.elementTypeOptions
+    )
+}}

@@ -140,7 +140,12 @@ class AdminPageController extends BaseController
     /**
      * Fetch New Element Form
      *
-     * Responds to ajax requests for element form
+     * Renders new element form with initial values, and returns via Ajax to browser.
+     * At a minimum, the element form is expecting these values:
+     * - sectionCodeName
+     * - elementType
+     * - elementSort
+     * - elementTypeOptions | optional, comma separated list of approved element types
      */
     public function fetchElementForm($request, $response, $args)
     {
@@ -150,7 +155,12 @@ class AdminPageController extends BaseController
         $form['elementType'] = $parsedBody['elementType'];
         $form['elementSort'] = 1;
 
-        $elementFormHtml = $this->container->view->fetch('@admin/elementBaseFormRender.html', ['data' => $form]);
+        // Only include element type options if the string is not empty
+        if (!empty($parsedBody['elementTypeOptions'])) {
+            $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
+        }
+
+        $elementFormHtml = $this->container->view->fetch('@admin/editElementFormLoad.html', ['data' => $form]);
 
         // Set the response type
         $r = $response->withHeader('Content-Type', 'application/json');
