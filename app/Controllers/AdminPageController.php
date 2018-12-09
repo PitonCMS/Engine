@@ -150,7 +150,7 @@ class AdminPageController extends BaseController
         $form['elementType'] = $parsedBody['elementType'];
         $form['elementSort'] = 1;
 
-        $elementFormHtml = $this->container->view->fetch('@admin/elementBaseFormRender.html', ['data' => $form]);
+        $elementFormHtml = $this->container->view->fetch('@admin/editElementFormLoad.html', ['data' => $form]);
 
         // Set the response type
         $r = $response->withHeader('Content-Type', 'application/json');
