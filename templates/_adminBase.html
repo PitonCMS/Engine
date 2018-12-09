@@ -8,7 +8,7 @@
 
     <title>PitonCMS</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet"/>
     <link href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
     <link href="{{ basePath() }}/assets/admin/css/main.css" rel="stylesheet">
@@ -16,72 +16,10 @@
 
   <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Pages</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ pathFor('showPages') }}">All Pages</a>
-              <div class="dropdown-divider"></div>
-              {% for tl in getThemeLayouts()  %}
-              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': tl}) }}">Add {{ tl }} Page</a>
-              {% endfor %}
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">All Page Elements</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Navigation</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/#">Navigations</a>
-              <a class="dropdown-item" href="/#">Add Navigation</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Media</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/#">All Media</a>
-              <a class="dropdown-item" href="/#">Outdoors</a>
-              <a class="dropdown-item" href="/#">Funny Cats</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">Add Media Group</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Collections</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/#">Suppliers</a>
-              <a class="dropdown-item" href="/#">Things to do</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">Add Collection</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms.com" id="setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ pathFor('showSettings') }}">Settings</a>
-              <a class="dropdown-item" href="{{ pathFor('showUsers') }}">Users</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('logout') }}" title="Logout">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    {% include "@admin/includes/_navbar.html" %}
 
     <main role="main" class="container">
+      {% include "@admin/includes/_alert.html" %}
 
       {% block body %}
       {% endblock %}

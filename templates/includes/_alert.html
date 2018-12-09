@@ -1,0 +1,15 @@
+{#
+    Alert Dialog
+
+    Only displays if an alert message was set in session flash data by the application code
+#}
+
+    {% if getAlert() %}
+      <div class="alert alert-{{ getAlert('severity') }} alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">{{ getAlert('heading') }}</h4>
+        <p>{{ getAlert('message') }}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endif %}

@@ -41,6 +41,7 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
             new \Twig_SimpleFunction('getThemes', array($this, 'getThemes')),
             new \Twig_SimpleFunction('getThemeLayouts', array($this, 'getThemeLayouts')),
             new \Twig_SimpleFunction('uniqueArrayKey', array($this, 'uniqueArrayKey')),
+            new \Twig_SimpleFunction('getAlert', array($this, 'getAlert')),
         ]);
     }
 
@@ -101,5 +102,26 @@ class PitonTwigAdminExtension extends PitonTwigBaseExtension
     public function uniqueArrayKey()
     {
         return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, 4);
+    }
+
+    /**
+     * Get Flash Alert
+     *
+     * Get flash alert data. Returns null if no alert found.
+     */
+    public function getAlert($key = null)
+    {
+        $session = $this->container->sessionHandler;
+        $alert = $session->getFlashData('alert');
+
+        if ($key === null) {
+            return $alert;
+        }
+
+        if (isset($alert[$key])) {
+            return $alert[$key];
+        }
+
+        return null;
     }
 }

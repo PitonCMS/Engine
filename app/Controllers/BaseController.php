@@ -37,4 +37,34 @@ class BaseController
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($request, $response);
     }
+
+    /**
+     * Set Flash Alert
+     *
+     * Set alert using flash data to session
+     * @param string Severity
+     * @param string Heading (Optional)
+     * @param string Message (Optional)
+     * @return void
+     */
+    public function setAlert($severity, $heading = null, $message = null)
+    {
+        $session = $this->container->sessionHandler;
+
+        // Make sure severity level is in our CSS
+        $severityList = ['primary','secondary','success','danger','warning','info'];
+        if (!in_array($severity, $severityList)) {
+            throw new \Exception("Alert severity not found in list.");
+        }
+
+        $alert = [
+            'severity' => $severity,
+            'heading' => $heading,
+            'message' => $message
+        ];
+
+        $session->setFlashData('alert', $alert);
+
+        return;
+    }
 }
