@@ -17,7 +17,8 @@
         "monolog/monolog": "^1.17",
         "wolfmoritz/session": "^1.0",
         "erusev/parsedown": "^1.6",
-        "eoghanobrien/php-simple-mail": "^1.7"
+        "eoghanobrien/php-simple-mail": "^1.7",
+        "webmozart/json": "^1.2.2"
         },
     "autoload": {
         "psr-4": {
