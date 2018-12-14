@@ -9,7 +9,7 @@ namespace Piton\Library;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class NotFoundHandler extends \Slim\Handlers\NotFound
+class NotFound extends \Slim\Handlers\NotFound
 {
     /**
      * Twig View Handler
@@ -35,7 +35,8 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     /**
      * Constructor
      *
-     * @param Slim\Views\Twig $view Slim Twig view handler
+     * @param object Slim\Views\Twig Slim Twig view handler
+     * @param object \Monolog\Logger Logging
      */
     public function __construct(\Slim\Views\Twig $view, \Monolog\Logger $logger)
     {
@@ -46,6 +47,8 @@ class NotFoundHandler extends \Slim\Handlers\NotFound
     /**
      * Invoke not found handler as callable
      *
+     * Adds logging for not found pages
+     * Determines public or admin facing 404 page template path
      * @param  ServerRequestInterface $request  The most recent Request object
      * @param  ResponseInterface      $response The most recent Response object
      *
