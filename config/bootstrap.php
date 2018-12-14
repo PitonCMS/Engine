@@ -21,6 +21,8 @@ return call_user_func(
 
         if (file_exists(ROOT_DIR . 'config/config.local.php')) {
             require ROOT_DIR . 'config/config.local.php';
+        } else {
+            throw new \Exception("No local configuration file found");
         }
 
         // Set error reporting level based on environment
