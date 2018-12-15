@@ -1,12 +1,12 @@
 <?php
 /**
- * Index Controller
+ * Front End Controller
  *
  * Primary public facing controller
  */
 namespace Piton\Controllers;
 
-class IndexController extends BaseController
+class FrontController extends BaseController
 {
     /**
      * Show Dynamic Page
