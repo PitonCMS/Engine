@@ -14,7 +14,7 @@
  */
 namespace Piton\Controllers;
 
-class LoginController extends BaseController
+class AccessController extends BaseController
 {
     // Login token key name
     private $loginTokenKey = 'loginToken';

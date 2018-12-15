@@ -113,20 +113,20 @@ $app->group('/admin', function () {
 
 // Login page with form to submit email
 $app->get('/letmein', function ($request, $response, $args) {
-    return (new Piton\Controllers\LoginController($this))->showLoginForm($request, $response, $args);
+    return (new Piton\Controllers\AccessController($this))->showLoginForm($request, $response, $args);
 })->setName('showLoginForm');
 
 // Accept and validate email, and send login token
 $app->post('/requestlogintoken/', function ($request, $response, $args) {
-    return (new Piton\Controllers\LoginController($this))->requestLoginToken($request, $response, $args);
+    return (new Piton\Controllers\AccessController($this))->requestLoginToken($request, $response, $args);
 })->setName('requestLoginToken');
 
 // Accept and validate login token and set session
 $app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($request, $response, $args) {
-    return (new Piton\Controllers\LoginController($this))->processLoginToken($request, $response, $args);
+    return (new Piton\Controllers\AccessController($this))->processLoginToken($request, $response, $args);
 })->setName('processLoginToken');
 
 // Logout
 $app->get('/logout', function ($request, $response, $args) {
-    return (new Piton\Controllers\LoginController($this))->logout($request, $response, $args);
+    return (new Piton\Controllers\AccessController($this))->logout($request, $response, $args);
 })->setName('logout');
