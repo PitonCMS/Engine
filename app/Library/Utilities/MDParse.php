@@ -1,13 +1,13 @@
 <?php
 /**
- * Piton Parsedown Extension
+ * Piton Markdown Parser
  *
  * Modified parser to render single image lines without the paragraph tags
  * https://gist.github.com/fxck/d65255218de3611df3cd
  */
-namespace Piton\Extensions;
+namespace Piton\Library\Utilities;
 
-class MDParser extends \Parsedown
+class MDParse extends \Parsedown
 {
     /**
      * Markdown image definition regex
