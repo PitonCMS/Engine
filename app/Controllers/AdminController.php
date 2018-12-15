@@ -4,7 +4,7 @@
  */
 namespace Piton\Controllers;
 
-class AdminController extends BaseController
+class AdminController extends AdminBaseController
 {
     /**
      * Admin Home Page
@@ -12,7 +12,7 @@ class AdminController extends BaseController
      */
     public function home($request, $response, $args)
     {
-        return $this->container->view->render($response, '@admin/home.html');
+        return $this->render('home.html');
     }
 
     /**

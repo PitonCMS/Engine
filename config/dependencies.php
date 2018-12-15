@@ -77,7 +77,7 @@ $container['sessionHandler'] = function ($c) {
     return new WolfMoritz\Session\SessionHandler($c['database'], $c->get('settings')['session']);
 };
 
-// Security
+// Access Control
 $container['accessHandler'] = function ($c) {
     return new Piton\Library\Handlers\Access($c->get('sessionHandler'));
 };
@@ -87,7 +87,7 @@ $container['notFoundHandler'] = function ($c) {
     return new Piton\Library\Handlers\NotFound($c->get('view'), $c->get('logger'));
 };
 
-// Emailer
+// Emails
 $container['emailHandler'] = function ($c) {
     return new SimpleMail();
 };
@@ -108,4 +108,9 @@ $container['dataMapper'] = function ($c) {
 // Markdown parser
 $container['markdownParser'] = function ($c) {
     return new Piton\Library\Utilities\MDParse();
+};
+
+// Page Layout JSON
+$container['pageLayoutJson'] = function ($c) {
+    return new Piton\Library\Utilities\PageJson($c);
 };

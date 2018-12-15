@@ -6,7 +6,7 @@
  */
 namespace Piton\Controllers;
 
-class AdminSettingController extends BaseController
+class AdminSettingController extends AdminBaseController
 {
     /**
      * Show Settings

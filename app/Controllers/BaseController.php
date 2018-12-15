@@ -3,7 +3,6 @@
  * Piton Base Controller
  *
  * All other controllers should extend this class.
- * Loads the Slim Container to $this->container
  */
 namespace Piton\Controllers;
 
@@ -13,7 +12,23 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class BaseController
 {
+    /**
+     * Container
+     * @var Interop\Container\ContainerInterface
+     */
     protected $container;
+
+    /**
+     * Request
+     * @var Psr\Http\Message\ServerRequestInterface
+     */
+    protected $request;
+
+    /**
+     * Response
+     * @var Psr\Http\Message\ResponseInterface
+     */
+    protected $response;
 
     /**
      * Constructor
@@ -23,48 +38,30 @@ class BaseController
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->request = $container->request;
+        $this->response = $container->response;
+    }
+
+    /**
+     * Render Template
+     *
+     * @param string Path to layout
+     * @param array|null Data to echo
+     */
+    public function render($layout, $data = null)
+    {
+        return $this->container->view->render($this->response, $layout, ['page' => $data]);
     }
 
     /**
      * Show Page Not Found (404)
      *
-     * Returns status 404 Not Found and custom template as a method to exending controllers
-     * @param  ServerRequestInterface $request  The most recent Request object
-     * @param  ResponseInterface      $response The most recent Response object
+     * Returns http status 404 Not Found and custom error template
+     * @param bool Front end flag
      */
-    protected function notFound(ServerRequestInterface $request, ResponseInterface $response)
+    protected function notFound($frontEnd = true)
     {
         $notFound = $this->container->get('notFoundHandler');
-        return $notFound($request, $response);
-    }
-
-    /**
-     * Set Flash Alert
-     *
-     * Set alert using flash data to session
-     * @param string Severity
-     * @param string Heading (Optional)
-     * @param string Message (Optional)
-     * @return void
-     */
-    public function setAlert($severity, $heading = null, $message = null)
-    {
-        $session = $this->container->sessionHandler;
-
-        // Make sure severity level is in our CSS
-        $severityList = ['primary','secondary','success','danger','warning','info'];
-        if (!in_array($severity, $severityList)) {
-            throw new \Exception("Alert severity not found in list.");
-        }
-
-        $alert = [
-            'severity' => $severity,
-            'heading' => $heading,
-            'message' => $message
-        ];
-
-        $session->setFlashData('alert', $alert);
-
-        return;
+        return $notFound($this->request, $this->response);
     }
 }

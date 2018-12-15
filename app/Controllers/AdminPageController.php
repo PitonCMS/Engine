@@ -4,7 +4,7 @@
  */
 namespace Piton\Controllers;
 
-class AdminPageController extends BaseController
+class AdminPageController extends AdminBaseController
 {
     /**
      * Show Pages
@@ -20,7 +20,7 @@ class AdminPageController extends BaseController
         // Fetch pages
         $pages = $PageMapper->find();
 
-        return $this->container->view->render($response, '@admin/showPages.html', ['pages' => $pages]);
+        return $this->render('showPages.html', $pages);
     }
 
     /**
@@ -34,7 +34,7 @@ class AdminPageController extends BaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageSectionElementMapper = $mapper('PageSectionElementMapper');
-        $settings = $this->container->get('settings');
+        $PageJson = $this->container->pageLayoutJson;
 
         // Fetch page, or create new page
         if (is_numeric($args['id'])) {
@@ -46,14 +46,12 @@ class AdminPageController extends BaseController
             $page->layout = $args['id'] . '.html';
         }
 
-        // Get page definition
-        // TODO Handle error if no layout json file found
-        $layout = pathinfo($page->layout, PATHINFO_FILENAME);
-        $layoutDefintion = ROOT_DIR . 'themes/' . $settings['site']['theme'] . '/templates/layouts/' . $layout . '.json';
-        $pageDefinition = file_get_contents($layoutDefintion);
-        $page->definition = json_decode($pageDefinition, true);
+        // Get page layout definition
+        if (null === $page->definition = $PageJson->getPageLayoutDefinition($page->layout)) {
+            $this->setAlert('danger', 'Layout Definition Error', $PageJson->getErrorMessages());
+        }
 
-        return $this->container->view->render($response, '@admin/editPage.html', ['page' => $page]);
+        return $this->render('editPage.html', $page);
     }
 
     /**
@@ -129,7 +127,7 @@ class AdminPageController extends BaseController
 
         // Verify we have a page ID to act on
         if (!is_numeric($args['id'])) {
-            $this->notFound($request, $response);
+            $this->notFound();
         }
 
         // Delete page

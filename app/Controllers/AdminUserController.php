@@ -6,7 +6,7 @@
  */
 namespace Piton\Controllers;
 
-class AdminUserController extends BaseController
+class AdminUserController extends AdminBaseController
 {
     /**
      * Show All Users

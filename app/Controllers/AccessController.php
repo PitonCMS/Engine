@@ -14,7 +14,7 @@
  */
 namespace Piton\Controllers;
 
-class AccessController extends BaseController
+class AccessController extends FrontBaseController
 {
     // Login token key name
     private $loginTokenKey = 'loginToken';
@@ -29,7 +29,7 @@ class AccessController extends BaseController
      */
     public function showLoginForm($request, $response, $args)
     {
-        $this->container->view->render($response, '@admin/login.html');
+        $this->render('login.html');
     }
 
     /**
@@ -128,7 +128,7 @@ class AccessController extends BaseController
         $message = $args['token'] . ' saved: ' . $savedToken . ' time: ' . time() . ' expires: ' . $tokenExpires;
         $this->container->logger->info('Invalid login token, supplied: ' . $message);
 
-        return $this->notFound($request, $response);
+        return $this->notFound();
     }
 
     /**

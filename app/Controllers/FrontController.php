@@ -1,12 +1,12 @@
 <?php
 /**
- * Front End Controller
+ * Piton Front End Controller
  *
  * Primary public facing controller
  */
 namespace Piton\Controllers;
 
-class FrontController extends BaseController
+class FrontController extends FrontBaseController
 {
     /**
      * Show Dynamic Page
@@ -22,9 +22,9 @@ class FrontController extends BaseController
 
         // Send 404 if not found
         if (!isset($page)) {
-            return $this->notFound($request, $response);
+            return $this->notFound();
         }
 
-        return $this->container->view->render($response, 'layouts/' . $page['layout'], ['page' => $page]);
+        return $this->render($page['layout'], $page);
     }
 }
