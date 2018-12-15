@@ -1,14 +1,14 @@
 <?php
 /**
- * Custom Piton Base Extension for Twig
+ * Piton Base Twig Extension
  *
  * Has core Twig properties and functions used on public and on admin sites.
  */
-namespace Piton\Extensions;
+namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
-class PitonTwigBaseExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * @var string|\Slim\Http\Uri

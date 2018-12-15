@@ -1,15 +1,15 @@
 <?php
 /**
- * Custom Piton Admin Extensions for Twig
+ * Piton Back End Admin Twig Extension
  *
  * Has Twig functions and filters to be used on the admin site.
  * Note: extended methods such as getFilters and getFunctions must merge parent functions.
  */
-namespace Piton\Extensions;
+namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
-class PitonTwigAdminExtension extends PitonTwigBaseExtension
+class Admin extends Base
 {
 
     /**

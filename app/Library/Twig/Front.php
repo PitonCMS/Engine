@@ -1,15 +1,15 @@
 <?php
 /**
- * Custom Piton Site Extensions for Twig
+ * Piton Front End Twig Extension
  *
- * Has Twig functions and filters to be used on the public facing site.
+ * Custom Twig functions and filters to be used on the public facing site.
  * Note: extended methods such as getFilters and getFunctions must merge parent functions.
  */
-namespace Piton\Extensions;
+namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
-class PitonTwigSiteExtension extends PitonTwigBaseExtension
+class Front extends Base
 {
 
     /**

@@ -25,13 +25,13 @@ $container['view'] = function ($c) {
         'autoescape' => false,
     ]);
 
-    // Custom Twig Extensions
+    // Piton Twig Extensions
     // TODO Is this a useless optimization to separate backend from frontend Twig extensions?
     $currentPath = $c->request->getUri()->getPath();
     if (substr($currentPath, 0, 6) === '/admin') {
-        $view->addExtension(new Piton\Extensions\PitonTwigAdminExtension($c));
+        $view->addExtension(new Piton\Library\Twig\Admin($c));
     } else {
-        $view->addExtension(new Piton\Extensions\PitonTwigSiteExtension($c));
+        $view->addExtension(new Piton\Library\Twig\Front($c));
     }
 
     // Load Twig debugger if in development
