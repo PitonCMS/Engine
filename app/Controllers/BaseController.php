@@ -57,9 +57,8 @@ class BaseController
      * Show Page Not Found (404)
      *
      * Returns http status 404 Not Found and custom error template
-     * @param bool Front end flag
      */
-    protected function notFound($frontEnd = true)
+    protected function notFound()
     {
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
