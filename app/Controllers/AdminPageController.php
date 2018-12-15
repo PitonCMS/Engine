@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin Page Controller
+ * Piton Admin Page Controller
  */
 namespace Piton\Controllers;
 

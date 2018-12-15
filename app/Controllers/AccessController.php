@@ -14,7 +14,7 @@
  */
 namespace Piton\Controllers;
 
-class AccessController extends FrontBaseController
+class AccessController extends AdminBaseController
 {
     // Login token key name
     private $loginTokenKey = 'loginToken';
@@ -66,7 +66,7 @@ class AccessController extends FrontBaseController
             // No, log and silently redirect to home
             $this->container->logger->alert('Failed login attempt: ' . $body['email']);
 
-            return $response->withRedirect($this->container->router->pathFor('home'));
+            return $this->redirect('home');
         }
 
         // Belt and braces/suspenders double check
@@ -95,7 +95,7 @@ class AccessController extends FrontBaseController
         }
 
         // Direct to home page
-        return $response->withRedirect($this->container->router->pathFor('home'));
+        return $this->redirect('home');
     }
 
     /**
@@ -141,6 +141,6 @@ class AccessController extends FrontBaseController
         $security = $this->container->accessHandler;
         $security->endAuthenticatedSession();
 
-        return $response->withRedirect($this->container->router->pathFor('home'));
+        return $this->redirect('home');
     }
 }

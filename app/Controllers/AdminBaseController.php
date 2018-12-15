@@ -21,15 +21,15 @@ class AdminBaseController extends BaseController
     }
 
     /**
-     * Set Flash Alert
+     * Set Alert
      *
      * Set alert using flash data to session
      * @param string Severity
-     * @param string Heading (Optional)
-     * @param string Message (Optional)
+     * @param string Heading
+     * @param string|array Message(s) (Optional)
      * @return void
      */
-    public function setAlert($severity, $heading = null, $message = null)
+    public function setAlert($severity, $heading, $message = null)
     {
         $session = $this->container->sessionHandler;
 
@@ -45,7 +45,9 @@ class AdminBaseController extends BaseController
             'message' => $message
         ];
 
-        $session->setFlashData('alert', $alert);
+        // Alert data is made available in the template, or if $this->redirect() is called
+        // then data persists in flash data for one page view
+        $this->pageData['alert'] = $alert;
 
         return;
     }

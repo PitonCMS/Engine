@@ -38,10 +38,10 @@ class Admin extends Base
     public function getFunctions()
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('getThemes', array($this, 'getThemes')),
-            new \Twig_SimpleFunction('getThemeLayouts', array($this, 'getThemeLayouts')),
-            new \Twig_SimpleFunction('uniqueArrayKey', array($this, 'uniqueArrayKey')),
-            new \Twig_SimpleFunction('getAlert', array($this, 'getAlert')),
+            new \Twig_SimpleFunction('getThemes', [$this, 'getThemes']),
+            new \Twig_SimpleFunction('getThemeLayouts', [$this, 'getThemeLayouts']),
+            new \Twig_SimpleFunction('uniqueArrayKey', [$this, 'uniqueArrayKey']),
+            new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
         ]);
     }
 
@@ -105,17 +105,27 @@ class Admin extends Base
     }
 
     /**
-     * Get Flash Alert
+     * Get Alert Messages
      *
-     * Get flash alert data. Returns null if no alert found.
+     * Get alert data. Returns null if no alert found.
+     * @param array $context Page data
+     * @param string $key Alert keys: severity|heading|message
+     * @returns mixed array|string|null
      */
-    public function getAlert($key = null)
+    public function getAlert($context, $key = null)
     {
         $session = $this->container->sessionHandler;
-        $alert = $session->getFlashData('alert');
+
+        // Get alert notices from page context, or failing that then session flash data
+        $alert = null;
+        $alert = (isset($context['alert'])) ? $context['alert'] : $session->getFlashData('alert');
 
         if ($key === null) {
             return $alert;
+        }
+
+        if ($key === 'message' && isset($alert['message'])) {
+            return '<ul><li>' . implode('</li><li>', $alert['message']) . '</li></ul>';
         }
 
         if (isset($alert[$key])) {

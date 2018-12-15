@@ -38,8 +38,8 @@ class Front extends Base
     public function getFunctions()
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('assetsPath', array($this, 'assetsPath')),
-            new \Twig_SimpleFunction('fetchElementHtml', array($this, 'fetchElementHtml'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
+            new \Twig_SimpleFunction('fetchElementHtml', [$this, 'fetchElementHtml'], ['is_safe' => ['html']]),
         ]);
     }
 

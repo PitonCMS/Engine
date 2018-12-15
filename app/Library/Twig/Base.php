@@ -76,11 +76,11 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('pathFor', array($this, 'pathFor')),
-            new \Twig_SimpleFunction('baseUrl', array($this, 'baseUrl')),
-            new \Twig_SimpleFunction('basePath', array($this, 'basePath')),
-            new \Twig_SimpleFunction('inUrl', array($this, 'inUrl')),
-            new \Twig_SimpleFunction('checked', array($this, 'checked')),
+            new \Twig_SimpleFunction('pathFor', [$this, 'pathFor']),
+            new \Twig_SimpleFunction('baseUrl', [$this, 'baseUrl']),
+            new \Twig_SimpleFunction('basePath', [$this, 'basePath']),
+            new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
+            new \Twig_SimpleFunction('checked', [$this, 'checked']),
         ];
     }
 

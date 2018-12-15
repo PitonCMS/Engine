@@ -31,6 +31,12 @@ class BaseController
     protected $response;
 
     /**
+     * Page Data
+     * @var array
+     */
+    protected $pageData = [];
+
+    /**
      * Constructor
      *
      * @param ContainerInterface $container
@@ -50,7 +56,25 @@ class BaseController
      */
     public function render($layout, $data = null)
     {
-        return $this->container->view->render($this->response, $layout, ['page' => $data]);
+        $this->pageData['page'] = $data;
+        return $this->container->view->render($this->response, $layout, $this->pageData);
+    }
+
+    /**
+     * Redirect
+     *
+     * @param string $name Route name
+     * @param array  $args Associative array of route arguments
+     */
+    public function redirect($routeName, $args = [])
+    {
+        // Save any alert messages in flash data
+        if (isset($this->pageData['alert'])) {
+            $Session = $this->container->sessionHandler;
+            $Session->setFlashData('alert', $this->pageData['alert']);
+        }
+
+        return $response->withRedirect($this->container->router->pathFor($routeName, $args));
     }
 
     /**
