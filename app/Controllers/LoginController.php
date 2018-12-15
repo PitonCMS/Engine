@@ -42,7 +42,7 @@ class LoginController extends BaseController
         // Get dependencies
         $session = $this->container->sessionHandler;
         $email = $this->container->emailHandler;
-        $security = $this->container->securityHandler;
+        $security = $this->container->accessHandler;
         $mapper = $this->container->dataMapper;
         $UserMapper = $mapper('UserMapper');
         $body = $request->getParsedBody();
@@ -107,7 +107,7 @@ class LoginController extends BaseController
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
-        $security = $this->container->securityHandler;
+        $security = $this->container->accessHandler;
         $savedToken = $session->getData($this->loginTokenKey);
         $tokenExpires = $session->getData($this->loginTokenExpiresKey);
 
@@ -138,7 +138,7 @@ class LoginController extends BaseController
      */
     public function logout($request, $response, $args)
     {
-        $security = $this->container->securityHandler;
+        $security = $this->container->accessHandler;
         $security->endAuthenticatedSession();
 
         return $response->withRedirect($this->container->router->pathFor('home'));

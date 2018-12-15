@@ -1,10 +1,10 @@
 <?php
 /**
- * Error
+ * Error Handler
  *
  * Extends Slim\Handlers\Error to support logging
  */
-namespace Piton\Library;
+namespace Piton\Library\Handlers;
 
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;

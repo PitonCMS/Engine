@@ -90,7 +90,7 @@ $app->group('/admin', function () {
     // End settings
 })->add(function ($request, $response, $next) {
     // Authentication
-    $security = $this->securityHandler;
+    $security = $this->accessHandler;
 
     if (!$security->isAuthenticated()) {
         // Failed authentication, redirect to login

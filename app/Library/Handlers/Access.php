@@ -1,12 +1,12 @@
 <?php
 /**
- * Security Handler
+ * Access Control Handler
  *
  * Manages Authentication and Authorization
  */
-namespace Piton\Library;
+namespace Piton\Library\Handlers;
 
-class SecurityHandler
+class Access
 {
     /**
      * Session Handler

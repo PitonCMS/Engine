@@ -4,7 +4,7 @@
  *
  * Extends the Slim NotFound handler
  */
-namespace Piton\Library;
+namespace Piton\Library\Handlers;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

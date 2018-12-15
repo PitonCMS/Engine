@@ -24,11 +24,10 @@ $container['view'] = function ($c) {
         'debug' => !$settings['production'],
         'autoescape' => false,
     ]);
-    $currentPath = $c->request->getUri()->getPath();
-
 
     // Custom Twig Extensions
     // TODO Is this a useless optimization to separate backend from frontend Twig extensions?
+    $currentPath = $c->request->getUri()->getPath();
     if (substr($currentPath, 0, 6) === '/admin') {
         $view->addExtension(new Piton\Extensions\PitonTwigAdminExtension($c));
     } else {
@@ -70,7 +69,7 @@ $container['database'] = function ($c) {
 
 // Custom error handling (overwrite Slim errorHandler to add logging)
 $container['errorHandler'] = function ($c) {
-    return new Piton\Library\ErrorHandler($c->get('settings')['displayErrorDetails'], $c['logger']);
+    return new Piton\Library\Handlers\Error($c->get('settings')['displayErrorDetails'], $c['logger']);
 };
 
 // Sessions
@@ -79,13 +78,13 @@ $container['sessionHandler'] = function ($c) {
 };
 
 // Security
-$container['securityHandler'] = function ($c) {
-    return new Piton\Library\SecurityHandler($c->get('sessionHandler'));
+$container['accessHandler'] = function ($c) {
+    return new Piton\Library\Handlers\Access($c->get('sessionHandler'));
 };
 
-// Override the default Slim Not Found Handler
+// Override the default Slim Not Found handler
 $container['notFoundHandler'] = function ($c) {
-    return new Piton\Library\NotFoundHandler($c->get('view'), $c->get('logger'));
+    return new Piton\Library\Handlers\NotFound($c->get('view'), $c->get('logger'));
 };
 
 // Emailer
