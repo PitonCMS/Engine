@@ -14,8 +14,8 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ pathFor('showPages') }}">All Pages</a>
               <div class="dropdown-divider"></div>
-              {% for tl in getThemeLayouts()  %}
-              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': tl}) }}">Add {{ tl }} Page</a>
+              {% for key, tl in getThemeLayouts()  %}
+              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">Add {{ tl }} Page</a>
               {% endfor %}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/#">All Page Elements</a>

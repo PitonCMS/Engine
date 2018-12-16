@@ -77,17 +77,23 @@ class Admin extends Base
     {
         // Get layout templates
         $layouts = [];
-        foreach (new \DirectoryIterator(ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/') as $dirObject) {
+        $pathToLayouts = ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/';
+        foreach (new \DirectoryIterator($pathToLayouts) as $dirObject) {
             if ($dirObject->isDir() ||
                 $dirObject->isDot() ||
                 substr($dirObject->getFilename(), 0, 1) === '.' ||
                 substr($dirObject->getFilename(), 0, 1) === '_' ||
-                pathinfo($dirObject->getFilename(), PATHINFO_EXTENSION) !== 'json'
+                pathinfo($dirObject->getFilename(), PATHINFO_EXTENSION) === 'json'
             ) {
                 continue;
             }
 
-            $layouts[] = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
+            // Split camelCase filenames and upper case first letters into title case,
+            // and assign to array using [fileName] = Readable File Name
+            $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
+            $ReadFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
+            $ReadFileName = ucwords($ReadFileName);
+            $layouts[$fileName] = $ReadFileName;
         }
 
         return $layouts;
