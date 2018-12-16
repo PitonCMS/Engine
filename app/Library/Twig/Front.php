@@ -39,7 +39,7 @@ class Front extends Base
     {
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
-            new \Twig_SimpleFunction('fetchElementHtml', [$this, 'fetchElementHtml'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
         ]);
     }
 
@@ -55,23 +55,35 @@ class Front extends Base
     }
 
     /**
-     * Fetch Element
+     * Get HTML Element
      *
-     * @param string elementType Matches include of the same name
-     * @param string title
-     * @param string content
+     * @param array $element Element values
      * @return string HTML
      */
-    public function fetchElementHtml($elementType, $title = null, $content = null, $collectionId = null, $mediaId = null, $mediaPath = null)
+    public function getElementHtml($element)
     {
+        // Element array example of keys
+        // [element_id] => 1
+        // [element_type] => hero
+        // [element_title] => Hero Image
+        // [content_raw] => ## Call to action!
+        // [content] => <h2>Call to action!</h2>
+        // [collection_id] => 1
+        // [media_id] => 1
+        // [media_path] => https://unsplash.it/600
+
+        // Ensure we have an element type
+        if (!isset($element['element_type']) && empty($element['element_type'])) {
+            throw new Exception("Missing element_type");
+        }
+
         // Assign data
-        $data['title'] = $title;
-        $data['content'] = $content;
-        $data['mediaPath'] = $mediaPath;
+        $data['title'] = $element['element_title'];
+        $data['content'] = $element['content'];
+        $data['mediaPath'] = $element['media_path'];
 
         // Return template
-        $includeElement = $elementType . '.html';
-        // TODO Put in some sort of error handling if include element does not exist
+        $includeElement = $element['element_type'] . '.html';
 
         return $this->container->view->fetch("elements/$includeElement", ['data' => $data]);
     }
