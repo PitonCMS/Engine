@@ -52,10 +52,10 @@
         </label>
       </div>
       {% endif %}
-      {% if 'contact' in elementTypeOptions|default('contact') %}
+      {% if 'contactForm' in elementTypeOptions|default('contactForm') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="contactForm" {{ checked(elementType == 'contact') }}> Contact Form
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="contactForm" {{ checked(elementType == 'contactForm') }}> Contact Form
   			</label>
   		</div>
       {% endif %}
