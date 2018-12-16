@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/product.schema.json",
+    "title": "Page Layout Definition",
+    "description": "Page section layout definition schema",
+    "type": "object",
+    "properties": {
+        "pageName": {
+            "description": "Page name displayed in page editor",
+            "type": "string"
+        },
+        "pageLayoutDescription": {
+            "description": "Page description displayed in page editor",
+            "type": "string"
+        },
+        "sections": {
+            "description": "An array of page section definitions",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Section name label",
+                        "type": "string"
+                    },
+                    "codeName": {
+                        "description": "Single word (camelCase) key for this section",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Section description displayed in page editor",
+                        "type": "string"
+                    },
+                    "elementType": {
+                        "description": "Default element type: key word",
+                        "type": "string"
+                    },
+                    "elementTypeOptions": {
+                        "description": "List of allowable element types",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["name", "codeName"]
+            }
+        }
+    },
+    "required": ["pageName"]
+}

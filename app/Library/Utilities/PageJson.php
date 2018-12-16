@@ -7,6 +7,7 @@ namespace Piton\Library\Utilities;
 
 use Interop\Container\ContainerInterface;
 use Webmozart\Json\JsonDecoder;
+use Webmozart\Json\ValidationFailedException;
 
 class PageJson extends JsonDecoder
 {
@@ -24,7 +25,7 @@ class PageJson extends JsonDecoder
 
     /**
      * Validation Errors
-     * @var arrah
+     * @var array
      */
     protected $errors = [];
 
@@ -37,23 +38,36 @@ class PageJson extends JsonDecoder
     {
         $this->container = $container;
         $this->theme = $container->settings['site']['theme'];
+
+        parent::__construct();
     }
 
     /**
      * Get Page Layout Definition from JSON
      *
+     * Schema validation file: vendor/pitoncms/engine/pageLayoutSchema.json
+     * Validation errors are written to $this->errors
      * @param string Page name
      * @return mixed
      */
     public function getPageLayoutDefinition($pageLayout)
     {
-        // Validate page layout name and get path
+        // Page layout name and get path
         $layoutFile = pathinfo($pageLayout, PATHINFO_FILENAME);
-        $jsonPath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $layoutFile . '.json';
+        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $layoutFile . '.json';
+        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/pageLayoutSchema.json';
 
         try {
-            return $this->decodeFile($jsonPath);
+            return $this->decodeFile($jsonFilePath, $validationFile);
         } catch (\RuntimeException $e) {
+            // Runtime errors such as file not found
+            $this->errors[] = $e->getMessage();
+        } catch (ValidationFailedException $e) {
+            // Schema validation errors
+            $this->errors[] = $e->getMessage();
+        } catch (\Exception $e) {
+            // Anything else we did not anticipate
+            $this->errors[] = 'Unknown Exception in $PageJson->getPageLayoutDefinition()';
             $this->errors[] = $e->getMessage();
         }
 
