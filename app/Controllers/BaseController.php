@@ -74,7 +74,7 @@ class BaseController
             $Session->setFlashData('alert', $this->pageData['alert']);
         }
 
-        return $response->withRedirect($this->container->router->pathFor($routeName, $args));
+        return $this->response->withRedirect($this->container->router->pathFor($routeName, $args));
     }
 
     /**
