@@ -91,9 +91,9 @@ class Admin extends Base
             // Split camelCase filenames and upper case first letters into title case,
             // and assign to array using [fileName] = Readable File Name
             $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-            $ReadFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
-            $ReadFileName = ucwords($ReadFileName);
-            $layouts[$fileName] = $ReadFileName;
+            $ReadableFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
+            $ReadableFileName = ucwords($ReadableFileName);
+            $layouts[$fileName] = $ReadableFileName;
         }
 
         return $layouts;
