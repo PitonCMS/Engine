@@ -13,7 +13,7 @@ class AdminSettingController extends AdminBaseController
      *
      * List all site configuration settings
      */
-    public function showSettings($request, $response, $args)
+    public function showSettings($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -22,7 +22,7 @@ class AdminSettingController extends AdminBaseController
         // Fetch settings
         $settings = $SettingMapper->find();
 
-        return $this->container->view->render($response, '@admin/showSettings.html', ['settings' => $settings]);
+        return $this->render('showSettings.html', ['settings' => $settings]);
     }
 
     /**
@@ -30,13 +30,13 @@ class AdminSettingController extends AdminBaseController
      *
      * Save all site configuration settings
      */
-    public function saveSettings($request, $response, $args)
+    public function saveSettings($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
 
-        $allSettings = $request->getParsedBodyParam('setting');
+        $allSettings = $this->request->getParsedBodyParam('setting');
 
         // Save settings
         foreach ($allSettings['id'] as $key => $row) {
@@ -49,6 +49,6 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        return $response->withRedirect($this->container->router->pathFor('showSettings'));
+        return $this->redirect('showSettings');
     }
 }

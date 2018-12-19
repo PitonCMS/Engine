@@ -7,7 +7,7 @@
         <h2>Configure Site Settings</h2>
         <form class="" action="{{ pathFor('saveSettings') }}" method="post" accept-charset="utf-8">
 
-            {% for s in settings %}
+            {% for s in page.settings %}
             {% if s.setting_key == 'theme' %}
             <div class="form-group">
               <label>{{ s.label }}</label>

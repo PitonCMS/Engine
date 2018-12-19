@@ -82,6 +82,12 @@ $container['accessHandler'] = function ($c) {
     return new Piton\Library\Handlers\Access($c->get('sessionHandler'));
 };
 
+// Piton route strategy
+// https://www.slimframework.com/docs/v3/objects/router.html#route-strategies
+$container['foundHandler'] = function ($c) {
+    return new Piton\Library\Handlers\RouteArgumentStrategy();
+};
+
 // Override the default Slim Not Found handler
 $container['notFoundHandler'] = function ($c) {
     return new Piton\Library\Handlers\NotFound($c->get('view'), $c->get('logger'));

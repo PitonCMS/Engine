@@ -12,7 +12,7 @@ class AdminUserController extends AdminBaseController
      * Show All Users
      *
      */
-    public function showUsers($request, $response, $args)
+    public function showUsers($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -21,7 +21,7 @@ class AdminUserController extends AdminBaseController
         // Fetch users
         $users = $UserMapper->find();
 
-        return $this->container->view->render($response, '@admin/showUsers.html', ['users' => $users]);
+        return $this->render('showUsers.html', ['users' => $users]);
     }
 
     /**
@@ -29,12 +29,12 @@ class AdminUserController extends AdminBaseController
      *
      * Save all email addresses, ignoring duplicates
      */
-    public function saveUsers($request, $response, $args)
+    public function saveUsers($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $UserMapper = $mapper('UserMapper');
-        $users = $request->getParsedBodyParam('email');
+        $users = $this->request->getParsedBodyParam('email');
 
         // Save users
         foreach ($users as $user) {
@@ -46,7 +46,7 @@ class AdminUserController extends AdminBaseController
         }
 
         // Redirect back to list of users
-        return $response->withRedirect($this->container->router->pathFor('showUsers'));
+        return $this->redirect('showUsers');
     }
 
     /**
@@ -54,7 +54,7 @@ class AdminUserController extends AdminBaseController
      *
      * Delete user email to deny access
      */
-    public function deleteUser($request, $response, $args)
+    public function deleteUser($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -66,6 +66,6 @@ class AdminUserController extends AdminBaseController
         $UserMapper->delete($User);
 
         // Redirect back to list of users
-        return $response->withRedirect($this->container->router->pathFor('showUsers'));
+        return $this->redirect('showUsers');
     }
 }

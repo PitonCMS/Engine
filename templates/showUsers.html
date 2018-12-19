@@ -6,7 +6,7 @@
       <div class="col">
       <h2>Manage Users</h2>
       <form class="jsUserForm" action="{{ pathFor('saveUsers') }}" method="post" accept-charset="utf-8">
-        {% for user in users %}
+        {% for user in page.users %}
         <div class="form-group form-row">
           <div class="col-4">
             <input type="email" class="form-control" name="email[]" maxlength="60" value="{{ user.email }}" autocomplete="off">

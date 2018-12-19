@@ -27,7 +27,7 @@ class AccessController extends AdminBaseController
      *
      * Render page with form to submit email
      */
-    public function showLoginForm($request, $response, $args)
+    public function showLoginForm($args)
     {
         $this->render('login.html');
     }
@@ -37,7 +37,7 @@ class AccessController extends AdminBaseController
      *
      * Validates email and sends login link to user
      */
-    public function requestLoginToken($request, $response, $args)
+    public function requestLoginToken($args)
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
@@ -45,7 +45,7 @@ class AccessController extends AdminBaseController
         $security = $this->container->accessHandler;
         $mapper = $this->container->dataMapper;
         $UserMapper = $mapper('UserMapper');
-        $body = $request->getParsedBody();
+        $body = $this->request->getParsedBody();
 
         // Fetch all users
         $userList = $UserMapper->find();
@@ -81,8 +81,8 @@ class AccessController extends AdminBaseController
             ]);
 
             // Get request details to create login link and email to user
-            $scheme = $request->getUri()->getScheme();
-            $host = $request->getUri()->getHost();
+            $scheme = $this->request->getUri()->getScheme();
+            $host = $this->request->getUri()->getHost();
             $link = $scheme . '://' . $host;
             $link .= $this->container->router->pathFor('processLoginToken', ['token' => $token]);
 
@@ -103,7 +103,7 @@ class AccessController extends AdminBaseController
      *
      * Validate login token and authenticate request
      */
-    public function processLoginToken($request, $response, $args)
+    public function processLoginToken($args)
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
@@ -121,7 +121,7 @@ class AccessController extends AdminBaseController
             $session->unsetData($this->loginTokenExpiresKey);
 
             // Go to admin dashboard
-            return $response->withRedirect($this->container->router->pathFor('adminHome'));
+            return $this->redirect('adminHome');
         }
 
         // Not valid, direct home
@@ -136,7 +136,7 @@ class AccessController extends AdminBaseController
      *
      * Unsets logged in status
      */
-    public function logout($request, $response, $args)
+    public function logout($args)
     {
         $security = $this->container->accessHandler;
         $security->endAuthenticatedSession();

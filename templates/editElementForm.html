@@ -1,9 +1,22 @@
-{# Element Base Form #}
+{# Element Form #}
 
-{% macro elementForm(sectionElementId, sectionCodeName, elementId, elementType, elementSort, elementTitle, contentRaw, collectionId, mediaId, mediaPath, elementTypeOptions) %}
+{%
+  macro elementForm(
+    sectionElementId,
+    sectionCodeName,
+    elementId,
+    elementType,
+    elementSort,
+    elementTitle,
+    contentRaw,
+    collectionId,
+    mediaId,
+    mediaPath,
+    elementTypeOptions
+    )
+%}
 
 {% set arrayKey = uniqueArrayKey() %}
-
 
 <div class="card mb-2 jsElementParent">
 	<input type="hidden" name="section_name[{{ arrayKey }}]" value="{{ sectionCodeName }}">
@@ -11,10 +24,11 @@
 	<input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ elementId }}">
   <h5 class="card-header">Element</h5>
 	<div class="card-body">
-  	<div class="form-group">
-  		<label>Sort</label>
-  		<input type="text" style="width: 40px;" name="element_sort[{{ arrayKey }}]" value="{{ elementSort }}">
-      TODO: Make Drag and Drop
+  	<div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Element Order</span>
+      </div>
+  		<input type="text" class="form-control" name="element_sort[{{ arrayKey }}]" value="{{ elementSort }}">
   	</div>
   	<div class="form-group form-inline jsElementType">
       {% if 'text' in elementTypeOptions|default('text') %}

@@ -11,7 +11,7 @@ class FrontController extends FrontBaseController
     /**
      * Show Dynamic Page
      */
-    public function showPage($request, $response, $args)
+    public function showPage($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
