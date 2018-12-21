@@ -74,7 +74,7 @@ $container['errorHandler'] = function ($c) {
 
 // Sessions
 $container['sessionHandler'] = function ($c) {
-    return new WolfMoritz\Session\SessionHandler($c['database'], $c->get('settings')['session']);
+    return new Piton\Session\SessionHandler($c['database'], $c->get('settings')['session']);
 };
 
 // Access Control
