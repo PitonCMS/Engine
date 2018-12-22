@@ -13,7 +13,7 @@ class AdminSettingController extends AdminBaseController
      *
      * List all site configuration settings
      */
-    public function showSettings($args)
+    public function showSettings()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -30,7 +30,7 @@ class AdminSettingController extends AdminBaseController
      *
      * Save all site configuration settings
      */
-    public function saveSettings($args)
+    public function saveSettings()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;

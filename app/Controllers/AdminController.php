@@ -10,7 +10,7 @@ class AdminController extends AdminBaseController
      * Admin Home Page
      *
      */
-    public function home($args)
+    public function home()
     {
         return $this->render('home.html');
     }

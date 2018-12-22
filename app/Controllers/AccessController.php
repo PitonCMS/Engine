@@ -27,7 +27,7 @@ class AccessController extends AdminBaseController
      *
      * Render page with form to submit email
      */
-    public function showLoginForm($args)
+    public function showLoginForm()
     {
         $this->render('login.html');
     }
@@ -37,7 +37,7 @@ class AccessController extends AdminBaseController
      *
      * Validates email and sends login link to user
      */
-    public function requestLoginToken($args)
+    public function requestLoginToken()
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
@@ -136,7 +136,7 @@ class AccessController extends AdminBaseController
      *
      * Unsets logged in status
      */
-    public function logout($args)
+    public function logout()
     {
         $security = $this->container->accessHandler;
         $security->endAuthenticatedSession();

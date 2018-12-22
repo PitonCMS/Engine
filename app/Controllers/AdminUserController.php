@@ -12,7 +12,7 @@ class AdminUserController extends AdminBaseController
      * Show All Users
      *
      */
-    public function showUsers($args)
+    public function showUsers()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -29,7 +29,7 @@ class AdminUserController extends AdminBaseController
      *
      * Save all email addresses, ignoring duplicates
      */
-    public function saveUsers($args)
+    public function saveUsers()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;

@@ -11,7 +11,7 @@ class AdminPageController extends AdminBaseController
      *
      * Show pages with child elements
      */
-    public function showPages($args)
+    public function showPages()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -63,7 +63,7 @@ class AdminPageController extends AdminBaseController
      *
      * Create new page, or update existing page
      */
-    public function savePage($args)
+    public function savePage()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
@@ -156,7 +156,7 @@ class AdminPageController extends AdminBaseController
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
      */
-    public function fetchElementForm($args)
+    public function fetchElementForm()
     {
         $parsedBody = $this->request->getParsedBody();
 

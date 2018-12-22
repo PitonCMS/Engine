@@ -15,19 +15,19 @@ $app->group('/admin', function () {
 
     // Admin home
     $this->get('/home', function ($args) {
-        return (new AdminController($this))->home($args);
+        return (new AdminController($this))->home();
     })->setName('adminHome');
 
     // User routes
     $this->group('/user', function () {
         // Show Users
         $this->get('[/]', function ($args) {
-            return (new AdminUserController($this))->showUsers($args);
+            return (new AdminUserController($this))->showUsers();
         })->setName('showUsers');
 
         // Save Users
         $this->post('/save', function ($args) {
-            return (new AdminUserController($this))->saveUsers($args);
+            return (new AdminUserController($this))->saveUsers();
         })->setName('saveUsers');
 
         // Delete User
@@ -41,7 +41,7 @@ $app->group('/admin', function () {
     $this->group('/page', function () {
         // Show All Pages
         $this->get('[/]', function ($args) {
-            return (new AdminPageController($this))->showPages($args);
+            return (new AdminPageController($this))->showPages();
         })->setName('showPages');
 
         // Edit Page, or Create New Page
@@ -51,7 +51,7 @@ $app->group('/admin', function () {
 
         // Save Page
         $this->post('/save', function ($args) {
-            return (new AdminPageController($this))->savePage($args);
+            return (new AdminPageController($this))->savePage();
         })->setName('savePage');
 
         // Delete Page
@@ -72,7 +72,7 @@ $app->group('/admin', function () {
         $this->group('/element', function () {
             // Fetch element form
             $this->post('/fetch', function ($args) {
-                return (new AdminPageController($this))->fetchElementForm($args);
+                return (new AdminPageController($this))->fetchElementForm();
             });
         });
         // End page elements
@@ -83,12 +83,12 @@ $app->group('/admin', function () {
     $this->group('/settings', function () {
         // Show Settings
         $this->get('[/]', function ($args) {
-            return (new AdminSettingController($this))->showSettings($args);
+            return (new AdminSettingController($this))->showSettings();
         })->setName('showSettings');
 
         // Save Settings
         $this->post('/save', function ($args) {
-            return (new AdminSettingController($this))->saveSettings($args);
+            return (new AdminSettingController($this))->saveSettings();
         })->setName('saveSettings');
     });
     // End settings
@@ -117,12 +117,12 @@ $app->group('/admin', function () {
 
 // Login page with form to submit email
 $app->get('/letmein', function ($args) {
-    return (new AccessController($this))->showLoginForm($args);
+    return (new AccessController($this))->showLoginForm();
 })->setName('showLoginForm');
 
 // Accept and validate email, and send login token
 $app->post('/requestlogintoken/', function ($args) {
-    return (new AccessController($this))->requestLoginToken($args);
+    return (new AccessController($this))->requestLoginToken();
 })->setName('requestLoginToken');
 
 // Accept and validate login token and set session
@@ -132,5 +132,5 @@ $app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($args) {
 
 // Logout
 $app->get('/logout', function ($args) {
-    return (new AccessController($this))->logout($args);
+    return (new AccessController($this))->logout();
 })->setName('logout');
