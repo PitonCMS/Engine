@@ -34,21 +34,17 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
-        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
         $PageJson = $this->container->pageLayoutJson;
 
         // Fetch page, or create new page
         if (is_numeric($args['id'])) {
             $page = $PageMapper->findById($args['id']);
-            $page->elements = $PageSectionElementMapper->getSectionElementsByPageId($args['id']);
+            $page->elements = $PageElementMapper->findElementsByPageId($args['id']);
         } elseif (is_string($args['id'])) {
             // New page
             $page = $PageMapper->make();
             $page->layout = $args['id'] . '.html';
         }
-
-        // Get all elements
-        $page->allElements = $PageElementMapper->findAllElementsWithOptionalPageSections();
 
         // Get page layout definition
         if (null === $page->definition = $PageJson->getPageLayoutDefinition($page->layout)) {
@@ -69,7 +65,6 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
-        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
         $markdown = $this->container->markdownParser;
 
         // Create page object and populate POST data
@@ -94,23 +89,18 @@ class AdminPageController extends AdminBaseController
             // Save element
             $pageElement = $PageElementMapper->make();
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
+            $pageElement->page_id = $page->id;
+            $pageElement->section_name = $this->request->getParsedBodyParam('section_name')[$key];
             $pageElement->element_type = $this->request->getParsedBodyParam('element_type')[$key];
+            $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->excerpt = null; // Get excerpt substr (60) from ->content
             $pageElement->collection_id = $this->request->getParsedBodyParam('collection_id')[$key];
             $pageElement->media_id = $this->request->getParsedBodyParam('media_id')[$key];
             $pageElement->media_path = $this->request->getParsedBodyParam('media_path')[$key];
             $pageElement = $PageElementMapper->save($pageElement);
-
-            // Save section element map
-            $pageSectionElementMap = $PageSectionElementMapper->make();
-            $pageSectionElementMap->id = $this->request->getParsedBodyParam('section_element_id')[$key];
-            $pageSectionElementMap->page_id = $page->id;
-            $pageSectionElementMap->section_name = $this->request->getParsedBodyParam('section_name')[$key];
-            $pageSectionElementMap->element_id = $pageElement->id;
-            $pageSectionElementMap->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
-            $PageSectionElementMapper->save($pageSectionElementMap);
         }
 
         // Redirect back to show page
@@ -127,11 +117,11 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
-        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
+        $PageElementMapper = $mapper('PageElementMapper');
 
         // Verify we have a page ID to act on
         if (!is_numeric($args['id'])) {
-            $this->notFound();
+            throw new \Exception("Page to delete not found", 1);
         }
 
         // Delete page
@@ -139,8 +129,8 @@ class AdminPageController extends AdminBaseController
         $page->id = $args['id'];
         $page = $PageMapper->delete($page);
 
-        // Delete page section element map
-        $PageSectionElementMapper->deleteSectionElementsByPageId($page->id);
+        // Delete page elements
+        $PageElementMapper->deletePageElementsByPageId($page->id);
 
         // Redirect back to show pages
         return $this->redirect('showPages');
@@ -160,16 +150,16 @@ class AdminPageController extends AdminBaseController
     {
         $parsedBody = $this->request->getParsedBody();
 
-        $form['sectionCodeName'] = $parsedBody['sectionCodeName'];
-        $form['elementType'] = $parsedBody['elementType'];
-        $form['elementSort'] = 1;
+        $form['section_name'] = $parsedBody['sectionCodeName'];
+        $form['element_type'] = $parsedBody['elementType'];
+        $form['element_sort'] = 1;
 
         // Only include element type options if the string is not empty
         if (!empty($parsedBody['elementTypeOptions'])) {
             $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
         }
 
-        $elementFormHtml = $this->container->view->fetch('@admin/editElementFormLoad.html', ['data' => $form]);
+        $elementFormHtml = $this->container->view->fetch('@admin/editElementFormLoad.html', ['element' => $form]);
 
         // Set the response type
         $r = $this->response->withHeader('Content-Type', 'application/json');
@@ -178,20 +168,20 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
-     * Delete Section Element
+     * Delete Element
      *
      * Ajax request
      */
-    public function deletePageSectionElement($args)
+    public function deleteElement($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageSectionElementMapper = $mapper('PageSectionElementMapper');
+        $PageElement = $mapper('PageElementMapper');
 
         // Delete section element
-        $sectionElement = $PageSectionElementMapper->make();
+        $sectionElement = $PageElement->make();
         $sectionElement->id = $args['id'];
-        $PageSectionElementMapper->delete($sectionElement);
+        $PageElement->delete($sectionElement);
 
         // Set the response type
         $r = $this->response->withHeader('Content-Type', 'application/json');

@@ -63,11 +63,10 @@ class Front extends Base
     public function getElementHtml($element)
     {
         // Element array example of keys
-        // [element_id] => 1
         // [element_type] => hero
-        // [element_title] => Hero Image
-        // [content_raw] => ## Call to action!
+        // [title] => Hero Image
         // [content] => <h2>Call to action!</h2>
+        // [excerpt] => Call to action! Call to action!
         // [collection_id] => 1
         // [media_id] => 1
         // [media_path] => https://unsplash.it/600
@@ -78,7 +77,7 @@ class Front extends Base
         }
 
         // Assign data
-        $data['title'] = $element['element_title'];
+        $data['title'] = $element['title'];
         $data['content'] = $element['content'];
         $data['mediaPath'] = $element['media_path'];
 

@@ -59,20 +59,16 @@ $app->group('/admin', function () {
             return (new AdminPageController($this))->deletePage($args);
         })->setName('deletePage');
 
-        // Page Section
-        $this->group('/section', function () {
-            // Delete Section ELement
-            $this->get('/deleteelement/{id:[0-9]{0,}}', function ($args) {
-                return (new AdminPageController($this))->deletePageSectionElement($args);
-            });
-        });
-        // End page section
-
         // Page elements
         $this->group('/element', function () {
             // Fetch element form
             $this->post('/fetch', function ($args) {
                 return (new AdminPageController($this))->fetchElementForm();
+            });
+
+            // Delete ELement
+            $this->get('/delete/{id:[0-9]{0,}}', function ($args) {
+                return (new AdminPageController($this))->deleteElement($args);
             });
         });
         // End page elements

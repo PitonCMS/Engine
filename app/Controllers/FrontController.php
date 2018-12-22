@@ -17,7 +17,7 @@ class FrontController extends FrontBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
 
-        // Fetch pages
+        // Get page data
         $page = $PageMapper->findPageData($args['url']);
 
         // Send 404 if not found

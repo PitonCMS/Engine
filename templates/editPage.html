@@ -8,12 +8,9 @@
 <style type="text/css">
   .jsSectionParent {border: 1px solid rgba(0,0,0,.125);}
   .row-scroll-container {height:100vh;}
-  .row-scroll-container>.col-md, .row-scroll-container>.col-md-3  {overflow-y: scroll;}
+  .row-scroll-container>.col-md {overflow-y: scroll;}
 </style>
 
-<form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="layout" value="{{ page.layout }}">
 
   <div class="row">
     <div class="col-md">
@@ -22,19 +19,12 @@
         <p class="lead">{{ page.definition.pageLayoutDescription }}</p>
         {% endif %}
     </div>
-    <div class="col-md-3">
-      <!-- Control Buttons -->
-      <div class="form-group">
-        <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
-        <button class="btn btn-primary" type="submit" name="button" title="Save page.">Save</button>
-        {% if page.id %}
-        <a class="btn btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
-        {% endif %}
-      </div>
-    </div>
   </div>
-
   <hr>
+
+<form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="id" value="{{ page.id }}">
+  <input type="hidden" name="layout" value="{{ page.layout }}">
 
   <div class="row row-scroll-container">
     <div class="col-md">
@@ -61,11 +51,11 @@
         <h2>{{ section.name }} Section</h2>
         {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
 
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add New Element</button>
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add Element</button>
         <hr>
 
-        {% for el in page.elements if el.section_name == section.codeName %}
-          {{ form.elementForm(el.section_element_id, el.section_name, el.element_id, el.element_type, el.element_sort, el.title, el.content_raw, el.collection_id, el.media_id, el.media_path, section.elementTypeOptions) }}
+        {% for element in page.elements if element.section_name == section.codeName %}
+          {{ form.elementForm(element, section.codeName, section.elementTypeOptions) }}
         {% else %}
           <h5>Click "Add Element" to build this section.</h5>
         {% endfor %}
@@ -75,29 +65,15 @@
     </div><!-- end left col -->
 
     <div class="col-md-3">
-      <!-- Available Elements -->
-      <h5>All Elements</h5>
-      {% for e in page.allElements %}
-      <div class="card mb-2">
-        <div class="card-header">
-          #{{ e.id }} {{ e.element_type }}
-        </div>
-        {% if e.media_path %}
-        <img class="card-img-top" src="{{ e.media_path }}" alt="Card image cap">
+      <h5>Controls</h5>
+      <!-- Control Buttons -->
+      <div class="form-group">
+        <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
+        <button class="btn btn-primary" type="submit" name="button" title="Save page.">Save</button>
+        {% if page.id %}
+        <a class="btn btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
         {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ e.title|default('No Title') }}</h5>
-          <p class="card-text">
-            {% set content = e.content|default('No Content') %}
-            {{ content|length > 100 ? content|slice(0,100)~'&hellip;' : content }}
-          </p>
-          <hr>
-          <p><i>{{ e.page_references }}</i></p>
-        </div>
       </div>
-      {% else %}
-      <h5>No Elements Found</h5>
-      {% endfor %}
     </div><!-- end right col -->
 
   </div><!-- end row -->

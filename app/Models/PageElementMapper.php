@@ -8,34 +8,64 @@ class PageElementMapper extends DataMapperAbstract
 {
     protected $table = 'page_element';
     protected $modifiableColumns = [
+        'page_id',
+        'section_name',
         'element_type',
+        'element_sort',
         'title',
         'content_raw',
         'content',
+        'excerpt',
         'collection_id',
         'media_id',
         'media_path'
     ];
 
     /**
-     * Find Elements With Sections
+     * Find Elements by Page ID
      *
-     * Gets all elements with current section assignments
-     * @param void
-     * @return mixed array|null
+     * @param int    $pageId Page ID
+     * @return mixed Array or null
      */
-    public function findAllElementsWithOptionalPageSections()
+    public function findElementsByPageId($pageId)
     {
         $this->sql = <<<'SQL'
-select pe.id, pe.element_type, pe.title, pe.content, pe.media_path,
-ifnull(group_concat(concat(p.title, ' > ', pse.section_name) separator '<br>'), 'Orphaned') page_references
+select
+    pe.id,
+    pe.section_name,
+    pe.element_type,
+    pe.element_sort,
+    pe.title,
+    pe.content_raw,
+    pe.content,
+    pe.excerpt,
+    pe.collection_id,
+    pe.media_id,
+    pe.media_path
 from page_element pe
-left outer join page_section_element_map pse on pe.id = pse.element_id
-left outer join page p on p.id = pse.page_id
-group by pe.id, pe.element_type, pe.title, pe.content
-order by pe.id
+where pe.page_id = ?
+order by pe.section_name, pe.element_sort
 SQL;
 
+        $this->bindValues[] = $pageId;
+
         return $this->find();
+    }
+
+    /**
+     * Delete Page Elements by Page ID
+     *
+     * @param int   $pageId Page ID
+     * @return void
+     */
+    public function deletePageElementsByPageId($pageId)
+    {
+        $this->sql = "delete from {$this->table} where page_id = ?;";
+        $this->bindValues[] = $pageId;
+
+        $this->execute();
+        $this->clear();
+
+        return;
     }
 }

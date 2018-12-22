@@ -1,4 +1,3 @@
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -13,7 +12,9 @@ CREATE TABLE IF NOT EXISTS `session` (
   `data` text,
   `user_agent` char(64) DEFAULT NULL,
   `ip_address` varchar(46) DEFAULT NULL,
-  `time_updated` int(11) DEFAULT NULL
+  `time_updated` int DEFAULT NULL,
+  PRIMARY KEY (`session_id`),
+  KEY `time_updated_idx` (`time_updated`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -46,10 +47,14 @@ CREATE TABLE IF NOT EXISTS `page` (
 
 CREATE TABLE IF NOT EXISTS `page_element` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `page_id` int NOT NULL,
+  `section_name` varchar(60) NOT NULL,
   `element_type` varchar(40) NULL DEFAULT NULL,
+  `element_sort` int NOT NULL DEFAULT 1,
   `title` varchar(200) NULL DEFAULT NULL,
   `content_raw` mediumtext,
   `content` mediumtext,
+  `excerpt` varchar(60) NULL DEFAULT NULL,
   `collection_id` int NULL DEFAULT NULL,
   `media_id` int NULL DEFAULT NULL,
   `media_path` varchar(200) NULL DEFAULT NULL,
@@ -57,23 +62,8 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `page_section_element_map` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `page_id` int NOT NULL,
-  `section_name` varchar(60) NOT NULL,
-  `element_id` int NOT NULL,
-  `element_sort` int NOT NULL DEFAULT 1,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `page_id_idx` (`page_id`),
-  KEY `section_name_idx` (`section_name`),
-  KEY `element_id_idx` (`element_id`)
+  KEY `page_id_idx` (`page_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
@@ -94,17 +84,11 @@ CREATE TABLE IF NOT EXISTS `setting` (
 INSERT INTO `page` (`id`, `title`, `url`, `url_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', NULL, 1, now(), 1, now());
 
-INSERT INTO `page_element` (`id`, `element_type`, `title`, `content_raw`, `content`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page_element` (`id`, `page_id`, `section_name`, `element_type`, `element_sort`, `title`, `content_raw`, `content`, `media_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES
-    (1, 'hero', 'Hero Image', 'Call to Action!', '<p>Call to Action!</p>', 1, now(), 1, now()),
-    (2, 'text', 'Main Body Text', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>', 1, now(), 1, now());
-
-INSERT INTO `page_section_element_map` (`id`, `page_id`, `section_name`, `element_id`, `element_sort`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES
-    (1, 1, 'aboveTheFoldHero', 1, 1, 1, now(), 1, now()),
-    (2, 1, 'introBlock', 2, 1, 1, now(), 1, now());
+    (1, 1, 'aboveTheFoldHero', 'hero', 1, 'Hero Image', 'Call to Action!', '<p>Call to Action!</p>', 'https://unsplash.it/600', 1, now(), 1, now()),
+    (2, 1, 'introBlock', 'text', 1, 'Main Body Text', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>', null, 1, now(), 1, now());
 
 INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `label`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES ('global', 'theme', 'default', 'Theme', 1, now(), 1, now());
 
-SET FOREIGN_KEY_CHECKS=1;
