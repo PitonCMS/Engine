@@ -8,9 +8,10 @@
 
 {% set arrayKey = uniqueArrayKey() %}
 
-<div class="card mb-2 jsElementParent">
+<div class="card mb-2 jsElementParent" id="page-section-{{ sectionName }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
 	<input type="hidden" name="section_name[{{ arrayKey }}]" value="{{ sectionName }}">
+
   <h5 class="card-header">Element</h5>
 	<div class="card-body">
   	<div class="form-group input-group">
@@ -79,8 +80,11 @@
   		<textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
   	</div>
     <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'media' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
-      <label>Media Path (TODO)</label>
-      <input type="text" class="form-control" name="media_path[{{ arrayKey }}]" value="{{ element.media_path }}" placeholder="Media path" autocomplete="off">
+      <label>Media Path</label>
+      <textarea class="form-control" rows = "3" name="media_path[{{ arrayKey }}]">
+{{ element.media_path }}
+      </textarea>
+      <small class="form-text text-muted">Enter an image URL or embedded video HTML.</small>
     </div>
     <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">
     <label>Collection (TODO)</label>
@@ -99,7 +103,7 @@
       </select>
     </div>
     <div class="form-group">
-      <button class="btn btn-outline-danger btn-sm jsDeleteSectionElement" type="button" data-element-id="{{ element.id }}" title="Delete element from section, but does not delete the same element from other pages.">Delete Section Element</button>
+      <button class="btn btn-outline-danger btn-sm jsDeleteSectionElement" type="button" data-element-id="{{ element.id }}" title="Delete element.">Delete Element</button>
     </div>
   </div>
 </div>

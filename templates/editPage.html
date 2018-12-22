@@ -67,12 +67,21 @@
     <div class="col-md-3">
       <h5>Controls</h5>
       <!-- Control Buttons -->
-      <div class="form-group">
+      <div class="mb-2">
         <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
         <button class="btn btn-primary" type="submit" name="button" title="Save page.">Save</button>
         {% if page.id %}
         <a class="btn btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
         {% endif %}
+      </div>
+      <hr>
+      <div>
+        <h5>Section Navigator</h5>
+        {% for section in page.definition.sections %}
+          <h6>
+            <a href="#page-section-{{ section.codeName }}">{{ section.name }} Section</a>
+          </h6>
+        {% endfor %}
       </div>
     </div><!-- end right col -->
 
