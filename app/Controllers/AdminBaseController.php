@@ -12,8 +12,8 @@ class AdminBaseController extends BaseController
      * Render Admin Template
      *
      * Modifies path to layout then calls parent render() method
-     * @param string Path to layout
-     * @param array|null Data to echo
+     * @param string $layout Path to layout
+     * @param mixed  $data   Data to echo, Domain object or array
      */
     public function render($layout, $data = null)
     {
@@ -24,9 +24,9 @@ class AdminBaseController extends BaseController
      * Set Alert
      *
      * Set alert using flash data to session
-     * @param string Severity
-     * @param string Heading
-     * @param string|array Message(s) (Optional)
+     * @param string $severity Severity level
+     * @param string $heading  Heading text
+     * @param mixed  $messge   Message or array messages (Optional)
      * @return void
      */
     public function setAlert($severity, $heading, $message = null)

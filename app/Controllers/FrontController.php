@@ -2,29 +2,36 @@
 /**
  * Piton Front End Controller
  *
- * Primary public facing controller
  */
 namespace Piton\Controllers;
 
 class FrontController extends FrontBaseController
 {
     /**
-     * Show Dynamic Page
+     * Show Page
+     *
+     * Displays page matching URL, or throws 404 Not Found
+     * @param array $args Array of URL parameters, expecting 'url'
      */
     public function showPage($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
+        $Page = $mapper('PageMapper');
+        $PageElement = $mapper('PageElementMapper');
 
         // Get page data
-        $page = $PageMapper->findPageData($args['url']);
+
+        $page = $Page->findPage($args['url']);
 
         // Send 404 if not found
-        if (!isset($page)) {
+        if (empty($page)) {
             return $this->notFound();
         }
 
-        return $this->render($page['layout'], $page);
+        // Get elements
+        $page->sections = $this->buildElementsBySection($PageElement->findElementsByPageId($page->id));
+
+        return $this->render($page->layout, $page);
     }
 }

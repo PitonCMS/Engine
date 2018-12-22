@@ -51,8 +51,8 @@ class BaseController
     /**
      * Render Template
      *
-     * @param string Path to layout
-     * @param array|null Data to echo
+     * @param string $layout Path to layout
+     * @param mixed  $data   Data to echo, Domain object or array
      */
     public function render($layout, $data = null)
     {

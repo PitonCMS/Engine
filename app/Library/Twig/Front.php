@@ -63,12 +63,12 @@ class Front extends Base
     public function getElementHtml($element)
     {
         // Ensure we have an element type
-        if (!isset($element['element_type']) && empty($element['element_type'])) {
+        if (!isset($element->element_type) && empty($element->element_type)) {
             throw new Exception("Missing element_type");
         }
 
         // Template to render
-        $includeElement = $element['element_type'] . '.html';
+        $includeElement = $element->element_type . '.html';
 
         return $this->container->view->fetch("elements/$includeElement", ['data' => $element]);
     }

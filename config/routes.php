@@ -1,6 +1,6 @@
 <?php
 /**
- * Public Application Routes
+ * Public Piton Application Routes
  */
 use Piton\Controllers\FrontController;
 
@@ -9,7 +9,7 @@ $app->get('/{url}', function ($args) {
     return (new FrontController($this))->showPage($args);
 })->setName('showPage');
 
-// Home page '/' is always the last route, the default, and an alias for the 'home' route
+// Home page '/' is always the last route as default, and an alias for the 'home' route
 $app->get('/', function ($args) {
     $args['url'] = 'home';
     return (new FrontController($this))->showPage($args);

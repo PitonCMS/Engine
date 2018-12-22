@@ -30,25 +30,8 @@ class PageElementMapper extends DataMapperAbstract
      */
     public function findElementsByPageId($pageId)
     {
-        $this->sql = <<<'SQL'
-select
-    pe.id,
-    pe.section_name,
-    pe.element_type,
-    pe.element_sort,
-    pe.title,
-    pe.content_raw,
-    pe.content,
-    pe.excerpt,
-    pe.collection_id,
-    pe.gallery_id,
-    pe.image_path,
-    pe.video_path
-from page_element pe
-where pe.page_id = ?
-order by pe.section_name, pe.element_sort
-SQL;
-
+        $this->makeSelect();
+        $this->sql .= ' where page_id = ? order by section_name, element_sort';
         $this->bindValues[] = $pageId;
 
         return $this->find();
