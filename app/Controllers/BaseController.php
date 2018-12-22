@@ -54,7 +54,7 @@ class BaseController
      * @param string $layout Path to layout
      * @param mixed  $data   Data to echo, Domain object or array
      */
-    public function render($layout, $data = null)
+    protected function render($layout, $data = null)
     {
         $this->pageData['page'] = $data;
         return $this->container->view->render($this->response, $layout, $this->pageData);
@@ -66,7 +66,7 @@ class BaseController
      * @param string $name Route name
      * @param array  $args Associative array of route arguments
      */
-    public function redirect($routeName, $args = [])
+    protected function redirect($routeName, $args = [])
     {
         // Save any alert messages in flash data
         if (isset($this->pageData['alert'])) {
@@ -86,5 +86,27 @@ class BaseController
     {
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
+    }
+
+    /**
+     * Build Page Elements by Section
+     *
+     * Takes array of page elements and builds multi-dimensional array of element objects
+     * with section names as top level keys
+     * @param array  $elements Array of page element domain models
+     * @return array
+     */
+    protected function buildElementsBySection($elements)
+    {
+        if (empty($elements)) {
+            return $elements;
+        }
+
+        $output = [];
+        foreach ($elements as $row) {
+            $output[$row->section_name][] = $row;
+        }
+
+        return $output;
     }
 }

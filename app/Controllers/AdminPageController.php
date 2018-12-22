@@ -9,16 +9,24 @@ class AdminPageController extends AdminBaseController
     /**
      * Show Pages
      *
-     * Show pages with child elements
+     * Show pages with sections and elements
      */
     public function showPages()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
+        $Page = $mapper('PageMapper');
+        $PageElement = $mapper('PageElementMapper');
 
         // Fetch pages
-        $pages = $PageMapper->find();
+        $pages = $Page->find();
+
+        // Fetch all section elements for each page
+        if ($pages) {
+            foreach ($pages as $key => $row) {
+                $pages[$key]->sections = $this->buildElementsBySection($PageElement->findElementsByPageId($row->id));
+            }
+        }
 
         return $this->render('showPages.html', $pages);
     }
