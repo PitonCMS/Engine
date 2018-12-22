@@ -8,7 +8,7 @@
 
 {% set arrayKey = uniqueArrayKey() %}
 
-<div class="card mb-2 jsElementParent" id="page-section-{{ sectionName }}">
+<div class="card mb-2 jsElementParent" id="page-element-{{ element.id }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
 	<input type="hidden" name="section_name[{{ arrayKey }}]" value="{{ sectionName }}">
 

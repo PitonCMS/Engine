@@ -7,8 +7,11 @@
 <!-- TODO Move this into css file -->
 <style type="text/css">
   .jsSectionParent {border: 1px solid rgba(0,0,0,.125);}
-  .row-scroll-container {height:100vh;}
-  .row-scroll-container>.col-md {overflow-y: scroll;}
+  .scroll-container {
+    height:100vh;
+    overflow-y: scroll;
+    position: relative;
+  }
 </style>
 
 
@@ -26,8 +29,8 @@
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="layout" value="{{ page.layout }}">
 
-  <div class="row row-scroll-container">
-    <div class="col-md">
+  <div class="row">
+    <div class="col-md scroll-container" data-spy="scroll" data-target="#page-nav">
 
       <div class="form-group">
         <label>Title</label>
@@ -47,7 +50,7 @@
       </div>
 
       {% for section in page.definition.sections %}
-      <div class="p-2 mb-2 jsSectionParent">
+      <div class="p-2 mb-2 jsSectionParent" id="page-section-{{ section.codeName }}">
         <h2>{{ section.name }} Section</h2>
         {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
 
@@ -77,11 +80,14 @@
       <hr>
       <div>
         <h5>Section Navigator</h5>
+        <div class="jsSmoothScroll" id="page-nav">
         {% for section in page.definition.sections %}
-          <h6>
-            <a href="#page-section-{{ section.codeName }}">{{ section.name }} Section</a>
-          </h6>
+            <a href="#page-section-{{ section.codeName }}">{{ section.name }} Section</a><br>
+            {% for element in page.elements if element.section_name == section.codeName %}
+              <a href="#page-element-{{ element.id }}" class="ml-2">{{ element.title }} Element</a><br>
+            {% endfor %}
         {% endfor %}
+        </div>
       </div>
     </div><!-- end right col -->
 
