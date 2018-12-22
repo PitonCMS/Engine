@@ -62,28 +62,14 @@ class Front extends Base
      */
     public function getElementHtml($element)
     {
-        // Element array example of keys
-        // [element_type] => hero
-        // [title] => Hero Image
-        // [content] => <h2>Call to action!</h2>
-        // [excerpt] => Call to action! Call to action!
-        // [collection_id] => 1
-        // [media_id] => 1
-        // [media_path] => https://unsplash.it/600
-
         // Ensure we have an element type
         if (!isset($element['element_type']) && empty($element['element_type'])) {
             throw new Exception("Missing element_type");
         }
 
-        // Assign data
-        $data['title'] = $element['title'];
-        $data['content'] = $element['content'];
-        $data['mediaPath'] = $element['media_path'];
-
-        // Return template
+        // Template to render
         $includeElement = $element['element_type'] . '.html';
 
-        return $this->container->view->fetch("elements/$includeElement", ['data' => $data]);
+        return $this->container->view->fetch("elements/$includeElement", ['data' => $element]);
     }
 }

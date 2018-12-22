@@ -43,8 +43,9 @@ select
     pe.content,
     pe.excerpt,
     pe.collection_id,
-    pe.media_id,
-    pe.media_path
+    pe.gallery_id,
+    pe.image_path,
+    pe.video_path
 from page p
 left outer join page_element pe on p.id = pe.page_id
 where
@@ -102,8 +103,9 @@ SQL;
             $page['sections'][$row['section_name']][$row['element_id']]['content'] = $row['content'];
             $page['sections'][$row['section_name']][$row['element_id']]['excerpt'] = $row['excerpt'];
             $page['sections'][$row['section_name']][$row['element_id']]['collection_id'] = $row['collection_id'];
-            $page['sections'][$row['section_name']][$row['element_id']]['media_id'] = $row['media_id'];
-            $page['sections'][$row['section_name']][$row['element_id']]['media_path'] = $row['media_path'];
+            $page['sections'][$row['section_name']][$row['element_id']]['gallery_id'] = $row['gallery_id'];
+            $page['sections'][$row['section_name']][$row['element_id']]['image_path'] = $row['image_path'];
+            $page['sections'][$row['section_name']][$row['element_id']]['video_path'] = $row['video_path'];
         }
 
         return $page;

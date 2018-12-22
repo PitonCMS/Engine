@@ -17,8 +17,9 @@ class PageElementMapper extends DataMapperAbstract
         'content',
         'excerpt',
         'collection_id',
-        'media_id',
-        'media_path'
+        'gallery_id',
+        'image_path',
+        'video_path'
     ];
 
     /**
@@ -40,8 +41,9 @@ select
     pe.content,
     pe.excerpt,
     pe.collection_id,
-    pe.media_id,
-    pe.media_path
+    pe.gallery_id,
+    pe.image_path,
+    pe.video_path
 from page_element pe
 where pe.page_id = ?
 order by pe.section_name, pe.element_sort

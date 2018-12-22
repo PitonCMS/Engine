@@ -98,8 +98,9 @@ class AdminPageController extends AdminBaseController
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = null; // Get excerpt substr (60) from ->content
             $pageElement->collection_id = $this->request->getParsedBodyParam('collection_id')[$key];
-            $pageElement->media_id = $this->request->getParsedBodyParam('media_id')[$key];
-            $pageElement->media_path = $this->request->getParsedBodyParam('media_path')[$key];
+            $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
+            $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];
+            $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
             $pageElement = $PageElementMapper->save($pageElement);
         }
 

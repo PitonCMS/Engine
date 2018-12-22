@@ -20,6 +20,7 @@
       </div>
   		<input type="text" class="form-control" name="element_sort[{{ arrayKey }}]" value="{{ element.element_sort|default('1') }}">
   	</div>
+
   	<div class="form-group form-inline jsElementType">
       {% if 'text' in elementTypeOptions|default('text') %}
   		<div class="form-check form-check-inline">
@@ -28,17 +29,24 @@
   			</label>
   		</div>
       {% endif %}
-      {% if 'media' in elementTypeOptions|default('media') %}
+      {% if 'image' in elementTypeOptions|default('image') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="media" {{ checked(element.element_type == 'media') }}> Media
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="image" {{ checked(element.element_type == 'image') }}> Image
   			</label>
   		</div>
+      {% endif %}
+      {% if 'video' in elementTypeOptions|default('video') %}
+      <div class="form-check form-check-inline">
+        <label class="form-check-label">
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="video" {{ checked(element.element_type == 'video') }}> Video
+        </label>
+      </div>
       {% endif %}
       {% if 'hero' in elementTypeOptions|default('hero') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" {{ checked(element.element_type == 'hero') }}> Hero Image
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" {{ checked(element.element_type == 'hero') }}> Hero
         </label>
       </div>
       {% endif %}
@@ -49,41 +57,37 @@
   			</label>
   		</div>
       {% endif %}
-      {% if 'mediaGroup' in elementTypeOptions|default('mediaGroup') %}
+      {% if 'gallery' in elementTypeOptions|default('gallery') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="mediaGroup" {{ checked(element.element_type == 'mediaGroup') }}> Media Group
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="gallery" {{ checked(element.element_type == 'gallery') }}> Gallery
         </label>
       </div>
       {% endif %}
-      {% if 'contactForm' in elementTypeOptions|default('contactForm') %}
-  		<div class="form-check form-check-inline">
-  			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="contactForm" {{ checked(element.element_type == 'contactForm') }}> Contact Form
-  			</label>
-  		</div>
-      {% endif %}
-      {% if 'calendar' in elementTypeOptions|default('calendar') %}
-  		<div class="form-check form-check-inline">
-  			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="calendar" {{ checked(element.element_type == 'calendar') }}> Calendar
-  			</label>
-  		</div>
-      {% endif %}
   	</div>
+
     <div class="form-group">
       <label>Title</label>
       <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}" placeholder="Element Title" autocomplete="off">
     </div>
+
   	<div class="form-group">
   		<label>Content</label>
   		<textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
   	</div>
-    <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'media' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
-      <label>Media Path</label>
-      <textarea class="form-control" rows = "3" name="media_path[{{ arrayKey }}]">{{ element.media_path }}</textarea>
-      <small class="form-text text-muted">Enter an image URL or embedded video HTML.</small>
+
+    <div class="form-group jsElementOptional jsElementVideoPath {% if element.element_type == 'video' %}d-block{% else %}d-none{% endif %}">
+      <label>Video Embed</label>
+      <textarea class="form-control" rows="3" name="video_path[{{ arrayKey }}]">{{ element.video_path }}</textarea>
+      <small class="form-text text-muted">Enter a video embed HTML link.</small>
     </div>
+
+    <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'image' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
+      <label>Image Link</label>
+      <input type="text" class="form-control" name="image_path[{{ arrayKey }}]" value="{{ element.image_path }}"">
+      <small class="form-text text-muted">Enter an image link.</small>
+    </div>
+
     <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">
     <label>Collection (TODO)</label>
       <select class="form-control">
@@ -92,14 +96,16 @@
         <option>Collection 3</option>
       </select>
     </div>
-    <div class="form-group jsElementOptional jsElementMediaGroup {% if element.element_type == 'mediaGroup' %}d-block{% else %}d-none{% endif %}">
-    <label>Media Group (TODO)</label>
+
+    <div class="form-group jsElementOptional jsElementGallery {% if element.element_type == 'gallery' %}d-block{% else %}d-none{% endif %}">
+    <label>Gallery (TODO)</label>
       <select class="form-control">
-        <option>Group 1</option>
-        <option>Group 2</option>
-        <option>Group 3</option>
+        <option>Gallery 1</option>
+        <option>Gallery 2</option>
+        <option>Gallery 3</option>
       </select>
     </div>
+
     <div class="form-group">
       <button class="btn btn-outline-danger btn-sm jsDeleteSectionElement" type="button" data-element-id="{{ element.id }}" title="Delete element.">Delete Element</button>
     </div>
