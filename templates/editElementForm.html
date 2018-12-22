@@ -81,9 +81,7 @@
   	</div>
     <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'media' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
       <label>Media Path</label>
-      <textarea class="form-control" rows = "3" name="media_path[{{ arrayKey }}]">
-{{ element.media_path }}
-      </textarea>
+      <textarea class="form-control" rows = "3" name="media_path[{{ arrayKey }}]">{{ element.media_path }}</textarea>
       <small class="form-text text-muted">Enter an image URL or embedded video HTML.</small>
     </div>
     <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">

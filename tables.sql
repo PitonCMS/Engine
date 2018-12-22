@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `excerpt` varchar(60) NULL DEFAULT NULL,
   `collection_id` int NULL DEFAULT NULL,
   `media_id` int NULL DEFAULT NULL,
-  `media_path` varchar(500) NULL DEFAULT NULL,
+  `media_path` varchar(1000) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
