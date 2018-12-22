@@ -65,7 +65,8 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
-        $markdown = $this->container->markdownParser;
+        $Markdown = $this->container->markdownParser;
+        $Toolbox = $this->container->toolbox;
 
         // Create page object and populate POST data
         $page = $PageMapper->make();
@@ -95,8 +96,8 @@ class AdminPageController extends AdminBaseController
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
-            $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
-            $pageElement->excerpt = null; // Get excerpt substr (60) from ->content
+            $pageElement->content = $Markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->excerpt = $Toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $this->request->getParsedBodyParam('collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];

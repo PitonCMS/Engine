@@ -120,3 +120,8 @@ $container['markdownParser'] = function ($c) {
 $container['pageLayoutJson'] = function ($c) {
     return new Piton\Library\Utilities\PageJson($c);
 };
+
+// Piton Toolbox
+$container['toolbox'] = function ($c) {
+    return new Piton\Library\Utilities\Toolbox();
+};
