@@ -84,6 +84,19 @@ class AdminPageController extends AdminBaseController
         $page->layout = $this->request->getParsedBodyParam('layout');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
 
+        // Process published date
+        $page->published_date = ($this->request->getParsedBodyParam('published_date')) ?: '';
+        if (!empty($page->published_date)) {
+        /*
+        @link: http://php.net/strtotime
+        Dates in the m/d/y or d-m-y formats are disambiguated by looking at the separator between the various
+        components: if the separator is a slash (/), then the American m/d/y is assumed; whereas if the separator
+        is a dash (-) or a dot (.), then the European d-m-y format is assumed.
+        */
+            $publishedDate = strtotime($page->published_date);
+            $page->published_date = date('Y-m-d', $publishedDate);
+        }
+
         // Prep URL
         $page->url = strtolower(trim($this->request->getParsedBodyParam('url')));
         $page->url = preg_replace('/[^a-z0-9\s-]/', '', $page->url);

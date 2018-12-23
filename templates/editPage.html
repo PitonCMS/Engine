@@ -62,11 +62,31 @@
       <div class="mb-2">
         <a class="btn btn-warning mb-2" href="{{ pathFor('showPages') }}">Cancel</a>
         <button class="btn btn-primary mb-2" type="submit" name="button" title="Save page.">Save</button>
+        <div class="form-group">
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              {% if not page.published_date %}
+              <span class="input-group-text" title="Not published">Draft</span>
+              {% elseif page.published_date > "now"|date('Y-m-d') %}
+              <span class="input-group-text list-group-item-warning">Pending</span>
+              {% elseif page.published_date <= "now"|date('Y-m-d') %}
+              <span class="input-group-text list-group-item-success">Published</span>
+              {% endif %}
+            </div>
+            {% if page.published_date %}
+              {% set publishedDate = page.published_date|date('m/d/Y') %}
+            {% endif %}
+            <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ publishedDate }}" autocomplete="off">
+            <small class="form-text text-muted">Select date to publish page and save. Clear date and save to unpublish.</small>
+          </div>
+        </div>
         {% if page.id %}
-        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
+        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete Page</a>
         {% endif %}
       </div>
       <hr>
+
       <div>
         <h6>Page Navigator</h6>
         <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
