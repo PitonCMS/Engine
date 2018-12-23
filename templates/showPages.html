@@ -10,13 +10,33 @@
     {% for p in page %}
     <div class="card mb-4" style="width: 18rem;">
       <div class="card-header">
-        <span class="h5 card-title">{{ p.title }}</span>
+        <h5 class="card-title">{{ p.title }}
+          {% if p.published_date %}
+          <span class="badge badge-success">Published</span>
+          {% else %}
+          <span class="badge badge-secondary" title="Not published">NP</span>
+          {% endif %}
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">URL: <i>/{{ p.url }}</i></h6>
+        <h6 class="card-subtitle mb-2 text-muted">Layout: <i>{{ p.layout }}</i></h6>
       </div>
       <div class="card-body">
-        <h6 class="card-text"><i>/{{ p.url }}</i></h6>
         <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
-        <a class="card-link" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
       </div>
+
+      <ul class="list-group list-group-flush">
+        {% for key, s in p.sections %}
+          <li class="list-group-item">
+            {{ key }}
+            <ul>
+            {% for e in s %}
+              <li>{{ e.title }} <small>({{ e.element_type }})</small></li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+      <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
     </div>
     {% else %}
     <strong>No pages found</strong>
