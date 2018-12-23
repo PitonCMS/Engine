@@ -83,7 +83,7 @@
           <nav class="nav nav-pills flex-column">
           {% for section in page.definition.sections %}
             <a class="nav-link" href="#page-section-{{ section.codeName }}">{{ section.name }} (Section)</a>
-            <nav class="nav nav-pills flex-column">
+            <nav class="nav nav-pills flex-column jsPageSubSection-{{ section.codeName }}">
             {% for element in page.elements if element.section_name == section.codeName %}
               <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
             {% endfor %}
