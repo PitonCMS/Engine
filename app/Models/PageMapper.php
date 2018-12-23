@@ -17,26 +17,40 @@ class PageMapper extends DataMapperAbstract
     ];
 
     /**
-     * Find Page
+     * Find Published Page By URL
      *
-     * Finds page by ID or by URL
-     * @param mixed  $pageId Page ID or URL
+     * Finds published-only page by by URL
+     * @param mixed  $pageId Page URL
      * @return mixed         Page object or null if not found
      */
-    public function findPage($pageId)
+    public function findPublishedPageByUrl($pageUrl)
     {
         $this->makeSelect();
 
-        if (is_numeric($pageId)) {
-            $this->sql .= ' where id = ?';
-            $this->bindValues[] = (int) $pageId;
-        } elseif (is_string($pageId)) {
+        if (is_string($pageUrl)) {
             $this->sql .= ' where url = ?';
-            $this->bindValues[] = $pageId;
+            $this->bindValues[] = $pageUrl;
         } else {
             throw new \Exception('Unknown page identifier type', 1);
         }
 
+        $this->sql .= " and published_date <= '{$this->today()}'";
+
         return $this->findRow();
+    }
+
+    /**
+     * Find All Published Pages
+     *
+     * Finds all published pages without element data
+     * @param none
+     * @return mixed Array on success
+     */
+    public function findPublishedPages()
+    {
+        $this->makeSelect();
+        $this->sql .= " where published_date <= '{$this->today()}'";
+
+        return $this->find();
     }
 }

@@ -93,8 +93,8 @@ class LoadSiteSettings
         $dataMapper = $this->dataMapper;
         $PageMapper = $dataMapper('PageMapper');
 
-        // Fetch all settings
-        $this->pages = $PageMapper->find();
+        // Fetch all published pages
+        $this->pages = $PageMapper->findPublishedPages();
 
         return;
     }

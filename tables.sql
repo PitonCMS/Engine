@@ -42,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `url_uq` (`url`)
+  UNIQUE KEY `url_uq` (`url`),
+  KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `page_element` (

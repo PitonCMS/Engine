@@ -277,12 +277,25 @@ abstract class DataMapperAbstract
     }
 
     /**
-     * Current Date Time in MySQL Format
-     * @return String
+     * Current Date Time
+     *
+     * Returns datetime string in MySQL Format
+     * @return string
      */
     public function now()
     {
         return date('Y-m-d H:i:s');
+    }
+
+    /**
+     * Current Date
+     *
+     * Returns date string in MySQL Format
+     * @return string
+     */
+    public function today()
+    {
+        return date('Y-m-d');
     }
 
     // ------------------------------------------
