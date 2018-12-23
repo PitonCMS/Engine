@@ -60,10 +60,10 @@
       <h5>Controls</h5>
       <!-- Control Buttons -->
       <div class="mb-2">
-        <a class="btn btn-warning" href="{{ pathFor('showPages') }}">Cancel</a>
-        <button class="btn btn-primary" type="submit" name="button" title="Save page.">Save</button>
+        <a class="btn btn-warning mb-2" href="{{ pathFor('showPages') }}">Cancel</a>
+        <button class="btn btn-primary mb-2" type="submit" name="button" title="Save page.">Save</button>
         {% if page.id %}
-        <a class="btn btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
+        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete</a>
         {% endif %}
       </div>
       <hr>
