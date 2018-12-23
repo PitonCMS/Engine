@@ -69,9 +69,9 @@
               {% if not page.published_date %}
               <span class="input-group-text" title="Not published">Draft</span>
               {% elseif page.published_date > "now"|date('Y-m-d') %}
-              <span class="input-group-text list-group-item-warning">Pending</span>
+              <span class="input-group-text bg-warning">Pending</span>
               {% elseif page.published_date <= "now"|date('Y-m-d') %}
-              <span class="input-group-text list-group-item-success">Published</span>
+              <span class="input-group-text bg-success text-light">Published</span>
               {% endif %}
             </div>
             {% if page.published_date %}
