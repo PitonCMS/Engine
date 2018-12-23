@@ -6,9 +6,8 @@
 
 <!-- TODO Move this into css file -->
 <style type="text/css">
-  .jsSectionParent {border: 1px solid rgba(0,0,0,.125);}
   .scroll-container {
-    height:100vh;
+    height: 70vh; /*Not sure how to manage this*/
     overflow-y: scroll;
     position: relative;
   }
@@ -23,14 +22,14 @@
         {% endif %}
     </div>
   </div>
-  <hr>
+  <hr class="mt-0">
 
 <form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="layout" value="{{ page.layout }}">
 
   <div class="row">
-    <div class="col-md scroll-container" data-spy="scroll" data-target="#page-nav">
+    <div class="col-md scroll-container" data-spy="scroll" data-target="#page-edit-nav">
 
       <div class="form-group">
         <label>Title</label>
@@ -50,7 +49,7 @@
       </div>
 
       {% for section in page.definition.sections %}
-      <div class="p-2 mb-2 jsSectionParent" id="page-section-{{ section.codeName }}">
+      <div class="p-2 mb-2 jsSectionParent border" id="page-section-{{ section.codeName }}">
         <h2>{{ section.name }} Section</h2>
         {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
 
@@ -79,15 +78,19 @@
       </div>
       <hr>
       <div>
-        <h5>Section Navigator</h5>
-        <div class="jsSmoothScroll" id="page-nav">
-        {% for section in page.definition.sections %}
-            <a href="#page-section-{{ section.codeName }}">{{ section.name }} Section</a><br>
+        <h6>Page Navigator</h6>
+        <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
+          <nav class="nav nav-pills flex-column">
+          {% for section in page.definition.sections %}
+            <a class="nav-link" href="#page-section-{{ section.codeName }}">{{ section.name }} (Section)</a>
+            <nav class="nav nav-pills flex-column">
             {% for element in page.elements if element.section_name == section.codeName %}
-              <a href="#page-element-{{ element.id }}" class="ml-2">{{ element.title }} Element</a><br>
+              <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
             {% endfor %}
-        {% endfor %}
-        </div>
+            </nav>
+          {% endfor %}
+          </nav>
+        </nav>
       </div>
     </div><!-- end right col -->
 
