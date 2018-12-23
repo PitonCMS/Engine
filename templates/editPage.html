@@ -4,16 +4,6 @@
 
 {% block body %}
 
-<!-- TODO Move this into css file -->
-<style type="text/css">
-  .scroll-container {
-    height: 70vh; /*Not sure how to manage this*/
-    overflow-y: scroll;
-    position: relative;
-  }
-</style>
-
-
   <div class="row">
     <div class="col-md">
         <h2>{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page</h2>
