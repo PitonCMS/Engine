@@ -16,9 +16,9 @@
               <div class="dropdown-divider"></div>
               {% for key, tl in getThemeLayouts()  %}
               <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">Add {{ tl }} Page</a>
+              {% else %}
+              <a class="dropdown-item" href="#">No Valid Theme Selected</a>
               {% endfor %}
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">All Page Elements</a>
             </div>
           </li>
 

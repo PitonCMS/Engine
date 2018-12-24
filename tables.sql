@@ -69,19 +69,22 @@ CREATE TABLE IF NOT EXISTS `page_element` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 1,
   `setting_key` varchar(40) NOT NULL,
-  `setting_value` varchar(150) NULL DEFAULT NULL,
-  `label` varchar(60) NULL DEFAULT NULL,
+  `setting_value` varchar(1000) DEFAULT NULL,
+  `input_type` varchar(20) DEFAULT NULL,
+  `label` varchar(60) DEFAULT NULL,
+  `help` varchar(500) DEFAULT NULL,
   `restricted` char(1) NOT NULL DEFAULT 'N',
-  `created_by` int NOT NULL DEFAULT 1,
+  `created_by` int(11) NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_by` int(11) NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `setting_category_key_idx` (`category`, `setting_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+  KEY `setting_key_uq` (`setting_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `title`, `url`, `url_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', NULL, 1, now(), 1, now());
@@ -91,6 +94,25 @@ INSERT INTO `page_element` (`id`, `page_id`, `section_name`, `element_type`, `el
     (1, 1, 'aboveTheFoldHero', 'hero', 1, 'Hero Image', 'Call to Action!', '<p>Call to Action!</p>', 'https://unsplash.it/600', 1, now(), 1, now()),
     (2, 1, 'introBlock', 'text', 1, 'Main Body Text', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>', null, 1, now(), 1, now());
 
-INSERT INTO `setting` (`category`, `setting_key`, `setting_value`, `label`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES ('global', 'theme', 'default', 'Theme', 1, now(), 1, now());
+INSERT INTO `setting` (`id`, `category`, `sort_order`, `setting_key`, `setting_value`, `input_type`, `label`, `help`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+VALUES
+  (1,'site',1,'theme','default','select','Theme',NULL,'N',1,now(),1,now()),
+  (2,'site',2,'dateFormat','mm/dd/yyyy','select','Date Format','Select date picker format to use across site.','N',1,now(),1,now()),
+  (3,'site',3,'googleWebMaster','Unique GWM Key',NULL,'Google Webmaster Verification Link',NULL,'N',1,now(),1,now()),
+  (4,'site',4,'googleAnalytics','Google Analytics Tracking Code',NULL,'Google Analytics Code',NULL,'N',1,now(),1,now()),
+  (5,'site',5,'statCounter','Stat counter code',NULL,'Stat Counter',NULL,'N',1,now(),1,now()),
+  (6,'contact',1,'displayName','Moritz Media',NULL,'Display Name',NULL,'N',1,now(),1,now()),
+  (7,'contact',2,'telephone','555-1212',NULL,'Telephone',NULL,'N',1,now(),1,now()),
+  (8,'contact',3,'mobile','541-555-1212',NULL,'Mobile',NULL,'N',1,now(),1,now()),
+  (9,'contact',4,'address1','Building 4',NULL,'Address Line 1',NULL,'N',1,now(),1,now()),
+  (10,'contact',5,'address2','1234 Main St',NULL,'Address Line 2',NULL,'N',1,now(),1,now()),
+  (11,'contact',6,'address3','Flat 13',NULL,'Address Line 3',NULL,'N',1,now(),1,now()),
+  (12,'contact',7,'city','Bend',NULL,'City',NULL,'N',1,now(),1,now()),
+  (13,'contact',8,'province','OR',NULL,'State',NULL,'N',1,now(),1,now()),
+  (14,'contact',9,'postalCode','TW1 2HU',NULL,'Postal Code',NULL,'N',1,now(),1,now()),
+  (15,'contact',10,'country','United States',NULL,'Country',NULL,'N',1,now(),1,now()),
+  (16,'social',1,'facebookLink','https://www.facebook.com/',NULL,'Facebook Link',NULL,'N',1,now(),1,now()),
+  (17,'social',2,'twitterLink','https://twitter.com',NULL,'Twitter Link',NULL,'N',1,now(),1,now()),
+  (18,'social',3,'instagramLink','https://www.instagram.com/',NULL,'Instagram Link',NULL,'N',1,now(),1,now()),
+  (19,'social',4,'linkedinLink','https://www.linkedin.com/',NULL,'LinkedIn Link',NULL,'N',1,now(),1,now());
 

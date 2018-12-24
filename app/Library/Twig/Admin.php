@@ -78,22 +78,25 @@ class Admin extends Base
         // Get layout templates
         $layouts = [];
         $pathToLayouts = ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/';
-        foreach (new \DirectoryIterator($pathToLayouts) as $dirObject) {
-            if ($dirObject->isDir() ||
-                $dirObject->isDot() ||
-                substr($dirObject->getFilename(), 0, 1) === '.' ||
-                substr($dirObject->getFilename(), 0, 1) === '_' ||
-                pathinfo($dirObject->getFilename(), PATHINFO_EXTENSION) === 'json'
-            ) {
-                continue;
-            }
 
-            // Split camelCase filenames and upper case first letters into title case,
-            // and assign to array using [fileName] = Readable File Name
-            $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-            $ReadableFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
-            $ReadableFileName = ucwords($ReadableFileName);
-            $layouts[$fileName] = $ReadableFileName;
+        if (is_dir($pathToLayouts)) {
+            foreach (new \DirectoryIterator($pathToLayouts) as $dirObject) {
+                if ($dirObject->isDir() ||
+                    $dirObject->isDot() ||
+                    substr($dirObject->getFilename(), 0, 1) === '.' ||
+                    substr($dirObject->getFilename(), 0, 1) === '_' ||
+                    pathinfo($dirObject->getFilename(), PATHINFO_EXTENSION) === 'json'
+                ) {
+                    continue;
+                }
+
+                // Split camelCase filenames and upper case first letters into title case,
+                // and assign to array using [fileName] = Readable File Name
+                $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
+                $ReadableFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
+                $ReadableFileName = ucwords($ReadableFileName);
+                $layouts[$fileName] = $ReadableFileName;
+            }
         }
 
         return $layouts;

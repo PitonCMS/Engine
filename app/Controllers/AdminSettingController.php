@@ -11,7 +11,7 @@ class AdminSettingController extends AdminBaseController
     /**
      * Show Settings
      *
-     * List all site configuration settings
+     * List all site configuration settings in bulk edit form
      */
     public function showSettings()
     {
@@ -36,7 +36,7 @@ class AdminSettingController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
 
-        $allSettings = $this->request->getParsedBodyParam('setting');
+        $allSettings = $this->request->getParsedBody();
 
         // Save settings
         foreach ($allSettings['id'] as $key => $row) {
