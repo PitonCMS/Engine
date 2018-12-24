@@ -26,13 +26,23 @@ $container['view'] = function ($c) {
     ]);
 
     // Piton Twig Extensions
-    // TODO Is this a useless optimization to separate backend from frontend Twig extensions?
     $currentPath = $c->request->getUri()->getPath();
     if (substr($currentPath, 0, 6) === '/admin') {
         $view->addExtension(new Piton\Library\Twig\Admin($c));
     } else {
         $view->addExtension(new Piton\Library\Twig\Front($c));
     }
+
+    // Set twig default date filter/function format based on site settings
+    // Map site setting date format to PHP equivalent
+    $dateFormats = [
+        'mm/dd/yyyy' => 'm/d/Y',
+        'dd-mm-yyyy' => 'd-m-Y',
+        'dd.mm.yyyy' => 'd.m.Y'
+        ];
+
+    $twigEnvironment = $view->getEnvironment();
+    $twigEnvironment->getExtension('Twig_Extension_Core')->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
 
     // Load Twig debugger if in development
     if ($settings['production'] === false) {
