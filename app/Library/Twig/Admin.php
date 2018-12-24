@@ -42,6 +42,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getThemeLayouts', [$this, 'getThemeLayouts']),
             new \Twig_SimpleFunction('uniqueArrayKey', [$this, 'uniqueArrayKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
+            new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
         ]);
     }
 
@@ -53,14 +54,19 @@ class Admin extends Base
      */
     public function getThemes()
     {
-        $themes = ['default'];
+        $themes['default'] = 'Default';
         foreach (new \DirectoryIterator(ROOT_DIR . 'themes/') as $dirObject) {
             // Ignore dot files, and skip default theme as we will force that option to the top
             if (!$dirObject->isDir() || $dirObject->isDot() || $dirObject->getFilename() === 'default') {
                 continue;
             }
 
-            $themes[] = $dirObject->getFilename();
+            // Split camelCase theme names and upper case first letters into title case,
+            // and assign to array using [themeName] = Readable Theme Name
+            $themeName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
+            $ReadableThemeName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $themeName);
+            $ReadableThemeName = ucwords($ReadableThemeName);
+            $themes[$themeName] = $ReadableThemeName;
         }
 
         return $themes;
@@ -142,5 +148,30 @@ class Admin extends Base
         }
 
         return null;
+    }
+
+    /**
+     * Get Setting Select Options
+     *
+     * Accepts a setting_key string and returns an array of selection options
+     * Limited to: "theme", "dateFormat"
+     * @param string $settingKey Setting key string
+     * @return array
+     */
+    public function getSettingOptions($settingKey)
+    {
+        if ($settingKey === 'theme') {
+            return $this->getThemes();
+        }
+
+        if ($settingKey === 'dateFormat') {
+            return [
+                'mm/dd/yyyy' => 'mm/dd/yyyy',
+                'dd-mm-yyyy' => 'dd-mm-yyyy',
+                'dd.mm.yyyy' => 'dd.mm.yyyy'
+            ];
+        }
+
+        return[];
     }
 }
