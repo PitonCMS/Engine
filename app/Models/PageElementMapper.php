@@ -49,7 +49,6 @@ class PageElementMapper extends DataMapperAbstract
         $this->bindValues[] = $pageId;
 
         $this->execute();
-        $this->clear();
 
         return;
     }

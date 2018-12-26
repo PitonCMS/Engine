@@ -7,6 +7,7 @@
 namespace Piton\Models;
 
 use \PDO;
+use \Exception;
 
 abstract class DataMapperAbstract
 {
@@ -113,7 +114,7 @@ abstract class DataMapperAbstract
      * @param object $logger Logging
      * @param array $settings Optional array of settings
      */
-    public function __construct($pdo, $logger = null, $settings = [])
+    public function __construct(PDO $pdo, $logger = null, array $settings = [])
     {
         // $dbh and $logger are static properties so only set once
         if (!self::$dbh) {
@@ -176,12 +177,10 @@ abstract class DataMapperAbstract
             $this->makeSelect();
         }
 
-        // Execute the query
+        // Execute the query & return
         $this->execute();
-        $result = $this->statement->fetch();
-        $this->clear();
 
-        return $result;
+        return $this->statement->fetch();
     }
 
     /**
@@ -201,10 +200,8 @@ abstract class DataMapperAbstract
 
         // Execute the query
         $this->execute();
-        $data = $this->statement->fetchAll();
-        $this->clear();
 
-        return $data;
+        return $this->statement->fetchAll();
     }
 
     /**
@@ -329,7 +326,7 @@ abstract class DataMapperAbstract
     {
         // Make sure a primary key was set
         if (empty($domainObject->{$this->primaryKey})) {
-            throw new \Exception('A primary key id was not provided to update the record.');
+            throw new Exception('A primary key id was not provided to update the record.');
         }
 
         // Get started
@@ -371,7 +368,6 @@ abstract class DataMapperAbstract
 
         // Execute
         $this->execute();
-        $this->clear();
 
         return $domainObject;
     }
@@ -436,7 +432,6 @@ abstract class DataMapperAbstract
         // Execute and assign last insert ID to primary key and return
         $this->execute();
         $domainObject->{$this->primaryKey} = self::$dbh->lastInsertId();
-        $this->clear();
 
         return $domainObject;
     }
@@ -451,7 +446,7 @@ abstract class DataMapperAbstract
     {
         // Make sure the ID was set
         if (empty($domainObject->{$this->primaryKey})) {
-            throw new \Exception('A primary key id was not provided to delete this record.');
+            throw new Exception('A primary key id was not provided to delete this record.');
         }
 
         // Make SQL Statement
@@ -459,16 +454,13 @@ abstract class DataMapperAbstract
         $this->bindValues[] = $domainObject->{$this->primaryKey};
 
         // Execute
-        $this->execute();
-        $this->clear();
-
-        return;
+        return $this->execute();
     }
 
     /**
      * Make Default Select
      *
-     * Make select statement if $this->sql was not set
+     * Make select statement if $this->sql is not set
      * @return none
      */
     protected function makeSelect()
@@ -532,6 +524,9 @@ abstract class DataMapperAbstract
                 $this->statement->setFetchMode($this->fetchMode);
             }
         }
+
+        // Clear last query
+        $this->clear();
 
         return $outcome;
     }
