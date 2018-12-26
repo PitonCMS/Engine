@@ -6,6 +6,8 @@
  */
 namespace Piton\Library\Handlers;
 
+use Piton\Interfaces\SessionInterface;
+
 class Access
 {
     /**
@@ -25,7 +27,7 @@ class Access
     /**
      * Constructor
      */
-    public function __construct($sessionHandler)
+    public function __construct(SessionInterface $sessionHandler)
     {
         $this->session = $sessionHandler;
     }

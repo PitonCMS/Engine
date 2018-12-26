@@ -84,7 +84,8 @@ $container['errorHandler'] = function ($c) {
 
 // Sessions
 $container['sessionHandler'] = function ($c) {
-    return new Piton\Session\SessionHandler($c['database'], $c->get('settings')['session']);
+    // return new Piton\Session\SessionHandler($c['database'], $c->get('settings')['session']);
+    return new Piton\Handlers\Session($c['database'], $c->get('settings')['session']);
 };
 
 // Access Control
@@ -113,7 +114,7 @@ $container['dataMapper'] = function ($c) {
     return function ($mapper) use ($c) {
         // Get session user ID
         $session = $c->sessionHandler;
-        $userId = ($session->getData('user_id')) ? $session->getData('user_id') : 1;
+        $userId = ($session->getData('user_id')) ?: 1;
 
         // Return instantiated mapper
         $fqn = 'Piton\\Models\\' . $mapper;
