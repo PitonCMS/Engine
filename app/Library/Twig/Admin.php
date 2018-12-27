@@ -154,7 +154,7 @@ class Admin extends Base
      * Get Setting Select Options
      *
      * Accepts a setting_key string and returns an array of selection options
-     * Limited to: "theme", "dateFormat"
+     * Limited to: "theme", "dateFormat", "UrlScheme"
      * @param string $settingKey Setting key string
      * @return array
      */
@@ -169,6 +169,13 @@ class Admin extends Base
                 'mm/dd/yyyy' => 'mm/dd/yyyy',
                 'dd-mm-yyyy' => 'dd-mm-yyyy',
                 'dd.mm.yyyy' => 'dd.mm.yyyy'
+            ];
+        }
+
+        if ($settingKey === 'UrlScheme') {
+            return [
+                'http' => 'http',
+                'https' => 'https (Secure)'
             ];
         }
 
