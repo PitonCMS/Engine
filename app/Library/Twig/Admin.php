@@ -40,7 +40,7 @@ class Admin extends Base
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('getThemes', [$this, 'getThemes']),
             new \Twig_SimpleFunction('getThemeLayouts', [$this, 'getThemeLayouts']),
-            new \Twig_SimpleFunction('uniqueArrayKey', [$this, 'uniqueArrayKey']),
+            new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
         ]);
@@ -109,14 +109,15 @@ class Admin extends Base
     }
 
     /**
-     * Tests if Numeric
+     * Generate Key
      *
-     * @param mixed
-     * @return boolean
+     * Generates unique key of n-length.
+     * @param int  $length length of key, optional (default=4)
+     * @return str
      */
-    public function uniqueArrayKey()
+    public function uniqueKey($length = 4)
     {
-        return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, 4);
+        return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, $length);
     }
 
     /**

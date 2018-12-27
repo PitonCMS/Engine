@@ -6,7 +6,7 @@
 
 {% macro elementForm(element, sectionName, elementTypeOptions) %}
 
-{% set arrayKey = uniqueArrayKey() %}
+{% set arrayKey = uniqueKey() %}
 
 <div class="card mb-2 jsElementParent" id="page-element-{{ element.id|default(arrayKey) }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
