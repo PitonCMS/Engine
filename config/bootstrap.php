@@ -43,6 +43,11 @@ return call_user_func(
         // Load dependencies
         require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
+        // Load dependencies site override
+        if (file_exists(ROOT_DIR . 'config/dependencies.php')) {
+            require ROOT_DIR . 'config/dependencies.php';
+        }
+
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
