@@ -1,0 +1,48 @@
+{# Custom Settigs Form #}
+
+{% macro custom(setting) %}
+    <div class="jsCustomSetting" id="{{ setting.key }}">
+      <div class="form-row form-group">
+        <input type="hidden" name="id[]" value="{{ setting.id }}">
+        <div class="form-group col-md-1">
+          <label>Sort</label>
+          <input type="text" class="form-control jsCustomSettingSort" name="sort_order[]" maxlength="3" value="{{ setting.sort_order|default(1) }}" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Display Label</label>
+          <input type="text" class="form-control" name="label[]" maxlength="60" value="{{ setting.label }}" required>
+          <small class="form-text text-muted">Title for setting (60 characters).</small>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Current Setting Value</label>
+          <input type="text" class="form-control" value="{{ setting.setting_value|slice(0, 15) }}" readonly>
+        </div>
+      </div>
+
+      <div class="form-row form-group">
+        <div class="form-group col-md-6">
+          <label>Setting Key</label>
+          <input type="text" class="form-control" name="setting_key[]" maxlength="40" value="{{ setting.setting_key }}" required>
+          <small class="form-text text-muted">Single camelCase text key (40 characters).</small>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Input Type</label>
+          <select class="form-control" name="input_type[]">
+            <option value="" {% if setting.input_type == '' %}selected{% endif %}>Input</option>
+            <option value="textarea" {% if setting.input_type == 'textarea' %}selected{% endif %}>Textarea</option>
+            <option value="select" {% if setting.input_type == 'select' %}selected{% endif %}>Select</option>
+          </select>
+          <small class="form-text text-muted">Default is <code>input</code>. Select lists need development to add options in <code>Piton\Library\Twig\Admin</code></small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Help Text</label>
+        <textarea class="form-control" rows="3" name="help[]">{{ setting.help }}</textarea>
+        <small class="form-text text-muted">Optional descriptive help text. Accepts HTML, CSS, JavaScript (1,000 characters).</small>
+      </div>
+      <div class="form-group">
+        <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" data-id="{{ setting.id }}">Delete Custom Setting</a>
+      </div>
+    </div>
+    <hr>
+{% endmacro custom %}

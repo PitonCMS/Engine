@@ -62,8 +62,8 @@ $app->group('/admin', function () {
         // Page elements
         $this->group('/element', function () {
             // Fetch element form
-            $this->post('/fetch', function ($args) {
-                return (new AdminPageController($this))->fetchElementForm();
+            $this->post('/new', function ($args) {
+                return (new AdminPageController($this))->newElementForm();
             });
 
             // Delete ELement
@@ -86,6 +86,26 @@ $app->group('/admin', function () {
         $this->post('/save', function ($args) {
             return (new AdminSettingController($this))->saveSettings();
         })->setName('saveSettings');
+
+        // Show Custom Settings
+        $this->get('/custom', function ($args) {
+            return (new AdminSettingController($this))->showCustomSettings();
+        })->setName('showCustomSettings');
+
+        // Add Custom Setting
+        $this->get('/custom/new', function ($args) {
+            return (new AdminSettingController($this))->newCustomSettingForm();
+        });
+
+        // Save Custom Settings
+        $this->post('/custom/save', function ($args) {
+            return (new AdminSettingController($this))->saveCustomSettings();
+        })->setName('saveCustomSettings');
+
+        // Delete Custom Setting
+        $this->get('/custom/delete/{id:[0-9]{0,}}', function ($args) {
+            return (new AdminSettingController($this))->deleteCustomSettings($args);
+        })->setName('deleteCustomSetting');
     });
     // End settings
 })->add(function ($request, $response, $next) {

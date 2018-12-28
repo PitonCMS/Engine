@@ -160,7 +160,7 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
-     * Fetch New Element Form
+     * New Element Form
      *
      * Renders new element form with initial values, and returns via Ajax to browser.
      * At a minimum, the element form is expecting these values:
@@ -169,7 +169,7 @@ class AdminPageController extends AdminBaseController
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
      */
-    public function fetchElementForm()
+    public function newElementForm()
     {
         $parsedBody = $this->request->getParsedBody();
 
@@ -182,7 +182,9 @@ class AdminPageController extends AdminBaseController
             $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
         }
 
-        $elementFormHtml = $this->container->view->fetch('@admin/editElementFormLoad.html', ['element' => $form]);
+        $template = '{% import "@admin/editElementForm.html" as form %}';
+        $template .= " {{ form.elementForm(element, element.section_name, elementTypeOptions) }}";
+        $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
         // Set the response type
         $r = $this->response->withHeader('Content-Type', 'application/json');
