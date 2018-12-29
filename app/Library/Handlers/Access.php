@@ -1,13 +1,20 @@
 <?php
 /**
- * Access Control Handler
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Manages Authentication and Authorization
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Handlers;
 
 use Piton\Interfaces\SessionInterface;
 
+/**
+ * Access Control Handler
+ *
+ * Manages Authentication and Authorization
+ */
 class Access
 {
     /**

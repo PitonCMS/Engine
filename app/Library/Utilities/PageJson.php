@@ -1,7 +1,10 @@
 <?php
 /**
- * Piton Page Layout JSON Decoder/Encoder and schema validator
+ * PitonCMS (https://github.com/PitonCMS)
  *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Utilities;
 
@@ -9,6 +12,9 @@ use Interop\Container\ContainerInterface;
 use Webmozart\Json\JsonDecoder;
 use Webmozart\Json\ValidationFailedException;
 
+/**
+ * Piton Page Layout JSON Decoder/Encoder and schema validator
+ */
 class PageJson extends JsonDecoder
 {
     /**

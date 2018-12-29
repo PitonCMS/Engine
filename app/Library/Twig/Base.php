@@ -1,13 +1,20 @@
 <?php
 /**
- * Piton Base Twig Extension
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Has core Twig properties and functions used on public and on admin sites.
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
+/**
+ * Piton Base Twig Extension
+ *
+ * Has core Twig properties and functions used on public and on admin sites.
+ */
 class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**

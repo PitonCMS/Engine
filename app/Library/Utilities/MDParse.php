@@ -1,12 +1,19 @@
 <?php
 /**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+namespace Piton\Library\Utilities;
+
+/**
  * Piton Markdown Parser
  *
  * Modified parser to render single image lines without the paragraph tags
  * https://gist.github.com/fxck/d65255218de3611df3cd
  */
-namespace Piton\Library\Utilities;
-
 class MDParse extends \Parsedown
 {
     /**

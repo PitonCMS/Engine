@@ -1,10 +1,10 @@
 <?php
 /**
- * Piton Route Argument Strategy
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * The default Slim route strategy passes the Request, Response, objects and route Arguments array to the callback.
- * However, in Piton the Request and Response objects are available in the Controllers as properties.
- * This route strategy passes only the URL route arguments to the controller.
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Handlers;
 
@@ -13,7 +13,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 
 /**
- * Piton route callback strategy with route parameters as an array of arguments.
+ * Piton Route Argument Strategy
+ *
+ * The default Slim route strategy passes the Request, Response, objects and route Arguments array to the callback.
+ * However, in Piton the Request and Response objects are available in the Controllers as properties.
+ * This route strategy passes only the URL route arguments to the controller.
  */
 class RouteArgumentStrategy implements InvocationStrategyInterface
 {

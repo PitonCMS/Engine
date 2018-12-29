@@ -1,8 +1,10 @@
 <?php
 /**
- * Piton Base Controller
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * All other controllers should extend this class.
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Controllers;
 
@@ -10,6 +12,11 @@ use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Piton Base Controller
+ *
+ * All other controllers should extend this class.
+ */
 class BaseController
 {
     /**

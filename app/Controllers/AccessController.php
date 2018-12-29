@@ -1,6 +1,15 @@
 <?php
 /**
- * Login Controller
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+namespace Piton\Controllers;
+
+/**
+ * Access Controller
  *
  * Piton uses a passwordless login process, in which a user requests a one-time use login token
  * to be sent by email to the user's validated email account. The login flow is:
@@ -12,8 +21,6 @@
  * 5 The application validates the submitted token to the one in session data, and if not expired an authenticated
  *      session is started
  */
-namespace Piton\Controllers;
-
 class AccessController extends AdminBaseController
 {
     // Login token key name

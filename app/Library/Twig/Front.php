@@ -1,14 +1,21 @@
 <?php
 /**
- * Piton Front End Twig Extension
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Custom Twig functions and filters to be used on the public facing site.
- * Note: extended methods such as getFilters and getFunctions must merge parent functions.
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
+/**
+ * Piton Front End Twig Extension
+ *
+ * Custom Twig functions and filters to be used on the public facing site.
+ * Note: extended methods such as getFilters and getFunctions must merge parent functions.
+ */
 class Front extends Base
 {
 

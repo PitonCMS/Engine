@@ -1,8 +1,10 @@
 <?php
 /**
- * Error Handler
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Extends Slim\Handlers\Error to support logging
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Handlers;
 
@@ -10,7 +12,12 @@ use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-final class Error extends \Slim\Handlers\Error
+/**
+ * Error Handler
+ *
+ * Extends Slim\Handlers\Error to support logging
+ */
+class Error extends \Slim\Handlers\Error
 {
     /**
      * Logger

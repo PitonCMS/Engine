@@ -1,14 +1,21 @@
 <?php
 /**
- * Piton Back End Admin Twig Extension
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Has Twig functions and filters to be used on the admin site.
- * Note: extended methods such as getFilters and getFunctions must merge parent functions.
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
 
+/**
+ * Piton Back End Admin Twig Extension
+ *
+ * Has Twig functions and filters to be used on the admin site.
+ * Note: extended methods such as getFilters and getFunctions must merge parent functions.
+ */
 class Admin extends Base
 {
 

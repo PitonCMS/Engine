@@ -1,14 +1,21 @@
 <?php
 /**
- * Piton Not Found Handler
+ * PitonCMS (https://github.com/PitonCMS)
  *
- * Extends the Slim NotFound handler
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 namespace Piton\Library\Handlers;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Piton Not Found Handler
+ *
+ * Extends the Slim NotFound handler
+ */
 class NotFound extends \Slim\Handlers\NotFound
 {
     /**
