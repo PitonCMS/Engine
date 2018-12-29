@@ -70,7 +70,7 @@
                   {{ settingForm.inputHtml(setting) }}
                 {% endif %}
               {% else %}
-              <h4>No Custom Settings Available</h4>
+                <p><a href="{{ pathFor('showCustomSettings') }}">Add custom site setting</a></p>
               {% endfor %}
             </div>
           </div>
@@ -83,37 +83,39 @@
 
 {% endblock %}
 
+{# Standard Input HTML Macro #}
+{% macro inputHtml(setting) %}
+               <div class="form-group ">
+                    <label>{{ setting.label }}</label>
+                    <input type="hidden" name="id[]" value="{{ setting.id }}">
+                    <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
+                    <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
+                    <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+                </div>
+{% endmacro inputHtml %}
 
 {# Select List HTML Macro #}
 {% macro selectHtml(setting, options) %}
               <div class="form-group">
                 <label>{{ setting.label }}</label>
                 <input type="hidden" name="id[]" value="{{ setting.id }}">
+                <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[]">
                   {% for key, option in options %}
                   <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
                   {% endfor %}
                 </select>
-                <small class="form-text text-muted">{{ setting.help }}</small>
+                <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
               </div>
 {% endmacro selectHtml %}
-
-{# Standard Input HTML Macro #}
-{% macro inputHtml(setting) %}
-               <div class="form-group ">
-                    <label>{{ setting.label }}</label>
-                    <input type="hidden" name="id[]" value="{{ setting.id }}">
-                    <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
-                    <small class="form-text text-muted">{{ setting.help }}</small>
-                </div>
-{% endmacro inputHtml %}
 
 {# Textarea HTML Macro #}
 {% macro textareaHtml(setting) %}
                <div class="form-group ">
                     <label>{{ setting.label }}</label>
                     <input type="hidden" name="id[]" value="{{ setting.id }}">
+                    <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                     <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
-                    <small class="form-text text-muted">{{ setting.help }}</small>
+                    <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
 {% endmacro textareaHtml %}

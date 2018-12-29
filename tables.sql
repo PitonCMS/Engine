@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `setting_key_uq` (`setting_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `title`, `url`, `url_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', NULL, 1, now(), 1, now());
@@ -97,8 +97,8 @@ INSERT INTO `page_element` (`id`, `page_id`, `section_name`, `element_type`, `el
 INSERT INTO `setting` (`category`, `sort_order`, `setting_key`, `setting_value`, `input_type`, `label`, `help`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   ('site',1,'theme','default','select','Theme',NULL,'N',1,now(),1,now()),
-  ('site',2,'UrlDomainName','example.com','','Domain Name','Do not include the http(s):// or a trailing slash. For use in generated sitemaps.','N',1,now(),1,now()),
-  ('site',3,'UrlScheme','http','select','URL Scheme','Select <code>http</code> or <code>https</code> (https requires additional server changes).','N',1,now(),1,now()),
+  ('site',2,'urlDomainName','example.com','','Domain Name','Do not include the http(s):// or a trailing slash. For use in generated sitemaps.','N',1,now(),1,now()),
+  ('site',3,'urlScheme','http','select','URL Scheme','Select <code>http</code> or <code>https</code> (https requires additional server changes).','N',1,now(),1,now()),
   ('site',4,'dateFormat','mm/dd/yyyy','select','Date Format','Select date picker format to use across site.','N',1,now(),1,now()),
   ('site',5,'googleWebMaster','Unique GWM Key',NULL,'Google Webmaster Verification Link',NULL,'N',1,now(),1,now()),
   ('site',6,'googleAnalytics','Google Analytics Tracking Code',NULL,'Google Analytics Code',NULL,'N',1,now(),1,now()),

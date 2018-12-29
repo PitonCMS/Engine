@@ -155,7 +155,7 @@ class Admin extends Base
      * Get Setting Select Options
      *
      * Accepts a setting_key string and returns an array of selection options
-     * Limited to: "theme", "dateFormat", "UrlScheme"
+     * Limited to: "theme", "dateFormat", "urlScheme"
      * @param string $settingKey Setting key string
      * @return array
      */
@@ -173,7 +173,7 @@ class Admin extends Base
             ];
         }
 
-        if ($settingKey === 'UrlScheme') {
+        if ($settingKey === 'urlScheme') {
             return [
                 'http' => 'http',
                 'https' => 'https (Secure)'

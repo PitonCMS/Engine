@@ -4,6 +4,8 @@
  */
 namespace Piton\Models;
 
+use Piton\ORM\DataMapperAbstract;
+
 class PageMapper extends DataMapperAbstract
 {
     protected $table = 'page';

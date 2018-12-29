@@ -4,6 +4,8 @@
  */
 namespace Piton\Models;
 
+use Piton\ORM\DataMapperAbstract;
+
 class UserMapper extends DataMapperAbstract
 {
     protected $table = 'user';

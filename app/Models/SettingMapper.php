@@ -4,6 +4,8 @@
  */
 namespace Piton\Models;
 
+use Piton\ORM\DataMapperAbstract;
+
 class SettingMapper extends DataMapperAbstract
 {
     protected $table = 'setting';
