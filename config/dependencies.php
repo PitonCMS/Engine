@@ -114,11 +114,12 @@ $container['dataMapper'] = function ($c) {
     return function ($mapper) use ($c) {
         // Get session user ID
         $session = $c->sessionHandler;
-        $userId = ($session->getData('user_id')) ?: 1;
+        $dmConfig['sessionUserId'] = $session->getData('user_id');
+        $dmConfig['logger'] = $c['logger'];
 
         // Return instantiated mapper
         $fqn = 'Piton\\Models\\' . $mapper;
-        return new $fqn($c['database'], $c['logger'], ['user_id' => $userId]);
+        return new $fqn($c['database'], $dmConfig);
     };
 };
 
