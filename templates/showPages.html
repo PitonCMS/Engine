@@ -6,9 +6,9 @@
     <div class="col">
     <h1>Pages</h1>
     <hr>
-
+<div class="card-wrapper">
     {% for p in page %}
-    <div class="card mb-4" style="width: 18rem;">
+    <div class="card mb-4">
       <div class="card-header">
         <h5 class="card-title">{{ p.title }}
           {% if not p.published_date %}
@@ -21,6 +21,7 @@
         </h5>
         <h6 class="card-subtitle mb-2 text-muted">URL: <i>/{{ p.url }}</i></h6>
         <h6 class="card-subtitle mb-2 text-muted">Layout: <i>{{ p.layout }}</i></h6>
+        <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
       </div>
       <div class="card-body">
         <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
@@ -38,11 +39,13 @@
           </li>
         {% endfor %}
       </ul>
-      <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
+     
     </div>
     {% else %}
     <strong>No pages found</strong>
     {% endfor %}
+</div>
+    
   </div>
 </div>
 
