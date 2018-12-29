@@ -1,6 +1,6 @@
 <?php
 /**
- * Page Element Mapper
+ * Piton Page Element Mapper
  */
 namespace Piton\Models;
 

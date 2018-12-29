@@ -1,6 +1,6 @@
 <?php
 /**
- * Setting Mapper
+ * Piton Setting Mapper
  */
 namespace Piton\Models;
 
