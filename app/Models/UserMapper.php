@@ -20,6 +20,6 @@ class UserMapper extends DataMapperAbstract
      */
     public function insert(DomainObject $domainObject)
     {
-        return $this->_insert($domainObject, true);
+        return $this->coreInsert($domainObject, true);
     }
 }

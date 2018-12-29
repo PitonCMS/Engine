@@ -44,7 +44,7 @@ class SettingMapper extends DataMapperAbstract
     public function findCustomSettings()
     {
         $this->makeSelect();
-        $this->sql .= ' where setting.category = \'custom\' order by sort_order';
+        $this->sql .= ' and setting.category = \'custom\' order by sort_order';
 
         return $this->find();
     }

@@ -33,7 +33,7 @@ class PageElementMapper extends DataMapperAbstract
     public function findElementsByPageId($pageId)
     {
         $this->makeSelect();
-        $this->sql .= ' where page_id = ? order by section_name, element_sort';
+        $this->sql .= ' and page_id = ? order by section_name, element_sort';
         $this->bindValues[] = $pageId;
 
         return $this->find();
@@ -50,8 +50,6 @@ class PageElementMapper extends DataMapperAbstract
         $this->sql = "delete from {$this->table} where page_id = ?;";
         $this->bindValues[] = $pageId;
 
-        $this->execute();
-
-        return;
+        return $this->execute();
     }
 }

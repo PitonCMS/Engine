@@ -30,10 +30,10 @@ class PageMapper extends DataMapperAbstract
         $this->makeSelect();
 
         if (is_string($pageUrl)) {
-            $this->sql .= ' where url = ?';
+            $this->sql .= ' and url = ?';
             $this->bindValues[] = $pageUrl;
         } else {
-            throw new \Exception('Unknown page identifier type', 1);
+            throw new Exception('Unknown page identifier type', 1);
         }
 
         $this->sql .= " and published_date <= '{$this->today()}'";
@@ -51,7 +51,7 @@ class PageMapper extends DataMapperAbstract
     public function findPublishedPages()
     {
         $this->makeSelect();
-        $this->sql .= " where published_date <= '{$this->today()}'";
+        $this->sql .= " and published_date <= '{$this->today()}'";
 
         return $this->find();
     }
