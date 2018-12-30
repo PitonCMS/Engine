@@ -189,7 +189,7 @@ class AdminPageController extends AdminBaseController
             $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
         }
 
-        $template = '{% import "@admin/editElementForm.html" as form %}';
+        $template = '{% import "@admin/editElement.html" as form %}';
         $template .= " {{ form.elementForm(element, element.section_name, elementTypeOptions) }}";
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
