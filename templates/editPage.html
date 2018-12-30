@@ -1,6 +1,6 @@
 {% extends '@admin/_adminFormBase.html' %}
 
-{% import "@admin/editElement.html" as form %}
+{% import "@admin/editElementMacro.html" as form %}
 
 {% block htmlTitle %}
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page -
