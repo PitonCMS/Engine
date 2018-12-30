@@ -1,0 +1,63 @@
+{#
+    Base layout for Piton forms.
+
+    Available blocks in base layout:
+    - htmlTitle
+    - jsPitonConfig
+    - headJs
+    - footerJs
+
+    Blocks in form:
+    - formHeading
+    - leadText
+    - formActionPath
+    - hiddenInputs
+    - leftColDiv
+    - formBody
+    - otherControls
+    - rightCol
+#}
+{% extends '@admin/_adminBase.html' %}
+
+{% block body %}
+
+  <div class="row">
+    <div class="col-md">
+        <h2>{% block formHeading %}Form Heading{% endblock %}</h2>
+        <p class="lead">{% block leadText %}Lead Text{% endblock %}</p>
+    </div>
+  </div><!-- end head row -->
+  <hr class="mt-0">
+
+<form action="{% block formActionPath %}#{% endblock %}" method="post" accept-charset="utf-8">
+{% block hiddenInputs %}
+{% endblock %}
+
+  <div class="row">
+    <div class="col-md scroll-container" {% block leftColDiv %}{% endblock %}>
+
+    {% block formBody %}
+    {% endblock %}
+
+    </div><!-- end left col -->
+
+    <div class="col-md-3">
+      <!-- Control Buttons -->
+      <div class="mb-2">
+        <a class="btn btn-warning mb-2" href="{% block cancelLink %}#{% endblock %}">Cancel</a>
+        <button class="btn btn-primary mb-2" type="submit" name="button">Save</button>
+
+        {% block otherControls %}
+        {% endblock %}
+
+      </div>
+      <hr>
+
+        {% block rightCol %}
+        {% endblock %}
+    </div><!-- end right col -->
+
+  </div><!-- end row -->
+</form>
+
+{% endblock %}

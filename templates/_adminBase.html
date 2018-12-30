@@ -6,7 +6,7 @@
     <meta name="author" content="PitonCMS">
     <link rel="icon" href="">
 
-    <title>PitonCMS Administration</title>
+    <title>{% block htmlTitle %}{% endblock %}PitonCMS Administration</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
@@ -14,16 +14,17 @@
     <link href="{{ basePath() }}/assets/admin/css/main.css" rel="stylesheet">
 
     <script type="text/javascript">
-      var pitonDateSettings = {
+      var pitonConfig = {
         "dateFormat": "{{ site.settings.dateFormat }}",
         "weekStart": {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }}
+        {% block jsPitonConfig %}{% endblock %}
       };
     </script>
-
+    {% block headJs %}
+    {% endblock %}
   </head>
 
   <body>
-
     {% include "@admin/includes/_navbar.html" %}
 
     <main role="main" class="container">
@@ -49,6 +50,6 @@
         });
       });
     </script>
-
+    {% block footerJs %}{% endblock %}
   </body>
 </html>

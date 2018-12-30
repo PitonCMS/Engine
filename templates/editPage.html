@@ -1,25 +1,27 @@
-{% extends '@admin/_adminBase.html' %}
+{% extends '@admin/_adminFormBase.html' %}
 
 {% import "@admin/editElement.html" as form %}
 
-{% block body %}
+{% block htmlTitle %}
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page -
+{% endblock %}
 
-  <div class="row">
-    <div class="col-md">
-        <h2>{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page</h2>
-        {% if page.definition.pageLayoutDescription %}
-        <p class="lead">{{ page.definition.pageLayoutDescription }}</p>
-        {% endif %}
-    </div>
-  </div>
-  <hr class="mt-0">
+{% block formHeading %}
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page
+{% endblock %}
 
-<form action="{{ pathFor('savePage') }}" method="post" accept-charset="utf-8">
+{% block leadText %}{{ page.definition.pageLayoutDescription }}{% endblock %}
+
+{% block formActionPath %}{{ pathFor('savePage') }}{% endblock %}
+
+{% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="layout" value="{{ page.layout }}">
+{% endblock %}
 
-  <div class="row">
-    <div class="col-md scroll-container" data-spy="scroll" data-target="#page-edit-nav">
+{% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}
+
+{% block formBody %}
 
       <div class="form-group">
         <label>Title</label>
@@ -54,16 +56,12 @@
       </div>
       {% endfor %}
 
-    </div><!-- end left col -->
+{% endblock %}
 
-    <div class="col-md-3">
-      <h5>Controls</h5>
-      <!-- Control Buttons -->
-      <div class="mb-2">
-        <a class="btn btn-warning mb-2" href="{{ pathFor('showPages') }}">Cancel</a>
-        <button class="btn btn-primary mb-2" type="submit" name="button" title="Save page.">Save</button>
+{% block cancelLink %}{{ pathFor('showPages') }}{% endblock %}
+
+{% block otherControls %}
         <div class="form-group">
-
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               {% if not page.published_date %}
@@ -79,11 +77,11 @@
           </div>
         </div>
         {% if page.id %}
-        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}" title="Delete page">Delete Page</a>
+        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
         {% endif %}
-      </div>
-      <hr>
+{% endblock %}
 
+{% block rightCol %}
       <div>
         <h6>Page Navigator</h6>
         <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
@@ -99,9 +97,6 @@
           </nav>
         </nav>
       </div>
-    </div><!-- end right col -->
-
-  </div><!-- end row -->
-</form>
-
 {% endblock %}
+
+
