@@ -29,7 +29,7 @@ class AdminSettingController extends AdminBaseController
         // Fetch settings
         $settings = $SettingMapper->findSiteSettings();
 
-        return $this->render('showSettings.html', ['settings' => $settings]);
+        return $this->render('settings.html', $settings);
     }
 
     /**

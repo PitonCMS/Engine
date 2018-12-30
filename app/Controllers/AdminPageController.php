@@ -35,7 +35,7 @@ class AdminPageController extends AdminBaseController
             }
         }
 
-        return $this->render('showPages.html', $pages);
+        return $this->render('pages.html', $pages);
     }
 
     /**

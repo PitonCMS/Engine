@@ -28,7 +28,7 @@ class AdminUserController extends AdminBaseController
         // Fetch users
         $users = $UserMapper->find();
 
-        return $this->render('showUsers.html', ['users' => $users]);
+        return $this->render('users.html', $users);
     }
 
     /**
