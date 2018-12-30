@@ -3,10 +3,17 @@
 
 {% block body %}
 
-    <div class="row">
-      <div class="col">
+  <div class="row">
+    <div class="col-md">
         <h2>Piton Site Settings</h2>
-        <form action="{{ pathFor('saveSettings') }}" method="post" accept-charset="utf-8">
+    </div>
+  </div>
+  <hr class="mt-0">
+
+  <form action="{{ pathFor('saveSettings') }}" method="post" accept-charset="utf-8">
+    <div class="row">
+
+      <div class="col-md scroll-container">
 
           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
@@ -61,6 +68,7 @@
             </div>
 
             <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-custom-tab">
+              <p><a href="{{ pathFor('editCustomSetting') }}">Add custom site setting</a></p>
               {% for setting in page.settings if setting.category == 'custom' %}
                 {% if setting.input_type == 'select' %}
                   {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
@@ -70,28 +78,41 @@
                   {{ settingForm.inputHtml(setting) }}
                 {% endif %}
               {% else %}
-                <p><a href="{{ pathFor('showCustomSettings') }}">Add custom site setting</a></p>
+                <h5>No Custom Settings</h5>
               {% endfor %}
+
             </div>
           </div>
 
-          <a class="btn btn-warning" href="{{ pathFor('adminHome') }}">Cancel</a>
-          <button type="submit" name="button" class="btn btn-primary">Save</button>
-        </form>
-      </div>
+      </div><!-- end left col -->
+
+      <div class="col-md-3">
+        <h5>Controls</h5>
+        <!-- Control Buttons -->
+        <a class="btn btn-warning mb-2" href="{{ pathFor('adminHome') }}">Cancel</a>
+        <button class="btn btn-primary mb-2" type="submit" name="button">Save</button>
+      </div><!-- End right col -->
+
     </div>
+  </form>
 
 {% endblock %}
 
 {# Standard Input HTML Macro #}
 {% macro inputHtml(setting) %}
-               <div class="form-group ">
+              <div class="form-group">
                     <label>{{ setting.label }}</label>
                     <input type="hidden" name="id[]" value="{{ setting.id }}">
                     <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                     <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
                     <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
+                {% if setting.category == 'custom' %}
+                <div class="form-group">
+                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
+                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
+                </div>
+                {% endif %}
 {% endmacro inputHtml %}
 
 {# Select List HTML Macro #}
@@ -107,15 +128,27 @@
                 </select>
                 <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
               </div>
+                {% if setting.category == 'custom' %}
+                <div class="form-group">
+                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
+                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
+                </div>
+                {% endif %}
 {% endmacro selectHtml %}
 
 {# Textarea HTML Macro #}
 {% macro textareaHtml(setting) %}
-               <div class="form-group ">
+               <div class="form-group">
                     <label>{{ setting.label }}</label>
                     <input type="hidden" name="id[]" value="{{ setting.id }}">
                     <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                     <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
                     <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
+                {% if setting.category == 'custom' %}
+                <div class="form-group">
+                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
+                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
+                </div>
+                {% endif %}
 {% endmacro textareaHtml %}

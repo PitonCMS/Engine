@@ -11,6 +11,7 @@ use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AccessController;
+use Piton\Controllers\AdminCollectionController;
 
 //
 // Private secured routes
@@ -91,27 +92,39 @@ $app->group('/admin', function () {
             return (new AdminSettingController($this))->saveSettings();
         })->setName('saveSettings');
 
-        // Show Custom Settings
-        $this->get('/custom', function ($args) {
-            return (new AdminSettingController($this))->showCustomSettings();
-        })->setName('showCustomSettings');
+        // Custom Settings
+        $this->group('/custom', function () {
+            // Edit Custom Setting
+            $this->get('/edit[/{id}]', function ($args) {
+                return (new AdminSettingController($this))->editCustomSetting($args);
+            })->setName('editCustomSetting');
 
-        // Add Custom Setting
-        $this->get('/custom/new', function ($args) {
-            return (new AdminSettingController($this))->newCustomSettingForm();
-        });
+            // Save Custom Setting
+            $this->post('/save', function ($args) {
+                return (new AdminSettingController($this))->saveCustomSetting();
+            })->setName('saveCustomSetting');
 
-        // Save Custom Settings
-        $this->post('/custom/save', function ($args) {
-            return (new AdminSettingController($this))->saveCustomSettings();
-        })->setName('saveCustomSettings');
-
-        // Delete Custom Setting
-        $this->get('/custom/delete/{id:[0-9]{0,}}', function ($args) {
-            return (new AdminSettingController($this))->deleteCustomSettings($args);
-        })->setName('deleteCustomSetting');
+            // Delete Custom Setting
+            $this->get('/delete/{id}', function ($args) {
+                return (new AdminSettingController($this))->deleteCustomSettings($args);
+            })->setName('deleteCustomSetting');
+        }); // End Custom Settings
     });
     // End settings
+
+    // Collections
+    $this->group('/collection', function () {
+        // Show collection groups
+        $this->get('[/]', function ($args) {
+            return (new AdminCollectionController($this))->showCollectionGroups();
+        })->setName('showCollectionGroups');
+
+        // Edit collection group
+        $this->get('/edit[/{id}]', function ($args) {
+            return (new AdminCollectionController($this))->editCollectionGroup($args);
+        })->setName('editCollectionGroup');
+    });
+    // End collection
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;

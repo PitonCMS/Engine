@@ -51,8 +51,6 @@ class AdminSettingController extends AdminBaseController
             $setting->id = $allSettings['id'][$key];
             $setting->setting_value = $allSettings['setting_value'][$key];
             $SettingMapper->save($setting);
-
-            // TODO If changing themes, copy assets folder to public/theme
         }
 
         // Redirect back to list of settings
@@ -60,68 +58,50 @@ class AdminSettingController extends AdminBaseController
     }
 
     /**
-     * Manage Custom Settings
+     * Edit Custom Setting
      *
-     * Load all custom settings to edit, delete, or add
-     * @param void
+     * Update or add custom setting
+     * @param mixed $args Array with setting ID - Optional
      */
-    public function showCustomSettings()
+    public function editCustomSetting($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
 
-        $customSettings = $SettingMapper->findCustomSettings();
-
-        return $this->render('editCustomSettings.html', ['settings' => $customSettings]);
-    }
-
-    /**
-     * Load New Custom Setting
-     *
-     * Responds as XHR request
-     * @param void
-     */
-    public function newCustomSettingForm()
-    {
-        // If not a XHR request respond as 404
-        if (!$this->request->isXhr()) {
-            $this->notFound();
+        // Fetch custom setting, or create new custom setting
+        if (is_numeric($args['id'])) {
+            // Existing
+            $customSetting = $SettingMapper->findById($args['id']);
+        } elseif (is_string($args['id'])) {
+            // New
+            $customSetting = $SettingMapper->make();
         }
 
-        $template = "{% import '@admin/editCustomSettingsFormMacro.html' as settingForm %}";
-        $template .= " {% set setting = setting|merge({'key': uniqueKey()}) %} {{ settingForm.custom( setting ) }}";
-        $settingFormHtml = $this->container->view->fetchFromString($template, ['setting' => []]);
-
-        // Set the response type
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $r->write(json_encode(["html" => $settingFormHtml]));
+        return $this->render('editCustomSetting.html', $customSetting);
     }
 
     /**
-     * Save Custom Settings
+     * Save Custom Setting
      */
-    public function saveCustomSettings()
+    public function saveCustomSetting()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
 
-        foreach ($this->request->getParsedBodyParam('setting_key') as $key => $value) {
-            $setting = $SettingMapper->make();
-            $setting->id = $this->request->getParsedBodyParam('id')[$key];
-            $setting->category = 'custom';
-            $setting->sort_order = $this->request->getParsedBodyParam('sort_order')[$key];
-            $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$key];
-            $setting->input_type = $this->request->getParsedBodyParam('input_type')[$key];
-            $setting->label = $this->request->getParsedBodyParam('label')[$key];
-            $setting->help = $this->request->getParsedBodyParam('help')[$key];
-            $SettingMapper->save($setting);
-        }
+        $setting = $SettingMapper->make();
+        $setting->id = $this->request->getParsedBodyParam('id');
+        $setting->category = 'custom';
+        $setting->sort_order = $this->request->getParsedBodyParam('sort_order');
+        $setting->setting_key = $this->request->getParsedBodyParam('setting_key');
+        $setting->input_type = $this->request->getParsedBodyParam('input_type');
+        $setting->label = $this->request->getParsedBodyParam('label');
+        $setting->help = $this->request->getParsedBodyParam('help');
+        $SettingMapper->save($setting);
 
         // Redirect back to list of settings
-        return $this->redirect('showCustomSettings');
+        return $this->redirect('showSettings');
     }
 
     /**
@@ -140,14 +120,7 @@ class AdminSettingController extends AdminBaseController
         $setting->id = (int) $args['id'];
         $SettingMapper->delete($setting);
 
-        if (!$this->request->isXhr()) {
-            // Redirect back to list of settings
-            return $this->redirect('showCustomSettings');
-        }
-
-        // Set the response type
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $r->write(json_encode(["status" => "success"]));
+        // Redirect back to list of settings
+        return $this->redirect('showSettings');
     }
 }
