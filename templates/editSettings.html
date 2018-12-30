@@ -63,7 +63,6 @@
             </div>
 
             <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-custom-tab">
-              <p><a href="{{ pathFor('editCustomSetting') }}">Add custom site setting</a></p>
               {% for setting in page if setting.category == 'custom' %}
                 {% if setting.input_type == 'select' %}
                   {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
@@ -81,6 +80,10 @@
 {% endblock %}
 
 {% block cancelLink %}{{ pathFor('showSettings') }}{% endblock %}
+
+{% block otherControls %}
+<p><a href="{{ pathFor('editCustomSetting') }}">Add custom site setting</a></p>
+{% endblock %}
 
 {# Standard Input HTML Macro #}
 {% macro inputHtml(setting) %}
