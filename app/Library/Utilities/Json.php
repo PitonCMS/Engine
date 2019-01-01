@@ -13,9 +13,9 @@ use Webmozart\Json\JsonDecoder;
 use Webmozart\Json\ValidationFailedException;
 
 /**
- * Piton Page Layout JSON Decoder/Encoder and schema validator
+ * Piton Layout JSON Decoder/Encoder and schema validator
  */
-class PageJson extends JsonDecoder
+class Json extends JsonDecoder
 {
     /**
      * Container

@@ -136,9 +136,9 @@ $container['markdownParser'] = function ($c) {
     return new Piton\Library\Utilities\MDParse();
 };
 
-// Page Layout JSON
-$container['pageLayoutJson'] = function ($c) {
-    return new Piton\Library\Utilities\PageJson($c);
+// JSON helper
+$container['json'] = function ($c) {
+    return new Piton\Library\Utilities\Json($c);
 };
 
 // Piton Toolbox

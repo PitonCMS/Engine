@@ -49,7 +49,7 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
-        $PageJson = $this->container->pageLayoutJson;
+        $Json = $this->container->json;
 
         // Fetch page, or create new page
         if (is_numeric($args['id'])) {
@@ -62,8 +62,8 @@ class AdminPageController extends AdminBaseController
         }
 
         // Get page layout definition
-        if (null === $page->definition = $PageJson->getPageLayoutDefinition($page->layout)) {
-            $this->setAlert('danger', 'Layout Definition Error', $PageJson->getErrorMessages());
+        if (null === $page->definition = $Json->getPageLayoutDefinition($page->layout)) {
+            $this->setAlert('danger', 'Layout Definition Error', $Json->getErrorMessages());
         }
 
         return $this->render('editPage.html', $page);
