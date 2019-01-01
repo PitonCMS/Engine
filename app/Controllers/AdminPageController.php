@@ -149,18 +149,13 @@ class AdminPageController extends AdminBaseController
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
 
-        // Verify we have a page ID to act on
-        if (!is_numeric($args['id'])) {
-            throw new \Exception("Page to delete not found", 1);
-        }
-
         // Delete page
         $page = $PageMapper->make();
         $page->id = $args['id'];
         $page = $PageMapper->delete($page);
 
         // Delete page elements
-        $PageElementMapper->deletePageElementsByPageId($page->id);
+        $PageElementMapper->deleteElementsByPageId($page->id);
 
         // Redirect back to show pages
         return $this->redirect('showPages');

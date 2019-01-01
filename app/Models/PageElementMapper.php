@@ -52,7 +52,7 @@ class PageElementMapper extends DataMapperAbstract
      * @param int   $pageId Page ID
      * @return void
      */
-    public function deletePageElementsByPageId($pageId)
+    public function deleteElementsByPageId($pageId)
     {
         $this->sql = "delete from {$this->table} where page_id = ?;";
         $this->bindValues[] = $pageId;
