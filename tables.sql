@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `element_type` varchar(40) NULL DEFAULT NULL,
   `element_sort` int NOT NULL DEFAULT 1,
   `title` varchar(200) NULL DEFAULT NULL,
-  `content_raw` mediumtext,
-  `content` mediumtext,
+  `content_raw` mediumtext NULL DEFAULT NULL,
+  `content` mediumtext NULL DEFAULT NULL,
   `excerpt` varchar(60) NULL DEFAULT NULL,
   `collection_id` int NULL DEFAULT NULL,
   `gallery_id` int NULL DEFAULT NULL,
@@ -66,6 +66,43 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `page_id_idx` (`page_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `collection` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(60) NOT NULL,
+  `sort` int NULL DEFAULT NULL,
+  `content_raw` mediumtext NULL DEFAULT NULL,
+  `content` mediumtext NULL DEFAULT NULL,
+  `expansion` mediumtext NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `collection_detail` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `collection_id` int NOT NULL,
+  `sort` int NULL DEFAULT NULL,
+  `url` varchar(150) NOT NULL,
+  `title` varchar(60) NULL DEFAULT NULL,
+  `sub_title` varchar(250) NULL DEFAULT NULL,
+  `content_raw` mediumtext NULL DEFAULT NULL,
+  `content` mediumtext NULL DEFAULT NULL,
+  `expansion` mediumtext NULL DEFAULT NULL,
+  `summary_image_path` varchar(100) NULL DEFAULT NULL,
+  `detail_image_path` varchar(100) NULL DEFAULT NULL,
+  `published_date` date NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `collection_id_idx` (`collection_id`),
+  KEY `url_idx` (`url`),
+  KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (

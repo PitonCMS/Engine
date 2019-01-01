@@ -1,7 +1,9 @@
 {#
     Alert Dialog
 
-    Only displays if an alert message was set in session flash data by the application code
+    Displays an alert message if set by the application.
+    The application will pass in the severity code to set the appropriate background colors:
+    primary, secondary, success, danger, warning, info
 #}
 
     {% if getAlert() %}

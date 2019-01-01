@@ -49,8 +49,8 @@ $app->group('/admin', function () {
             return (new AdminPageController($this))->showPages();
         })->setName('showPages');
 
-        // Edit Page, or Create New Page
-        $this->get('/edit[/{id}]', function ($args) {
+        // Edit or add new page. Must provide ID or page layout argument
+        $this->get('/edit/{id}', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editPage');
 
@@ -94,7 +94,7 @@ $app->group('/admin', function () {
 
         // Custom Settings
         $this->group('/custom', function () {
-            // Edit Custom Setting
+            // Edit or add custom Setting
             $this->get('/edit[/{id}]', function ($args) {
                 return (new AdminSettingController($this))->editCustomSetting($args);
             })->setName('editCustomSetting');
@@ -114,15 +114,25 @@ $app->group('/admin', function () {
 
     // Collections
     $this->group('/collection', function () {
-        // Show collection groups
+        // Show collections
         $this->get('[/]', function ($args) {
-            return (new AdminCollectionController($this))->showCollectionGroups();
-        })->setName('showCollectionGroups');
+            return (new AdminCollectionController($this))->showCollections();
+        })->setName('showCollections');
 
-        // Edit collection group
+        // Create or edit collection
         $this->get('/edit[/{id}]', function ($args) {
-            return (new AdminCollectionController($this))->editCollectionGroup($args);
-        })->setName('editCollectionGroup');
+            return (new AdminCollectionController($this))->editCollection($args);
+        })->setName('editCollection');
+
+        // Save Collection Group
+        $this->post('/save', function ($args) {
+            return (new AdminCollectionController($this))->saveCollection();
+        })->setName('saveCollection');
+
+        // Delete collection
+        $this->get('/delete/{id}', function ($args) {
+            return (new AdminCollectionController($this))->deleteCollection($args);
+        })->setName('deleteCollection');
     });
     // End collection
 })->add(function ($request, $response, $next) {

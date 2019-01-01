@@ -1,0 +1,15 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block headText 'All Collections' %}
+
+{% block leadText 'Should we just stuff these edit links into the nav bar????' %}
+
+{% block body %}
+
+    {% for c in page.collections %}
+    <p><a href="{{ pathFor('editCollection', {'id': c.id}) }}" title="Edit collection">{{ c.title }}</a></p>
+    {% else %}
+    <h5>No Collections Found</h5>
+    {% endfor %}
+
+{% endblock body %}

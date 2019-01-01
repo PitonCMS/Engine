@@ -6,7 +6,7 @@
     <meta name="author" content="PitonCMS">
     <link rel="icon" href="">
 
-    <title>{% block htmlTitle %}{% endblock %}PitonCMS Administration</title>
+    <title>{% block htmlTitle '' %}PitonCMS Administration</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
@@ -29,6 +29,9 @@
 
     <main role="main" class="container">
       {% include "@admin/includes/_alert.html" %}
+      {% include "@admin/includes/_header.html" with {
+        headText: block('headText') is defined ? block('headText'),
+        leadText: block('leadText') is defined ? block('leadText')} %}
 
       {% block body %}
       {% endblock %}
@@ -50,6 +53,6 @@
         });
       });
     </script>
-    {% block footerJs %}{% endblock %}
+    {% block footJs %}{% endblock %}
   </body>
 </html>

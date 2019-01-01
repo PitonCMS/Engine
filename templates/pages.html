@@ -1,11 +1,11 @@
 {% extends '@admin/_adminBase.html' %}
 
+{% block headText 'All Pages' %}
+
 {% block body %}
 
   <div class="row">
     <div class="col">
-    <h1>Pages</h1>
-    <hr>
 <div class="card-wrapper">
     {% for p in page %}
     <div class="card mb-4">
@@ -39,14 +39,14 @@
           </li>
         {% endfor %}
       </ul>
-     
+
     </div>
     {% else %}
     <strong>No pages found</strong>
     {% endfor %}
 </div>
-    
+
   </div>
 </div>
 
-{% endblock %}
+{% endblock body %}

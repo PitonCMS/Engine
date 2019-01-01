@@ -12,7 +12,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Pages</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ pathFor('showPages') }}">All Pages</a>
+              <a class="dropdown-item" href="{{ pathFor('showPages') }}">Pages</a>
               <div class="dropdown-divider"></div>
               {% for key, tl in getThemeLayouts()  %}
               <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">Add {{ tl }} Page</a>
@@ -44,10 +44,8 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Collections</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="/#">Suppliers</a>
-              <a class="dropdown-item" href="/#">Things to do</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">Add Collection</a>
+              <a class="dropdown-item" href="{{ pathFor('showCollections') }}">Collections</a>
+              <a class="dropdown-item" href="{{ pathFor('editCollection') }}">Add Collection</a>
             </div>
           </li>
 
@@ -55,6 +53,7 @@
             <a class="nav-link dropdown-toggle" href="http://pitoncms.com" id="setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ pathFor('showSettings') }}">Settings</a>
+              <a class="dropdown-item" href="{{ pathFor('editCustomSetting') }}">Add Setting</a>
               <a class="dropdown-item" href="{{ pathFor('showUsers') }}">Users</a>
             </div>
           </li>

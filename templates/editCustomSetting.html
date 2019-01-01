@@ -1,14 +1,14 @@
 {% extends '@admin/_adminFormBase.html' %}
 
-{% block htmlTitle %}Custom Setting - {% endblock %}
+{% block htmlTitle 'Custom Setting - ' %}
 
-{% block formHeading %}
+{% block headText %}
 {% if page.id %}Edit{% else %}Add{% endif %} Custom Setting
 {% endblock %}
 
-{% block leadText %}Define custom setting entry to customize the site.{% endblock %}
+{% block leadText %}Define custom setting key to customize the site.{% endblock %}
 
-{% block formActionPath %}{{ pathFor('saveCustomSetting') }}{% endblock %}
+{% block formActionPath pathFor('saveCustomSetting') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
@@ -53,12 +53,12 @@
         <small class="form-text text-muted">Optional descriptive help text. Accepts HTML, CSS, JavaScript (1,000 characters).</small>
       </div>
 
-{% endblock %}
+{% endblock formBody %}
 
-{% block cancelLink %}{{ pathFor('showSettings') }}{% endblock %}
+{% block cancelLink pathFor('showSettings') %}
 
 {% block otherControls %}
         {% if page.id %}
         <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': page.id}) }}">Delete</a>
         {% endif %}
-{% endblock %}
+{% endblock otherControls %}

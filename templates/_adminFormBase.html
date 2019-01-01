@@ -3,13 +3,13 @@
 
     Available blocks in base layout:
     - htmlTitle
+    - headText
+    - leadText
     - jsPitonConfig
     - headJs
-    - footerJs
+    - footJs
 
-    Blocks in form:
-    - formHeading
-    - leadText
+    Blocks in form layout:
     - formActionPath
     - hiddenInputs
     - leftColDiv
@@ -21,20 +21,14 @@
 
 {% block body %}
 
-  <div class="row">
-    <div class="col-md">
-        <h2>{% block formHeading %}Form Heading{% endblock %}</h2>
-        <p class="lead">{% block leadText %}Lead Text{% endblock %}</p>
-    </div>
-  </div><!-- end head row -->
-  <hr class="mt-0">
+<hr class="mt-0">
 
-<form action="{% block formActionPath %}#{% endblock %}" method="post" accept-charset="utf-8">
+<form action="{% block formActionPath '#' %}" method="post" accept-charset="utf-8">
 {% block hiddenInputs %}
 {% endblock %}
 
   <div class="row">
-    <div class="col-md scroll-container" {% block leftColDiv %}{% endblock %}>
+    <div class="col-md scroll-container" {% block leftColDiv '' %}>
 
     {% block formBody %}
     {% endblock %}
@@ -44,7 +38,7 @@
     <div class="col-md-3">
       <!-- Control Buttons -->
       <div class="mb-2">
-        <a class="btn btn-warning mb-2" href="{% block cancelLink %}#{% endblock %}">Cancel</a>
+        <a class="btn btn-warning mb-2" href="{% block cancelLink '#' %}">Cancel</a>
         <button class="btn btn-primary mb-2" type="submit" name="button">Save</button>
 
         {% block otherControls %}
@@ -60,4 +54,4 @@
   </div><!-- end row -->
 </form>
 
-{% endblock %}
+{% endblock body %}

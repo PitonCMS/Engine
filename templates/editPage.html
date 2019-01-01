@@ -6,18 +6,18 @@
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page -
 {% endblock %}
 
-{% block formHeading %}
+{% block headText %}
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page
 {% endblock %}
 
-{% block leadText %}{{ page.definition.pageLayoutDescription }}{% endblock %}
+{% block leadText page.definition.pageLayoutDescription %}
 
-{% block formActionPath %}{{ pathFor('savePage') }}{% endblock %}
+{% block formActionPath pathFor('savePage') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="layout" value="{{ page.layout }}">
-{% endblock %}
+{% endblock hiddenInputs %}
 
 {% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}
 
@@ -56,9 +56,9 @@
       </div>
       {% endfor %}
 
-{% endblock %}
+{% endblock formBody %}
 
-{% block cancelLink %}{{ pathFor('showPages') }}{% endblock %}
+{% block cancelLink pathFor('showPages') %}
 
 {% block otherControls %}
         <div class="form-group">
@@ -79,7 +79,7 @@
         {% if page.id %}
         <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
         {% endif %}
-{% endblock %}
+{% endblock otherControls %}
 
 {% block rightCol %}
       <div>
@@ -97,6 +97,4 @@
           </nav>
         </nav>
       </div>
-{% endblock %}
-
-
+{% endblock rightCol %}
