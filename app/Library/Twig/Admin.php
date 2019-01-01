@@ -71,7 +71,7 @@ class Admin extends Base
             // Split camelCase theme names and upper case first letters into title case,
             // and assign to array using [themeName] = Readable Theme Name
             $themeName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-            $ReadableThemeName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $themeName);
+            $ReadableThemeName = preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', '$1 ', $themeName);
             $ReadableThemeName = ucwords($ReadableThemeName);
             $themes[$themeName] = $ReadableThemeName;
         }
@@ -106,7 +106,7 @@ class Admin extends Base
                 // Split camelCase filenames and upper case first letters into title case,
                 // and assign to array using [fileName] = Readable File Name
                 $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-                $ReadableFileName = preg_replace("/([a-z].[^A-Z]+)/s", "$1 ", $fileName);
+                $ReadableFileName = preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', '$1 ', $fileName);
                 $ReadableFileName = ucwords($ReadableFileName);
                 $layouts[$fileName] = $ReadableFileName;
             }
