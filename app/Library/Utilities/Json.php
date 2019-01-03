@@ -61,7 +61,7 @@ class Json extends JsonDecoder
         // Page layout name and get path
         $layoutFile = pathinfo($pageLayout, PATHINFO_FILENAME);
         $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $layoutFile . '.json';
-        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/pageLayoutSchema.json';
+        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageLayoutSchema.json';
 
         try {
             return $this->decodeFile($jsonFilePath, $validationFile);
