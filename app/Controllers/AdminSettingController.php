@@ -32,7 +32,7 @@ class AdminSettingController extends AdminBaseController
 
         // Fetch custom theme settings from themes/<theme-name>/themeSettings.json
         if (null === $customSettings = $Json->getThemeSettings()) {
-            $this->setAlert('danger', 'Custom Theme Settings JSON Error', $Json->getErrorMessages());
+            $this->setAlert('danger', 'Custom Theme Settings Error', $Json->getErrorMessages());
         }
 
         // Create union of settings from DB and from JSON file by matching keys
@@ -108,7 +108,7 @@ class AdminSettingController extends AdminBaseController
     {
         $newArray = [];
         foreach ($options as $key => $row) {
-            $newArray[$row->value] = $row->name;
+            $newArray[$row->value] = ($row->name) ?: $row->value;
         }
 
         return $newArray;

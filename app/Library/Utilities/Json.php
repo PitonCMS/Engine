@@ -92,9 +92,10 @@ class Json extends JsonDecoder
     {
         // themeSettings.json full path
         $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/themeSettings.json';
+        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json';
 
         try {
-            return $this->decodeFile($jsonFilePath);
+            return $this->decodeFile($jsonFilePath, $validationFile);
         } catch (\RuntimeException $e) {
             // Runtime errors such as file not found
             $this->errors[] = $e->getMessage();
