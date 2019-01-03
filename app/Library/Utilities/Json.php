@@ -73,7 +73,37 @@ class Json extends JsonDecoder
             $this->errors[] = $e->getMessage();
         } catch (\Exception $e) {
             // Anything else we did not anticipate
-            $this->errors[] = 'Unknown Exception in $PageJson->getPageLayoutDefinition()';
+            $this->errors[] = 'Unknown Exception in getPageLayoutDefinition()';
+            $this->errors[] = $e->getMessage();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Custom Theme Settings
+     *
+     * Schema validation file: TODO
+     * Validation errors are written to $this->errors
+     * @param void
+     * @return mixed
+     */
+    public function getThemeSettings()
+    {
+        // themeSettings.json full path
+        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/themeSettings.json';
+
+        try {
+            return $this->decodeFile($jsonFilePath);
+        } catch (\RuntimeException $e) {
+            // Runtime errors such as file not found
+            $this->errors[] = $e->getMessage();
+        } catch (ValidationFailedException $e) {
+            // Schema validation errors
+            $this->errors[] = $e->getMessage();
+        } catch (\Exception $e) {
+            // Anything else we did not anticipate
+            $this->errors[] = 'Unknown Exception in getThemeSettings()';
             $this->errors[] = $e->getMessage();
         }
 

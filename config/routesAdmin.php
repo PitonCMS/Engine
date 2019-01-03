@@ -94,16 +94,6 @@ $app->group('/admin', function () {
 
         // Custom Settings
         $this->group('/custom', function () {
-            // Edit or add custom Setting
-            $this->get('/edit[/{id}]', function ($args) {
-                return (new AdminSettingController($this))->editCustomSetting($args);
-            })->setName('editCustomSetting');
-
-            // Save Custom Setting
-            $this->post('/save', function ($args) {
-                return (new AdminSettingController($this))->saveCustomSetting();
-            })->setName('saveCustomSetting');
-
             // Delete Custom Setting
             $this->get('/delete/{id}', function ($args) {
                 return (new AdminSettingController($this))->deleteCustomSettings($args);

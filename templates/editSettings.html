@@ -3,11 +3,11 @@
 
 {% block htmlTitle %}Edit Site Settings - {% endblock %}
 
-{% block formHeading %}Edit Site Settings{% endblock %}
+{% block headText %}Edit Site Settings{% endblock %}
 
 {% block leadText %}Customize your site.{% endblock %}
 
-{% block formActionPath %}{{ pathFor('saveSettings') }}{% endblock %}
+{% block formActionPath pathFor('saveSettings') %}
 
 {% block formBody %}
           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -29,7 +29,7 @@
             <div class="tab-pane fade show active" id="pills-site" role="tabpanel" aria-labelledby="pills-site-tab">
               {% for setting in page if setting.category == 'site' %}
                 {% if setting.input_type == 'select' %}
-                  {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
+                  {{ settingForm.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
                 {% elseif setting.input_type == 'textarea' %}
                   {{ settingForm.textareaHtml(setting) }}
                 {% else %}
@@ -41,7 +41,7 @@
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
               {% for setting in page if setting.category == 'contact' %}
                 {% if setting.input_type == 'select' %}
-                  {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
+                  {{ settingForm.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
                 {% elseif setting.input_type == 'textarea' %}
                   {{ settingForm.textareaHtml(setting) }}
                 {% else %}
@@ -53,7 +53,7 @@
             <div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
               {% for setting in page if setting.category == 'social' %}
                 {% if setting.input_type == 'select' %}
-                  {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
+                  {{ settingForm.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
                 {% elseif setting.input_type == 'textarea' %}
                   {{ settingForm.textareaHtml(setting) }}
                 {% else %}
@@ -65,7 +65,7 @@
             <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-custom-tab">
               {% for setting in page if setting.category == 'custom' %}
                 {% if setting.input_type == 'select' %}
-                  {{ settingForm.selectHTML(setting, getSettingOptions(setting.setting_key)) }}
+                  {{ settingForm.selectHtml(setting, setting.options) }}
                 {% elseif setting.input_type == 'textarea' %}
                   {{ settingForm.textareaHtml(setting) }}
                 {% else %}
@@ -77,35 +77,30 @@
 
             </div>
           </div>
-{% endblock %}
+{% endblock formBody %}
 
-{% block cancelLink %}{{ pathFor('showSettings') }}{% endblock %}
+{% block cancelLink pathFor('showSettings') %}
 
-{% block otherControls %}
-<p><a href="{{ pathFor('editCustomSetting') }}">Add custom site setting</a></p>
-{% endblock %}
-
-{# Standard Input HTML Macro #}
+{# Input Macro #}
 {% macro inputHtml(setting) %}
+  {% import _self as button %}
               <div class="form-group">
-                    <label>{{ setting.label }}</label>
+                    <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
                     <input type="hidden" name="id[]" value="{{ setting.id }}">
                     <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                     <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
                     <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
-                {% if setting.category == 'custom' %}
-                <div class="form-group">
-                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
-                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
-                </div>
+                {% if setting.category == 'custom' and setting.orphaned %}
+                  {{ button.delete(setting) }}
                 {% endif %}
 {% endmacro inputHtml %}
 
-{# Select List HTML Macro #}
+{# Select List Macro #}
 {% macro selectHtml(setting, options) %}
+  {% import _self as button %}
               <div class="form-group">
-                <label>{{ setting.label }}</label>
+                <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
                 <input type="hidden" name="id[]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[]">
@@ -115,27 +110,29 @@
                 </select>
                 <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
               </div>
-                {% if setting.category == 'custom' %}
-                <div class="form-group">
-                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
-                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
-                </div>
+                {% if setting.category == 'custom' and setting.orphaned %}
+                  {{ button.delete(setting) }}
                 {% endif %}
 {% endmacro selectHtml %}
 
-{# Textarea HTML Macro #}
+{# Textarea Macro #}
 {% macro textareaHtml(setting) %}
+  {% import _self as button %}
                <div class="form-group">
-                    <label>{{ setting.label }}</label>
+                    <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
                     <input type="hidden" name="id[]" value="{{ setting.id }}">
                     <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                     <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
                     <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
-                {% if setting.category == 'custom' %}
-                <div class="form-group">
-                  <a class="btn btn-primary btn-sm" href="{{ pathFor('editCustomSetting', {'id': setting.id}) }}" title="Edit setting information">Edit</a>
-                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete setting">Delete</a>
-                </div>
+                {% if setting.category == 'custom' and setting.orphaned %}
+                  {{ button.delete(setting) }}
                 {% endif %}
 {% endmacro textareaHtml %}
+
+{# Delete Button Macro #}
+{% macro delete(setting) %}
+                <div class="form-group">
+                  <a class="btn btn-sm btn-outline-danger jsDeleteConfirm" href="{{ pathFor('deleteCustomSetting', {'id': setting.id}) }}" title="Delete ophaned setting not in current theme. Optional.">Delete Orphaned Setting</a>
+                </div>
+{% endmacro delete %}
