@@ -75,7 +75,7 @@ $app->group('/admin', function () {
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
-                return (new AdminPageController($this))->deleteElement($args);
+                return (new AdminPageController($this))->deleteElement();
             });
         });
         // End page elements
@@ -97,8 +97,8 @@ $app->group('/admin', function () {
         // Custom Settings
         $this->group('/custom', function () {
             // Delete Custom Setting
-            $this->get('/delete/{id}', function ($args) {
-                return (new AdminSettingController($this))->deleteCustomSettings($args);
+            $this->post('/delete', function ($args) {
+                return (new AdminSettingController($this))->deleteCustomSetting();
             })->setName('deleteCustomSetting');
         }); // End Custom Settings
     });

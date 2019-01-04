@@ -163,20 +163,26 @@ class AdminSettingController extends AdminBaseController
     /**
      * Delete Custom Setting
      *
-     * Delete single record
-     * @param array
+     * XHR Request
      */
-    public function deleteCustomSettings($args)
+    public function deleteCustomSetting()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
+        $status = 'error';
 
-        $setting = $SettingMapper->make();
-        $setting->id = (int) $args['id'];
-        $SettingMapper->delete($setting);
+        if ($this->request->getParsedBodyParam('id')) {
+            $setting = $SettingMapper->make();
+            $setting->id = $this->request->getParsedBodyParam('id');
+            $SettingMapper->delete($setting);
 
-        // Redirect back to list of settings
-        return $this->redirect('showSettings');
+            $status = 'success';
+        }
+
+        // Set the response type
+        $r = $this->response->withHeader('Content-Type', 'application/json');
+
+        return $r->write(json_encode(["status" => $status]));
     }
 }

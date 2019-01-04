@@ -212,10 +212,10 @@ class AdminPageController extends AdminBaseController
         $PageElement = $mapper('PageElementMapper');
 
         // Check that we received an ID
-        if ($elementId = $this->request->getParsedBodyParam('id')) {
+        if ($this->request->getParsedBodyParam('id')) {
             // Delete section element
             $sectionElement = $PageElement->make();
-            $sectionElement->id = $elementId;
+            $sectionElement->id = $this->request->getParsedBodyParam('id');
             $PageElement->delete($sectionElement);
 
             $status = 'success';
