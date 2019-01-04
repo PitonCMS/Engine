@@ -25,13 +25,13 @@
 
 <form action="{% block formActionPath '#' %}" method="post" accept-charset="utf-8">
 {% block hiddenInputs %}
-{% endblock %}
+{% endblock hiddenInputs %}
 
   <div class="row">
     <div class="col-md scroll-container" {% block leftColDiv '' %}>
 
     {% block formBody %}
-    {% endblock %}
+    {% endblock formBody %}
 
     </div><!-- end left col -->
 
@@ -42,13 +42,13 @@
         <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
 
         {% block otherControls %}
-        {% endblock %}
+        {% endblock otherControls %}
 
       </div>
       <hr>
 
         {% block rightCol %}
-        {% endblock %}
+        {% endblock rightCol %}
     </div><!-- end right col -->
 
   </div><!-- end row -->

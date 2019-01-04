@@ -1,3 +1,15 @@
+{#
+    Piton Administration Base Layout
+
+    Available blocks in base layout:
+    - htmlTitle
+    - headText
+    - leadText
+    - jsPitonConfig
+    - body
+    - headJs
+    - footJs
+#}
 <!doctype html>
 <html lang="en">
   <head>
@@ -17,11 +29,12 @@
       var pitonConfig = {
         "dateFormat": "{{ site.settings.dateFormat }}",
         "weekStart": {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }}
-        {% block jsPitonConfig %}{% endblock %}
+        {% block jsPitonConfig %}
+        {% endblock jsPitonConfig %}
       };
     </script>
     {% block headJs %}
-    {% endblock %}
+    {% endblock headJs %}
   </head>
 
   <body>
@@ -34,7 +47,7 @@
         leadText: block('leadText') is defined ? block('leadText')} %}
 
       {% block body %}
-      {% endblock %}
+      {% endblock body %}
 
     </main><!-- /.container -->
 
@@ -53,6 +66,7 @@
         });
       });
     </script>
-    {% block footJs %}{% endblock %}
+    {% block footJs %}
+    {% endblock footJs %}
   </body>
 </html>
