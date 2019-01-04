@@ -116,15 +116,17 @@ $app->group('/admin', function () {
             return (new AdminCollectionController($this))->editCollection($args);
         })->setName('editCollection');
 
-        // Save Collection Group
+        // Save Collection Group, Including Deletes
         $this->post('/save', function ($args) {
-            return (new AdminCollectionController($this))->saveCollection();
+            if ($this->request->getParsedBodyParam('button') === 'save') {
+                return (new AdminCollectionController($this))->saveCollection();
+            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
+                return (new AdminCollectionController($this))->deleteCollection();
+            } else {
+                $notFound = $this->notFoundHanlder;
+                return $notFound($this->request, $this->response);
+            }
         })->setName('saveCollection');
-
-        // Delete collection
-        $this->get('/delete/{id}', function ($args) {
-            return (new AdminCollectionController($this))->deleteCollection($args);
-        })->setName('deleteCollection');
     });
     // End collection
 })->add(function ($request, $response, $next) {

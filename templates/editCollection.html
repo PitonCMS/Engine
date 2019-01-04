@@ -34,8 +34,8 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
 
 {% block cancelLink pathFor('showCollections') %}
 
-{% block rightCol %}
+{% block otherControls %}
         {% if page.id %}
-        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deleteCollection', {'id': page.id}) }}" title="Delete collection and all details">Delete Collection</a>
+        <button class="btn btn-outline-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
         {% endif %}
-{% endblock rightCol %}
+{% endblock otherControls %}

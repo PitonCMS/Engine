@@ -80,20 +80,24 @@ class AdminCollectionController extends AdminBaseController
      *
      * Delete collection and collection details
      */
-    public function deleteCollection($args)
+    public function deleteCollection()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
         $CollectionDetailMapper = $mapper('CollectionDetailMapper');
 
-        // Delete collection
-        $collection = $CollectionMapper->make();
-        $collection->id = $args['id'];
-        $collection = $CollectionMapper->delete($collection);
+        if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
+            // Delete collection
+            $collection = $CollectionMapper->make();
+            $collection->id = $this->request->getParsedBodyParam('id');
+            $collection = $CollectionMapper->delete($collection);
 
-        // Delete collection details
-        $CollectionDetailMapper->deleteByCollectionId($collection->id);
+            // Delete collection details
+            $CollectionDetailMapper->deleteByCollectionId($collection->id);
+        } else {
+            throw new Exception('Invalid collection delete request.');
+        }
 
         // Redirect back to show collections
         return $this->redirect('showCollections');
