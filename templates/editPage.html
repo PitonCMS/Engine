@@ -77,7 +77,7 @@
           </div>
         </div>
         {% if page.id %}
-        <a class="btn btn-outline-danger mb-2 jsDeleteConfirm" href="{{ pathFor('deletePage', {'id': page.id}) }}">Delete</a>
+        <button class="btn btn-outline-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
         {% endif %}
 {% endblock otherControls %}
 

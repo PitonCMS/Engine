@@ -8,6 +8,8 @@
  */
 namespace Piton\Controllers;
 
+use Exception;
+
 /**
  * Piton Admin Page Controller
  */
@@ -142,20 +144,24 @@ class AdminPageController extends AdminBaseController
      *
      * Home page is not restricted from being deleted
      */
-    public function deletePage($args)
+    public function deletePage()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
 
-        // Delete page
-        $page = $PageMapper->make();
-        $page->id = $args['id'];
-        $page = $PageMapper->delete($page);
+        if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
+            // Delete page
+            $page = $PageMapper->make();
+            $page->id = $this->request->getParsedBodyParam('id');
+            $page = $PageMapper->delete($page);
 
-        // Delete page elements
-        $PageElementMapper->deleteElementsByPageId($page->id);
+            // Delete page elements
+            $PageElementMapper->deleteElementsByPageId($page->id);
+        } else {
+            throw new Exception('Invalid page delete request.');
+        }
 
         // Redirect back to show pages
         return $this->redirect('showPages');

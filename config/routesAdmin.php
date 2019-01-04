@@ -54,15 +54,17 @@ $app->group('/admin', function () {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editPage');
 
-        // Save Page
+        // Save Page for Update, Insert, and Delete
         $this->post('/save', function ($args) {
-            return (new AdminPageController($this))->savePage();
+            if ($this->request->getParsedBodyParam('button') === 'save') {
+                return (new AdminPageController($this))->savePage();
+            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
+                return (new AdminPageController($this))->deletePage($args);
+            } else {
+                $notFound = $this->notFoundHanlder;
+                return $notFound($this->request, $this->response);
+            }
         })->setName('savePage');
-
-        // Delete Page
-        $this->get('/delete/{id:[0-9]{0,}}', function ($args) {
-            return (new AdminPageController($this))->deletePage($args);
-        })->setName('deletePage');
 
         // Page elements
         $this->group('/element', function () {
