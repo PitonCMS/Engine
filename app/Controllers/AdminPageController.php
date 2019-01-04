@@ -203,22 +203,29 @@ class AdminPageController extends AdminBaseController
     /**
      * Delete Element
      *
-     * Ajax request
+     * XHR request
      */
-    public function deleteElement($args)
+    public function deleteElement()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $PageElement = $mapper('PageElementMapper');
 
-        // Delete section element
-        $sectionElement = $PageElement->make();
-        $sectionElement->id = $args['id'];
-        $PageElement->delete($sectionElement);
+        // Check that we received an ID
+        if ($elementId = $this->request->getParsedBodyParam('id')) {
+            // Delete section element
+            $sectionElement = $PageElement->make();
+            $sectionElement->id = $elementId;
+            $PageElement->delete($sectionElement);
+
+            $status = 'success';
+        } else {
+            $status = 'error';
+        }
 
         // Set the response type
         $r = $this->response->withHeader('Content-Type', 'application/json');
 
-        return $r->write(json_encode(["status" => "success"]));
+        return $r->write(json_encode(['status' => $status]));
     }
 }

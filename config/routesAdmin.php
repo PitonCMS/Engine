@@ -73,8 +73,8 @@ $app->group('/admin', function () {
                 return (new AdminPageController($this))->newElementForm();
             });
 
-            // Delete ELement
-            $this->get('/delete/{id:[0-9]{0,}}', function ($args) {
+            // Delete ELement (XHR)
+            $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement($args);
             });
         });
