@@ -89,11 +89,12 @@
     </div>
 
     <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">
-    <label>Collection (TODO)</label>
-      <select class="form-control">
-        <option>Collection 1</option>
-        <option>Collection 2</option>
-        <option>Collection 3</option>
+    <label>Collection</label>
+      <select class="form-control" name="collection_id[{{ arrayKey }}]">
+        <option value="">- None -</option>
+        {% for c in getCollections() %}
+        <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
+        {% endfor %}
       </select>
     </div>
 

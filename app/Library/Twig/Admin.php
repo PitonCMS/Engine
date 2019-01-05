@@ -50,6 +50,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
+            new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
         ]);
     }
 
@@ -188,5 +189,20 @@ class Admin extends Base
         }
 
         return[];
+    }
+
+    /**
+     * Get Collection Options
+     *
+     * Get all collection summary rows
+     * @param  void
+     * @return mixed Array | null
+     */
+    public function getCollections()
+    {
+        $dataMapper = $this->container->dataMapper;
+        $CollectionMapper = $dataMapper('CollectionMapper');
+
+        return $CollectionMapper->find();
     }
 }
