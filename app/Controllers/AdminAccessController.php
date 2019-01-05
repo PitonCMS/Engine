@@ -145,8 +145,13 @@ class AdminAccessController extends AdminBaseController
      */
     public function logout()
     {
+        // Unset authenticated session
         $security = $this->container->accessHandler;
         $security->endAuthenticatedSession();
+
+        // Unset CSRF Token
+        $csrfGuard = $this->container->csrfGuard;
+        $csrfGuard->unsetToken();
 
         return $this->redirect('home');
     }

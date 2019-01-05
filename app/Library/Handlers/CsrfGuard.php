@@ -108,6 +108,18 @@ class CsrfGuard
     }
 
     /**
+     * Unset Token
+     *
+     * Remove token key and value from session
+     * @param  void
+     * @return void
+     */
+    public function unsetToken()
+    {
+        $this->session->unsetData($this->csrfTokenName);
+    }
+
+    /**
      * Validate Token
      *
      * Uses hash_equals() to compare saved token ($this->csrfTokenValue) with provided token
