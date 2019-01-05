@@ -92,8 +92,7 @@ $container['errorHandler'] = function ($c) {
 
 // Sessions
 $container['sessionHandler'] = function ($c) {
-    // return new Piton\Session\SessionHandler($c['database'], $c->get('settings')['session']);
-    return new Piton\Handlers\Session($c['database'], $c->get('settings')['session']);
+    return new Piton\Library\Handlers\Session($c['database'], $c->get('settings')['session']);
 };
 
 // Access Control
