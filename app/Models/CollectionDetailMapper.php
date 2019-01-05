@@ -41,7 +41,7 @@ class CollectionDetailMapper extends DataMapperAbstract
     {
         $this->makeSelect();
         $this->sql .= ' and collection_id = ?';
-        $this->bindValues[] = $pageId;
+        $this->bindValues[] = $collectionId;
 
         if (!$includeUnpublished) {
             $this->sql .= " and published_date <= '{$this->today()}'";

@@ -47,6 +47,7 @@ class Front extends Base
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('getCollection', [$this, 'getCollection']),
         ]);
     }
 
@@ -78,5 +79,30 @@ class Front extends Base
         $includeElement = $element->element_type . '.html';
 
         return $this->container->view->fetch("elements/$includeElement", ['data' => $element]);
+    }
+
+    /**
+     * Get Collection
+     *
+     * Get collection summary and details by collection ID
+     * For use in page element as collection landing page
+     * @param  int   $collectionId Collection ID
+     * @return mixed               Array | null
+     */
+    public function getCollection($collectionId)
+    {
+        $dataMapper = $this->container->dataMapper;
+        $CollectionMapper = $dataMapper('CollectionMapper');
+        $CollectionDetailMapper = $dataMapper('CollectionDetailMapper');
+
+        // Collection
+        $data = $CollectionMapper->findById($collectionId);
+
+        // Published Details
+        if (!empty($data)) {
+            $data->details = $CollectionDetailMapper->findByCollectionId($collectionId);
+        }
+
+        return $data;
     }
 }
