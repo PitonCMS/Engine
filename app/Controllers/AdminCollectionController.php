@@ -128,4 +128,77 @@ class AdminCollectionController extends AdminBaseController
 
         return $this->render('editCollectionDetail.html', $data);
     }
+
+    /**
+     * Save Collection Detail
+     *
+     * Create new collection detail, or update collection detail
+     */
+    public function saveCollectionDetail()
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $CollectionDetailMapper = $mapper('CollectionDetailMapper');
+        $Markdown = $this->container->markdownParser;
+        $Toolbox = $this->container->toolbox;
+
+        // Create collection detail object and populate POST data
+        $collectionDetail = $CollectionDetailMapper->make();
+        $collectionDetail->id = $this->request->getParsedBodyParam('id');
+        $collectionDetail->collection_id = $this->request->getParsedBodyParam('collection_id');
+        $collectionDetail->title = $this->request->getParsedBodyParam('title');
+        $collectionDetail->sub_title = $this->request->getParsedBodyParam('sub_title');
+        $collectionDetail->content_raw = $this->request->getParsedBodyParam('content_raw');
+        $collectionDetail->content = $Markdown->text($this->request->getParsedBodyParam('content_raw'));
+        $collectionDetail->summary_image_path = $this->request->getParsedBodyParam('summary_image_path');
+        $collectionDetail->detail_image_path = $this->request->getParsedBodyParam('detail_image_path');
+
+        // Process published date
+        $collectionDetail->published_date = ($this->request->getParsedBodyParam('published_date')) ?: '';
+        if (!empty($collectionDetail->published_date)) {
+        /*
+        @link: http://php.net/strtotime
+        Dates in the m/d/y or d-m-y formats are disambiguated by looking at the separator between the various
+        components: if the separator is a slash (/), then the American m/d/y is assumed; whereas if the separator
+        is a dash (-) or a dot (.), then the European d-m-y format is assumed.
+        */
+            $publishedDate = strtotime($collectionDetail->published_date);
+            $collectionDetail->published_date = date('Y-m-d', $publishedDate);
+        }
+
+        // Prep URL
+        $collectionDetail->url = strtolower(trim($this->request->getParsedBodyParam('url')));
+        $collectionDetail->url = preg_replace('/[^a-z0-9\s-]/', '', $collectionDetail->url);
+        $collectionDetail->url = preg_replace('/[\s-]+/', ' ', $collectionDetail->url);
+        $collectionDetail->url = preg_replace('/[\s]/', '-', $collectionDetail->url);
+
+        // Save Page and get ID
+        $collectionDetail = $CollectionDetailMapper->save($collectionDetail);
+
+        // Redirect back to show collections
+        return $this->redirect('showCollections');
+    }
+
+    /**
+     * Delete Collection Detail
+     *
+     */
+    public function deleteCollectionDetail()
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $CollectionDetailMapper = $mapper('CollectionDetailMapper');
+
+        if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
+            // Delete collection
+            $collectionDetail = $CollectionDetailMapper->make();
+            $collectionDetail->id = $this->request->getParsedBodyParam('id');
+            $collectionDetail = $CollectionDetailMapper->delete($collectionDetail);
+        } else {
+            throw new Exception('Invalid page delete request.');
+        }
+
+        // Redirect back to show collections
+        return $this->redirect('showCollections');
+    }
 }

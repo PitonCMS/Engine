@@ -136,9 +136,9 @@ $app->group('/admin', function () {
         // Save Collection Detail, Including Deletes
         $this->post('/savedetail', function ($args) {
             if ($this->request->getParsedBodyParam('button') === 'save') {
-                // return (new AdminCollectionController($this))->saveCollection();
+                return (new AdminCollectionController($this))->saveCollectionDetail();
             } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                // return (new AdminCollectionController($this))->deleteCollection();
+                return (new AdminCollectionController($this))->deleteCollectionDetail();
             } else {
                 $notFound = $this->notFoundHanlder;
                 return $notFound($this->request, $this->response);
