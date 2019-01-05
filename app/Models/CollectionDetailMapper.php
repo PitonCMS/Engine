@@ -28,6 +28,7 @@ class CollectionDetailMapper extends DataMapperAbstract
         'detail_image_path',
         'published_date'
     ];
+    protected $domainObjectClass = __NAMESPACE__ . '\CollectionDetail';
 
     /**
      * Find Collection Details by ID

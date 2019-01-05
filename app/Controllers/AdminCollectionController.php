@@ -102,4 +102,30 @@ class AdminCollectionController extends AdminBaseController
         // Redirect back to show collections
         return $this->redirect('showCollections');
     }
+
+    /**
+     * Edit Collection Detail
+     *
+     * @param array $args 'collection' Collection ID
+     *                    'id' Collection Detail ID
+     */
+    public function editCollectionDetail($args)
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $CollectionMapper = $mapper('CollectionMapper');
+        $CollectionDetailMapper = $mapper('CollectionDetailMapper');
+
+        // Get collection detail and collection summary data
+        if (isset($args['id']) && is_numeric($args['id'])) {
+            $data = $CollectionDetailMapper->findById($args['id']);
+        } else {
+            $data = $CollectionDetailMapper->make();
+        }
+
+        // Get collection summary information
+        $data->collection = $CollectionMapper->findById($args['collection']);
+
+        return $this->render('editCollectionDetail.html', $data);
+    }
 }
