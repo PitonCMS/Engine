@@ -33,6 +33,9 @@ class AdminSettingController extends AdminBaseController
         // Fetch custom theme settings from themes/<theme-name>/themeSettings.json
         if (null === $customSettings = $Json->getThemeSettings()) {
             $this->setAlert('danger', 'Custom Theme Settings Error', $Json->getErrorMessages());
+        } else {
+            // Move up multi-dimensional array one key
+            $customSettings = $customSettings->customSettings;
         }
 
         // Create union of settings from DB and from JSON file by matching keys
