@@ -147,5 +147,5 @@ $container['toolbox'] = function ($c) {
 
 // Piton CSRF Guard
 $container['csrfGuard'] = function ($c) {
-    return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler);
+    return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler, $c->logger);
 };
