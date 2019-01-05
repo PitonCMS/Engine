@@ -10,7 +10,7 @@ use Piton\Controllers\AdminController;
 use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
-use Piton\Controllers\AccessController;
+use Piton\Controllers\AdminAccessController;
 use Piton\Controllers\AdminCollectionController;
 
 //
@@ -154,20 +154,20 @@ $app->group('/admin', function () {
 
 // Login page with form to submit email
 $app->get('/letmein', function ($args) {
-    return (new AccessController($this))->showLoginForm();
+    return (new AdminAccessController($this))->showLoginForm();
 })->setName('showLoginForm');
 
 // Accept and validate email, and send login token
 $app->post('/requestlogintoken/', function ($args) {
-    return (new AccessController($this))->requestLoginToken();
+    return (new AdminAccessController($this))->requestLoginToken();
 })->setName('requestLoginToken');
 
 // Accept and validate login token and set session
 $app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($args) {
-    return (new AccessController($this))->processLoginToken($args);
+    return (new AdminAccessController($this))->processLoginToken($args);
 })->setName('processLoginToken');
 
 // Logout
 $app->get('/logout', function ($args) {
-    return (new AccessController($this))->logout();
+    return (new AdminAccessController($this))->logout();
 })->setName('logout');

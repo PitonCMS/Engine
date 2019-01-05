@@ -9,7 +9,7 @@
 namespace Piton\Controllers;
 
 /**
- * Access Controller
+ * Piton Access Controller
  *
  * Piton uses a passwordless login process, in which a user requests a one-time use login token
  * to be sent by email to the user's validated email account. The login flow is:
@@ -21,7 +21,7 @@ namespace Piton\Controllers;
  * 5 The application validates the submitted token to the one in session data, and if not expired an authenticated
  *      session is started
  */
-class AccessController extends AdminBaseController
+class AdminAccessController extends AdminBaseController
 {
     // Login token key name
     private $loginTokenKey = 'loginToken';
