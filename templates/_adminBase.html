@@ -28,7 +28,9 @@
     <script type="text/javascript">
       var pitonConfig = {
         "dateFormat": "{{ site.settings.dateFormat }}",
-        "weekStart": {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }}
+        "weekStart": {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
+        "csrfTokenName": "{{ site.csrf.name }}",
+        "csrfTokenValue": "{{ site.csrf.value }}"
         {% block jsPitonConfig %}
         {% endblock jsPitonConfig %}
       };

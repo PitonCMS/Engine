@@ -33,7 +33,7 @@ $app->group('/admin', function () {
         // Save Users
         $this->post('/save', function ($args) {
             return (new AdminUserController($this))->saveUsers();
-        })->setName('saveUsers');
+        })->add('csrfGuard')->setName('saveUsers');
 
         // Delete User
         $this->get('/delete/{id:[0-9]{1,}}', function ($args) {
@@ -71,12 +71,12 @@ $app->group('/admin', function () {
             // Fetch element form
             $this->post('/new', function ($args) {
                 return (new AdminPageController($this))->newElementForm();
-            });
+            })->add('csrfGuard');
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement();
-            });
+            })->add('csrfGuard');
         });
         // End page elements
     });
@@ -92,14 +92,14 @@ $app->group('/admin', function () {
         // Save Settings
         $this->post('/save', function ($args) {
             return (new AdminSettingController($this))->saveSettings();
-        })->setName('saveSettings');
+        })->add('csrfGuard')->setName('saveSettings');
 
         // Custom Settings
         $this->group('/custom', function () {
             // Delete Custom Setting
             $this->post('/delete', function ($args) {
                 return (new AdminSettingController($this))->deleteCustomSetting();
-            })->setName('deleteCustomSetting');
+            })->add('csrfGuard')->setName('deleteCustomSetting');
         }); // End Custom Settings
     });
     // End settings
@@ -126,7 +126,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHanlder;
                 return $notFound($this->request, $this->response);
             }
-        })->setName('saveCollection');
+        })->add('csrfGuard')->setName('saveCollection');
     });
     // End collection
 })->add(function ($request, $response, $next) {
