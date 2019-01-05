@@ -56,6 +56,7 @@
 
   <body class="text-center">
     <form class="form-signin" action="{{ pathFor('requestLoginToken') }}" method="post" accept-charset="utf-8">
+      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
       <h1 class="h3 mb-3 font-weight-normal">Please login in</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input type="email" id="inputEmail" class="form-control" name="email" maxlength="60"  placeholder="Enter registered email" required autofocus>

@@ -160,7 +160,7 @@ $app->get('/letmein', function ($args) {
 // Accept and validate email, and send login token
 $app->post('/requestlogintoken/', function ($args) {
     return (new AdminAccessController($this))->requestLoginToken();
-})->setName('requestLoginToken');
+})->add('csrfGuard')->setName('requestLoginToken');
 
 // Accept and validate login token and set session
 $app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($args) {
