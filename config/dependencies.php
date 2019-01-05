@@ -144,3 +144,8 @@ $container['json'] = function ($c) {
 $container['toolbox'] = function ($c) {
     return new Piton\Library\Utilities\Toolbox();
 };
+
+// Piton CSRF Guard
+$container['csrfGuard'] = function ($c) {
+    return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler);
+};

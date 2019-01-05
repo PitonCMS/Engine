@@ -64,7 +64,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHanlder;
                 return $notFound($this->request, $this->response);
             }
-        })->setName('savePage');
+        })->add('csrfGuard')->setName('savePage');
 
         // Page elements
         $this->group('/element', function () {

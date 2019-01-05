@@ -38,16 +38,33 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     protected $siteSettings;
 
     /**
+     * Piton CSRF Token Name
+     * @var string
+     */
+    protected $csrfTokenName;
+
+    /**
+     * Piton CSRF Token Value
+     * @var string
+     */
+    protected $csrfTokenValue;
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->uri = $container->request->getUri();
         $this->container = $container;
+
+        $this->uri = $container->request->getUri();
         $this->sitePages = isset($container['settings']['pages']) ? $container['settings']['pages'] : null;
         $this->siteSettings = isset($container['settings']['site']) ? $container['settings']['site'] : null;
+
+        $csrfGuard = $container->csrfGuard;
+        $this->csrfTokenName = $csrfGuard->getTokenName();
+        $this->csrfTokenValue = $csrfGuard->getTokenValue();
     }
 
     // Identifer
@@ -65,6 +82,10 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             'site' => [
                 'pages' => $this->sitePages,
                 'settings' => $this->siteSettings,
+                'csrf' => [
+                    'name' => $this->csrfTokenName,
+                    'value' => $this->csrfTokenValue
+                ]
             ],
         ];
     }
