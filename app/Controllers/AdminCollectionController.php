@@ -74,6 +74,13 @@ class AdminCollectionController extends AdminBaseController
         $collection->content_raw = $this->request->getParsedBodyParam('content_raw');
         $collection->content = $Markdown->text($this->request->getParsedBodyParam('content_raw'));
         // $collection->expansion = $this->request->getParsedBodyParam('expansion');
+
+        // Prep URL
+        $collection->url = strtolower(trim($this->request->getParsedBodyParam('url')));
+        $collection->url = preg_replace('/[^a-z0-9\s-]/', '', $collection->url);
+        $collection->url = preg_replace('/[\s-]+/', ' ', $collection->url);
+        $collection->url = preg_replace('/[\s]/', '-', $collection->url);
+
         $collection = $CollectionMapper->save($collection);
 
         return $this->redirect('showCollections');

@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `collection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NOT NULL,
   `sort` int NULL DEFAULT NULL,
+  `url` varchar(150) NOT NULL,
   `content_raw` mediumtext NULL DEFAULT NULL,
   `content` mediumtext NULL DEFAULT NULL,
   `expansion` mediumtext NULL DEFAULT NULL,
