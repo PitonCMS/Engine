@@ -17,9 +17,17 @@ Details for {{ page.collection.title }}.
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
+  <input type="hidden" name="layout" value="{{ page.layout }}">
 {% endblock hiddenInputs %}
 
 {% block formBody %}
+      <div class="form-group input-group w-25">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Element Order</span>
+        </div>
+        <input type="text" class="form-control" name="sort" value="{{ page.sort|default('1') }}">
+      </div>
+
       <div class="form-group">
         <label>{{ page.collection.title }} Title</label>
         <input type="text" class="form-control" name="title" maxlength="60" placeholder="Collection detail title" value="{{ page.title }}" required autocomplete="off">

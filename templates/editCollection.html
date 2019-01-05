@@ -16,6 +16,7 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
+  <input type="hidden" name="layout" value="{{ page.layout }}">
 {% endblock hiddenInputs %}
 
 {% block formBody %}

@@ -18,8 +18,7 @@ class CollectionMapper extends DataMapperAbstract
     protected $table = 'collection';
     protected $modifiableColumns = [
         'title',
-        'sort',
         'slug',
-        'expansion'
+        'layout'
     ];
 }

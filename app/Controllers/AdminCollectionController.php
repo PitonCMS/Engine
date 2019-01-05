@@ -70,7 +70,7 @@ class AdminCollectionController extends AdminBaseController
         $collection = $CollectionMapper->make();
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
-        // $collection->expansion = $this->request->getParsedBodyParam('expansion');
+        $collection->layout = $this->request->getParsedBodyParam('layout');
 
         // Prep URL Slug
         $collection->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
@@ -154,10 +154,13 @@ class AdminCollectionController extends AdminBaseController
         $collectionDetail = $CollectionDetailMapper->make();
         $collectionDetail->id = $this->request->getParsedBodyParam('id');
         $collectionDetail->collection_id = $this->request->getParsedBodyParam('collection_id');
+        $collectionDetail->sort = $this->request->getParsedBodyParam('sort');
+        $collectionDetail->layout = $this->request->getParsedBodyParam('layout');
         $collectionDetail->title = $this->request->getParsedBodyParam('title');
         $collectionDetail->sub_title = $this->request->getParsedBodyParam('sub_title');
         $collectionDetail->content_raw = $this->request->getParsedBodyParam('content_raw');
         $collectionDetail->content = $Markdown->text($this->request->getParsedBodyParam('content_raw'));
+        $collectionDetail->expansion = $this->request->getParsedBodyParam('expansion');
         $collectionDetail->summary_image_path = $this->request->getParsedBodyParam('summary_image_path');
         $collectionDetail->detail_image_path = $this->request->getParsedBodyParam('detail_image_path');
 

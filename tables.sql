@@ -71,9 +71,8 @@ CREATE TABLE IF NOT EXISTS `page_element` (
 CREATE TABLE IF NOT EXISTS `collection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NOT NULL,
-  `sort` int NULL DEFAULT NULL,
   `slug` varchar(100) NOT NULL,
-  `expansion` mediumtext NULL DEFAULT NULL,
+  `layout` varchar(60) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
@@ -87,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `collection_detail` (
   `collection_id` int NOT NULL,
   `sort` int NULL DEFAULT NULL,
   `slug` varchar(100) NOT NULL,
+  `layout` varchar(60) NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `sub_title` varchar(250) NULL DEFAULT NULL,
   `content_raw` mediumtext NULL DEFAULT NULL,
