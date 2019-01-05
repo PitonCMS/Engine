@@ -22,11 +22,15 @@ class AdminCollectionController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
+        $CollectionDetailMapper = $mapper('CollectionDetailMapper');
 
         // Fetch collections
-        $collections = $CollectionMapper->find();
+        $data['collections'] = $CollectionMapper->find();
 
-        return $this->render('collections.html', ['collections' => $collections]);
+        // Fetch collection details
+        $data['collectionDetails'] = $CollectionDetailMapper->find();
+
+        return $this->render('collections.html', $data);
     }
 
     /**
@@ -41,7 +45,7 @@ class AdminCollectionController extends AdminBaseController
         $CollectionMapper = $mapper('CollectionMapper');
 
         // Fetch collection group, or create new collection group
-        if (is_numeric($args['id'])) {
+        if (isset($args['id']) && is_numeric($args['id'])) {
             $collection = $CollectionMapper->findById($args['id']);
         } else {
             // New collection

@@ -9,7 +9,21 @@
     {% for c in page.collections %}
     <p>
         <a href="{{ pathFor('editCollection', {'id': c.id}) }}" title="Edit collection">{{ c.title }}</a> |
-        <a href="{{ pathFor('editCollectionDetail', {'collection': c.id}) }}" title="Add to collection detail">Add {{ c.title }}</a>
+        <a href="{{ pathFor('editCollectionDetail', {'collection': c.id}) }}" title="Add new collection detail">New {{ c.title }}</a>
+        <ul>
+            {% for d in page.collectionDetails if c.id == d.collection_id %}
+            <li>
+                <a href="{{ pathFor('editCollectionDetail', {'collection': c.id, 'id': d.id}) }}" title="Edit collection detail">{{ d.title }}</a>
+                  {% if d.getPublishedStatus() == 'draft' %}
+                  <span class="badge badge-secondary" title="Not published">Draft</span>
+                  {% elseif d.getPublishedStatus() == 'pending' %}
+                  <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date('m/d/Y') }}">Pending</span>
+                  {% elseif d.getPublishedStatus() == 'published' %}
+                  <span class="badge badge-success" title="Published on {{ p.published_date|date('m/d/Y') }}">Published</span>
+                  {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
     </p>
     {% else %}
     <h5>No Collections Found</h5>
