@@ -19,7 +19,7 @@
           <span class="badge badge-success" title="Published on {{ p.published_date|date('m/d/Y') }}">Published</span>
           {% endif %}
         </h5>
-        <h6 class="card-subtitle mb-2 text-muted">URL: <i>/{{ p.url }}</i></h6>
+        <h6 class="card-subtitle mb-2 text-muted">URL: <i>/{{ p.slug }}</i></h6>
         <h6 class="card-subtitle mb-2 text-muted">Layout: <i>{{ p.layout }}</i></h6>
         <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
       </div>

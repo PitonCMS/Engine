@@ -29,9 +29,9 @@
       </div>
 
       <div class="form-group">
-        <label>URL /</label>
-        <input type="text" class="form-control" name="url" maxlength="150" placeholder="URL slug" value="{{ page.url }}" required {% if page.url == 'home' %}readonly{% endif %}>
-        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL is restricted from being changed.</small>
+        <label>Slug /</label>
+        <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug" value="{{ page.slug }}" required {% if page.slug == 'home' %}readonly{% endif %}>
+        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL slug is restricted from being changed.</small>
       </div>
 
       <div class="form-group">

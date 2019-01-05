@@ -65,21 +65,18 @@ class AdminCollectionController extends AdminBaseController
         // // Get dependencies
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
-        $Markdown = $this->container->markdownParser;
 
-        // // Create collection object and populate with POST data
+        // Create collection object and populate with POST data
         $collection = $CollectionMapper->make();
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
-        $collection->content_raw = $this->request->getParsedBodyParam('content_raw');
-        $collection->content = $Markdown->text($this->request->getParsedBodyParam('content_raw'));
         // $collection->expansion = $this->request->getParsedBodyParam('expansion');
 
-        // Prep URL
-        $collection->url = strtolower(trim($this->request->getParsedBodyParam('url')));
-        $collection->url = preg_replace('/[^a-z0-9\s-]/', '', $collection->url);
-        $collection->url = preg_replace('/[\s-]+/', ' ', $collection->url);
-        $collection->url = preg_replace('/[\s]/', '-', $collection->url);
+        // Prep URL Slug
+        $collection->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
+        $collection->slug = preg_replace('/[^a-z0-9\s-]/', '', $collection->slug);
+        $collection->slug = preg_replace('/[\s-]+/', ' ', $collection->slug);
+        $collection->slug = preg_replace('/[\s]/', '-', $collection->slug);
 
         $collection = $CollectionMapper->save($collection);
 
@@ -177,11 +174,11 @@ class AdminCollectionController extends AdminBaseController
             $collectionDetail->published_date = date('Y-m-d', $publishedDate);
         }
 
-        // Prep URL
-        $collectionDetail->url = strtolower(trim($this->request->getParsedBodyParam('url')));
-        $collectionDetail->url = preg_replace('/[^a-z0-9\s-]/', '', $collectionDetail->url);
-        $collectionDetail->url = preg_replace('/[\s-]+/', ' ', $collectionDetail->url);
-        $collectionDetail->url = preg_replace('/[\s]/', '-', $collectionDetail->url);
+        // Prep URL Slug
+        $collectionDetail->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
+        $collectionDetail->slug = preg_replace('/[^a-z0-9\s-]/', '', $collectionDetail->slug);
+        $collectionDetail->slug = preg_replace('/[\s-]+/', ' ', $collectionDetail->slug);
+        $collectionDetail->slug = preg_replace('/[\s]/', '-', $collectionDetail->slug);
 
         // Save Page and get ID
         $collectionDetail = $CollectionDetailMapper->save($collectionDetail);

@@ -28,7 +28,7 @@ class FrontController extends FrontBaseController
         $PageElement = $mapper('PageElementMapper');
 
         // Get page data
-        $page = $Page->findPublishedPageByUrl($args['url']);
+        $page = $Page->findPublishedPageBySlug($args['url']);
 
         // Send 404 if not found
         if (empty($page)) {

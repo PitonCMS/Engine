@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NULL DEFAULT NULL,
-  `url` varchar(150) NOT NULL,
-  `url_locked` char(1) NOT NULL DEFAULT 'N',
+  `slug` varchar(100) NOT NULL,
+  `slug_locked` char(1) NOT NULL DEFAULT 'N',
   `layout` varchar(60) NOT NULL,
   `meta_description` varchar(320) NULL DEFAULT NULL,
   `published_date` date NULL DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `url_uq` (`url`),
+  UNIQUE KEY `slug_uq` (`slug`),
   KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
@@ -72,22 +72,21 @@ CREATE TABLE IF NOT EXISTS `collection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NOT NULL,
   `sort` int NULL DEFAULT NULL,
-  `url` varchar(150) NOT NULL,
-  `content_raw` mediumtext NULL DEFAULT NULL,
-  `content` mediumtext NULL DEFAULT NULL,
+  `slug` varchar(100) NOT NULL,
   `expansion` mediumtext NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug_uq` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `collection_detail` (
   `id` int NOT NULL AUTO_INCREMENT,
   `collection_id` int NOT NULL,
   `sort` int NULL DEFAULT NULL,
-  `url` varchar(150) NOT NULL,
+  `slug` varchar(100) NOT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `sub_title` varchar(250) NULL DEFAULT NULL,
   `content_raw` mediumtext NULL DEFAULT NULL,
@@ -102,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `collection_detail` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `collection_id_idx` (`collection_id`),
-  KEY `url_idx` (`url`),
+  KEY `slug_idx` (`slug`),
   KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
@@ -124,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   KEY `setting_key_uq` (`setting_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `page` (`id`, `title`, `url`, `url_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', NULL, 1, now(), 1, now());
+INSERT INTO `page` (`id`, `title`, `slug`, `slug_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+  VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', now(), 1, now(), 1, now());
 
 INSERT INTO `page_element` (`id`, `page_id`, `section_name`, `element_type`, `element_sort`, `title`, `content_raw`, `content`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES

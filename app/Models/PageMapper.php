@@ -18,8 +18,8 @@ class PageMapper extends DataMapperAbstract
     protected $table = 'page';
     protected $modifiableColumns = [
         'title',
-        'url',
-        'url_locked',
+        'slug',
+        'slug_locked',
         'layout',
         'meta_description',
         'published_date'
@@ -27,19 +27,19 @@ class PageMapper extends DataMapperAbstract
     protected $domainObjectClass = __NAMESPACE__ . '\Page';
 
     /**
-     * Find Published Page By URL
+     * Find Published Page By Slug
      *
-     * Finds published-only page by by URL
-     * @param mixed  $pageId Page URL
-     * @return mixed         Page object or null if not found
+     * Finds published-only page by by slug
+     * @param mixed  $pageSlug Page slug
+     * @return mixed           Page object or null if not found
      */
-    public function findPublishedPageByUrl($pageUrl)
+    public function findPublishedPageBySlug($pageSlug)
     {
         $this->makeSelect();
 
-        if (is_string($pageUrl)) {
-            $this->sql .= ' and url = ?';
-            $this->bindValues[] = $pageUrl;
+        if (is_string($pageSlug)) {
+            $this->sql .= ' and slug = ?';
+            $this->bindValues[] = $pageSlug;
         } else {
             throw new Exception('Unknown page identifier type', 1);
         }

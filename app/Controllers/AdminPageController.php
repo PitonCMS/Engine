@@ -89,7 +89,7 @@ class AdminPageController extends AdminBaseController
         $page = $PageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
         $page->title = $this->request->getParsedBodyParam('title');
-        $page->url_locked = 'N'; // TODO strtolower(trim($this->request->getParsedBodyParam('url_locked')));
+        $page->slug_locked = 'N'; // TODO strtolower(trim($this->request->getParsedBodyParam('slug_locked')));
         $page->layout = $this->request->getParsedBodyParam('layout');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
 
@@ -106,11 +106,11 @@ class AdminPageController extends AdminBaseController
             $page->published_date = date('Y-m-d', $publishedDate);
         }
 
-        // Prep URL
-        $page->url = strtolower(trim($this->request->getParsedBodyParam('url')));
-        $page->url = preg_replace('/[^a-z0-9\s-]/', '', $page->url);
-        $page->url = preg_replace('/[\s-]+/', ' ', $page->url);
-        $page->url = preg_replace('/[\s]/', '-', $page->url);
+        // Prep URL Slug
+        $page->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
+        $page->slug = preg_replace('/[^a-z0-9\s-]/', '', $page->slug);
+        $page->slug = preg_replace('/[\s-]+/', ' ', $page->slug);
+        $page->slug = preg_replace('/[\s]/', '-', $page->slug);
 
         // Save Page and get ID
         $page = $PageMapper->save($page);
