@@ -11,11 +11,11 @@
     <div class="card mb-4">
       <div class="card-header">
         <h5 class="card-title">{{ p.title }}
-          {% if not p.published_date %}
+          {% if p.getPublishedStatus() == 'draft' %}
           <span class="badge badge-secondary" title="Not published">Draft</span>
-          {% elseif p.published_date > "now"|date('Y-m-d') %}
+          {% elseif p.getPublishedStatus() == 'pending' %}
           <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date('m/d/Y') }}">Pending</span>
-          {% elseif p.published_date <= "now"|date('Y-m-d') %}
+          {% elseif p.getPublishedStatus() == 'published' %}
           <span class="badge badge-success" title="Published on {{ p.published_date|date('m/d/Y') }}">Published</span>
           {% endif %}
         </h5>

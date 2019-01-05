@@ -24,6 +24,7 @@ class PageMapper extends DataMapperAbstract
         'meta_description',
         'published_date'
     ];
+    protected $domainObjectClass = __NAMESPACE__ . '\Page';
 
     /**
      * Find Published Page By URL

@@ -61,14 +61,15 @@
 {% block cancelLink pathFor('showPages') %}
 
 {% block otherControls %}
+
         <div class="form-group">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              {% if not page.published_date %}
+              {% if page.getPublishedStatus() == 'draft' %}
               <span class="input-group-text" title="Not published">Draft</span>
-              {% elseif page.published_date > "now"|date('Y-m-d') %}
+              {% elseif page.getPublishedStatus() == 'pending' %}
               <span class="input-group-text bg-warning">Pending</span>
-              {% elseif page.published_date <= "now"|date('Y-m-d') %}
+              {% elseif page.getPublishedStatus() == 'published' %}
               <span class="input-group-text bg-success text-light">Published</span>
               {% endif %}
             </div>
