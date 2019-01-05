@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block leadText %}
-To publish a collection add a <i>Page Element</i> of type <i>Collection</i> where you then select the Collection by name to display.
+To publish a collection add a <i>Page Element</i> of type <i>Collection</i> where you then select the Collection to display.
 {% endblock %}
 
 {% block formActionPath pathFor('saveCollection') %}
@@ -20,13 +20,13 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
 
 {% block formBody %}
       <div class="form-group">
-        <label>Title</label>
+        <label>Collection Title</label>
         <input type="text" class="form-control" name="title" maxlength="60" placeholder="Collection title" value="{{ page.title }}" required autocomplete="off">
         <small class="form-text text-muted">Display title.</small>
       </div>
 
       <div class="form-group">
-        <label>Content</label>
+        <label>Summary Description</label>
         <textarea class="form-control jsMDE" rows="5" name="content_raw">{{ page.content_raw }}</textarea>
         <small class="form-text text-muted">Optional text to display with collection summary.</small>
       </div>
