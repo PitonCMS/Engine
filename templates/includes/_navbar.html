@@ -15,7 +15,7 @@
               <a class="dropdown-item" href="{{ pathFor('showPages') }}">Pages</a>
               <div class="dropdown-divider"></div>
               {% for key, tl in getThemeLayouts()  %}
-              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">Add {{ tl }} Page</a>
+              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">New {{ tl }} Page</a>
               {% else %}
               <a class="dropdown-item" href="#">No Valid Theme Selected</a>
               {% endfor %}
@@ -26,7 +26,7 @@
             <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Navigation</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="/#">Navigations</a>
-              <a class="dropdown-item" href="/#">Add Navigation</a>
+              <a class="dropdown-item" href="/#">New Navigation</a>
             </div>
           </li>
 
@@ -37,7 +37,7 @@
               <a class="dropdown-item" href="/#">Outdoors</a>
               <a class="dropdown-item" href="/#">Funny Cats</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/#">Add Media Group</a>
+              <a class="dropdown-item" href="/#">New Media Group</a>
             </div>
           </li>
 
@@ -45,7 +45,7 @@
             <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Collections</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ pathFor('showCollections') }}">Collections</a>
-              <a class="dropdown-item" href="{{ pathFor('editCollection') }}">Add Collection</a>
+              <a class="dropdown-item" href="{{ pathFor('editCollection') }}">New Collection</a>
             </div>
           </li>
 

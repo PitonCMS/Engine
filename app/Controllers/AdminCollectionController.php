@@ -43,6 +43,8 @@ class AdminCollectionController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
+        $Json = $this->container->json;
+        $Toolbox = $this->container->toolbox;
 
         // Fetch collection group, or create new collection group
         if (isset($args['id']) && is_numeric($args['id'])) {
@@ -50,6 +52,18 @@ class AdminCollectionController extends AdminBaseController
         } else {
             // New collection
             $collection = $CollectionMapper->make();
+        }
+
+        // Get custom collection schemas
+        $theme = $this->container->get('settings')['site']['theme'];
+        $path = ROOT_DIR . "themes/{$theme}/templates/elements/collection";
+        $collection->custom = $Toolbox->getDirectoryFiles($path, '^_.+');
+
+        foreach ($collection->custom as $key => $file) {
+            if (null === $collection->custom[$key]['json'] = $Json->getCustomCollectionDefinition($file['filename'])) {
+                $this->setAlert('danger', 'Custom Collection Error', $Json->getErrorMessages());
+                break;
+            }
         }
 
         return $this->render('editCollection.html', $collection);
@@ -65,18 +79,20 @@ class AdminCollectionController extends AdminBaseController
         // // Get dependencies
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
+        $Toolbox = $this->container->toolbox;
 
         // Create collection object and populate with POST data
         $collection = $CollectionMapper->make();
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
-        $collection->layout = $this->request->getParsedBodyParam('layout');
+        $collection->slug = $Toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
 
-        // Prep URL Slug
-        $collection->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
-        $collection->slug = preg_replace('/[^a-z0-9\s-]/', '', $collection->slug);
-        $collection->slug = preg_replace('/[\s-]+/', ' ', $collection->slug);
-        $collection->slug = preg_replace('/[\s]/', '-', $collection->slug);
+        // We have two values in the radio button separated by |, if not "standard"
+        if ($this->request->getParsedBodyParam('custom_type') !== 'standard') {
+            $custom = explode('|', $this->request->getParsedBodyParam('custom_type'));
+            $collection->custom_type = $custom[0];
+            $collection->layout = $custom[1];
+        }
 
         $collection = $CollectionMapper->save($collection);
 

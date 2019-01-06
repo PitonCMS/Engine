@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS `collection` (
   `title` varchar(60) NOT NULL,
   `slug` varchar(100) NOT NULL,
   `layout` varchar(60) NULL DEFAULT NULL,
+  `custom_type` varchar(60) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,

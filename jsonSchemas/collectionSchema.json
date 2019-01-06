@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org#",
+    "title": "Custom Collection Schema",
+    "type": "object",
+    "properties": {
+        "summaryCollectionLayout": {
+            "description": "Optional collection summary HTML file",
+            "type": "string"
+        },
+        "detailCollectionLayout": {
+            "description": "Optional collection detail HTML file",
+            "type": "string"
+        },
+        "inputs": {
+            "description": "Define inputs for custom settings.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "label": {
+                        "description": "Input label text",
+                        "type": "string"
+                    },
+                    "key": {
+                        "description": "camelCase single word as the key name",
+                        "type": "string"
+                    },
+                    "value": {
+                        "description": "Default value, optional",
+                        "type": "string"
+                    },
+                    "inputType": {
+                        "description": "HTML input type: input, select, textarea.",
+                        "type": "string",
+                        "enum": ["input","select","textarea"]
+                    },
+                    "help": {
+                        "description": "Form input help text"
+                    },
+                    "options": {
+                        "description": "Only for select lists. List of values (saved) and names (readable).",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "value": {
+                                    "description": "Value to save.",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "Value to show in select.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["value"]
+                        }
+                    }
+                },
+                "required": ["label","key"]
+            }
+        }
+    }
+}

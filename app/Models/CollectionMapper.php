@@ -19,6 +19,7 @@ class CollectionMapper extends DataMapperAbstract
     protected $modifiableColumns = [
         'title',
         'slug',
-        'layout'
+        'layout',
+        'custom_type'
     ];
 }
