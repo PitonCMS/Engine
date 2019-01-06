@@ -8,10 +8,12 @@
  */
 namespace Piton\Library\Utilities;
 
+use FilesystemIterator;
+
 /**
  *  Piton Toolbox Class
  *
- *  Misc methods
+ *  Misc Helper Methods
  */
 class Toolbox
 {
@@ -80,5 +82,53 @@ class Toolbox
         $string = trim($string, '-');
 
         return $string;
+    }
+
+    /**
+     * Get Directory Files
+     *
+     * Scans a given directory, and returns a multi-dimension array of file names
+     * Ignores '.' '..' and sub directories by default
+     * $ignore accepts file names or regex patterns
+     * @param  string $dirPath Path to directory to scan
+     * @param  mixed  $ignore  String | Array
+     * @return array
+     */
+    public function getDirectoryFiles($dirPath, $ignore = null)
+    {
+        $files = [];
+        $pattern = '/^\..+'; // Ignore all dot files by default
+        $splitCamelCase = '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/';
+
+        if (is_string($ignore) && !empty($ignore)) {
+            // If we have a valid string add it to the regex
+            $pattern .= '|' . $ignore;
+        } elseif (is_array($ignore)) {
+            // If we have a non-empty array then add it to the regex
+            $multiIgnores = implode('|', $ignore);
+            $pattern .= empty($multiIgnores) ? '' : '|' . $multiIgnores;
+        }
+
+        $pattern .= '/'; // Close regex
+
+        if (is_dir($dirPath)) {
+            foreach (new FilesystemIterator($dirPath) as $dirObject) {
+                if ($dirObject->isDir() || preg_match($pattern, $dirObject->getFilename())) {
+                    continue;
+                }
+
+                $baseName = $dirObject->getBasename('.' . $dirObject->getExtension());
+                $readableFileName = preg_replace($splitCamelCase, '$1 ', $baseName);
+                $readableFileName = ucwords($readableFileName);
+
+                $files[] = [
+                    'filename' => $dirObject->getFilename(),
+                    'basename' => $baseName,
+                    'readname' => $readableFileName
+                ];
+            }
+        }
+
+        return $files;
     }
 }
