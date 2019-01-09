@@ -35,7 +35,7 @@ class AdminSettingController extends AdminBaseController
             $this->setAlert('danger', 'Custom Theme Settings Error', $Json->getErrorMessages());
         } else {
             // Move up multi-dimensional array one key
-            $customSettings = $customSettings->customSettings;
+            $customSettings = $customSettings->settings;
         }
 
         // Create union of settings from DB and from JSON file by matching keys
