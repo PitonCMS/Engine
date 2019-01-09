@@ -62,22 +62,15 @@ class Admin extends Base
      */
     public function getThemes()
     {
-        $themes['default'] = 'Default';
-        foreach (new \DirectoryIterator(ROOT_DIR . 'themes/') as $dirObject) {
-            // Ignore dot files, and skip default theme as we will force that option to the top
-            if (!$dirObject->isDir() || $dirObject->isDot() || $dirObject->getFilename() === 'default') {
-                continue;
-            }
+        $toolbox = $this->container->toolbox;
+        $themes = $toolbox->getDirectoryFiles(ROOT_DIR . 'themes', 'default');
+        $themeOptions['default'] = 'Default';
 
-            // Split camelCase theme names and upper case first letters into title case,
-            // and assign to array using [themeName] = Readable Theme Name
-            $themeName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-            $ReadableThemeName = preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', '$1 ', $themeName);
-            $ReadableThemeName = ucwords($ReadableThemeName);
-            $themes[$themeName] = $ReadableThemeName;
+        foreach ($themes as $row) {
+            $themeOptions[$row['filename']] = $row['readname'];
         }
 
-        return $themes;
+        return $themeOptions;
     }
 
     /**
