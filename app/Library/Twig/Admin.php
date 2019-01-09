@@ -76,34 +76,19 @@ class Admin extends Base
     /**
      * Get Layout File Names
      *
-     * For the current theme, gets layout file names, and strips the '.html'
-     * @param none
-     * @return mixed array of layout file names, or null
+     * For the current theme
+     * @param  void
+     * @return array
      */
     public function getThemeLayouts()
     {
-        // Get layout templates
+        $toolbox = $this->container->toolbox;
+        $path = ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/';
+        $layoutFiles = $toolbox->getDirectoryFiles($path, ['^_.+','\.json']);
         $layouts = [];
-        $pathToLayouts = ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/';
 
-        if (is_dir($pathToLayouts)) {
-            foreach (new \DirectoryIterator($pathToLayouts) as $dirObject) {
-                if ($dirObject->isDir() ||
-                    $dirObject->isDot() ||
-                    substr($dirObject->getFilename(), 0, 1) === '.' ||
-                    substr($dirObject->getFilename(), 0, 1) === '_' ||
-                    pathinfo($dirObject->getFilename(), PATHINFO_EXTENSION) === 'json'
-                ) {
-                    continue;
-                }
-
-                // Split camelCase filenames and upper case first letters into title case,
-                // and assign to array using [fileName] = Readable File Name
-                $fileName = pathinfo($dirObject->getFilename(), PATHINFO_FILENAME);
-                $ReadableFileName = preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', '$1 ', $fileName);
-                $ReadableFileName = ucwords($ReadableFileName);
-                $layouts[$fileName] = $ReadableFileName;
-            }
+        foreach ($layoutFiles as $row) {
+            $layouts[$row['filename']] = $row['readname'];
         }
 
         return $layouts;
