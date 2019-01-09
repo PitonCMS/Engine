@@ -99,12 +99,24 @@ class Toolbox
         $files = [];
         $pattern = '/^\..+'; // Ignore all dot files by default
         $splitCamelCase = '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/';
+        $ignoreDirectories = false;
 
         if (is_string($ignore) && !empty($ignore)) {
-            // If we have a valid string add it to the regex
-            $pattern .= '|' . $ignore;
+            // If 'dir' or 'directory' strings are set, then set flag to ignore directories
+            if ($ignore === 'dir' || $ignore === 'directory') {
+                $ignoreDirectories = true;
+            } else {
+                // Add it to the regex
+                $pattern .= '|' . $ignore;
+            }
         } elseif (is_array($ignore)) {
-            // If we have a non-empty array then add it to the regex
+            // If 'dir' or 'directory' strings are set, then set flag to ignore directories
+            if (in_array('dir', $ignore) || in_array('directory', $ignore)) {
+                $ignoreDirectories = true;
+                $ignore = array_diff($ignore, ['dir', 'directory']);
+            }
+
+            // Add it to the regex
             $multiIgnores = implode('|', $ignore);
             $pattern .= empty($multiIgnores) ? '' : '|' . $multiIgnores;
         }
@@ -113,7 +125,7 @@ class Toolbox
 
         if (is_dir($dirPath)) {
             foreach (new FilesystemIterator($dirPath) as $dirObject) {
-                if ($dirObject->isDir() || preg_match($pattern, $dirObject->getFilename())) {
+                if (($ignoreDirectories && $dirObject->isDir()) || preg_match($pattern, $dirObject->getFilename())) {
                     continue;
                 }
 

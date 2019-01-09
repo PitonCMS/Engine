@@ -57,7 +57,7 @@ class AdminCollectionController extends AdminBaseController
         // Get custom collection schemas
         $theme = $this->container->get('settings')['site']['theme'];
         $path = ROOT_DIR . "themes/{$theme}/templates/elements/collection";
-        $collection->custom = $Toolbox->getDirectoryFiles($path, '^_.+');
+        $collection->custom = $Toolbox->getDirectoryFiles($path, ['^_.+','dir']);
 
         foreach ($collection->custom as $key => $file) {
             if (null === $collection->custom[$key]['json'] = $Json->getCustomCollectionDefinition($file['filename'])) {
