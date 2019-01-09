@@ -1,6 +1,6 @@
 {
-    "$schema": "http://json-schema.org#",
-    "title": "Theme Custom Setting Inputs",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Theme Custom Setting Inputs",
     "type": "object",
     "properties": {
         "customSettings": {
@@ -15,11 +15,13 @@
                     },
                     "label": {
                         "description": "Input label text",
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 60
                     },
                     "key": {
-                        "description": "camelCase single word as the key name",
-                        "type": "string"
+                        "description": "Single camelCase word with only a-z and A-Z characters",
+                        "type": "string",
+                        "pattern": "^[a-zA-Z]{1,60}$"
                     },
                     "value": {
                         "description": "Default value, optional",
@@ -31,7 +33,8 @@
                         "enum": ["input","select","textarea"]
                     },
                     "help": {
-                        "description": "Form input help text"
+                        "description": "Form input help text",
+                        "maxLength": 500
                     },
                     "options": {
                         "description": "Only for select lists. List of values (saved) and names (readable).",
@@ -44,7 +47,7 @@
                                     "type": "string"
                                 },
                                 "name": {
-                                    "description": "Value to show in select.",
+                                    "description": "Value to show in select list.",
                                     "type": "string"
                                 }
                             },

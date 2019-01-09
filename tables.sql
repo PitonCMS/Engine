@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 1,
-  `setting_key` varchar(40) NOT NULL,
+  `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(1000) DEFAULT NULL,
   `input_type` varchar(20) DEFAULT NULL,
   `label` varchar(60) DEFAULT NULL,

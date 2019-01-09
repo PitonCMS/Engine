@@ -88,7 +88,10 @@ class AdminCollectionController extends AdminBaseController
         $collection->slug = $Toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
 
         // We have two values in the radio button separated by |, if not "standard"
-        if ($this->request->getParsedBodyParam('custom_type') !== 'standard') {
+        if ($this->request->getParsedBodyParam('custom_type') === 'standard') {
+            $collection->custom_type = $this->request->getParsedBodyParam('custom_type');
+            $collection->layout = null;
+        } else {
             $custom = explode('|', $this->request->getParsedBodyParam('custom_type'));
             $collection->custom_type = $custom[0];
             $collection->layout = $custom[1];
@@ -139,18 +142,30 @@ class AdminCollectionController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $CollectionMapper = $mapper('CollectionMapper');
         $CollectionDetailMapper = $mapper('CollectionDetailMapper');
+        $Json = $this->container->json;
 
-        // Get collection detail and collection summary data
+        // Get collection detail and collection summary
         if (isset($args['id']) && is_numeric($args['id'])) {
-            $data = $CollectionDetailMapper->findById($args['id']);
+            $collectionDetail = $CollectionDetailMapper->findById($args['id']);
         } else {
-            $data = $CollectionDetailMapper->make();
+            $collectionDetail = $CollectionDetailMapper->make();
         }
 
         // Get collection summary information
-        $data->collection = $CollectionMapper->findById($args['collection']);
+        $collectionDetail->collection = $CollectionMapper->findById($args['collection']);
 
-        return $this->render('editCollectionDetail.html', $data);
+        // Get custom collection JSON
+        if ($collectionDetail->collection->custom_type !== 'standard') {
+            $theme = $this->container->get('settings')['site']['theme'];
+            $jsonPath = ROOT_DIR . "themes/{$theme}/templates/elements/collection/";
+            $jsonPath .= $collectionDetail->collection->custom_type;
+
+            if (null === $collectionDetail->custom = $Json->getCustomCollectionDefinition($jsonPath)) {
+                $this->setAlert('danger', 'Custom Collection Error', $Json->getErrorMessages());
+            }
+        }
+
+        return $this->render('editCollectionDetail.html', $collectionDetail);
     }
 
     /**
