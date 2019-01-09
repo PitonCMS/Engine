@@ -20,6 +20,6 @@ class CollectionMapper extends DataMapperAbstract
         'title',
         'slug',
         'layout',
-        'custom_type'
+        'kind'
     ];
 }

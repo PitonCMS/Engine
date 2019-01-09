@@ -88,12 +88,12 @@ class AdminCollectionController extends AdminBaseController
         $collection->slug = $Toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
 
         // We have two values in the radio button separated by |, if not "standard"
-        if ($this->request->getParsedBodyParam('custom_type') === 'standard') {
-            $collection->custom_type = $this->request->getParsedBodyParam('custom_type');
+        if ($this->request->getParsedBodyParam('kind') === 'standard') {
+            $collection->kind = $this->request->getParsedBodyParam('kind');
             $collection->layout = null;
         } else {
-            $custom = explode('|', $this->request->getParsedBodyParam('custom_type'));
-            $collection->custom_type = $custom[0];
+            $custom = explode('|', $this->request->getParsedBodyParam('kind'));
+            $collection->kind = $custom[0];
             $collection->layout = $custom[1];
         }
 
@@ -155,10 +155,10 @@ class AdminCollectionController extends AdminBaseController
         $collectionDetail->collection = $CollectionMapper->findById($args['collection']);
 
         // Get custom collection JSON
-        if ($collectionDetail->collection->custom_type !== 'standard') {
+        if ($collectionDetail->collection->kind !== 'standard') {
             $theme = $this->container->get('settings')['site']['theme'];
             $jsonPath = ROOT_DIR . "themes/{$theme}/templates/elements/collection/";
-            $jsonPath .= $collectionDetail->collection->custom_type;
+            $jsonPath .= $collectionDetail->collection->kind;
 
             if (null === $collectionDetail->custom = $Json->getCustomCollectionDefinition($jsonPath)) {
                 $this->setAlert('danger', 'Custom Collection Error', $Json->getErrorMessages());
