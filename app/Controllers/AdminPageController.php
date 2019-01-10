@@ -90,7 +90,6 @@ class AdminPageController extends AdminBaseController
         $page->id = $this->request->getParsedBodyParam('id');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
-        $page->slug_locked = 'N'; // TODO strtolower(trim($this->request->getParsedBodyParam('slug_locked')));
         $page->layout = $this->request->getParsedBodyParam('layout');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
 

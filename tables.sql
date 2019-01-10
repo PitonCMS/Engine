@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NULL DEFAULT NULL,
   `slug` varchar(100) NOT NULL,
-  `slug_locked` char(1) NOT NULL DEFAULT 'N',
   `layout` varchar(60) NOT NULL,
   `meta_description` varchar(320) NULL DEFAULT NULL,
   `published_date` date NULL DEFAULT NULL,
@@ -124,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   KEY `setting_key_uq` (`setting_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `page` (`id`, `title`, `slug`, `slug_locked`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-  VALUES (1, 'Home', 'home', 'Y', 'home.html', 'All about this page for SEO.', now(), 1, now(), 1, now());
+INSERT INTO `page` (`id`, `title`, `slug`, `layout`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+  VALUES (1, 'Home', 'home', 'home.html', 'All about this page for SEO.', now(), 1, now(), 1, now());
 
 INSERT INTO `page_element` (`id`, `page_id`, `section_name`, `element_type`, `element_sort`, `title`, `content_raw`, `content`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
   VALUES
