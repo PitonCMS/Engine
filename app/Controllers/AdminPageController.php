@@ -83,12 +83,13 @@ class AdminPageController extends AdminBaseController
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
         $Markdown = $this->container->markdownParser;
-        $Toolbox = $this->container->toolbox;
+        $toolbox = $this->container->toolbox;
 
         // Create page object and populate POST data
         $page = $PageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
         $page->title = $this->request->getParsedBodyParam('title');
+        $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
         $page->slug_locked = 'N'; // TODO strtolower(trim($this->request->getParsedBodyParam('slug_locked')));
         $page->layout = $this->request->getParsedBodyParam('layout');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
@@ -106,12 +107,6 @@ class AdminPageController extends AdminBaseController
             $page->published_date = date('Y-m-d', $publishedDate);
         }
 
-        // Prep URL Slug
-        $page->slug = strtolower(trim($this->request->getParsedBodyParam('slug')));
-        $page->slug = preg_replace('/[^a-z0-9\s-]/', '', $page->slug);
-        $page->slug = preg_replace('/[\s-]+/', ' ', $page->slug);
-        $page->slug = preg_replace('/[\s]/', '-', $page->slug);
-
         // Save Page and get ID
         $page = $PageMapper->save($page);
 
@@ -127,11 +122,12 @@ class AdminPageController extends AdminBaseController
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $Markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
-            $pageElement->excerpt = $Toolbox->truncateHtmlText($pageElement->content, 60);
+            $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $this->request->getParsedBodyParam('collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
+
             $pageElement = $PageElementMapper->save($pageElement);
         }
 
