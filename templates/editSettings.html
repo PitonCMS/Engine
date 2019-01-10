@@ -21,7 +21,7 @@
               <a class="nav-link" id="pills-social-tab" data-toggle="pill" href="#pills-social" role="tab" aria-controls="pills-social" aria-selected="false">Social</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="pills-custom-tab" data-toggle="pill" href="#pills-custom" role="tab" aria-controls="pills-custom" aria-selected="false">Custom</a>
+              <a class="nav-link" id="pills-theme-tab" data-toggle="pill" href="#pills-theme" role="tab" aria-controls="pills-theme" aria-selected="false">Theme</a>
             </li>
           </ul>
 
@@ -62,8 +62,8 @@
               {% endfor %}
             </div>
 
-            <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-custom-tab">
-              {% for setting in page if setting.category == 'custom' %}
+            <div class="tab-pane fade" id="pills-theme" role="tabpanel" aria-labelledby="pills-theme-tab">
+              {% for setting in page if setting.category == 'theme' %}
                 {% if setting.input_type == 'select' %}
                   {{ settingForm.selectHtml(setting, setting.options) }}
                 {% elseif setting.input_type == 'textarea' %}
@@ -71,8 +71,6 @@
                 {% else %}
                   {{ settingForm.inputHtml(setting) }}
                 {% endif %}
-              {% else %}
-                <h5>No Custom Settings</h5>
               {% endfor %}
             </div>
           </div>
@@ -91,7 +89,7 @@
                 <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
                 <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
-                {% if setting.category == 'custom' and setting.orphaned %}
+                {% if setting.category == 'theme' and setting.orphaned %}
                   {{ button.delete(setting) }}
                 {% endif %}
             </div>
@@ -112,7 +110,7 @@
                 </select>
                 <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
               </div>
-                {% if setting.category == 'custom' and setting.orphaned %}
+                {% if setting.category == 'theme' and setting.orphaned %}
                   {{ button.delete(setting) }}
                 {% endif %}
             </div>
@@ -129,7 +127,7 @@
                   <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
                   <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
                 </div>
-                {% if setting.category == 'custom' and setting.orphaned %}
+                {% if setting.category == 'theme' and setting.orphaned %}
                   {{ button.delete(setting) }}
                 {% endif %}
             </div>
@@ -138,6 +136,6 @@
 {# Delete Button Macro #}
 {% macro delete(setting) %}
           <div class="form-group">
-            <button type="button" class="btn btn-sm btn-outline-danger jsDeleteCustomSetting" data-setting-id="{{ setting.id }}" title="Delete orphaned setting not in current theme. Optional.">Delete Orphaned Setting</button>
+            <button type="button" class="btn btn-sm btn-outline-danger jsDeleteThemeSetting" data-setting-id="{{ setting.id }}" title="Delete orphaned setting not in current theme. Optional.">Delete Orphaned Setting</button>
           </div>
 {% endmacro delete %}

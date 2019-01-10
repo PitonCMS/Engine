@@ -30,43 +30,43 @@ class AdminSettingController extends AdminBaseController
         // Fetch settings from database
         $allSettings = $SettingMapper->findSiteSettings();
 
-        // Fetch custom theme settings from themes/<theme-name>/themeSettings.json
-        if (null === $customSettings = $Json->getThemeSettings()) {
-            $this->setAlert('danger', 'Custom Theme Settings Error', $Json->getErrorMessages());
+        // Fetch theme settings from themes/<theme-name>/themeSettings.json
+        if (null === $themeSettings = $Json->getThemeSettings()) {
+            $this->setAlert('danger', 'Theme Settings Error', $Json->getErrorMessages());
         } else {
             // Move up multi-dimensional array one key
-            $customSettings = $customSettings->settings;
+            $themeSettings = $themeSettings->settings;
         }
 
         // Create union of settings from DB and from JSON file by matching keys
         foreach ($allSettings as $allKey => $setting) {
-            // Skip ahead if non-custom setting
-            if ($setting->category !== 'custom') {
+            // Skip ahead if non-theme setting
+            if ($setting->category !== 'theme') {
                 continue;
             }
 
-            // Now see if we have a custom setting from JSON that matches one in the DB
-            foreach ($customSettings as $customKey => $custom) {
-                if ($setting->setting_key === $custom->key) {
+            // Now see if we have a theme setting from JSON that matches one in the DB
+            foreach ($themeSettings as $settingKey => $theme) {
+                if ($setting->setting_key === $theme->key) {
                     // There is a match on setting key so update display properties
                     // use themeSettings.json as the master reference
-                    $setting->sort_order = $custom->sort;
-                    $setting->label = $custom->label;
-                    $setting->input_type = $custom->inputType;
-                    $setting->help = $custom->help;
+                    $setting->sort_order = $theme->sort;
+                    $setting->label = $theme->label;
+                    $setting->input_type = $theme->inputType;
+                    $setting->help = $theme->help;
 
                     // Include select options array
-                    if ($custom->inputType === 'select') {
-                        $setting->options = $this->createOptionsArray($custom->options);
+                    if ($theme->inputType === 'select') {
+                        $setting->options = $this->createOptionsArray($theme->options);
                     }
 
-                    // Unset custom setting and skip to the next outer loop iteration
-                    unset($customSettings[$customKey]);
+                    // Unset theme setting and skip to the next outer loop iteration
+                    unset($themeSettings[$settingKey]);
                     continue 2;
                 }
             }
 
-            // Found an orphaned custom setting in the DB, so mark it as such for optional delete
+            // Found an orphaned theme setting in the DB, so mark it as such for optional delete
             $allSettings[$allKey]->orphaned = true;
 
             if ($allSettings[$allKey]->input_type = 'select') {
@@ -75,22 +75,22 @@ class AdminSettingController extends AdminBaseController
             }
         }
 
-        // Any remaining $customSettings are new and have not yet been saved to the DB
+        // Any remaining $themeSettings are new and have not yet been saved to the DB
         // Append these to the settings array
-        foreach ($customSettings as $custom) {
+        foreach ($themeSettings as $setting) {
             // Create setting object
             $newSetting = $SettingMapper->make();
-            $newSetting->category = 'custom';
-            $newSetting->sort_order = $custom->sort;
-            $newSetting->setting_key = $custom->key;
-            $newSetting->setting_value = $custom->value;
-            $newSetting->input_type = $custom->inputType;
-            $newSetting->label = $custom->label;
-            $newSetting->help = $custom->help;
+            $newSetting->category = 'theme';
+            $newSetting->sort_order = $setting->sort;
+            $newSetting->setting_key = $setting->key;
+            $newSetting->setting_value = $setting->value;
+            $newSetting->input_type = $setting->inputType;
+            $newSetting->label = $setting->label;
+            $newSetting->help = $setting->help;
 
             // Include select options
-            if ($custom->inputType === 'select') {
-                $newSetting->options = $this->createOptionsArray($custom->options);
+            if ($setting->inputType === 'select') {
+                $newSetting->options = $this->createOptionsArray($setting->options);
             }
 
             // Append to array
@@ -110,7 +110,7 @@ class AdminSettingController extends AdminBaseController
     protected function createOptionsArray($options)
     {
         $newArray = [];
-        foreach ($options as $key => $row) {
+        foreach ($options as $row) {
             $newArray[$row->value] = ($row->name) ?: $row->value;
         }
 
@@ -129,8 +129,9 @@ class AdminSettingController extends AdminBaseController
         $SettingMapper = $mapper('SettingMapper');
         $Json = $this->container->json;
 
-        // Fetch custom theme settings from themes/<theme-name>/themeSettings.json
-        $customSettings = $Json->getThemeSettings();
+        // Fetch theme settings from themes/<theme-name>/themeSettings.json
+        $themeSettings = $Json->getThemeSettings();
+        $themeSettings = $themeSettings->settings;
 
         // Get $_POST data array
         $allSettings = $this->request->getParsedBody();
@@ -141,19 +142,19 @@ class AdminSettingController extends AdminBaseController
             $setting->id = $allSettings['id'][$key];
             $setting->setting_value = $allSettings['setting_value'][$key];
 
-            // If there is no ID, then this is a new custom setting to save
+            // If there is no ID, then this is a new theme setting to save
             // Import setting information from theme file
             if (empty($allSettings['id'][$key])) {
-                // Get theme custom setting array key for this setting_key for reference
-                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($customSettings, 'key'));
+                // Get theme setting array key for this setting_key for reference
+                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
 
-                // Populate the new custom setting and save
-                $setting->category = 'custom';
-                $setting->sort_order = $customSettings[$jsonKey]->sort;
-                $setting->setting_key = $customSettings[$jsonKey]->key;
-                $setting->input_type = $customSettings[$jsonKey]->inputType;
-                $setting->label = $customSettings[$jsonKey]->label;
-                $setting->help = $customSettings[$jsonKey]->help;
+                // Populate the new theme setting and save
+                $setting->category = 'theme';
+                $setting->sort_order = $themeSettings[$jsonKey]->sort;
+                $setting->setting_key = $themeSettings[$jsonKey]->key;
+                $setting->input_type = $themeSettings[$jsonKey]->inputType;
+                $setting->label = $themeSettings[$jsonKey]->label;
+                $setting->help = $themeSettings[$jsonKey]->help;
             }
 
             $SettingMapper->save($setting);
@@ -164,11 +165,11 @@ class AdminSettingController extends AdminBaseController
     }
 
     /**
-     * Delete Custom Setting
+     * Delete Theme Setting
      *
      * XHR Request
      */
-    public function deleteCustomSetting()
+    public function deleteThemeSetting()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;

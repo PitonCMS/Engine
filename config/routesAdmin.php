@@ -94,13 +94,13 @@ $app->group('/admin', function () {
             return (new AdminSettingController($this))->saveSettings();
         })->add('csrfGuard')->setName('saveSettings');
 
-        // Custom Settings
-        $this->group('/custom', function () {
-            // Delete Custom Setting
+        // Theme Settings
+        $this->group('/theme', function () {
+            // Delete Setting
             $this->post('/delete', function ($args) {
-                return (new AdminSettingController($this))->deleteCustomSetting();
-            })->add('csrfGuard')->setName('deleteCustomSetting');
-        }); // End Custom Settings
+                return (new AdminSettingController($this))->deleteThemeSetting();
+            })->add('csrfGuard');
+        }); // End Theme Settings
     });
     // End settings
 

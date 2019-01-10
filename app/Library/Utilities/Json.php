@@ -81,7 +81,7 @@ class Json extends JsonDecoder
     }
 
     /**
-     * Get Custom Theme Settings
+     * Get Theme Settings
      *
      * Validation errors are written to $this->errors
      * @param void
