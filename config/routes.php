@@ -11,13 +11,13 @@ use Piton\Controllers\FrontController;
 /**
  * Public Piton Application Routes
  */
-// Load dynamic page by /url. Keep as second to last route
-$app->get('/{url}', function ($args) {
+// Load dynamic page by /slug. Keep as second to last route
+$app->get('/{slug}', function ($args) {
     return (new FrontController($this))->showPage($args);
 })->setName('showPage');
 
 // Home page '/' is always the last route as default, and an alias for the 'home' route
 $app->get('/', function ($args) {
-    $args['url'] = 'home';
+    $args['slug'] = 'home';
     return (new FrontController($this))->showPage($args);
 })->setName('home');

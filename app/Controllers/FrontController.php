@@ -17,8 +17,8 @@ class FrontController extends FrontBaseController
     /**
      * Show Page
      *
-     * Displays page matching URL, or throws 404 Not Found
-     * @param array $args Array of URL parameters, expecting 'url'
+     * Displays page matching URL slug, or throws 404 Not Found
+     * @param array $args Array of URL parameters, expecting 'slug'
      */
     public function showPage($args)
     {
@@ -28,7 +28,7 @@ class FrontController extends FrontBaseController
         $PageElement = $mapper('PageElementMapper');
 
         // Get page data
-        $page = $Page->findPublishedPageBySlug($args['url']);
+        $page = $Page->findPublishedPageBySlug($args['slug']);
 
         // Send 404 if not found
         if (empty($page)) {
