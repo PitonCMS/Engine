@@ -56,7 +56,7 @@ class AdminCollectionController extends AdminBaseController
         $collection->custom = $toolbox->getDirectoryFiles($path, ['^_.+','\.html']);
 
         foreach ($collection->custom as $key => $file) {
-            if (null === $collection->custom[$key]['json'] = $json->getCustomCollectionDefinition($path . $file['filename'])) {
+            if (null === $collection->custom[$key]['json'] = $json->getCollectionDefinition($path . $file['filename'])) {
                 $this->setAlert('danger', 'Custom Collection Error', $json->getErrorMessages());
                 break;
             }

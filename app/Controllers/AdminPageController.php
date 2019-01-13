@@ -49,24 +49,27 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
-        $Json = $this->container->json;
+        $pageMapper = $mapper('PageMapper');
+        $pageElementMapper = $mapper('PageElementMapper');
+        $json = $this->container->json;
+        $theme = $this->container->get('settings')['site']['theme'];
 
         // Fetch page, or create new page
         if (is_numeric($args['id'])) {
-            $page = $PageMapper->findById($args['id']);
-            $page->elements = $PageElementMapper->findElementsByPageId($args['id']);
+            $page = $pageMapper->findById($args['id']);
+            $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
         } elseif (is_string($args['id'])) {
             // New page
-            $page = $PageMapper->make();
+            $page = $pageMapper->make();
             $page->template = $args['id'] . '.html';
         }
 
         // Get page template definition
-        $pageJson = pathinfo($page->template, PATHINFO_FILENAME) . '.json';
-        if (null === $page->definition = $Json->getPageDefinition($pageJson)) {
-            $this->setAlert('danger', 'Template Definition Error', $Json->getErrorMessages());
+        $path = ROOT_DIR . 'themes/' . $theme . '/templates/layouts/';
+        $path .= pathinfo($page->template, PATHINFO_FILENAME) . '.json';
+
+        if (null === $page->definition = $json->getPageDefinition($path)) {
+            $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
         }
 
         return $this->render('editPage.html', $page);

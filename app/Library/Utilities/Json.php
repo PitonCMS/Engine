@@ -53,17 +53,15 @@ class Json extends JsonDecoder
      *
      * Schema validation file: vendor/pitoncms/engine/pageLayoutSchema.json
      * Validation errors are written to $this->errors
-     * @param string Page name
-     * @return mixed
+     * @param string $pageJsonFile Path to page JSON file
+     * @return mixed               JSON Object | null
      */
-    public function getPageDefinition($pageJson)
+    public function getPageDefinition($pageJsonFile)
     {
-        // Page layout name and get path
-        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $pageJson;
         $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json';
 
         try {
-            return $this->decodeFile($jsonFilePath, $validationFile);
+            return $this->decodeFile($pageJsonFile, $validationFile);
         } catch (\RuntimeException $e) {
             // Runtime errors such as file not found
             $this->errors[] = $e->getMessage();
@@ -110,13 +108,13 @@ class Json extends JsonDecoder
     }
 
     /**
-     * Get Custom Collection Defintion
+     * Get Collection Defintion
      *
      * Validation errors are written to $this->errors
      * @param  string $collectionJsonFile Path to collection JSON file
-     * @return mixed  JSON Object | null
+     * @return mixed                      JSON Object | null
      */
-    public function getCustomCollectionDefinition($collectionJsonFile)
+    public function getCollectionDefinition($collectionJsonFile)
     {
         $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/collectionSchema.json';
 
