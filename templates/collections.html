@@ -9,7 +9,7 @@
     {% for c in page.collections %}
     <p>
         <a href="{{ pathFor('editCollection', {'id': c.id}) }}" title="Edit collection">{{ c.title }}</a> |
-        <a href="{{ pathFor('editCollectionDetail', {'collection': c.id}) }}" title="Add new collection detail">New {{ c.title }}</a>
+        <a href="{{ pathFor('editCollectionDetail', {'collection': c.id, 'id': c.kind}) }}" title="Add new collection detail">New {{ c.title }}</a>
         <ul>
             {% for d in page.collectionDetails if c.id == d.collection_id %}
             <li>

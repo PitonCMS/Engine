@@ -88,16 +88,6 @@
       <small class="form-text text-muted">Enter an image link.</small>
     </div>
 
-    <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">
-    <label>Collection</label>
-      <select class="form-control" name="collection_id[{{ arrayKey }}]">
-        <option value="">- None -</option>
-        {% for c in getCollections() %}
-        <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
-        {% endfor %}
-      </select>
-    </div>
-
     <div class="form-group jsElementOptional jsElementGallery {% if element.element_type == 'gallery' %}d-block{% else %}d-none{% endif %}">
     <label>Gallery (TODO)</label>
       <select class="form-control">

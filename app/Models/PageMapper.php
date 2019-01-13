@@ -17,6 +17,7 @@ class PageMapper extends DataMapperAbstract
 {
     protected $table = 'page';
     protected $modifiableColumns = [
+        'collection_id',
         'title',
         'sub_title',
         'slug',
@@ -53,13 +54,14 @@ class PageMapper extends DataMapperAbstract
      * Find All Published Pages
      *
      * Finds all published pages without element data
+     * Does not include collections
      * @param none
      * @return mixed Array on success
      */
     public function findPublishedPages()
     {
         $this->makeSelect();
-        $this->sql .= " and published_date <= '{$this->today()}'";
+        $this->sql .= " and collection_id is null and published_date <= '{$this->today()}'";
 
         return $this->find();
     }

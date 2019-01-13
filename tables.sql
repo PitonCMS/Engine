@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `collection_id` int NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `sub_title` varchar(150) NULL DEFAULT NULL,
   `slug` varchar(100) NOT NULL,
@@ -42,7 +43,8 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `slug_uq` (`slug`),
+  KEY `collection_id_idx` (`collection_id`),
+  UNIQUE KEY `slug_uq` (`slug`,`id`),
   KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 

@@ -51,6 +51,7 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $pageMapper = $mapper('PageMapper');
         $pageElementMapper = $mapper('PageElementMapper');
+        $collectionMapper = $mapper('CollectionMapper');
         $json = $this->container->json;
         $theme = $this->container->get('settings')['site']['theme'];
 
@@ -64,11 +65,19 @@ class AdminPageController extends AdminBaseController
             $page->template = $args['id'] . '.html';
         }
 
-        // Get page template definition
-        $path = ROOT_DIR . 'themes/' . $theme . '/templates/layouts/';
-        $path .= pathinfo($page->template, PATHINFO_FILENAME) . '.json';
+        // Start path to JSON definition file
+        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/templates/';
 
-        if (null === $page->definition = $json->getPageDefinition($path)) {
+        // If this page is for a collection detail, get collection record
+        if (isset($args['collection']) || isset($page->collection_id)) {
+            $collectionId = isset($args['collection']) || isset($page->collection_id);
+            $page->collection = $collectionMapper->findById($collectionId);
+            $jsonPath .= 'collection/' . $page->collection->kind . '.json';
+        } else {
+            $jsonPath .= 'layouts/'. pathinfo($page->template, PATHINFO_FILENAME) . '.json';
+        }
+
+        if (null === $page->definition = $json->getPageDefinition($jsonPath)) {
             $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
         }
 
@@ -92,6 +101,7 @@ class AdminPageController extends AdminBaseController
         // Create page object and populate POST data
         $page = $PageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
+        $page->collection_id = $this->request->getParsedBodyParam('collection_id');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
