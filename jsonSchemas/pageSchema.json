@@ -21,7 +21,7 @@
                         "description": "Section name label",
                         "type": "string"
                     },
-                    "codeName": {
+                    "key": {
                         "description": "Single camelCase word with only a-z and A-Z characters",
                         "type": "string",
                         "pattern": "^[a-zA-Z]{1,60}$"
@@ -44,7 +44,7 @@
                         }
                     }
                 },
-                "required": ["name", "codeName"]
+                "required": ["name", "key"]
             }
         }
     },
