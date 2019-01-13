@@ -18,7 +18,7 @@ class PageElementMapper extends DataMapperAbstract
     protected $table = 'page_element';
     protected $modifiableColumns = [
         'page_id',
-        'section_name',
+        'block_key',
         'element_type',
         'element_sort',
         'title',
@@ -40,7 +40,7 @@ class PageElementMapper extends DataMapperAbstract
     public function findElementsByPageId($pageId)
     {
         $this->makeSelect();
-        $this->sql .= ' and page_id = ? order by section_name, element_sort';
+        $this->sql .= ' and page_id = ? order by block_key, element_sort';
         $this->bindValues[] = $pageId;
 
         return $this->find();

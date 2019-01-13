@@ -96,14 +96,14 @@ class BaseController
     }
 
     /**
-     * Build Page Elements by Section
+     * Build Page Elements by Block
      *
      * Takes array of page elements and builds multi-dimensional array of element objects
-     * with section names as top level keys
+     * with block names as top level keys
      * @param array  $elements Array of page element domain models
      * @return array
      */
-    protected function buildElementsBySection($elements)
+    protected function buildElementsByBlock($elements)
     {
         if (empty($elements)) {
             return $elements;
@@ -111,7 +111,7 @@ class BaseController
 
         $output = [];
         foreach ($elements as $row) {
-            $output[$row->section_name][] = $row;
+            $output[$row->block_key][] = $row;
         }
 
         return $output;

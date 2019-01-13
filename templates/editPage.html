@@ -40,18 +40,18 @@
         <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
       </div>
 
-      {% for section in page.definition.sections %}
-      <div class="p-2 mb-2 jsSectionParent border" id="page-section-{{ section.key }}">
-        <h2>{{ section.name }} Section</h2>
-        {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
+      {% for block in page.definition.blocks %}
+      <div class="p-2 mb-2 jsBlockParent border" id="page-block-{{ block.key }}">
+        <h2>{{ block.name }} Block</h2>
+        <p class="lead">{{ block.description }}</p>
 
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-key="{{ section.key }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add Element</button>
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementType }}" data-element-type-options="{{ block.elementTypeOptions|join(',') }}">Add Element</button>
         <hr>
 
-        {% for element in page.elements if element.section_name == section.key %}
-          {{ form.elementForm(element, section.key, section.elementTypeOptions) }}
+        {% for element in page.elements if element.block_key == block.key %}
+          {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
         {% else %}
-          <h5>Click "Add Element" to build this section.</h5>
+          <h5>Click "Add Element" to build this block.</h5>
         {% endfor %}
       </div>
       {% endfor %}
@@ -86,10 +86,10 @@
         <h6>Page Navigator</h6>
         <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
           <nav class="nav nav-pills flex-column">
-          {% for section in page.definition.sections %}
-            <a class="nav-link" href="#page-section-{{ section.key }}">{{ section.name }} (Section)</a>
-            <nav class="nav nav-pills flex-column jsPageSubSection-{{ section.key }}">
-            {% for element in page.elements if element.section_name == section.key %}
+          {% for block in page.definition.blocks %}
+            <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }} (Block)</a>
+            <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
+            {% for element in page.elements if element.block_key == block.key %}
               <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
             {% endfor %}
             </nav>

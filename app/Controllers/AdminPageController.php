@@ -18,7 +18,7 @@ class AdminPageController extends AdminBaseController
     /**
      * Show Pages
      *
-     * Show pages with sections and elements
+     * Show pages with blocks and elements
      */
     public function showPages()
     {
@@ -30,10 +30,10 @@ class AdminPageController extends AdminBaseController
         // Fetch pages
         $pages = $Page->find();
 
-        // Fetch all section elements for each page
+        // Fetch all block elements for each page
         if ($pages) {
             foreach ($pages as $key => $row) {
-                $pages[$key]->sections = $this->buildElementsBySection($PageElement->findElementsByPageId($row->id));
+                $pages[$key]->blocks = $this->buildElementsByBlock($PageElement->findElementsByPageId($row->id));
             }
         }
 
@@ -110,13 +110,13 @@ class AdminPageController extends AdminBaseController
         // Save Page and get ID
         $page = $PageMapper->save($page);
 
-        // Save page section elements
-        foreach ($this->request->getParsedBodyParam('section_name') as $key => $value) {
+        // Save page block elements
+        foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
             // Save element
             $pageElement = $PageElementMapper->make();
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
             $pageElement->page_id = $page->id;
-            $pageElement->section_name = $this->request->getParsedBodyParam('section_name')[$key];
+            $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
             $pageElement->element_type = $this->request->getParsedBodyParam('element_type')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
@@ -168,7 +168,7 @@ class AdminPageController extends AdminBaseController
      *
      * Renders new element form with initial values, and returns via Ajax to browser.
      * At a minimum, the element form is expecting these values:
-     * - sectionKey
+     * - blockKey
      * - elementType
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
@@ -177,7 +177,7 @@ class AdminPageController extends AdminBaseController
     {
         $parsedBody = $this->request->getParsedBody();
 
-        $form['section_name'] = $parsedBody['sectionKey'];
+        $form['block_key'] = $parsedBody['blockKey'];
         $form['element_type'] = $parsedBody['elementType'];
         $form['element_sort'] = 1;
 
@@ -187,7 +187,7 @@ class AdminPageController extends AdminBaseController
         }
 
         $template = '{% import "@admin/editElementMacro.html" as form %}';
-        $template .= " {{ form.elementForm(element, element.section_name, elementTypeOptions) }}";
+        $template .= " {{ form.elementForm(element, element.block_key, elementTypeOptions) }}";
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
         // Set the response type
@@ -209,10 +209,10 @@ class AdminPageController extends AdminBaseController
 
         // Check that we received an ID
         if ($this->request->getParsedBodyParam('id')) {
-            // Delete section element
-            $sectionElement = $PageElement->make();
-            $sectionElement->id = $this->request->getParsedBodyParam('id');
-            $PageElement->delete($sectionElement);
+            // Delete block element
+            $blockElement = $PageElement->make();
+            $blockElement->id = $this->request->getParsedBodyParam('id');
+            $PageElement->delete($blockElement);
 
             $status = 'success';
         } else {

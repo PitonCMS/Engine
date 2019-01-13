@@ -11,14 +11,14 @@
             "description": "Page description displayed in page editor",
             "type": "string"
         },
-        "sections": {
-            "description": "An array of page section definitions",
+        "blocks": {
+            "description": "An array of page block definitions",
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
                     "name": {
-                        "description": "Section name label",
+                        "description": "Block name label",
                         "type": "string"
                     },
                     "key": {
@@ -27,7 +27,7 @@
                         "pattern": "^[a-zA-Z]{1,60}$"
                     },
                     "description": {
-                        "description": "Section description displayed in page editor",
+                        "description": "Block description displayed in page editor",
                         "type": "string"
                     },
                     "elementType": {
