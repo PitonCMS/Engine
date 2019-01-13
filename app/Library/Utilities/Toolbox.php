@@ -89,7 +89,7 @@ class Toolbox
      *
      * Scans a given directory, and returns a multi-dimension array of file names
      * Ignores '.' '..' and sub directories by default
-     * $ignore accepts file names or regex patterns
+     * $ignore accepts file names or regex patterns to ignore
      * @param  string $dirPath Path to directory to scan
      * @param  mixed  $ignore  String | Array
      * @return array
