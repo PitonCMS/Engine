@@ -151,10 +151,10 @@ class AdminPageController extends AdminBaseController
             // Delete page
             $page = $PageMapper->make();
             $page->id = $this->request->getParsedBodyParam('id');
-            $page = $PageMapper->delete($page);
+            $PageMapper->delete($page);
 
             // Delete page elements
-            $PageElementMapper->deleteElementsByPageId($page->id);
+            $PageElementMapper->deleteElementsByPageId($this->request->getParsedBodyParam('id'));
         } else {
             throw new Exception('Invalid page delete request.');
         }
@@ -168,7 +168,7 @@ class AdminPageController extends AdminBaseController
      *
      * Renders new element form with initial values, and returns via Ajax to browser.
      * At a minimum, the element form is expecting these values:
-     * - sectionCodeName
+     * - sectionKey
      * - elementType
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
@@ -177,7 +177,7 @@ class AdminPageController extends AdminBaseController
     {
         $parsedBody = $this->request->getParsedBody();
 
-        $form['section_name'] = $parsedBody['sectionCodeName'];
+        $form['section_name'] = $parsedBody['sectionKey'];
         $form['element_type'] = $parsedBody['elementType'];
         $form['element_sort'] = 1;
 

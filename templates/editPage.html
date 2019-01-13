@@ -41,15 +41,15 @@
       </div>
 
       {% for section in page.definition.sections %}
-      <div class="p-2 mb-2 jsSectionParent border" id="page-section-{{ section.codeName }}">
+      <div class="p-2 mb-2 jsSectionParent border" id="page-section-{{ section.key }}">
         <h2>{{ section.name }} Section</h2>
         {% if section.description %}<p class="lead">{{ section.description }}</p>{% endif %}
 
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-code-name="{{ section.codeName }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add Element</button>
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-section-key="{{ section.key }}" data-element-type="{{ section.elementType }}" data-element-type-options="{{ section.elementTypeOptions|join(',') }}">Add Element</button>
         <hr>
 
-        {% for element in page.elements if element.section_name == section.codeName %}
-          {{ form.elementForm(element, section.codeName, section.elementTypeOptions) }}
+        {% for element in page.elements if element.section_name == section.key %}
+          {{ form.elementForm(element, section.key, section.elementTypeOptions) }}
         {% else %}
           <h5>Click "Add Element" to build this section.</h5>
         {% endfor %}
@@ -87,9 +87,9 @@
         <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
           <nav class="nav nav-pills flex-column">
           {% for section in page.definition.sections %}
-            <a class="nav-link" href="#page-section-{{ section.codeName }}">{{ section.name }} (Section)</a>
-            <nav class="nav nav-pills flex-column jsPageSubSection-{{ section.codeName }}">
-            {% for element in page.elements if element.section_name == section.codeName %}
+            <a class="nav-link" href="#page-section-{{ section.key }}">{{ section.name }} (Section)</a>
+            <nav class="nav nav-pills flex-column jsPageSubSection-{{ section.key }}">
+            {% for element in page.elements if element.section_name == section.key %}
               <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
             {% endfor %}
             </nav>
