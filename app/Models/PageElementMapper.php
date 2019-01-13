@@ -19,6 +19,7 @@ class PageElementMapper extends DataMapperAbstract
     protected $modifiableColumns = [
         'page_id',
         'block_key',
+        'template',
         'element_type',
         'element_sort',
         'title',

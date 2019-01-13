@@ -75,10 +75,7 @@ class Front extends Base
             throw new Exception("Missing element_type");
         }
 
-        // Template to render
-        $includeElement = $element->element_type . '.html';
-
-        return $this->container->view->fetch("elements/$includeElement", ['data' => $element]);
+        return $this->container->view->fetch("elements/{$element->template}", ['data' => $element]);
     }
 
     /**

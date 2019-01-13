@@ -117,6 +117,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
             $pageElement->page_id = $page->id;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
+            $pageElement->template = $this->request->getParsedBodyParam('element_type')[$key] . '.html';
             $pageElement->element_type = $this->request->getParsedBodyParam('element_type')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
