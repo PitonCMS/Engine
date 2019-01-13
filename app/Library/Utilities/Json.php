@@ -113,17 +113,15 @@ class Json extends JsonDecoder
      * Get Custom Collection Defintion
      *
      * Validation errors are written to $this->errors
-     * @param void
-     * @return mixed
+     * @param  string $collectionJsonFile Path to collection JSON file
+     * @return mixed  JSON Object | null
      */
-    public function getCustomCollectionDefinition($collection)
+    public function getCustomCollectionDefinition($collectionJsonFile)
     {
-        // Full paths
-        $jsonFilePath = ROOT_DIR . "themes/{$this->theme}/templates/elements/collection/{$collection}";
         $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/collectionSchema.json';
 
         try {
-            return $this->decodeFile($jsonFilePath, $validationFile);
+            return $this->decodeFile($collectionJsonFile);
         } catch (\RuntimeException $e) {
             // Runtime errors such as file not found
             $this->errors[] = $e->getMessage();

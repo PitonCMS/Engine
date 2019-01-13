@@ -9,7 +9,7 @@
             "maxLength": 60
         },
         "detailCollectionLayout": {
-            "description": "Optional collection detail HTML file",
+            "description": "Collection detail HTML file",
             "type": "string",
             "maxLength": 60
         },

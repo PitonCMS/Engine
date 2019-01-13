@@ -72,38 +72,13 @@ CREATE TABLE IF NOT EXISTS `collection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NOT NULL,
   `slug` varchar(100) NOT NULL,
-  `layout` varchar(60) NULL DEFAULT NULL,
-  `kind` varchar(60) NULL DEFAULT NULL,
+  `kind` varchar(60) NOT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug_uq` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `collection_detail` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `collection_id` int NOT NULL,
-  `sort` int NULL DEFAULT NULL,
-  `slug` varchar(100) NOT NULL,
-  `layout` varchar(60) NULL DEFAULT NULL,
-  `title` varchar(60) NULL DEFAULT NULL,
-  `sub_title` varchar(250) NULL DEFAULT NULL,
-  `content_raw` mediumtext NULL DEFAULT NULL,
-  `content` mediumtext NULL DEFAULT NULL,
-  `expansion` mediumtext NULL DEFAULT NULL,
-  `summary_image_path` varchar(100) NULL DEFAULT NULL,
-  `detail_image_path` varchar(100) NULL DEFAULT NULL,
-  `published_date` date NULL DEFAULT NULL,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `collection_id_idx` (`collection_id`),
-  KEY `slug_idx` (`slug`),
-  KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
