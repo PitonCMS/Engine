@@ -90,6 +90,7 @@ class AdminPageController extends AdminBaseController
         $page = $PageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
         $page->title = $this->request->getParsedBodyParam('title');
+        $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
         $page->template = $this->request->getParsedBodyParam('template');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');

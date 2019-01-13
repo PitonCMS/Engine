@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(60) NULL DEFAULT NULL,
+  `sub_title` varchar(150) NULL DEFAULT NULL,
   `slug` varchar(100) NOT NULL,
   `template` varchar(60) NOT NULL,
   `meta_description` varchar(320) NULL DEFAULT NULL,
