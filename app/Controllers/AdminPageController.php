@@ -187,7 +187,7 @@ class AdminPageController extends AdminBaseController
         }
 
         $template = '{% import "@admin/editElementMacro.html" as form %}';
-        $template .= " {{ form.elementForm(element, element.block_key, elementTypeOptions) }}";
+        $template .= " {{ form.elementForm(element, element.block_key, element.elementTypeOptions) }}";
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
         // Set the response type
