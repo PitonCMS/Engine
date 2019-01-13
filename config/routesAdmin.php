@@ -127,23 +127,6 @@ $app->group('/admin', function () {
                 return $notFound($this->request, $this->response);
             }
         })->add('csrfGuard')->setName('saveCollection');
-
-        // Create or edit collection detail
-        $this->get('/{collection}/detail/edit[/{id}]', function ($args) {
-            return (new AdminCollectionController($this))->editCollectionDetail($args);
-        })->setName('editCollectionDetail');
-
-        // Save Collection Detail, Including Deletes
-        $this->post('/savedetail', function ($args) {
-            if ($this->request->getParsedBodyParam('button') === 'save') {
-                return (new AdminCollectionController($this))->saveCollectionDetail();
-            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                return (new AdminCollectionController($this))->deleteCollectionDetail();
-            } else {
-                $notFound = $this->notFoundHanlder;
-                return $notFound($this->request, $this->response);
-            }
-        })->add('csrfGuard')->setName('saveCollectionDetail');
     });
     // End collection
 })->add(function ($request, $response, $next) {
