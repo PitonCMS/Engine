@@ -58,13 +58,13 @@ class BaseController
     /**
      * Render Template
      *
-     * @param string $layout Path to layout
+     * @param string $template Path to template
      * @param mixed  $data   Data to echo, Domain object or array
      */
-    protected function render($layout, $data = null)
+    protected function render($template, $data = null)
     {
         $this->pageData['page'] = $data;
-        return $this->container->view->render($this->response, $layout, $this->pageData);
+        return $this->container->view->render($this->response, $template, $this->pageData);
     }
 
     /**

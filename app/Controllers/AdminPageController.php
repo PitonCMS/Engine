@@ -60,12 +60,13 @@ class AdminPageController extends AdminBaseController
         } elseif (is_string($args['id'])) {
             // New page
             $page = $PageMapper->make();
-            $page->layout = $args['id'] . '.html';
+            $page->template = $args['id'] . '.html';
         }
 
-        // Get page layout definition
-        if (null === $page->definition = $Json->getPageLayoutDefinition($page->layout)) {
-            $this->setAlert('danger', 'Layout Definition Error', $Json->getErrorMessages());
+        // Get page template definition
+        $pageJson = pathinfo($page->template, PATHINFO_FILENAME) . '.json';
+        if (null === $page->definition = $Json->getPageDefinition($pageJson)) {
+            $this->setAlert('danger', 'Template Definition Error', $Json->getErrorMessages());
         }
 
         return $this->render('editPage.html', $page);
@@ -90,7 +91,7 @@ class AdminPageController extends AdminBaseController
         $page->id = $this->request->getParsedBodyParam('id');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
-        $page->layout = $this->request->getParsedBodyParam('layout');
+        $page->template = $this->request->getParsedBodyParam('template');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
 
         // Process published date

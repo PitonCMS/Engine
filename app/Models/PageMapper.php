@@ -19,7 +19,7 @@ class PageMapper extends DataMapperAbstract
     protected $modifiableColumns = [
         'title',
         'slug',
-        'layout',
+        'template',
         'meta_description',
         'published_date'
     ];

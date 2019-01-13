@@ -18,12 +18,12 @@ class FrontBaseController extends BaseController
     /**
      * Render Front End Template
      *
-     * Modifies path to layout then calls parent render() method
-     * @param string $layout Path to layout
+     * Modifies path to template then calls parent render() method
+     * @param string $template Path to template
      * @param mixed  $data   Data to echo, Domain object or array
      */
-    public function render($layout, $data = null)
+    public function render($template, $data = null)
     {
-        return parent::render('layouts/' . $layout, $data);
+        return parent::render('layouts/' . $template, $data);
     }
 }

@@ -38,6 +38,6 @@ class FrontController extends FrontBaseController
         // Get elements
         $page->sections = $this->buildElementsBySection($PageElement->findElementsByPageId($page->id));
 
-        return $this->render($page->layout, $page);
+        return $this->render($page->template, $page);
     }
 }

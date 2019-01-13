@@ -49,19 +49,18 @@ class Json extends JsonDecoder
     }
 
     /**
-     * Get Page Layout Definition from JSON
+     * Get Page Definition from JSON
      *
      * Schema validation file: vendor/pitoncms/engine/pageLayoutSchema.json
      * Validation errors are written to $this->errors
      * @param string Page name
      * @return mixed
      */
-    public function getPageLayoutDefinition($pageLayout)
+    public function getPageDefinition($pageJson)
     {
         // Page layout name and get path
-        $layoutFile = pathinfo($pageLayout, PATHINFO_FILENAME);
-        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $layoutFile . '.json';
-        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageLayoutSchema.json';
+        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/templates/layouts/' . $pageJson;
+        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json';
 
         try {
             return $this->decodeFile($jsonFilePath, $validationFile);
@@ -73,7 +72,7 @@ class Json extends JsonDecoder
             $this->errors[] = $e->getMessage();
         } catch (\Exception $e) {
             // Anything else we did not anticipate
-            $this->errors[] = 'Unknown Exception in getPageLayoutDefinition()';
+            $this->errors[] = 'Unknown Exception in getPageDefinition()';
             $this->errors[] = $e->getMessage();
         }
 

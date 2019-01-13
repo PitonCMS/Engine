@@ -10,13 +10,13 @@
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.pageName) }} Page
 {% endblock %}
 
-{% block leadText page.definition.pageLayoutDescription %}
+{% block leadText page.definition.pageTemplateDescription %}
 
 {% block formActionPath pathFor('savePage') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="layout" value="{{ page.layout }}">
+  <input type="hidden" name="template" value="{{ page.template }}">
 {% endblock hiddenInputs %}
 
 {% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}

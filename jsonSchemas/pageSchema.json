@@ -7,7 +7,7 @@
             "description": "Page name displayed in page editor",
             "type": "string"
         },
-        "pageLayoutDescription": {
+        "pageTemplateDescription": {
             "description": "Page description displayed in page editor",
             "type": "string"
         },
