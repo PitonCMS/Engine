@@ -77,29 +77,4 @@ class Front extends Base
 
         return $this->container->view->fetch("elements/{$element->template}", ['data' => $element]);
     }
-
-    /**
-     * Get Collection
-     *
-     * Get collection summary and details by collection ID
-     * For use in page element as collection landing page
-     * @param  int   $collectionId Collection ID
-     * @return mixed               Array | null
-     */
-    public function getCollection($collectionId)
-    {
-        $dataMapper = $this->container->dataMapper;
-        $CollectionMapper = $dataMapper('CollectionMapper');
-        $CollectionDetailMapper = $dataMapper('CollectionDetailMapper');
-
-        // Collection
-        $data = $CollectionMapper->findById($collectionId);
-
-        // Published Details
-        if (!empty($data)) {
-            $data->details = $CollectionDetailMapper->findByCollectionId($collectionId);
-        }
-
-        return $data;
-    }
 }

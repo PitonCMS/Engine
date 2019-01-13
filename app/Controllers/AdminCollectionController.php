@@ -22,9 +22,11 @@ class AdminCollectionController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $collectionMapper = $mapper('CollectionMapper');
+        $pageMapper = $mapper('PageMapper');
 
-        // Fetch collections
+        // Fetch collections and page details
         $data['collections'] = $collectionMapper->find();
+        $data['collectionDetails'] = $pageMapper->findCollectionPages(false);
 
         return $this->render('collections.html', $data);
     }
