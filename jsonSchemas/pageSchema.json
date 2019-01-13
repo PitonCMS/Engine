@@ -3,12 +3,12 @@
     "$comment": "Page Layout Definition",
     "type": "object",
     "properties": {
-        "pageName": {
-            "description": "Page name displayed in page editor",
+        "templateName": {
+            "description": "Template name displayed in page editor",
             "type": "string"
         },
-        "pageTemplateDescription": {
-            "description": "Page description displayed in page editor",
+        "templateDescription": {
+            "description": "Template description displayed in page editor",
             "type": "string"
         },
         "blocks": {
@@ -48,5 +48,5 @@
             }
         }
     },
-    "required": ["pageName"]
+    "required": ["templateName"]
 }
