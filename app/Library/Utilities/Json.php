@@ -87,7 +87,7 @@ class Json extends JsonDecoder
     public function getThemeSettings()
     {
         // themeSettings.json full path
-        $jsonFilePath = ROOT_DIR . 'themes/' . $this->theme . '/themeSettings.json';
+        $jsonFilePath = ROOT_DIR . "themes/{$this->theme}/definitions/themeSettings.json";
         $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json';
 
         try {

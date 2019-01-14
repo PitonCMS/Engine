@@ -30,7 +30,7 @@ class AdminSettingController extends AdminBaseController
         // Fetch settings from database
         $allSettings = $SettingMapper->findSiteSettings();
 
-        // Fetch theme settings from themes/<theme-name>/themeSettings.json
+        // Fetch theme settings
         if (null === $themeSettings = $Json->getThemeSettings()) {
             $this->setAlert('danger', 'Theme Settings Error', $Json->getErrorMessages());
         } else {
