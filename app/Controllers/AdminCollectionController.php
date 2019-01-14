@@ -84,7 +84,12 @@ class AdminCollectionController extends AdminBaseController
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
         $collection->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
-        $collection->kind = $this->request->getParsedBodyParam('kind');
+
+        // The "kind" radio button is carrying two values: kind|summaryTemplate
+        // Which we separate and assign
+        $radioSelect = explode('|', $this->request->getParsedBodyParam('kind'));
+        $collection->kind = $radioSelect[0];
+        $collection->summary_template = ($radioSelect[1]) ?: 'collection.html';
 
         $collection = $collectionMapper->save($collection);
 

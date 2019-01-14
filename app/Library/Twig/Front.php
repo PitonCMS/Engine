@@ -47,7 +47,7 @@ class Front extends Base
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('getCollection', [$this, 'getCollection']),
+            new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
         ]);
     }
 
@@ -77,4 +77,25 @@ class Front extends Base
 
         return $this->container->view->fetch("elements/{$element->template}", ['data' => $element]);
     }
+
+
+    /**
+     * Get Collection Page List
+     *
+     * Get collection pages by collection ID
+     * For use in page element as collection landing page
+     * @param  int   $collectionId Collection ID
+     * @return mixed               Array | null
+     */
+    public function getCollectionPages($collectionId)
+    {
+        $dataMapper = $this->container->dataMapper;
+        $pageMapper = $dataMapper('pageMapper');
+
+        // Page Collection
+        $data = $pageMapper->findCollectionPages($collectionId);
+
+        return $data;
+    }
+
 }

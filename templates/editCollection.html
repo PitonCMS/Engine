@@ -42,10 +42,11 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
             <input class="form-check-input" type="radio" name="kind" value="standard" {{ checked(page.kind|default('1')) }}> Standard
           </label>
         </div>
+
         {% for c in page.custom %}
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input class="form-check-input" type="radio" name="kind" value="{{ c.basename }}" {{ checked(page.kind == c.basename) }}> {{ c.readname }}
+            <input class="form-check-input" type="radio" name="kind" value="{{ c.basename }}|{{ c.json.collectionSummaryTemplate }}" {{ checked(page.kind == c.basename) }}> {{ c.readname }}
           </label>
         </div>
       {% endfor %}

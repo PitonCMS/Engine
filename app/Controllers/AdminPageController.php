@@ -69,9 +69,8 @@ class AdminPageController extends AdminBaseController
         $jsonPath = ROOT_DIR . 'themes/' . $theme . '/templates/';
 
         // If this page is for a collection detail, get collection record
-        if (isset($args['collection']) || isset($page->collection_id)) {
-            $collectionId = isset($args['collection']) || isset($page->collection_id);
-            $page->collection = $collectionMapper->findById($collectionId);
+        if (isset($args['collection'])) {
+            $page->collection = $collectionMapper->findById($args['collection']);
             $jsonPath .= 'collection/' . $page->collection->kind . '.json';
         } else {
             $jsonPath .= 'layouts/'. pathinfo($page->template, PATHINFO_FILENAME) . '.json';
@@ -79,6 +78,11 @@ class AdminPageController extends AdminBaseController
 
         if (null === $page->definition = $json->getPageDefinition($jsonPath)) {
             $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
+        }
+
+        // If this was for a collection, then update template file name from JSON
+        if (isset($args['collection'])) {
+            $page->template = $page->definition->collectionDetailTemplate;
         }
 
         return $this->render('editPage.html', $page);
@@ -138,10 +142,19 @@ class AdminPageController extends AdminBaseController
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $Markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->collection_id = $this->request->getParsedBodyParam('collection_id')[$key];
+            $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
+
+            // Collection ID is carrying two values: collection_id|summary_template
+            if (!empty($this->request->getParsedBodyParam('element_collection_id')[$key])) {
+                $collection = explode('|', $this->request->getParsedBodyParam('element_collection_id')[$key]);
+                $pageElement->collection_id = $collection[0];
+                $pageElement->template = $collection[1];
+            } else {
+                $pageElement->collection_id = null;
+            }
 
             $pageElement = $PageElementMapper->save($pageElement);
         }

@@ -179,8 +179,8 @@ class Admin extends Base
     public function getCollections()
     {
         $dataMapper = $this->container->dataMapper;
-        $CollectionMapper = $dataMapper('CollectionMapper');
+        $collectionMapper = $dataMapper('CollectionMapper');
 
-        return $CollectionMapper->find();
+        return $collectionMapper->find();
     }
 }

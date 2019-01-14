@@ -9,6 +9,7 @@
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
+use Exception;
 
 /**
  * Piton Page Mapper
@@ -30,7 +31,7 @@ class PageMapper extends DataMapperAbstract
     /**
      * Find Published Page By Slug
      *
-     * Finds published-only page by by slug
+     * Finds published page by by slug
      * Does not include collections
      * @param mixed  $pageSlug Page slug
      * @return mixed           Page object or null if not found
@@ -43,7 +44,7 @@ class PageMapper extends DataMapperAbstract
             $this->sql .= ' and collection_id is null and slug = ?';
             $this->bindValues[] = $pageSlug;
         } else {
-            throw new Exception('Unknown page identifier type', 1);
+            throw new Exception('Unknown page identifier type');
         }
 
         $this->sql .= " and published_date <= '{$this->today()}'";
@@ -75,11 +76,47 @@ class PageMapper extends DataMapperAbstract
      * Find All Collection Pages
      *
      * Finds all collection pages, does not include element data
-     * Does not include collections
      * @param  bool  $published Filter on published collection pages
      * @return mixed            Array | null
      */
     public function findCollectionPages($published = true)
+    {
+        $this->makeCollectionPageSelect();
+
+        if ($published) {
+            $this->sql .= " and p.published_date <= '{$this->today()}'";
+        }
+
+        return $this->find();
+    }
+
+    /**
+     * Find Published Collection Page Detail By Slug
+     *
+     * Finds collection page, does not include element data
+     * @param  bool  $published Filter on published collection pages
+     * @return mixed            Array | null
+     */
+    public function findPublishedCollectionPageBySlug($collectionSlug, $pageSlug)
+    {
+        $this->makeCollectionPageSelect();
+        $this->sql .= " and p.published_date <= '{$this->today()}'";
+        $this->sql .= ' and c.slug = ? and p.slug = ?';
+
+        $this->bindValues[] = $collectionSlug;
+        $this->bindValues[] = $pageSlug;
+
+        return $this->findRow();
+    }
+
+    /**
+     * Make Collection-Page Select
+     *
+     * SQL statement for collection page inner join
+     * @param  void
+     * @return void
+     */
+    protected function makeCollectionPageSelect()
     {
         $this->sql = <<<SQL
 select c.id collection_id,
@@ -95,9 +132,7 @@ select c.id collection_id,
        p.published_date
 from page p
 join collection c on p.collection_id = c.id
-where published_date <= '{$this->today()}'
+where 1=1
 SQL;
-
-        return $this->find();
     }
 }

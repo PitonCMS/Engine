@@ -18,17 +18,23 @@ class FrontController extends FrontBaseController
      * Show Page
      *
      * Displays page matching URL slug, or throws 404 Not Found
-     * @param array $args Array of URL parameters, expecting 'slug'
+     * @param array $args Array of URL parameters, expecting 'slug1', 'slug2'
      */
     public function showPage($args)
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $Page = $mapper('PageMapper');
-        $PageElement = $mapper('PageElementMapper');
+        $pageMapper = $mapper('PageMapper');
+        $pageElementMapper = $mapper('PageElementMapper');
+        $collectionMapper = $mapper('collectionMapper');
 
-        // Get page data
-        $page = $Page->findPublishedPageBySlug($args['slug']);
+        if (isset($args['slug2'])) {
+            // This request is for a collection
+            $page = $pageMapper->findPublishedCollectionPageBySlug($args['slug1'], $args['slug2']);
+        } else {
+            // Get page data
+            $page = $pageMapper->findPublishedPageBySlug($args['slug1']);
+        }
 
         // Send 404 if not found
         if (empty($page)) {
@@ -36,7 +42,7 @@ class FrontController extends FrontBaseController
         }
 
         // Get elements
-        $page->blocks = $this->buildElementsByBlock($PageElement->findElementsByPageId($page->id));
+        $page->blocks = $this->buildElementsByBlock($pageElementMapper->findElementsByPageId($page->id));
 
         return $this->render($page->template, $page);
     }
