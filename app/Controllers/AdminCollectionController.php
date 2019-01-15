@@ -26,7 +26,7 @@ class AdminCollectionController extends AdminBaseController
 
         // Fetch collections and page details
         $data['collections'] = $collectionMapper->find();
-        $data['collectionDetails'] = $pageMapper->findCollectionPages(false);
+        $data['collectionDetails'] = $pageMapper->findCollections();
 
         return $this->render('collections.html', $data);
     }

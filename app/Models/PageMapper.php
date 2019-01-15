@@ -73,15 +73,30 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
-     * Find All Collection Pages
+     * Find All Collections
      *
-     * Finds all collection pages, does not include element data
-     * @param  bool  $published Filter on published collection pages
-     * @return mixed            Array | null
+     * @return mixed Array | null
      */
-    public function findCollectionPages($published = true)
+    public function findCollections()
     {
         $this->makeCollectionPageSelect();
+
+        return $this->find();
+    }
+
+    /**
+     * Find Collection Pages by ID
+     *
+     * Finds all collection pages
+     * @param  int   $collectionId
+     * @param  bool  $published    Filter on published collection pages
+     * @return mixed               Array | null
+     */
+    public function findCollectionPagesById($collectionId, $published = true)
+    {
+        $this->makeCollectionPageSelect();
+        $this->sql .= ' and c.id = ?';
+        $this->bindValues[] = $collectionId;
 
         if ($published) {
             $this->sql .= " and p.published_date <= '{$this->today()}'";
@@ -91,9 +106,9 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
-     * Find Published Collection Page Detail By Slug
+     * Find Published Collection Page By Slug
      *
-     * Finds collection page, does not include element data
+     * Finds collection page by collection slug and page slug
      * @param  bool  $published Filter on published collection pages
      * @return mixed            Array | null
      */

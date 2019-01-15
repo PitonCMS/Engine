@@ -78,7 +78,6 @@ class Front extends Base
         return $this->container->view->fetch("elements/{$element->template}", ['data' => $element]);
     }
 
-
     /**
      * Get Collection Page List
      *
@@ -93,9 +92,8 @@ class Front extends Base
         $pageMapper = $dataMapper('pageMapper');
 
         // Page Collection
-        $data = $pageMapper->findCollectionPages($collectionId);
+        $data = $pageMapper->findCollectionPagesById($collectionId);
 
         return $data;
     }
-
 }
