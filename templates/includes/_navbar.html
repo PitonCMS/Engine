@@ -13,12 +13,7 @@
             <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Pages</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ pathFor('showPages') }}">Pages</a>
-              <div class="dropdown-divider"></div>
-              {% for key, tl in getThemePageTemplates()  %}
-              <a class="dropdown-item" href="{{ pathFor('editPage', {'id': key}) }}">New {{ tl }} Page</a>
-              {% else %}
-              <a class="dropdown-item" href="#">No Valid Theme Selected</a>
-              {% endfor %}
+              <a class="dropdown-item" href="{{ pathFor('choosePageLayout') }}">New Page</a>
             </div>
           </li>
 

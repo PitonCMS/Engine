@@ -16,6 +16,27 @@ use Exception;
 class AdminPageController extends AdminBaseController
 {
     /**
+     * Choose Page Layout
+     *
+     * Select a page layout to use
+     */
+    public function chooseLayout()
+    {
+        $toolbox = $this->container->toolbox;
+        $layouts = [];
+
+        $theme = $this->container->get('settings')['site']['theme'];
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions";
+        $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
+
+        foreach ($layoutFiles as $row) {
+            $layouts[$row['basename']] = $row['readname'];
+        }
+
+        return $this->render('choosePageLayout.html', ['layouts' => $layouts]);
+    }
+
+    /**
      * Show Pages
      *
      * Show pages with blocks and elements

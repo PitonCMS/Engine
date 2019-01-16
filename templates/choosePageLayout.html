@@ -1,0 +1,21 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block headText 'Choose Page Layout' %}
+
+{% block body %}
+
+    <p>
+      {% if page.layouts %}
+      <ul>
+          {% for key, l in page.layouts %}
+          <li>
+              <a href="{{ pathFor('editPage', {'id': key}) }}">{{ l }}</a>
+          </li>
+          {% endfor %}
+      </ul>
+      {% else %}
+      <h5>No Page Layout JSON Files Found</h5>
+      {% endif %}
+    </p>
+
+{% endblock body %}

@@ -46,7 +46,6 @@ class Admin extends Base
     {
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('getThemes', [$this, 'getThemes']),
-            new \Twig_SimpleFunction('getThemePageTemplates', [$this, 'getThemePageTemplates']),
             new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
@@ -71,27 +70,6 @@ class Admin extends Base
         }
 
         return $themeOptions;
-    }
-
-    /**
-     * Get Theme Page Templates
-     *
-     * For the current theme
-     * @param  void
-     * @return array
-     */
-    public function getThemePageTemplates()
-    {
-        $toolbox = $this->container->toolbox;
-        $path = ROOT_DIR . 'themes/' . $this->siteSettings['theme'] . '/templates/layouts/';
-        $layoutFiles = $toolbox->getDirectoryFiles($path, ['^_.+','\.html']);
-        $layouts = [];
-
-        foreach ($layoutFiles as $row) {
-            $layouts[$row['basename']] = $row['readname'];
-        }
-
-        return $layouts;
     }
 
     /**
