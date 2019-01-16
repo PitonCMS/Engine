@@ -66,17 +66,17 @@ class AdminPageController extends AdminBaseController
         }
 
         // Start path to JSON definition file
-        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/templates/';
+        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/definitions/';
 
         // If this page is for a collection detail, get collection record
         if (isset($args['collection'])) {
             $page->collection = $collectionMapper->findById($args['collection']);
             $jsonPath .= 'collection/' . $page->collection->kind . '.json';
         } else {
-            $jsonPath .= 'layouts/'. pathinfo($page->template, PATHINFO_FILENAME) . '.json';
+            $jsonPath .= pathinfo($page->template, PATHINFO_FILENAME) . '.json';
         }
 
-        if (null === $page->definition = $json->getPageDefinition($jsonPath)) {
+        if (null === $page->definition = $json->getJson($jsonPath, 'page')) {
             $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
         }
 

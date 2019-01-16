@@ -11,6 +11,7 @@ namespace Piton\Library\Utilities;
 use Interop\Container\ContainerInterface;
 use Webmozart\Json\JsonDecoder;
 use Webmozart\Json\ValidationFailedException;
+use Exception;
 
 /**
  * Piton Layout JSON Decoder/Encoder and schema validator
@@ -22,6 +23,12 @@ class Json extends JsonDecoder
      * @var Interop\Container\ContainerInterface
      */
     protected $container;
+
+    /**
+     * Validation Files
+     * @var array
+     */
+    protected $validation = [];
 
     /**
      * Current Theme
@@ -45,23 +52,33 @@ class Json extends JsonDecoder
         $this->container = $container;
         $this->theme = $container->settings['site']['theme'];
 
+        $this->validation = [
+            'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json',
+            'collection' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/collectionSchema.json',
+            'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
+        ];
+
         parent::__construct();
     }
 
     /**
-     * Get Page Definition from JSON
+     * Get JSON Definition
      *
-     * Schema validation file: vendor/pitoncms/engine/pageLayoutSchema.json
      * Validation errors are written to $this->errors
-     * @param string $pageJsonFile Path to page JSON file
-     * @return mixed               JSON Object | null
+     * @param string $jsonFile   Path to page JSON file to decode
+     * @param string $jsonSchema Name of validation: settings|collection|page
+     * @return mixed             Object | null
      */
-    public function getPageDefinition($pageJsonFile)
+    public function getJson($jsonFile, $jsonSchema = null)
     {
-        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json';
+        if (isset($jsonSchema) && array_key_exists($jsonSchema, $this->validation)) {
+            $validation = $this->validation[$jsonSchema];
+        } else {
+            throw new Exception('Invalid jsonSchema validation key');
+        }
 
         try {
-            return $this->decodeFile($pageJsonFile, $validationFile);
+            return $this->decodeFile($jsonFile, $validation);
         } catch (\RuntimeException $e) {
             // Runtime errors such as file not found
             $this->errors[] = $e->getMessage();
@@ -71,64 +88,6 @@ class Json extends JsonDecoder
         } catch (\Exception $e) {
             // Anything else we did not anticipate
             $this->errors[] = 'Unknown Exception in getPageDefinition()';
-            $this->errors[] = $e->getMessage();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get Theme Settings
-     *
-     * Validation errors are written to $this->errors
-     * @param void
-     * @return mixed
-     */
-    public function getThemeSettings()
-    {
-        // themeSettings.json full path
-        $jsonFilePath = ROOT_DIR . "themes/{$this->theme}/definitions/themeSettings.json";
-        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json';
-
-        try {
-            return $this->decodeFile($jsonFilePath, $validationFile);
-        } catch (\RuntimeException $e) {
-            // Runtime errors such as file not found
-            $this->errors[] = $e->getMessage();
-        } catch (ValidationFailedException $e) {
-            // Schema validation errors
-            $this->errors[] = $e->getMessage();
-        } catch (\Exception $e) {
-            // Anything else we did not anticipate
-            $this->errors[] = 'Unknown Exception in getThemeSettings()';
-            $this->errors[] = $e->getMessage();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get Collection Defintion
-     *
-     * Validation errors are written to $this->errors
-     * @param  string $collectionJsonFile Path to collection JSON file
-     * @return mixed                      JSON Object | null
-     */
-    public function getCollectionDefinition($collectionJsonFile)
-    {
-        $validationFile = ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/collectionSchema.json';
-
-        try {
-            return $this->decodeFile($collectionJsonFile);
-        } catch (\RuntimeException $e) {
-            // Runtime errors such as file not found
-            $this->errors[] = $e->getMessage();
-        } catch (ValidationFailedException $e) {
-            // Schema validation errors
-            $this->errors[] = $e->getMessage();
-        } catch (\Exception $e) {
-            // Anything else we did not anticipate
-            $this->errors[] = 'Unknown Exception in getThemeSettings()';
             $this->errors[] = $e->getMessage();
         }
 

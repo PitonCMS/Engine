@@ -54,11 +54,11 @@ class AdminCollectionController extends AdminBaseController
 
         // Get custom collection schemas
         $theme = $this->container->get('settings')['site']['theme'];
-        $path = ROOT_DIR . "themes/{$theme}/templates/collection/";
-        $collection->custom = $toolbox->getDirectoryFiles($path, ['^_.+','\.html']);
+        $jsonPath = ROOT_DIR . "themes/{$theme}/templates/definitions/";
+        $collection->custom = $toolbox->getDirectoryFiles($jsonPath, ['^_.+','\.html']);
 
         foreach ($collection->custom as $key => $file) {
-            if (null === $collection->custom[$key]['json'] = $json->getCollectionDefinition($path . $file['filename'])) {
+            if (null === $collection->custom[$key]['json'] = $json->getJson($path . $file['filename'] /* TODO validation */)) {
                 $this->setAlert('danger', 'Custom Collection Error', $json->getErrorMessages());
                 break;
             }

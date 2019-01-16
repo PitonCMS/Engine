@@ -25,14 +25,16 @@ class AdminSettingController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
-        $Json = $this->container->json;
+        $json = $this->container->json;
 
         // Fetch settings from database
         $allSettings = $SettingMapper->findSiteSettings();
 
         // Fetch theme settings
-        if (null === $themeSettings = $Json->getThemeSettings()) {
-            $this->setAlert('danger', 'Theme Settings Error', $Json->getErrorMessages());
+        $theme = $this->container->get('settings')['site']['theme'];
+        $jsonFilePath = ROOT_DIR . "themes/{$theme}/definitions/themeSettings.json";
+        if (null === $themeSettings = $json->getJson($jsonFilePath, 'setting')) {
+            $this->setAlert('danger', 'Theme Settings Error', $json->getErrorMessages());
         } else {
             // Move up multi-dimensional array one key
             $themeSettings = $themeSettings->settings;
@@ -127,10 +129,12 @@ class AdminSettingController extends AdminBaseController
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $SettingMapper = $mapper('SettingMapper');
-        $Json = $this->container->json;
+        $json = $this->container->json;
 
-        // Fetch theme settings from themes/<theme-name>/themeSettings.json
-        $themeSettings = $Json->getThemeSettings();
+        // Fetch theme settings
+        $theme = $this->container->get('settings')['site']['theme'];
+        $jsonFilePath = ROOT_DIR . "themes/{$theme}/definitions/themeSettings.json";
+        $themeSettings = $json->getJson($jsonFilePath, 'setting');
         $themeSettings = $themeSettings->settings;
 
         // Get $_POST data array
