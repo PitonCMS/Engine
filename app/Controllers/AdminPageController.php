@@ -26,7 +26,7 @@ class AdminPageController extends AdminBaseController
         $layouts = [];
 
         $theme = $this->container->get('settings')['site']['theme'];
-        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions";
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages";
         $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
 
         foreach ($layoutFiles as $row) {
@@ -87,7 +87,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Start path to JSON definition file
-        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/definitions/';
+        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/definitions/pages/';
 
         // If this page is for a collection detail, get collection record
         if (isset($args['collection'])) {
