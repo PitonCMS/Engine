@@ -1,5 +1,5 @@
 {% extends '@admin/_adminFormBase.html' %}
-{% import _self as settingForm %}
+{% import '@admin/editSettingInputMacro.html' as settingForm %}
 
 {% block htmlTitle %}Edit Site Settings - {% endblock %}
 
@@ -77,65 +77,3 @@
 {% endblock formBody %}
 
 {% block cancelLink pathFor('showSettings') %}
-
-{# Input Macro #}
-{% macro inputHtml(setting) %}
-  {% import _self as button %}
-            <div class="jsSettingParent">
-              <div class="form-group">
-                <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                <input type="hidden" name="id[]" value="{{ setting.id }}">
-                <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
-                <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
-                <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-                </div>
-                {% if setting.category == 'theme' and setting.orphaned %}
-                  {{ button.delete(setting) }}
-                {% endif %}
-            </div>
-{% endmacro inputHtml %}
-
-{# Select List Macro #}
-{% macro selectHtml(setting, options) %}
-  {% import _self as button %}
-            <div class="jsSettingParent">
-              <div class="form-group">
-                <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                <input type="hidden" name="id[]" value="{{ setting.id }}">
-                <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
-                <select class="form-control" name="setting_value[]">
-                  {% for key, option in options %}
-                  <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
-                  {% endfor %}
-                </select>
-                <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-              </div>
-                {% if setting.category == 'theme' and setting.orphaned %}
-                  {{ button.delete(setting) }}
-                {% endif %}
-            </div>
-{% endmacro selectHtml %}
-
-{# Textarea Macro #}
-{% macro textareaHtml(setting) %}
-  {% import _self as button %}
-            <div class="jsSettingParent">
-               <div class="form-group">
-                  <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                  <input type="hidden" name="id[]" value="{{ setting.id }}">
-                  <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
-                  <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
-                  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-                </div>
-                {% if setting.category == 'theme' and setting.orphaned %}
-                  {{ button.delete(setting) }}
-                {% endif %}
-            </div>
-{% endmacro textareaHtml %}
-
-{# Delete Button Macro #}
-{% macro delete(setting) %}
-          <div class="form-group">
-            <button type="button" class="btn btn-sm btn-outline-danger jsDeleteThemeSetting" data-setting-id="{{ setting.id }}" title="Delete orphaned setting not in current theme. Optional.">Delete Orphaned Setting</button>
-          </div>
-{% endmacro delete %}
