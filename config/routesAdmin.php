@@ -133,7 +133,7 @@ $app->group('/admin', function () {
             }
         })->add('csrfGuard')->setName('saveCollection');
 
-        // Create or edit collection detail
+        // Create or edit collection page
         $this->get('/{collection:[0-9]+}/detail/edit/{id}', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editCollectionDetail');

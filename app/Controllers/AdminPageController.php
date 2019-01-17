@@ -18,19 +18,30 @@ class AdminPageController extends AdminBaseController
     /**
      * Choose Page Layout
      *
-     * Select a page layout to use
+     * Select a page layout for new page
      */
     public function chooseLayout()
     {
         $toolbox = $this->container->toolbox;
-        $layouts = [];
+        $json = $this->container->json;
 
         $theme = $this->container->get('settings')['site']['theme'];
-        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages";
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/";
         $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
 
+        $layouts = [];
         foreach ($layoutFiles as $row) {
-            $layouts[$row['basename']] = $row['readname'];
+            // Get definition files to screen out collection types
+            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
+                $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
+                break;
+            }
+
+            if (isset($definition->templateType) && $definition->templateType === 'collection') {
+                continue;
+            }
+
+            $layouts[$row['filename']] = $row['readname'];
         }
 
         return $this->render('choosePageLayout.html', ['layouts' => $layouts]);
@@ -39,7 +50,7 @@ class AdminPageController extends AdminBaseController
     /**
      * Show Pages
      *
-     * Show pages with blocks and elements
+     * Show all pages with blocks and elements
      */
     public function showPages()
     {
@@ -83,27 +94,19 @@ class AdminPageController extends AdminBaseController
         } elseif (is_string($args['id'])) {
             // New page
             $page = $pageMapper->make();
-            $page->template = $args['id'] . '.html';
+            $page->definition = $args['id'];
         }
 
         // Start path to JSON definition file
-        $jsonPath = ROOT_DIR . 'themes/' . $theme . '/definitions/pages/';
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/{$page->definition}";
 
-        // If this page is for a collection detail, get collection record
+        // If this page is for a collection, get collection record
         if (isset($args['collection'])) {
             $page->collection = $collectionMapper->findById($args['collection']);
-            $jsonPath .= 'collection/' . $page->collection->kind . '.json';
-        } else {
-            $jsonPath .= pathinfo($page->template, PATHINFO_FILENAME) . '.json';
         }
 
-        if (null === $page->definition = $json->getJson($jsonPath, 'page')) {
+        if (null === $page->json = $json->getJson($jsonPath, 'page')) {
             $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
-        }
-
-        // If this was for a collection, then update template file name from JSON
-        if (isset($args['collection'])) {
-            $page->template = $page->definition->collectionDetailTemplate;
         }
 
         return $this->render('editPage.html', $page);
@@ -127,10 +130,11 @@ class AdminPageController extends AdminBaseController
         $page = $PageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
+        $page->definition = $this->request->getParsedBodyParam('definition');
+        $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
-        $page->template = $this->request->getParsedBodyParam('template');
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
 
         // Process published date

@@ -19,10 +19,11 @@ class PageMapper extends DataMapperAbstract
     protected $table = 'page';
     protected $modifiableColumns = [
         'collection_id',
+        'definition',
+        'template',
         'title',
         'sub_title',
         'slug',
-        'template',
         'meta_description',
         'published_date'
     ];
@@ -140,9 +141,10 @@ select c.id collection_id,
        c.kind collection_kind,
        p.id,
        p.title,
+       p.definition,
+       p.template,
        p.sub_title,
        p.slug,
-       p.template,
        p.meta_description,
        p.published_date
 from page p

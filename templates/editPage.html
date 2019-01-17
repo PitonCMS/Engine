@@ -3,21 +3,22 @@
 {% import "@admin/editElementMacro.html" as form %}
 
 {% block htmlTitle %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.templateName) }} -
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateTitle) }} -
 {% endblock %}
 
 {% block headText %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.definition.templateName) }}
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateTitle) }}
 {% endblock %}
 
-{% block leadText page.definition.templateDescription %}
+{% block leadText page.json.templateDescription %}
 
 {% block formActionPath pathFor('savePage') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="template" value="{{ page.template }}">
   <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
+  <input type="hidden" name="definition" value="{{ page.definition }}">
+  <input type="hidden" name="template" value="{{ page.json.templateFile }}">
 {% endblock hiddenInputs %}
 
 {% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}
@@ -52,7 +53,7 @@
         <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
       </div>
 
-      {% for block in page.definition.blocks %}
+      {% for block in page.json.blocks %}
       <div class="p-2 mb-2 jsBlockParent border" id="page-block-{{ block.key }}">
         <h2>{{ block.name }} Block</h2>
         <p class="lead">{{ block.description }}</p>
@@ -98,7 +99,7 @@
         <h6>Page Navigator</h6>
         <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
           <nav class="nav nav-pills flex-column">
-          {% for block in page.definition.blocks %}
+          {% for block in page.json.blocks %}
             <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }} (Block)</a>
             <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
             {% for element in page.elements if element.block_key == block.key %}

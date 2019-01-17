@@ -3,12 +3,25 @@
     "$comment": "Page Layout Definition",
     "type": "object",
     "properties": {
-        "templateName": {
+        "templateTitle": {
             "description": "Template name displayed in page editor",
             "type": "string"
         },
         "templateDescription": {
             "description": "Template description displayed in page editor",
+            "type": "string"
+        },
+        "templateFile": {
+            "description": "The template page HTML file.",
+            "type": "string"
+        },
+        "templateType": {
+            "description": "Template type. Defaults to 'page'.",
+            "type": "string",
+            "enum": ["page","collection"]
+        },
+        "collectionSummaryFile": {
+            "description": "The template summary element HTML file.",
             "type": "string"
         },
         "blocks": {
@@ -48,5 +61,5 @@
             }
         }
     },
-    "required": ["templateName"]
+    "required": ["templateTitle","templateFile"]
 }
