@@ -17,6 +17,8 @@ class SettingMapper extends DataMapperAbstract
 {
     protected $table = 'setting';
     protected $modifiableColumns = [
+        'page_id',
+        'scope',
         'category',
         'sort_order',
         'setting_key',
@@ -36,22 +38,7 @@ class SettingMapper extends DataMapperAbstract
     public function findSiteSettings()
     {
         $this->makeSelect();
-        $this->sql .= ' order by category, sort_order';
-
-        return $this->find();
-    }
-
-    /**
-     * Find All Custom Settings
-     *
-     * Find all custom settings to CRUD
-     * @param void
-     * @return mixed Array | null
-     */
-    public function findCustomSettings()
-    {
-        $this->makeSelect();
-        $this->sql .= ' and setting.category = \'custom\' order by sort_order';
+        $this->sql .= ' and scope = \'global\' order by category, sort_order';
 
         return $this->find();
     }

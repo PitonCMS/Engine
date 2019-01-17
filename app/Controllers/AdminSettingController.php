@@ -153,6 +153,7 @@ class AdminSettingController extends AdminBaseController
                 $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
 
                 // Populate the new theme setting and save
+                $setting->scope = 'global';
                 $setting->category = 'theme';
                 $setting->sort_order = $themeSettings[$jsonKey]->sort;
                 $setting->setting_key = $themeSettings[$jsonKey]->key;

@@ -86,7 +86,9 @@ CREATE TABLE IF NOT EXISTS `collection` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `page_id` int NULL DEFAULT NULL,
+  `scope` varchar(20) NOT NULL,
   `category` varchar(60) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 1,
   `setting_key` varchar(60) NOT NULL,
@@ -100,7 +102,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `updated_by` int(11) NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `setting_key_uq` (`setting_key`)
+  KEY `page_id_idx` (`page_id`),
+  KEY `setting_key_uq` (`scope`,`page_id`,`setting_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `collection_id`, `slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
@@ -124,28 +127,28 @@ VALUES
   (10,3,'galleryGuide','gallery.htl','gallery',1,'Piton Gallery','This page represents the default gallery page. A gallery will need to be created before this page can be created. Currently it is populated with images from Unsplash.','<p>This page represents the default gallery page. A gallery will need to be created before this page can be created. Currently it is populated with images from Unsplash.</p>','This page represents the default gallery page. A gallery',NULL,NULL,NULL,NULL,1,'2018-12-29 14:12:38',1,'2019-01-11 14:45:49'),
   (11,4,'videoGuide','video.html','video',1,'Style Guide for Video','This is how the video will appear.','<p>This is how the video will appear.</p>','This is how the video will appear.',NULL,NULL,NULL,'<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/Y7RAqOaj_JE\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>',1,'2019-01-11 14:27:16',1,'2019-01-11 14:53:08');
 
-INSERT INTO `setting` (`category`, `sort_order`, `setting_key`, `setting_value`, `input_type`, `label`, `help`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `setting` (`scope`, `category`, `sort_order`, `setting_key`, `setting_value`, `input_type`, `label`, `help`, `restricted`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-  ('site',1,'theme','default','select','Theme',NULL,'N',1,now(),1,now()),
-  ('site',2,'urlDomainName','example.com','','Domain Name','Do not include the http(s):// or a trailing slash. For use in generated sitemaps.','N',1,now(),1,now()),
-  ('site',3,'urlScheme','http','select','URL Scheme','Select <code>http</code> or <code>https</code> (https requires additional server changes).','N',1,now(),1,now()),
-  ('site',4,'dateFormat','mm/dd/yyyy','select','Date Format','Select date picker format to use across site.','N',1,now(),1,now()),
-  ('site',5,'googleWebMaster','Unique GWM Key',NULL,'Google Webmaster Verification Link',NULL,'N',1,now(),1,now()),
-  ('site',6,'googleAnalytics','Google Analytics Tracking Code',NULL,'Google Analytics Code',NULL,'N',1,now(),1,now()),
-  ('site',7,'statCounter','Stat counter code',NULL,'Stat Counter',NULL,'N',1,now(),1,now()),
-  ('contact',1,'displayName','Moritz Media',NULL,'Display Name',NULL,'N',1,now(),1,now()),
-  ('contact',2,'telephone','555-1212',NULL,'Telephone',NULL,'N',1,now(),1,now()),
-  ('contact',3,'mobile','541-555-1212',NULL,'Mobile',NULL,'N',1,now(),1,now()),
-  ('contact',4,'address1','Building 4',NULL,'Address Line 1',NULL,'N',1,now(),1,now()),
-  ('contact',5,'address2','1234 Main St',NULL,'Address Line 2',NULL,'N',1,now(),1,now()),
-  ('contact',6,'address3','Flat 13',NULL,'Address Line 3',NULL,'N',1,now(),1,now()),
-  ('contact',7,'city','Bend',NULL,'City',NULL,'N',1,now(),1,now()),
-  ('contact',8,'province','OR',NULL,'State',NULL,'N',1,now(),1,now()),
-  ('contact',9,'postalCode','TW1 2HU',NULL,'Postal Code',NULL,'N',1,now(),1,now()),
-  ('contact',10,'country','United States',NULL,'Country',NULL,'N',1,now(),1,now()),
-  ('social',1,'facebookLink','https://www.facebook.com/',NULL,'Facebook Link',NULL,'N',1,now(),1,now()),
-  ('social',2,'twitterLink','https://twitter.com',NULL,'Twitter Link',NULL,'N',1,now(),1,now()),
-  ('social',3,'instagramLink','https://www.instagram.com/',NULL,'Instagram Link',NULL,'N',1,now(),1,now()),
-  ('social',4,'linkedinLink','https://www.linkedin.com/',NULL,'LinkedIn Link',NULL,'N',1,now(),1,now()),
-  ('social',5,'githubLink','https://www.github.com/',NULL,'GitHub Link',NULL,'N',1,now(),1,now());
+  ('global','site',1,'theme','default','select','Theme',NULL,'N',1,now(),1,now()),
+  ('global','site',2,'urlDomainName','example.com','','Domain Name','Do not include the http(s):// or a trailing slash. For use in generated sitemaps.','N',1,now(),1,now()),
+  ('global','site',3,'urlScheme','http','select','URL Scheme','Select <code>http</code> or <code>https</code> (https requires additional server changes).','N',1,now(),1,now()),
+  ('global','site',4,'dateFormat','mm/dd/yyyy','select','Date Format','Select date picker format to use across site.','N',1,now(),1,now()),
+  ('global','site',5,'googleWebMaster','Unique GWM Key',NULL,'Google Webmaster Verification Link',NULL,'N',1,now(),1,now()),
+  ('global','site',6,'googleAnalytics','Google Analytics Tracking Code',NULL,'Google Analytics Code',NULL,'N',1,now(),1,now()),
+  ('global','site',7,'statCounter','Stat counter code',NULL,'Stat Counter',NULL,'N',1,now(),1,now()),
+  ('global','contact',1,'displayName','Moritz Media',NULL,'Display Name',NULL,'N',1,now(),1,now()),
+  ('global','contact',2,'telephone','555-1212',NULL,'Telephone',NULL,'N',1,now(),1,now()),
+  ('global','contact',3,'mobile','541-555-1212',NULL,'Mobile',NULL,'N',1,now(),1,now()),
+  ('global','contact',4,'address1','Building 4',NULL,'Address Line 1',NULL,'N',1,now(),1,now()),
+  ('global','contact',5,'address2','1234 Main St',NULL,'Address Line 2',NULL,'N',1,now(),1,now()),
+  ('global','contact',6,'address3','Flat 13',NULL,'Address Line 3',NULL,'N',1,now(),1,now()),
+  ('global','contact',7,'city','Bend',NULL,'City',NULL,'N',1,now(),1,now()),
+  ('global','contact',8,'province','OR',NULL,'State',NULL,'N',1,now(),1,now()),
+  ('global','contact',9,'postalCode','TW1 2HU',NULL,'Postal Code',NULL,'N',1,now(),1,now()),
+  ('global','contact',10,'country','United States',NULL,'Country',NULL,'N',1,now(),1,now()),
+  ('global','social',1,'facebookLink','https://www.facebook.com/',NULL,'Facebook Link',NULL,'N',1,now(),1,now()),
+  ('global','social',2,'twitterLink','https://twitter.com',NULL,'Twitter Link',NULL,'N',1,now(),1,now()),
+  ('global','social',3,'instagramLink','https://www.instagram.com/',NULL,'Instagram Link',NULL,'N',1,now(),1,now()),
+  ('global','social',4,'linkedinLink','https://www.linkedin.com/',NULL,'LinkedIn Link',NULL,'N',1,now(),1,now()),
+  ('global','social',5,'githubLink','https://www.github.com/',NULL,'GitHub Link',NULL,'N',1,now(),1,now());
 
