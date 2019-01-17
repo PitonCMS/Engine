@@ -98,7 +98,7 @@
       <select class="form-control" name="element_collection_id[{{ arrayKey }}]">
         <option value="">- None -</option>
         {% for c in getCollections() %}
-        <option value="{{ c.id }}|{{ c.summary_template }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
+        <option value="{{ c.id }}|{{ c.summaryTemplate }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
         {% endfor %}
       </select>
     </div>

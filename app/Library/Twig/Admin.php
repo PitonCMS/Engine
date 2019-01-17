@@ -158,7 +158,44 @@ class Admin extends Base
     {
         $dataMapper = $this->container->dataMapper;
         $collectionMapper = $dataMapper('CollectionMapper');
+        $toolbox = $this->container->toolbox;
+        $json = $this->container->json;
 
-        return $collectionMapper->find();
+        // Get collection records
+        $collections = $collectionMapper->find();
+
+        // Get custom collection definitions to find the summary template name
+        $theme = $this->container->get('settings')['site']['theme'];
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/";
+        $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
+
+        // Filter page definition files
+        $layouts = [];
+        foreach ($layoutFiles as $key => $row) {
+            // Get definition files to screen out non-collection types
+            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
+                // Unset this file if we cannot find the valid JSON definition
+                unset($layoutFiles[$key]);
+                continue;
+            }
+
+            if ($definition->templateType !== 'collection') {
+                unset($layoutFiles[$key]);
+                continue;
+            }
+
+            $layoutFiles[$key]['json'] = $definition;
+        }
+
+        // Assign summary template to the collection
+        foreach ($collections as $key => $col) {
+            foreach ($layoutFiles as $file) {
+                if ($col->definition === $file['filename']) {
+                    $collections[$key]->summaryTemplate = $file['json']->collectionSummaryFile;
+                }
+            }
+        }
+
+        return $collections;
     }
 }
