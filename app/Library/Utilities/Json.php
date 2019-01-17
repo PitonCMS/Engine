@@ -54,7 +54,6 @@ class Json extends JsonDecoder
 
         $this->validation = [
             'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json',
-            'collection' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/collectionSchema.json',
             'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
         ];
 
@@ -66,7 +65,7 @@ class Json extends JsonDecoder
      *
      * Validation errors are written to $this->errors
      * @param string $jsonFile   Path to page JSON file to decode
-     * @param string $jsonSchema Name of validation: settings|collection|page
+     * @param string $jsonSchema Name of validation: settings|page
      * @return mixed             Object | null
      */
     public function getJson($jsonFile, $jsonSchema = null)
