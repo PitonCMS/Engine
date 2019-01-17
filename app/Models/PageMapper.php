@@ -138,7 +138,6 @@ class PageMapper extends DataMapperAbstract
 select c.id collection_id,
        c.title collection_title,
        c.slug collection_slug,
-       c.kind collection_kind,
        p.id,
        p.title,
        p.definition,

@@ -52,17 +52,27 @@ class AdminCollectionController extends AdminBaseController
             $collection = $collectionMapper->make();
         }
 
-        // Get custom collection schemas
+        // Get custom collections
         $theme = $this->container->get('settings')['site']['theme'];
-        $jsonPath = ROOT_DIR . "themes/{$theme}/templates/definitions/";
-        $collection->custom = $toolbox->getDirectoryFiles($jsonPath, ['^_.+','\.html']);
+        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/";
+        $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
 
-        foreach ($collection->custom as $key => $file) {
-            if (null === $collection->custom[$key]['json'] = $json->getJson($path . $file['filename'] /* TODO validation */)) {
-                $this->setAlert('danger', 'Custom Collection Error', $json->getErrorMessages());
+        $layouts = [];
+        foreach ($layoutFiles as $row) {
+            // Get definition files to screen out non-collection types
+            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
+                $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
                 break;
             }
+
+            if ($definition->templateType !== 'collection') {
+                continue;
+            }
+
+            $layouts[$row['filename']] = $definition->templateTitle;
         }
+
+        $collection->custom = $layouts;
 
         return $this->render('editCollection.html', $collection);
     }
@@ -84,12 +94,7 @@ class AdminCollectionController extends AdminBaseController
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
         $collection->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
-
-        // The "kind" radio button is carrying two values: kind|summaryTemplate
-        // Which we separate and assign
-        $radioSelect = explode('|', $this->request->getParsedBodyParam('kind'));
-        $collection->kind = $radioSelect[0];
-        $collection->summary_template = ($radioSelect[1]) ?: 'collection.html';
+        $collection->definition = $this->request->getParsedBodyParam('definition');
 
         $collection = $collectionMapper->save($collection);
 

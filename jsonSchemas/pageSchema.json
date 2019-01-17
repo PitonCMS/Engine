@@ -61,5 +61,5 @@
             }
         }
     },
-    "required": ["templateTitle","templateFile"]
+    "required": ["templateTitle","templateFile","templateType"]
 }

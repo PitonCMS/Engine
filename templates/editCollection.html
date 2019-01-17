@@ -1,7 +1,7 @@
 {% extends '@admin/_adminFormBase.html' %}
 
 {% block htmlTitle %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title }} Collection -
+{% if page.id %}Edit {{ page.title }}{% else %}Add Collection - {% endif %}
 {% endblock %}
 
 {% block headText %}
@@ -19,6 +19,7 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
 {% endblock hiddenInputs %}
 
 {% block formBody %}
+
       <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" name="title" maxlength="60" placeholder="Collection title" value="{{ page.title }}" required autocomplete="off">
@@ -39,14 +40,14 @@ To publish a collection add a <i>Page Element</i> of type <i>Collection</i> wher
       <div class="form-group form-inline jsElementType">
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input class="form-check-input" type="radio" name="kind" value="standard" {{ checked(page.kind|default('1')) }}> Standard
+            <input class="form-check-input" type="radio" name="definition" value="standard" {{ checked(page.definition|default('1')) }}> Standard
           </label>
         </div>
 
-        {% for c in page.custom %}
+        {% for key, col in page.custom %}
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input class="form-check-input" type="radio" name="kind" value="{{ c.basename }}|{{ c.json.collectionSummaryTemplate }}" {{ checked(page.kind == c.basename) }}> {{ c.readname }}
+            <input class="form-check-input" type="radio" name="definition" value="{{ key }}" {{ checked(page.definition == key) }}> {{ col }}
           </label>
         </div>
       {% endfor %}

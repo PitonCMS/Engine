@@ -37,7 +37,7 @@ class AdminPageController extends AdminBaseController
                 break;
             }
 
-            if (isset($definition->templateType) && $definition->templateType === 'collection') {
+            if ($definition->templateType === 'collection') {
                 continue;
             }
 
