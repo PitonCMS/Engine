@@ -123,8 +123,10 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
+        $CollectionMapper = $mapper('CollectionMapper');
         $Markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
+        $json = $this->container->json;
 
         // Create page object and populate POST data
         $page = $PageMapper->make();
@@ -172,11 +174,21 @@ class AdminPageController extends AdminBaseController
             $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
 
-            // Collection ID is carrying two values: collection_id|summary_template
+            // If collection ID is set, get the summary_template
             if (!empty($this->request->getParsedBodyParam('element_collection_id')[$key])) {
-                $collection = explode('|', $this->request->getParsedBodyParam('element_collection_id')[$key]);
-                $pageElement->collection_id = $collection[0];
-                $pageElement->template = $collection[1];
+                $collectionId = $this->request->getParsedBodyParam('element_collection_id')[$key];
+                $collectionRecord = $CollectionMapper->findById($collectionId);
+
+                // Get collection definition file
+                $theme = $this->container->get('settings')['site']['theme'];
+                $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/{$collectionRecord->definition}";
+
+                if (null === $definition = $json->getJson($jsonPath, 'page')) {
+                    throw new Exception('Page definition error: '. print_r($json->getErrorMessages(), true));
+                }
+
+                $pageElement->collection_id = $collectionId;
+                $pageElement->template = $definition->collectionSummaryFile;
             } else {
                 $pageElement->collection_id = null;
             }
