@@ -59,6 +59,9 @@
                 },
                 "required": ["name", "key"]
             }
+        },
+        "settings": {
+            "$ref": "jsonSchemas/settingsDefinitionSchema.json#/defintion"
         }
     },
     "required": ["templateTitle","templateFile","templateType"]
