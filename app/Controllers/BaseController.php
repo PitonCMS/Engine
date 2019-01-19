@@ -66,7 +66,7 @@ class BaseController
      * Render Template
      *
      * @param string $template Path to template
-     * @param mixed  $data   Data to echo, Domain object or array
+     * @param mixed  $data     Data to echo, Domain object or array
      */
     protected function render($template, $data = null)
     {
@@ -105,8 +105,7 @@ class BaseController
    /**
      * Build Page Elements by Block
      *
-     * Takes array of page elements and builds multi-dimensional array of element objects
-     * with block names as top level keys
+     * Takes array of page elements and changes keys to use block.key as array keys
      * @param array  $elements Array of page element domain models
      * @return array
      */
@@ -125,11 +124,10 @@ class BaseController
     }
 
     /**
-     * Build Fields
+     * Build Page Fields
      *
-     * Takes array of page elements and builds multi-dimensional array of element objects
-     * with block names as top level keys
-     * @param array  $elements Array of page element domain models
+     * Takes array of page field settings and changes keys to use field.key as array keys
+     * @param array  $fields Array of page field domain models
      * @return array
      */
     protected function buildFields($fields)
