@@ -217,8 +217,15 @@ class AdminPageController extends AdminBaseController
             $pageElement = $PageElementMapper->save($pageElement);
         }
 
+        // Determine redirect based on whether this is a collection
+        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
+            $redirectPath = 'showCollections';
+        } else {
+            $redirectPath = 'showPages';
+        }
+
         // Redirect back to show page
-        return $this->redirect('showPages');
+        return $this->redirect($redirectPath);
     }
 
     /**

@@ -94,4 +94,48 @@ class BaseController
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
     }
+
+   /**
+     * Build Page Elements by Block
+     *
+     * Takes array of page elements and builds multi-dimensional array of element objects
+     * with block names as top level keys
+     * @param array  $elements Array of page element domain models
+     * @return array
+     */
+    protected function buildElementsByBlock($elements)
+    {
+        if (empty($elements)) {
+            return $elements;
+        }
+
+        $output = [];
+        foreach ($elements as $row) {
+            $output[$row->block_key][] = $row;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Build Fields
+     *
+     * Takes array of page elements and builds multi-dimensional array of element objects
+     * with block names as top level keys
+     * @param array  $elements Array of page element domain models
+     * @return array
+     */
+    protected function buildFields($fields)
+    {
+        if (empty($fields)) {
+            return $fields;
+        }
+
+        $output = [];
+        foreach ($fields as $row) {
+            $output[$row->setting_key] = $row->setting_value;
+        }
+
+        return $output;
+    }
 }
