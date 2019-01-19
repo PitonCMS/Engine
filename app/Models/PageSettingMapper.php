@@ -11,32 +11,29 @@ namespace Piton\Models;
 use Piton\ORM\DataMapperAbstract;
 
 /**
- * Piton Setting Mapper
+ * Piton Page Setting Mapper
  */
-class SettingMapper extends DataMapperAbstract
+class PageSettingMapper extends DataMapperAbstract
 {
-    protected $table = 'setting';
+    protected $table = 'page_setting';
     protected $modifiableColumns = [
-        'category',
-        'sort_order',
+        'page_id',
         'setting_key',
-        'setting_value',
-        'input_type',
-        'label',
-        'help'
+        'setting_value'
     ];
 
     /**
-     * Find All Settings
+     * Find Page settings
      *
-     * Find all settings, in order of setting category and sort
-     * @param void
-     * @return array
+     * Get page level settings
+     * @param  int $pageId  Page ID
+     * @return mixed        Array | null
      */
-    public function findSiteSettings()
+    public function findPageSettings($pageId)
     {
         $this->makeSelect();
-        $this->sql .= ' order by category, sort_order';
+        $this->sql .= ' and page_id = ?';
+        $this->bindValues[] = $pageId;
 
         return $this->find();
     }

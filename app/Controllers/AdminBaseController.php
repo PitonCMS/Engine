@@ -71,21 +71,19 @@ class AdminBaseController extends BaseController
     public function mergeSettingsWithJsonFields($settings, $jsonFields, $scope)
     {
         $mapper = $this->container->dataMapper;
-        $settingMapper = $mapper('settingMapper');
+        $settingMapper = $mapper('SettingMapper');
+        $pageSettingMapper = $mapper('PageSettingMapper');
 
         if (empty($jsonFields)) {
             return $settings;
         }
 
-        // TODO ?
-        $themeSettingFlag = false;
-        if ($scope == 'global') {
-            $themeSettingFlag = true;
-        }
-
-        if (!in_array($scope, ['page','global'])) {
+        if (!in_array($scope, ['page','theme'])) {
             throw new Exception('Invalid $scope paramter');
         }
+
+        // Determine whether this is for a page or global theme
+        $themeSettingFlag = ($scope === 'theme') ? true : false;
 
         // Create union of settings from DB and from JSON file by matching keys
         foreach ($settings as $settingIndex => $setting) {
@@ -129,13 +127,16 @@ class AdminBaseController extends BaseController
         foreach ($jsonFields as $setting) {
             // Create setting object
             $newSetting = $settingMapper->make();
-            $newSetting->category = ($scope === 'global') ? 'theme' : null;
-            $newSetting->sort_order = $setting->sort;
             $newSetting->setting_key = $setting->key;
             $newSetting->setting_value = $setting->value;
             $newSetting->input_type = $setting->inputType;
             $newSetting->label = $setting->label;
             $newSetting->help = $setting->help;
+
+            if ($themeSettingFlag) {
+                $newSetting->category = 'theme';
+                $newSetting->sort_order = $setting->sort;
+            }
 
             // Include select options
             if ($setting->inputType === 'select') {

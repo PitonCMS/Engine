@@ -84,7 +84,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = $mapper('PageMapper');
         $pageElementMapper = $mapper('PageElementMapper');
         $collectionMapper = $mapper('CollectionMapper');
-        $settingMapper = $mapper('SettingMapper');
+        $pageSettingMapper = $mapper('PageSettingMapper');
         $json = $this->container->json;
         $theme = $this->container->get('settings')['site']['theme'];
 
@@ -92,7 +92,7 @@ class AdminPageController extends AdminBaseController
         if (is_numeric($args['id'])) {
             $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
-            $page->fields = $settingMapper->findPageSettings($args['id']);
+            $page->fields = $pageSettingMapper->findPageSettings($args['id']);
         } elseif (is_string($args['id'])) {
             // New page
             $page = $pageMapper->make();
@@ -129,7 +129,7 @@ class AdminPageController extends AdminBaseController
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
         $CollectionMapper = $mapper('CollectionMapper');
-        $SettingMapper = $mapper('SettingMapper');
+        $PageSettingMapper = $mapper('PageSettingMapper');
         $Markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
@@ -164,7 +164,7 @@ class AdminPageController extends AdminBaseController
         // Save any custom field setting inputs
         if ($this->request->getParsedBodyParam('setting_id')) {
             foreach ($this->request->getParsedBodyParam('setting_id') as $fieldKey => $field) {
-                $setting = $SettingMapper->make();
+                $setting = $PageSettingMapper->make();
                 $setting->id = $this->request->getParsedBodyParam('setting_id')[$fieldKey];
                 $setting->page_id = $page->id;
                 $setting->scope = 'page';
@@ -172,7 +172,7 @@ class AdminPageController extends AdminBaseController
                 $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$fieldKey];
                 $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$fieldKey];
 
-                $SettingMapper->save($setting);
+                $PageSettingMapper->save($setting);
             }
         }
 
