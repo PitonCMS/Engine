@@ -97,7 +97,7 @@ class AdminBaseController extends BaseController
                 if ($setting->setting_key === $field->key) {
                     // There is a match on setting key so update display properties
                     // use JSON definition as the master reference
-                    $setting->sort_order = $field->sort;
+                    $setting->sort_order = isset($field->sort) ? $field->sort : null;
                     $setting->label = $field->label;
                     $setting->input_type = $field->inputType;
                     $setting->help = $field->help;
