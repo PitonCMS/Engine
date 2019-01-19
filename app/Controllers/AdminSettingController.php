@@ -35,88 +35,12 @@ class AdminSettingController extends AdminBaseController
         $jsonFilePath = ROOT_DIR . "themes/{$theme}/definitions/themeSettings.json";
         if (null === $themeSettings = $json->getJson($jsonFilePath, 'setting')) {
             $this->setAlert('danger', 'Theme Settings Error', $json->getErrorMessages());
-        } else {
-            // Move up multi-dimensional array one key
-            $themeSettings = $themeSettings->settings;
         }
 
-        // Create union of settings from DB and from JSON file by matching keys
-        foreach ($allSettings as $allKey => $setting) {
-            // Skip ahead if non-theme setting
-            if ($setting->category !== 'theme') {
-                continue;
-            }
-
-            // Now see if we have a theme setting from JSON that matches one in the DB
-            foreach ($themeSettings as $settingKey => $theme) {
-                if ($setting->setting_key === $theme->key) {
-                    // There is a match on setting key so update display properties
-                    // use themeSettings.json as the master reference
-                    $setting->sort_order = $theme->sort;
-                    $setting->label = $theme->label;
-                    $setting->input_type = $theme->inputType;
-                    $setting->help = $theme->help;
-
-                    // Include select options array
-                    if ($theme->inputType === 'select') {
-                        $setting->options = $this->createOptionsArray($theme->options);
-                    }
-
-                    // Unset theme setting and skip to the next outer loop iteration
-                    unset($themeSettings[$settingKey]);
-                    continue 2;
-                }
-            }
-
-            // Found an orphaned theme setting in the DB, so mark it as such for optional delete
-            $allSettings[$allKey]->orphaned = true;
-
-            if ($allSettings[$allKey]->input_type = 'select') {
-                // For readability purposes, change orphaned selects to inputs
-                $allSettings[$allKey]->input_type = 'input';
-            }
-        }
-
-        // Any remaining $themeSettings are new and have not yet been saved to the DB
-        // Append these to the settings array
-        foreach ($themeSettings as $setting) {
-            // Create setting object
-            $newSetting = $SettingMapper->make();
-            $newSetting->category = 'theme';
-            $newSetting->sort_order = $setting->sort;
-            $newSetting->setting_key = $setting->key;
-            $newSetting->setting_value = $setting->value;
-            $newSetting->input_type = $setting->inputType;
-            $newSetting->label = $setting->label;
-            $newSetting->help = $setting->help;
-
-            // Include select options
-            if ($setting->inputType === 'select') {
-                $newSetting->options = $this->createOptionsArray($setting->options);
-            }
-
-            // Append to array
-            $allSettings[] = $newSetting;
-        }
+        // Merge saved settings with theme settings
+        $allSettings = $this->mergeSettingsWithJsonFields($allSettings, $themeSettings->settings, 'global');
 
         return $this->render('editSettings.html', $allSettings);
-    }
-
-    /**
-     * Options Associative Array
-     *
-     * Create select options associative array
-     * @param  array $options
-     * @return array          Associative array [$value] = $name
-     */
-    protected function createOptionsArray($options)
-    {
-        $newArray = [];
-        foreach ($options as $row) {
-            $newArray[$row->value] = ($row->name) ?: $row->value;
-        }
-
-        return $newArray;
     }
 
     /**
@@ -143,12 +67,12 @@ class AdminSettingController extends AdminBaseController
         // Save each setting
         foreach ($allSettings['setting_key'] as $key => $row) {
             $setting = $SettingMapper->make();
-            $setting->id = $allSettings['id'][$key];
+            $setting->id = $allSettings['setting_id'][$key];
             $setting->setting_value = $allSettings['setting_value'][$key];
 
             // If there is no ID, then this is a new theme setting to save
             // Import setting information from theme file
-            if (empty($allSettings['id'][$key])) {
+            if (empty($allSettings['setting_id'][$key])) {
                 // Get theme setting array key for this setting_key for reference
                 $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
 

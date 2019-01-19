@@ -1,6 +1,6 @@
 {% extends '@admin/_adminFormBase.html' %}
-
 {% import "@admin/editElementMacro.html" as form %}
+{% import '@admin/editSettingInputMacro.html' as settingForm %}
 
 {% block htmlTitle %}
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateTitle) }} -
@@ -52,6 +52,16 @@
         <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
         <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
       </div>
+
+      {% for field in page.fields %}
+        {% if field.input_type == 'select' %}
+          {{ settingForm.selectHtml(field, field.options) }}
+        {% elseif field.input_type == 'textarea' %}
+          {{ settingForm.textareaHtml(field) }}
+        {% else %}
+          {{ settingForm.inputHtml(field) }}
+        {% endif %}
+      {% endfor %}
 
       {% for block in page.json.blocks %}
       <div class="p-2 mb-2 jsBlockParent border" id="page-block-{{ block.key }}">

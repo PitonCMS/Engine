@@ -42,4 +42,20 @@ class SettingMapper extends DataMapperAbstract
 
         return $this->find();
     }
+
+    /**
+     * Find Page settings
+     *
+     * Get page level settings
+     * @param  int $pageId  Page ID
+     * @return mixed        Array | null
+     */
+    public function findPageSettings($pageId)
+    {
+        $this->makeSelect();
+        $this->sql .= ' and scope = \'page\' and page_id = ?';
+        $this->bindValues[] = $pageId;
+
+        return $this->find();
+    }
 }

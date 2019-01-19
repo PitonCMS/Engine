@@ -8,7 +8,7 @@
             <div class="jsSettingParent">
               <div class="form-group">
                 <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                <input type="hidden" name="id[]" value="{{ setting.id }}">
+                <input type="hidden" name="setting_id[]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                 <input type="text" class="form-control" name="setting_value[]" value="{{ setting.setting_value }}" autocomplete="off">
                 <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
@@ -25,7 +25,7 @@
             <div class="jsSettingParent">
               <div class="form-group">
                 <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                <input type="hidden" name="id[]" value="{{ setting.id }}">
+                <input type="hidden" name="setting_id[]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[]">
                   {% for key, option in options %}
@@ -46,7 +46,7 @@
             <div class="jsSettingParent">
                <div class="form-group">
                   <label>{{ setting.label }}{% if setting.orphaned %} <span class="badge badge-danger">Orphaned</span>{% endif %}</label>
-                  <input type="hidden" name="id[]" value="{{ setting.id }}">
+                  <input type="hidden" name="setting_id[]" value="{{ setting.id }}">
                   <input type="hidden" name="setting_key[]" value="{{ setting.setting_key }}">
                   <textarea class="form-control" rows="3" name="setting_value[]">{{ setting.setting_value }}</textarea>
                   <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
