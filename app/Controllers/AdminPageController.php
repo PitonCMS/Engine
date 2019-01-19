@@ -25,8 +25,7 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
 
-        $theme = $this->container->get('settings')['site']['theme'];
-        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/";
+        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
         $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
 
         $layouts = [];
@@ -86,7 +85,6 @@ class AdminPageController extends AdminBaseController
         $collectionMapper = $mapper('CollectionMapper');
         $pageSettingMapper = $mapper('PageSettingMapper');
         $json = $this->container->json;
-        $theme = $this->container->get('settings')['site']['theme'];
 
         // Fetch page, or create new page
         if (is_numeric($args['id'])) {
@@ -106,7 +104,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Path to JSON definition file
-        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/{$page->definition}";
+        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/{$page->definition}";
         if (null === $page->json = $json->getJson($jsonPath, 'page')) {
             $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
         }
@@ -201,8 +199,7 @@ class AdminPageController extends AdminBaseController
                 $collectionRecord = $CollectionMapper->findById($collectionId);
 
                 // Get collection definition file
-                $theme = $this->container->get('settings')['site']['theme'];
-                $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/{$collectionRecord->definition}";
+                $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/{$collectionRecord->definition}";
 
                 if (null === $definition = $json->getJson($jsonPath, 'page')) {
                     throw new Exception('Page definition error: '. print_r($json->getErrorMessages(), true));

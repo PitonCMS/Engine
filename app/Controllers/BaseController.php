@@ -44,6 +44,12 @@ class BaseController
     protected $pageData = [];
 
     /**
+     * Site Settings Array
+     * @var array
+     */
+    protected $siteSettings = [];
+
+    /**
      * Constructor
      *
      * @param ContainerInterface $container
@@ -53,6 +59,7 @@ class BaseController
         $this->container = $container;
         $this->request = $container->request;
         $this->response = $container->response;
+        $this->siteSettings = $container->get('settings')['site'];
     }
 
     /**

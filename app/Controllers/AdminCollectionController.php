@@ -53,8 +53,7 @@ class AdminCollectionController extends AdminBaseController
         }
 
         // Get custom collections
-        $theme = $this->container->get('settings')['site']['theme'];
-        $jsonPath = ROOT_DIR . "themes/{$theme}/definitions/pages/";
+        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
         $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
 
         $layouts = [];

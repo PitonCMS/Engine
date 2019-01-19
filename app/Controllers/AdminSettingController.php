@@ -31,8 +31,7 @@ class AdminSettingController extends AdminBaseController
         $allSettings = $SettingMapper->findSiteSettings();
 
         // Fetch theme settings
-        $theme = $this->container->get('settings')['site']['theme'];
-        $jsonFilePath = ROOT_DIR . "themes/{$theme}/definitions/themeSettings.json";
+        $jsonFilePath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/themeSettings.json";
         if (null === $themeSettings = $json->getJson($jsonFilePath, 'setting')) {
             $this->setAlert('danger', 'Theme Settings Error', $json->getErrorMessages());
         }
@@ -56,8 +55,7 @@ class AdminSettingController extends AdminBaseController
         $json = $this->container->json;
 
         // Fetch theme settings
-        $theme = $this->container->get('settings')['site']['theme'];
-        $jsonFilePath = ROOT_DIR . "themes/{$theme}/definitions/themeSettings.json";
+        $jsonFilePath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/themeSettings.json";
         $themeSettings = $json->getJson($jsonFilePath, 'setting');
         $themeSettings = $themeSettings->settings;
 
