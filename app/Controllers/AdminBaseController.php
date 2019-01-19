@@ -128,7 +128,7 @@ class AdminBaseController extends BaseController
             // Create setting object
             $newSetting = $settingMapper->make();
             $newSetting->setting_key = $setting->key;
-            $newSetting->setting_value = $setting->value;
+            $newSetting->setting_value = isset($setting->value) ? $setting->value : null;
             $newSetting->input_type = $setting->inputType;
             $newSetting->label = $setting->label;
             $newSetting->help = $setting->help;
