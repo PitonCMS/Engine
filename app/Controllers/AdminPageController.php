@@ -112,7 +112,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Merge saved fields with fields from JSON definition
-        $page->fields = $this->mergeSettingsWithJsonFields($page->fields, $page->json->fields, 'page');
+        $page->fields = $this->mergeSettingsWithJsonFields($page->fields, $page->json->settings, 'page');
 
         return $this->render('editPage.html', $page);
     }
