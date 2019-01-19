@@ -144,6 +144,7 @@ class AdminPageController extends AdminBaseController
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
+        $page->image_path = $this->request->getParsedBodyParam('image_path');
 
         // Process published date
         $page->published_date = ($this->request->getParsedBodyParam('published_date')) ?: '';
@@ -192,7 +193,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
-            $pageElement->image_path = $this->request->getParsedBodyParam('image_path')[$key];
+            $pageElement->image_path = $this->request->getParsedBodyParam('element_image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
 
             // If collection ID is set, get the summary_template

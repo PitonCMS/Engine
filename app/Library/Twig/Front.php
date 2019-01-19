@@ -89,7 +89,7 @@ class Front extends Base
     public function getCollectionPages($collectionId)
     {
         $dataMapper = $this->container->dataMapper;
-        $pageMapper = $dataMapper('pageMapper');
+        $pageMapper = $dataMapper('PageMapper');
 
         // Page Collection
         $data = $pageMapper->findCollectionPagesById($collectionId);

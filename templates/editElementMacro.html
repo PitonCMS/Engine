@@ -89,7 +89,7 @@
 
     <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'image' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
       <label>Image Link</label>
-      <input type="text" class="form-control" name="image_path[{{ arrayKey }}]" value="{{ element.image_path }}"">
+      <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ element.image_path }}"">
       <small class="form-text text-muted">Enter an image link.</small>
     </div>
 

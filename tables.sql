@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `sub_title` varchar(150) NULL DEFAULT NULL,
   `meta_description` varchar(320) NULL DEFAULT NULL,
   `published_date` date NULL DEFAULT NULL,
+  `image_path` varchar(100) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,

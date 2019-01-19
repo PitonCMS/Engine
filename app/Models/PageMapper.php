@@ -25,7 +25,8 @@ class PageMapper extends DataMapperAbstract
         'sub_title',
         'slug',
         'meta_description',
-        'published_date'
+        'published_date',
+        'image_path'
     ];
     protected $domainObjectClass = __NAMESPACE__ . '\Page';
 
@@ -145,7 +146,8 @@ select c.id collection_id,
        p.sub_title,
        p.slug,
        p.meta_description,
-       p.published_date
+       p.published_date,
+       p.image_path
 from page p
 join collection c on p.collection_id = c.id
 where 1=1
