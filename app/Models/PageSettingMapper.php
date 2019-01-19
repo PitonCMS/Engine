@@ -23,7 +23,7 @@ class PageSettingMapper extends DataMapperAbstract
     ];
 
     /**
-     * Find Page settings
+     * Find Page Settings
      *
      * Get page level settings
      * @param  int $pageId  Page ID
@@ -36,5 +36,19 @@ class PageSettingMapper extends DataMapperAbstract
         $this->bindValues[] = $pageId;
 
         return $this->find();
+    }
+
+    /**
+     * Delete Page Settings
+     *
+     * @param
+     * @return
+     */
+    public function deleteByPageId($pageId)
+    {
+        $this->sql = "delete from {$this->table} where page_id = ?;";
+        $this->bindValues[] = $pageId;
+
+        return $this->execute();
     }
 }

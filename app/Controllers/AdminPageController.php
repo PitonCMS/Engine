@@ -232,6 +232,7 @@ class AdminPageController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $PageMapper = $mapper('PageMapper');
         $PageElementMapper = $mapper('PageElementMapper');
+        $PageSettingMapper = $mapper('PageSettingMapper');
 
         if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
             // Delete page
@@ -239,8 +240,9 @@ class AdminPageController extends AdminBaseController
             $page->id = $this->request->getParsedBodyParam('id');
             $PageMapper->delete($page);
 
-            // Delete page elements
+            // Delete page elements & page settings
             $PageElementMapper->deleteElementsByPageId($this->request->getParsedBodyParam('id'));
+            $PageSettingMapper->deleteByPageId($this->request->getParsedBodyParam('id'));
         } else {
             throw new Exception('Invalid page delete request.');
         }
