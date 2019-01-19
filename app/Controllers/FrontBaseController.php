@@ -24,7 +24,7 @@ class FrontBaseController extends BaseController
      */
     public function render($template, $data = null)
     {
-        return parent::render('layouts/' . $template, $data);
+        return parent::render('pages/' . $template, $data);
     }
 
     /**
