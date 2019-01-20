@@ -209,7 +209,7 @@ class AdminPageController extends AdminBaseController
                 }
 
                 $pageElement->collection_id = $collectionId;
-                $pageElement->template = $definition->collectionSummaryFile;
+                $pageElement->template = $definition->collectionElementTemplateFile;
             } else {
                 $pageElement->collection_id = null;
             }

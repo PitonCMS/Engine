@@ -20,8 +20,8 @@
             "type": "string",
             "enum": ["page","collection"]
         },
-        "collectionSummaryFile": {
-            "description": "The template summary element HTML file.",
+        "collectionElementTemplateFile": {
+            "description": "The element template HTML file.",
             "type": "string"
         },
         "blocks": {
