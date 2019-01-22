@@ -20,6 +20,13 @@ class Admin extends Base
 {
 
     /**
+     * Custom Elements Cache
+     * For multiple calls on getCustomElements()
+     * @var array
+     */
+    protected $customElements;
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
@@ -50,6 +57,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
+            new \Twig_SimpleFunction('getCustomElements', [$this, 'getCustomElements']),
         ]);
     }
 
@@ -160,5 +168,34 @@ class Admin extends Base
         $collectionMapper = $dataMapper('CollectionMapper');
 
         return $collectionMapper->find();
+    }
+
+    /**
+     * Get Custom Elements
+     *
+     * @param  void
+     * @return array
+     */
+    public function getCustomElements()
+    {
+        // Get dependencies
+        $toolbox = $this->container->toolbox;
+        $json = $this->container->json;
+
+        if (isset($this->customElements)) {
+            return $this->customElements;
+        }
+
+        // Get all JSON files in directory
+        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/";
+        $files = $toolbox->getDirectoryFiles($jsonPath);
+
+        foreach ($files as $key => $file) {
+            if (null !== $definition = $json->getJson($jsonPath . $file['filename'] /*, TODO */)) {
+                $files[$key]['json'] = $definition;
+            }
+        }
+
+        return $this->customElements = $files;
     }
 }

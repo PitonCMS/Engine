@@ -1,11 +1,10 @@
 {#
   Element Form
 
-  The arrayKey variable helps separate each element block when sent to the server to save
+  The arrayKey variable helps separate each set of inputs when sent to the server to save
 #}
 
 {% macro elementForm(element, blockKey, elementTypeOptions) %}
-
 {% set arrayKey = uniqueKey() %}
 
 <div class="card mb-2 jsElementParent" id="page-element-{{ element.id|default(arrayKey) }}">
@@ -69,6 +68,15 @@
         </label>
       </div>
       {% endif %}
+
+      <!-- Custom Elements -->
+      {% for ce in getCustomElements() %}
+      <div class="form-check form-check-inline">
+        <label class="form-check-label">
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="{{ ce.filename }}" {{ checked(element.element_type == ce.json.filename) }}> {{ ce.json.elementTitle }}
+        </label>
+      </div>
+      {% endfor %}
   	</div>
 
     <div class="form-group">

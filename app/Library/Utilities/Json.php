@@ -72,6 +72,8 @@ class Json extends JsonDecoder
     {
         if (isset($jsonSchema) && array_key_exists($jsonSchema, $this->validation)) {
             $validation = $this->validation[$jsonSchema];
+        } elseif ($jsonSchema === null) {
+            $validation = $jsonSchema;
         } else {
             throw new Exception('Invalid jsonSchema validation key');
         }

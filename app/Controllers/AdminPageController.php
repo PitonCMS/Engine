@@ -191,27 +191,23 @@ class AdminPageController extends AdminBaseController
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $Markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
+            $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('element_image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
 
-            // If collection ID is set, get the summary_template
-            if (!empty($this->request->getParsedBodyParam('element_collection_id')[$key])) {
-                $collectionId = $this->request->getParsedBodyParam('element_collection_id')[$key];
-                $collectionRecord = $CollectionMapper->findById($collectionId);
+            // If a custom element type was selected, get the JSON definition file
+            if (preg_match('/.+\.json$/', ($this->request->getParsedBodyParam('element_type')[$key]))) {
+                $customType = $this->request->getParsedBodyParam('element_type')[$key];
 
-                // Get collection definition file
-                $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/{$collectionRecord->definition}";
+                // Get element definition file
+                $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$customType}";
 
-                if (null === $definition = $json->getJson($jsonPath, 'page')) {
-                    throw new Exception('Page definition error: '. print_r($json->getErrorMessages(), true));
+                if (null === $definition = $json->getJson($jsonPath /*, TODO */)) {
+                    throw new Exception('Element definition error: '. print_r($json->getErrorMessages(), true));
                 }
 
-                $pageElement->collection_id = $collectionId;
-                $pageElement->template = $definition->collectionElementTemplateFile;
-            } else {
-                $pageElement->collection_id = null;
+                $pageElement->template = $definition->elementTemplateFile;
             }
 
             $pageElement = $PageElementMapper->save($pageElement);
