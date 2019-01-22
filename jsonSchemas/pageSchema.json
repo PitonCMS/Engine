@@ -20,10 +20,6 @@
             "type": "string",
             "enum": ["page","collection"]
         },
-        "collectionElementTemplateFile": {
-            "description": "The element template HTML file.",
-            "type": "string"
-        },
         "blocks": {
             "description": "An array of page block definitions",
             "type": "array",
