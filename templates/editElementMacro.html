@@ -1,11 +1,15 @@
 {#
   Element Form
 
-  The arrayKey variable helps separate each set of inputs when sent to the server to save
+  var arrayKey: Keeps each block of element inputs together on save
+  var enableOption: Flag to enable optional inputs for saved elements
 #}
 
 {% macro elementForm(element, blockKey, elementTypeOptions) %}
 {% set arrayKey = uniqueKey() %}
+{% set enableOption = (element.element_type in ['image','hero']) ? 'image' %}
+{% set enableOption = (element.element_type in ['collection','gallery']) ? 'collection' : enableOption %}
+{% set enableOption = (element.element_type == 'video') ? 'video' : enableOption %}
 
 <div class="card mb-2 jsElementParent" id="page-element-{{ element.id|default(arrayKey) }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
@@ -32,7 +36,7 @@
       {% if 'image' in elementTypeOptions|default('image') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="image" {{ checked(element.element_type == 'image') }}> Image
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="image" data-input-option="image" {{ checked(element.element_type == 'image') }}> Image
   			</label>
   		</div>
       {% endif %}
@@ -40,7 +44,7 @@
       {% if 'video' in elementTypeOptions|default('video') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="video" {{ checked(element.element_type == 'video') }}> Video
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="video" data-input-option="video" {{ checked(element.element_type == 'video') }}> Video
         </label>
       </div>
       {% endif %}
@@ -48,7 +52,7 @@
       {% if 'hero' in elementTypeOptions|default('hero') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" {{ checked(element.element_type == 'hero') }}> Hero
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="hero" data-input-option="image" {{ checked(element.element_type == 'hero') }}> Hero
         </label>
       </div>
       {% endif %}
@@ -56,7 +60,7 @@
       {% if 'collection' in elementTypeOptions|default('collection') %}
   		<div class="form-check form-check-inline">
   			<label class="form-check-label">
-  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="collection" {{ checked(element.element_type == 'collection') }}> Collection
+  				<input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="collection" data-input-option="collection" {{ checked(element.element_type == 'collection') }}> Collection
   			</label>
   		</div>
       {% endif %}
@@ -64,16 +68,17 @@
       {% if 'gallery' in elementTypeOptions|default('gallery') %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="gallery" {{ checked(element.element_type == 'gallery') }}> Gallery
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="gallery" data-input-option="collection" {{ checked(element.element_type == 'gallery') }}> Gallery
         </label>
       </div>
       {% endif %}
 
       <!-- Custom Elements -->
       {% for ce in getCustomElements() %}
+      {% set enableOption = (element.element_type == ce.filename) ? ce.json.inputTypeOption : enableOption %}
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="{{ ce.filename }}" {{ checked(element.element_type == ce.json.filename) }}> {{ ce.json.elementTitle }}
+          <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" value="{{ ce.filename }}" data-input-option="{{ ce.json.inputTypeOption }}" {{ checked(element.element_type == ce.filename) }}> {{ ce.json.elementTitle }}
         </label>
       </div>
       {% endfor %}
@@ -89,34 +94,25 @@
   		<textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
   	</div>
 
-    <div class="form-group jsElementOptional jsElementVideoPath {% if element.element_type == 'video' %}d-block{% else %}d-none{% endif %}">
+    <div class="form-group jsElementOption jsVideoInput {% if enableOption == 'video' %}d-block{% else %}d-none{% endif %}">
       <label>Video Embed</label>
       <textarea class="form-control" rows="3" name="video_path[{{ arrayKey }}]">{{ element.video_path }}</textarea>
       <small class="form-text text-muted">Enter a video embed HTML link.</small>
     </div>
 
-    <div class="form-group jsElementOptional jsElementMediaPath {% if element.element_type == 'image' or element.element_type == 'hero' %}d-block{% else %}d-none{% endif %}">
+    <div class="form-group jsElementOption jsMediaInput {% if enableOption == 'image' %}d-block{% else %}d-none{% endif %}">
       <label>Image Link</label>
       <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ element.image_path }}"">
       <small class="form-text text-muted">Enter an image link.</small>
     </div>
 
-    <div class="form-group jsElementOptional jsElementCollection {% if element.element_type == 'collection' %}d-block{% else %}d-none{% endif %}">
+    <div class="form-group jsElementOption jsCollectionInput {% if enableOption == 'collection' %}d-block{% else %}d-none{% endif %}">
     <label>Collection</label>
       <select class="form-control" name="element_collection_id[{{ arrayKey }}]">
         <option value="">- None -</option>
         {% for c in getCollections() %}
         <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
         {% endfor %}
-      </select>
-    </div>
-
-    <div class="form-group jsElementOptional jsElementGallery {% if element.element_type == 'gallery' %}d-block{% else %}d-none{% endif %}">
-    <label>Gallery (TODO)</label>
-      <select class="form-control">
-        <option>Gallery 1</option>
-        <option>Gallery 2</option>
-        <option>Gallery 3</option>
       </select>
     </div>
 
