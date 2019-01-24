@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "Custom Element Definition",
+    "type": "object",
+    "properties": {
+        "elementTitle": {
+            "description": "Element type name displayed in page editor",
+            "type": "string"
+        },
+        "elementTemplateFile": {
+            "description": "The template page HTML file. Relative path from templates/elements/",
+            "type": "string"
+        },
+        "inputTypeOption": {
+            "description": "Element type.",
+            "type": "string",
+            "enum": ["collection","video","image","text"]
+        }
+    },
+    "required": ["elementTitle","elementTemplateFile","inputTypeOption"]
+}

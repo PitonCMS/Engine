@@ -203,8 +203,8 @@ class AdminPageController extends AdminBaseController
                 // Get element definition file
                 $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$customType}";
 
-                if (null === $definition = $json->getJson($jsonPath /*, TODO */)) {
-                    throw new Exception('Element definition error: '. print_r($json->getErrorMessages(), true));
+                if (null === $definition = $json->getJson($jsonPath, 'element')) {
+                    throw new Exception('Element definition error: ' . print_r($json->getErrorMessages(), true));
                 }
 
                 $pageElement->template = $definition->elementTemplateFile;

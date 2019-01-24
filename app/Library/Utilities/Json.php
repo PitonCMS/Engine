@@ -55,6 +55,7 @@ class Json extends JsonDecoder
         $this->validation = [
             'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json',
             'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
+            'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/elementSchema.json',
         ];
 
         parent::__construct();

@@ -9,6 +9,7 @@
 namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
+use Exception;
 
 /**
  * Piton Back End Admin Twig Extension
@@ -191,7 +192,9 @@ class Admin extends Base
         $files = $toolbox->getDirectoryFiles($jsonPath);
 
         foreach ($files as $key => $file) {
-            if (null !== $definition = $json->getJson($jsonPath . $file['filename'] /*, TODO */)) {
+            if (null === $definition = $json->getJson($jsonPath . $file['filename'], 'element')) {
+                throw new Exception('Element definition error: ' . print_r($json->getErrorMessages(), true));
+            } else {
                 $files[$key]['json'] = $definition;
             }
         }
