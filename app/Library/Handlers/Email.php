@@ -46,6 +46,11 @@ class Email extends PHPMailer implements EmailInterface
 
         // Enable exceptions in PHPMailer
         parent::__construct(true);
+
+        // Check if a SMTP connection was requested and then configure
+        if (strtolower($this->settings['email']['protocol']) === 'smtp') {
+            $this->configSMTP();
+        }
     }
 
     /**
@@ -126,5 +131,28 @@ class Email extends PHPMailer implements EmailInterface
             $this->logger->critical('PitonCMS: Failed to send mail: ' . $e->getMessage());
             throw new \Exception($e->getMessage());
         }
+    }
+
+    /**
+     * Configure SMTP
+     *
+     * All values are derived from configuration settings set in constructor
+     * @param  void
+     * @return void
+     */
+    public function configSMTP()
+    {
+        $this->isSMTP();
+        //Enable SMTP debugging
+        // 0 = off (for production use)
+        // 1 = client messages
+        // 2 = client and server messages
+        $this->SMTPDebug = ($this->settings['production']) ? 2 : 0;
+        $this->Host = $this->settings['email']['smtpHost'];
+        $this->Port = $this->settings['email']['smtpPort'];
+        $this->SMTPAuth = true;
+        $this->SMTPSecure = 'ssl';
+        $this->Username = $this->settings['email']['smtpUser'];
+        $this->Password = $this->settings['email']['smtpPass'];
     }
 }
