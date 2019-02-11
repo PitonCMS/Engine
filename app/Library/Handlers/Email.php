@@ -18,14 +18,8 @@ use PHPMailer\PHPMailer\Exception;
  * To use a different email manager class, implement Piton\Interfaces\EmailInterface
  * and override the emailHandler dependency in the container.
  */
-class Email implements EmailInterface
+class Email extends PHPMailer implements EmailInterface
 {
-    /**
-     * PHPMailer Object
-     * @var PHPMailer\PHPMailer\PHPMailer
-     */
-    protected $mailer;
-
     /**
      * Settings Array
      * @var array
@@ -39,29 +33,34 @@ class Email implements EmailInterface
     protected $logger;
 
     /**
-     * New Function
+     * Constructor
      *
-     * @param
-     * @return
+     * @param  array  $settings Array of configuration settings
+     * @param  object $logger Logging object
+     * @return void
      */
     public function __construct($settings, $logger)
     {
         $this->settings = $settings;
         $this->logger = $logger;
 
-        $this->mailer = new PHPMailer(true);
+        // Enable exceptions in PHPMailer
+        parent::__construct(true);
     }
 
     /**
      * Set From Address
      *
-     * @param  string $address From email address
-     * @param  string $name    Sender name, optiona
-     * @return object $this    Email
+     * @param  string  $address From email address
+     * @param  string  $name    Sender name, optional
+     * @param  boolean $auto    NOT USED
+     * @return object  $this    Email
      */
-    public function setFrom($address, $name = null)
+    public function setFrom($address, $name = '', $auto = true)
     {
-        $this->mailer->setFrom($address, $name, false);
+        // When using mail/sendmail, we need to set the PHPMailer "auto" flag to false
+        // https://github.com/PHPMailer/PHPMailer/issues/1634
+        parent::setFrom($address, $name, false);
 
         return $this;
     }
@@ -76,7 +75,7 @@ class Email implements EmailInterface
      */
     public function addTo($address, $name = null)
     {
-        $this->mailer->addAddress($address, $name);
+        $this->addAddress($address, $name);
 
         return $this;
     }
@@ -89,7 +88,7 @@ class Email implements EmailInterface
      */
     public function setSubject($subject)
     {
-        $this->mailer->Subject =$subject;
+        $this->Subject =$subject;
 
         return $this;
     }
@@ -102,7 +101,7 @@ class Email implements EmailInterface
      */
     public function setMessage($message)
     {
-        $this->mailer->Body = $message;
+        $this->Body = $message;
 
         return $this;
     }
@@ -116,12 +115,12 @@ class Email implements EmailInterface
     public function send()
     {
         // Has the from address not been set properly? If not, use config default
-        if ($this->mailer->From = 'root@localhost' || empty($this->mailer->From)) {
+        if ($this->From = 'root@localhost' || empty($this->From)) {
             $this->setFrom($this->settings['email']['from']);
         }
 
         try {
-            $this->mailer->send();
+            parent::send();
         } catch (Exception $e) {
             // Log for debugging and then rethrow
             $this->logger->critical('PitonCMS: Failed to send mail: ' . $e->getMessage());
