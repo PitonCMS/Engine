@@ -19,7 +19,6 @@
         "monolog/monolog": "^1.17",
         "erusev/parsedown": "^1.6",
         "phpmailer/phpmailer": "~6.0",
-        "eoghanobrien/php-simple-mail": "^1.7",
         "webmozart/json": "^1.2.2"
         },
     "autoload": {

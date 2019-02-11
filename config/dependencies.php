@@ -113,7 +113,7 @@ $container['notFoundHandler'] = function ($c) {
 
 // Emails
 $container['emailHandler'] = function ($c) {
-    return new SimpleMail();
+    return new Piton\Library\Handlers\Email($c->get('settings'), $c->get('logger'));
 };
 
 // Data mapper to CRUD the database tables

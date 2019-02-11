@@ -94,8 +94,7 @@ class AdminAccessController extends AdminBaseController
             $link .= $this->container->router->pathFor('processLoginToken', ['token' => $token]);
 
             // Send message
-            $email->setFrom('send@' . $host, 'PitonCMS')
-                ->setTo($providedEmail, '')
+            $email->addTo($providedEmail, '')
                 ->setSubject('PitonCMS Login')
                 ->setMessage("Click to login\n\n {$link}")
                 ->send();
