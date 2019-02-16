@@ -18,13 +18,13 @@ use PHPMailer\PHPMailer\Exception;
  * To use a different email manager class, implement Piton\Interfaces\EmailInterface
  * and override the emailHandler dependency in the container.
  */
-class Email extends PHPMailer implements EmailInterface
+class Email implements EmailInterface
 {
     /**
-     * Settings Array
-     * @var array
+     * Mailer
+     * @var object PHPMailer\PHPMailer\PHPMailer
      */
-    protected $settings;
+    protected $mailer;
 
     /**
      * Logger Object
@@ -33,19 +33,24 @@ class Email extends PHPMailer implements EmailInterface
     protected $logger;
 
     /**
+     * Settings Array
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Constructor
      *
+     * @param  object $mailer   PHPMailer
+     * @param  object $logger   Logging object
      * @param  array  $settings Array of configuration settings
-     * @param  object $logger Logging object
      * @return void
      */
-    public function __construct($settings, $logger)
+    public function __construct(PHPMailer $mailer, $logger, $settings)
     {
-        $this->settings = $settings;
+        $this->mailer = $mailer;
         $this->logger = $logger;
-
-        // Enable exceptions in PHPMailer
-        parent::__construct(true);
+        $this->settings = $settings;
 
         // Check if a SMTP connection was requested and then configure
         if (strtolower($this->settings['email']['protocol']) === 'smtp') {
@@ -58,29 +63,28 @@ class Email extends PHPMailer implements EmailInterface
      *
      * @param  string  $address From email address
      * @param  string  $name    Sender name, optional
-     * @param  boolean $auto    NOT USED
-     * @return object  $this    Email
+     * @return object  $this    EmailInterface
      */
-    public function setFrom($address, $name = '', $auto = true)
+    public function setFrom($address, $name = null) : EmailInterface
     {
         // When using mail/sendmail, we need to set the PHPMailer "auto" flag to false
         // https://github.com/PHPMailer/PHPMailer/issues/1634
-        parent::setFrom($address, $name, false);
+        $this->mailer->setFrom($address, $name, false);
 
         return $this;
     }
 
     /**
-     * Add Recipient To Address
+     * Set Recipient To Address
      *
      * Can be called multiple times to add additional recipients
      * @param  string $address To email address
      * @param  string $name    Recipient name, optiona
-     * @return object $this    Email
+     * @return object $this    EmailInterface
      */
-    public function addTo($address, $name = null)
+    public function setTo($address, $name = null) : EmailInterface
     {
-        $this->addAddress($address, $name);
+        $this->mailer->addAddress($address, $name);
 
         return $this;
     }
@@ -89,11 +93,11 @@ class Email extends PHPMailer implements EmailInterface
      * Set Email Subject
      *
      * @param  string $subject Email subject line
-     * @return object $this    Email
+     * @return object $this    EmailInterface
      */
-    public function setSubject($subject)
+    public function setSubject($subject) : EmailInterface
     {
-        $this->Subject =$subject;
+        $this->mailer->Subject = $subject;
 
         return $this;
     }
@@ -102,11 +106,11 @@ class Email extends PHPMailer implements EmailInterface
      * Set Email Message Body
      *
      * @param  string $body Email body
-     * @return object $this Email
+     * @return object $this EmailInterface
      */
-    public function setMessage($message)
+    public function setMessage($message) : EmailInterface
     {
-        $this->Body = $message;
+        $this->mailer->Body = $message;
 
         return $this;
     }
@@ -117,15 +121,15 @@ class Email extends PHPMailer implements EmailInterface
      * @param  void
      * @return void
      */
-    public function send()
+    public function send() : void
     {
         // Has the from address not been set properly? If not, use config default
-        if ($this->From = 'root@localhost' || empty($this->From)) {
+        if ($this->mailer->From = 'root@localhost' || empty($this->mailer->From)) {
             $this->setFrom($this->settings['email']['from']);
         }
 
         try {
-            parent::send();
+            $this->mailer->send();
         } catch (Exception $e) {
             // Log for debugging and then rethrow
             $this->logger->critical('PitonCMS: Failed to send mail: ' . $e->getMessage());
@@ -140,19 +144,19 @@ class Email extends PHPMailer implements EmailInterface
      * @param  void
      * @return void
      */
-    public function configSMTP()
+    public function configSMTP() : void
     {
-        $this->isSMTP();
+        $this->mailer->isSMTP();
         //Enable SMTP debugging
         // 0 = off (for production use)
         // 1 = client messages
         // 2 = client and server messages
-        $this->SMTPDebug = ($this->settings['production']) ? 2 : 0;
-        $this->Host = $this->settings['email']['smtpHost'];
-        $this->Port = $this->settings['email']['smtpPort'];
-        $this->SMTPAuth = true;
-        $this->SMTPSecure = 'ssl';
-        $this->Username = $this->settings['email']['smtpUser'];
-        $this->Password = $this->settings['email']['smtpPass'];
+        $this->mailer->SMTPDebug = ($this->settings['production']) ? 0 : 2;
+        $this->mailer->Host = $this->settings['email']['smtpHost'];
+        $this->mailer->Port = $this->settings['email']['smtpPort'];
+        $this->mailer->SMTPAuth = true;
+        $this->mailer->SMTPSecure = 'ssl';
+        $this->mailer->Username = $this->settings['email']['smtpUser'];
+        $this->mailer->Password = $this->settings['email']['smtpPass'];
     }
 }
