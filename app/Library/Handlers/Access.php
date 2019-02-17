@@ -74,7 +74,7 @@ class Access
      */
     public function generateLoginToken()
     {
-        return hash('sha256', microtime() . mt_rand());
+        return hash('sha256', microtime() . bin2hex(random_bytes(32)));
     }
 
     /**
