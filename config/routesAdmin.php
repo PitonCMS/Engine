@@ -55,7 +55,7 @@ $app->group('/admin', function () {
         })->setName('choosePageLayout');
 
         // Edit or add new page. Must provide ID or page layout argument
-        $this->get('/edit/{id}', function ($args) {
+        $this->get('/edit/{id:[0-9]+|.+\.json}', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editPage');
 
@@ -117,7 +117,7 @@ $app->group('/admin', function () {
         })->setName('showCollections');
 
         // Create or edit collection
-        $this->get('/edit[/{id}]', function ($args) {
+        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminCollectionController($this))->editCollection($args);
         })->setName('editCollection');
 
@@ -134,7 +134,7 @@ $app->group('/admin', function () {
         })->add('csrfGuard')->setName('saveCollection');
 
         // Create or edit collection page
-        $this->get('/{collection:[0-9]+}/detail/edit/{id}', function ($args) {
+        $this->get('/{collection:[0-9]+}/detail/edit/{id:[0-9]+|.+\.json}', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editCollectionDetail');
     });
