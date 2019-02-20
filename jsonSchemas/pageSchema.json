@@ -3,7 +3,7 @@
     "$comment": "Page Template Definition",
     "type": "object",
     "properties": {
-        "templateTitle": {
+        "templateName": {
             "description": "Template name displayed in page editor",
             "type": "string"
         },
@@ -60,5 +60,5 @@
             "$ref": "jsonSchemas/settingsDefinitionSchema.json#/defintion"
         }
     },
-    "required": ["templateTitle","templateDescription","templateFile","templateType"]
+    "required": ["templateName","templateDescription","templateFile","templateType"]
 }

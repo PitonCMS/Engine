@@ -68,7 +68,7 @@ class AdminCollectionController extends AdminBaseController
                 continue;
             }
 
-            $layouts[$row['filename']] = $definition->templateTitle;
+            $layouts[$row['filename']] = $definition->templateName;
         }
 
         $collection->custom = $layouts;

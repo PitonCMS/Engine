@@ -9,7 +9,7 @@
       <ul>
           {% for template in page.templates %}
           <li>
-              <a href="{{ pathFor('editPage', {'id': template.filename}) }}" title="{{ template.description }}">{{ template.title }}</a>
+              <a href="{{ pathFor('editPage', {'id': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a>
           </li>
           {% endfor %}
       </ul>

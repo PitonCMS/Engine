@@ -3,11 +3,11 @@
 {% import '@admin/editSettingInputMacro.html' as settingForm %}
 
 {% block htmlTitle %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateTitle) }} -
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateName) }} -
 {% endblock %}
 
 {% block headText %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateTitle) }}
+{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
 {% block leadText page.json.templateDescription %}

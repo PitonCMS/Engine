@@ -41,7 +41,7 @@ class AdminPageController extends AdminBaseController
 
             $templates[] = [
                 'filename' => $row['filename'],
-                'title' => $definition->templateTitle,
+                'name' => $definition->templateName,
                 'description' => $definition->templateDescription
             ];
         }
