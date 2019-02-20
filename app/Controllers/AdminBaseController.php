@@ -64,7 +64,7 @@ class AdminBaseController extends BaseController
     /**
      * Merge Saved Settings with JSON Settings
      *
-     * Merge saved settings with fields from page JSON definition file
+     * Merge saved settings with those from page JSON definition file
      * @param  array  $settings     Saved settings array
      * @param  array  $jsonSettings Defined settings in JSON definition file
      * @param  string $scope        page | theme
