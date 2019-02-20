@@ -16,23 +16,22 @@ use Exception;
 class AdminPageController extends AdminBaseController
 {
     /**
-     * Choose Page Layout
+     * Choose Page Template
      *
-     * Select a page layout for new page
+     * Select page template for new page
      */
-    public function chooseLayout()
+    public function chooseTemplate()
     {
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
 
         $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
-        $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
+        $templates = [];
 
-        $layouts = [];
-        foreach ($layoutFiles as $row) {
-            // Get definition files to screen out collection types
+        foreach ($toolbox->getDirectoryFiles($jsonPath) as $row) {
+            // Get definition files and filter out collection types
             if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
-                $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
+                $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
                 break;
             }
 
@@ -40,10 +39,14 @@ class AdminPageController extends AdminBaseController
                 continue;
             }
 
-            $layouts[$row['filename']] = $row['readname'];
+            $templates[] = [
+                'filename' => $row['filename'],
+                'title' => $definition->templateTitle,
+                'description' => $definition->templateDescription
+            ];
         }
 
-        return $this->render('choosePageLayout.html', ['layouts' => $layouts]);
+        return $this->render('choosePageTemplate.html', ['templates' => $templates]);
     }
 
     /**

@@ -49,10 +49,10 @@ $app->group('/admin', function () {
             return (new AdminPageController($this))->showPages();
         })->setName('showPages');
 
-        // Selete Page Layout
+        // Selete Page Template
         $this->get('/choose', function ($args) {
-            return (new AdminPageController($this))->chooseLayout();
-        })->setName('choosePageLayout');
+            return (new AdminPageController($this))->chooseTemplate();
+        })->setName('choosePageTemplate');
 
         // Edit or add new page. Must provide ID or page layout argument
         $this->get('/edit/{id:[0-9]+|.+\.json}', function ($args) {
