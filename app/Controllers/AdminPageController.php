@@ -255,7 +255,7 @@ class AdminPageController extends AdminBaseController
      * Renders new element form with initial values, and returns via Ajax to browser.
      * At a minimum, the element form is expecting these values:
      * - blockKey
-     * - elementType
+     * - elementTypeDefault
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
      */
@@ -273,7 +273,7 @@ class AdminPageController extends AdminBaseController
         }
 
         $template = '{% import "@admin/editElementMacro.html" as form %}';
-        $template .= " {{ form.elementForm(element, element.block_key, element.elementTypeOptions) }}";
+        $template .= ' {{ form.elementForm(element, element.block_key, element.elementTypeOptions) }}';
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
         // Set the response type

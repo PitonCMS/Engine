@@ -39,8 +39,8 @@
                         "description": "Block description displayed in page editor",
                         "type": "string"
                     },
-                    "elementType": {
-                        "description": "Default element type: key word",
+                    "elementTypeDefault": {
+                        "description": "Default element type",
                         "type": "string",
                         "enum": ["","text","image","video","hero","collection","gallery"]
                     },

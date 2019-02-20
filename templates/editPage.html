@@ -80,7 +80,7 @@
         <h2>{{ block.name }} Block</h2>
         <p class="lead">{{ block.description }}</p>
 
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementType }}" data-element-type-options="{{ block.elementTypeOptions|join(',') }}">Add Element</button>
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementTypeDefault }}" data-element-type-options="{{ block.elementTypeOptions|join(',') }}">Add Element</button>
         <hr>
 
         {% for element in page.elements if element.block_key == block.key %}
