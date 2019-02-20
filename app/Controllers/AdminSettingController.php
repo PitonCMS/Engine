@@ -37,7 +37,7 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Merge saved settings with theme settings
-        $allSettings = $this->mergeSettingsWithJsonFields($allSettings, $themeSettings->settings, 'theme');
+        $allSettings = $this->mergeSettingsWithJsonSettings($allSettings, $themeSettings->settings, 'theme');
 
         return $this->render('editSettings.html', $allSettings);
     }

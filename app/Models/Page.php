@@ -16,6 +16,18 @@ use Piton\ORM\DomainObject;
 class Page extends DomainObject
 {
     /**
+     * Elements Array
+     * @var array
+     */
+    public $elements = [];
+
+    /**
+     * Page Settings Array
+     * @var array
+     */
+    public $settings = [];
+
+    /**
      * Get Published Status
      *
      * @param void

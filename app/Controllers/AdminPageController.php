@@ -64,13 +64,6 @@ class AdminPageController extends AdminBaseController
         // Fetch pages
         $pages = $Page->findPages(true);
 
-        // Fetch all block elements for each page
-        if ($pages) {
-            foreach ($pages as $key => $row) {
-                $pages[$key]->blocks = $this->buildElementsByBlock($PageElement->findElementsByPageId($row->id));
-            }
-        }
-
         return $this->render('pages.html', $pages);
     }
 
@@ -93,12 +86,11 @@ class AdminPageController extends AdminBaseController
         if (is_numeric($args['id'])) {
             $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
-            $page->fields = $pageSettingMapper->findPageSettings($args['id']);
+            $page->settings = $pageSettingMapper->findPageSettings($args['id']);
         } elseif (is_string($args['id'])) {
-            // New page
+            // New page object
             $page = $pageMapper->make();
             $page->definition = $args['id'];
-            $page->fields = [];
         }
 
         // If this page is for a collection, get collection record
@@ -109,12 +101,12 @@ class AdminPageController extends AdminBaseController
         // Path to JSON definition file
         $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/{$page->definition}";
         if (null === $page->json = $json->getJson($jsonPath, 'page')) {
-            $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
+            $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
         }
 
-        // Merge saved fields with fields from JSON definition
-        if (!empty($page->json->settings)) {
-            $page->fields = $this->mergeSettingsWithJsonFields($page->fields, $page->json->settings, 'page');
+        // Merge saved page settnigs with settings from page JSON definition
+        if (isset($page->json->settings)) {
+            $page->settings = $this->mergeSettingsWithJsonSettings($page->settings, $page->json->settings, 'page');
         }
 
         return $this->render('editPage.html', $page);

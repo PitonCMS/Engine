@@ -26,7 +26,6 @@ class FrontController extends FrontBaseController
         $mapper = $this->container->dataMapper;
         $pageMapper = $mapper('PageMapper');
         $pageElementMapper = $mapper('PageElementMapper');
-        $collectionMapper = $mapper('CollectionMapper');
         $pageSettingMapper = $mapper('PageSettingMapper');
 
         if (isset($args['slug2'])) {
@@ -45,8 +44,8 @@ class FrontController extends FrontBaseController
         // Get elements
         $page->blocks = $this->buildElementsByBlock($pageElementMapper->findElementsByPageId($page->id));
 
-        // Get custom fields
-        $page->fields = $this->buildFields($pageSettingMapper->findPageSettings($page->id));
+        // Get page settings
+        $page->settings = $this->buildPageSettings($pageSettingMapper->findPageSettings($page->id));
 
         return $this->render($page->template, $page);
     }

@@ -62,53 +62,48 @@ class AdminBaseController extends BaseController
     }
 
     /**
-     * Merge Settings with JSON Fields
+     * Merge Saved Settings with JSON Settings
      *
-     * Merge saved settings with fields from JSON page definition file
-     * @param
-     * @return
+     * Merge saved settings with fields from page JSON definition file
+     * @param  array  $settings     Saved settings array
+     * @param  array  $jsonSettings Defined settings in JSON definition file
+     * @param  string $scope        page | theme
+     * @return array
      */
-    public function mergeSettingsWithJsonFields($settings, $jsonFields, $scope)
+    public function mergeSettingsWithJsonSettings(array $settings, array $jsonSettings, string $scope)
     {
         $mapper = $this->container->dataMapper;
         $settingMapper = $mapper('SettingMapper');
         $pageSettingMapper = $mapper('PageSettingMapper');
 
-        if (empty($jsonFields)) {
-            return $settings;
-        }
-
+        // Validate that we have a valid scope
         if (!in_array($scope, ['page','theme'])) {
             throw new Exception('Invalid $scope paramter');
         }
 
-        // Determine whether this is for a page or global theme
-        $themeSettingFlag = ($scope === 'theme') ? true : false;
-
-        // Create union of settings from DB and from JSON file by matching keys
+        // Update settings from DB with details from JSON file by matching keys
         foreach ($settings as $settingIndex => $setting) {
-            // Skip ahead if not in scope
-            if ($themeSettingFlag && $setting->category !== 'theme') {
+            // Skip ahead if this is a site setting but not a theme setting
+            if (isset($setting->category) && $setting->category !== 'theme') {
                 continue;
             }
 
-            // Now see if we have a field setting from JSON that matches one in the DB
-            foreach ($jsonFields as $fieldIndex => $field) {
-                if ($setting->setting_key === $field->key) {
-                    // There is a match on setting key so update display properties
-                    // use JSON definition as the master reference
-                    $setting->sort_order = isset($field->sort) ? $field->sort : null;
-                    $setting->label = $field->label;
-                    $setting->input_type = $field->inputType;
-                    $setting->help = $field->help;
+            // Now see if we have a matching JSON setting definition
+            foreach ($jsonSettings as $jsonIndex => $jsonSetting) {
+                if ($setting->setting_key === $jsonSetting->key) {
+                    // Update display properties using JSON definition as the master reference
+                    $setting->sort_order = isset($jsonSetting->sort) ? $jsonSetting->sort : null;
+                    $setting->label = $jsonSetting->label;
+                    $setting->input_type = $jsonSetting->inputType;
+                    $setting->help = $jsonSetting->help;
 
                     // Include select options array
-                    if ($field->inputType === 'select') {
-                        $setting->options = $this->createOptionsArray($field->options);
+                    if ($jsonSetting->inputType === 'select') {
+                        $setting->options = $this->createOptionsArray($jsonSetting->options);
                     }
 
-                    // Unset field setting and skip to the next outer loop iteration
-                    unset($jsonFields[$fieldIndex]);
+                    // Unset this JSOn setting and skip to the next outer loop iteration
+                    unset($jsonSettings[$jsonIndex]);
                     continue 2;
                 }
             }
@@ -117,26 +112,28 @@ class AdminBaseController extends BaseController
             $settings[$settingIndex]->orphaned = true;
 
             if ($settings[$settingIndex]->input_type = 'select') {
-                // For key readability purposes, change orphaned selects to inputs
+                // For readability purposes, change orphaned selects to inputs
                 $settings[$settingIndex]->input_type = 'input';
             }
         }
 
-        // Any remaining fields are new and have not yet been saved to the DB
+        // Any remaining JSON settings are new and have not yet been saved to the DB
         // Append these to the settings array
-        foreach ($jsonFields as $setting) {
+        foreach ($jsonSettings as $setting) {
             // Create setting object
-            $newSetting = $settingMapper->make();
+            if ($scope === 'theme') {
+                $newSetting = $settingMapper->make();
+                $newSetting->category = 'theme';
+            } else {
+                $newSetting = $pageSettingMapper->make();
+            }
+
+            $newSetting->sort_order = $setting->sort;
             $newSetting->setting_key = $setting->key;
             $newSetting->setting_value = isset($setting->value) ? $setting->value : null;
             $newSetting->input_type = $setting->inputType;
             $newSetting->label = $setting->label;
             $newSetting->help = $setting->help;
-
-            if ($themeSettingFlag) {
-                $newSetting->category = 'theme';
-                $newSetting->sort_order = $setting->sort;
-            }
 
             // Include select options
             if ($setting->inputType === 'select') {
@@ -157,11 +154,11 @@ class AdminBaseController extends BaseController
      * @param  array $options
      * @return array          Associative array [$value] = $name
      */
-    protected function createOptionsArray($options)
+    protected function createOptionsArray(array $options)
     {
         $newArray = [];
-        foreach ($options as $row) {
-            $newArray[$row->value] = ($row->name) ?: $row->value;
+        foreach ($options as $option) {
+            $newArray[$option->value] = ($option->name) ?: $option->value;
         }
 
         return $newArray;

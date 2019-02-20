@@ -61,13 +61,17 @@
 
       <hr>
 
-      {% for field in page.fields %}
-        {% if field.input_type == 'select' %}
-          {{ settingForm.selectHtml(field, field.options) }}
-        {% elseif field.input_type == 'textarea' %}
-          {{ settingForm.textareaHtml(field) }}
+      {% if page.settings %}
+      <h5>Page Settings</h5>
+      {% endif %}
+
+      {% for setting in page.settings %}
+        {% if setting.input_type == 'select' %}
+          {{ settingForm.selectHtml(setting, setting.options) }}
+        {% elseif setting.input_type == 'textarea' %}
+          {{ settingForm.textareaHtml(setting) }}
         {% else %}
-          {{ settingForm.inputHtml(field) }}
+          {{ settingForm.inputHtml(setting) }}
         {% endif %}
       {% endfor %}
 

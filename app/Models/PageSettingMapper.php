@@ -26,8 +26,8 @@ class PageSettingMapper extends DataMapperAbstract
      * Find Page Settings
      *
      * Get page level settings
-     * @param  int $pageId  Page ID
-     * @return mixed        Array | null
+     * @param  int   $pageId  Page ID
+     * @return mixed          Array | null
      */
     public function findPageSettings($pageId)
     {
@@ -41,8 +41,8 @@ class PageSettingMapper extends DataMapperAbstract
     /**
      * Delete Page Settings
      *
-     * @param
-     * @return
+     * @param  int  $pageId Page ID
+     * @return bool
      */
     public function deleteByPageId($pageId)
     {

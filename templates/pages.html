@@ -6,47 +6,34 @@
 
   <div class="row">
     <div class="col">
-<div class="card-wrapper">
-    {% for p in page %}
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="card-title">{{ p.title }}
-          {% if p.getPublishedStatus() == 'draft' %}
-          <span class="badge badge-secondary" title="Not published">Draft</span>
-          {% elseif p.getPublishedStatus() == 'pending' %}
-          <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date('m/d/Y') }}">Pending</span>
-          {% elseif p.getPublishedStatus() == 'published' %}
-          <span class="badge badge-success" title="Published on {{ p.published_date|date('m/d/Y') }}">Published</span>
-          {% endif %}
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted">URL: <i>/{{ p.slug }}</i></h6>
-        <h6 class="card-subtitle mb-2 text-muted">Layout: <i>{{ p.layout }}</i></h6>
-        <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
-      </div>
-      <div class="card-body">
-        <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
+      <div class="card-wrapper">
+
+      {% for p in page %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title">{{ p.title }}
+            {% if p.getPublishedStatus() == 'draft' %}
+            <span class="badge badge-secondary" title="Not published">Draft</span>
+            {% elseif p.getPublishedStatus() == 'pending' %}
+            <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date }}">Pending</span>
+            {% elseif p.getPublishedStatus() == 'published' %}
+            <span class="badge badge-success" title="Published on {{ p.published_date|date }}">Published</span>
+            {% endif %}
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted">URL: <code>/{{ p.slug }}</code></h6>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
+          <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
+        </div>
       </div>
 
-      <ul class="list-group list-group-flush">
-        {% for key, s in p.blocks %}
-          <li class="list-group-item">
-            {{ key }}
-            <ul>
-            {% for e in s %}
-              <li>{{ e.title }} <small>({{ e.element_type }})</small></li>
-            {% endfor %}
-            </ul>
-          </li>
-        {% endfor %}
-      </ul>
+      {% else %}
+      <strong>No pages found</strong>
+      {% endfor %}
 
+      </div>
     </div>
-    {% else %}
-    <strong>No pages found</strong>
-    {% endfor %}
-</div>
-
   </div>
-</div>
 
 {% endblock body %}
