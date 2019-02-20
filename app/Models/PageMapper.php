@@ -59,15 +59,15 @@ class PageMapper extends DataMapperAbstract
      *
      * Finds all pages, does not include element data
      * Does not include collections
-     * @param  bool  $published Filter on published pages
-     * @return mixed            Array | null
+     * @param  bool  $unpublished Filter on published pages
+     * @return mixed                     Array | null
      */
-    public function findPages($published = true)
+    public function findPages($unpublished = false)
     {
         $this->makeSelect();
         $this->sql .= " and collection_id is null";
 
-        if ($published) {
+        if (!$unpublished) {
             $this->sql .= " and published_date <= '{$this->today()}'";
         }
 

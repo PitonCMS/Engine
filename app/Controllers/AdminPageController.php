@@ -62,7 +62,7 @@ class AdminPageController extends AdminBaseController
         $PageElement = $mapper('PageElementMapper');
 
         // Fetch pages
-        $pages = $Page->findPages(false);
+        $pages = $Page->findPages(true);
 
         // Fetch all block elements for each page
         if ($pages) {
