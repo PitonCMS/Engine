@@ -25,6 +25,7 @@
 
 {% block formBody %}
 
+      {# Page Standard Fields #}
       <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
@@ -61,20 +62,22 @@
 
       <hr>
 
+      {# Page Custom Settings #}
       {% if page.settings %}
       <h5>Page Settings</h5>
+
+        {% for setting in page.settings %}
+          {% if setting.input_type == 'select' %}
+            {{ settingForm.selectHtml(setting, setting.options) }}
+          {% elseif setting.input_type == 'textarea' %}
+            {{ settingForm.textareaHtml(setting) }}
+          {% else %}
+            {{ settingForm.inputHtml(setting) }}
+          {% endif %}
+        {% endfor %}
       {% endif %}
 
-      {% for setting in page.settings %}
-        {% if setting.input_type == 'select' %}
-          {{ settingForm.selectHtml(setting, setting.options) }}
-        {% elseif setting.input_type == 'textarea' %}
-          {{ settingForm.textareaHtml(setting) }}
-        {% else %}
-          {{ settingForm.inputHtml(setting) }}
-        {% endif %}
-      {% endfor %}
-
+      {# Page Blocks and Elements #}
       {% for block in page.json.blocks %}
       <div class="p-2 mb-2 jsBlockParent border" id="page-block-{{ block.key }}">
         <h2>{{ block.name }} Block</h2>
@@ -86,7 +89,7 @@
         {% for element in page.elements if element.block_key == block.key %}
           {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
         {% else %}
-          <h5>Click "Add Element" to build this block.</h5>
+          <h5>Click "Add Element" to add content to this block.</h5>
         {% endfor %}
       </div>
       {% endfor %}

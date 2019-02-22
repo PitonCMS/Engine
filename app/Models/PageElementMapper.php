@@ -20,7 +20,7 @@ class PageElementMapper extends DataMapperAbstract
         'page_id',
         'block_key',
         'template',
-        'element_type',
+        'definition',
         'element_sort',
         'title',
         'content_raw',

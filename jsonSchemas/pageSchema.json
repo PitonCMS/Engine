@@ -41,15 +41,13 @@
                     },
                     "elementTypeDefault": {
                         "description": "Default element type",
-                        "type": "string",
-                        "enum": ["","text","image","video","hero","collection","gallery"]
+                        "type": "string"
                     },
                     "elementTypeOptions": {
                         "description": "List of allowable element types",
                         "type": "array",
                         "items": {
-                            "type": "string",
-                            "enum": ["text","image","video","hero","collection","gallery"]
+                            "type": "string"
                         }
                     }
                 },

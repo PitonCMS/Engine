@@ -128,7 +128,7 @@ class AdminBaseController extends BaseController
                 $newSetting = $pageSettingMapper->make();
             }
 
-            $newSetting->sort_order = $setting->sort;
+            $newSetting->sort_order = isset($setting->sort) ? $setting->sort : 1;
             $newSetting->setting_key = $setting->key;
             $newSetting->setting_value = isset($setting->value) ? $setting->value : null;
             $newSetting->input_type = $setting->inputType;

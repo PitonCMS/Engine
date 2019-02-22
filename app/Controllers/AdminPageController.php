@@ -121,16 +121,15 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
-        $CollectionMapper = $mapper('CollectionMapper');
-        $PageSettingMapper = $mapper('PageSettingMapper');
-        $Markdown = $this->container->markdownParser;
+        $pageMapper = $mapper('PageMapper');
+        $pageElementMapper = $mapper('PageElementMapper');
+        $pageSettingMapper = $mapper('PageSettingMapper');
+        $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
 
         // Create page object and populate POST data
-        $page = $PageMapper->make();
+        $page = $pageMapper->make();
         $page->id = $this->request->getParsedBodyParam('id');
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
         $page->definition = $this->request->getParsedBodyParam('definition');
@@ -142,73 +141,65 @@ class AdminPageController extends AdminBaseController
         $page->image_path = $this->request->getParsedBodyParam('image_path');
 
         // Process published date
-        $page->published_date = ($this->request->getParsedBodyParam('published_date')) ?: '';
-        if (!empty($page->published_date)) {
+        $publishedDate = $this->request->getParsedBodyParam('published_date');
+        if (!empty($publishedDate)) {
         /*
         @link: http://php.net/strtotime
         Dates in the m/d/y or d-m-y formats are disambiguated by looking at the separator between the various
         components: if the separator is a slash (/), then the American m/d/y is assumed; whereas if the separator
         is a dash (-) or a dot (.), then the European d-m-y format is assumed.
         */
-            $publishedDate = strtotime($page->published_date);
+            $publishedDate = strtotime($publishedDate);
             $page->published_date = date('Y-m-d', $publishedDate);
         }
 
         // Save Page and get ID
-        $page = $PageMapper->save($page);
+        $page = $pageMapper->save($page);
 
-        // Save any custom field setting inputs
+        // Save any custom page settings
         if ($this->request->getParsedBodyParam('setting_id')) {
-            foreach ($this->request->getParsedBodyParam('setting_id') as $fieldKey => $field) {
-                $setting = $PageSettingMapper->make();
-                $setting->id = $this->request->getParsedBodyParam('setting_id')[$fieldKey];
+            foreach ($this->request->getParsedBodyParam('setting_id') as $settingKey => $settingValue) {
+                $setting = $pageSettingMapper->make();
+                $setting->id = $this->request->getParsedBodyParam('setting_id')[$settingKey];
                 $setting->page_id = $page->id;
-                $setting->scope = 'page';
-                $setting->category = 'page';
-                $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$fieldKey];
-                $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$fieldKey];
+                $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$settingKey];
+                $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$settingKey];
 
-                $PageSettingMapper->save($setting);
+                $pageSettingMapper->save($setting);
             }
         }
 
-        // Save page block elements
+        // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
             // Save element
-            $pageElement = $PageElementMapper->make();
+            $pageElement = $pageElementMapper->make();
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
             $pageElement->page_id = $page->id;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
-            $pageElement->template = $this->request->getParsedBodyParam('element_type')[$key] . '.html';
-            $pageElement->element_type = $this->request->getParsedBodyParam('element_type')[$key];
+            $pageElement->definition = $this->request->getParsedBodyParam('element_type')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
-            $pageElement->content = $Markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('element_image_path')[$key];
             $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
 
-            // If a custom element type was selected, get the JSON definition file
-            if (preg_match('/.+\.json$/', ($this->request->getParsedBodyParam('element_type')[$key]))) {
-                $customType = $this->request->getParsedBodyParam('element_type')[$key];
+            // Get the elementTemplateFile from element JSON file
+            $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$pageElement->definition}";
 
-                // Get element definition file
-                $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$customType}";
-
-                if (null === $definition = $json->getJson($jsonPath, 'element')) {
-                    throw new Exception('Element definition error: ' . print_r($json->getErrorMessages(), true));
-                }
-
-                $pageElement->template = $definition->elementTemplateFile;
+            if (null === $elementDefinition = $json->getJson($jsonPath, 'element')) {
+                throw new Exception('Element JSON Definition Error: ' . print_r($json->getErrorMessages(), true));
             }
 
-            $pageElement = $PageElementMapper->save($pageElement);
+            $pageElement->template = $elementDefinition->elementTemplateFile;
+
+            $pageElement = $pageElementMapper->save($pageElement);
         }
 
-        // Determine redirect based on whether this is a collection
+        // Determine redirect path based on whether this is a collection
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
             $redirectPath = 'showCollections';
         } else {
@@ -264,7 +255,7 @@ class AdminPageController extends AdminBaseController
         $parsedBody = $this->request->getParsedBody();
 
         $form['block_key'] = $parsedBody['blockKey'];
-        $form['element_type'] = $parsedBody['elementType'];
+        $form['definition'] = $parsedBody['elementType'];
         $form['element_sort'] = 1;
 
         // Only include element type options if the string is not empty

@@ -3,19 +3,19 @@
     "$comment": "Custom Element Definition",
     "type": "object",
     "properties": {
-        "elementTitle": {
-            "description": "Element type name displayed in page editor",
+        "elementName": {
+            "description": "Element name displayed in page editor",
             "type": "string"
         },
         "elementTemplateFile": {
             "description": "The template page HTML file. Relative path from templates/elements/",
             "type": "string"
         },
-        "inputTypeOption": {
-            "description": "Element type.",
+        "enableInput": {
+            "description": "What additional input to enable for this element",
             "type": "string",
-            "enum": ["collection","video","image","text"]
+            "enum": ["collection","video","image"]
         }
     },
-    "required": ["elementTitle","elementTemplateFile","inputTypeOption"]
+    "required": ["elementName","elementTemplateFile"]
 }

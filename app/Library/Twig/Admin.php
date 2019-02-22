@@ -21,11 +21,11 @@ class Admin extends Base
 {
 
     /**
-     * Custom Elements Cache
+     * Elements Cache
      * For multiple calls on getCustomElements()
      * @var array
      */
-    protected $customElements;
+    protected $elementOptions;
 
     /**
      * Constructor
@@ -58,7 +58,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
-            new \Twig_SimpleFunction('getCustomElements', [$this, 'getCustomElements']),
+            new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
         ]);
     }
 
@@ -172,33 +172,34 @@ class Admin extends Base
     }
 
     /**
-     * Get Custom Elements
+     * Get Elements
      *
      * @param  void
      * @return array
      */
-    public function getCustomElements()
+    public function getElements()
     {
         // Get dependencies
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
 
-        if (isset($this->customElements)) {
-            return $this->customElements;
+        if (isset($this->elementOptions)) {
+            return $this->elementOptions;
         }
 
         // Get all JSON files in directory
         $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/";
-        $files = $toolbox->getDirectoryFiles($jsonPath);
+        $elements = [];
 
-        foreach ($files as $key => $file) {
+        foreach ($toolbox->getDirectoryFiles($jsonPath) as $key => $file) {
             if (null === $definition = $json->getJson($jsonPath . $file['filename'], 'element')) {
-                throw new Exception('Element definition error: ' . print_r($json->getErrorMessages(), true));
+                throw new Exception('Element JSON definition error: ' . print_r($json->getErrorMessages(), true));
             } else {
-                $files[$key]['json'] = $definition;
+                $definition->filename = $file['filename'];
+                $elements[] = $definition;
             }
         }
 
-        return $this->customElements = $files;
+        return $this->elementOptions = $elements;
     }
 }
