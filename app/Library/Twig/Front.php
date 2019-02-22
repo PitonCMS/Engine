@@ -46,6 +46,7 @@ class Front extends Base
     {
         return array_merge(parent::getFunctions(), [
             new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
+            new \Twig_SimpleFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
         ]);
@@ -63,10 +64,32 @@ class Front extends Base
     }
 
     /**
+     * Get All Block Elements HTML
+     *
+     * Gets all all Element's HTML within a Block, rendered with data
+     * @param  array $block Array of Elements within a Block
+     * @return string        HTML
+     */
+    public function getBlockElementsHtml($block)
+    {
+        if (empty($block)) {
+            return '';
+        }
+
+        $blockHtml = '';
+        foreach ($block as $element) {
+            $blockHtml .= $this->getElementHtml($element) . PHP_EOL;
+        }
+
+        return $blockHtml;
+    }
+
+    /**
      * Get HTML Element
      *
-     * @param array $element Element values
-     * @return string HTML
+     * Gets Element HTML fragments rendered with data
+     * @param  array  $element Element values
+     * @return string          HTML
      */
     public function getElementHtml($element)
     {
