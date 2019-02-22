@@ -22,8 +22,8 @@ class PitonInstall
      */
     protected static function getProjectDir()
     {
-        // This class if 5 levels deep
-        return basename(dirname(__DIR__, 5));
+        // This class if 6 levels deep from project root
+        return basename(dirname(__DIR__, 6));
     }
 
     /**
