@@ -15,6 +15,17 @@ use Composer\Script\Event;
  */
 class PitonInstall
 {
+
+    /**
+     * Get Project Directory
+     *
+     */
+    protected static function getProjectDir()
+    {
+        // This class if 5 levels deep
+        return basename(dirname(__DIR__, 5));
+    }
+
     /**
      * Update Docker Yaml
      *
@@ -25,9 +36,7 @@ class PitonInstall
     public static function updateDockerYaml(Event $event)
     {
         // Get project directory name
-        $package = $event->getOperation()->getPackage();
-        $installationManager = $event->getComposer()->getInstallationManager();
-        $projectDir = $installationManager->getInstallPath($package);
+        $projectDir = self::getProjectDir();
 
         $content = <<<TEXT
 version: '3'
@@ -72,9 +81,7 @@ TEXT;
     public static function updateApacheHost(Event $event)
     {
         // Get project directory name
-        $package = $event->getOperation()->getPackage();
-        $installationManager = $event->getComposer()->getInstallationManager();
-        $projectDir = $installationManager->getInstallPath($package);
+        $projectDir = self::getProjectDir();
 
         $content = <<<TEXT
 <VirtualHost *:80>
