@@ -8,7 +8,7 @@
  */
 namespace Piton\Library\Utilities;
 
-use Composer\Installer\PackageEvent;
+use Composer\Installer\Event;
 
 /**
  * Piton Installer Scripts
@@ -22,7 +22,7 @@ class PitonInstall
      * @param  object $event Composer\Script\Event
      * @return void
      */
-    public static function updateDockerYaml(PackageEvent $event)
+    public static function updateDockerYaml(Event $event)
     {
         // Get project directory name
         $package = $event->getOperation()->getPackage();
@@ -69,7 +69,7 @@ TEXT;
      * @param  object $event Composer\Script\Event
      * @return void
      */
-    public static function updateApacheHost(PackageEvent $event)
+    public static function updateApacheHost(Event $event)
     {
         // Get project directory name
         $package = $event->getOperation()->getPackage();
