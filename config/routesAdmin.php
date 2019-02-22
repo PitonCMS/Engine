@@ -98,14 +98,6 @@ $app->group('/admin', function () {
         $this->post('/save', function ($args) {
             return (new AdminSettingController($this))->saveSettings();
         })->add('csrfGuard')->setName('saveSettings');
-
-        // Theme Settings
-        $this->group('/theme', function () {
-            // Delete Setting
-            $this->post('/delete', function ($args) {
-                return (new AdminSettingController($this))->deleteThemeSetting();
-            })->add('csrfGuard');
-        }); // End Theme Settings
     });
     // End settings
 

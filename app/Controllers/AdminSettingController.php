@@ -51,7 +51,7 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $SettingMapper = $mapper('SettingMapper');
+        $settingMapper = $mapper('SettingMapper');
         $json = $this->container->json;
 
         // Fetch theme settings
@@ -64,8 +64,15 @@ class AdminSettingController extends AdminBaseController
 
         // Save each setting
         foreach ($allSettings['setting_key'] as $key => $row) {
-            $setting = $SettingMapper->make();
+            $setting = $settingMapper->make();
             $setting->id = $allSettings['setting_id'][$key];
+
+            // Check for a theme setting delete
+            if (isset($allSettings['setting_delete'][$key])) {
+                $settingMapper->delete($setting);
+                continue;
+            }
+
             $setting->setting_value = $allSettings['setting_value'][$key];
 
             // If there is no ID, then this is a new theme setting to save
@@ -75,7 +82,6 @@ class AdminSettingController extends AdminBaseController
                 $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
 
                 // Populate the new theme setting and save
-                $setting->scope = 'global';
                 $setting->category = 'theme';
                 $setting->sort_order = $themeSettings[$jsonKey]->sort;
                 $setting->setting_key = $themeSettings[$jsonKey]->key;
@@ -84,36 +90,10 @@ class AdminSettingController extends AdminBaseController
                 $setting->help = $themeSettings[$jsonKey]->help;
             }
 
-            $SettingMapper->save($setting);
+            $settingMapper->save($setting);
         }
 
         // Redirect back to list of settings
         return $this->redirect('showSettings');
-    }
-
-    /**
-     * Delete Theme Setting
-     *
-     * XHR Request
-     */
-    public function deleteThemeSetting()
-    {
-        // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $SettingMapper = $mapper('SettingMapper');
-        $status = 'error';
-
-        if ($this->request->getParsedBodyParam('id')) {
-            $setting = $SettingMapper->make();
-            $setting->id = $this->request->getParsedBodyParam('id');
-            $SettingMapper->delete($setting);
-
-            $status = 'success';
-        }
-
-        // Set the response type
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $r->write(json_encode(["status" => $status]));
     }
 }
