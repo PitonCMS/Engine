@@ -2,3 +2,7 @@
 
 {% block headText 'PitonCMS' %}
 {% block leadText 'Content Management System' %}
+
+{% block body %}
+Current project: <code>{{ site.settings.projectDir }}</code>
+{% endblock body %}

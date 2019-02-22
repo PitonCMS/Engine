@@ -38,11 +38,23 @@ class Admin extends Base
     }
 
     /**
+     * Register Global variables
+     */
+    public function getGlobals()
+    {
+        return array_merge_recursive(parent::getGlobals(), [
+            'site' => [
+                'settings' => ['projectDir' => basename(ROOT_DIR)]
+            ]
+        ]);
+    }
+
+    /**
      * Register Custom Filters
      */
     public function getFilters()
     {
-        return array_merge(parent::getFilters(), [
+        return array_merge_recursive(parent::getFilters(), [
             // Custom filters
         ]);
     }
