@@ -161,6 +161,13 @@ class AdminPageController extends AdminBaseController
             foreach ($this->request->getParsedBodyParam('setting_id') as $settingKey => $settingValue) {
                 $setting = $pageSettingMapper->make();
                 $setting->id = $this->request->getParsedBodyParam('setting_id')[$settingKey];
+
+                // Check for a page setting delete
+                if (isset($this->request->getParsedBodyParam('setting_delete')[$settingKey])) {
+                    $pageSettingMapper->delete($setting);
+                    continue;
+                }
+
                 $setting->page_id = $page->id;
                 $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$settingKey];
                 $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$settingKey];

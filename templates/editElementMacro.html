@@ -8,14 +8,14 @@
 
 {% macro elementForm(element, blockKey, elementTypeOptions) %}
 
-  {% set arrayKey = uniqueKey() %}
+  {% set arrayKey = element.id ?? uniqueKey() %}
   {% set elementTypes = getElements() %}
   {% set enableInput = '' %}
   {% for e in elementTypes if e.filename == element.definition %}
     {% set enableInput = e.enableInput %}
   {% endfor %}
 
-<div class="card mb-2 jsElementParent" id="page-element-{{ element.id|default(arrayKey) }}">
+<div class="card mb-2 jsElementParent" id="page-element-{{ arrayKey }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
 	<input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
