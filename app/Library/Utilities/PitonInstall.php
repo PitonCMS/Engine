@@ -8,7 +8,7 @@
  */
 namespace Piton\Library\Utilities;
 
-use Composer\Installer\Event;
+use Composer\Script\Event;
 
 /**
  * Piton Installer Scripts
