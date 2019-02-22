@@ -185,7 +185,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
             $pageElement->image_path = $this->request->getParsedBodyParam('element_image_path')[$key];
-            $pageElement->video_path = $this->request->getParsedBodyParam('video_path')[$key];
+            $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
 
             // Get the elementTemplateFile from element JSON file
             $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$pageElement->definition}";

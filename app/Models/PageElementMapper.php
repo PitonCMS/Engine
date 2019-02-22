@@ -29,7 +29,7 @@ class PageElementMapper extends DataMapperAbstract
         'collection_id',
         'gallery_id',
         'image_path',
-        'video_path'
+        'embedded'
     ];
 
     /**

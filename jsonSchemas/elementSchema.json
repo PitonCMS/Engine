@@ -14,7 +14,7 @@
         "enableInput": {
             "description": "What additional input to enable for this element",
             "type": "string",
-            "enum": ["collection","video","image"]
+            "enum": ["collection","embedded","image"]
         }
     },
     "required": ["elementName","elementTemplateFile"]

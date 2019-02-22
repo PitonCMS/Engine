@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `collection_id` int NULL DEFAULT NULL,
   `gallery_id` int NULL DEFAULT NULL,
   `image_path` varchar(100) NULL DEFAULT NULL,
-  `video_path` varchar(1000) NULL DEFAULT NULL,
+  `embedded` varchar(1000) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
@@ -117,7 +117,7 @@ VALUES
   (3,NULL,'gallery','gallery.json','gallery.html','Gallery',NULL,'Gallery ','2018-12-29',1,'2018-12-29 14:12:38',1,'2019-01-11 14:45:49'),
   (4,NULL,'video','video.json','video.html','Video',NULL,'Video Layout Page','2019-01-10',1,'2019-01-11 14:27:16',1,'2019-01-11 14:53:08');
 
-INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `template`, `definition`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_id`, `gallery_id`, `image_path`, `video_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `template`, `definition`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_id`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,1,'aboveTheFoldHero','hero.html','hero.json',1,'Hero Image','<button>Call to Action!</button>','<button>Call to Action!</button>','Call to Action!',NULL,NULL,'https://unsplash.it/1920/500',NULL,1,'2018-12-22 11:32:10',1,'2018-12-29 13:28:25'),
   (2,1,'introBlock','text.html','text.json',1,'Main Body Text','Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\r\n\r\nhttps:// source.unsplash .com/random/1920x450','<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>\n<p>https:// source.unsplash .com/random/1920x450</p>','Sed ut perspiciatis unde omnis iste natus error sit',NULL,NULL,NULL,NULL,1,'2018-12-22 11:32:10',1,'2018-12-29 13:28:25'),
