@@ -4,5 +4,9 @@
 {% block leadText 'Content Management System' %}
 
 {% block body %}
-Current project: <code>{{ site.settings.projectDir }}</code>
+<p>
+    Current project: <code>{{ site.settings.projectDir }}</code><br>
+    PitonCMS Engine Version: <code>{{ page.pitonEngineVersion }}</code>
+    <a href="{{ pathFor('helpEngineRelease', {'release': page.pitonEngineVersion}) }}">Release Notes</a>
+</p>
 {% endblock body %}

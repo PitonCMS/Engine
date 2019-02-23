@@ -23,6 +23,13 @@ $app->group('/admin', function () {
         return (new AdminController($this))->home();
     })->setName('adminHome');
 
+    $this->group('/help', function () {
+        $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
+            return (new AdminController($this))->release($args);
+        })->setName('helpEngineRelease');
+    });
+    // End Help
+
     // User routes
     $this->group('/user', function () {
         // Show Users

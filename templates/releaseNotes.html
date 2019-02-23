@@ -1,0 +1,22 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block headText 'Release Notes' %}
+{% block leadText 'For PitonCMS Engine' %}
+
+{% block body %}
+    {% for rel in page.releases %}
+    <h3 id="rel-{{ rel.tag_name }}">{{ rel.name }}</h3>
+    <p class="lead">
+        Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
+        Published {{ rel.published_at|date }}
+    </p>
+    <p>{{ rel.body }}</p>
+    <hr>
+    {% endfor %}
+{% endblock body %}
+
+{% block footJs %}
+    let path = window.location.pathname;
+    let release = path.match(/\d+\.\d+\.\d+$/g);
+    if (release[0]) window.location.hash = "rel-" + release[0];
+{% endblock footJs %}
