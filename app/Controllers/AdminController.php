@@ -41,22 +41,28 @@ class AdminController extends AdminBaseController
     public function release($args)
     {
         $json = $this->container->json;
+        $releases = [];
 
-        // https://developer.github.com/v3/repos/releases
-        $releases = '';
-        $githubApi = 'https://api.github.com/repos/PitonCMS/Engine/releases';
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $githubApi,
-            CURLOPT_USERAGENT => $this->request->getHeaderLine('HTTP_USER_AGENT')
-        ]);
-        $releases = curl_exec($curl);
-        curl_close($curl);
+        // If curl is not installed display alert
+        if (!function_exists('curl_init')) {
+            $this->setAlert('warning', 'Required PHP cURL not installed');
+        } else {
+            // https://developer.github.com/v3/repos/releases
+            $releases = '';
+            $githubApi = 'https://api.github.com/repos/PitonCMS/Engine/releases';
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_URL => $githubApi,
+                CURLOPT_USERAGENT => $this->request->getHeaderLine('HTTP_USER_AGENT')
+            ]);
+            $releases = curl_exec($curl);
+            curl_close($curl);
 
-        // Verify that we have a response
-        if (!empty($releases)) {
-            $releases = json_decode($releases);
+            // Verify that we have a response
+            if (!empty($releases)) {
+                $releases = json_decode($releases);
+            }
         }
 
         return $this->render('releaseNotes.html', ['releases' => $releases]);
