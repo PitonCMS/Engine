@@ -22,29 +22,7 @@ class AdminPageController extends AdminBaseController
      */
     public function chooseTemplate()
     {
-        $toolbox = $this->container->toolbox;
-        $json = $this->container->json;
-
-        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
-        $templates = [];
-
-        foreach ($toolbox->getDirectoryFiles($jsonPath) as $row) {
-            // Get definition files and filter out collection types
-            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
-                $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
-                break;
-            }
-
-            if ($definition->templateType === 'collection') {
-                continue;
-            }
-
-            $templates[] = [
-                'filename' => $row['filename'],
-                'name' => $definition->templateName,
-                'description' => $definition->templateDescription
-            ];
-        }
+        $templates = $this->getPageTemplates('page');
 
         return $this->render('choosePageTemplate.html', ['templates' => $templates]);
     }
