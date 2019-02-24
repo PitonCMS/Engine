@@ -110,7 +110,7 @@ class LoadSiteSettings
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
         $key = array_search($url, array_column($this->pages, 'slug'));
 
-        if ($key) {
+        if (is_numeric($key)) {
             $this->pages[$key]->currentPage = true;
         }
 
