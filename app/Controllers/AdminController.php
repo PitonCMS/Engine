@@ -41,6 +41,7 @@ class AdminController extends AdminBaseController
     public function release($args)
     {
         $json = $this->container->json;
+        $markdown = $this->container->markdownParser;
         $responseBody = '';
 
         // If curl is not installed display alert
@@ -62,6 +63,10 @@ class AdminController extends AdminBaseController
             // Verify that we have a response
             if ($responseStatus == '200') {
                 $releases = json_decode($responseBody);
+                // Format Markdown
+                foreach ($releases as $key => $release) {
+                    $releases[$key]->body = $markdown->text($release->body);
+                }
             } else {
                 $releases = [];
                 $this->setAlert('warning', "$responseStatus Response From GitHub", $responseBody);
