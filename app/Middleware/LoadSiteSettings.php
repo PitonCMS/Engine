@@ -106,10 +106,11 @@ class LoadSiteSettings
 
         // Set flag on page for current request
         $url = $request->getUri()->getPath();
-        $url = ltrim($url, '/');
+        // Check if home page '/' to match slug name
+        $url = ($url === '/') ? 'home' : ltrim($url, '/');
         $key = array_search($url, array_column($this->pages, 'slug'));
 
-        if (!empty($key)) {
+        if ($key) {
             $this->pages[$key]->currentPage = true;
         }
 
