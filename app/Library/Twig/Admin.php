@@ -109,24 +109,19 @@ class Admin extends Base
      * Get Alert Messages
      *
      * Get alert data. Returns null if no alert found.
-     * @param array $context Page data
-     * @param string $key Alert keys: severity|heading|message
-     * @returns mixed array|string|null
+     * @param  array  $context Twig context, includes controller pageData array
+     * @param  string $key     Alert keys: severity|heading|message
+     * @return mixed           array|string|null
      */
     public function getAlert($context, $key = null)
     {
         $session = $this->container->sessionHandler;
 
         // Get alert notices from page context, or failing that then session flash data
-        $alert = null;
         $alert = (isset($context['alert'])) ? $context['alert'] : $session->getFlashData('alert');
 
         if ($key === null) {
             return $alert;
-        }
-
-        if ($key === 'message' && isset($alert['message'])) {
-            return '<ul><li>' . implode('</li><li>', $alert['message']) . '</li></ul>';
         }
 
         if (isset($alert[$key])) {

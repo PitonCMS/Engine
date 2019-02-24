@@ -41,14 +41,13 @@ class AdminController extends AdminBaseController
     public function release($args)
     {
         $json = $this->container->json;
-        $releases = [];
+        $responseBody = '';
 
         // If curl is not installed display alert
         if (!function_exists('curl_init')) {
             $this->setAlert('warning', 'Required PHP cURL not installed');
         } else {
             // https://developer.github.com/v3/repos/releases
-            $releases = '';
             $githubApi = 'https://api.github.com/repos/PitonCMS/Engine/releases';
             $curl = curl_init();
             curl_setopt_array($curl, [
@@ -56,12 +55,16 @@ class AdminController extends AdminBaseController
                 CURLOPT_URL => $githubApi,
                 CURLOPT_USERAGENT => $this->request->getHeaderLine('HTTP_USER_AGENT')
             ]);
-            $releases = curl_exec($curl);
+            $responseBody = curl_exec($curl);
+            $responseStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
 
             // Verify that we have a response
-            if (!empty($releases)) {
-                $releases = json_decode($releases);
+            if ($responseStatus == '200') {
+                $releases = json_decode($responseBody);
+            } else {
+                $releases = [];
+                $this->setAlert('warning', "$responseStatus Response From GitHub", $responseBody);
             }
         }
 

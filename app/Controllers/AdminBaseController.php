@@ -35,7 +35,7 @@ class AdminBaseController extends BaseController
      * Set alert using flash data to session
      * @param string $severity Severity level
      * @param string $heading  Heading text
-     * @param mixed  $messge   Message or array messages (Optional)
+     * @param mixed  $messge   Message or array of messages (Optional)
      * @return void
      */
     public function setAlert($severity, $heading, $message = null)
@@ -51,7 +51,7 @@ class AdminBaseController extends BaseController
         $alert = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => $message
+            'message' => (is_array($message)) ? implode(', ', $message) : $message
         ];
 
         // Alert data is made available in the template, or if $this->redirect() is called

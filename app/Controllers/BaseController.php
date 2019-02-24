@@ -82,10 +82,10 @@ class BaseController
      */
     protected function redirect($routeName, $args = [])
     {
-        // Save any alert messages in flash data
+        // Save any alert messages in session flash data
         if (isset($this->pageData['alert'])) {
-            $Session = $this->container->sessionHandler;
-            $Session->setFlashData('alert', $this->pageData['alert']);
+            $session = $this->container->sessionHandler;
+            $session->setFlashData('alert', $this->pageData['alert']);
         }
 
         return $this->response->withRedirect($this->container->router->pathFor($routeName, $args));
