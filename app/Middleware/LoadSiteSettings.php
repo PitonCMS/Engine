@@ -38,15 +38,17 @@ class LoadSiteSettings
     /**
      * Constructor
      *
-     * @param closure
-     * @param ArrayAccess
+     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
+     * @param  closure
+     * @param  ArrayAccess
+     * @return void
      */
-    public function __construct($dataMapper, $appSettings)
+    public function __construct($request, $dataMapper, $appSettings)
     {
         $this->dataMapper = $dataMapper;
         $this->appSettings = $appSettings;
         $this->loadSettings();
-        $this->loadPages();
+        $this->loadPages($request);
     }
 
     /**
@@ -84,24 +86,32 @@ class LoadSiteSettings
         $siteSettings = $SettingMapper->find();
 
         // Create new multi-dimensional array keyed by the setting category and key
-        foreach ($siteSettings as $row) {
-            $this->settings[$row->setting_key] = $row->setting_value;
-        }
+        $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
     }
 
     /**
      * Load pages from DB
      *
-     * @param none
+     * Sets currentPage = true flag on page record for current request
+     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
      * @return void
      */
-    public function loadPages()
+    public function loadPages($request)
     {
         $dataMapper = $this->dataMapper;
-        $PageMapper = $dataMapper('PageMapper');
+        $pageMapper = $dataMapper('pageMapper');
 
         // Fetch all published pages
-        $this->pages = $PageMapper->findPages();
+        $this->pages = $pageMapper->findPages();
+
+        // Set flag on page for current request
+        $url = $request->getUri()->getPath();
+        $url = ltrim($url, '/');
+        $key = array_search($url, array_column($this->pages, 'slug'));
+
+        if (!empty($key)) {
+            $this->pages[$key]->currentPage = true;
+        }
 
         return;
     }
