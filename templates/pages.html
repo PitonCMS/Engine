@@ -1,23 +1,40 @@
 {% extends '@admin/_adminBase.html' %}
 
-{% block headText 'All Pages' %}
+{% block headText 'Manage Pages' %}
 
 {% block body %}
+  <div class="row">
+    <div class="col">
+      <h3>Add New Page</h3>
+      {% if page.templates %}
+      <ul>
+        {% for template in page.templates %}
+        <li>
+          <a href="{{ pathFor('editPage', {'id': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a> {{ template.description }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h5>No Page JSON Definition Files Found</h5>
+      {% endif %}
+    </div>
+  </div>
 
   <div class="row">
     <div class="col">
+      <h3>Saved Pages</h3>
       <div class="card-wrapper">
 
-      {% for p in page %}
+      {% for p in page.pages %}
       <div class="card mb-4">
         <div class="card-header">
           <h5 class="card-title">{{ p.title }}
             {% if p.getPublishedStatus() == 'draft' %}
-            <span class="badge badge-secondary" title="Not published">Draft</span>
+              <span class="badge badge-secondary" title="Not published">Draft</span>
             {% elseif p.getPublishedStatus() == 'pending' %}
-            <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date }}">Pending</span>
+              <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date }}">Pending</span>
             {% elseif p.getPublishedStatus() == 'published' %}
-            <span class="badge badge-success" title="Published on {{ p.published_date|date }}">Published</span>
+              <span class="badge badge-success" title="Published on {{ p.published_date|date }}">Published</span>
             {% endif %}
           </h5>
           <h6 class="card-subtitle mb-2 text-muted">URL: <code>/{{ p.slug }}</code></h6>
@@ -29,11 +46,10 @@
       </div>
 
       {% else %}
-      <strong>No pages found</strong>
+      <strong>No Saved Pages Found</strong>
       {% endfor %}
 
       </div>
     </div>
   </div>
-
 {% endblock body %}

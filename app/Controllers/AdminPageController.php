@@ -16,21 +16,9 @@ use Exception;
 class AdminPageController extends AdminBaseController
 {
     /**
-     * Choose Page Template
-     *
-     * Select page template for new page
-     */
-    public function chooseTemplate()
-    {
-        $templates = $this->getPageTemplates('page');
-
-        return $this->render('choosePageTemplate.html', ['templates' => $templates]);
-    }
-
-    /**
      * Show Pages
      *
-     * Show all pages with blocks and elements
+     * Show all pages and page templates
      */
     public function showPages()
     {
@@ -39,10 +27,11 @@ class AdminPageController extends AdminBaseController
         $Page = $mapper('PageMapper');
         $PageElement = $mapper('PageElementMapper');
 
-        // Fetch pages
+        // Fetch pages & templates
         $pages = $Page->findPages(true);
+        $templates = $this->getPageTemplates('page');
 
-        return $this->render('pages.html', $pages);
+        return $this->render('pages.html', ['pages' => $pages, 'templates' => $templates]);
     }
 
     /**
