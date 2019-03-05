@@ -13,12 +13,12 @@
             <a class="nav-link" href="{{ pathFor('showPages') }}">Pages</a>
           </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Navigation</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/#">Navigations</a>
-              <a class="dropdown-item" href="/#">New Navigation</a>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ pathFor('showCollections') }}">Collections</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Navigation</a>
           </li>
 
           <li class="nav-item dropdown">
@@ -29,14 +29,6 @@
               <a class="dropdown-item" href="/#">Funny Cats</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/#">New Media Group</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms" data-toggle="dropdown">Collections</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ pathFor('showCollections') }}">Collections</a>
-              <a class="dropdown-item" href="{{ pathFor('editCollection') }}">New Collection</a>
             </div>
           </li>
 

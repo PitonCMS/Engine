@@ -107,7 +107,7 @@ $app->group('/admin', function () {
     $this->group('/collection', function () {
         // Show collections
         $this->get('[/]', function ($args) {
-            return (new AdminCollectionController($this))->showCollections();
+            return (new AdminPageController($this))->showCollections();
         })->setName('showCollections');
 
         // Create or edit collection

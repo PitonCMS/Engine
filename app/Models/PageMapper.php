@@ -139,15 +139,7 @@ class PageMapper extends DataMapperAbstract
 select c.id collection_id,
        c.title collection_title,
        c.slug collection_slug,
-       p.id,
-       p.title,
-       p.definition,
-       p.template,
-       p.sub_title,
-       p.slug,
-       p.meta_description,
-       p.published_date,
-       p.image_path
+       p.*
 from page p
 join collection c on p.collection_id = c.id
 where 1=1
