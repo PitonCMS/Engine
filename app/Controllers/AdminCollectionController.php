@@ -14,8 +14,9 @@ namespace Piton\Controllers;
 class AdminCollectionController extends AdminBaseController
 {
     /**
-     * Show Collections
+     * Show Collections and Collection Pages
      *
+     * Show all collection groups, collection templates, and collection pages
      */
     public function showCollections()
     {
@@ -24,9 +25,30 @@ class AdminCollectionController extends AdminBaseController
         $collectionMapper = $mapper('CollectionMapper');
         $pageMapper = $mapper('PageMapper');
 
-        // Fetch collections and page details
+        // Fetch collection pages, and chuck pages into sub-array by collection ID with meta info
+        $collectionPages = $pageMapper->findCollections();
+        foreach ($collectionPages as $col) {
+            if (!isset($data['collectionPages'][$col->collection_id])) {
+                $data['collectionPages'][$col->collection_id]['collection_id'] = $col->collection_id;
+                $data['collectionPages'][$col->collection_id]['collection_title'] = $col->collection_title;
+                $data['collectionPages'][$col->collection_id]['collection_slug'] = $col->collection_slug;
+            }
+
+            $data['collectionPages'][$col->collection_id]['pages'][] = $col;
+        }
+
+        // Get available templates and collection groups
+        $data['templates'] = $this->getPageTemplates('collection');
         $data['collections'] = $collectionMapper->find();
-        $data['collectionDetails'] = $pageMapper->findCollections();
+
+        // Enrich collections array with matching description from templates array
+        $templateArray = array_column($data['templates'], 'filename');
+        array_walk($data['collections'], function (&$collect) use ($data, $templateArray) {
+            // Find matching collection template key for reference in $templateArray
+            $key = array_search($collect->definition, $templateArray);
+            $collect->templateName = $data['templates'][$key]['name'];
+            $collect->templateDescription = $data['templates'][$key]['description'];
+        });
 
         return $this->render('collections.html', $data);
     }
@@ -45,33 +67,13 @@ class AdminCollectionController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Fetch collection group, or create new collection group
-        if (isset($args['id']) && is_numeric($args['id'])) {
+        if (is_numeric($args['id'])) {
             $collection = $collectionMapper->findById($args['id']);
-        } else {
-            // Create new collection
+        } elseif (is_string($args['id'])) {
+            // Create new collection and set template JSON file
             $collection = $collectionMapper->make();
+            $collection->definition = $args['id'];
         }
-
-        // Get custom collections
-        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
-        $layoutFiles = $toolbox->getDirectoryFiles($jsonPath);
-
-        $layouts = [];
-        foreach ($layoutFiles as $row) {
-            // Get definition files to screen out non-collection types
-            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
-                $this->setAlert('danger', 'Template Definition Error', $json->getErrorMessages());
-                break;
-            }
-
-            if ($definition->templateType !== 'collection') {
-                continue;
-            }
-
-            $layouts[$row['filename']] = $definition->templateName;
-        }
-
-        $collection->custom = $layouts;
 
         return $this->render('editCollection.html', $collection);
     }
@@ -79,16 +81,16 @@ class AdminCollectionController extends AdminBaseController
     /**
      * Save Collection
      *
-     * Create new collection, or update existing collection
+     * Save collection group information
      */
     public function saveCollection()
     {
-        // // Get dependencies
+        // Get dependencies
         $mapper = $this->container->dataMapper;
         $collectionMapper = $mapper('CollectionMapper');
         $toolbox = $this->container->toolbox;
 
-        // Create collection object and populate with POST data
+        // Create collection object and populate
         $collection = $collectionMapper->make();
         $collection->id = $this->request->getParsedBodyParam('id');
         $collection->title = $this->request->getParsedBodyParam('title');
@@ -103,7 +105,8 @@ class AdminCollectionController extends AdminBaseController
     /**
      * Delete Collection
      *
-     * Delete collection and details
+     * Delete collection group
+     * TODO Does not delete pages
      */
     public function deleteCollection()
     {

@@ -34,46 +34,6 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
-     * Show Collections
-     *
-     * Show all collections, collection templates, and collection pages
-     */
-    public function showCollections()
-    {
-        // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
-        $pageMapper = $mapper('PageMapper');
-
-        // Fetch collection pages, and chuck pages into sub-array by collection ID with meta info
-        $collectionPages = $pageMapper->findCollections();
-        foreach ($collectionPages as $col) {
-            if (!isset($data['collectionPages'][$col->collection_id])) {
-                $data['collectionPages'][$col->collection_id]['collection_id'] = $col->collection_id;
-                $data['collectionPages'][$col->collection_id]['collection_title'] = $col->collection_title;
-                $data['collectionPages'][$col->collection_id]['collection_slug'] = $col->collection_slug;
-            }
-
-            $data['collectionPages'][$col->collection_id]['pages'][] = $col;
-        }
-
-        // Get available templates and collection groups
-        $data['templates'] = $this->getPageTemplates('collection');
-        $data['collections'] = $collectionMapper->find();
-
-        // Enrich collections array with matching description from templates array
-        $templateArray = array_column($data['templates'], 'filename');
-        array_walk($data['collections'], function (&$collect) use ($data, $templateArray) {
-            // Find matching collection template key for reference in $templateArray
-            $key = array_search($collect->definition, $templateArray);
-            $collect->templateName = $data['templates'][$key]['name'];
-            $collect->templateDescription = $data['templates'][$key]['description'];
-        });
-
-        return $this->render('collections.html', $data);
-    }
-
-    /**
      * Edit Page
      *
      * Create new page, or edit existing page
