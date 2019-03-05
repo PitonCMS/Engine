@@ -24,31 +24,11 @@
     <div class="col">
       <h3>Saved Pages</h3>
       <div class="card-wrapper">
-
-      {% for p in page.pages %}
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="card-title">{{ p.title }}
-            {% if p.getPublishedStatus() == 'draft' %}
-              <span class="badge badge-secondary" title="Not published">Draft</span>
-            {% elseif p.getPublishedStatus() == 'pending' %}
-              <span class="badge badge-warning" title="Pending publish on {{ p.published_date|date }}">Pending</span>
-            {% elseif p.getPublishedStatus() == 'published' %}
-              <span class="badge badge-success" title="Published on {{ p.published_date|date }}">Published</span>
-            {% endif %}
-          </h5>
-          <h6 class="card-subtitle mb-2 text-muted">URL: <code>/{{ p.slug }}</code></h6>
-        </div>
-        <div class="card-body">
-          <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
-          <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('editPage', {'id': p.id}) }}">Edit Page</a>
-        </div>
-      </div>
-
-      {% else %}
-      <strong>No Saved Pages Found</strong>
-      {% endfor %}
-
+        {% for p in page.pages %}
+          {% include "@admin/includes/_pageCard.html" %}
+        {% else %}
+        <strong>No Saved Pages Found</strong>
+        {% endfor %}
       </div>
     </div>
   </div>
