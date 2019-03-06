@@ -131,11 +131,6 @@ $app->group('/admin', function () {
                 return $notFound($this->request, $this->response);
             }
         })->add('csrfGuard')->setName('saveCollection');
-
-        // Create or edit collection page
-        $this->get('/{collection:[0-9]+}/detail/edit/{id:[0-9]+|.+\.json}', function ($args) {
-            return (new AdminPageController($this))->editPage($args);
-        })->setName('editCollectionDetail');
     });
     // End collection
 })->add(function ($request, $response, $next) {

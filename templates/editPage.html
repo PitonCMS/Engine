@@ -16,7 +16,7 @@
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
+  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
 {% endblock hiddenInputs %}
@@ -41,7 +41,7 @@
         <label>Slug</label>
         <div class="input-group">
           <div class="input-group-prepend">
-            <span class="input-group-text">{{ page.collection.slug ? '/' ~ page.collection.slug }}/</span>
+            <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
           </div>
           <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug" value="{{ page.slug }}" required {% if page.slug == 'home' %}readonly{% endif %}>
         </div>

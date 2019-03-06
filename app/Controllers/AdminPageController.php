@@ -50,25 +50,34 @@ class AdminPageController extends AdminBaseController
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
-            $page = $pageMapper->findById($args['id']);
+            // Existing page
+            $page = $pageMapper->findPageById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
             $page->settings = $pageSettingMapper->findPageSettings($args['id']);
         } else {
-            // Validate that we have a proper definition file name
-            $definionParam = htmlentities($this->request->getQueryParam('definition'));
+            // Get query params
+            $definionParam = $this->request->getQueryParam('definition');
+            $collectionIdParam = $this->request->getQueryParam('collection_id');
 
-            if (null !== $definionParam && 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
+            // Validate that we have a proper definition file name
+            if (null === $definionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
                 throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definionParam");
             }
 
             // New page object
             $page = $pageMapper->make();
             $page->definition = $definionParam;
-        }
 
-        // If this page is for a collection, get collection record
-        if (isset($args['collection'])) {
-            $page->collection = $collectionMapper->findById($args['collection']);
+            // Is this request for a collection detail page?
+            if (null !== $collectionIdParam) {
+                if (1 !== preg_match('/^\d+$/', $collectionIdParam)) {
+                    throw new Exception("PitonCMS: Invalid query parameter for 'collection_id': $collectionIdParam");
+                }
+
+                $collection = $collectionMapper->findById($collectionIdParam);
+                $page->collection_id = $collectionIdParam;
+                $page->collection_slug = $collection->slug;
+            }
         }
 
         // Path to JSON definition file

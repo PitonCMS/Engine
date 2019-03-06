@@ -10,7 +10,7 @@
       <ul>
         {% for col in page.collections %}
         <li>
-          <a href="{{ pathFor('editCollectionDetail', {'collection': col.id, 'id': col.definition}) }}" title="Add new collection detail page">New {{ col.title }}</a> {{ col.templateDescription }}
+          <a href="{{ pathFor('editPage', {}, {'collection_id': col.id, 'definition': col.definition}) }}" title="Add new collection detail page">New {{ col.title }}</a> {{ col.templateDescription }}
         </li>
         {% endfor %}
       </ul>

@@ -31,6 +31,22 @@ class PageMapper extends DataMapperAbstract
     protected $domainObjectClass = __NAMESPACE__ . '\Page';
 
     /**
+     * Find Page by ID
+     *
+     * Includes outer join to collection record
+     * @param  int   $pageId Page ID
+     * @return mixed         Page Object | null
+     */
+    public function findPageById($pageId)
+    {
+        $this->makeCollectionPageSelect(true);
+        $this->sql .= ' and p.id = ?';
+        $this->bindValues[] = $pageId;
+
+        return $this->findRow();
+    }
+
+    /**
      * Find Published Page By Slug
      *
      * Finds published page by by slug
@@ -133,15 +149,17 @@ class PageMapper extends DataMapperAbstract
      * @param  void
      * @return void
      */
-    protected function makeCollectionPageSelect()
+    protected function makeCollectionPageSelect($outerJoin = false)
     {
+        $joinType = ($outerJoin) ? 'left outer' : '';
+
         $this->sql = <<<SQL
 select c.id collection_id,
        c.title collection_title,
        c.slug collection_slug,
        p.*
 from page p
-join collection c on p.collection_id = c.id
+$joinType join collection c on p.collection_id = c.id
 where 1=1
 SQL;
     }
