@@ -192,21 +192,19 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
-        $PageMapper = $mapper('PageMapper');
-        $PageElementMapper = $mapper('PageElementMapper');
-        $PageSettingMapper = $mapper('PageSettingMapper');
+        $pageMapper = $mapper('PageMapper');
+        $pageElementMapper = $mapper('PageElementMapper');
+        $pageSettingMapper = $mapper('PageSettingMapper');
 
-        if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
+        if (null !== $pageId = $this->request->getParsedBodyParam('id')) {
             // Delete page
-            $page = $PageMapper->make();
-            $page->id = $this->request->getParsedBodyParam('id');
-            $PageMapper->delete($page);
+            $page = $pageMapper->make();
+            $page->id = $pageId;
+            $pageMapper->delete($page);
 
             // Delete page elements & page settings
-            $PageElementMapper->deleteElementsByPageId($this->request->getParsedBodyParam('id'));
-            $PageSettingMapper->deleteByPageId($this->request->getParsedBodyParam('id'));
-        } else {
-            throw new Exception('Invalid page delete request.');
+            $pageElementMapper->deleteElementsByPageId($pageId);
+            $pageSettingMapper->deleteByPageId($pageId);
         }
 
         // Redirect back to show pages

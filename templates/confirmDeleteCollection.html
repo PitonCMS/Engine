@@ -1,0 +1,32 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block htmlTitle %}
+Delete Collection -
+{% endblock %}
+
+{% block headText %}
+<span class="text-danger">Delete {{ page.title }} Collection</span>
+{% endblock %}
+
+{% block leadText %}
+Are you sure you want to delete {{ page.title }}? This will permanently all delete all collection detail pages below.
+{% endblock leadText %}
+
+{% block body %}
+  <form action="{{ pathFor('saveCollection') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+    <input type="hidden" name="id" value="{{ page.id }}">
+
+    {% if page.pages %}
+    <ul>
+      {% for p in page.pages %}
+      <li>{{ p.title }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <a class="btn btn-warning mb-2" href="{{ pathFor('showCollections') }}">Cancel</a>
+    <button class="btn btn-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete Permanently</button>
+  </form>
+
+{% endblock body %}

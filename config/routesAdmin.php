@@ -115,6 +115,11 @@ $app->group('/admin', function () {
             return (new AdminCollectionController($this))->editCollection($args);
         })->setName('editCollection');
 
+        // Confirm delete of collection and pages
+        $this->get('/delete/{id:[0-9]+}', function ($args) {
+            return (new AdminCollectionController($this))->confirmDeleteCollection($args);
+        })->setName('confirmDeleteCollection');
+
         // Save Collection, Including Deletes
         $this->post('/save', function ($args) {
             if ($this->request->getParsedBodyParam('button') === 'save') {

@@ -40,6 +40,6 @@
 
 {% block otherControls %}
         {% if page.id %}
-        <button class="btn btn-outline-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
+        <a class="btn btn-outline-danger mb-2" href="{{ pathFor('confirmDeleteCollection', {id: page.id}) }}">Delete</a>
         {% endif %}
 {% endblock otherControls %}

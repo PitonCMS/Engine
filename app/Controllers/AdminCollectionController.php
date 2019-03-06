@@ -26,7 +26,7 @@ class AdminCollectionController extends AdminBaseController
         $pageMapper = $mapper('PageMapper');
 
         // Fetch collection pages, and chuck pages into sub-array by collection ID with meta info
-        $collectionPages = $pageMapper->findCollections();
+        $collectionPages = $pageMapper->findCollectionPages();
         foreach ($collectionPages as $col) {
             if (!isset($data['collectionPages'][$col->collection_id])) {
                 $data['collectionPages'][$col->collection_id]['collection_id'] = $col->collection_id;
@@ -103,24 +103,54 @@ class AdminCollectionController extends AdminBaseController
     }
 
     /**
+     * Confirm Delete Collection
+     *
+     * Shows all pages to be deleted
+     */
+    public function confirmDeleteCollection($args)
+    {
+        // Get dependencies
+        $mapper = $this->container->dataMapper;
+        $collectionMapper = $mapper('CollectionMapper');
+        $pageMapper = $mapper('PageMapper');
+
+        $data = $collectionMapper->findById($args['id']);
+        $data->pages = $pageMapper->findCollectionPagesById($args['id'], false);
+
+        return $this->render('confirmDeleteCollection.html', $data);
+    }
+
+    /**
      * Delete Collection
      *
-     * Delete collection group
-     * TODO Does not delete pages
+     * Delete collection group and pages
      */
     public function deleteCollection()
     {
         // Get dependencies
         $mapper = $this->container->dataMapper;
         $collectionMapper = $mapper('CollectionMapper');
+        $pageMapper = $mapper('PageMapper');
+        $pageElementMapper = $mapper('PageElementMapper');
+        $pageSettingMapper = $mapper('PageSettingMapper');
 
-        if ($this->request->getParsedBodyParam('button') === 'delete' && $this->request->getParsedBodyParam('id')) {
-            // Delete collection
+        if (null !== $collectionId = $this->request->getParsedBodyParam('id')) {
+            // Get list of pages to delete
+            $pages = $pageMapper->findCollectionPagesById($collectionId, false);
+
+            foreach ($pages as $value) {
+                $page = $pageMapper->make();
+                $page->id = $value->id;
+                $pageMapper->delete($page);
+
+                $pageElementMapper->deleteElementsByPageId($value->id);
+                $pageSettingMapper->deleteByPageId($value->id);
+            }
+
+            // Last, delete collection
             $collection = $collectionMapper->make();
-            $collection->id = $this->request->getParsedBodyParam('id');
+            $collection->id = $collectionId;
             $collectionMapper->delete($collection);
-        } else {
-            throw new Exception('Invalid collection delete request.');
         }
 
         // Redirect back to show collections

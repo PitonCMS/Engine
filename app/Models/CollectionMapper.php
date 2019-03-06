@@ -20,6 +20,5 @@ class CollectionMapper extends DataMapperAbstract
         'title',
         'slug',
         'definition',
-        'summary_template',
     ];
 }

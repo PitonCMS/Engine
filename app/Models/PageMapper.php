@@ -79,7 +79,7 @@ class PageMapper extends DataMapperAbstract
      *
      * @return mixed Array | null
      */
-    public function findCollections()
+    public function findCollectionPages()
     {
         $this->makeCollectionPageSelect();
 
