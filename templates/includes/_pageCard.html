@@ -11,7 +11,7 @@
               <span class="badge badge-success" title="Published on {{ p.published_date|date }}">Published</span>
             {% endif %}
           </h5>
-          <h6 class="card-subtitle mb-2 text-muted">URL: <code>/{{ p.slug }}</code></h6>
+          <h6 class="card-subtitle mb-2 text-muted">URL: <code>{{ p.collection_slug ? '/' ~ p.collection_slug}}/{{ p.slug }}</code></h6>
         </div>
         <div class="card-body">
           <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
