@@ -57,7 +57,7 @@ $app->group('/admin', function () {
         })->setName('showPages');
 
         // Edit or add new page. Must provide ID or page layout argument
-        $this->get('/edit/{id:[0-9]+|.+\.json}', function ($args) {
+        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('editPage');
 

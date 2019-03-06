@@ -49,14 +49,21 @@ class AdminPageController extends AdminBaseController
         $json = $this->container->json;
 
         // Fetch page, or create new page
-        if (is_numeric($args['id'])) {
+        if (isset($args['id']) && is_numeric($args['id'])) {
             $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
             $page->settings = $pageSettingMapper->findPageSettings($args['id']);
-        } elseif (is_string($args['id'])) {
+        } else {
+            // Validate that we have a proper definition file name
+            $definionParam = htmlentities($this->request->getQueryParam('definition'));
+
+            if (null !== $definionParam && 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definionParam");
+            }
+
             // New page object
             $page = $pageMapper->make();
-            $page->definition = $args['id'];
+            $page->definition = $definionParam;
         }
 
         // If this page is for a collection, get collection record
