@@ -67,12 +67,19 @@ class AdminCollectionController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Fetch collection group, or create new collection group
-        if (is_numeric($args['id'])) {
+        if (isset($args['id']) && is_numeric($args['id'])) {
             $collection = $collectionMapper->findById($args['id']);
-        } elseif (is_string($args['id'])) {
+        } else {
+            $definionParam = $this->request->getQueryParam('definition');
+
+            // Validate that we have a proper definition file name
+            if (null === $definionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definionParam");
+            }
+
             // Create new collection and set template JSON file
             $collection = $collectionMapper->make();
-            $collection->definition = $args['id'];
+            $collection->definition = $definionParam;
         }
 
         return $this->render('editCollection.html', $collection);

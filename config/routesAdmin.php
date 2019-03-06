@@ -111,7 +111,7 @@ $app->group('/admin', function () {
         })->setName('showCollections');
 
         // Create or edit collection
-        $this->get('/edit/{id:[0-9]+|.+\.json}', function ($args) {
+        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminCollectionController($this))->editCollection($args);
         })->setName('editCollection');
 
