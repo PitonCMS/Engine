@@ -4,8 +4,12 @@
 {% block leadText 'For PitonCMS Engine' %}
 
 {% block body %}
+    <style>
+        /* Fixes issue with fixed nav covering part of named anchor */
+        .anchorOffset {padding-top: 56px; margin-top: -56px;}
+    </style>
     {% for rel in page.releases %}
-    <h3 id="rel-{{ rel.tag_name }}">{{ rel.name }}</h3>
+    <h3 id="rel-{{ rel.tag_name }}" class="anchorOffset">{{ rel.name }}</h3>
     <p class="lead">
         Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
         Published {{ rel.published_at|date }}
