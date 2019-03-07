@@ -5,8 +5,19 @@
     The application will pass in the severity code to set the appropriate background colors:
     primary, secondary, success, danger, warning, info
 #}
+  <style>
+    .alert-fixed {
+      position: fixed;
+      top: 100px;
+      left: 0px;
+      right: 0px;
+      width: 100%;
+      z-index: 99;
+    }
+  </style>
 
     {% if getAlert() %}
+    <div class="container alert-fixed">
       <div class="alert alert-{{ getAlert('severity') }} alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">{{ getAlert('heading') }}</h4>
         <p>{{ getAlert('message') }}</p>
@@ -14,4 +25,5 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+    </div>
     {% endif %}

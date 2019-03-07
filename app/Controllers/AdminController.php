@@ -67,6 +67,13 @@ class AdminController extends AdminBaseController
                 foreach ($releases as $key => $release) {
                     $releases[$key]->body = $markdown->text($release->body);
                 }
+
+                // Check if there is a more current release
+                if (array_search($args['release'], array_column($releases, 'tag_name')) > 0) {
+                    $message = "The current version is {$releases[0]->tag_name}, you have version {$args['release']}.";
+                    $message .= "\nTo upgrade, from your project root run <code>composer update pitoncms/engine</code>";
+                    $this->setAlert('info', 'There is a newer version of the PitonCMS Engine', $message);
+                }
             } else {
                 $releases = [];
                 $this->setAlert('warning', "$responseStatus Response From GitHub", $responseBody);
