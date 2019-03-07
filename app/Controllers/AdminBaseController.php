@@ -83,7 +83,7 @@ class AdminBaseController extends BaseController
 
         // Update settings from DB with details from JSON file by matching keys
         foreach ($settings as $settingIndex => $setting) {
-            // Skip ahead if this is a site setting but not a theme setting
+            // Skip ahead if this is not a theme setting
             if (isset($setting->category) && $setting->category !== 'theme') {
                 continue;
             }
@@ -94,15 +94,15 @@ class AdminBaseController extends BaseController
                     // Update display properties using JSON definition as the master reference
                     $setting->sort_order = isset($jsonSetting->sort) ? $jsonSetting->sort : null;
                     $setting->label = $jsonSetting->label;
-                    $setting->input_type = $jsonSetting->inputType;
-                    $setting->help = $jsonSetting->help;
+                    $setting->input_type = isset($jsonSetting->inputType) ? $jsonSetting->inputType : null;
+                    $setting->help = isset($jsonSetting->help) ? $jsonSetting->help : null;
 
                     // Include select options array
                     if ($jsonSetting->inputType === 'select') {
-                        $setting->options = $this->createOptionsArray($jsonSetting->options);
+                        $setting->options = array_column($jsonSetting->options, 'name', 'value');
                     }
 
-                    // Unset this JSOn setting and skip to the next outer loop iteration
+                    // Unset this JSON setting and skip to the next outer loop iteration
                     unset($jsonSettings[$jsonIndex]);
                     continue 2;
                 }
@@ -137,7 +137,7 @@ class AdminBaseController extends BaseController
 
             // Include select options
             if ($setting->inputType === 'select') {
-                $newSetting->options = $this->createOptionsArray($setting->options);
+                $newSetting->options = array_column($setting->options, 'name', 'value');
             }
 
             // Append to array
@@ -145,23 +145,6 @@ class AdminBaseController extends BaseController
         }
 
         return $settings;
-    }
-
-    /**
-     * Options Associative Array
-     *
-     * Create select options associative array
-     * @param  array $options
-     * @return array          Associative array [$value] = $name
-     */
-    protected function createOptionsArray(array $options)
-    {
-        $newArray = [];
-        foreach ($options as $option) {
-            $newArray[$option->value] = ($option->name) ?: $option->value;
-        }
-
-        return $newArray;
     }
 
     /**
