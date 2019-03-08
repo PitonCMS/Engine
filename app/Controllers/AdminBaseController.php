@@ -94,7 +94,7 @@ class AdminBaseController extends BaseController
                     // Update display properties using JSON definition as the master reference
                     $setting->sort_order = isset($jsonSetting->sort) ? $jsonSetting->sort : null;
                     $setting->label = $jsonSetting->label;
-                    $setting->input_type = isset($jsonSetting->inputType) ? $jsonSetting->inputType : null;
+                    $setting->input_type = isset($jsonSetting->inputType) ? $jsonSetting->inputType : 'input';
                     $setting->help = isset($jsonSetting->help) ? $jsonSetting->help : null;
 
                     // Include select options array
@@ -131,9 +131,9 @@ class AdminBaseController extends BaseController
             $newSetting->sort_order = isset($setting->sort) ? $setting->sort : 1;
             $newSetting->setting_key = $setting->key;
             $newSetting->setting_value = isset($setting->value) ? $setting->value : null;
-            $newSetting->input_type = $setting->inputType;
+            $newSetting->input_type = isset($setting->inputType) ? $setting->inputType : 'input';
             $newSetting->label = $setting->label;
-            $newSetting->help = $setting->help;
+            $newSetting->help = isset($setting->help) ? $setting->help : null;
 
             // Include select options
             if ($setting->inputType === 'select') {
