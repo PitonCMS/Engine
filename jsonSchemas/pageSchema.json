@@ -49,6 +49,10 @@
                         "items": {
                             "type": "string"
                         }
+                    },
+                    "elementCountLimit": {
+                        "description": "Number of elements allowed in this block. Optional.",
+                        "type": "integer"
                     }
                 },
                 "required": ["name", "key"]
