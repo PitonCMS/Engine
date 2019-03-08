@@ -38,10 +38,10 @@ class BaseController
     protected $response;
 
     /**
-     * Page Data
+     * Page Alerts
      * @var array
      */
-    protected $pageData = [];
+    protected $alert = [];
 
     /**
      * Site Settings Array
@@ -70,8 +70,15 @@ class BaseController
      */
     protected function render($template, $data = null)
     {
-        $this->pageData['page'] = $data;
-        return $this->container->view->render($this->response, $template, $this->pageData);
+        $twigView = $this->container->view;
+
+        // By making page data a Twig Global, we can access page data in block elements
+        // which are loaded by a Twig function
+        $twigEnvironment = $twigView->getEnvironment();
+        $twigEnvironment->addGlobal('page', $data);
+        $twigEnvironment->addGlobal('alert', $this->alert);
+
+        return $twigView->render($this->response, $template);
     }
 
     /**
@@ -83,9 +90,9 @@ class BaseController
     protected function redirect($routeName, $args = [])
     {
         // Save any alert messages in session flash data
-        if (isset($this->pageData['alert'])) {
+        if (isset($this->alert)) {
             $session = $this->container->sessionHandler;
-            $session->setFlashData('alert', $this->pageData['alert']);
+            $session->setFlashData('alert', $this->alert);
         }
 
         return $this->response->withRedirect($this->container->router->pathFor($routeName, $args));

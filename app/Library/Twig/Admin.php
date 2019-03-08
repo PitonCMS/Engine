@@ -109,7 +109,7 @@ class Admin extends Base
      * Get Alert Messages
      *
      * Get alert data. Returns null if no alert found.
-     * @param  array  $context Twig context, includes controller pageData array
+     * @param  array  $context Twig context, includes controller alert array
      * @param  string $key     Alert keys: severity|heading|message
      * @return mixed           array|string|null
      */

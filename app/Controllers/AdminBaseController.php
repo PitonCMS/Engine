@@ -56,7 +56,7 @@ class AdminBaseController extends BaseController
 
         // Alert data is made available in the template, or if $this->redirect() is called
         // then data persists in flash data for one page view
-        $this->pageData['alert'] = $alert;
+        $this->alert = $alert;
 
         return;
     }
