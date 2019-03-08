@@ -146,10 +146,8 @@ $app->group('/admin', function () {
     return $next($request, $response);
 })->add(function ($request, $response, $next) {
     // Add http header to prevent back button access to admin
-    $newResponse = $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
-
-    // Next call
-    return $next($request, $newResponse);
+    $response = $next($request, $response);
+    return $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
 });
 
 //
