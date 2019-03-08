@@ -83,7 +83,17 @@
         <h2>{{ block.name }} Block</h2>
         <p class="lead">{{ block.description }}</p>
 
-        <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementTypeDefault }}" data-element-type-options="{{ block.elementTypeOptions|join(',') }}" data-element-count-limit="{{ block.elementCountLimit }}">Add Element</button>
+        {# Get count of elements in block to know if we need to disable the Add Element Button #}
+        {% set elementLength = 0 %}
+        {% for element in page.elements if element.block_key == block.key %}
+          {% set elementLength = elementLength + 1 %}
+        {% endfor %}
+        <button class="btn btn-success btn-sm jsAddElement"
+          type="button" data-block-key="{{ block.key }}"
+          data-element-type="{{ block.elementTypeDefault }}"
+          data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+          data-element-count-limit="{{ block.elementCountLimit }}"
+          {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
         <hr>
 
         {% for element in page.elements if element.block_key == block.key %}
