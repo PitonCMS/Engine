@@ -37,7 +37,7 @@ class Json extends JsonDecoder
     public function __construct()
     {
         $this->validation = [
-            'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json',
+            'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/customSettingsSchema.json',
             'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
             'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/elementSchema.json',
         ];

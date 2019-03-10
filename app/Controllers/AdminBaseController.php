@@ -67,7 +67,7 @@ class AdminBaseController extends BaseController
      * Merge saved settings with those from page JSON definition file
      * @param  array  $settings     Saved settings array
      * @param  array  $jsonSettings Defined settings in JSON definition file
-     * @param  string $scope        page | theme
+     * @param  string $scope        'page' | 'custom'
      * @return array
      */
     public function mergeSettingsWithJsonSettings(array $settings, array $jsonSettings, string $scope)
@@ -77,14 +77,14 @@ class AdminBaseController extends BaseController
         $pageSettingMapper = $mapper('PageSettingMapper');
 
         // Validate that we have a valid scope
-        if (!in_array($scope, ['page','theme'])) {
+        if (!in_array($scope, ['page','custom'])) {
             throw new Exception('Invalid $scope paramter');
         }
 
         // Update settings from DB with details from JSON file by matching keys
         foreach ($settings as $settingIndex => $setting) {
-            // Skip ahead if this is not a theme setting
-            if (isset($setting->category) && $setting->category !== 'theme') {
+            // Skip ahead if this is not a custom setting
+            if (isset($setting->category) && $setting->category !== 'custom') {
                 continue;
             }
 
@@ -121,9 +121,9 @@ class AdminBaseController extends BaseController
         // Append these to the settings array
         foreach ($jsonSettings as $setting) {
             // Create setting object
-            if ($scope === 'theme') {
+            if ($scope === 'custom') {
                 $newSetting = $settingMapper->make();
-                $newSetting->category = 'theme';
+                $newSetting->category = 'custom';
             } else {
                 $newSetting = $pageSettingMapper->make();
             }

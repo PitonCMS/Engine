@@ -31,13 +31,13 @@ class AdminSettingController extends AdminBaseController
         $allSettings = $SettingMapper->findSiteSettings();
 
         // Fetch custom settings
-        $jsonFilePath = ROOT_DIR . "structure/definitions/themeSettings.json";
-        if (null === $themeSettings = $json->getJson($jsonFilePath, 'setting')) {
+        $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
+        if (null === $customSettings = $json->getJson($jsonFilePath, 'setting')) {
             $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
         }
 
         // Merge saved settings with custom settings
-        $allSettings = $this->mergeSettingsWithJsonSettings($allSettings, $themeSettings->settings, 'theme');
+        $allSettings = $this->mergeSettingsWithJsonSettings($allSettings, $customSettings->settings, 'custom');
 
         return $this->render('editSettings.html', $allSettings);
     }
@@ -55,9 +55,9 @@ class AdminSettingController extends AdminBaseController
         $json = $this->container->json;
 
         // Fetch custom settings
-        $jsonFilePath = ROOT_DIR . "structure/definitions/themeSettings.json";
-        $themeSettings = $json->getJson($jsonFilePath, 'setting');
-        $themeSettings = $themeSettings->settings;
+        $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
+        $customSettings = $json->getJson($jsonFilePath, 'setting');
+        $customSettings = $customSettings->settings;
 
         // Get $_POST data array
         $allSettings = $this->request->getParsedBody();
@@ -78,16 +78,16 @@ class AdminSettingController extends AdminBaseController
             // If there is no ID, then this is a new custom setting to save
             // Import setting information from custom file
             if (empty($allSettings['setting_id'][$key])) {
-                // Get theme setting array key for this setting_key for reference
-                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
+                // Get custom setting array key for this setting_key for reference
+                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($customSettings, 'key'));
 
                 // Populate the new custom setting and save
-                $setting->category = 'theme';
-                $setting->sort_order = $themeSettings[$jsonKey]->sort;
-                $setting->setting_key = $themeSettings[$jsonKey]->key;
-                $setting->input_type = $themeSettings[$jsonKey]->inputType;
-                $setting->label = $themeSettings[$jsonKey]->label;
-                $setting->help = $themeSettings[$jsonKey]->help;
+                $setting->category = 'custom';
+                $setting->sort_order = $customSettings[$jsonKey]->sort;
+                $setting->setting_key = $customSettings[$jsonKey]->key;
+                $setting->input_type = $customSettings[$jsonKey]->inputType;
+                $setting->label = $customSettings[$jsonKey]->label;
+                $setting->help = $customSettings[$jsonKey]->help;
             }
 
             $settingMapper->save($setting);
