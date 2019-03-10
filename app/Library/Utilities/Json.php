@@ -19,22 +19,10 @@ use Exception;
 class Json extends JsonDecoder
 {
     /**
-     * Container
-     * @var Interop\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
      * Validation Files
      * @var array
      */
     protected $validation = [];
-
-    /**
-     * Current Theme
-     * @var string
-     */
-    protected $theme;
 
     /**
      * Validation Errors
@@ -45,13 +33,9 @@ class Json extends JsonDecoder
     /**
      * Constructor
      *
-     * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
-        $this->theme = $container->settings['site']['theme'];
-
         $this->validation = [
             'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themeSettingsSchema.json',
             'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',

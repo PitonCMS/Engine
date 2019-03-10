@@ -45,22 +45,10 @@ class Front extends Base
     public function getFunctions()
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('assetsPath', [$this, 'assetsPath']),
             new \Twig_SimpleFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
         ]);
-    }
-
-    /**
-     * Get Base Path for Theme Assets
-     *
-     * @param none
-     * @return array
-     */
-    public function assetsPath()
-    {
-        return $this->basePath() . '/assets/' . $this->siteSettings['theme'];
     }
 
     /**

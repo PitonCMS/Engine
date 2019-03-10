@@ -164,7 +164,7 @@ class AdminBaseController extends BaseController
             throw new Exception("PitonCMS Unexpected $templateType paramter. Expecting 'page' or 'collection'");
         }
 
-        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/";
+        $jsonPath = ROOT_DIR . "structure/definitions/pages/";
         $templates = [];
 
         foreach ($toolbox->getDirectoryFiles($jsonPath) as $row) {

@@ -13,18 +13,8 @@
 $container['view'] = function ($c) {
     $settings = $c->get('settings');
 
-    // Array of directories for templates, in order of priority, starting with custom theme
-    $templatePaths = [];
-    if (isset($settings['site']['theme'])) {
-        $theme = $settings['site']['theme'];
-
-        if (is_dir(ROOT_DIR . 'themes/' . $theme . '/templates/')) {
-            $templatePaths[] = ROOT_DIR . 'themes/' . $theme . '/templates/';
-        }
-    }
-
-    // Add other template directories
-    $templatePaths[] = ROOT_DIR . 'themes/default/templates/';
+    // Array of directories for templates, in order of priority
+    $templatePaths[] = ROOT_DIR . 'structure/templates/';
     $templatePaths['admin'] = ROOT_DIR . 'vendor/pitoncms/engine/templates/';
 
     $view = new Slim\Views\Twig($templatePaths, [

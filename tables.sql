@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
 INSERT INTO `page` (`id`, `collection_id`, `slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',1,'2018-12-22 11:32:10',1,'2018-12-29 13:28:25'),
-  (2,NULL,'styles','style.json','style.html','Styles',NULL,'Style Guide for Default Theme PITONcms','2018-12-27',1,'2018-12-22 14:08:02',1,'2019-01-11 14:46:03'),
+  (2,NULL,'styles','style.json','style.html','Styles',NULL,'Style Guide for PitonCMS','2018-12-27',1,'2018-12-22 14:08:02',1,'2019-01-11 14:46:03'),
   (3,NULL,'gallery','gallery.json','gallery.html','Gallery',NULL,'Gallery ','2018-12-29',1,'2018-12-29 14:12:38',1,'2019-01-11 14:45:49'),
   (4,NULL,'video','video.json','video.html','Video',NULL,'Video Layout Page','2019-01-10',1,'2019-01-11 14:27:16',1,'2019-01-11 14:53:08');
 

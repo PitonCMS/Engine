@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "description": "Theme Setting Inputs",
+    "description": "Custom Setting Inputs",
     "type": "object",
     "properties": {
         "settings": {"$ref": "jsonSchemas/settingsDefinitionSchema.json#/defintion"}

@@ -30,13 +30,13 @@ class AdminSettingController extends AdminBaseController
         // Fetch settings from database
         $allSettings = $SettingMapper->findSiteSettings();
 
-        // Fetch theme settings
-        $jsonFilePath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/themeSettings.json";
+        // Fetch custom settings
+        $jsonFilePath = ROOT_DIR . "structure/definitions/themeSettings.json";
         if (null === $themeSettings = $json->getJson($jsonFilePath, 'setting')) {
-            $this->setAlert('danger', 'Theme Settings Error', $json->getErrorMessages());
+            $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
         }
 
-        // Merge saved settings with theme settings
+        // Merge saved settings with custom settings
         $allSettings = $this->mergeSettingsWithJsonSettings($allSettings, $themeSettings->settings, 'theme');
 
         return $this->render('editSettings.html', $allSettings);
@@ -54,8 +54,8 @@ class AdminSettingController extends AdminBaseController
         $settingMapper = $mapper('SettingMapper');
         $json = $this->container->json;
 
-        // Fetch theme settings
-        $jsonFilePath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/themeSettings.json";
+        // Fetch custom settings
+        $jsonFilePath = ROOT_DIR . "structure/definitions/themeSettings.json";
         $themeSettings = $json->getJson($jsonFilePath, 'setting');
         $themeSettings = $themeSettings->settings;
 
@@ -67,7 +67,7 @@ class AdminSettingController extends AdminBaseController
             $setting = $settingMapper->make();
             $setting->id = $allSettings['setting_id'][$key];
 
-            // Check for a theme setting delete
+            // Check for a custom setting delete
             if (isset($allSettings['setting_delete'][$key])) {
                 $settingMapper->delete($setting);
                 continue;
@@ -75,13 +75,13 @@ class AdminSettingController extends AdminBaseController
 
             $setting->setting_value = $allSettings['setting_value'][$key];
 
-            // If there is no ID, then this is a new theme setting to save
-            // Import setting information from theme file
+            // If there is no ID, then this is a new custom setting to save
+            // Import setting information from custom file
             if (empty($allSettings['setting_id'][$key])) {
                 // Get theme setting array key for this setting_key for reference
                 $jsonKey = array_search($allSettings['setting_key'][$key], array_column($themeSettings, 'key'));
 
-                // Populate the new theme setting and save
+                // Populate the new custom setting and save
                 $setting->category = 'theme';
                 $setting->sort_order = $themeSettings[$jsonKey]->sort;
                 $setting->setting_key = $themeSettings[$jsonKey]->key;

@@ -135,7 +135,7 @@ class Admin extends Base
      * Get Setting Select Options
      *
      * Accepts a setting_key string and returns an array of selection options
-     * Limited to: "theme", "dateFormat", "urlScheme"
+     * Limited to: "theme", "dateFormat"
      * @param string $settingKey Setting key string
      * @return array
      */
@@ -150,13 +150,6 @@ class Admin extends Base
                 'mm/dd/yyyy' => 'mm/dd/yyyy',
                 'dd-mm-yyyy' => 'dd-mm-yyyy',
                 'dd.mm.yyyy' => 'dd.mm.yyyy'
-            ];
-        }
-
-        if ($settingKey === 'urlScheme') {
-            return [
-                'http' => 'http',
-                'https' => 'https (Secure)'
             ];
         }
 
@@ -195,7 +188,7 @@ class Admin extends Base
         }
 
         // Get all JSON files in directory
-        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/";
+        $jsonPath = ROOT_DIR . "structure/definitions/elements/";
         $elements = [];
 
         foreach ($toolbox->getDirectoryFiles($jsonPath) as $key => $file) {

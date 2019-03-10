@@ -81,7 +81,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Path to JSON definition file
-        $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/pages/{$page->definition}";
+        $jsonPath = ROOT_DIR . "structure/definitions/pages/{$page->definition}";
         if (null === $page->json = $json->getJson($jsonPath, 'page')) {
             $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
         }
@@ -177,7 +177,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
 
             // Get the elementTemplateFile from element JSON file
-            $jsonPath = ROOT_DIR . "themes/{$this->siteSettings['theme']}/definitions/elements/{$pageElement->definition}";
+            $jsonPath = ROOT_DIR . "structure/definitions/elements/{$pageElement->definition}";
 
             if (null === $elementDefinition = $json->getJson($jsonPath, 'element')) {
                 throw new Exception('Element JSON Definition Error: ' . print_r($json->getErrorMessages(), true));

@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$comment": "Setting Inputs Definition",
     "defintion": {
-        "description": "Define inputs for theme settings.",
+        "description": "Define inputs for custom settings.",
         "type": "array",
         "items": {
             "type": "object",
