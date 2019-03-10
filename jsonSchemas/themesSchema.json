@@ -9,12 +9,12 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "value": {
+                    "name": {
                         "description": "Display name for theme",
                         "type": "string"
                     },
-                    "name": {
-                        "description": "Block name label",
+                    "value": {
+                        "description": "Theme file/folder name",
                         "type": "string"
                     }
                 },

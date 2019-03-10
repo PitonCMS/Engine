@@ -88,7 +88,7 @@ class Admin extends Base
             throw new Exception('PitonCMS: Get themes exception: ' . implode($json->getErrorMessages(), ','));
         }
 
-        return array_column($definition->themes, 'value', 'name');
+        return array_column($definition->themes, 'name', 'value');
     }
 
     /**
