@@ -82,15 +82,13 @@ class Admin extends Base
      */
     public function getThemes()
     {
-        $toolbox = $this->container->toolbox;
-        $themes = $toolbox->getDirectoryFiles(ROOT_DIR . 'themes', 'default');
-        $themeOptions['default'] = 'Default';
+        $json = $this->container->json;
 
-        foreach ($themes as $row) {
-            $themeOptions[$row['filename']] = $row['readname'];
+        if (null === $definition = $json->getJson(ROOT_DIR . 'structure/definitions/themes.json', 'themes')) {
+            throw new Exception('PitonCMS: Get themes exception: ' . implode($json->getErrorMessages(), ','));
         }
 
-        return $themeOptions;
+        return array_column($definition->themes, 'value', 'name');
     }
 
     /**

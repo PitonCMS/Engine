@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "Available themes schema",
+    "type": "object",
+    "properties": {
+        "themes": {
+            "description": "Theme options array",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "description": "Display name for theme",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Block name label",
+                        "type": "string"
+                    }
+                },
+                "required": ["value", "name"]
+            }
+        }
+    }
+}

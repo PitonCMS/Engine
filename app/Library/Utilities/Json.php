@@ -40,6 +40,7 @@ class Json extends JsonDecoder
             'setting' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/customSettingsSchema.json',
             'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
             'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/elementSchema.json',
+            'themes' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/themesSchema.json',
         ];
 
         parent::__construct();
