@@ -110,6 +110,17 @@ CREATE TABLE IF NOT EXISTS `setting` (
   KEY `setting_key_uq` (`setting_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `media` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `file` varchar(20) NOT NULL,
+  `caption` varchar(100) NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO `page` (`id`, `collection_id`, `slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',1,'2018-12-22 11:32:10',1,'2018-12-29 13:28:25'),

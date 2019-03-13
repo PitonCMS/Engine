@@ -12,6 +12,7 @@ use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminAccessController;
 use Piton\Controllers\AdminCollectionController;
+use Piton\Controllers\AdminMediaController;
 
 //
 // Private secured routes
@@ -133,6 +134,20 @@ $app->group('/admin', function () {
         })->add('csrfGuard')->setName('saveCollection');
     });
     // End collection
+
+    // Media
+    $this->group('/media', function () {
+        // Upload Form
+        $this->get('/form', function ($args) {
+            return (new AdminMediaController($this))->uploadFileForm();
+        })->setName('adminFileUploadForm');
+
+        // File upload
+        $this->post('/upload', function ($args) {
+            return (new AdminMediaController($this))->uploadFile();
+        })->setName('adminFileUpload');
+    });
+    // End media
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;

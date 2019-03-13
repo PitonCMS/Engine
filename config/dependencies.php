@@ -143,3 +143,8 @@ $container['toolbox'] = function ($c) {
 $container['csrfGuard'] = function ($c) {
     return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler, $c->logger);
 };
+
+// File Upload Handler
+$container['fileUploadHandler'] = function ($c) {
+    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles());
+};

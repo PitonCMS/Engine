@@ -1,0 +1,16 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block body %}
+    <form action="{{ pathFor('adminFileUpload') }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+        <div class="form-group">
+            <label>Media File</label>
+            <input type="file" class="form-control-file" name="media-file" required>
+        </div>
+        <div class="form-group">
+            <label>Caption</label>
+            <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption text">
+        </div>
+        <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
+    </form>
+{% endblock body %}
