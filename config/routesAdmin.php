@@ -150,7 +150,12 @@ $app->group('/admin', function () {
         // File upload
         $this->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadFile();
-        })->setName('adminFileUpload');
+        })->add('csrfGuard')->setName('adminFileUpload');
+
+        // File delete
+        $this->post('/delete', function ($args) {
+            return (new AdminMediaController($this))->deleteFile();
+        })->add('csrfGuard')->setName('adminFileDelete');
     });
     // End media
 })->add(function ($request, $response, $next) {

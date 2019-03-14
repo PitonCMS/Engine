@@ -62,4 +62,54 @@ class AdminMediaController extends AdminBaseController
 
         return $this->redirect('adminFileUploadForm');
     }
+
+    /**
+     * Delete File
+     *
+     * Deletes file and media record
+     * @param
+     * @return void
+     */
+    public function deleteFile()
+    {
+        $mapper = $this->container->dataMapper;
+        $mediaMapper = $mapper('MediaMapper');
+
+        // Get the media record
+        if (null !== $id = $this->request->getParsedBodyParam('id')) {
+            $mediaFile = $mediaMapper->findById($id);
+
+            if (is_string($mediaFile->file)) {
+                $rootDir = substr($mediaFile->file, 0, 2);
+                $this->deleteRecursive(ROOT_DIR . 'public/media/' . $rootDir);
+
+                $mediaMapper->delete($mediaFile);
+            }
+        }
+
+        return $this->redirect('adminShowMedia');
+    }
+
+    /**
+     * Recursively Delete File and Directory
+     *
+     * Deletes entire chain of directories for one media file path
+     * @param  string $dir Media file base folder to delete
+     * @return void
+     */
+    protected function deleteRecursive($dir)
+    {
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+
+        rmdir($dir);
+    }
 }
