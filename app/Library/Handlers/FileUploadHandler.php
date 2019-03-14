@@ -114,7 +114,6 @@ class FileUploadHandler
      */
     public function getFilePath($fileName)
     {
-        // Create file subfolder  path
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = substr($directory, 0, 2);
 

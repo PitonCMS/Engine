@@ -137,6 +137,11 @@ $app->group('/admin', function () {
 
     // Media
     $this->group('/media', function () {
+        // Show all media
+        $this->get('[/]', function ($args) {
+            return (new AdminMediaController($this))->showMedia();
+        })->setName('adminShowMedia');
+
         // Upload Form
         $this->get('/form', function ($args) {
             return (new AdminMediaController($this))->uploadFileForm();

@@ -109,6 +109,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             new \Twig_SimpleFunction('basePath', [$this, 'basePath']),
             new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
             new \Twig_SimpleFunction('checked', [$this, 'checked']),
+            new \Twig_SimpleFunction('getMediaPath', [$this, 'getMediaPath']),
         ];
     }
 
@@ -198,5 +199,19 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     public function checked($value = 0)
     {
         return ($value == 1 || $value == 'Y' || $value == true) ? 'checked' : '';
+    }
+
+    /**
+     * Get File Media Path
+     *
+     * @param  string $fileName File name
+     * @return string
+     */
+    public function getMediaPath($fileName)
+    {
+        $directory = pathinfo($fileName, PATHINFO_FILENAME);
+        $dir = substr($directory, 0, 2);
+
+        return "/media/$dir/$directory/$fileName";
     }
 }

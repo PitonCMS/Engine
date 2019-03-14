@@ -29,6 +29,19 @@ class AdminMediaController extends AdminBaseController
     }
 
     /**
+     * Show All Media
+     */
+    public function showMedia()
+    {
+        $mapper = $this->container->dataMapper;
+        $mediaMapper = $mapper('MediaMapper');
+
+        $data = $mediaMapper->find();
+
+        return $this->render('media.html', ['media' => $data]);
+    }
+
+    /**
      * Upload File
      */
     public function uploadFile()
@@ -37,13 +50,15 @@ class AdminMediaController extends AdminBaseController
         $mapper = $this->container->dataMapper;
         $mediaMapper = $mapper('MediaMapper');
 
-        $fileUpload->upload('media-file');
-
-        // Save reference to database
-        $media = $mediaMapper->make();
-        $media->file = $fileUpload->getFileName();
-        $media->caption = $this->request->getParsedBodyParam('caption');
-        $mediaMapper->save($media);
+        if ($fileUpload->upload('media-file')) {
+            // Save reference to database
+            $media = $mediaMapper->make();
+            $media->file = $fileUpload->getFileName();
+            $media->caption = $this->request->getParsedBodyParam('caption');
+            $mediaMapper->save($media);
+        } else {
+            $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
+        }
 
         return $this->redirect('adminFileUploadForm');
     }

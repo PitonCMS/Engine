@@ -1,0 +1,31 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block headText 'Media' %}
+
+{% block body %}
+  <div class="row">
+    <div class="col">
+      <a href="{{ pathFor('adminFileUploadForm') }}">Upload New File</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h3>Media</h3>
+      <div class="card-wrapper">
+        {% for media in page.media %}
+
+        <div class="card" style="width: 18rem;">
+          <img src="{{ getMediaPath(media.file) }}" class="card-img-top" alt="{{ media.caption }}">
+          <div class="card-body">
+            <p class="card-text">{{ media.caption }}</p>
+          </div>
+        </div>
+
+        {% else %}
+        <strong>No Media Found</strong>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock body %}
