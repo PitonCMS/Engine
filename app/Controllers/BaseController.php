@@ -60,6 +60,9 @@ class BaseController
         $this->request = $container->request;
         $this->response = $container->response;
         $this->siteSettings = $container->get('settings')['site'];
+
+        $session = $this->container->sessionHandler;
+        $this->alert = $session->getFlashData('alert');
     }
 
     /**
@@ -89,7 +92,7 @@ class BaseController
      */
     protected function redirect($routeName, $args = [])
     {
-        // Save any alert messages in session flash data
+        // Save any alert messages to session flash data
         if (isset($this->alert)) {
             $session = $this->container->sessionHandler;
             $session->setFlashData('alert', $this->alert);

@@ -40,25 +40,19 @@ class AdminBaseController extends BaseController
      */
     public function setAlert($severity, $heading, $message = null)
     {
-        $session = $this->container->sessionHandler;
-
         // Make sure severity level is in our CSS
         $severityList = ['primary','secondary','success','danger','warning','info'];
         if (!in_array($severity, $severityList)) {
             throw new \Exception("Alert severity not found in list.");
         }
 
-        $alert = [
+        // Alert data is made available in the template, or if $this->redirect() is called
+        // then data persists in flash data for one page view
+        $this->alert = [
             'severity' => $severity,
             'heading' => $heading,
             'message' => (is_array($message)) ? implode(', ', $message) : $message
         ];
-
-        // Alert data is made available in the template, or if $this->redirect() is called
-        // then data persists in flash data for one page view
-        $this->alert = $alert;
-
-        return;
     }
 
     /**
