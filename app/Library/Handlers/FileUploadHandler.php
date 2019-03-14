@@ -9,6 +9,7 @@
 namespace Piton\Library\Handlers;
 
 use \Exception;
+use \Closure;
 
 /**
  * Piton File Upload Handler
@@ -24,10 +25,10 @@ class FileUploadHandler
     protected $uploadedFiles;
 
     /**
-     * File Uploads Root Path
+     * Public Root Directory
      * @var string
      */
-    protected $uploadedFilesRoot;
+    protected $publicRoot;
 
     /**
      * New File Name
@@ -41,15 +42,18 @@ class FileUploadHandler
      */
     protected $error = UPLOAD_ERR_OK;
 
+    protected $filePath;
+
     /**
      * Constructor
      *
      * @param array $uploadedfiles Array of Slim\Http\UploadedFile objects
      */
-    public function __construct(array $uploadedFiles)
+    public function __construct(array $uploadedFiles, closure $filePathClosure)
     {
         $this->uploadedFiles = $uploadedFiles;
-        $this->uploadedFilesRoot = ROOT_DIR . 'public/media/';
+        $this->publicRoot = ROOT_DIR . 'public';
+        $this->filePath = $filePathClosure;
     }
 
     /**
@@ -80,7 +84,7 @@ class FileUploadHandler
             } while (!$exists);
 
             $this->fileName = "$name.$ext";
-            $file->moveTo("{$this->uploadedFilesRoot}{$path}{$this->fileName}");
+            $file->moveTo("{$this->publicRoot}{$path}{$this->fileName}");
 
             unset($file);
 
@@ -108,18 +112,22 @@ class FileUploadHandler
      * Get File Path
      *
      * Derive file path based on file name
-     * Path: fi/filename/
      * @param  string $fileName
      * @return string
      */
     public function getFilePath($fileName)
     {
-        $directory = pathinfo($fileName, PATHINFO_FILENAME);
-        $dir = substr($directory, 0, 2);
-
-        return "$dir/$directory/";
+        $path = $this->filePath;
+        return $path($fileName);
     }
 
+    /**
+     * Get Upload Error Message
+     *
+     * Converts PHP UPLOAD_ERR_* codes to text
+     * @param  void
+     * @return string
+     */
     public function getErrorMessage()
     {
         switch ($this->error) {
@@ -147,7 +155,6 @@ class FileUploadHandler
 
             default:
                 $message = "Unknown upload error";
-                break;
         }
 
         return $message;
@@ -162,7 +169,7 @@ class FileUploadHandler
      */
     protected function makeFileDirectory($directoryPath)
     {
-        $filePath = $this->uploadedFilesRoot . $directoryPath;
+        $filePath = $this->publicRoot . $directoryPath;
 
         // Create the path if the directory does not exist
         if (!is_dir($filePath)) {

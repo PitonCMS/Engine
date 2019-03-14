@@ -202,16 +202,15 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     }
 
     /**
-     * Get File Media Path
+     * Get Media Path
      *
-     * @param  string $fileName File name
+     * @param  string $fileName Media file name to parse
      * @return string
      */
     public function getMediaPath($fileName)
     {
-        $directory = pathinfo($fileName, PATHINFO_FILENAME);
-        $dir = substr($directory, 0, 2);
+        $filePath = $this->container->filePath;
 
-        return "/media/$dir/$directory/$fileName";
+        return $filePath($fileName) . $fileName;
     }
 }

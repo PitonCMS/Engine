@@ -146,5 +146,15 @@ $container['csrfGuard'] = function ($c) {
 
 // File Upload Handler
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles());
+    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles(), $c['filePath']);
+};
+
+// Media File Upload Path
+$container['filePath'] = function ($c) {
+    return function ($fileName) {
+        $directory = pathinfo($fileName, PATHINFO_FILENAME);
+        $dir = substr($directory, 0, 2);
+
+        return "/media/$dir/$directory/";
+    };
 };
