@@ -1,0 +1,18 @@
+{# Media Card #}
+
+{% macro mediaCard(media, deleteButton = false) %}
+        <div class="card">
+          <img src="{{ getMediaPath(media.file) }}" class="card-img-top" alt="{{ media.caption }}">
+          <div class="card-body">
+            <p class="card-text">{{ media.caption|default('<i>No Caption</i>') }}</p>
+            <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.file) }}" readonly>
+            {% if deleteButton %}
+            <form action="{{ pathFor('adminFileDelete') }}" method="post">
+              <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+              <input type="hidden" name="id" value="{{ media.id }}">
+              <button class="btn btn-outline-danger btn-sm mt-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+{% endmacro mediaCard %}

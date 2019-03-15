@@ -1,5 +1,5 @@
 {% extends '@admin/_adminBase.html' %}
-
+{% import "@admin/includes/_mediaCard.html" as file %}
 {% block headText 'Media' %}
 
 {% block body %}
@@ -14,20 +14,7 @@
       <h3>Media</h3>
       <div class="card-wrapper">
         {% for media in page.media %}
-
-        <div class="card" style="width: 18rem;">
-          <img src="{{ getMediaPath(media.file) }}" class="card-img-top" alt="{{ media.caption }}">
-          <div class="card-body">
-            <p class="card-text">{{ media.caption|default('<i>No Caption</i>') }}</p>
-            <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.file) }}" readonly>
-            <form action="{{ pathFor('adminFileDelete') }}" method="post">
-              <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-              <input type="hidden" name="id" value="{{ media.id }}">
-              <button class="btn btn-outline-danger btn-sm mt-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
-            </form>
-          </div>
-        </div>
-
+          {{ file.mediaCard(media, true) }}
         {% else %}
         <strong>No Media Found</strong>
         {% endfor %}
