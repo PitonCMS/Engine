@@ -24,6 +24,18 @@
 {% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}
 
 {% block formBody %}
+      {# Media Modal #}
+      <div class="modal fade" id="mediaModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {# Page Standard Fields #}
       <div class="form-group">
@@ -146,3 +158,25 @@
         </nav>
       </div>
 {% endblock rightCol %}
+
+{% block footJs %}
+  $('body').on('click', '.jsSelectMediaFile', function() {
+    let $input = $(this).parents('.input-group').find('input');
+    let $img = $(this).parents('.jsMediaInput').find('img');
+
+    $('#mediaModal').on('click', 'img', function() {
+      $input.val($(this).attr('src'));
+      $img.attr('src', $(this).attr('src')).removeClass('d-none');
+      $('#mediaModal').modal('hide');
+    });
+
+    $.ajax({
+        url: '/admin/media/get',
+        method: "GET",
+        success: function (r) {
+          $('#mediaModal').find('.modal-body').html(r.html).end().modal();
+        }
+      });
+
+  });
+{% endblock footJs %}

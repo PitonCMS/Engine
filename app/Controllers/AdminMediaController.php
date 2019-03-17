@@ -42,6 +42,34 @@ class AdminMediaController extends AdminBaseController
     }
 
     /**
+     * Get All Media
+     *
+     * Gets all media asynchronously with HTML
+     */
+    public function getMedia()
+    {
+        $mapper = $this->container->dataMapper;
+        $mediaMapper = $mapper('MediaMapper');
+
+        $data = $mediaMapper->find();
+
+        $template = <<<HTML
+            {% import "@admin/includes/_mediaCardMacro.html" as file %}
+            <div class="card-wrapper">
+            {% for media in page.media %}
+              {{ file.mediaCard(media) }}
+            {% endfor %}
+            </div>
+HTML;
+
+        $mediaHtml = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
+
+        $response = $this->response->withHeader('Content-Type', 'application/json');
+
+        return $response->write(json_encode(["html" => $mediaHtml]));
+    }
+
+    /**
      * Upload File
      */
     public function uploadFile()

@@ -55,9 +55,15 @@
     </div>
 
     <div class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
-      <label>Image Link</label>
-      <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ element.image_path }}"">
-      <small class="form-text text-muted">Enter an image link.</small>
+      <label>Media</label>
+      <img src="{{ element.image_path }}" class="img-fluid mb-2 {% if element.image_path %}d-block{% else %}d-none{% endif %}">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
+        </div>
+        <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ element.image_path }}">
+      </div>
+      <small class="form-text text-muted">Select media file to display.</small>
     </div>
 
     <div class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
