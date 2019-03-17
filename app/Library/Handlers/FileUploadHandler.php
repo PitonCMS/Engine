@@ -117,8 +117,7 @@ class FileUploadHandler
      */
     public function getFilePath($fileName)
     {
-        $path = $this->filePath;
-        return $path($fileName);
+        return ($this->filePath)($fileName);
     }
 
     /**

@@ -209,8 +209,11 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      */
     public function getMediaPath($fileName)
     {
-        $filePath = $this->container->filePath;
+        // If this is an external link to a media file, just return string
+        if (strpos($fileName, 'http') === 0) {
+            return $fileName;
+        }
 
-        return $filePath($fileName) . $fileName;
+        return ($this->container->filePath)($fileName) . $fileName;
     }
 }
