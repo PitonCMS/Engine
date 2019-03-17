@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `collection_id_idx` (`collection_id`),
-  UNIQUE KEY `slug_uq` (`slug`,`id`),
+  UNIQUE KEY `slug_uq` (`collection_id`,`slug`),
   KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
