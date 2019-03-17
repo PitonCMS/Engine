@@ -160,6 +160,12 @@
 {% endblock rightCol %}
 
 {% block footJs %}
+  $('body').on('change', 'input[name^=element_image_path]', function() {
+    if ($(this).val() === '') {
+      $(this).parents('.jsMediaInput').find('img').attr('src','');
+    }
+  });
+
   $('body').on('click', '.jsSelectMediaFile', function() {
     let $input = $(this).parents('.input-group').find('input');
     let $img = $(this).parents('.jsMediaInput').find('img');
