@@ -86,7 +86,7 @@ class Front extends Base
             throw new Exception("Missing page element template");
         }
 
-        return $this->container->view->fetch("elements/{$element->template}", ['data' => $element]);
+        return $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
     }
 
     /**
