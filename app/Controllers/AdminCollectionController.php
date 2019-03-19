@@ -21,9 +21,8 @@ class AdminCollectionController extends AdminBaseController
     public function showCollections()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
-        $pageMapper = $mapper('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
 
         // Fetch collection pages, and chuck pages into sub-array by collection ID with meta info
         $collectionPages = $pageMapper->findCollectionPages();
@@ -61,8 +60,7 @@ class AdminCollectionController extends AdminBaseController
     public function editCollection($args)
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $json = $this->container->json;
         $toolbox = $this->container->toolbox;
 
@@ -93,8 +91,7 @@ class AdminCollectionController extends AdminBaseController
     public function saveCollection()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $toolbox = $this->container->toolbox;
 
         // Create collection object and populate
@@ -117,9 +114,8 @@ class AdminCollectionController extends AdminBaseController
     public function confirmDeleteCollection($args)
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
-        $pageMapper = $mapper('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
 
         $data = $collectionMapper->findById($args['id']);
         $data->pages = $pageMapper->findCollectionPagesById($args['id'], false);
@@ -135,11 +131,10 @@ class AdminCollectionController extends AdminBaseController
     public function deleteCollection()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $collectionMapper = $mapper('CollectionMapper');
-        $pageMapper = $mapper('PageMapper');
-        $pageElementMapper = $mapper('PageElementMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         if (null !== $collectionId = $this->request->getParsedBodyParam('id')) {
             // Get list of pages to delete

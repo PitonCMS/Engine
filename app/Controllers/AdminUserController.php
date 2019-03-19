@@ -22,11 +22,10 @@ class AdminUserController extends AdminBaseController
     public function showUsers()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $UserMapper = $mapper('UserMapper');
+        $userMapper = ($this->container->dataMapper)('UserMapper');
 
         // Fetch users
-        $users = $UserMapper->find();
+        $users = $userMapper->find();
 
         return $this->render('users.html', $users);
     }
@@ -39,16 +38,15 @@ class AdminUserController extends AdminBaseController
     public function saveUsers()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $UserMapper = $mapper('UserMapper');
+        $userMapper = ($this->container->dataMapper)('UserMapper');
         $users = $this->request->getParsedBodyParam('email');
 
         // Save users
         foreach ($users as $user) {
             if (!empty($user)) {
-                $User = $UserMapper->make();
+                $User = $userMapper->make();
                 $User->email = strtolower(trim($user));
-                $UserMapper->save($User);
+                $userMapper->save($User);
             }
         }
 
@@ -64,13 +62,12 @@ class AdminUserController extends AdminBaseController
     public function deleteUser($args)
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $UserMapper = $mapper('UserMapper');
+        $userMapper = ($this->container->dataMapper)('UserMapper');
 
         // Delete user
-        $User = $UserMapper->make();
+        $User = $userMapper->make();
         $User->id = $args['id'];
-        $UserMapper->delete($User);
+        $userMapper->delete($User);
 
         // Redirect back to list of users
         return $this->redirect('adminUsers');

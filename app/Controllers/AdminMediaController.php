@@ -33,8 +33,7 @@ class AdminMediaController extends AdminBaseController
      */
     public function showMedia()
     {
-        $mapper = $this->container->dataMapper;
-        $mediaMapper = $mapper('MediaMapper');
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         $data = $mediaMapper->find();
 
@@ -48,8 +47,7 @@ class AdminMediaController extends AdminBaseController
      */
     public function getMedia()
     {
-        $mapper = $this->container->dataMapper;
-        $mediaMapper = $mapper('MediaMapper');
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         $data = $mediaMapper->find();
 
@@ -75,8 +73,7 @@ HTML;
     public function uploadFile()
     {
         $fileUpload = $this->container->fileUploadHandler;
-        $mapper = $this->container->dataMapper;
-        $mediaMapper = $mapper('MediaMapper');
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         if ($fileUpload->upload('media-file')) {
             // Save reference to database
@@ -100,8 +97,7 @@ HTML;
      */
     public function deleteFile()
     {
-        $mapper = $this->container->dataMapper;
-        $mediaMapper = $mapper('MediaMapper');
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         // Get the media record
         if (null !== $id = $this->request->getParsedBodyParam('id')) {

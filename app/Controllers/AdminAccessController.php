@@ -23,10 +23,16 @@ namespace Piton\Controllers;
  */
 class AdminAccessController extends AdminBaseController
 {
-    // Login token key name
+    /**
+     * Login Token Key Name
+     * @var string
+     */
     private $loginTokenKey = 'loginToken';
 
-    // Login token key expires name
+    /**
+     * Login Token Key Expires Name
+     * @var string
+     */
     private $loginTokenExpiresKey = 'loginTokenExpires';
 
     /**
@@ -50,12 +56,11 @@ class AdminAccessController extends AdminBaseController
         $session = $this->container->sessionHandler;
         $email = $this->container->emailHandler;
         $security = $this->container->accessHandler;
-        $mapper = $this->container->dataMapper;
-        $UserMapper = $mapper('UserMapper');
+        $userMapper = ($this->container->dataMapper)('UserMapper');
         $body = $this->request->getParsedBody();
 
         // Fetch all users
-        $userList = $UserMapper->find();
+        $userList = $userMapper->find();
 
         // Clean provided email
         $providedEmail = strtolower(trim($body['email']));

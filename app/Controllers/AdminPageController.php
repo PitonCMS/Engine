@@ -23,8 +23,7 @@ class AdminPageController extends AdminBaseController
     public function showPages()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $page = $mapper('PageMapper');
+        $page = ($this->container->dataMapper)('PageMapper');
 
         // Fetch pages & templates
         $data['pages'] = $page->findPages(true);
@@ -41,11 +40,10 @@ class AdminPageController extends AdminBaseController
     public function editPage($args)
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $pageMapper = $mapper('PageMapper');
-        $pageElementMapper = $mapper('PageElementMapper');
-        $collectionMapper = $mapper('CollectionMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
         $json = $this->container->json;
 
         // Fetch page, or create new page
@@ -102,10 +100,9 @@ class AdminPageController extends AdminBaseController
     public function savePage()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $pageMapper = $mapper('PageMapper');
-        $pageElementMapper = $mapper('PageElementMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
@@ -207,10 +204,9 @@ class AdminPageController extends AdminBaseController
     public function deletePage()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $pageMapper = $mapper('PageMapper');
-        $pageElementMapper = $mapper('PageElementMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         if (null !== $pageId = $this->request->getParsedBodyParam('id')) {
             // Delete page
@@ -268,8 +264,7 @@ class AdminPageController extends AdminBaseController
     public function deleteElement()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $PageElement = $mapper('PageElementMapper');
+        $PageElement = ($this->container->dataMapper)('PageElementMapper');
 
         // Check that we received an ID
         if ($this->request->getParsedBodyParam('id')) {

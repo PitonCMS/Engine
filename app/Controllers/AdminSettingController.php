@@ -23,12 +23,11 @@ class AdminSettingController extends AdminBaseController
     public function showSettings()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $SettingMapper = $mapper('SettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
         // Fetch settings from database
-        $allSettings = $SettingMapper->findSiteSettings();
+        $allSettings = $settingMapper->findSiteSettings();
 
         // Fetch custom settings
         $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
@@ -50,8 +49,7 @@ class AdminSettingController extends AdminBaseController
     public function saveSettings()
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $settingMapper = $mapper('SettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
         // Fetch custom settings

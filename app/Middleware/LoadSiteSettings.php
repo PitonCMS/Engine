@@ -80,8 +80,7 @@ class LoadSiteSettings
      */
     public function loadSettings()
     {
-        $dataMapper = $this->dataMapper;
-        $SettingMapper = $dataMapper('SettingMapper');
+        $SettingMapper = ($this->dataMapper)('SettingMapper');
 
         $siteSettings = $SettingMapper->find();
 
@@ -98,8 +97,7 @@ class LoadSiteSettings
      */
     public function loadPages($request)
     {
-        $dataMapper = $this->dataMapper;
-        $pageMapper = $dataMapper('pageMapper');
+        $pageMapper = ($this->dataMapper)('pageMapper');
 
         // Fetch all published pages
         $this->pages = $pageMapper->findPages();

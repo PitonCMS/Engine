@@ -42,6 +42,10 @@ class FileUploadHandler
      */
     protected $error = UPLOAD_ERR_OK;
 
+    /**
+     * Media File Path Closure
+     * @var closure
+     */
     protected $filePath;
 
     /**

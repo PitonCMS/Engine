@@ -23,10 +23,9 @@ class FrontController extends FrontBaseController
     public function showPage($args)
     {
         // Get dependencies
-        $mapper = $this->container->dataMapper;
-        $pageMapper = $mapper('PageMapper');
-        $pageElementMapper = $mapper('PageElementMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         if (isset($args['slug2'])) {
             // This request is for a collection

@@ -66,9 +66,8 @@ class AdminBaseController extends BaseController
      */
     public function mergeSettingsWithJsonSettings(array $settings, array $jsonSettings, string $scope)
     {
-        $mapper = $this->container->dataMapper;
-        $settingMapper = $mapper('SettingMapper');
-        $pageSettingMapper = $mapper('PageSettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         // Validate that we have a valid scope
         if (!in_array($scope, ['page','custom'])) {
