@@ -190,9 +190,9 @@ class AdminPageController extends AdminBaseController
 
         // Determine redirect path based on whether this is a collection
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectPath = 'showCollections';
+            $redirectPath = 'adminCollections';
         } else {
-            $redirectPath = 'showPages';
+            $redirectPath = 'adminPages';
         }
 
         // Redirect back to show page
@@ -224,7 +224,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Redirect back to show pages
-        return $this->redirect('showPages');
+        return $this->redirect('adminPages');
     }
 
     /**

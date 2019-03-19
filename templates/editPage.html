@@ -12,7 +12,7 @@
 
 {% block leadText page.json.templateDescription %}
 
-{% block formActionPath pathFor('savePage') %}
+{% block formActionPath pathFor('adminSavePage') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
@@ -118,7 +118,7 @@
 
 {% endblock formBody %}
 
-{% block cancelLink pathFor('showPages') %}
+{% block cancelLink pathFor('adminPages') %}
 
 {% block otherControls %}
         <div class="form-group">

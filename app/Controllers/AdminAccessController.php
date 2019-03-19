@@ -91,7 +91,7 @@ class AdminAccessController extends AdminBaseController
             $scheme = $this->request->getUri()->getScheme();
             $host = $this->request->getUri()->getHost();
             $link = $scheme . '://' . $host;
-            $link .= $this->container->router->pathFor('processLoginToken', ['token' => $token]);
+            $link .= $this->container->router->pathFor('adminProcessLoginToken', ['token' => $token]);
 
             // Send message
             $email->setTo($providedEmail, '')

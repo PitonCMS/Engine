@@ -27,7 +27,7 @@ $app->group('/admin', function () {
     $this->group('/help', function () {
         $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
             return (new AdminController($this))->release($args);
-        })->setName('helpEngineRelease');
+        })->setName('adminEngineRelease');
     });
     // End Help
 
@@ -36,17 +36,17 @@ $app->group('/admin', function () {
         // Show Users
         $this->get('[/]', function ($args) {
             return (new AdminUserController($this))->showUsers();
-        })->setName('showUsers');
+        })->setName('adminUsers');
 
         // Save Users
         $this->post('/save', function ($args) {
             return (new AdminUserController($this))->saveUsers();
-        })->add('csrfGuard')->setName('saveUsers');
+        })->add('csrfGuard')->setName('adminSaveUsers');
 
         // Delete User
         $this->get('/delete/{id:[0-9]{1,}}', function ($args) {
             return (new AdminUserController($this))->deleteUser($args);
-        })->setName('deleteUser');
+        })->setName('adminDeleteUser');
     });
     // End user routes
 
@@ -55,12 +55,12 @@ $app->group('/admin', function () {
         // Show All Pages
         $this->get('[/]', function ($args) {
             return (new AdminPageController($this))->showPages();
-        })->setName('showPages');
+        })->setName('adminPages');
 
         // Edit or add new page. Must provide ID or page layout argument
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editPage($args);
-        })->setName('editPage');
+        })->setName('adminEditPage');
 
         // Save Page for Update, Insert, and Delete
         $this->post('/save', function ($args) {
@@ -72,7 +72,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHanlder;
                 return $notFound($this->request, $this->response);
             }
-        })->add('csrfGuard')->setName('savePage');
+        })->add('csrfGuard')->setName('adminSavePage');
 
         // Page elements
         $this->group('/element', function () {
@@ -95,12 +95,12 @@ $app->group('/admin', function () {
         // Show Settings
         $this->get('[/]', function ($args) {
             return (new AdminSettingController($this))->showSettings();
-        })->setName('showSettings');
+        })->setName('adminSettings');
 
         // Save Settings
         $this->post('/save', function ($args) {
             return (new AdminSettingController($this))->saveSettings();
-        })->add('csrfGuard')->setName('saveSettings');
+        })->add('csrfGuard')->setName('adminSaveSettings');
     });
     // End settings
 
@@ -109,17 +109,17 @@ $app->group('/admin', function () {
         // Show collections
         $this->get('[/]', function ($args) {
             return (new AdminCollectionController($this))->showCollections();
-        })->setName('showCollections');
+        })->setName('adminCollections');
 
         // Create or edit collection
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminCollectionController($this))->editCollection($args);
-        })->setName('editCollection');
+        })->setName('adminEditCollection');
 
         // Confirm delete of collection and pages
         $this->get('/delete/{id:[0-9]+}', function ($args) {
             return (new AdminCollectionController($this))->confirmDeleteCollection($args);
-        })->setName('confirmDeleteCollection');
+        })->setName('adminConfirmDeleteCollection');
 
         // Save Collection, Including Deletes
         $this->post('/save', function ($args) {
@@ -131,7 +131,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHanlder;
                 return $notFound($this->request, $this->response);
             }
-        })->add('csrfGuard')->setName('saveCollection');
+        })->add('csrfGuard')->setName('adminSaveCollection');
     });
     // End collection
 
@@ -169,7 +169,7 @@ $app->group('/admin', function () {
 
     if (!$Security->isAuthenticated()) {
         // Failed authentication, redirect to login
-        return $response->withRedirect($this->router->pathFor('showLoginForm'));
+        return $response->withRedirect($this->router->pathFor('adminLoginForm'));
     }
 
     // Next call
@@ -187,19 +187,19 @@ $app->group('/admin', function () {
 // Login page with form to submit email
 $app->get('/letmein', function ($args) {
     return (new AdminAccessController($this))->showLoginForm();
-})->setName('showLoginForm');
+})->setName('adminLoginForm');
 
 // Accept and validate email, and send login token
 $app->post('/requestlogintoken/', function ($args) {
     return (new AdminAccessController($this))->requestLoginToken();
-})->add('csrfGuard')->setName('requestLoginToken');
+})->add('csrfGuard')->setName('adminRequestLoginToken');
 
 // Accept and validate login token and set session
 $app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($args) {
     return (new AdminAccessController($this))->processLoginToken($args);
-})->setName('processLoginToken');
+})->setName('adminProcessLoginToken');
 
 // Logout
 $app->get('/logout', function ($args) {
     return (new AdminAccessController($this))->logout();
-})->setName('logout');
+})->setName('adminLogout');

@@ -10,7 +10,7 @@
       <ul>
         {% for col in page.collections %}
         <li>
-          <a href="{{ pathFor('editPage', {}, {'collection_id': col.id, 'definition': col.definition}) }}" title="Add new collection detail page">New {{ col.title }}</a> {{ col.templateDescription }}
+          <a href="{{ pathFor('adminEditPage', {}, {'collection_id': col.id, 'definition': col.definition}) }}" title="Add new collection detail page">New {{ col.title }}</a> {{ col.templateDescription }}
         </li>
         {% endfor %}
       </ul>
@@ -27,7 +27,7 @@
       <ul>
         {% for template in page.templates %}
         <li>
-          <a href="{{ pathFor('editCollection', {}, {'definition': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a> {{ template.description }}
+          <a href="{{ pathFor('adminEditCollection', {}, {'definition': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a> {{ template.description }}
         </li>
         {% endfor %}
       </ul>
@@ -41,7 +41,7 @@
         <ul>
           {% for col in page.collections %}
           <li>
-            <a href="{{ pathFor('editCollection', {'id': col.id}) }}" title="Edit collection">{{ col.title }}</a>
+            <a href="{{ pathFor('adminEditCollection', {'id': col.id}) }}" title="Edit collection">{{ col.title }}</a>
           </li>
           {% endfor %}
         </ul>

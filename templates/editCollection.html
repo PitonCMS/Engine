@@ -8,7 +8,7 @@
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title }} Collection
 {% endblock %}
 
-{% block formActionPath pathFor('saveCollection') %}
+{% block formActionPath pathFor('adminSaveCollection') %}
 
 {% block hiddenInputs %}
   <input type="hidden" name="id" value="{{ page.id }}">
@@ -36,10 +36,10 @@
 
 {% endblock formBody %}
 
-{% block cancelLink pathFor('showCollections') %}
+{% block cancelLink pathFor('adminCollections') %}
 
 {% block otherControls %}
         {% if page.id %}
-        <a class="btn btn-outline-danger mb-2" href="{{ pathFor('confirmDeleteCollection', {id: page.id}) }}">Delete</a>
+        <a class="btn btn-outline-danger mb-2" href="{{ pathFor('adminConfirmDeleteCollection', {id: page.id}) }}">Delete</a>
         {% endif %}
 {% endblock otherControls %}

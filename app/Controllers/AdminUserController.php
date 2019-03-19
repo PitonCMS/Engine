@@ -53,7 +53,7 @@ class AdminUserController extends AdminBaseController
         }
 
         // Redirect back to list of users
-        return $this->redirect('showUsers');
+        return $this->redirect('adminUsers');
     }
 
     /**
@@ -73,6 +73,6 @@ class AdminUserController extends AdminBaseController
         $UserMapper->delete($User);
 
         // Redirect back to list of users
-        return $this->redirect('showUsers');
+        return $this->redirect('adminUsers');
     }
 }

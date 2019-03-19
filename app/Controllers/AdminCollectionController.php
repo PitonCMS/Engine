@@ -106,7 +106,7 @@ class AdminCollectionController extends AdminBaseController
 
         $collection = $collectionMapper->save($collection);
 
-        return $this->redirect('showCollections');
+        return $this->redirect('adminCollections');
     }
 
     /**
@@ -161,6 +161,6 @@ class AdminCollectionController extends AdminBaseController
         }
 
         // Redirect back to show collections
-        return $this->redirect('showCollections');
+        return $this->redirect('adminCollections');
     }
 }

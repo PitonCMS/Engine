@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col">
       <h2>Manage Users</h2>
-      <form class="jsUserForm" action="{{ pathFor('saveUsers') }}" method="post" accept-charset="utf-8">
+      <form class="jsUserForm" action="{{ pathFor('adminSaveUsers') }}" method="post" accept-charset="utf-8">
         {% for user in page %}
         <div class="form-group form-row">
           <div class="col-4">
@@ -17,7 +17,7 @@
               Administrator
             </label>
           </div>
-          <a class="btn btn-danger ml-2 jsDeleteConfirm" href="{{ pathFor('deleteUser', {'id': user.id}) }}">Delete User</a>
+          <a class="btn btn-danger ml-2 jsDeleteConfirm" href="{{ pathFor('adminDeleteUser', {'id': user.id}) }}">Delete User</a>
         </div>
         {% endfor %}
         <div class="form-group">

@@ -13,7 +13,7 @@ Are you sure you want to delete {{ page.title }}? This will permanently all dele
 {% endblock leadText %}
 
 {% block body %}
-  <form action="{{ pathFor('saveCollection') }}" method="post" accept-charset="utf-8">
+  <form action="{{ pathFor('adminSaveCollection') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
     <input type="hidden" name="id" value="{{ page.id }}">
 
@@ -25,7 +25,7 @@ Are you sure you want to delete {{ page.title }}? This will permanently all dele
     </ul>
     {% endif %}
 
-    <a class="btn btn-warning mb-2" href="{{ pathFor('showCollections') }}">Cancel</a>
+    <a class="btn btn-warning mb-2" href="{{ pathFor('adminCollections') }}">Cancel</a>
     <button class="btn btn-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete Permanently</button>
   </form>
 

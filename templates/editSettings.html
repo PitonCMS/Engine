@@ -7,7 +7,7 @@
 
 {% block leadText %}Customize your site.{% endblock %}
 
-{% block formActionPath pathFor('saveSettings') %}
+{% block formActionPath pathFor('adminSaveSettings') %}
 
 {% block formBody %}
           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -76,4 +76,4 @@
           </div>
 {% endblock formBody %}
 
-{% block cancelLink pathFor('showSettings') %}
+{% block cancelLink pathFor('adminSettings') %}

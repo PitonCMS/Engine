@@ -94,6 +94,6 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        return $this->redirect('showSettings');
+        return $this->redirect('adminSettings');
     }
 }
