@@ -210,7 +210,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     public function getMediaPath($fileName)
     {
         // If this is an external link to a media file, just return string
-        if (strpos($fileName, 'http') === 0) {
+        if (stripos($fileName, 'http') === 0 || empty($fileName)) {
             return $fileName;
         }
 

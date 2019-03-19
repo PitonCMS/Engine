@@ -170,8 +170,15 @@ class AdminPageController extends AdminBaseController
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
-            $pageElement->image_path = $this->request->getParsedBodyParam('element_image_path')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
+
+            // If the image path does not start with http then get base name
+            $imagePath = $this->request->getParsedBodyParam('element_image_path')[$key];
+            if (stripos($imagePath, 'http') === 0) {
+                $pageElement->image_path = $imagePath;
+            } else {
+                $pageElement->image_path = pathinfo($imagePath, PATHINFO_BASENAME);
+            }
 
             // Get the elementTemplateFile from element JSON file
             $jsonPath = ROOT_DIR . "structure/definitions/elements/{$pageElement->definition}";
