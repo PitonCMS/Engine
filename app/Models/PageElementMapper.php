@@ -40,8 +40,8 @@ class PageElementMapper extends DataMapperAbstract
      */
     public function findElementsByPageId($pageId)
     {
-        $this->makeSelect();
-        $this->sql .= ' and page_id = ? order by block_key, element_sort';
+        $this->makeElementMediaSelect();
+        $this->sql .= ' and pe.page_id = ? order by block_key, element_sort';
         $this->bindValues[] = $pageId;
 
         return $this->find();
@@ -59,5 +59,25 @@ class PageElementMapper extends DataMapperAbstract
         $this->bindValues[] = $pageId;
 
         return $this->execute();
+    }
+
+    /**
+     * Get With Media Meta Data
+     *
+     * Left outer joins to media table on image file name
+     * @param void
+     * @return void
+     */
+    protected function makeElementMediaSelect()
+    {
+        $this->sql = <<<SQL
+select m.id media_id,
+       m.file media_file,
+       m.caption media_caption,
+       pe.*
+from page_element pe
+left outer join media m on pe.image_path = m.file
+where 1=1
+SQL;
     }
 }

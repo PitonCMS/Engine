@@ -40,7 +40,7 @@ class FrontController extends FrontBaseController
             return $this->notFound();
         }
 
-        // Get elements
+        // Get elements and assign to blocks
         $page->blocks = $this->buildElementsByBlock($pageElementMapper->findElementsByPageId($page->id));
 
         // Get page settings
