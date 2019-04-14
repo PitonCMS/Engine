@@ -150,6 +150,8 @@ VALUES
   ('site',4,'googleWebMaster',null,NULL,'Google Webmaster Verification Link',NULL,1,now(),1,now()),
   ('site',5,'googleAnalytics',null,'textarea','Google Analytics Code',NULL,1,now(),1,now()),
   ('site',6,'statCounter',null,'textarea','Stat Counter',NULL,1,now(),1,now()),
+  ('site',7,'siteAuthor',null,'input','Site author',NULL,1,now(),1,now()),
+  ('site',8,'siteAuthorUrl',null,'input','Link to site author',NULL,1,now(),1,now()),
   ('contact',1,'displayName',null,NULL,'Display Name',NULL,1,now(),1,now()),
   ('contact',2,'telephone',null,NULL,'Telephone',NULL,1,now(),1,now()),
   ('contact',3,'mobile',null,NULL,'Mobile',NULL,1,now(),1,now()),
