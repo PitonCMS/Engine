@@ -11,25 +11,18 @@ namespace Piton\Models;
 use Piton\ORM\DataMapperAbstract;
 
 /**
- * Piton Page Element Mapper
+ * Piton Page Element Media Mapper
  */
-class PageElementMapper extends DataMapperAbstract
+class PageElementMediaMapper extends DataMapperAbstract
 {
     protected $table = 'page_element';
-    protected $modifiableColumns = [
-        'page_id',
-        'block_key',
-        'template',
-        'definition',
-        'element_sort',
-        'title',
-        'content_raw',
-        'content',
-        'excerpt',
-        'collection_id',
-        'gallery_id',
-        'image_path',
-        'embedded'
+    protected $tableJoins = [
+        [
+            'select' => 'media.file media_file, media.caption media_caption',
+            'table' => 'media',
+            'join' => 'left outer join',
+            'on' => 'media.file = page_element.image_path'
+        ]
     ];
 
     /**
@@ -45,19 +38,5 @@ class PageElementMapper extends DataMapperAbstract
         $this->bindValues[] = $pageId;
 
         return $this->find();
-    }
-
-    /**
-     * Delete Page Elements by Page ID
-     *
-     * @param int   $pageId Page ID
-     * @return void
-     */
-    public function deleteElementsByPageId($pageId)
-    {
-        $this->sql = "delete from {$this->table} where page_id = ?;";
-        $this->bindValues[] = $pageId;
-
-        return $this->execute();
     }
 }

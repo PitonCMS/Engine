@@ -28,7 +28,7 @@ class PageMapper extends DataMapperAbstract
         'published_date',
         'image_path'
     ];
-    protected $domainObjectClass = __NAMESPACE__ . '\Page';
+    protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
 
     /**
      * Find Page by ID
