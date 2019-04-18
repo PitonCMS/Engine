@@ -3,33 +3,33 @@
 {% block headText 'Manage Pages' %}
 
 {% block body %}
-  <div class="row">
-    <div class="col">
+
       <h3>Add New Page</h3>
+      <p>Select a page template.</p>
       {% if page.templates %}
-      <ul>
+      <ul class="gridLayout">
         {% for template in page.templates %}
         <li>
-          <a href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a> {{ template.description }}
+          <a href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}" title="{{ template.description }}">{{ template.name }}</a> <span class="pageTypeDesc">
+              {{ template.description }}
+          </span> 
         </li>
         {% endfor %}
       </ul>
       {% else %}
       <h5>No Page JSON Definition Files Found</h5>
       {% endif %}
-    </div>
-  </div>
+   
 
-  <div class="row">
-    <div class="col">
       <h3>Saved Pages</h3>
+      <p>Edit/Delete pages and page content.</p>
       <div class="card-wrapper">
         {% for p in page.pages %}
           {% include "@admin/includes/_pageCard.html" %}
         {% else %}
         <strong>No Saved Pages Found</strong>
         {% endfor %}
-      </div>
-    </div>
+  
   </div>
 {% endblock body %}
+
