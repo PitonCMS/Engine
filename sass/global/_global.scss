@@ -1,0 +1,38 @@
+$box-shadow: 0 2px 4px rgba(black, .25);
+$border-radius: 7px;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding-top: 56px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.15;
+}
+
+/* utilities */
+
+.span {
+  grid-column: 1 / -1;
+}
+
+/*Page Editor*/
+.scroll-container {
+  height: calc(100vh - 190px);
+  overflow-y: scroll;
+  position: relative;
+}
+.card{
+  border: none;
+}
+
+//form styles
+form{
+  background: #fff;
+  padding: 1rem;
+}
