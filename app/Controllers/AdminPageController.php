@@ -86,7 +86,7 @@ class AdminPageController extends AdminBaseController
 
         // Merge saved page settnigs with settings from page JSON definition
         if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettingsWithJsonSettings($page->settings, $page->json->settings, 'page');
+            $page->settings = $this->mergeSettings($page->settings, $page->json->settings);
         }
 
         return $this->render('editPage.html', $page);
