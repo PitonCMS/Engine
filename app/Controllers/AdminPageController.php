@@ -122,14 +122,15 @@ class AdminPageController extends AdminBaseController
         // Process published date
         $publishedDate = $this->request->getParsedBodyParam('published_date');
         if (!empty($publishedDate)) {
-        /*
-        @link: http://php.net/strtotime
-        Dates in the m/d/y or d-m-y formats are disambiguated by looking at the separator between the various
-        components: if the separator is a slash (/), then the American m/d/y is assumed; whereas if the separator
-        is a dash (-) or a dot (.), then the European d-m-y format is assumed.
-        */
-            $publishedDate = strtotime($publishedDate);
-            $page->published_date = date('Y-m-d', $publishedDate);
+            // The leading ! sets the time to 00:00:00
+            $phpDateFormat = [
+                'mm/dd/yyyy' => '!m/d/Y',
+                'dd-mm-yyyy' => '!d-m-Y',
+                'dd.mm.yyyy' => '!d.m.Y'
+            ];
+
+            $date = \DateTime::createFromFormat($phpDateFormat[$this->siteSettings['dateFormat']], $publishedDate);
+            $page->published_date = $date->format('Y-m-d');
         }
 
         // Save Page and get ID

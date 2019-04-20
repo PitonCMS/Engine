@@ -81,7 +81,7 @@ class AdminSettingController extends AdminBaseController
 
                 // Populate the new custom setting and save
                 $setting->category = 'custom';
-                $setting->sort_order = $customSettings[$jsonKey]->sort;
+                $setting->sort_order = 1; // Custom setting display order is based on JSON list order
                 $setting->setting_key = $customSettings[$jsonKey]->key;
                 $setting->input_type = $customSettings[$jsonKey]->inputType;
                 $setting->label = $customSettings[$jsonKey]->label;

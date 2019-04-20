@@ -75,24 +75,22 @@ class AdminBaseController extends BaseController
         foreach ($definedSettings as $defKey => $setting) {
             if (isset($settingIndex[$setting->key])) {
                 $definedSettings[$defKey]->id = $savedSettings[$settingIndex[$setting->key]]->id;
-                $definedSettings[$defKey]->setting_key = $savedSettings[$settingIndex[$setting->key]]->setting_key;
                 $definedSettings[$defKey]->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
                 $definedSettings[$defKey]->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
                 $definedSettings[$defKey]->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
                 $definedSettings[$defKey]->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
                 $definedSettings[$defKey]->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
 
-                // Remove saved setting now that we have updated the setting definition
+                // Remove saved setting from array parameter now that we have updated the setting definition
                 unset($savedSettings[$settingIndex[$setting->key]]);
             } else {
-                // If a matching saved setting was NOT found, then amend the keys as as new setting
-                $definedSettings[$defKey]->setting_key = $definedSettings[$defKey]->key;
+                // If a matching saved setting was NOT found, then set default value
                 $definedSettings[$defKey]->setting_value = $definedSettings[$defKey]->value;
             }
 
-            // Remove JSON keys to avoid confusion in template
-            unset($definedSettings[$defKey]->key);
-            unset($definedSettings[$defKey]->value);
+            // Amend setting keys to what is expected in template
+            $definedSettings[$defKey]->setting_key = $setting->key;
+            $definedSettings[$defKey]->input_type = $definedSettings[$defKey]->inputType;
 
             // Include select options array
             if ($definedSettings[$defKey]->inputType === 'select') {
@@ -101,6 +99,11 @@ class AdminBaseController extends BaseController
 
             // Add setting catagory. Not needed for page settings, but not in the way either
             $definedSettings[$defKey]->category = 'custom';
+
+            // Remove JSON keys to avoid confusion in template
+            unset($definedSettings[$defKey]->key);
+            unset($definedSettings[$defKey]->value);
+            unset($definedSettings[$defKey]->inputType);
         }
 
         // Check remaining saved settings for orphaned settings.
