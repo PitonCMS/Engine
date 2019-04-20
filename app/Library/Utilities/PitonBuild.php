@@ -11,9 +11,9 @@ namespace Piton\Library\Utilities;
 use Composer\Script\Event;
 
 /**
- * Piton Installer Scripts
+ * Piton Build Scripts
  */
-class PitonInstall
+class PitonBuild
 {
 
     /**
@@ -22,7 +22,7 @@ class PitonInstall
      */
     protected static function getProjectDir()
     {
-        // This class if 6 levels deep from project root
+        // This class is 6 levels deep from project root
         return basename(dirname(__DIR__, 6));
     }
 
