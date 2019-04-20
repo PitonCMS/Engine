@@ -21,38 +21,36 @@
 
 {% block body %}
 
-<hr class="mt-0">
-
 <form action="{% block formActionPath '#' %}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-{% block hiddenInputs %}
-{% endblock hiddenInputs %}
-
-  <div class="row">
-    <div class="col-md scroll-container" {% block leftColDiv '' %}>
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}"> 
+    
+    {% block hiddenInputs %}
+    {% endblock hiddenInputs %}
+  
+    <div class="scroll-container" {% block leftColDiv '' %}>
 
     {% block formBody %}
     {% endblock formBody %}
 
-    </div><!-- end left col -->
+    </div>
+    <!-- end left col -->
 
-    <div class="col-md-3">
+    <div class="sidebar">
       <!-- Control Buttons -->
       <div class="mb-2">
-        <a class="btn btn-warning mb-2" href="{% block cancelLink '#' %}">Cancel</a>
-        <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
+        <a class="btn btn-warning" href="{% block cancelLink '#' %}">Cancel</a>
+        <button class="btn btn-primary" type="submit" name="button" value="save">Save</button>
 
         {% block otherControls %}
         {% endblock otherControls %}
 
       </div>
-      <hr>
+     
 
         {% block rightCol %}
         {% endblock rightCol %}
     </div><!-- end right col -->
 
-  </div><!-- end row -->
 </form>
 
 {% endblock body %}

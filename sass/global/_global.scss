@@ -1,5 +1,5 @@
-$box-shadow: 0 2px 4px rgba(black, .25);
-$border-radius: 7px;
+$box-shadow: 0 2px 3px rgba(#333, .25);
+$border-radius: 5px;
 
 *,
 *::before,
@@ -10,7 +10,7 @@ $border-radius: 7px;
 }
 
 body {
-  padding-top: 56px;
+  padding-top: 50px;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.15;
 }
@@ -97,7 +97,7 @@ h3 {
 form {
 
   border-radius: $border-radius;
-  box-shadow: $box-shadow;
+ 
   padding: .25rem;
   margin-top: 1rem;
 
@@ -117,7 +117,6 @@ form {
   label {
     font-weight: 700;
     font-size: 1.2rem;
-
   }
 
   .page-settings-wrapper {
@@ -133,9 +132,7 @@ form {
 
   .form-group {
     border-radius: $border-radius;
-    box-shadow: $box-shadow;
-    border: 1px solid #efefef;
-    background: #efef;
+    background: #efefef;
     padding: .5rem;
   }
 }
