@@ -56,88 +56,65 @@ class AdminBaseController extends BaseController
     }
 
     /**
-     * Merge Saved Settings with JSON Settings
+     * Merge Saved Settings with Defined Settings
      *
      * Merge saved settings with those from page JSON definition file
-     * @param  array  $settings     Saved settings array
-     * @param  array  $jsonSettings Defined settings in JSON definition file
-     * @param  string $scope        'page' | 'custom'
+     * @param  array  $savedSettings   Saved settings array
+     * @param  array  $definedSettings Defined settings in JSON definition file
      * @return array
      */
-    public function mergeSettingsWithJsonSettings(array $settings, array $jsonSettings, string $scope)
+    public function mergeSettings(array $savedSettings, array $definedSettings)
     {
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
+        // Test if the saved settings are for site or page. Only site settings have the category key
+        $pageSetting = isset($savedSettings[0]->category) ? false : true;
 
-        // Validate that we have a valid scope
-        if (!in_array($scope, ['page','custom'])) {
-            throw new Exception('Invalid $scope paramter');
-        }
+        // Make index of saved setting keys to setting array for easy lookup
+        $settingIndex = array_combine(array_column($savedSettings, 'setting_key'), array_keys($savedSettings));
 
-        // Update settings from DB with details from JSON file by matching keys
-        foreach ($settings as $settingIndex => $setting) {
-            // Skip ahead if this is not a custom setting
-            if (isset($setting->category) && $setting->category !== 'custom') {
-                continue;
-            }
+        // Loop through defined settings and update with saved values and meta info
+        foreach ($definedSettings as $defKey => $setting) {
+            if (isset($settingIndex[$setting->key])) {
+                $definedSettings[$defKey]->id = $savedSettings[$settingIndex[$setting->key]]->id;
+                $definedSettings[$defKey]->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
+                $definedSettings[$defKey]->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
+                $definedSettings[$defKey]->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
+                $definedSettings[$defKey]->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
+                $definedSettings[$defKey]->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
 
-            // Now see if we have a matching JSON setting definition
-            foreach ($jsonSettings as $jsonIndex => $jsonSetting) {
-                if ($setting->setting_key === $jsonSetting->key) {
-                    // Update display properties using JSON definition as the master reference
-                    $setting->sort_order = isset($jsonSetting->sort) ? $jsonSetting->sort : null;
-                    $setting->label = $jsonSetting->label;
-                    $setting->input_type = isset($jsonSetting->inputType) ? $jsonSetting->inputType : 'input';
-                    $setting->help = isset($jsonSetting->help) ? $jsonSetting->help : null;
-
-                    // Include select options array
-                    if ($jsonSetting->inputType === 'select') {
-                        $setting->options = array_column($jsonSetting->options, 'name', 'value');
-                    }
-
-                    // Unset this JSON setting and skip to the next outer loop iteration
-                    unset($jsonSettings[$jsonIndex]);
-                    continue 2;
-                }
-            }
-
-            // Found an orphaned field setting in the DB, so mark it as such for optional delete
-            $settings[$settingIndex]->orphaned = true;
-
-            if ($settings[$settingIndex]->input_type = 'select') {
-                // For readability purposes, change orphaned selects to inputs
-                $settings[$settingIndex]->input_type = 'input';
-            }
-        }
-
-        // Any remaining JSON settings are new and have not yet been saved to the DB
-        // Append these to the settings array
-        foreach ($jsonSettings as $setting) {
-            // Create setting object
-            if ($scope === 'custom') {
-                $newSetting = $settingMapper->make();
-                $newSetting->category = 'custom';
+                // Remove saved setting from array parameter now that we have updated the setting definition
+                unset($savedSettings[$settingIndex[$setting->key]]);
             } else {
-                $newSetting = $pageSettingMapper->make();
+                // If a matching saved setting was NOT found, then set default value
+                $definedSettings[$defKey]->setting_value = $definedSettings[$defKey]->value;
             }
 
-            $newSetting->sort_order = isset($setting->sort) ? $setting->sort : 1;
-            $newSetting->setting_key = $setting->key;
-            $newSetting->setting_value = isset($setting->value) ? $setting->value : null;
-            $newSetting->input_type = isset($setting->inputType) ? $setting->inputType : 'input';
-            $newSetting->label = $setting->label;
-            $newSetting->help = isset($setting->help) ? $setting->help : null;
+            // Amend setting keys to what is expected in template
+            $definedSettings[$defKey]->setting_key = $setting->key;
+            $definedSettings[$defKey]->input_type = $definedSettings[$defKey]->inputType;
 
-            // Include select options
-            if ($setting->inputType === 'select') {
-                $newSetting->options = array_column($setting->options, 'name', 'value');
+            // Include select options array
+            if ($definedSettings[$defKey]->inputType === 'select') {
+                $definedSettings[$defKey]->options = array_column($definedSettings[$defKey]->options, 'name', 'value');
             }
 
-            // Append to array
-            $settings[] = $newSetting;
+            // Add setting catagory. Not needed for page settings, but not in the way either
+            $definedSettings[$defKey]->category = 'custom';
+
+            // Remove JSON keys to avoid confusion in template
+            unset($definedSettings[$defKey]->key);
+            unset($definedSettings[$defKey]->value);
+            unset($definedSettings[$defKey]->inputType);
         }
 
-        return $settings;
+        // Check remaining saved settings for orphaned settings.
+        array_walk($savedSettings, function(&$row) use ($pageSetting) {
+            if ($pageSetting || (isset($row->category) && $row->category === 'custom')) {
+                $row->orphaned = true;
+            }
+        });
+
+        // Append defined settings to end of saved settings array and return
+        return array_merge($savedSettings, $definedSettings);
     }
 
     /**

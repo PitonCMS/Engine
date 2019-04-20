@@ -33,10 +33,10 @@ class AdminSettingController extends AdminBaseController
         $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
         if (null === $customSettings = $json->getJson($jsonFilePath, 'setting')) {
             $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
+        } else {
+            // Merge saved settings with custom settings
+            $allSettings = $this->mergeSettings($allSettings, $customSettings->settings);
         }
-
-        // Merge saved settings with custom settings
-        $allSettings = $this->mergeSettingsWithJsonSettings($allSettings, $customSettings->settings, 'custom');
 
         return $this->render('editSettings.html', $allSettings);
     }
@@ -81,7 +81,7 @@ class AdminSettingController extends AdminBaseController
 
                 // Populate the new custom setting and save
                 $setting->category = 'custom';
-                $setting->sort_order = $customSettings[$jsonKey]->sort;
+                $setting->sort_order = 1; // Custom setting display order is based on JSON list order
                 $setting->setting_key = $customSettings[$jsonKey]->key;
                 $setting->input_type = $customSettings[$jsonKey]->inputType;
                 $setting->label = $customSettings[$jsonKey]->label;

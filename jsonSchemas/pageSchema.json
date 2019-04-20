@@ -20,6 +20,14 @@
             "type": "string",
             "enum": ["page","collection"]
         },
+        "hideSubTitle": {
+            "description": "Hides sub-title input",
+            "type": "boolean"
+        },
+        "hideFeaturedImage": {
+            "description": "Hides featured image input",
+            "type": "boolean"
+        },
         "blocks": {
             "description": "An array of page block definitions",
             "type": "array",

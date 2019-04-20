@@ -7,10 +7,6 @@
         "items": {
             "type": "object",
             "properties": {
-                "sort": {
-                    "description": "Sort order index",
-                    "type": "integer"
-                },
                 "label": {
                     "description": "Input label text",
                     "type": "string",
