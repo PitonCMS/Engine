@@ -15,7 +15,7 @@
     {% set enableInput = e.enableInput %}
   {% endfor %}
 
-<div class="card mb-2 jsElementParent" id="page-element-{{ arrayKey }}">
+<div class="card jsElementParent" id="page-element-{{ arrayKey }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
 	<input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
@@ -56,7 +56,7 @@
 
     <div class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
       <label>Media</label>
-      <img src="{{ getMediaPath(element.image_path) }}" class="img-fluid mb-2 {% if element.image_path %}d-block{% else %}d-none{% endif %}">
+      <img src="{{ getMediaPath(element.image_path) }}" class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
       <div class="input-group">
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>

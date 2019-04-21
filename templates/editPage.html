@@ -15,174 +15,192 @@
 {% block formActionPath pathFor('adminSavePage') %}
 
 {% block hiddenInputs %}
-  <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
-  <input type="hidden" name="definition" value="{{ page.definition }}">
-  <input type="hidden" name="template" value="{{ page.json.templateFile }}">
+<input type="hidden" name="id" value="{{ page.id }}">
+<input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+<input type="hidden" name="definition" value="{{ page.definition }}">
+<input type="hidden" name="template" value="{{ page.json.templateFile }}">
 {% endblock hiddenInputs %}
 
 {% block leftColDiv %}data-spy="scroll" data-target="#page-edit-nav"{% endblock %}
 
 {% block formBody %}
-      {# Media Modal #}
-      <div class="modal fade" id="mediaModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
+{# Media Modal #}
+<div class="modal fade" id="mediaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pageSettings">
+  <h5>Page Settings</h5>
+  {# Page Standard Fields #}
+  <div class="form-group-wrapper">
+      <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+            value="{{ page.title }}" required>
         </div>
-      </div>
-
-      {# Page Standard Fields #}
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
-      </div>
-
-      <div class="form-group">
-        <label>Sub Title</label>
-        <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
-        <small class="form-text text-muted">Optional. Limit 150 characters.</small>
-      </div>
-
-      <div class="form-group">
-        <label>Slug</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
-          </div>
-          <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug" value="{{ page.slug }}" required {% if page.slug == 'home' %}readonly{% endif %}>
+      
+        <div class="form-group">
+          <label>Sub Title</label>
+          <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
+          <small class="form-text text-muted">Optional. Limit 150 characters.</small>
         </div>
-        <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL slug is restricted from being changed.</small>
-      </div>
+      
+        <div class="form-group">
+          <label>Slug</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
+            </div>
+            <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug" value="{{ page.slug }}"
+              required {% if page.slug == 'home' %}readonly{% endif %}>
+          </div>
+          <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL slug is
+            restricted from being changed.</small>
+        </div>
+      
+        <div class="form-group">
+          <label>Meta Description</label>
+          <input type="text" class="form-control" name="meta_description" maxlength="320"
+            placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+          <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
+            results.</small>
+        </div>
+      
+        <div class="form-group">
+          <label>Featured Page Image</label>
+          <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
+            value="{{ page.image_path }}">
+          <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
+        </div>
+  </div>
+ 
+  {# Page Custom Settings #}
 
-      <div class="form-group">
-        <label>Meta Description</label>
-        <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
-        <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search results.</small>
-      </div>
+  {% if page.settings %}
+  <h5>Custom Page Settings</h5>
 
-      <div class="form-group">
-        <label>Featured Page Image</label>
-        <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path" value="{{ page.image_path }}">
-        <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
-      </div>
+<div class="form-group-wrapper">
+    {% for setting in page.settings %}
+    {% if setting.input_type == 'select' %}
+    {{ settingForm.selectHtml(setting, setting.options) }}
+    {% elseif setting.input_type == 'textarea' %}
+    {{ settingForm.textareaHtml(setting) }}
+    {% else %}
+    {{ settingForm.inputHtml(setting) }}
+    {% endif %}
+    {% endfor %}
+ 
+</div>
+{% endif %} 
+</div>
 
+{# Page Blocks and Elements #}
+<div class="block-element-wrapper">
+  {% for block in page.json.blocks %}
+  <div class="element-block">
+    <div class="p-2 jsBlockParent border" id="page-block-{{ block.key }}">
+      <h2>{{ block.name }} Block</h2>
+      <p class="lead">{{ block.description }}</p>
+
+      {# Get count of elements in block to know if we need to disable the Add Element Button #}
+      {% set elementLength = 0 %}
+      {% for element in page.elements if element.block_key == block.key %}
+      {% set elementLength = elementLength + 1 %}
+      {% endfor %}
+      <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
+        data-element-type="{{ block.elementTypeDefault }}"
+        data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+        data-element-count-limit="{{ block.elementCountLimit }}"
+        {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
       <hr>
 
-      {# Page Custom Settings #}
-      {% if page.settings %}
-      <h5>Page Settings</h5>
-
-        {% for setting in page.settings %}
-          {% if setting.input_type == 'select' %}
-            {{ settingForm.selectHtml(setting, setting.options) }}
-          {% elseif setting.input_type == 'textarea' %}
-            {{ settingForm.textareaHtml(setting) }}
-          {% else %}
-            {{ settingForm.inputHtml(setting) }}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-
-      {# Page Blocks and Elements #}
-      {% for block in page.json.blocks %}
-      <div class="p-2 mb-2 jsBlockParent border" id="page-block-{{ block.key }}">
-        <h2>{{ block.name }} Block</h2>
-        <p class="lead">{{ block.description }}</p>
-
-        {# Get count of elements in block to know if we need to disable the Add Element Button #}
-        {% set elementLength = 0 %}
-        {% for element in page.elements if element.block_key == block.key %}
-          {% set elementLength = elementLength + 1 %}
-        {% endfor %}
-        <button class="btn btn-success btn-sm jsAddElement"
-          type="button" data-block-key="{{ block.key }}"
-          data-element-type="{{ block.elementTypeDefault }}"
-          data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-          data-element-count-limit="{{ block.elementCountLimit }}"
-          {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
-        <hr>
-
-        {% for element in page.elements if element.block_key == block.key %}
-          {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
-        {% else %}
-          <h5>Click "Add Element" to add content to this block.</h5>
-        {% endfor %}
-      </div>
+      {% for element in page.elements if element.block_key == block.key %}
+      {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
+      {% else %}
+      <h5>Click "Add Element" to add content to this block.</h5>
       {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
 {% endblock formBody %}
 
 {% block cancelLink pathFor('adminPages') %}
 
 {% block otherControls %}
-        <div class="form-group">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              {% if page.getPublishedStatus() == 'draft' %}
-              <span class="input-group-text" title="Not published">Draft</span>
-              {% elseif page.getPublishedStatus() == 'pending' %}
-              <span class="input-group-text bg-warning">Pending</span>
-              {% elseif page.getPublishedStatus() == 'published' %}
-              <span class="input-group-text bg-success text-light">Published</span>
-              {% endif %}
-            </div>
-            <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
-            <small class="form-text text-muted">Select date to publish page and save. Clear date and save to unpublish.</small>
-          </div>
-        </div>
-        {% if page.id %}
-        <button class="btn btn-outline-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
-        {% endif %}
+{% if page.id %}
+<button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
+{% endif %}
+<div class="form-group">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      {% if page.getPublishedStatus() == 'draft' %}
+      <span class="input-group-text" title="Not published">Draft</span>
+      {% elseif page.getPublishedStatus() == 'pending' %}
+      <span class="input-group-text bg-warning">Pending</span>
+      {% elseif page.getPublishedStatus() == 'published' %}
+      <span class="input-group-text bg-success text-light">Published</span>
+      {% endif %}
+    </div>
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+    <small class="form-text text-muted">Select date to publish page and save. Clear date and save to unpublish.</small>
+  </div>
+</div>
+
 {% endblock otherControls %}
 
 {% block rightCol %}
-      <div>
-        <h6>Page Navigator</h6>
-        <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
-          <nav class="nav nav-pills flex-column">
-          {% for block in page.json.blocks %}
-            <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }} (Block)</a>
-            <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
-            {% for element in page.elements if element.block_key == block.key %}
-              <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
-            {% endfor %}
-            </nav>
-          {% endfor %}
-          </nav>
-        </nav>
-      </div>
+<div class="pageNavigator">
+  <h6>Page Navigator</h6>
+  <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
+    <nav class="nav nav-pills flex-column">
+      {% for block in page.json.blocks %}
+      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }} (Block)</a>
+      <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
+        {% for element in page.elements if element.block_key == block.key %}
+        <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
+        {% endfor %}
+      </nav>
+      {% endfor %}
+    </nav>
+  </nav>
+</div>
 {% endblock rightCol %}
 
 {% block footJs %}
-  $('body').on('change', 'input[name^=element_image_path]', function() {
-    if ($(this).val() === '') {
-      $(this).parents('.jsMediaInput').find('img').attr('src','');
-    }
-  });
+$('body').on('change', 'input[name^=element_image_path]', function() {
+if ($(this).val() === '') {
+$(this).parents('.jsMediaInput').find('img').attr('src','');
+}
+});
 
-  $('body').on('click', '.jsSelectMediaFile', function() {
-    let $input = $(this).parents('.input-group').find('input');
-    let $img = $(this).parents('.jsMediaInput').find('img');
+$('body').on('click', '.jsSelectMediaFile', function() {
+let $input = $(this).parents('.input-group').find('input');
+let $img = $(this).parents('.jsMediaInput').find('img');
 
-    $('#mediaModal').on('click', 'img', function() {
-      $input.val($(this).attr('src'));
-      $img.attr('src', $(this).attr('src')).removeClass('d-none');
-      $('#mediaModal').modal('hide');
-    });
+$('#mediaModal').on('click', 'img', function() {
+$input.val($(this).attr('src'));
+$img.attr('src', $(this).attr('src')).removeClass('d-none');
+$('#mediaModal').modal('hide');
+});
 
-    $.ajax({
-        url: '/admin/media/get',
-        method: "GET",
-        success: function (r) {
-          $('#mediaModal').find('.modal-body').html(r.html).end().modal();
-        }
-      });
+$.ajax({
+url: '/admin/media/get',
+method: "GET",
+success: function (r) {
+$('#mediaModal').find('.modal-body').html(r.html).end().modal();
+}
+});
 
-  });
+});
 {% endblock footJs %}
