@@ -63,6 +63,8 @@ class AdminController extends AdminBaseController
             // Verify that we have a response
             if ($responseStatus == '200') {
                 $releases = json_decode($responseBody);
+                $releases = array_slice($releases, 0, 5, true);
+
                 // Format Markdown
                 foreach ($releases as $key => $release) {
                     $releases[$key]->body = $markdown->text($release->body);
