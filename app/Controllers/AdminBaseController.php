@@ -40,10 +40,10 @@ class AdminBaseController extends BaseController
      */
     public function setAlert($severity, $heading, $message = null)
     {
-        // Make sure severity level is in our CSS
+        // Make sure severity level is in our Bootstrap CSS
         $severityList = ['primary','secondary','success','danger','warning','info'];
         if (!in_array($severity, $severityList)) {
-            throw new \Exception("Alert severity not found in list.");
+            throw new Exception("Alert severity not found in list.");
         }
 
         // Alert data is made available in the template, or if $this->redirect() is called
@@ -51,8 +51,20 @@ class AdminBaseController extends BaseController
         $this->alert = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? implode(', ', $message) : $message
+            'message' => (is_array($message)) ? $message : [$message]
         ];
+    }
+
+    /**
+     * Append Alert Message
+     *
+     * Add additional messages to alert dialog
+     * @param  string $message
+     * @return void
+     */
+    public function appendAlertMessage(string $message)
+    {
+        $this->alert['message'][] = $message;
     }
 
     /**

@@ -123,6 +123,10 @@ class Admin extends Base
         }
 
         if (isset($alert[$key])) {
+            if ($key === 'message' ) {
+                return '<ul><li>' . implode('</li><li>', $alert['message']) . '</ul>';
+            }
+
             return $alert[$key];
         }
 
