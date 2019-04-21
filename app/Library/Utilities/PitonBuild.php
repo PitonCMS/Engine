@@ -17,6 +17,18 @@ class PitonBuild
 {
 
     /**
+     * Piton Create Project
+     *
+     * Called after composer create-project
+     * Updates docker build for current project directory
+     */
+    public static function createProject()
+    {
+        static::updateDockerYaml();
+        static::updateApacheHost();
+    }
+
+    /**
      * Get Project Directory
      *
      */
@@ -33,7 +45,7 @@ class PitonBuild
      * @param  object $event Composer\Script\Event
      * @return void
      */
-    public static function updateDockerYaml(Event $event)
+    protected static function updateDockerYaml(Event $event)
     {
         // Get project directory name
         $projectDir = self::getProjectDir();
@@ -78,7 +90,7 @@ TEXT;
      * @param  object $event Composer\Script\Event
      * @return void
      */
-    public static function updateApacheHost(Event $event)
+    protected static function updateApacheHost(Event $event)
     {
         // Get project directory name
         $projectDir = self::getProjectDir();
