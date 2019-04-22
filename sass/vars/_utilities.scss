@@ -1,0 +1,9 @@
+/* utilities */
+
+.span {
+  grid-column: 1 / -1;
+}
+.sticky {
+  position: sticky;
+ box-shadow: $box-shadow;
+}
