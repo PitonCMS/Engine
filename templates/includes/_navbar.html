@@ -22,7 +22,9 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminMessages') }}">Messages</a>
+            <a class="nav-link" href="{{ pathFor('adminMessages') }}">
+              Messages <span class="badge badge-light">{{ getUnreadMessageCount() }}</span>
+              </a>
           </li>
 
           <li class="nav-item">

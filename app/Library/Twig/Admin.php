@@ -71,6 +71,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
             new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
+            new \Twig_SimpleFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
         ]);
     }
 
@@ -202,5 +203,20 @@ class Admin extends Base
         }
 
         return $this->elementOptions = $elements;
+    }
+
+    /**
+     * Get Unread Message Count
+     *
+     * Gets count of unread messages
+     * @param  void
+     * @return mixed
+     */
+    public function getUnreadMessageCount()
+    {
+        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        $count = $messageMapper->findUnreadCount();
+
+        return ($count === 0) ? null : $count;
     }
 }
