@@ -13,6 +13,7 @@ use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminAccessController;
 use Piton\Controllers\AdminCollectionController;
 use Piton\Controllers\AdminMediaController;
+use Piton\Controllers\AdminMessageController;
 
 //
 // Private secured routes
@@ -163,6 +164,15 @@ $app->group('/admin', function () {
         })->add('csrfGuard')->setName('adminFileDelete');
     });
     // End media
+
+    // Messages
+    $this->group('/message', function () {
+        // Show all messages
+        $this->get('[/]', function ($args) {
+            return (new AdminMessageController($this))->showMessages();
+        })->setName('adminMessages');
+    });
+    // End messages
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;

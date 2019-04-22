@@ -147,11 +147,7 @@ class Email implements EmailInterface
     public function configSMTP() : void
     {
         $this->mailer->isSMTP();
-        //Enable SMTP debugging
-        // 0 = off (for production use)
-        // 1 = client messages
-        // 2 = client and server messages
-        $this->mailer->SMTPDebug = ($this->settings['production']) ? 0 : 2;
+        $this->mailer->SMTPDebug = 0;
         $this->mailer->Host = $this->settings['email']['smtpHost'];
         $this->mailer->Port = $this->settings['email']['smtpPort'];
         $this->mailer->SMTPAuth = true;

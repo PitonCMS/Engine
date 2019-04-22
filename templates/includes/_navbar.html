@@ -21,13 +21,18 @@
             <a class="nav-link" href="{{ pathFor('adminShowMedia') }}">Media</a>
           </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://pitoncms.com" id="setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ pathFor('adminSettings') }}">Settings</a>
-              <!-- <a class="dropdown-item" href="{{ pathFor('adminUsers') }}">Users</a> -->
-            </div>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ pathFor('adminMessages') }}">Messages</a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ pathFor('adminSettings') }}">Settings</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ pathFor('adminUsers') }}">Users</a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
           </li>

@@ -21,6 +21,9 @@
               <a class="nav-link" id="pills-social-tab" data-toggle="pill" href="#pills-social" role="tab" aria-controls="pills-social" aria-selected="false">Social</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" id="pills-social-tab" data-toggle="pill" href="#pills-contactForm" role="tab" aria-controls="pills-contactForm" aria-selected="false">Contact Form</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" id="pills-custom-tab" data-toggle="pill" href="#pills-custom" role="tab" aria-controls="pills-custom" aria-selected="false">Custom</a>
             </li>
           </ul>
@@ -52,6 +55,18 @@
 
             <div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
               {% for setting in page if setting.category == 'social' %}
+                {% if setting.input_type == 'select' %}
+                  {{ settingForm.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
+                {% elseif setting.input_type == 'textarea' %}
+                  {{ settingForm.textareaHtml(setting) }}
+                {% else %}
+                  {{ settingForm.inputHtml(setting) }}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="tab-pane fade" id="pills-contactForm" role="tabpanel" aria-labelledby="pills-contactForm-tab">
+              {% for setting in page if setting.category == 'contactForm' %}
                 {% if setting.input_type == 'select' %}
                   {{ settingForm.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
                 {% elseif setting.input_type == 'textarea' %}
