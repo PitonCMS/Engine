@@ -22,8 +22,8 @@ class AdminMessageController extends AdminBaseController
     public function showMessages()
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
-
         $messages = $messageMapper->find();
-        var_dump($messages);
+
+        return $this->render('messages.html', ['messages' => $messages]);
     }
 }
