@@ -37,8 +37,11 @@
   </div>
 </div>
 
-<div id="pageSettings">
-  <h5>Page Settings</h5>
+<div class="page-settings-wrapper">
+  <div class="block-title-wrapper">
+      <h5>Page Settings</h5>
+  </div>
+ 
   {# Page Standard Fields #}
   <div class="form-group-wrapper">
       <div class="form-group">
@@ -46,12 +49,14 @@
           <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
             value="{{ page.title }}" required>
         </div>
-      
+
+      {% if not page.json.hideSubTitle %}
         <div class="form-group">
           <label>Sub Title</label>
           <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
           <small class="form-text text-muted">Optional. Limit 150 characters.</small>
         </div>
+        {% endif %}
       
         <div class="form-group">
           <label>Slug</label>
@@ -74,18 +79,22 @@
             results.</small>
         </div>
       
-        <div class="form-group">
-          <label>Featured Page Image</label>
+        {% if not page.json.hideFeaturedImage %}
+        <div class="form-group span">
+          <label>Featured Image</label>
           <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
             value="{{ page.image_path }}">
           <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
         </div>
+        {% endif %}
   </div>
  
   {# Page Custom Settings #}
 
   {% if page.settings %}
+<div class="block-title-wrapper">  
   <h5>Custom Page Settings</h5>
+</div>
 
 <div class="form-group-wrapper">
     {% for setting in page.settings %}
@@ -106,26 +115,27 @@
 <div class="block-element-wrapper">
   {% for block in page.json.blocks %}
   <div class="element-block">
-    <div class="p-2 jsBlockParent border" id="page-block-{{ block.key }}">
-      <h2>{{ block.name }} Block</h2>
-      <p class="lead">{{ block.description }}</p>
-
-      {# Get count of elements in block to know if we need to disable the Add Element Button #}
-      {% set elementLength = 0 %}
-      {% for element in page.elements if element.block_key == block.key %}
-      {% set elementLength = elementLength + 1 %}
-      {% endfor %}
-      <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
-        data-element-type="{{ block.elementTypeDefault }}"
-        data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-        data-element-count-limit="{{ block.elementCountLimit }}"
-        {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
-      <hr>
+    <div class="jsBlockParent" id="page-block-{{ block.key }}">
+      <div class="block-title-wrapper">
+          <h2>{{ block.name }} Block</h2>
+          <p class="lead">{{ block.description }}</p>
+          {# Get count of elements in block to know if we need to disable the Add Element Button #}
+          {% set elementLength = 0 %}
+          {% for element in page.elements if element.block_key == block.key %}
+          {% set elementLength = elementLength + 1 %}
+          {% endfor %}
+          <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
+            data-element-type="{{ block.elementTypeDefault }}"
+            data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+            data-element-count-limit="{{ block.elementCountLimit }}"
+            {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
+         
+      </div>
 
       {% for element in page.elements if element.block_key == block.key %}
       {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
       {% else %}
-      <h5>Click "Add Element" to add content to this block.</h5>
+      <p>Click "Add Element" to add content to this block.</p>
       {% endfor %}
     </div>
   </div>
