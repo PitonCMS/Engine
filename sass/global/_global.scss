@@ -43,7 +43,8 @@ body {
 }
 
 header {
-  background-color: #efefef !important;
+  background-color:$primary-color !important;
+  color: $primary-light !important;
   height: 100px;
   display: flex;
   flex-flow: column wrap;
