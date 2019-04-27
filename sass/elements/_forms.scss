@@ -1,35 +1,88 @@
 form {
-  background-color: #ecec11;
+  border-radius: $border-radius;
+  @include padding(0 .25rem .25rem);
 
-  .page-settings-wrapper {
-    background-color: #ecec22;
+  display: grid;
+  grid-template-rows: auto;
+
+  @media (min-width: 800px) {
+    grid-template-columns: 3.5fr 1fr;
+
   }
 
-  .block-title-wrapper {
-    background-color: #ecec33;
+  .scroll-container {
+    height: calc(100vh - 175px);
+    overflow-y: scroll;
+    position: relative;
+    scroll-behavior: smooth;
+
+  }
+
+  .sidebar {
+    @include padding(1rem);
+  }
+
+  label {
+    margin: 0;
+  }
+
+  h5 {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  label {
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  .page-settings-wrapper {
+
+    padding: 1rem .5rem;
   }
 
   .form-group-wrapper {
-    background-color: #ecec44;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
   }
 
   .form-group {
-    background-color: #ecec55;
+    border-radius: $border-radius;
+
+    padding: .5rem;
   }
 
-  .form-control {
-    background-color: #ecec;
+  .block-title-wrapper {
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-flow: row wrap;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+    background: $primary-light-grey;
+    padding: .25rem;
   }
 
-  .block-element-wrapper {
-    background-color: #efef;
+  h5,
+  h2,
+  p {
+    padding: 0;
+    margin: 0;
   }
 
-  .element-block {
-    background-color: #eded;
-  }
+}
 
-  .jsBlockParent {
-    background-color: #e1e1;
-  }
+.nav-link.ml-3.active {
+  background-color: rgba($primary-light-grey, .5) !important;
+  color: #333 !important;
+}
+
+.jsElementParent {
+  @include padding(30px null null);
 }

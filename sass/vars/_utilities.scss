@@ -3,10 +3,12 @@
 .span {
   grid-column: 1 / -1;
 }
+
 .sticky {
   position: sticky;
- box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
 }
+
 .alert-fixed {
   position: fixed;
   top: 100px;
@@ -14,4 +16,10 @@
   right: 0px;
   width: 100%;
   z-index: 99;
+}
+
+/* Fixes issue with fixed nav covering part of named anchor */
+.anchor-offset {
+  padding-top: 56px;
+  margin-top: -56px;
 }

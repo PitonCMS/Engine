@@ -4,24 +4,22 @@
 {% block leadText 'For PitonCMS Engine' %}
 
 {% block body %}
-    <style>
-        /* Fixes issue with fixed nav covering part of named anchor */
-        .anchor-offset {padding-top: 56px; margin-top: -56px;}
-    </style>
-    {% for rel in page.releases %}
-    <h3 id="rel-{{ rel.tag_name }}" class="anchor-offset">{{ rel.name }}</h3>
-    <p class="lead">
-        Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
-        Published {{ rel.published_at|date }}
-    </p>
-    <p>{{ rel.body }}</p>
-    <hr>
-    {% endfor %}
-    <i>To see older release notes, or to contribute to PitonCMS, go to <a href="https://github.com/PitonCMS" target="_blank">GitHub PitonCMS</a>.</i>
+
+{% for rel in page.releases %}
+<h3 id="rel-{{ rel.tag_name }}" class="anchor-offset">{{ rel.name }}</h3>
+<p class="lead">
+    Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
+    Published {{ rel.published_at|date }}
+</p>
+<p>{{ rel.body }}</p>
+<hr>
+{% endfor %}
+<i>To see older release notes, or to contribute to PitonCMS, go to <a href="https://github.com/PitonCMS"
+        target="_blank">GitHub PitonCMS</a>.</i>
 {% endblock body %}
 
 {% block footJs %}
-    let path = window.location.pathname;
-    let release = path.match(/\d+\.\d+\.\d+$/g);
-    if (release[0]) window.location.hash = "rel-" + release[0];
+let path = window.location.pathname;
+let release = path.match(/\d+\.\d+\.\d+$/g);
+if (release[0]) window.location.hash = "rel-" + release[0];
 {% endblock footJs %}
