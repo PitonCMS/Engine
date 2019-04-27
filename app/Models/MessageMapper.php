@@ -16,32 +16,27 @@ use Piton\ORM\DataMapperAbstract;
 class MessageMapper extends DataMapperAbstract
 {
     protected $table = 'message';
+    protected $domainObjectClass = __NAMESPACE__ . '\Entities\Message';
     protected $modifiableColumns = [
         'name',
         'email',
         'message',
-        'read',
-        'attribute1',
-        'attribute2',
-        'attribute3',
-        'attribute4',
-        'attribute5',
-        'attribute6',
-        'attribute7',
-        'attribute8',
-        'attribute9',
-        'attribute10',
-        'attribute11',
-        'attribute12',
-        'attribute13',
-        'attribute14',
-        'attribute15',
-        'attribute16',
-        'attribute17',
-        'attribute18',
-        'attribute19',
-        'attribute20'
+        'is_read'
     ];
+
+    /**
+     * Find Messages in Date Order
+     *
+     * @param void
+     * @return mixed
+     */
+    public function findAllInDateOrder()
+    {
+        $this->makeSelect();
+        $this->sql .= ' order by created_date desc';
+
+        return $this->find();
+    }
 
     /**
      * Find Unread Count
@@ -52,7 +47,7 @@ class MessageMapper extends DataMapperAbstract
      */
     public function findUnreadCount()
     {
-        $this->sql = 'select count(*) unread from message where `read` = \'N\'';
+        $this->sql = 'select count(*) unread from message where is_read = \'N\'';
 
         return (int) $this->findRow()->unread;
     }
@@ -67,7 +62,7 @@ class MessageMapper extends DataMapperAbstract
     public function findUnread()
     {
         $this->makeSelect();
-        $this->sql .= 'and `read` = \'N\'';
+        $this->sql .= 'and is_read = \'N\'';
 
         return $this->find();
     }
@@ -80,7 +75,7 @@ class MessageMapper extends DataMapperAbstract
      */
     public function markAsRead(int $messageId)
     {
-        $this->sql = 'update message set read = \'Y\' where id = ?';
+        $this->sql = 'update message set is_read = \'Y\' where id = ?';
         $this->bindValues[] = $messageId;
 
         return $this->execute();
@@ -94,7 +89,7 @@ class MessageMapper extends DataMapperAbstract
      */
     public function markAsUnread(int $messageId)
     {
-        $this->sql = 'update message set read = \'N\' where id = ?';
+        $this->sql = 'update message set is_read = \'N\' where id = ?';
         $this->bindValues[] = $messageId;
 
         return $this->execute();

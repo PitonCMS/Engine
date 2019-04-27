@@ -171,6 +171,18 @@ $app->group('/admin', function () {
         $this->get('[/]', function ($args) {
             return (new AdminMessageController($this))->showMessages();
         })->setName('adminMessages');
+
+        // Save message changes
+        $this->post('/save', function ($args) {
+            if ($this->request->getParsedBodyParam('button') === 'toggle') {
+                return (new AdminMessageController($this))->toggleStatus();
+            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
+                return (new AdminMessageController($this))->delete();
+            } else {
+                $notFound = $this->notFoundHanlder;
+                return $notFound($this->request, $this->response);
+            }
+        })->add('csrfGuard')->setName('adminMessageSave');
     });
     // End messages
 })->add(function ($request, $response, $next) {
