@@ -1,43 +1,44 @@
 {# Admin Navbar #}
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
+    aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
+  <div class="collapse navbar-collapse" id="pitonAdminNavbar">
+    <ul class="navbar-nav ml-auto">
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminPages') }}">Pages</a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminPages') }}">Pages</a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminCollections') }}">Collections</a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminCollections') }}">Collections</a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminShowMedia') }}">Media</a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminShowMedia') }}">Media</a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminMessages') }}">
-              Messages <span class="badge badge-light">{{ getUnreadMessageCount() }}</span>
-              </a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminMessages') }}">
+          Messages <span class="badge badge-light">{{ getUnreadMessageCount() }}</span>
+        </a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminSettings') }}">Settings</a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminSettings') }}">Settings</a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminUsers') }}">Users</a>
-          </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminUsers') }}">Users</a>
+      </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
