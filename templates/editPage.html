@@ -145,7 +145,7 @@
 
 {% block otherControls %}
 {% if page.id %}
-<button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete">Delete</button>
+<button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete" {% if page.slug == 'home' %}disabled title="The home page cannot be deleted."{% endif %}>Delete</button>
 {% endif %}
 <div class="form-group">
   <div class="input-group mb-3">

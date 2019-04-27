@@ -107,15 +107,27 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
         $json = $this->container->json;
 
-        // Create page object and populate POST data
-        $page = $pageMapper->make();
-        $page->id = $this->request->getParsedBodyParam('id');
+        // Get page object
+        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
+        $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
+
+        if (null !== $pageId) {
+            $page = $pageMapper->findById($pageId);
+
+            // Ensure we are not futzing with the home page slug
+            if ($page->slug === 'home' && $newSlug !== 'home') {
+                throw new Exception('PitonCMS: Cannot change home page slug');
+            }
+        } else {
+            $page = $pageMapper->make();
+        }
+
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
         $page->definition = $this->request->getParsedBodyParam('definition');
         $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
-        $page->slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
+        $page->slug = $newSlug;
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
         $page->image_path = $this->request->getParsedBodyParam('image_path');
 
@@ -217,9 +229,14 @@ class AdminPageController extends AdminBaseController
         $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         if (null !== $pageId = $this->request->getParsedBodyParam('id')) {
+            // Ensure this is not the home page
+            $page = $pageMapper->findById($pageId);
+
+            if ($page->slug === 'home') {
+                throw new Exception('PitonCMS: Cannot delete home page');
+            }
+
             // Delete page
-            $page = $pageMapper->make();
-            $page->id = $pageId;
             $pageMapper->delete($page);
 
             // Delete page elements & page settings
