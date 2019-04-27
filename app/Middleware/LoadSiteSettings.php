@@ -81,11 +81,14 @@ class LoadSiteSettings
     public function loadSettings()
     {
         $SettingMapper = ($this->dataMapper)('SettingMapper');
-
         $siteSettings = $SettingMapper->find();
 
         // Create new multi-dimensional array keyed by the setting category and key
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
+
+        // Load some config file settings into new settings
+        $this->settings['production'] = $this->appSettings['site']['production'];
+        $this->settings['pitonDev'] = isset($this->appSettings['site']['pitonDev']) ? $this->appSettings['site']['pitonDev'] : false;
     }
 
     /**

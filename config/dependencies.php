@@ -19,7 +19,7 @@ $container['view'] = function ($c) {
 
     $view = new Slim\Views\Twig($templatePaths, [
         'cache' => ROOT_DIR . 'twigcache',
-        'debug' => !$settings['production'],
+        'debug' => !$settings['site']['production'],
         'autoescape' => false,
     ]);
 
@@ -43,7 +43,7 @@ $container['view'] = function ($c) {
     $twigEnvironment->getExtension('Twig_Extension_Core')->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
 
     // Load Twig debugger if in development
-    if ($settings['production'] === false) {
+    if ($settings['site']['production'] === false) {
         $view->addExtension(new Twig_Extension_Debug());
     }
 
@@ -52,7 +52,7 @@ $container['view'] = function ($c) {
 
 // Monolog logging
 $container['logger'] = function ($c) {
-    $level = ($c->get('settings')['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
+    $level = ($c->get('settings')['site']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
     $logger = new Monolog\Logger('app');
     $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_DIR . 'logs/' . date('Y-m-d') . '.log', $level));
 

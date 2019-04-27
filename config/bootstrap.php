@@ -34,7 +34,7 @@ return call_user_func(
         }
 
         // Set error reporting level based on environment
-        if ($config['production'] === true) {
+        if ($config['site']['production'] === true) {
             ini_set('display_errors', 'Off');
             error_reporting(0);
             $config['displayErrorDetails'] = false;

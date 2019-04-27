@@ -22,8 +22,12 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
-    <link href="{{ basePath() }}/admin/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
+    {% if site.settings.pitonDev %}
+    <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
+    {% else %}
+    <link rel="stylesheet" href="https://cdn.pitoncms.com/0.16.0/css/main.css">
+    {% endif %}
 
     <script type="text/javascript">
       let pitonConfig = {
@@ -47,7 +51,6 @@
 
     <div class="container-fluid">
 
-
       {% block body %}
       {% endblock body %}
 
@@ -59,7 +62,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
+    {% if site.settings.pitonDev %}
     <script src="{{ basePath() }}/admin/js/admin.js"></script>
+    {% else %}
+    <script src="https://cdn.pitoncms.com/0.16.0/js/main.js"></script>
+    {% endif %}
     <script>
       [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
         var simplemde = new SimpleMDE({
