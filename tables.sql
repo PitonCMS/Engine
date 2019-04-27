@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `category` varchar(60) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 1,
   `setting_key` varchar(60) NOT NULL,
-  `setting_value` varchar(1000) DEFAULT NULL,
+  `setting_value` varchar(4000) DEFAULT NULL,
   `input_type` varchar(20) DEFAULT NULL,
   `label` varchar(60) DEFAULT NULL,
   `help` varchar(500) DEFAULT NULL,
