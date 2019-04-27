@@ -18,12 +18,47 @@ class AdminMessageController extends AdminBaseController
     /**
      * Show All Messages
      *
+     * Displays all messages in descending date order
      */
     public function showMessages()
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $messages = $messageMapper->find();
+        $messages = $messageMapper->findAllInDateOrder();
 
         return $this->render('messages.html', ['messages' => $messages]);
+    }
+
+    /**
+     * Toggle Status
+     *
+     * Sets the read status to the opposite of the current status
+     */
+    public function toggleStatus()
+    {
+        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+
+        $messageId = $this->request->getParsedBodyParam('id');
+        $message = $messageMapper->findById($messageId);
+        if ($message->isRead === 'Y') {
+            $messageMapper->markAsUnread($messageId);
+        } else {
+            $messageMapper->markAsRead($messageId);
+        }
+
+        return $this->redirect('adminMessages');
+    }
+
+    /**
+     * Delete Message
+     */
+    public function delete()
+    {
+        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+
+        $message = $messageMapper->make();
+        $message->id = $this->request->getParsedBodyParam('id');
+        $messageMapper->delete($message);
+
+        return $this->redirect('adminMessages');
     }
 }
