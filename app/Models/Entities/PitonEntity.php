@@ -16,15 +16,6 @@ use Piton\ORM\DomainObject;
 class PitonEntity extends DomainObject
 {
     /**
-     * Piton Who Properties
-     * @var mixed int | string
-     */
-    public $created_by;
-    public $created_date;
-    public $updated_by;
-    public $updated_date;
-
-    /**
      * Get Object Property
      *
      * The switch statement maps non-existent camelCase properties to real properties in database

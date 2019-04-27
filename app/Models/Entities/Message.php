@@ -14,14 +14,6 @@ namespace Piton\Models\Entities;
 class Message extends PitonEntity
 {
     /**
-     * Message Properties
-     */
-    public $name;
-    public $email;
-    public $message;
-    public $is_read;
-
-    /**
      * Get Object Property
      *
      * The switch statement maps non-existent camelCase properties to real properties in database
