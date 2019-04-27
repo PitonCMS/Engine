@@ -228,7 +228,9 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
-        if (null !== $pageId = $this->request->getParsedBodyParam('id')) {
+        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
+
+        if (null !== $pageId) {
             // Ensure this is not the home page
             $page = $pageMapper->findById($pageId);
 
