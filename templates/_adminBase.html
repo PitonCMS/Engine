@@ -40,14 +40,13 @@
   </head>
 
   <body>
-    {% include "@admin/includes/_navbar.html" %}
     {% include "@admin/includes/_alert.html" %}
       {% include "@admin/includes/_header.html" with {
         headText: block('headText') is defined ? block('headText'),
         leadText: block('leadText') is defined ? block('leadText')} %}
 
     <div class="container-fluid">
-      
+
 
       {% block body %}
       {% endblock body %}
