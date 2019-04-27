@@ -60,28 +60,21 @@ class FrontController extends FrontBaseController
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $email = $this->container->emailHandler;
 
-        $message = $messageMapper->make();
-        $message->name = $this->request->getParsedBodyParam('name');
-        $message->email = $this->request->getParsedBodyParam('email');
-        $message->message = $this->request->getParsedBodyParam('message');
-        $message->attribute1 = $this->request->getParsedBodyParam('attribute1');
-        $message->attribute2 = $this->request->getParsedBodyParam('attribute2');
-        $message->attribute3 = $this->request->getParsedBodyParam('attribute3');
-        $message->attribute4 = $this->request->getParsedBodyParam('attribute4');
-        $message->attribute5 = $this->request->getParsedBodyParam('attribute5');
-        $message->attribute6 = $this->request->getParsedBodyParam('attribute6');
-        $message->attribute7 = $this->request->getParsedBodyParam('attribute7');
-        $message->attribute8 = $this->request->getParsedBodyParam('attribute8');
-        $message->attribute9 = $this->request->getParsedBodyParam('attribute9');
-        $message->attribute10 = $this->request->getParsedBodyParam('attribute10');
-        $messageMapper->save($message);
+        // Check honepot and if clean, then submit message
+        if ('alt@example.com' === $this->request->getParsedBodyParam('alt-email')) {
+            $message = $messageMapper->make();
+            $message->name = $this->request->getParsedBodyParam('name');
+            $message->email = $this->request->getParsedBodyParam('email');
+            $message->message = $this->request->getParsedBodyParam('message');
+            $messageMapper->save($message);
 
-        // Send message to workflow email
-        $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
-        $email->setTo($this->siteSettings['contactFormEmail'], '')
-            ->setSubject("New Contact Message to $siteName")
-            ->setMessage("From: {$message->email}\n\n{$message->message}")
-            ->send();
+            // Send message to workflow email
+            $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
+            $email->setTo($this->siteSettings['contactFormEmail'], '')
+                    ->setSubject("New Contact Message to $siteName")
+                    ->setMessage("From: {$message->email}\n\n{$message->message}")
+                    ->send();
+        }
 
         // Set the response type and return
         $r = $this->response->withHeader('Content-Type', 'application/json');
