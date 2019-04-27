@@ -11,20 +11,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.15;
 }
-/*Page Editor*/
 
+/*Page Editor*/
 
 .page-settings-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px));
 }
+
 .card-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 1rem;
 }
 
-.element-block-title{
+.element-block-title {
   padding: 1rem;
 }
 
@@ -43,17 +44,17 @@ body {
 }
 
 header {
-  background-color:$primary-color !important;
+  background-color: $primary-color !important;
   color: $primary-light !important;
   height: 100px;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  @include padding(null 1rem);
 
   p,
   h2 {
-    margin: 0 1rem;
     line-height: 1;
   }
 }
@@ -82,9 +83,11 @@ ul {
 h3 {
   margin: 1rem 0;
 }
-.pageNavigator{
+
+.pageNavigator {
   display: none;
-  @media screen and (min-width: 800px){
+
+  @media screen and (min-width: 800px) {
     display: block;
   }
 }
