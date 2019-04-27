@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<div class="page-settings-wrapper">
+<div class="page-settings-wrapper" id="page-settings-nav">
   <div class="block-title-wrapper">
       <h5>Page Settings</h5>
   </div>
@@ -90,25 +90,22 @@
   </div>
 
   {# Page Custom Settings #}
-
   {% if page.settings %}
-<div class="block-title-wrapper">
-  <h5>Custom Page Settings</h5>
-</div>
-
-<div class="form-group-wrapper">
-    {% for setting in page.settings %}
-    {% if setting.input_type == 'select' %}
-    {{ settingForm.selectHtml(setting, setting.options) }}
-    {% elseif setting.input_type == 'textarea' %}
-    {{ settingForm.textareaHtml(setting) }}
-    {% else %}
-    {{ settingForm.inputHtml(setting) }}
-    {% endif %}
-    {% endfor %}
-
-</div>
-{% endif %}
+  <div class="block-title-wrapper" id="page-custom-settings-nav">
+    <h5>Custom Page Settings</h5>
+  </div>
+  <div class="form-group-wrapper">
+      {% for setting in page.settings %}
+        {% if setting.input_type == 'select' %}
+          {{ settingForm.selectHtml(setting, setting.options) }}
+        {% elseif setting.input_type == 'textarea' %}
+          {{ settingForm.textareaHtml(setting) }}
+        {% else %}
+          {{ settingForm.inputHtml(setting) }}
+        {% endif %}
+      {% endfor %}
+  </div>
+  {% endif %}
 </div>
 
 {# Page Blocks and Elements #}
@@ -171,14 +168,20 @@
 
 {% block rightCol %}
 <div class="pageNavigator">
-  <h6>Page Navigator</h6>
   <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
     <nav class="nav nav-pills flex-column">
+      <a class="nav-link" href="#page-settings-nav">Page Settings</a>
+      {% if page.settings %}
+      <nav class="nav nav-pills flex-column">
+        <a class="nav-link ml-3 my-1" href="#page-custom-settings-nav">Custom Settings</a>
+      </nav>
+      {% endif %}
+
       {% for block in page.json.blocks %}
-      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }} (Block)</a>
+      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
       <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
         {% for element in page.elements if element.block_key == block.key %}
-        <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }} (Element)</a>
+        <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }}</a>
         {% endfor %}
       </nav>
       {% endfor %}
@@ -186,31 +189,3 @@
   </nav>
 </div>
 {% endblock rightCol %}
-
-{% block footJs %}
-$('body').on('change', 'input[name^=element_image_path]', function() {
-if ($(this).val() === '') {
-$(this).parents('.jsMediaInput').find('img').attr('src','');
-}
-});
-
-$('body').on('click', '.jsSelectMediaFile', function() {
-let $input = $(this).parents('.input-group').find('input');
-let $img = $(this).parents('.jsMediaInput').find('img');
-
-$('#mediaModal').on('click', 'img', function() {
-$input.val($(this).attr('src'));
-$img.attr('src', $(this).attr('src')).removeClass('d-none');
-$('#mediaModal').modal('hide');
-});
-
-$.ajax({
-url: '/admin/media/get',
-method: "GET",
-success: function (r) {
-$('#mediaModal').find('.modal-body').html(r.html).end().modal();
-}
-});
-
-});
-{% endblock footJs %}

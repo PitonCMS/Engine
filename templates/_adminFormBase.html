@@ -6,8 +6,9 @@
     - headText
     - leadText
     - jsPitonConfig
-    - headJs
-    - footJs
+    - head
+    - body
+    - foot
 
     Blocks in form layout:
     - formActionPath
@@ -22,11 +23,11 @@
 {% block body %}
 
 <form action="{% block formActionPath '#' %}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}"> 
-    
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+
     {% block hiddenInputs %}
     {% endblock hiddenInputs %}
-  
+
     <div class="scroll-container" {% block leftColDiv '' %}>
 
     {% block formBody %}
@@ -45,7 +46,7 @@
         {% endblock otherControls %}
 
       </div>
-     
+
 
         {% block rightCol %}
         {% endblock rightCol %}

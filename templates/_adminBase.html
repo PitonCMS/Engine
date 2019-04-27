@@ -6,9 +6,9 @@
     - headText
     - leadText
     - jsPitonConfig
+    - head
     - body
-    - headJs
-    - footJs
+    - foot
 #}
 <!doctype html>
 <html lang="en">
@@ -35,12 +35,10 @@
         weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
         csrfTokenName: "{{ site.csrf.name }}",
         csrfTokenValue: "{{ site.csrf.value }}",
-        {% block jsPitonConfig %}
-        {% endblock jsPitonConfig %}
+        {% block jsPitonConfig '' %}
       };
     </script>
-    {% block headJs %}
-    {% endblock headJs %}
+    {% block head '' %}
   </head>
 
   <body>
@@ -75,6 +73,6 @@
         });
       });
     </script>
-    <script>{% block footJs '' %}</script>
+    {% block foot '' %}
   </body>
 </html>
