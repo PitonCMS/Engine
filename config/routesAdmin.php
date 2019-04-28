@@ -179,7 +179,7 @@ $app->group('/admin', function () {
             } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
                 return (new AdminMessageController($this))->delete();
             } else {
-                $notFound = $this->notFoundHanlder;
+                $notFound = $this->notFoundHandler;
                 return $notFound($this->request, $this->response);
             }
         })->add('csrfGuard')->setName('adminMessageSave');

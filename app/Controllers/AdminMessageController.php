@@ -45,6 +45,12 @@ class AdminMessageController extends AdminBaseController
             $messageMapper->markAsRead($messageId);
         }
 
+        // Set the response type
+        if ($this->request->isXhr()) {
+            $r = $this->response->withHeader('Content-Type', 'application/json');
+            return $r->write(json_encode(["status" => "success"]));
+        }
+
         return $this->redirect('adminMessages');
     }
 
@@ -56,8 +62,14 @@ class AdminMessageController extends AdminBaseController
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
 
         $message = $messageMapper->make();
-        $message->id = $this->request->getParsedBodyParam('id');
+        $message->id = (int) $this->request->getParsedBodyParam('id');
         $messageMapper->delete($message);
+
+        // Set the response type
+        if ($this->request->isXhr()) {
+            $r = $this->response->withHeader('Content-Type', 'application/json');
+            return $r->write(json_encode(["status" => "success"]));
+        }
 
         return $this->redirect('adminMessages');
     }

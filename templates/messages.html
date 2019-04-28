@@ -9,20 +9,20 @@
 		  <a class="nav-link active" id="pills-new-tab" data-toggle="pill" href="#pills-new" role="tab" aria-controls="pills-new" aria-selected="true">New</a>
 		</li>
 		<li class="nav-item">
-		  <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="false">All</a>
+		  <a class="nav-link" id="pills-read-tab" data-toggle="pill" href="#pills-read" role="tab" aria-controls="pills-read" aria-selected="false">Read</a>
 		</li>
   </ul>
 
-  <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab">
+  <div class="tab-content jsAllMessagesWrap" id="message-pills">
+    <div class="tab-pane fade show active jsUnreadMessages" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab">
       {% for m in page.messages if m.isRead == 'N' %}
         {{ html.message(m) }}
       {% else %}
       <p>You have no unread messages.</p>
       {% endfor %}
     </div>
-    <div class="tab-pane fade show" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-      {% for m in page.messages %}
+    <div class="tab-pane fade show jsReadMessages" id="pills-read" role="tabpanel" aria-labelledby="pills-read-tab">
+      {% for m in page.messages if m.isRead == 'Y' %}
         {{ html.message(m) }}
       {% else %}
       <p>You have no messages.</p>
@@ -32,18 +32,16 @@
 {% endblock body %}
 
 {% macro message(m) %}
-  <div>
-    <div>
-      <form action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
-          <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-          <input type="hidden" name="id" value="{{ m.id }}">
-          <button class="btn btn-primary btn-sm" type="submit"  name="button" value="toggle">Mark as {% if m.isRead == 'Y' %}Unread{% else %}Read{% endif %}</button>
-          <button class="btn btn-outline-danger btn-sm" type="submit"  name="button" value="delete" title="Delete message">Delete</button>
-        </form>
-    </div>
+  <div class="jsMessageWrap">
+    <form action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
+      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+      <input type="hidden" name="id" value="{{ m.id }}">
+      <button class="btn btn-{% if m.isRead == 'Y' %}outline-{% endif %}primary btn-sm" type="submit" name="button" value="toggle" data-is-read="{{ m.isRead }}">Mark as {% if m.isRead == 'Y' %}Unread{% else %}Read{% endif %}</button>
+      <button class="btn btn-outline-danger btn-sm" type="submit" name="button" value="delete" title="Delete message">Delete</button>
+    </form>
     <p>
       <a href="mailto:{{ m.email }}" target="_blank">{{ m.email }}</a>
-      {{ m.createdDate|date('d F Y  h:i a') }} Read: {{ m.isRead }}
+      {{ m.createdDate|date('d F Y  h:i a') }}
     </p>
     <p>{{ m.message }}</p>
   </div>
