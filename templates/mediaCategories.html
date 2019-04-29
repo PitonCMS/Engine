@@ -1,0 +1,30 @@
+{% extends '@admin/_adminMediaBase.html' %}
+
+{% block subBody %}
+<form class="jsEditMediaCategory" action="{{ pathFor('adminSaveMediaCategories') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <button class="btn btn-primary ml-2" type="submit" name="button" value="save">Save</button>
+  <a class="btn btn-warning ml-2" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
+
+  {% for c in page.categories %}
+    <div class="form-group jsMediaCategory">
+      <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
+      <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}" placeholder="Category name" autocomplete="off">
+      {% if c.id %}
+      <input id="catid-{{ c.id }}" class="form-check-input" name="delete[{{ c.id }}]" type="checkbox" value="delete" title="Deletes on save">
+      <label for="catid-{{ c.id }}" class="text-danger">Delete?</label>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {# Extra empty form on page load to add a newn category #}
+  <div class="form-group jsMediaCategory">
+      <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
+      <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}" placeholder="Category name" autocomplete="off">
+      {% if c.id %}
+      <input id="catid-{{ c.id }}" class="form-check-input" name="delete[{{ c.id }}]" type="checkbox" value="delete" title="Deletes on save">
+      <label for="catid-{{ c.id }}" class="text-danger">Delete?</label>
+      {% endif %}
+    </div>
+</form>
+{% endblock subBody %}

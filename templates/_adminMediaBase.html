@@ -1,0 +1,20 @@
+{#
+		Base layout for Piton Media management.
+#}
+{% extends '@admin/_adminSideBarBase.html' %}
+{% block headText 'Media' %}
+
+{% block sideNav %}
+<li class="nav-item">
+  <a class="nav-link" href="{{ pathFor('adminShowMedia') }}">All Media</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ pathFor('adminFileUploadForm') }}">Upload New File</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ pathFor('adminEditMediaCategories') }}">Categories</a>
+</li>
+{% endblock sideNav %}
+
+{% block subBody %}
+{% endblock subBody %}

@@ -121,6 +121,30 @@ CREATE TABLE IF NOT EXISTS `media` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `media_category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) NOT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_idx` (`category`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `media_category_map` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `media_id` int NOT NULL,
+  `category_id` int NOT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `media_id_idx` (`media_id`),
+  KEY `category_id_idx` (`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `message` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NULL DEFAULT NULL,

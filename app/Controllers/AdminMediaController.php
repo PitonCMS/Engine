@@ -115,6 +115,51 @@ HTML;
     }
 
     /**
+     * Edit Media Categories
+     */
+    public function editMediaCategories()
+    {
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        $data = $mediaCategoryMapper->find();
+
+        return $this->render('mediaCategories.html', ['categories' => $data]);
+    }
+
+    /**
+     * Save Media Categories
+     */
+    public function saveMediaCategories()
+    {
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        $categoriesPost = $this->request->getParsedBody();
+
+        foreach ($categoriesPost['category'] as $key => $cat) {
+            // Skip if category name is empty
+            if (empty($cat)) {
+                continue;
+            }
+
+            // Make category object
+            $category = $mediaCategoryMapper->make();
+            $category->id = $categoriesPost['id'][$key];
+
+            // Check if we need to delete a category, but only if this has been previously saved with an ID
+            if (isset($categoriesPost['delete'][$key]) && !empty($categoriesPost['id'][$key])) {
+                $mediaCategoryMapper->delete($category);
+            }
+
+            // Save
+            $category->category = $cat;
+            $mediaCategoryMapper->save($category);
+        }
+
+        // Return to showing categories
+        return $this->redirect('adminEditMediaCategories');
+    }
+
+    /**
      * Recursively Delete File and Directory
      *
      * Deletes entire chain of directories for one media file path

@@ -162,6 +162,18 @@ $app->group('/admin', function () {
         $this->post('/delete', function ($args) {
             return (new AdminMediaController($this))->deleteFile();
         })->add('csrfGuard')->setName('adminFileDelete');
+
+        // Media categories
+        $this->group('/category', function () {
+            $this->get('/edit', function ($args) {
+                return (new AdminMediaController($this))->editMediaCategories();
+            })->setName('adminEditMediaCategories');
+
+            // Save media category
+            $this->post('/save', function ($args) {
+                return (new AdminMediaController($this))->saveMediaCategories();
+            })->add('csrfGuard')->setName('adminSaveMediaCategories');
+        });
     });
     // End media
 
