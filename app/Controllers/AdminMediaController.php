@@ -34,10 +34,82 @@ class AdminMediaController extends AdminBaseController
     public function showMedia()
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        $data = $mediaMapper->find();
+        $data['media'] = $mediaMapper->find();
+        $data['categories'] = $mediaCategoryMapper->findCategories();
+        $cats = $mediaCategoryMapper->findAllMediaCategoryAssignments();
 
-        return $this->render('media.html', ['media' => $data]);
+        // Assign any category ID's to each medium
+        foreach ($data['media'] as $key => &$medium) {
+            $medium->category = [];
+            foreach ($cats as $cat) {
+                if ($medium->id === $cat->media_id) {
+                    $medium->category[$cat->category_id] = 'on';
+                }
+            }
+        }
+
+        return $this->render('media.html', $data);
+    }
+
+    /**
+     * Save Media
+     *
+     * Save media caption, categories
+     */
+    public function saveMedia()
+    {
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        $media = $mediaMapper->make();
+        $media->id = $this->request->getParsedBodyParam('id');
+        $media->caption = $this->request->getParsedBodyParam('caption');
+        $mediaMapper->save($media);
+
+        // Save category mappings
+        $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+
+        // Set the response type
+        if ($this->request->isXhr()) {
+            $r = $this->response->withHeader('Content-Type', 'application/json');
+            return $r->write(json_encode(["status" => "success"]));
+        }
+
+        return $this->redirect('adminShowMedia');
+    }
+
+    /**
+     * Delete Media
+     *
+     * Deletes file and media record
+     * @param
+     * @return void
+     */
+    public function deleteMedia()
+    {
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+
+        // Get the media record
+        if (null !== $id = $this->request->getParsedBodyParam('id')) {
+            $mediaFile = $mediaMapper->findById($id);
+
+            if (is_string($mediaFile->file)) {
+                $rootDir = substr($mediaFile->file, 0, 2);
+                $this->deleteRecursive(ROOT_DIR . 'public/media/' . $rootDir);
+
+                $mediaMapper->delete($mediaFile);
+            }
+        }
+
+        // Set the response type
+        if ($this->request->isXhr()) {
+            $r = $this->response->withHeader('Content-Type', 'application/json');
+            return $r->write(json_encode(["status" => "success"]));
+        }
+
+        return $this->redirect('adminShowMedia');
     }
 
     /**
@@ -86,32 +158,6 @@ HTML;
         }
 
         return $this->redirect('adminFileUploadForm');
-    }
-
-    /**
-     * Delete File
-     *
-     * Deletes file and media record
-     * @param
-     * @return void
-     */
-    public function deleteFile()
-    {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-
-        // Get the media record
-        if (null !== $id = $this->request->getParsedBodyParam('id')) {
-            $mediaFile = $mediaMapper->findById($id);
-
-            if (is_string($mediaFile->file)) {
-                $rootDir = substr($mediaFile->file, 0, 2);
-                $this->deleteRecursive(ROOT_DIR . 'public/media/' . $rootDir);
-
-                $mediaMapper->delete($mediaFile);
-            }
-        }
-
-        return $this->redirect('adminShowMedia');
     }
 
     /**

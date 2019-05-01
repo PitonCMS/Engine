@@ -158,10 +158,17 @@ $app->group('/admin', function () {
             return (new AdminMediaController($this))->uploadFile();
         })->add('csrfGuard')->setName('adminFileUpload');
 
-        // File delete
-        $this->post('/delete', function ($args) {
-            return (new AdminMediaController($this))->deleteFile();
-        })->add('csrfGuard')->setName('adminFileDelete');
+        // Media save
+        $this->post('/save', function ($args) {
+            if ($this->request->getParsedBodyParam('button') === 'save') {
+                return (new AdminMediaController($this))->saveMedia();
+            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
+                return (new AdminMediaController($this))->deleteMedia();
+            } else {
+                $notFound = $this->notFoundHandler;
+                return $notFound($this->request, $this->response);
+            }
+        })->add('csrfGuard')->setName('adminMediaSave');
 
         // Media categories
         $this->group('/category', function () {

@@ -5,7 +5,7 @@
     <div class="col">
       <div class="card-wrapper">
         {% for media in page.media %}
-          {{ file.mediaCard(media, true) }}
+          {{ file.mediaCard(media, page.categories, true) }}
         {% else %}
         <strong>No Media Found</strong>
         {% endfor %}
