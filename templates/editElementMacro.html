@@ -66,11 +66,21 @@
     </div>
 
     <div class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
-    <label>Collection</label>
+      <label>Collection</label>
       <select class="form-control" name="element_collection_id[{{ arrayKey }}]">
         <option value="">- None -</option>
         {% for c in getCollections() %}
         <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>{{ c.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
+      <label>Gallery</label>
+      <select class="form-control" name="element_gallery_id[{{ arrayKey }}]">
+        <option value="">- None -</option>
+        {% for c in getGalleries() %}
+        <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
         {% endfor %}
       </select>
     </div>

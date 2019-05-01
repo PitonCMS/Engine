@@ -25,7 +25,7 @@ class AdminMediaController extends AdminBaseController
      */
     public function uploadFileForm()
     {
-        return $this->render('uploadFileForm.html');
+        return $this->render('media/mediaUploadForm.html');
     }
 
     /**
@@ -50,7 +50,7 @@ class AdminMediaController extends AdminBaseController
             }
         }
 
-        return $this->render('media.html', $data);
+        return $this->render('media/media.html', $data);
     }
 
     /**
@@ -124,7 +124,7 @@ class AdminMediaController extends AdminBaseController
         $data = $mediaMapper->find();
 
         $template = <<<HTML
-            {% import "@admin/includes/_mediaCardMacro.html" as file %}
+            {% import "@admin/media/_mediaCardMacro.html" as file %}
             <div class="card-wrapper">
             {% for media in page.media %}
               {{ file.mediaCard(media) }}
@@ -169,7 +169,7 @@ HTML;
 
         $data = $mediaCategoryMapper->find();
 
-        return $this->render('mediaCategories.html', ['categories' => $data]);
+        return $this->render('media/mediaCategories.html', ['categories' => $data]);
     }
 
     /**

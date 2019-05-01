@@ -28,6 +28,20 @@ class Admin extends Base
     protected $elementOptions;
 
     /**
+     * Collections Cache
+     * For multiple calls on getCollections()
+     * @var array
+     */
+    protected $collections;
+
+    /**
+     * Gallery Cache
+     * For multiple calls on getGalleries()
+     * @var array
+     */
+    protected $galleries;
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
@@ -70,6 +84,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
+            new \Twig_SimpleFunction('getGalleries', [$this, 'getGalleries']),
             new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
             new \Twig_SimpleFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
         ]);
@@ -168,9 +183,31 @@ class Admin extends Base
      */
     public function getCollections()
     {
+        if ($this->collections) {
+            return $this->collections;
+        }
+
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
 
-        return $collectionMapper->find();
+        return $this->collections = $collectionMapper->find();
+    }
+
+    /**
+     * Get Gallery Options
+     *
+     * Get all gallery media categories
+     * @param  void
+     * @return mixed Array | null
+     */
+    public function getGalleries()
+    {
+        if ($this->galleries) {
+            return $this->galleries;
+        }
+
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        return $this->galleries = $mediaCategoryMapper->findCategories();
     }
 
     /**
