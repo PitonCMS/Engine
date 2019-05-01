@@ -24,7 +24,6 @@ class FrontController extends FrontBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
         $pageElementMedia = ($this->container->dataMapper)('PageElementMediaMapper');
 

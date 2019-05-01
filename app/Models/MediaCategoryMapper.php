@@ -42,8 +42,12 @@ class MediaCategoryMapper extends DataMapperAbstract
      * @param  int   $catId
      * @return mixed
      */
-    public function findMediaByCategoryId(int $catId)
+    public function findMediaByCategoryId(int $catId = null)
     {
+        if (null === $catId) {
+            return;
+        }
+
         $this->sql = <<<SQL
 select
     mc.category,

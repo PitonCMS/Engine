@@ -48,6 +48,7 @@ class Front extends Base
             new \Twig_SimpleFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
+            new \Twig_SimpleFunction('getGallery', [$this, 'getGallery']),
         ]);
     }
 
@@ -105,5 +106,18 @@ class Front extends Base
         $data = $pageMapper->findCollectionPagesById($collectionId);
 
         return $data;
+    }
+
+    /**
+     * Get Gallery by ID
+     *
+     * @param int $galleryId
+     * @return mixed
+     */
+    public function getGallery(int $galleryId = null)
+    {
+        $mediaCategory = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        return $mediaCategory->findMediaByCategoryId($galleryId);
     }
 }

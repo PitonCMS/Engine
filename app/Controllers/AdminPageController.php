@@ -182,7 +182,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
-            $pageElement->gallery_id = $this->request->getParsedBodyParam('gallery_id')[$key];
+            $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
 
             // If the image path does not start with http then get base name
