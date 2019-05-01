@@ -21,7 +21,7 @@ class MediaCategoryMapper extends DataMapperAbstract
     ];
 
     /**
-     * Find in Char Order
+     * Find Categories
      *
      * Find all categories sorted by category name
      * @param  void
@@ -32,6 +32,30 @@ class MediaCategoryMapper extends DataMapperAbstract
         $this->makeSelect();
         $this->sql .= ' order by category';
 
+        return $this->find();
+    }
+
+    /**
+     * Find Media By Category ID
+     *
+     * Find media by category ID
+     * @param  int   $catId
+     * @return mixed
+     */
+    public function findMediaByCategoryId(int $catId)
+    {
+        $this->sql = <<<SQL
+select
+    mc.category,
+    m.id,
+    m.file,
+    m.caption
+from media_category mc
+join media_category_map mcp on mc.id = mcp.category_id
+join media m on mcp.media_id = m.id
+where mc.id = ?
+SQL;
+        $this->bindValues[] = $catId;
         return $this->find();
     }
 
