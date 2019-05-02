@@ -1,0 +1,58 @@
+// Media Queries from https://medium.freecodecamp.org/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862
+@mixin for-phone-only {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) {
+    @content;
+  }
+}
+
+@mixin for-tablet-landscape-up {
+  @media (min-width: 900px) {
+    @content;
+  }
+}
+
+@mixin for-desktop-up {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin for-big-desktop-up {
+  @media (min-width: 1800px) {
+    @content;
+  }
+}
+
+/*  These are the media queries and how to use them. Copy/paste into sass file.
+
+--
+
+@include for-phone-only {
+  background-color: white;
+}
+
+@include for-tablet-portrait-up {
+  background-color: lightgoldenrodyellow;
+}
+
+@include for-tablet-landscape-up {
+  background-color: lightcoral;
+}
+
+@include for-desktop-up {
+  background-color: lightblue;
+}
+
+@include for-big-desktop-up {
+  background-color: lavender;
+}
+
+--
+
+*/

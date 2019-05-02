@@ -1,14 +1,15 @@
 {% extends '@admin/media/_adminMediaBase.html' %}
 {% import "@admin/media/_mediaCardMacro.html" as file %}
+{% block sectionText 'media' %}
 
 {% block subBody %}
-    <div class="col">
-      <div class="card-wrapper">
-        {% for media in page.media %}
-          {{ file.mediaCard(media, page.categories, true) }}
-        {% else %}
-        <strong>No Media Found</strong>
-        {% endfor %}
-      </div>
-    </div>
+
+<div class="card-wrapper">
+  {% for media in page.media %}
+  {{ file.mediaCard(media, page.categories, true) }}
+  {% else %}
+  <strong>No Media Found</strong>
+  {% endfor %}
+</div>
+
 {% endblock subBody %}

@@ -12,67 +12,86 @@
 #}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="PitonCMS">
-    <link rel="icon" href="">
 
-    <title>{% block htmlTitle '' %}PitonCMS Administration</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="PitonCMS">
+  <link rel="icon" href="">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
-    {% if site.settings.pitonDev %}
-    <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
-    {% else %}
-    <link rel="stylesheet" href="https://cdn.pitoncms.com/0.17.1/css/main.css">
-    {% endif %}
+  <title>{% block htmlTitle '' %}PitonCMS Administration</title>
 
-    <script type="text/javascript">
-      let pitonConfig = {
-        dateFormat: "{{ site.settings.dateFormat }}",
-        weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
-        csrfTokenName: "{{ site.csrf.name }}",
-        csrfTokenValue: "{{ site.csrf.value }}",
-        {% block jsPitonConfig '' %}
-      };
-    </script>
-    {% block head '' %}
-  </head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css"
+    integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
+  {% if site.settings.pitonDev %}
+  <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
+  {% else %}
+  <link rel="stylesheet" href="https://cdn.pitoncms.com/0.17.1/css/main.css">
+  {% endif %}
 
-  <body>
-    {% include "@admin/includes/_alert.html" %}
-      {% include "@admin/includes/_header.html" with {
+  <script type="text/javascript">
+    let pitonConfig = {
+      dateFormat: "{{ site.settings.dateFormat }}",
+      weekStart: {
+        {
+          site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1'
+        }
+      },
+      csrfTokenName: "{{ site.csrf.name }}",
+      csrfTokenValue: "{{ site.csrf.value }}",
+      {
+        %
+        block jsPitonConfig '' %
+      }
+    };
+  </script>
+  {% block head '' %}
+</head>
+
+<body>
+  {% include "@admin/includes/_alert.html" %}
+  {% include "@admin/includes/_header.html" with {
         headText: block('headText') is defined ? block('headText'),
         leadText: block('leadText') is defined ? block('leadText')} %}
 
-    <div class="container-fluid">
-
+  <section id="{% block sectionText %}default{% endblock %}">
+    <div class="section-inner">
       {% block body %}
       {% endblock body %}
+    </div>
 
-    </div><!-- /.container -->
+  </section>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
-    {% if site.settings.pitonDev %}
-    <script src="{{ basePath() }}/admin/js/main.js"></script>
-    {% else %}
-    <script src="https://cdn.pitoncms.com/0.17.1/js/main.js"></script>
-    {% endif %}
-    <script>
-      [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
-        var simplemde = new SimpleMDE({
-          element: element,
-          forceSync: true
-        });
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"
+    integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
+  {% if site.settings.pitonDev %}
+  <script src="{{ basePath() }}/admin/js/main.js"></script>
+  {% else %}
+  <script src="https://cdn.pitoncms.com/0.17.1/js/main.js"></script>
+  {% endif %}
+  <script>
+    [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
+      var simplemde = new SimpleMDE({
+        element: element,
+        forceSync: true
       });
-    </script>
-    {% block foot '' %}
-  </body>
+    });
+  </script>
+  {% block foot '' %}
+</body>
+
 </html>

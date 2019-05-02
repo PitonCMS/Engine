@@ -1,6 +1,7 @@
 {% extends '@admin/_adminFormBase.html' %}
 {% import "@admin/editElementMacro.html" as form %}
 {% import '@admin/editSettingInputMacro.html' as settingForm %}
+{% block sectionText 'editPage' %}
 
 {% block htmlTitle %}
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateName) }} -
@@ -39,54 +40,54 @@
 
 <div class="page-settings-wrapper" id="page-settings-nav">
   <div class="block-title-wrapper">
-      <h5>Page Settings</h5>
+    <h5>Page Settings</h5>
   </div>
 
   {# Page Standard Fields #}
   <div class="form-group-wrapper">
-      <div class="form-group">
-          <label>Title <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
-            value="{{ page.title }}" required>
-        </div>
+    <div class="form-group">
+      <label>Title <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+        value="{{ page.title }}" required>
+    </div>
 
-      {% if not page.json.hideSubTitle %}
-        <div class="form-group">
-          <label>Sub Title</label>
-          <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
-          <small class="form-text text-muted">Optional. Limit 150 characters.</small>
-        </div>
-        {% endif %}
+    {% if not page.json.hideSubTitle %}
+    <div class="form-group">
+      <label>Sub Title</label>
+      <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
+      <small class="form-text text-muted">Optional. Limit 150 characters.</small>
+    </div>
+    {% endif %}
 
-        <div class="form-group">
-          <label>Slug <span class="text-danger">*</span></label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
-            </div>
-            <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug" value="{{ page.slug }}"
-              required {% if page.slug == 'home' %}readonly{% endif %}>
-          </div>
-          <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL slug is
-            restricted from being changed.</small>
+    <div class="form-group">
+      <label>Slug <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
         </div>
+        <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug"
+          value="{{ page.slug }}" required {% if page.slug == 'home' %}readonly{% endif %}>
+      </div>
+      <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL slug is
+        restricted from being changed.</small>
+    </div>
 
-        <div class="form-group">
-          <label>Meta Description</label>
-          <input type="text" class="form-control" name="meta_description" maxlength="320"
-            placeholder="Description to appear in search results" value="{{ page.meta_description }}">
-          <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
-            results.</small>
-        </div>
+    <div class="form-group">
+      <label>Meta Description</label>
+      <input type="text" class="form-control" name="meta_description" maxlength="320"
+        placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+      <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
+        results.</small>
+    </div>
 
-        {% if not page.json.hideFeaturedImage %}
-        <div class="form-group span">
-          <label>Featured Image</label>
-          <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
-            value="{{ page.image_path }}">
-          <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
-        </div>
-        {% endif %}
+    {% if not page.json.hideFeaturedImage %}
+    <div class="form-group span">
+      <label>Featured Image</label>
+      <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
+        value="{{ page.image_path }}">
+      <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
+    </div>
+    {% endif %}
   </div>
 
   {# Page Custom Settings #}
@@ -95,15 +96,15 @@
     <h5>Custom Page Settings</h5>
   </div>
   <div class="form-group-wrapper">
-      {% for setting in page.settings %}
-        {% if setting.input_type == 'select' %}
-          {{ settingForm.selectHtml(setting, setting.options) }}
-        {% elseif setting.input_type == 'textarea' %}
-          {{ settingForm.textareaHtml(setting) }}
-        {% else %}
-          {{ settingForm.inputHtml(setting) }}
-        {% endif %}
-      {% endfor %}
+    {% for setting in page.settings %}
+    {% if setting.input_type == 'select' %}
+    {{ settingForm.selectHtml(setting, setting.options) }}
+    {% elseif setting.input_type == 'textarea' %}
+    {{ settingForm.textareaHtml(setting) }}
+    {% else %}
+    {{ settingForm.inputHtml(setting) }}
+    {% endif %}
+    {% endfor %}
   </div>
   {% endif %}
 </div>
@@ -114,18 +115,18 @@
   <div class="element-block">
     <div class="jsBlockParent" id="page-block-{{ block.key }}">
       <div class="block-title-wrapper">
-          <h2>{{ block.name }} Block</h2>
-          <p class="lead">{{ block.description }}</p>
-          {# Get count of elements in block to know if we need to disable the Add Element Button #}
-          {% set elementLength = 0 %}
-          {% for element in page.elements if element.block_key == block.key %}
-          {% set elementLength = elementLength + 1 %}
-          {% endfor %}
-          <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
-            data-element-type="{{ block.elementTypeDefault }}"
-            data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-            data-element-count-limit="{{ block.elementCountLimit }}"
-            {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
+        <h2>{{ block.name }} Block</h2>
+        <p class="lead">{{ block.description }}</p>
+        {# Get count of elements in block to know if we need to disable the Add Element Button #}
+        {% set elementLength = 0 %}
+        {% for element in page.elements if element.block_key == block.key %}
+        {% set elementLength = elementLength + 1 %}
+        {% endfor %}
+        <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
+          data-element-type="{{ block.elementTypeDefault }}"
+          data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+          data-element-count-limit="{{ block.elementCountLimit }}"
+          {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
 
       </div>
 
@@ -145,7 +146,8 @@
 
 {% block otherControls %}
 {% if page.id %}
-<button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete" {% if page.slug == 'home' %}disabled title="The home page cannot be deleted."{% endif %}>Delete</button>
+<button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
+  {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
 {% endif %}
 <div class="form-group">
   <div class="input-group mb-3">

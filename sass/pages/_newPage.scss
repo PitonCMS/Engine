@@ -1,0 +1,122 @@
+#pages {
+  /*Page Editor*/
+  background-color: #913912;
+
+  .page-settings-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px));
+  }
+
+  .card-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1rem;
+  }
+
+  .element-block-title {
+    padding: 1rem;
+  }
+
+  .card {
+    box-shadow: $box-shadow;
+    border: none;
+  }
+
+  .alert-fixed {
+    position: fixed;
+    top: 100px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    z-index: 99;
+  }
+
+  form {
+    border-radius: $border-radius;
+    @include padding(0 .25rem .25rem);
+
+    display: grid;
+    grid-template-rows: auto;
+
+    @media (min-width: 800px) {
+      grid-template-columns: 3.5fr 1fr;
+
+    }
+
+    .scroll-container {
+      height: calc(100vh - 175px);
+      overflow-y: scroll;
+      position: relative;
+      scroll-behavior: smooth;
+
+    }
+
+    .sidebar {
+      @include padding(1rem);
+    }
+
+    label {
+      margin: 0;
+    }
+
+    h5 {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .page-settings-wrapper {
+
+      padding: 1rem .5rem;
+    }
+
+    .form-group-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .form-group {
+      border-radius: $border-radius;
+
+      padding: .5rem;
+    }
+
+    .block-title-wrapper {
+
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-flow: row wrap;
+      position: sticky;
+      top: 0px;
+      z-index: 100;
+      box-shadow: $box-shadow;
+      border-radius: $border-radius;
+      background: $primary-light-grey;
+      padding: .25rem;
+    }
+
+    h5,
+    h2,
+    p {
+      padding: 0;
+      margin: 0;
+    }
+
+  }
+
+  .nav-link.ml-3.active {
+    background-color: rgba($primary-light-grey, .5) !important;
+    color: #333 !important;
+  }
+
+  .jsElementParent {
+    @include padding(30px null null);
+  }
+}
