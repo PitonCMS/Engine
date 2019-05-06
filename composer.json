@@ -21,7 +21,8 @@
         "phpmailer/phpmailer": "~6.0",
         "webmozart/json": "^1.2.2",
         "twbs/bootstrap": "^4.3",
-        "intervention/image": "^2.4"
+        "intervention/image": "^2.4",
+        "spatie/image": "^1.7"
         },
     "autoload": {
         "psr-4": {
