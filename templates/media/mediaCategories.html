@@ -1,4 +1,5 @@
 {% extends '@admin/media/_adminMediaBase.html' %}
+{% import _self as form %}
 {% block sectionText 'mediaCategories' %}
 
 {% block subBody %}
@@ -9,24 +10,21 @@
   <a class="btn btn-warning ml-2" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
 
   {% for c in page.categories %}
-  <div class="form-group jsMediaCategory">
-    <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
-    <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
-      placeholder="Gallery name" autocomplete="off">
-    {% if c.id %}
-    <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
-    {% endif %}
-  </div>
+  {{ form.categoryInput(c) }}
   {% endfor %}
 
   {# Extra empty form on page load to add a new category #}
-  <div class="form-group input-group jsMediaCategory">
-    <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
-    <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
-      placeholder="Gallery name" autocomplete="off">
-    {% if c.id %}
-    <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
-    {% endif %}
-  </div>
+  {{ form.categoryInput(c) }}
 </form>
 {% endblock subBody %}
+
+{% macro categoryInput(category) %}
+<div class="form-group jsMediaCategory">
+  <input type="hidden" name="id[{{ category.id }}]" value="{{ category.id }}">
+  <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
+    placeholder="Gallery name" autocomplete="off">
+  {% if c.id %}
+  <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ category.id }}">Delete</button>
+  {% endif %}
+</div>
+{% endmacro categoryInput %}
