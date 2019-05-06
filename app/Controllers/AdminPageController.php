@@ -29,7 +29,7 @@ class AdminPageController extends AdminBaseController
         $data['pages'] = $page->findPages(true);
         $data['templates'] = $this->getPageTemplates('page');
 
-        return $this->render('pages.html', $data);
+        return $this->render('page/pages.html', $data);
     }
 
     /**
@@ -89,7 +89,7 @@ class AdminPageController extends AdminBaseController
             $page->settings = $this->mergeSettings($page->settings, $page->json->settings);
         }
 
-        return $this->render('editPage.html', $page);
+        return $this->render('page/editPage.html', $page);
     }
 
     /**
@@ -273,7 +273,7 @@ class AdminPageController extends AdminBaseController
             $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
         }
 
-        $template = '{% import "@admin/editElementMacro.html" as form %}';
+        $template = '{% import "@admin/page/_editElementMacro.html" as form %}';
         $template .= ' {{ form.elementForm(element, element.block_key, element.elementTypeOptions) }}';
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 

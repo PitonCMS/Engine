@@ -26,7 +26,7 @@
 <p>Edit/Delete pages and page content.</p>
 <div class="card-wrapper">
   {% for p in page.pages %}
-  {% include "@admin/includes/_pageCard.html" %}
+  {% include "@admin/page/_pageCard.html" %}
   {% else %}
   <strong>No Saved Pages Found</strong>
   {% endfor %}
