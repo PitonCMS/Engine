@@ -153,7 +153,7 @@ $container['fileUploadHandler'] = function ($c) {
 $container['filePath'] = function ($c) {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
-        $dir = substr($directory, 0, 2);
+        $dir = mb_substr($directory, 0, 2);
 
         return "/media/$dir/$directory/";
     };

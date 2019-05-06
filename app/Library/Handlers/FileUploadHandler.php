@@ -51,7 +51,9 @@ class FileUploadHandler
     /**
      * Constructor
      *
-     * @param array $uploadedfiles Array of Slim\Http\UploadedFile objects
+     * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
+     * @param  closure $filePathClosure Function to derive file path
+     * @return void
      */
     public function __construct(array $uploadedFiles, closure $filePathClosure)
     {
@@ -78,7 +80,7 @@ class FileUploadHandler
         if ($file->getError() === UPLOAD_ERR_OK) {
             // Get file name and extension
             $uploadFileName = $file->getClientFilename();
-            $ext = strtolower(pathinfo($uploadFileName, PATHINFO_EXTENSION));
+            $ext = mb_strtolower(pathinfo($uploadFileName, PATHINFO_EXTENSION));
 
             // Create new file name and directory and ensure it is unique
             do {
@@ -90,7 +92,7 @@ class FileUploadHandler
             $this->fileName = "$name.$ext";
             $file->moveTo("{$this->publicRoot}{$path}{$this->fileName}");
 
-            unset($file);
+            unset($this->uploadedFiles[$fileKey]);
 
             return true;
         }
