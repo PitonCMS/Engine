@@ -9,18 +9,12 @@
   <a class="btn btn-warning ml-2" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
 
   {% for c in page.categories %}
-  <div class="form-group input-group jsMediaCategory">
+  <div class="form-group jsMediaCategory">
     <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
     <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
       placeholder="Category name" autocomplete="off">
     {% if c.id %}
-    <div class="input-group-append">
-      <div class="input-group-text">
-        <input type="checkbox" id="catid-{{ c.id }}" class="mr-2" name="delete[{{ c.id }}]" value="delete"
-          title="Deletes on save">
-        <label>Delete</label>
-      </div>
-    </div>
+    <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
     {% endif %}
   </div>
   {% endfor %}
@@ -31,13 +25,7 @@
     <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
       placeholder="Category name" autocomplete="off">
     {% if c.id %}
-    <div class="input-group-append">
-      <div class="input-group-text">
-        <input type="checkbox" id="catid-{{ c.id }}" class="mr-2" name="delete[{{ c.id }}]" value="delete"
-          title="Deletes on save">
-        <label>Delete</label>
-      </div>
-    </div>
+    <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
     {% endif %}
   </div>
 </form>

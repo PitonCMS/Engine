@@ -74,7 +74,7 @@ SQL;
     public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null)
     {
         // Delete current category assignments for this media ID
-        $this->deleteMediaCategoryAssignments($mediaId);
+        $this->deleteMediaCategoryAssignmentsByMediaId($mediaId);
 
         // Insert all assignments, if the category ID's array is not empty
         if (null !== $categoryIds) {
@@ -102,15 +102,28 @@ SQL;
     }
 
     /**
-     *  Delete Media Category Assignments
+     *  Delete Media Category Assignments by Media ID
      *
      * @param int    $mediaId
      * @return mixed
      */
-    public function deleteMediaCategoryAssignments(int $mediaId)
+    public function deleteMediaCategoryAssignmentsByMediaId(int $mediaId)
     {
         $this->sql = 'delete from media_category_map where media_id = ?';
         $this->bindValues[] = $mediaId;
+        $this->execute();
+    }
+
+    /**
+     *  Delete Media Category Assignments by Category ID
+     *
+     * @param int    $categoryId
+     * @return mixed
+     */
+    public function deleteMediaCategoryAssignmentsByCategoryId(int $categoryId)
+    {
+        $this->sql = 'delete from media_category_map where category_id = ?';
+        $this->bindValues[] = $categoryId;
         $this->execute();
     }
 }

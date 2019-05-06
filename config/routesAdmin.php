@@ -180,6 +180,11 @@ $app->group('/admin', function () {
             $this->post('/save', function ($args) {
                 return (new AdminMediaController($this))->saveMediaCategories();
             })->add('csrfGuard')->setName('adminSaveMediaCategories');
+
+            // Delete media category
+            $this->post('/delete', function ($args) {
+                return (new AdminMediaController($this))->deleteMediaCategory();
+            })->add('csrfGuard')->setName('adminDeleteMediaCategory');
         });
     });
     // End media

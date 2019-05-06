@@ -206,6 +206,31 @@ HTML;
     }
 
     /**
+     * Delete Media Category
+     *
+     */
+    public function deleteMediaCategory()
+    {
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $categoryId = (int) $this->request->getParsedBodyParam('id');
+        $status = 'error';
+
+        if (!empty($categoryId) && is_int($categoryId)) {
+            // Delete category assignments
+            $mediaCategoryMapper->deleteMediaCategoryAssignmentsByCategoryId($categoryId);
+
+            // Delete category
+            $category = $mediaCategoryMapper->make();
+            $category->id = $categoryId;
+            $mediaCategoryMapper->delete($category);
+            $status = 'success';
+        }
+
+        $r = $this->response->withHeader('Content-Type', 'application/json');
+        return $r->write(json_encode(["status" => $status]));
+    }
+
+    /**
      * Recursively Delete File and Directory
      *
      * Deletes entire chain of directories for one media file path
