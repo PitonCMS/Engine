@@ -12,18 +12,18 @@
   <div class="form-group jsMediaCategory">
     <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
     <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
-      placeholder="Category name" autocomplete="off">
+      placeholder="Gallery name" autocomplete="off">
     {% if c.id %}
     <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
     {% endif %}
   </div>
   {% endfor %}
 
-  {# Extra empty form on page load to add a newn category #}
+  {# Extra empty form on page load to add a new category #}
   <div class="form-group input-group jsMediaCategory">
     <input type="hidden" name="id[{{ c.id }}]" value="{{ c.id }}">
     <input type="text" class="form-control" name="category[{{ c.id }}]" value="{{ c.category }}"
-      placeholder="Category name" autocomplete="off">
+      placeholder="Gallery name" autocomplete="off">
     {% if c.id %}
     <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ c.id }}">Delete</button>
     {% endif %}
