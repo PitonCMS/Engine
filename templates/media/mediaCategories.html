@@ -23,7 +23,7 @@
   <input type="hidden" name="id[{{ category.id }}]" value="{{ category.id }}">
   <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
     placeholder="Gallery name" autocomplete="off">
-  {% if c.id %}
+  {% if category.id %}
   <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ category.id }}">Delete</button>
   {% endif %}
 </div>
