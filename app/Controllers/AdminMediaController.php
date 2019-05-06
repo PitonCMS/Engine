@@ -20,10 +20,10 @@ use \RecursiveIteratorIterator;
 class AdminMediaController extends AdminBaseController
 {
     /**
-     * Upload File Form
+     * Upload Media Form
      *
      */
-    public function uploadFileForm()
+    public function uploadMediaForm()
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $data['categories'] = $mediaCategoryMapper->findCategories();
@@ -145,7 +145,7 @@ HTML;
     /**
      * Upload File
      */
-    public function uploadFile()
+    public function uploadMedia()
     {
         $fileUpload = $this->container->fileUploadHandler;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');

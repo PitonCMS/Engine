@@ -150,12 +150,12 @@ $app->group('/admin', function () {
 
         // Upload Form
         $this->get('/form', function ($args) {
-            return (new AdminMediaController($this))->uploadFileForm();
+            return (new AdminMediaController($this))->uploadMediaForm();
         })->setName('adminFileUploadForm');
 
         // File upload
         $this->post('/upload', function ($args) {
-            return (new AdminMediaController($this))->uploadFile();
+            return (new AdminMediaController($this))->uploadMedia();
         })->add('csrfGuard')->setName('adminFileUpload');
 
         // Media save
