@@ -79,10 +79,10 @@ SQL;
         // Insert all assignments, if the category ID's array is not empty
         if (null !== $categoryIds) {
             $this->sql = 'insert into media_category_map (media_id, category_id) values ';
-            foreach ($categoryIds as $id) {
+            foreach ($categoryIds as $catId) {
                 $this->sql .= '(?, ?),';
                 $this->bindValues[] = $mediaId;
-                $this->bindValues[] = $id;
+                $this->bindValues[] = $catId;
             }
             $this->sql = rtrim($this->sql, ',') . ';';
             $this->execute();
@@ -97,7 +97,7 @@ SQL;
      */
     public function findAllMediaCategoryAssignments()
     {
-        $this->sql = 'select media_id, category_id from media_category_map order by media_id;';
+        $this->sql = 'select media_id, category_id from media_category_map;';
         return $this->find();
     }
 

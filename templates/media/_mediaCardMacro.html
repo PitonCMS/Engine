@@ -6,21 +6,18 @@
 #}
 
 {% macro mediaCard(media, categories, editable = false) %}
+{% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
 <div class="card jsMediaCard">
-
   <img src="{{ getMediaPath(media.file) }}" class="card-img-top" alt="{{ media.caption }}">
-
   <div class="card-body">
 
     {% if editable %}
-
     <div class="form-group">
       <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.file) }}" readonly
         title="Link to media">
     </div>
 
     <form action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
-
       <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
       <input type="hidden" name="id" value="{{ media.id }}">
 
@@ -30,11 +27,7 @@
       </div>
 
       {% for c in categories %}
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ c.id }}" name="category[]"
-          value="{{ c.id }}" {{ checked(media.category[c.id]) }}>
-        <label class="form-check-label" for="{{ media.id }}-{{ c.id }}">{{ c.category }}</label>
-      </div>
+      {{ catForm.categorySelect(c, media.id) }}
       {% endfor %}
 
       <div class="form-group">
@@ -43,18 +36,13 @@
       </div>
 
     </form>
-
-
     {% else %}
 
     {# This is for displaying in the media modal when selecting images #}
-
     <p>{{ media.caption }}</p>
-
     {% endif %}
 
   </div>
-
 </div>
 
 {% endmacro mediaCard %}

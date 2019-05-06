@@ -1,4 +1,5 @@
 {% extends '@admin/media/_adminMediaBase.html' %}
+{% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
 {% block sectionText 'mediaUpload' %}
 
 {% block subBody %}
@@ -8,12 +9,17 @@
     <label>Media File</label>
     <input type="file" class="form-control-file" name="media-file" required>
   </div>
+
+  {% for c in page.categories %}
+  {{ catForm.categorySelect(c) }}
+  {% endfor %}
+
   <div class="form-group">
     <label>Caption</label>
     <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
   </div>
-  <div class="form-group"></div>
+
   <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
-  </div>
+
 </form>
 {% endblock subBody %}

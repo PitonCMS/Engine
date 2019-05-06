@@ -1,0 +1,15 @@
+{#
+  Media Select Category Checkbox Macro
+
+  This presents a list of available categories to assign in media.
+#}
+
+{% macro categorySelect(category, mediaId) %}
+  {% if category %}
+  <div class="form-group form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]" value="{{ category.id }}"
+      {{ checked(category.media[mediaId]) }}>
+    <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
+  </div>
+  {% endif %}
+{% endmacro categorySelect %}

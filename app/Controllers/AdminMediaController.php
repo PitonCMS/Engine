@@ -25,7 +25,10 @@ class AdminMediaController extends AdminBaseController
      */
     public function uploadFileForm()
     {
-        return $this->render('media/mediaUploadForm.html');
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $data['categories'] = $mediaCategoryMapper->findCategories();
+
+        return $this->render('media/mediaUploadForm.html', $data);
     }
 
     /**
@@ -38,14 +41,14 @@ class AdminMediaController extends AdminBaseController
 
         $data['media'] = $mediaMapper->find();
         $data['categories'] = $mediaCategoryMapper->findCategories();
-        $cats = $mediaCategoryMapper->findAllMediaCategoryAssignments();
+        $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments();
 
-        // Assign any category ID's to each medium
-        foreach ($data['media'] as $key => &$medium) {
-            $medium->category = [];
-            foreach ($cats as $cat) {
-                if ($medium->id === $cat->media_id) {
-                    $medium->category[$cat->category_id] = 'on';
+        // Identify any media ID's assigned to each category
+        foreach ($data['categories'] as &$cat) {
+            $cat->media = [];
+            foreach ($categoryAssignments as $map) {
+                if ($cat->id === $map->category_id) {
+                    $cat->media[$map->media_id] = 'on';
                 }
             }
         }
@@ -146,6 +149,7 @@ HTML;
     {
         $fileUpload = $this->container->fileUploadHandler;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         if ($fileUpload->upload('media-file')) {
             // Save reference to database
@@ -153,6 +157,9 @@ HTML;
             $media->file = $fileUpload->getFileName();
             $media->caption = $this->request->getParsedBodyParam('caption');
             $mediaMapper->save($media);
+
+            // Save category assignments
+            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
         } else {
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
