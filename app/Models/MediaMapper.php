@@ -17,7 +17,10 @@ class MediaMapper extends DataMapperAbstract
 {
     protected $table = 'media';
     protected $modifiableColumns = [
-        'file',
+        'filename',
+        'width',
+        'height',
+        'feature',
         'caption',
     ];
 }

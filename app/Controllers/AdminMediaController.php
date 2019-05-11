@@ -69,6 +69,7 @@ class AdminMediaController extends AdminBaseController
         $media = $mediaMapper->make();
         $media->id = $this->request->getParsedBodyParam('id');
         $media->caption = $this->request->getParsedBodyParam('caption');
+        $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
         $mediaMapper->save($media);
 
         // Save category mappings
@@ -98,8 +99,8 @@ class AdminMediaController extends AdminBaseController
         if (null !== $id = $this->request->getParsedBodyParam('id')) {
             $mediaFile = $mediaMapper->findById($id);
 
-            if (is_string($mediaFile->file)) {
-                $rootDir = substr($mediaFile->file, 0, 2);
+            if (is_string($mediaFile->filename)) {
+                $rootDir = substr($mediaFile->filename, 0, 2);
                 $this->deleteRecursive(ROOT_DIR . 'public/media/' . $rootDir);
 
                 $mediaMapper->delete($mediaFile);
@@ -152,10 +153,13 @@ HTML;
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         if ($fileUpload->upload('media-file')) {
-            // Save reference to database
+            // Save media reference to database
             $media = $mediaMapper->make();
-            $media->file = $fileUpload->getFileName();
+            $media->filename = $fileUpload->getFilename();
             $media->caption = $this->request->getParsedBodyParam('caption');
+            $media->width = ($fileUpload->width) ?: null;
+            $media->height = ($fileUpload->height) ?: null;
+            $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
             $mediaMapper->save($media);
 
             // Save category assignments

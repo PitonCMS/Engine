@@ -112,7 +112,10 @@ CREATE TABLE IF NOT EXISTS `setting` (
 
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `file` varchar(20) NOT NULL,
+  `filename` varchar(20) NOT NULL,
+  `width` int NULL DEFAULT NULL,
+  `height` int NULL DEFAULT NULL,
+  `feature` enum('Y', 'N') NOT NULL DEFAULT 'N',
   `caption` varchar(100) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,

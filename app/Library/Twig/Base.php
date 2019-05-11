@@ -198,22 +198,22 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      */
     public function checked($value = 0)
     {
-        return ($value == 1 || $value == 'Y' || $value == true) ? 'checked' : '';
+        return ($value === 'Y' || $value === 1 || $value === true || $value == 1) ? 'checked' : '';
     }
 
     /**
      * Get Media Path
      *
-     * @param  string $fileName Media file name to parse
+     * @param  string $filename Media file name to parse
      * @return string
      */
-    public function getMediaPath($fileName)
+    public function getMediaPath($filename)
     {
         // If this is an external link to a media file, just return string
-        if (stripos($fileName, 'http') === 0 || empty($fileName)) {
-            return $fileName;
+        if (stripos($filename, 'http') === 0 || empty($filename)) {
+            return $filename;
         }
 
-        return ($this->container->filePath)($fileName) . $fileName;
+        return ($this->container->mediaUri)($filename) . $filename;
     }
 }

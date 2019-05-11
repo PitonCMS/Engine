@@ -146,11 +146,11 @@ $container['csrfGuard'] = function ($c) {
 
 // File Upload Handler
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles(), $c['filePath']);
+    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles(), $c['mediaUri']);
 };
 
-// Media File Upload Path
-$container['filePath'] = function ($c) {
+// Media File Uri
+$container['mediaUri'] = function ($c) {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = mb_substr($directory, 0, 2);
@@ -158,3 +158,8 @@ $container['filePath'] = function ($c) {
         return "/media/$dir/$directory/";
     };
 };
+
+// Media Handler
+// $container['mediaHandler'] = function ($c) {
+//     return new Piton\Library\Handlers\MediaHandler($c['mediaUri']);
+// };

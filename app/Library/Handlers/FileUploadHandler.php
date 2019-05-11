@@ -12,9 +12,9 @@ use \Exception;
 use \Closure;
 
 /**
- * Piton File Upload Handler
+ * Piton Media File Upload Handler
  *
- * Manages file uploads
+ * Manages Media file uploads
  */
 class FileUploadHandler
 {
@@ -34,7 +34,31 @@ class FileUploadHandler
      * New File Name
      * @var string
      */
-    protected $fileName = '';
+    protected $filename;
+
+    /**
+     * Extension
+     * @var string
+     */
+    protected $extension;
+
+    /**
+     * Media File Width
+     * @var int
+     */
+    public $width;
+
+    /**
+     * Media File Height
+     * @var string
+     */
+    public $height;
+
+    /**
+     * Media File URI Closure
+     * @var closure
+     */
+    protected $mediaUriClosure;
 
     /**
      * PHP Upload Error Code
@@ -43,30 +67,24 @@ class FileUploadHandler
     protected $error = UPLOAD_ERR_OK;
 
     /**
-     * Media File Path Closure
-     * @var closure
-     */
-    protected $filePath;
-
-    /**
      * Constructor
      *
      * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
-     * @param  closure $filePathClosure Function to derive file path
+     * @param  closure $mediaUriClosure Function to derive media file path
      * @return void
      */
-    public function __construct(array $uploadedFiles, closure $filePathClosure)
+    public function __construct(array $uploadedFiles, closure $mediaUriClosure)
     {
         $this->uploadedFiles = $uploadedFiles;
         $this->publicRoot = ROOT_DIR . 'public';
-        $this->filePath = $filePathClosure;
+        $this->mediaUriClosure = $mediaUriClosure;
     }
 
     /**
-     * Upload File Action
+     * Upload Media File
      *
      * Upload file from $_FILES array
-     * @param  string  $fileKey Array key for file
+     * @param  string  $fileKey Array key for file upload
      * @return boolean          True|False
      */
     public function upload(string $fileKey)
@@ -80,50 +98,99 @@ class FileUploadHandler
         if ($file->getError() === UPLOAD_ERR_OK) {
             // Get file name and extension
             $uploadFileName = $file->getClientFilename();
-            $ext = mb_strtolower(pathinfo($uploadFileName, PATHINFO_EXTENSION));
+            $this->extension = mb_strtolower(pathinfo($uploadFileName, PATHINFO_EXTENSION));
 
             // Create new file name and directory and ensure it is unique
             do {
-                $name = $this->generateName();
-                $path = $this->getFilePath($name);
-                $exists = $this->makeFileDirectory($path);
-            } while (!$exists);
+                $this->makeFilename();
+            } while (!$this->makeFileDirectory());
 
-            $this->fileName = "$name.$ext";
-            $file->moveTo("{$this->publicRoot}{$path}{$this->fileName}");
+            $file->moveTo($this->getAbsoluteFilename());
+
+            // Set file attributes
+            list($this->width, $this->height) = getimagesize($this->getAbsoluteFilename());
 
             unset($this->uploadedFiles[$fileKey]);
 
             return true;
         }
 
-        // Save error code
+        // Otherwise save error code
         $this->error = $file->getError();
 
         return false;
     }
 
     /**
-     * Get New File Name
+     * Get File Name
      *
+     * Returns filename plus extension
      * @param  void
      * @return string
      */
-    public function getFileName()
+    public function getFilename()
     {
-        return $this->fileName;
+        return "{$this->filename}.{$this->extension}";
     }
 
     /**
-     * Get File Path
+     * Get Absolute Filename
      *
-     * Derive file path based on file name
-     * @param  string $fileName
+     * Returns absolute path to file with extension
+     * @param  void
      * @return string
      */
-    public function getFilePath($fileName)
+    public function getAbsoluteFilename()
     {
-        return ($this->filePath)($fileName);
+        return $this->publicRoot . $this->getFileUri() . $this->getFilename();
+    }
+
+    /**
+     * Get File URI
+     *
+     * Derive file URI based on file name
+     * @param  void
+     * @return string
+     */
+    public function getFileUri()
+    {
+        return ($this->mediaUriClosure)($this->filename);
+    }
+
+    /**
+     * Make Directory Path
+     *
+     * Creates the directory path
+     * @return bool
+     */
+    protected function makeFileDirectory()
+    {
+        $filePath = $this->publicRoot . $this->getFileUri();
+
+        // Create the path if the directory does not exist
+        if (!is_dir($filePath)) {
+            try {
+                mkdir($filePath, 0775, true);
+                return true;
+            } catch (Exception $e) {
+                throw new Exception('PitonCMS: Failed to create file upload directory. ' . $e->getMessage());
+            }
+        }
+
+        // The directory already exists
+        return false;
+    }
+
+    /**
+     * Make Filename
+     *
+     * Generates new filename
+     * @param  void
+     * @return void
+     */
+    protected function makeFilename()
+    {
+        $this->filename = bin2hex(random_bytes(6));
     }
 
     /**
@@ -163,42 +230,5 @@ class FileUploadHandler
         }
 
         return $message;
-    }
-
-    /**
-     * Make Directory Path
-     *
-     * Creates the directory path
-     * @param  string $directoryPath
-     * @return bool                  True|False
-     */
-    protected function makeFileDirectory($directoryPath)
-    {
-        $filePath = $this->publicRoot . $directoryPath;
-
-        // Create the path if the directory does not exist
-        if (!is_dir($filePath)) {
-            try {
-                mkdir($filePath, 0775, true);
-                return true;
-            } catch (Exception $e) {
-                throw new Exception('PitonCMS: Failed to create file upload directory');
-            }
-        }
-
-        // The directory already exists
-        return false;
-    }
-
-    /**
-     * Generate Filename
-     *
-     * Generates new filename
-     * @param  void
-     * @return string
-     */
-    protected function generateName()
-    {
-        return bin2hex(random_bytes(6));
     }
 }

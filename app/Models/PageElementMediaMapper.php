@@ -18,10 +18,10 @@ class PageElementMediaMapper extends DataMapperAbstract
     protected $table = 'page_element';
     protected $tableJoins = [
         [
-            'select' => 'media.file media_file, media.caption media_caption',
+            'select' => 'media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption',
             'table' => 'media',
             'join' => 'left outer join',
-            'on' => 'media.file = page_element.image_path'
+            'on' => 'media.filename = page_element.image_path'
         ]
     ];
 

@@ -52,7 +52,10 @@ class MediaCategoryMapper extends DataMapperAbstract
 select
     mc.category,
     m.id,
-    m.file,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
     m.caption
 from media_category mc
 join media_category_map mcp on mc.id = mcp.category_id
