@@ -18,12 +18,13 @@ class PageElementMediaMapper extends DataMapperAbstract
     protected $table = 'page_element';
     protected $tableJoins = [
         [
-            'select' => 'media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption',
+            'select' => 'media.id media_id, media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption',
             'table' => 'media',
             'join' => 'left outer join',
             'on' => 'media.filename = page_element.image_path'
         ]
     ];
+    protected $domainObjectClass = __NAMESPACE__ . '\Entities\PageElementMedia';
 
     /**
      * Find Elements by Page ID
