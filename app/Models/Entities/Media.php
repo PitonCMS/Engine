@@ -1,0 +1,29 @@
+<?php
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+namespace Piton\Models\Entities;
+
+/**
+ * Piton Media Value Object
+ */
+class Media extends PitonEntity
+{
+    public $aspectRatio;
+    public $orientation;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        if (isset($this->height) && $this->height > 0) {
+            $this->aspectRatio = round($this->width / $this->height, 2);
+            $this->orientation = ($this->aspectRatio > 1) ? 'landscape' : 'portrait';
+        }
+    }
+}

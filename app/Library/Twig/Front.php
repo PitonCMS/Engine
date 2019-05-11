@@ -116,8 +116,8 @@ class Front extends Base
      */
     public function getGallery(int $galleryId = null)
     {
-        $mediaCategory = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
-        return $mediaCategory->findMediaByCategoryId($galleryId);
+        return $mediaMapper->findMediaByCategoryId($galleryId);
     }
 }

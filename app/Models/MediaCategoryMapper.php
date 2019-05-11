@@ -36,33 +36,14 @@ class MediaCategoryMapper extends DataMapperAbstract
     }
 
     /**
-     * Find Media By Category ID
+     * Find All Media Category Assignments
      *
-     * Find media by category ID
-     * @param  int   $catId
+     * @param void
      * @return mixed
      */
-    public function findMediaByCategoryId(int $catId = null)
+    public function findAllMediaCategoryAssignments()
     {
-        if (null === $catId) {
-            return;
-        }
-
-        $this->sql = <<<SQL
-select
-    mc.category,
-    m.id,
-    m.filename,
-    m.width,
-    m.height,
-    m.feature,
-    m.caption
-from media_category mc
-join media_category_map mcp on mc.id = mcp.category_id
-join media m on mcp.media_id = m.id
-where mc.id = ?
-SQL;
-        $this->bindValues[] = $catId;
+        $this->sql = 'select media_id, category_id from media_category_map;';
         return $this->find();
     }
 
@@ -72,7 +53,7 @@ SQL;
      * For a media ID, save category array
      * @param int   $mediaId
      * @param array $categoryIds
-     * @return mixed
+     * @return void
      */
     public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null)
     {
@@ -93,22 +74,10 @@ SQL;
     }
 
     /**
-     * Find All Media Category Assignments
-     *
-     * @param void
-     * @return mixed
-     */
-    public function findAllMediaCategoryAssignments()
-    {
-        $this->sql = 'select media_id, category_id from media_category_map;';
-        return $this->find();
-    }
-
-    /**
      *  Delete Media Category Assignments by Media ID
      *
      * @param int    $mediaId
-     * @return mixed
+     * @return void
      */
     public function deleteMediaCategoryAssignmentsByMediaId(int $mediaId)
     {
@@ -121,7 +90,7 @@ SQL;
      *  Delete Media Category Assignments by Category ID
      *
      * @param int    $categoryId
-     * @return mixed
+     * @return void
      */
     public function deleteMediaCategoryAssignmentsByCategoryId(int $categoryId)
     {
