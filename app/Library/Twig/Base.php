@@ -198,7 +198,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      */
     public function checked($value = 0)
     {
-        return ($value === 'Y' || $value === 1 || $value === true || $value == 1) ? 'checked' : '';
+        return ($value === 'Y' || $value === 1 || $value === true || $value == 1 || $value == 'on') ? 'checked' : '';
     }
 
     /**
