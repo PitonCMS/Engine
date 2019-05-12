@@ -15,6 +15,7 @@ class Media extends PitonEntity
 {
     public $aspectRatio;
     public $orientation;
+    public $featured;
 
     /**
      * Constructor
@@ -25,5 +26,7 @@ class Media extends PitonEntity
             $this->aspectRatio = round($this->width / $this->height, 2);
             $this->orientation = ($this->aspectRatio > 1) ? 'landscape' : 'portrait';
         }
+
+        $this->featured = ($this->feature == 'Y') ? 'featured-img' : null;
     }
 }
