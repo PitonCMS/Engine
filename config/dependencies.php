@@ -160,6 +160,6 @@ $container['mediaUri'] = function ($c) {
 };
 
 // Media Handler
-// $container['mediaHandler'] = function ($c) {
-//     return new Piton\Library\Handlers\MediaHandler($c['mediaUri']);
-// };
+$container['mediaHandler'] = function ($c) {
+    return new Piton\Library\Handlers\MediaHandler($c['mediaUri'], $c['settings']['site']['tinifyApiKey']);
+};

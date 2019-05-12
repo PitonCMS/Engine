@@ -186,6 +186,7 @@ VALUES
   ('site',6,'statCounter',NULL,'textarea','Stat Counter',NULL,1,now(),1,now()),
   ('site',7,'siteAuthor','Moritz Media',NULL,'Site Author','Who built this website',1,now(),1,now()),
   ('site',8,'siteAuthorUrl','https://moritzmedia.com',NULL,'Site Author URL','Author website',1,now(),1,now()),
+  ('site',9,'tinifyApiKey',NULL,'Tinify API Key','Optimize your media files with TinyJPG. Save your API key <a href="https://tinyjpg.com/" target="_blank">https://tinyjpg.com/</a>.',1,now(),1,now()),
   ('contact',1,'displayName',NULL,NULL,'Display Name',NULL,1,now(),1,now()),
   ('contact',2,'telephone',NULL,NULL,'Telephone',NULL,1,now(),1,now()),
   ('contact',3,'mobile',NULL,NULL,'Mobile',NULL,1,now(),1,now()),

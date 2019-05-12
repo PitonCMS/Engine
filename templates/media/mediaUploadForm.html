@@ -3,7 +3,7 @@
 {% block sectionText 'mediaUpload' %}
 
 {% block subBody %}
-<form action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+<form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <div class="form-group">
     <label>Media File</label>
@@ -22,8 +22,14 @@
     <label>Caption</label>
     <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
   </div>
-
-  <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
-
+  <div class="form-group">
+    <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
+  </div>
 </form>
+{% if not site.settings.tinifyApiKey %}
+<p class="small">
+  PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to automatically optimize your media files for the web.
+  To use TinifyJPG with PitonCMS, go to <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a> and enter your name and email address to receive an API key. Save this key to <a href="{{ pathFor('adminSettings') }}">PitonCMS Settings > Site > Tinify API Key</a>.
+</p>
+{% endif %}
 {% endblock subBody %}

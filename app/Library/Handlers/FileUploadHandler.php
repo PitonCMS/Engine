@@ -50,7 +50,7 @@ class FileUploadHandler
 
     /**
      * Media File Height
-     * @var string
+     * @var int
      */
     public $height;
 
@@ -70,7 +70,7 @@ class FileUploadHandler
      * Constructor
      *
      * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
-     * @param  closure $mediaUriClosure Function to derive media file path
+     * @param  closure $mediaUriClosure Function to derive media file URI
      * @return void
      */
     public function __construct(array $uploadedFiles, closure $mediaUriClosure)

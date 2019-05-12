@@ -164,6 +164,9 @@ HTML;
 
             // Save category assignments
             $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+
+            // Make optimized copies
+            $this->makeMediaSet($fileUpload->getFilename());
         } else {
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
@@ -262,5 +265,21 @@ HTML;
         }
 
         rmdir($dir);
+    }
+
+    /**
+     * Make Optimized Media Set
+     *
+     * @param  string $filename
+     * @return void
+     */
+    protected function makeMediaSet($filename)
+    {
+        $mediaHandler = $this->container->mediaHandler;
+
+        $mediaHandler->setSource($filename);
+        $mediaHandler->makeXLarge();
+        $mediaHandler->makeLarge();
+        $mediaHandler->makeThumb();
     }
 }
