@@ -60,7 +60,7 @@
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
-        <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ getMediaPath(element.image_path) }}">
+        <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
       </div>
       <small class="form-text text-muted">Select media file to display.</small>
     </div>

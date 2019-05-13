@@ -275,11 +275,14 @@ HTML;
      */
     protected function makeMediaSet($filename)
     {
-        $mediaHandler = $this->container->mediaHandler;
+        // Ensure there is a Tinify API key
+        if (($this->container->settings)['site']['tinifyApiKey']) {
+            $mediaHandler = $this->container->mediaHandler;
 
-        $mediaHandler->setSource($filename);
-        $mediaHandler->makeXLarge();
-        $mediaHandler->makeLarge();
-        $mediaHandler->makeThumb();
+            $mediaHandler->setSource($filename);
+            $mediaHandler->makeXLarge();
+            $mediaHandler->makeLarge();
+            $mediaHandler->makeThumb();
+        }
     }
 }

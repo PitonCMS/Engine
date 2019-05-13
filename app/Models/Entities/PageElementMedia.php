@@ -13,7 +13,7 @@ namespace Piton\Models\Entities;
  */
 class PageElementMedia extends PitonEntity
 {
-    public $image;
+    public $media;
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ class PageElementMedia extends PitonEntity
             $media->feature = $this->media_feature;
             $media->caption = $this->media_caption;
             $media->__construct();
-            $this->image = $media;
+            $this->media = $media;
         }
 
         // Remove media properties

@@ -8,12 +8,12 @@
 {% macro mediaCard(media, categories, editable = false) %}
 {% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
 <div class="card jsMediaCard">
-  <img src="{{ getMediaPath(media.filename) }}" class="card-img-top" alt="{{ media.caption }}">
+  <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}" data-source="{{ getMediaPath(media.filename, 'original') }}">
   <div class="card-body">
 
     {% if editable %}
     <div class="form-group">
-      <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename) }}" readonly
+      <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename, 'large') }}" readonly
         title="Link to media">
     </div>
 

@@ -161,5 +161,21 @@ $container['mediaUri'] = function ($c) {
 
 // Media Handler
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\MediaHandler($c['mediaUri'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\MediaHandler($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+};
+
+// Media Size File Suffix Reference
+$container['mediaSizes'] = function ($c) {
+    $sizes = [
+        'original' => '',
+        'xlarge' => '-xlarge',
+        'large' => '-large',
+        'thumb' => '-thumb'
+    ];
+    return function ($size = 'original') use ($sizes) {
+        if (isset($sizes[$size])) {
+            return $sizes[$size];
+        }
+        return '';
+    };
 };

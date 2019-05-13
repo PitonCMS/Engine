@@ -187,7 +187,7 @@ class AdminPageController extends AdminBaseController
 
             // If the image path does not start with http then get base name
             $imagePath = $this->request->getParsedBodyParam('element_image_path')[$key];
-            if (stripos($imagePath, 'http') === 0) {
+            if (mb_stripos($imagePath, 'http') === 0) {
                 $pageElement->image_path = $imagePath;
             } else {
                 $pageElement->image_path = pathinfo($imagePath, PATHINFO_BASENAME);

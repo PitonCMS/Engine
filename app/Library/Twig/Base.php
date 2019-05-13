@@ -198,22 +198,39 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      */
     public function checked($value = 0)
     {
-        return ($value === 'Y' || $value === 1 || $value === true || $value == 1 || $value == 'on') ? 'checked' : '';
+        //      ------------------------- Exactly True ------------------------------| Truthy Fallback
+        return ($value === 'Y' || $value === 1 || $value === true || $value === 'on' || $value == 1) ? 'checked' : '';
     }
 
     /**
      * Get Media Path
      *
      * @param  string $filename Media file name to parse
+     * @param  string $size     Media size: original|xlarge|large|thumb
      * @return string
      */
-    public function getMediaPath($filename)
+    public function getMediaPath($filename, $size = 'original')
     {
         // If this is an external link to a media file, just return string
-        if (stripos($filename, 'http') === 0 || empty($filename)) {
+        if (mb_stripos($filename, 'http') === 0) {
             return $filename;
         }
 
-        return ($this->container->mediaUri)($filename) . $filename;
+        // If the original is requested, pass through the URI and filename
+        if ($size === 'original') {
+            return ($this->container->mediaUri)($filename) . $filename;
+        }
+
+        // Construct requsted file URI
+        $pathParts = pathinfo($filename);
+        $baseUri = ($this->container->mediaUri)($filename);
+        $requestedSize = $pathParts['filename'] . ($this->container->mediaSizes)($size) . '.' . $pathParts['extension'];
+
+        if (file_exists(ROOT_DIR . 'public' . $baseUri . $requestedSize)) {
+            return $baseUri . $requestedSize;
+        } else {
+            // Fall back is original file
+            return $baseUri . $filename;
+        }
     }
 }

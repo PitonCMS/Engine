@@ -13,6 +13,9 @@ namespace Piton\Models\Entities;
  */
 class Media extends PitonEntity
 {
+    /**
+     * Derived properties calculated at runtime
+     */
     public $aspectRatio;
     public $orientation;
     public $featured;

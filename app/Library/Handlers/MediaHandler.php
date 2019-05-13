@@ -62,14 +62,6 @@ class MediaHandler
     protected $orientation;
 
     /**
-     * Media File Names
-     * @var
-     */
-    protected $filenameXLarge = '-xlarge';
-    protected $filenameLarge = '-large';
-    protected $filenameThumb = '-thumb';
-
-    /**
      * Tinify Source
      * @var \Tinify\Source
      */
@@ -79,16 +71,23 @@ class MediaHandler
      * Media File URI Closure
      * @var closure
      */
-    protected $mediaUriClosure;
+    protected $mediaUri;
+
+    /**
+     * Media Sizes Closure
+     * @var closure
+     */
+    protected $mediaSizes;
 
     /**
      * Constructor
      *
-     * @param  closure $mediaUriClosure Function to derive media file URI
-     * @param  string  $tinifyApiKey    TinyJPG API Key
+     * @param  closure $mediaUri     Function to derive media file URI
+     * @param  closure $mediaSizes   Function to derive media size suffix
+     * @param  string  $tinifyApiKey TinyJPG API Key
      * @return void
      */
-    public function __construct(closure $mediaUriClosure, string $tinifyApiKey)
+    public function __construct(closure $mediaUri, closure $mediaSizes, string $tinifyApiKey)
     {
         // Make sure there is a key
         if (empty($tinifyApiKey)) {
@@ -103,7 +102,8 @@ class MediaHandler
         }
 
         $this->publicRoot = ROOT_DIR . 'public';
-        $this->mediaUriClosure = $mediaUriClosure;
+        $this->mediaUri = $mediaUri;
+        $this->mediaSizes = $mediaSizes;
     }
 
     /**
@@ -147,8 +147,8 @@ class MediaHandler
     {
         $this->validateTinifySource();
 
-        $xlFilename = $this->publicRoot . $this->getFileUri() . $this->filename . $this->filenameXLarge . '.' . $this->extension;
-        $this->tinifySource->toFile($xlFilename);
+        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('xlarge') . '.' . $this->extension;
+        $this->tinifySource->toFile($filename);
     }
 
     /**
@@ -162,7 +162,7 @@ class MediaHandler
     {
         $this->validateTinifySource();
 
-        $largeFilename = $this->publicRoot . $this->getFileUri() . $this->filename . $this->filenameLarge . '.' . $this->extension;
+        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('large') . '.' . $this->extension;
 
         // If square, keep aspect and constrain to 2000 x 2000
         if ($this->width == $this->height) {
@@ -186,7 +186,7 @@ class MediaHandler
         }
 
         $resized = $this->tinifySource->resize($resize);
-        $resized->toFile($largeFilename);
+        $resized->toFile($filename);
     }
 
     /**
@@ -200,13 +200,13 @@ class MediaHandler
     {
         $this->validateTinifySource();
 
-        $thumbFilename = $this->publicRoot . $this->getFileUri() . $this->filename . $this->filenameThumb . '.' . $this->extension;
+        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('thumb') . '.' . $this->extension;
         $resized = $this->tinifySource->resize([
             'method' => 'thumb',
             'width' => ($this->orientation === 'landscape') ? 350 : 265,
             'height' => ($this->orientation === 'landscape') ? 265 : 350
         ]);
-        $resized->toFile($thumbFilename);
+        $resized->toFile($filename);
     }
 
     /**
@@ -218,7 +218,7 @@ class MediaHandler
      */
     public function getFileUri()
     {
-        return ($this->mediaUriClosure)($this->filename);
+        return ($this->mediaUri)($this->filename);
     }
 
     /**
