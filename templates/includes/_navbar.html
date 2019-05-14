@@ -1,44 +1,49 @@
 {# Admin Navbar #}
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
-    aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div class="container">
+    <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
+      aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="pitonAdminNavbar">
-    <ul class="navbar-nav ml-auto">
+    <div class="collapse navbar-collapse" id="pitonAdminNavbar">
+      <ul class="navbar-nav ml-auto">
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminPages') }}">Pages</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('page') %}active{% endif %}" href="{{ pathFor('adminPages') }}">Pages</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminCollections') }}">Collections</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('collection') %}active{% endif %}"
+            href="{{ pathFor('adminCollections') }}">Collections</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminShowMedia') }}">Media</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('media') %}active{% endif %}" href="{{ pathFor('adminShowMedia') }}">Media</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminMessages') }}">
-          Messages <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('message') %}active{% endif %}" href="{{ pathFor('adminMessages') }}">
+            Messages <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminSettings') }}">Settings</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('settings') %}active{% endif %}"
+            href="{{ pathFor('adminSettings') }}">Settings</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminUsers') }}">Users</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link {% if inUrl('user') %}active{% endif %}" href="{{ pathFor('adminUsers') }}">Users</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
-      </li>
-    </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
+        </li>
+      </ul>
+    </div>
   </div>
+
 </nav>

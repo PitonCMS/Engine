@@ -1,9 +1,11 @@
 {% extends '@admin/media/_adminMediaBase.html' %}
 {% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
+{% block leadText 'Upload Form' %}
 {% block sectionText 'mediaUpload' %}
 
 {% block subBody %}
-<form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+<form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
+  enctype="multipart/form-data">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <div class="form-group">
     <label>Media File</label>
@@ -28,8 +30,11 @@
 </form>
 {% if not site.settings.tinifyApiKey %}
 <p class="small">
-  PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to automatically optimize your media files for the web.
-  To use TinifyJPG with PitonCMS, go to <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a> and enter your name and email address to receive an API key. Save this key to <a href="{{ pathFor('adminSettings') }}">PitonCMS Settings > Site > Tinify API Key</a>.
+  PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to automatically optimize your
+  media files for the web.
+  To use TinifyJPG with PitonCMS, go to <a href="https://tinyjpg.com/developers"
+    target="_blank">https://tinyjpg.com/developers</a> and enter your name and email address to receive an API key. Save
+  this key to <a href="{{ pathFor('adminSettings') }}">PitonCMS Settings > Site > Tinify API Key</a>.
   TinyJPG is free up to 500 transformations per month.
 </p>
 {% endif %}
