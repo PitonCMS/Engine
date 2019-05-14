@@ -6,6 +6,7 @@
 {% block subBody %}
 <form class="jsEditMediaCategory" action="{{ pathFor('adminSaveMediaCategories') }}" method="post"
   accept-charset="utf-8">
+
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
   <div class="button-group">
@@ -20,6 +21,7 @@
 
   {# Extra empty form on page load to add a new category #}
   {{ form.categoryInput(c) }}
+
 </form>
 {% endblock subBody %}
 
@@ -28,12 +30,16 @@
 
   <input type="hidden" name="id[{{ category.id }}]" value="{{ category.id }}">
 
-  <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
-    placeholder="Gallery name" autocomplete="off">
+  <div class="input-group">
+    <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
+      placeholder="New Gallery name" autocomplete="off">
 
-  {% if category.id %}
-  <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ category.id }}">Delete</button>
-  {% endif %}
+    {% if category.id %}
+    <button class="btn btn-sm btn-outline-danger" type="button" name="button" value="{{ category.id }}">Delete</button>
+    {% endif %}
+  </div>
+
+
 </div>
 
 {% endmacro categoryInput %}

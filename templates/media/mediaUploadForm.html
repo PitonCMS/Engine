@@ -7,19 +7,26 @@
 <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
   enctype="multipart/form-data">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+
   <div class="form-group">
     <label>Media File</label>
     <input type="file" class="form-control-file" name="media-file" required>
   </div>
+
+  <!-- <div class="custom-file">
+    <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
+    <label class="custom-file-label" for="mediaFile">Choose a file</label>
+  </div> -->
+  <hr>
   <div class="form-group form-check">
     <input class="form-check-input" type="checkbox" id="feature" name="feature">
     <label class="form-check-label" for="feature">Featured Media</label>
   </div>
-
+  <hr>
   {% for c in page.categories %}
   {{ catForm.categorySelect(c) }}
   {% endfor %}
-
+  <hr>
   <div class="form-group">
     <label>Caption</label>
     <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
