@@ -2,6 +2,18 @@
   Setting Input Macros
 #}
 
+{# Wrapper Macro #}
+{% macro settingInput(setting) %}
+  {% import _self as input %}
+  {% if setting.input_type == 'select' %}
+    {{ input.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
+  {% elseif setting.input_type == 'textarea' %}
+    {{ input.textareaHtml(setting) }}
+  {% else %}
+    {{ input.inputHtml(setting) }}
+  {% endif %}
+{% endmacro settingInput %}
+
 {# Input Macro #}
 {% macro inputHtml(setting) %}
   {% import _self as button %}
