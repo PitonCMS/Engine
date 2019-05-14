@@ -84,4 +84,14 @@ class AdminController extends AdminBaseController
 
         return $this->render('releaseNotes.html', ['releases' => $releases]);
     }
+
+    /**
+     * Admin Tools
+     *
+     * For miscellaneous admin tools
+     */
+    public function adminTools()
+    {
+        return $this->render('tools/adminTools.html');
+    }
 }
