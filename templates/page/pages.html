@@ -1,28 +1,27 @@
-{% extends '@admin/_adminBase.html' %}
+{% extends '@admin/page/_adminPageBase.html' %}
 
 {% block htmlTitle 'Pages' %}
 {% block headText 'Manage Pages' %}
 {% block sectionText 'pages' %}
-{% block body %}
 
-<h3>Add New Page</h3>
-<p>Select a page template.</p>
+
+{% block sideNav %}
 {% if page.templates %}
-<ul class="gridLayout">
+<ul class="nav flex-column">
   {% for template in page.templates %}
-  <li>
-    <a href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
-      title="{{ template.description }}">{{ template.name }}</a> <span class="pageTypeDesc">
-      {{ template.description }}
-    </span>
+  <li class="nav-item">
+    <a class="nav-link active" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
+      title="{{ template.description }}">{{ template.name }}</a>
+    <span class="pageTypeDesc">{{ template.description }}</span>
   </li>
   {% endfor %}
 </ul>
 {% else %}
-<h5>No Page JSON Definition Files Found</h5>
+<h5>No Page Definition Files Found</h5>
 {% endif %}
+{% endblock sideNav %}
 
-
+{% block subBody %}
 <h3>Saved Pages</h3>
 <p>Edit/Delete pages and page content.</p>
 <div class="card-wrapper">
@@ -31,6 +30,5 @@
   {% else %}
   <strong>No Saved Pages Found</strong>
   {% endfor %}
-
 </div>
-{% endblock body %}
+{% endblock subBody %}
