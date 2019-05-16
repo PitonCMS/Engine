@@ -1,12 +1,12 @@
 #pages {
+  background-color: #fff;
+
   .section-inner {
     width: 80vw;
     max-width: 1200px;
     @include margin(0 auto);
     @include padding(1rem);
   }
-
-  /*Page Editor*/
 
   .card-wrapper {
     display: grid;

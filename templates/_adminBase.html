@@ -19,7 +19,8 @@
   <meta name="author" content="PitonCMS">
   <link rel="icon" href="">
 
-  <title>{% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}PitonCMS Administration</title>
+  <title>{% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}PitonCMS Administration
+  </title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -36,10 +37,17 @@
   <script type="text/javascript">
     let pitonConfig = {
       dateFormat: "{{ site.settings.dateFormat }}",
-      weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
+      weekStart: {
+        {
+          site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1'
+        }
+      },
       csrfTokenName: "{{ site.csrf.name }}",
       csrfTokenValue: "{{ site.csrf.value }}",
-      {% block jsPitonConfig '' %}
+      {
+        %
+        block jsPitonConfig '' %
+      }
     };
   </script>
   {% block head '' %}
@@ -69,6 +77,7 @@
   <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"
     integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script> -->
   {% if site.settings.pitonDev %}
   <script src="{{ basePath() }}/admin/js/main.js"></script>
   {% else %}
@@ -82,6 +91,7 @@
       });
     });
   </script>
+
   {% block foot '' %}
 </body>
 

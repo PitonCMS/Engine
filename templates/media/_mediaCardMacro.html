@@ -8,13 +8,14 @@
 {% macro mediaCard(media, categories, editable = false) %}
 {% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
 <div class="card jsMediaCard">
-  <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}" data-source="{{ getMediaPath(media.filename, 'original') }}">
+  <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}"
+    data-source="{{ getMediaPath(media.filename, 'thumb') }}">
   <div class="card-body">
 
     {% if editable %}
     <div class="form-group">
-      <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename, 'large') }}" readonly
-        title="Link to media">
+      <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename, 'large') }}"
+        readonly title="Link to media">
     </div>
 
     <form action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
@@ -27,7 +28,8 @@
       </div>
 
       <div class="form-group form-check">
-        <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature" {{ checked(media.feature) }}>
+        <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
+          {{ checked(media.feature) }}>
         <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
       </div>
 
