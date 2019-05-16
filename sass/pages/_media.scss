@@ -1,69 +1,6 @@
 #media,
 #mediaUpload,
-#mediaCategories {
-  background-color: #efef;
-  position: absolute;
-  min-height: 100%;
-  width: 100%;
-
-  .section-inner {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    grid-auto-rows: 100%;
-    min-height: 100%;
-  }
-
-  .sidebar {
-    background: pink !important;
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 0 2 auto;
-  }
-
-  nav {
-    padding: 1rem;
-
-    .nav-item .nav-link {
-      color: white !important;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-
-      .nav-item .nav-link:hover {
-        color: var(--primary) !important;
-      }
-    }
-  }
-
-  .section-inner {
-    all: unset;
-    width: 100%;
-    min-height: 100%;
-
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    grid-auto-rows: 100%;
-    height: 100%;
-  }
-
-  nav {
-    @include padding(0rem);
-    min-height: 100%;
-
-    .nav-link {
-      color: white !important;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-
-      &:hover {
-        color: var(--primary) !important;
-      }
-    }
-  }
-
-  main {
-    @include padding(1rem);
-  }
-}
+#mediaCategories {}
 
 #media {
   .card-wrapper {
@@ -76,6 +13,23 @@
     box-shadow: $box-shadow;
     border-radius: $border-radius;
   }
+}
 
+#mediaUpload,
+#mediaCategories {
+  form {
+    @include padding(null 1rem);
+    border: solid #efefef 2px;
+    border-radius: $border-radius;
+    width: 95%;
+    @include margin(.5rem auto);
 
+    .button-group {
+      @include padding(1rem);
+    }
+
+    .input-group>* {
+      @include margin(null .5rem);
+    }
+  }
 }
