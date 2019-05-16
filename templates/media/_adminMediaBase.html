@@ -6,14 +6,14 @@
 
 {% block sideNav %}
 <li class="nav-item">
-  <a class="nav-link {% if inUrl('media') %}active{% endif %}" href="{{ pathFor('adminShowMedia') }}">All Media</a>
+  <a class="nav-link {{ currentRoute('adminShowMedia') }}" href="{{ pathFor('adminShowMedia') }}">All Media</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link {% if inUrl('form') %}active{% endif %}" href="{{ pathFor('adminFileUploadForm') }}">Upload
+  <a class="nav-link {{ currentRoute('adminFileUploadForm') }}" href="{{ pathFor('adminFileUploadForm') }}">Upload
     File</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link {% if inUrl('category') %}active{% endif %}"
+  <a class="nav-link {{ currentRoute('adminEditMediaCategories') }}"
     href="{{ pathFor('adminEditMediaCategories') }}">Galleries</a>
 </li>
 {% endblock sideNav %}

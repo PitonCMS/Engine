@@ -62,9 +62,8 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
         $this->sitePages = isset($container['settings']['pages']) ? $container['settings']['pages'] : null;
         $this->siteSettings = isset($container['settings']['site']) ? $container['settings']['site'] : null;
 
-        $csrfGuard = $container->csrfGuard;
-        $this->csrfTokenName = $csrfGuard->getTokenName();
-        $this->csrfTokenValue = $csrfGuard->getTokenValue();
+        $this->csrfTokenName = ($container->csrfGuard)->getTokenName();
+        $this->csrfTokenValue = ($container->csrfGuard)->getTokenValue();
     }
 
     // Identifer
@@ -107,6 +106,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             new \Twig_SimpleFunction('pathFor', [$this, 'pathFor']),
             new \Twig_SimpleFunction('baseUrl', [$this, 'baseUrl']),
             new \Twig_SimpleFunction('basePath', [$this, 'basePath']),
+            new \Twig_SimpleFunction('currentRoute', [$this, 'currentRoute']),
             new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
             new \Twig_SimpleFunction('checked', [$this, 'checked']),
             new \Twig_SimpleFunction('getMediaPath', [$this, 'getMediaPath']),
@@ -163,9 +163,26 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     }
 
     /**
+     * Current Route
+     *
+     * If the supplied route name is the current route, returns the second parameter
+     * @param  string $routeName   Name of the route to test
+     * @param  mixed  $returnValue Value to return
+     * @return mixed
+     */
+    public function currentRoute($routeName, $returnValue = 'active')
+    {
+        if ($routeName === $this->container->settings['site']['currentRouteName']) {
+            return $returnValue;
+        }
+
+        return null;
+    }
+
+    /**
      * In URL
      *
-     * Checks if the supplied string is one of the URL segments
+     * Checks if the supplied string is one of the current URL segments
      * @param string $segment URL segment to find
      * @return boolean
      */

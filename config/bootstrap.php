@@ -44,7 +44,10 @@ return call_user_func(
             $config['displayErrorDetails'] = true;
         }
 
-        // Create the Slim application and get container
+        // This flag is needed to get the current route name in LoadSiteSettings
+        $config['determineRouteBeforeAppMiddleware'] = true;
+
+        // Create the Slim application and make container available
         $app = new Slim\App(['settings' => $config]);
         $container = $app->getContainer();
 
