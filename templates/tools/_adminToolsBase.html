@@ -5,12 +5,14 @@
 {% block headText 'Manage Site' %}
 
 {% block sideNav %}
-<li class="nav-item">
-  <a class="nav-link {% if inUrl('settings') %}active{% endif %}" href="{{ pathFor('adminSettings') }}">Settings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link {% if inUrl('user') %}active{% endif %}" href="{{ pathFor('adminUsers') }}">Users</a>
-</li>
+<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link {% if inUrl('settings') %}active{% endif %}" href="{{ pathFor('adminSettings') }}">Settings</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if inUrl('user') %}active{% endif %}" href="{{ pathFor('adminUsers') }}">Users</a>
+  </li>
+</ul>
 {% endblock sideNav %}
 
 {% block subBody %}

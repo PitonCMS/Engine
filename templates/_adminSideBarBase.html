@@ -15,24 +15,24 @@
 {% extends '@admin/_adminBase.html' %}
 
 {% block body %}
-
+{% block openForm '' %}
 <div class="sidebar bg-dark">
 
-  <ul class="nav flex-column">
-    {% block sideNav %}
-    <li class="nav-item">
-      <a class="nav-link" href="#">Example Sidebar Link</a>
-    </li>
-    {% endblock sideNav %}
-  </ul>
+	{% block sideNav %}
+	<ul class="nav flex-column">
+		<li class="nav-item">
+			<a class="nav-link" href="#">Example Sidebar Link</a>
+		</li>
+	</ul>
+	{% endblock sideNav %}
 
 </div>
 
 <main role="main" class="content">
 
-  {% block subBody %}
-  {% endblock subBody %}
+	{% block subBody %}
+	{% endblock subBody %}
 
 </main>
-
+{% block closeForm '' %}
 {% endblock body %}
