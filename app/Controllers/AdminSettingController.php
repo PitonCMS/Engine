@@ -38,7 +38,7 @@ class AdminSettingController extends AdminBaseController
             $allSettings = $this->mergeSettings($allSettings, $customSettings->settings);
         }
 
-        return $this->render('setting/editSettings.html', $allSettings);
+        return $this->render('tools/editSettings.html', $allSettings);
     }
 
     /**
