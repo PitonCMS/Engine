@@ -2,18 +2,12 @@
 
 {% block headText 'PitonCMS' %}
 {% block leadText 'Content Management System' %}
-{% block sectionText 'adminHome' %}
+{% block sectionId 'adminHome' %}
 
-{% block body %}
-<div class="sidebar">
+{% block content %}
 
-</div>
-<main class="content">
     <p class="lead">Current project: <code>{{ site.settings.projectDir }}</code></p>
-
     <p class="lead">PitonCMS Engine Version: <code>{{ page.pitonEngineVersion }}</code> <a
             href="{{ pathFor('adminEngineRelease', {'release': page.pitonEngineVersion}) }}">Release Notes</a></p>
-</main>
 
-
-{% endblock body %}
+{% endblock content %}

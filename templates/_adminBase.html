@@ -2,13 +2,17 @@
     Piton Administration Base Layout
 
     Available blocks in base layout:
-    - htmlTitle
-    - headText
-    - leadText
-    - jsPitonConfig
-    - head
-    - body
-    - foot
+    - htmlTitle     HTML <title> text
+    - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
+    - head          Insert additional <head> HTLM elements
+    - headText      Page heading
+    - leadText      Page header lead text
+    - sectionId     HTML <section> tag ID
+    - openForm      HTLM Optional open <form> tag with hidden inputs
+    - sidebar       Sidebar content area
+    - content       Main content area
+    - closeForm     HTML Optional close </form> tag, required if openForm is used
+    - foot          Insert additional footer HTML elements after JS links
 #}
 <!doctype html>
 <html lang="en">
@@ -19,7 +23,9 @@
   <meta name="author" content="PitonCMS">
   <link rel="icon" href="">
 
-  <title>{% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}PitonCMS Administration
+  <title>
+    {% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}
+    PitonCMS Administration
   </title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
     integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
@@ -52,10 +58,23 @@
         headText: block('headText') is defined ? block('headText'),
         leadText: block('leadText') is defined ? block('leadText')} %}
 
-  <section id="{% block sectionText 'default' %}" class="content-wrapper">
+  <section id="{% block sectionId 'default' %}" class="content-wrapper">
 
-    {% block body %}
-    {% endblock body %}
+    {# Open form block if wrapping sidebar and content #}
+    {% block openForm '' %}
+
+    <div class="sidebar">
+      {% block sidebar '' %}
+    </div>
+
+    <main role="main" class="content">
+      {% block content '' %}
+    </main>
+
+    {% block closeForm %}
+      {# Self closing form tag #}
+      {{ block('openForm') != '' ? '</form>' }}
+    {% endblock closeForm %}
 
   </section>
 

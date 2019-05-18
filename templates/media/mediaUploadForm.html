@@ -1,11 +1,15 @@
-{% extends '@admin/media/_adminMediaBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 {% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
 
-{% block htmlTitle 'Upload Media' %}
-{% block leadText 'Upload Form' %}
-{% block sectionText 'mediaUpload' %}
+{% block htmlTitle 'Media Upload' %}
+{% block headText 'Media upload' %}
+{% block sectionId 'mediaUpload' %}
 
-{% block subBody %}
+{% block sidebar %}
+  {% include "@admin/media/_mediaSidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
 <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
   enctype="multipart/form-data">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
@@ -22,7 +26,7 @@
   </div>
   <hr>
   {% for c in page.categories %}
-  {{ catForm.categorySelect(c) }}
+    {{ catForm.categorySelect(c) }}
   {% endfor %}
   <hr>
   <div class="form-group">
@@ -47,7 +51,7 @@
 <p class="lead">The upload and conversion process of your images will take some time depending upon your browser and
   internet speed.</p>
 
-{% endblock subBody %}
+{% endblock content %}
 
 {% block foot %}
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>

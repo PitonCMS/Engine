@@ -1,11 +1,11 @@
-{% extends '@admin/_adminSideBarBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 {% import _self as html %}
 
 {% block htmlTitle 'Messages' %}
 {% block headText 'Manage Messages' %}
-{% block sectionText 'messages' %}
+{% block sectionId 'messages' %}
 
-{% block sideNav %}
+{% block sidebar %}
     <ul class="nav flex-column">
         <li class="nav-item">
             <a class="nav-link {{ (currentRoute('adminMessages') and inUrl('new')) ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">New Messages</a>
@@ -14,9 +14,9 @@
             <a class="nav-link {{ (currentRoute('adminMessages') and inUrl('read')) ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">Read Messages</a>
         </li>
     </ul>
-{% endblock sideNav %}
+{% endblock sidebar %}
 
-{% block subBody %}
+{% block content %}
     {% if page.status == 'new' %}
         {% for m in page.messages if m.isRead == 'N' %}
             {{ html.message(m) }}
@@ -32,7 +32,7 @@
             <p>You have no read messages.</p>
         {% endfor %}
     {% endif %}
-{% endblock subBody %}
+{% endblock content %}
 
 {% macro message(m) %}
     <div class="jsMessageWrap">

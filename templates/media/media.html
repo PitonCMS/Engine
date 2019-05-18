@@ -1,11 +1,16 @@
-{% extends '@admin/media/_adminMediaBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 {% import "@admin/media/_mediaCardMacro.html" as file %}
 
 {% block htmlTitle 'Media' %}
-{% block sectionText 'media' %}
+{% block headText 'Media' %}
+{% block leadText 'All Media Files' %}
+{% block sectionId 'media' %}
 
-{% block subBody %}
+{% block sidebar %}
+  {% include "@admin/media/_mediaSidebar.html" %}
+{% endblock sidebar %}
 
+{% block content %}
 <div class="card-wrapper">
   {% for media in page.media %}
   {{ file.mediaCard(media, page.categories, true) }}
@@ -13,5 +18,4 @@
   <strong>No Media Found</strong>
   {% endfor %}
 </div>
-
-{% endblock subBody %}
+{% endblock content %}

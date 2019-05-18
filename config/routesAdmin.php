@@ -25,11 +25,6 @@ $app->group('/admin', function () {
         return (new AdminController($this))->home();
     })->setName('adminHome');
 
-    // Admin Tools
-    $this->get('/tools', function ($args) {
-        return (new AdminController($this))->adminTools();
-    })->setName('adminTools');
-
     $this->group('/help', function () {
         $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
             return (new AdminController($this))->release($args);

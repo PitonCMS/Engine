@@ -1,11 +1,14 @@
-{% extends '@admin/tools/_adminToolsBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 
 {% block htmlTitle 'Users' %}
 {% block headText %}Manage Users{% endblock %}
-{% block sectionText 'tools' %}
+{% block sectionId 'tools' %}
 
-{% block subBody %}
+{% block sidebar %}
+  {% include "@admin/tools/_toolsSidebar.html" %}
+{% endblock sidebar %}
 
+{% block content %}
 <div class="row">
   <div class="col">
     <h2>Manage Users</h2>
@@ -35,5 +38,4 @@
     </form>
   </div>
 </div>
-
-{% endblock subBody %}
+{% endblock content %}

@@ -3,7 +3,7 @@
 {% block headText 'Release Notes' %}
 {% block leadText 'For PitonCMS Engine' %}
 
-{% block body %}
+{% block content %}
 
 {% for rel in page.releases %}
 <h3 id="rel-{{ rel.tag_name }}" class="anchor-offset">{{ rel.name }}</h3>
@@ -16,7 +16,7 @@
 {% endfor %}
 <i>To see older release notes, or to contribute to PitonCMS, go to <a href="https://github.com/PitonCMS"
         target="_blank">GitHub PitonCMS</a>.</i>
-{% endblock body %}
+{% endblock content %}
 
 {% block footJs %}
 let path = window.location.pathname;

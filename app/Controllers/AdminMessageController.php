@@ -27,7 +27,7 @@ class AdminMessageController extends AdminBaseController
         $data['messages'] = $messageMapper->findAllInDateOrder();
         $data['status'] = $args['status'];
 
-        return $this->render('messages.html', $data);
+        return $this->render('messages/messages.html', $data);
     }
 
     /**

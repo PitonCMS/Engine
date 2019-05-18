@@ -69,7 +69,7 @@ class NotFound extends \Slim\Handlers\NotFound
         // Set notFound template path context
         $this->templatePath = 'core/notFound.html';
         if (explode('/', $path)[1] === 'admin') {
-            $this->templatePath = '@admin/notFound.html';
+            $this->templatePath = '@admin/system/notFound.html';
         }
 
         // If request is for a file or image then just return the 404 status and stop

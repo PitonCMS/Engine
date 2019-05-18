@@ -1,13 +1,15 @@
-{% extends '@admin/tools/_adminToolsBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 {% import '@admin/setting/_editSettingInputMacro.html' as settingForm %}
 
 {% block htmlTitle 'Edit Settings' %}
-{% block headText %}Manage Site Settings{% endblock %}
-{% block leadText %}Customize your site.{% endblock %}
+{% block headText 'Manage Site Settings' %}
+{% block sectionId 'tools' %}
 
-{% block sectionText 'tools' %}
+{% block sidebar %}
+  {% include "@admin/tools/_toolsSidebar.html" %}
+{% endblock sidebar %}
 
-{% block subBody %}
+{% block content %}
 <form action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
@@ -74,4 +76,4 @@
     </div>
   </div>
 </form>
-{% endblock subBody %}
+{% endblock content %}

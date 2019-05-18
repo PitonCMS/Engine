@@ -1,11 +1,10 @@
-{% extends '@admin/_adminSideBarBase.html' %}
+{% extends '@admin/_adminBase.html' %}
 
 {% block htmlTitle 'Pages' %}
 {% block headText 'Manage Pages' %}
-{% block sectionText 'pages' %}
+{% block sectionId 'pages' %}
 
-
-{% block sideNav %}
+{% block sidebar %}
 {% if page.templates %}
 <div class="sidebar-links">
   {% for template in page.templates %}
@@ -21,9 +20,9 @@
 {% else %}
 <h5>No Page Definition Files Found</h5>
 {% endif %}
-{% endblock sideNav %}
+{% endblock sidebar %}
 
-{% block subBody %}
+{% block content %}
 <h3>Saved Pages</h3>
 <p>Edit/Delete pages and page content.</p>
 <div class="card-wrapper">
@@ -33,4 +32,4 @@
   <strong>No Saved Pages Found</strong>
   {% endfor %}
 </div>
-{% endblock subBody %}
+{% endblock content %}

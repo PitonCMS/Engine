@@ -10,7 +10,7 @@
 Are you sure you want to delete {{ page.title }}? This will permanently all delete all collection detail pages below.
 {% endblock leadText %}
 
-{% block body %}
+{% block content %}
   <form action="{{ pathFor('adminSaveCollection') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
     <input type="hidden" name="id" value="{{ page.id }}">
@@ -27,4 +27,4 @@ Are you sure you want to delete {{ page.title }}? This will permanently all dele
     <button class="btn btn-danger mb-2 jsDeleteConfirm" type="submit" name="button" value="delete">Delete Permanently</button>
   </form>
 
-{% endblock body %}
+{% endblock content %}
