@@ -11,8 +11,6 @@
 {% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
-{% block leadText page.json.templateDescription %}
-
 {% block openForm %}
 <div class="form-wrapper">
   <form action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
