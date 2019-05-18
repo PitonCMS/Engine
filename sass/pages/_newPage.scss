@@ -1,29 +1,25 @@
-#pages {
-
-  &.content-wrapper{
+#editPage{
+  .sidebar{
+    display: flex;
+    flex-flow: column nowrap;
+    width: 200px;
     
-    .sidebar { 
-      @include padding(null 1rem null null);
-      display: flex;
-      flex-flow: column nowrap; 
-      position: sticky;
-      top: 100px;
-      
-    }
-    .card-wrapper {
+  }
 
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      grid-gap: 1rem;
-    }
-   
+}
 
+#pages{
+  .card-wrapper {
+
+    max-width: 960px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1rem;
   }
   .sidebar-link{
     display: flex;
     flex-flow: row nowrap;
-    @include padding(0 .25rem);
+    @include padding(0 .25rem .25rem);
     justify-content: space-between;
     align-items: center;
     .fa-info-circle{
@@ -33,30 +29,9 @@
       }
     }
   }
+
   .card {
     box-shadow: $box-shadow;
     border: none;
   }
-
-}
-
-
-#editPage{
-  &.content-wrapper{
-.form-wrapper{
-
-}
-    
-  }
- form{
-   display: flex;
- 
-   .sidebar{
-     align-self: flex-start;
-     width: 250px;
-     position: sticky;
-     top: 60px;
-  
-   }
- }
 }

@@ -6,16 +6,17 @@
 
 {% block sidebar %}
 {% if page.templates %}
-<div class="sidebar-links">
-  {% for template in page.templates %}
-  <div class="sidebar-link">
-    <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
-      title="{{ template.description }}">{{ template.name }}</a>
-    <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
-      data-content="{{ template.description }}"></i>
-  </div>
-  {% endfor %}
+<h4>Create Page</h4>
+{% for template in page.templates %}
+
+<div class="sidebar-link">
+  <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
+    title="{{ template.description }}">{{ template.name }}</a>
+  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
+    data-content="{{ template.description }}"></i>
 </div>
+{% endfor %}
+
 
 {% else %}
 <h5>No Page Definition Files Found</h5>

@@ -6,7 +6,7 @@
 {% block sectionId 'tools' %}
 
 {% block sidebar %}
-  {% include "@admin/tools/_toolsSidebar.html" %}
+{% include "@admin/tools/_toolsSidebar.html" %}
 {% endblock sidebar %}
 
 {% block content %}
@@ -39,36 +39,36 @@
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-site" role="tabpanel" aria-labelledby="pills-site-tab">
       {% for setting in page if setting.category == 'site' %}
-        {{ settingForm.settingInput(setting) }}
+      {{ settingForm.settingInput(setting) }}
       {% endfor %}
     </div>
 
     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
       {% for setting in page if setting.category == 'contact' %}
-        {{ settingForm.settingInput(setting) }}
+      {{ settingForm.settingInput(setting) }}
       {% endfor %}
     </div>
 
     <div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
       {% for setting in page if setting.category == 'social' %}
-        {{ settingForm.settingInput(setting) }}
+      {{ settingForm.settingInput(setting) }}
       {% endfor %}
     </div>
 
     <div class="tab-pane fade" id="pills-contactForm" role="tabpanel" aria-labelledby="pills-contactForm-tab">
       {% for setting in page if setting.category == 'contactForm' %}
-        {{ settingForm.settingInput(setting) }}
+      {{ settingForm.settingInput(setting) }}
       {% endfor %}
     </div>
 
     <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-custom-tab">
       {% for setting in page if setting.category == 'custom' %}
-        {{ settingForm.settingInput(setting) }}
+      {{ settingForm.settingInput(setting) }}
       {% endfor %}
     </div>
   </div>
 
-  <div class="sidebar">
+  <div class="settings-sidebar">
     <!-- Control Buttons -->
     <div class="mb-2">
       <a class="btn btn-warning" href="{{ pathFor('adminSettings') }}">Cancel</a>
