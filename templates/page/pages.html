@@ -7,15 +7,17 @@
 
 {% block sideNav %}
 {% if page.templates %}
-<ul class="nav flex-column">
+<div class="sidebar-links">
   {% for template in page.templates %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
+  <div class="sidebar-link">
+    <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
       title="{{ template.description }}">{{ template.name }}</a>
-    <span class="pageTypeDesc">{{ template.description }}</span>
-  </li>
+    <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
+      data-content="{{ template.description }}"></i>
+  </div>
   {% endfor %}
-</ul>
+</div>
+
 {% else %}
 <h5>No Page Definition Files Found</h5>
 {% endif %}
