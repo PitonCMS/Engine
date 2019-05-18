@@ -19,8 +19,8 @@ body {
 
 // Layout
 header {
-  @include padding(65px null null);
-  border-bottom: solid $primary-dark 3px;
+  @include padding(75px null 1rem);
+  background-color: $primary-color;
 
   p,
   h2 {
@@ -43,17 +43,22 @@ header {
 }
 
 .sidebar {
-  @include padding(1rem 0rem);
+  @include padding(1rem .25rem);
+
   min-height: 100%;
 
   .nav-link {
-    color: rgba($primary-light, .5);
+    color: $primary-dark;
     font-size: 1.1rem;
     letter-spacing: 1px;
 
     &:hover {
       color: var(--primary) !important;
     }
+  }
+  .active {
+    background-color: $primary-color !important;
+    border-radius: 30px;
   }
 
 }
