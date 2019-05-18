@@ -1,4 +1,4 @@
-{% extends '@admin/page/_adminPageBase.html' %}
+{% extends '@admin/_adminSideBarBase.html' %}
 {% import "@admin/page/_editElementMacro.html" as form %}
 {% import '@admin/setting/_editSettingInputMacro.html' as settingForm %}
 {% block sectionText 'editPage' %}
@@ -22,7 +22,17 @@
     <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
     <input type="hidden" name="definition" value="{{ page.definition }}">
     <input type="hidden" name="template" value="{{ page.json.templateFile }}">
-    {% endblock openForm %}
+
+    <style>
+        .scroll-container {
+          overflow-y: scroll;
+          position: relative;
+          scroll-behavior: smooth;
+          height: 100vh;
+          /* height: calc(100vh - 175px); */
+        }
+      </style>
+{% endblock openForm %}
 
     {% block sideNav %}
     <div class="sidebar-links">
@@ -56,7 +66,7 @@
       </div>
 
       <div class="pageNavigator">
-        <nav class="navbar navbar-light jsSmoothScroll" id="page-edit-nav">
+        <nav class="navbar navbar-light" id="page-edit-nav">
           <nav class="nav nav-pills flex-column">
             <a class="nav-link" href="#page-settings-nav">Page Settings</a>
             {% if page.settings %}
