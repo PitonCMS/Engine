@@ -32,25 +32,6 @@ $app->group('/admin', function () {
     });
     // End Help
 
-    // User routes
-    $this->group('/user', function () {
-        // Show Users
-        $this->get('[/]', function ($args) {
-            return (new AdminUserController($this))->showUsers();
-        })->setName('adminUsers');
-
-        // Save Users
-        $this->post('/save', function ($args) {
-            return (new AdminUserController($this))->saveUsers();
-        })->add('csrfGuard')->setName('adminSaveUsers');
-
-        // Delete User
-        $this->get('/delete/{id:[0-9]{1,}}', function ($args) {
-            return (new AdminUserController($this))->deleteUser($args);
-        })->setName('adminDeleteUser');
-    });
-    // End user routes
-
     // Page route
     $this->group('/page', function () {
         // Show All Pages
@@ -90,20 +71,6 @@ $app->group('/admin', function () {
         // End page elements
     });
     // End page routes
-
-    // Settings
-    $this->group('/settings', function () {
-        // Show Settings
-        $this->get('[/]', function ($args) {
-            return (new AdminSettingController($this))->showSettings();
-        })->setName('adminSettings');
-
-        // Save Settings
-        $this->post('/save', function ($args) {
-            return (new AdminSettingController($this))->saveSettings();
-        })->add('csrfGuard')->setName('adminSaveSettings');
-    });
-    // End settings
 
     // Collections
     $this->group('/collection', function () {
@@ -210,6 +177,43 @@ $app->group('/admin', function () {
         })->add('csrfGuard')->setName('adminMessageSave');
     });
     // End messages
+
+    // Tools routes
+    $this->group('/tools', function () {
+        // Settings
+        $this->group('/settings', function () {
+            // Show Settings
+            $this->get('[/]', function ($args) {
+                return (new AdminSettingController($this))->showSettings();
+            })->setName('adminSettings');
+
+            // Save Settings
+            $this->post('/save', function ($args) {
+                return (new AdminSettingController($this))->saveSettings();
+            })->add('csrfGuard')->setName('adminSaveSettings');
+        });
+        // End settings
+
+        // User routes
+        $this->group('/user', function () {
+            // Show Users
+            $this->get('[/]', function ($args) {
+                return (new AdminUserController($this))->showUsers();
+            })->setName('adminUsers');
+
+            // Save Users
+            $this->post('/save', function ($args) {
+                return (new AdminUserController($this))->saveUsers();
+            })->add('csrfGuard')->setName('adminSaveUsers');
+
+            // Delete User
+            $this->get('/delete/{id:[0-9]{1,}}', function ($args) {
+                return (new AdminUserController($this))->deleteUser($args);
+            })->setName('adminDeleteUser');
+        });
+        // End user routes
+    });
+    // End tools
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;
