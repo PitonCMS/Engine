@@ -24,15 +24,15 @@
     <input type="hidden" name="template" value="{{ page.json.templateFile }}">
 
     <style>
-        .scroll-container {
-          overflow-y: scroll;
-          position: relative;
-          scroll-behavior: smooth;
-          height: 100vh;
-          /* height: calc(100vh - 175px); */
-        }
-      </style>
-{% endblock openForm %}
+      .scroll-container {
+        overflow-y: scroll;
+        position: relative;
+        scroll-behavior: smooth;
+        height: 100vh;
+        /* height: calc(100vh - 175px); */
+      }
+    </style>
+    {% endblock openForm %}
 
     {% block sideNav %}
     <div class="sidebar-links">
@@ -66,20 +66,20 @@
       </div>
 
       <div class="pageNavigator">
-        <nav class="navbar navbar-light" id="page-edit-nav">
-          <nav class="nav nav-pills flex-column">
+        <nav class="" id="page-edit-nav">
+          <nav class="nav">
             <a class="nav-link" href="#page-settings-nav">Page Settings</a>
             {% if page.settings %}
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link ml-3 my-1" href="#page-custom-settings-nav">Custom Settings</a>
+            <nav class="nav ">
+              <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
             </nav>
             {% endif %}
 
             {% for block in page.json.blocks %}
             <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
-            <nav class="nav nav-pills flex-column jsPageSubBlock-{{ block.key }}">
+            <nav class="nav jsPageSubBlock-{{ block.key }}">
               {% for element in page.elements if element.block_key == block.key %}
-              <a class="nav-link ml-3 my-1" href="#page-element-{{ element.id }}">{{ element.title }}</a>
+              <a class="nav-link" href="#page-element-{{ element.id }}">{{ element.title }}</a>
               {% endfor %}
             </nav>
             {% endfor %}
