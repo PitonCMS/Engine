@@ -49,7 +49,7 @@ class AdminCollectionController extends AdminBaseController
             $collect->templateDescription = $data['templates'][$key]['description'];
         });
 
-        return $this->render('collection/collections.html', $data);
+        return $this->render('collections/collections.html', $data);
     }
 
     /**
@@ -80,7 +80,7 @@ class AdminCollectionController extends AdminBaseController
             $collection->definition = $definionParam;
         }
 
-        return $this->render('collection/editCollection.html', $collection);
+        return $this->render('collections/editCollection.html', $collection);
     }
 
     /**
@@ -120,7 +120,7 @@ class AdminCollectionController extends AdminBaseController
         $data = $collectionMapper->findById($args['id']);
         $data->pages = $pageMapper->findCollectionPagesById($args['id'], false);
 
-        return $this->render('collection/confirmDeleteCollection.html', $data);
+        return $this->render('collections/confirmDeleteCollection.html', $data);
     }
 
     /**
