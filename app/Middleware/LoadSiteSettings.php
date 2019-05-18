@@ -65,7 +65,8 @@ class LoadSiteSettings
         // This is a bit of a Slim hack. This is the only $request object that actually has a route object attribute
         // Because of PSR7 immutability the $request object passed into the controller constructor is a copy
         // and does not have the route object attribute
-        $this->settings['currentRouteName'] = $request->getAttribute('route')->getName();
+        $route = $request->getAttribute('route');
+        $this->settings['currentRouteName'] = ($route !== null) ? $route->getName() : null;
 
         // Replace site settings with new settings
         $this->appSettings->replace([

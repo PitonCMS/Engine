@@ -196,9 +196,10 @@ $app->group('/admin', function () {
 
     // Messages
     $this->group('/message', function () {
-        // Show all messages
-        $this->get('[/]', function ($args) {
-            return (new AdminMessageController($this))->showMessages();
+        // Show messages
+        $this->get('[/{status:new|read}]', function ($args) {
+            $args['status'] = isset($args['status']) ? $args['status'] : 'new';
+            return (new AdminMessageController($this))->showMessages($args);
         })->setName('adminMessages');
 
         // Save message changes

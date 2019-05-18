@@ -19,13 +19,15 @@ class AdminMessageController extends AdminBaseController
      * Show All Messages
      *
      * Displays all messages in descending date order
+     * @param array $args
      */
-    public function showMessages()
+    public function showMessages($args)
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $messages = $messageMapper->findAllInDateOrder();
+        $data['messages'] = $messageMapper->findAllInDateOrder();
+        $data['status'] = $args['status'];
 
-        return $this->render('messages.html', ['messages' => $messages]);
+        return $this->render('messages.html', $data);
     }
 
     /**
