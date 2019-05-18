@@ -183,27 +183,32 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      * In URL
      *
      * Checks if the supplied string is one of the current URL segments
-     * @param string $segment URL segment to find
-     * @return boolean
+     * @param string  $segment       URL segment to find
+     * @param mixed   $valueToReturn Value to return if true
+     * @return mixed                 Returns $valueToReturn or null
      */
-    public function inUrl($segmentToTest = null)
+    public function inUrl($segmentToTest = null, $valueToReturn = 'active')
     {
         // Verify we have a segment to find
         if ($segmentToTest === null) {
-            return false;
+            return null;
         }
 
         // If just a slash is provided, meaning 'home', then evaluate
         if ($segmentToTest === '/' && ($this->uri->getPath() === '/' || empty($this->uri->getPath()))) {
-            return true;
+            return $valueToReturn;
         } elseif ($segmentToTest === '/' && !empty($this->uri->getPath())) {
-            return false;
+            return null;
         }
 
         // Clean segment of slashes
         $segmentToTest = trim($segmentToTest, '/');
 
-        return in_array($segmentToTest, explode('/', $this->uri->getPath()));
+        if (in_array($segmentToTest, explode('/', $this->uri->getPath()))) {
+            return $valueToReturn;
+        }
+
+        return null;
     }
 
     /**

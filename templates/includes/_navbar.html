@@ -12,7 +12,7 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminPages') }}" href="{{ pathFor('adminPages') }}">Pages</a>
+          <a class="nav-link {{ currentRoute('adminPages')|default(inUrl('page')) }}" href="{{ pathFor('adminPages') }}">Pages</a>
         </li>
 
         <li class="nav-item">
@@ -21,7 +21,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminShowMedia') }}" href="{{ pathFor('adminShowMedia') }}">Media</a>
+          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminShowMedia') }}">Media</a>
         </li>
 
         <li class="nav-item">

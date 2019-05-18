@@ -8,10 +8,10 @@
 {% block sidebar %}
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link {{ (currentRoute('adminMessages') and inUrl('new')) ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">New Messages</a>
+            <a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">New Messages</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ (currentRoute('adminMessages') and inUrl('read')) ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">Read Messages</a>
+            <a class="nav-link {{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">Read Messages</a>
         </li>
     </ul>
 {% endblock sidebar %}
