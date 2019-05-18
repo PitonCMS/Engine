@@ -2,6 +2,7 @@
 {% import "@admin/pages/_editElementMacro.html" as form %}
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
 {% block sectionId 'editPage' %}
+{% block mainClass 'contentTwoCol' %}
 
 {% block htmlTitle %}
 {% if page.id %}Edit{% else %}Add{% endif %} Page
@@ -46,35 +47,6 @@
       </nav>
     </nav>
   </div>
-  <hr class="sidebar-divider">
-  <!-- Control Buttons -->
-  <div class="button-group">
-    <a class="btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
-    <button class="btn btn-primary" type="submit" name="button" value="save">Save</button>
-
-    {% if page.id %}
-    <button class="btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
-      {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
-    {% endif %}
-  </div>
-  <hr class="sidebar-divider">
-  <div class="form-group status">
-    {% if page.getPublishedStatus() == 'draft' %}
-    <div class="btn" title="Not published">Draft</div>
-    {% elseif page.getPublishedStatus() == 'pending' %}
-    <div class="btn bg-warning">Pending</div>
-    {% elseif page.getPublishedStatus() == 'published' %}
-    <div class="btn bg-success text-light">Published</div>
-    {% endif %}
-
-    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
-      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
-    <small class="form-text text-muted">Select date to publish page and save. Clear date and save to
-      unpublish.</small>
-
-  </div>
-  <hr class="sidebar-divider">
-
 
   {% endblock sidebar %}
 
@@ -197,5 +169,34 @@
       {% endfor %}
     </div>
   </div><!-- End scroll-container -->
+  <div class="two-col-sidebar">
+    <!-- Control Buttons -->
+    <div class="button-group">
+      <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
+      <button class="mb-2 btn btn-primary" type="submit" name="button" value="save">Save</button>
 
+      {% if page.id %}
+      <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
+        {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+      {% endif %}
+    </div>
+    <hr class="sidebar-divider">
+    <div class="form-group status">
+      {% if page.getPublishedStatus() == 'draft' %}
+      <div class="mb-2 btn" title="Not published">Draft</div>
+      {% elseif page.getPublishedStatus() == 'pending' %}
+      <div class="mb-2 btn bg-warning">Pending</div>
+      {% elseif page.getPublishedStatus() == 'published' %}
+      <div class="mb-2 btn bg-success text-light">Published</div>
+      {% endif %}
+
+      <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+        value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+      <small class="form-text text-muted">Select date to publish page and save. Clear date and save to
+        unpublish.</small>
+
+    </div>
+    <hr class="sidebar-divider">
+
+  </div>
   {% endblock content %}
