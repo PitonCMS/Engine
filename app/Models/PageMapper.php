@@ -38,12 +38,18 @@ class PageMapper extends DataMapperAbstract
      * @param string  $collectionSlug Collection slug
      * @return mixed                  Page object or null if not found
      */
-    public function findPublishedPageBySlug(string $pageSlug, string $collectionSlug = '0')
+    public function findPublishedPageBySlug(string $pageSlug, string $collectionSlug = null)
     {
         $this->makeSelect();
-        $this->sql .= ' and collection_slug = ? and page_slug = ?';
-        $this->bindValues[] = $collectionSlug;
+        $this->sql .= ' and page_slug = ?';
         $this->bindValues[] = $pageSlug;
+
+        if (null === $collectionSlug) {
+            $this->sql .= ' and collection_slug is null';
+        } else {
+            $this->sql .= ' and collection_slug = ?';
+            $this->bindValues[] = $collectionSlug;
+        }
 
         $this->sql .= " and published_date <= '{$this->today()}'";
 
@@ -61,7 +67,7 @@ class PageMapper extends DataMapperAbstract
     public function findPages(bool $includeUnpublished = false)
     {
         $this->makeSelect();
-        $this->sql .= " and collection_slug = '0'";
+        $this->sql .= " and collection_slug is null";
 
         if (!$includeUnpublished) {
             $this->sql .= " and published_date <= '{$this->today()}'";
@@ -80,7 +86,7 @@ class PageMapper extends DataMapperAbstract
     public function findCollectionPages(bool $includeUnpublished = false)
     {
         $this->makeSelect();
-        $this->sql .= " and collection_slug != '0'";
+        $this->sql .= " and collection_slug is not null";
 
         if (!$includeUnpublished) {
             $this->sql .= " and published_date <= '{$this->today()}'";
@@ -119,7 +125,7 @@ class PageMapper extends DataMapperAbstract
      */
     public function findCollections()
     {
-        $this->sql = 'select distinct collection_slug from page where collection_slug != \'0\' order by collection_slug';
+        $this->sql = 'select distinct collection_slug from page where collection_slug is not null order by collection_slug';
 
         return $this->find();
     }

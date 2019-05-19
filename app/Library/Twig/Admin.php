@@ -189,7 +189,16 @@ class Admin extends Base
 
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        return $this->collections = $pageMapper->findCollections();
+        // Structure return array
+        $data = $pageMapper->findCollections();
+        $collections = array_map(function ($col) {
+            return [
+                'name' => ucfirst($col->collection_slug),
+                'value' => $col->collection_slug
+            ];
+        }, $data);
+
+        return $this->collections = $collections;
     }
 
     /**
