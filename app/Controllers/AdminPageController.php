@@ -31,6 +31,15 @@ class AdminPageController extends AdminBaseController
             $data['pages'] = $pageMapper->findCollectionPages(true);
             $data['templates'] = $this->getPageTemplates('collection');
             $data['type'] = 'collection';
+
+            // Get distinct list of collection names for section separators
+            $data['collectionNames'] = [];
+            foreach ($data['pages'] as $page) {
+                $data['collectionNames'][$page->collection_slug] = [
+                    'value' => $page->collection_slug,
+                    'name' => ucfirst($page->collection_slug)
+                ];
+            }
         } else {
             $data['pages'] = $pageMapper->findPages(true);
             $data['templates'] = $this->getPageTemplates('page');

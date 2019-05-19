@@ -25,12 +25,29 @@
 {% endblock sidebar %}
 
 {% block content %}
-  <h3>Saved Pages</h3>
-  <div class="card-wrapper">
-    {% for p in page.pages %}
-      {% include "@admin/pages/_pageCard.html" %}
-    {% else %}
-      <strong>No Pages Found</strong>
+  {% if page.type == 'page' %}
+
+    <h3>Saved Pages</h3>
+    <div class="card-wrapper">
+      {% for p in page.pages %}
+        {% include "@admin/pages/_pageCard.html" %}
+      {% else %}
+        <strong>No Pages Found</strong>
+      {% endfor %}
+    </div>
+
+  {% elseif page.type == 'collection' %}
+
+    {% for c in page.collectionNames %}
+      <h3>Saved {{ c.name }} Pages</h3>
+      <div class="card-wrapper">
+        {% for p in page.pages if p.collection_slug == c.value %}
+          {% include "@admin/pages/_pageCard.html" %}
+        {% else %}
+          <strong>No Pages Found</strong>
+        {% endfor %}
+      </div>
     {% endfor %}
-  </div>
+
+  {% endif %}
 {% endblock content %}
