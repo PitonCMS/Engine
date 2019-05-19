@@ -105,14 +105,14 @@ class PageMapper extends DataMapperAbstract
      * @param  bool  $includeUnpublished    Include unpublished collection pages
      * @return mixed                        Array | null
      */
-    public function findCollectionPagesBySlug(string $collectionSlug, bool $includeUnpublished = false)
+    public function findCollectionPagesBySlug($collectionSlug, bool $includeUnpublished = false)
     {
         $this->makeSelect();
         $this->sql .= ' and collection_slug = ?';
         $this->bindValues[] = $collectionSlug;
 
         if (!$includeUnpublished) {
-            $this->sql .= " and p.published_date <= '{$this->today()}'";
+            $this->sql .= " and published_date <= '{$this->today()}'";
         }
 
         return $this->find();
