@@ -18,8 +18,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminCollections') }}"
-            href="{{ pathFor('adminCollections') }}">Collections</a>
+          <a class="nav-link {{ currentRoute('adminPages') and inUrl('collection') ? 'active' }}" href="{{ pathFor('adminPages', {'type': 'collection'}) }}">Collections</a>
         </li>
 
         <li class="nav-item">

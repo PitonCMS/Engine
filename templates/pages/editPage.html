@@ -5,27 +5,25 @@
 {% block mainClass 'contentTwoCol' %}
 
 {% block htmlTitle %}
-{% if page.id %}Edit{% else %}Add{% endif %} Page
+  {% if page.id %}Edit{% else %}Add{% endif %} Page
 {% endblock %}
 
 {% block headText %}
-{% if page.id %}Edit{% else %}Add{% endif %} {{ page.title|default(page.json.templateName) }}
+  {% if page.id %}Edit{% else %}Add{% endif %}
+  {% if page.type == 'collection' %}Collection{% endif %}
+  {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
 {% block openForm %}
-
 <form class="content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-
   <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+  <input type="hidden" name="collection_slug" value="{{ page.json.collectionSlug }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
+{% endblock openForm %}
 
-
-  {% endblock openForm %}
-
-  {% block sidebar %}
+{% block sidebar %}
   <div class="pageNavigator">
     <nav class="" id="page-edit-nav">
       <nav class="nav">
@@ -47,10 +45,9 @@
       </nav>
     </nav>
   </div>
+{% endblock sidebar %}
 
-  {% endblock sidebar %}
-
-  {% block content %}
+{% block content %}
   {# Media Modal #}
   <div class="modal fade" id="mediaModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -90,14 +87,12 @@
           <label>Slug <span class="text-danger">*</span></label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text">{{ page.collection_slug ? '/' ~ page.collection_slug }}/</span>
+              <span class="input-group-text">{{ page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
             </div>
-            <input type="text" class="form-control" name="slug" maxlength="100" placeholder="URL slug"
-              value="{{ page.slug }}" required {% if page.slug == 'home' %}readonly{% endif %}>
+            <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
+              value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
           </div>
-          <small class="form-text text-muted">Link to page. Use lowercase, with no spaces. The <code>home</code> URL
-            slug is
-            restricted from being changed.</small>
+          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being changed.</small>
         </div>
 
         <div class="form-group">
@@ -177,7 +172,7 @@
 
       {% if page.id %}
       <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
-        {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+        {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
       {% endif %}
     </div>
     <hr class="sidebar-divider">

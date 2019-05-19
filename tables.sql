@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `collection_id` int NULL DEFAULT NULL,
-  `slug` varchar(100) NOT NULL,
+  `collection_slug` varchar(100) NULL DEFAULT NULL,
+  `page_slug` varchar(100) NOT NULL,
   `definition` varchar(60) NULL DEFAULT NULL,
   `template` varchar(60) NOT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `collection_id_idx` (`collection_id`),
-  UNIQUE KEY `slug_uq` (`collection_id`,`slug`),
+  KEY `page_slug_idx` (`page_slug`),
+  UNIQUE KEY `slug_uq` (`collection_slug`,`page_slug`),
   KEY `published_date_idx` (`published_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `content_raw` mediumtext NULL DEFAULT NULL,
   `content` mediumtext NULL DEFAULT NULL,
   `excerpt` varchar(60) NULL DEFAULT NULL,
-  `collection_id` int NULL DEFAULT NULL,
+  `collection_slug` varchar(100) NULL DEFAULT NULL,
   `gallery_id` int NULL DEFAULT NULL,
   `image_path` varchar(100) NULL DEFAULT NULL,
   `embedded` varchar(1000) NULL DEFAULT NULL,
@@ -78,19 +78,6 @@ CREATE TABLE IF NOT EXISTS `page_setting` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `page_setting_uq` (`page_id`,`setting_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `collection` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(60) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `definition` varchar(60) NOT NULL,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug_uq` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
@@ -157,12 +144,12 @@ CREATE TABLE IF NOT EXISTS `message` (
   KEY `message_date_idx` (`created_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `page` (`id`, `collection_id`, `slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page` (`id`, `collection_slug`, `page_slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now()),
   (2,NULL,'styles','style.json','style.html','Styles',NULL,'Style Guide for PitonCMS','2018-12-27',NULL,1,now(),1,now());
 
-INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_id`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_slug`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,1,'aboveTheFoldHero','hero.json','hero.html',1,'Welcome to PitonCMS','A flexible content management system for your personal website.','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,NULL,1,now(),1,now()),
   (2,1,'introBlock','text.json','text.html',1,'Where to Start?','Congratulations! You have successfully installed PitonCMS. \r\n\r\nTo start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  \r\n\r\n','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,NULL,1,now(),1,now()),

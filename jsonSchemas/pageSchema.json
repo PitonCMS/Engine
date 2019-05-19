@@ -20,6 +20,11 @@
             "type": "string",
             "enum": ["page","collection"]
         },
+        "collectionSlug": {
+            "description": "Collection URL slug",
+            "type": "string",
+            "pattern": "^[-a-zA-Z0-9]{1,100}$"
+        },
         "hideSubTitle": {
             "description": "Hides sub-title input",
             "type": "boolean"
@@ -70,5 +75,22 @@
             "$ref": "jsonSchemas/settingsDefinitionSchema.json#/defintion"
         }
     },
+    "anyOf": [
+        {
+            "properties": {
+                "templateType": {
+                    "enum": ["collection"]
+                }
+            },
+            "required": ["collectionSlug"]
+        },
+        {
+            "properties": {
+                "templateType": {
+                    "enum": ["page"]
+                }
+            }
+        }
+    ],
     "required": ["templateName","templateDescription","templateFile","templateType"]
 }

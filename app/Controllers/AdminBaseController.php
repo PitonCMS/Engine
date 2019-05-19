@@ -143,7 +143,7 @@ class AdminBaseController extends BaseController
 
         // Validate inputs
         if ($templateType !== null && !in_array($templateType, ['page','collection'])) {
-            throw new Exception("PitonCMS Unexpected $templateType paramter. Expecting 'page' or 'collection'");
+            throw new Exception("PitonCMS: Unexpected $templateType paramter. Expecting 'page' or 'collection'");
         }
 
         $jsonPath = ROOT_DIR . "structure/definitions/pages/";

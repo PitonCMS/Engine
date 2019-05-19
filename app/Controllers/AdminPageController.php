@@ -19,15 +19,23 @@ class AdminPageController extends AdminBaseController
      * Show Pages
      *
      * Show all pages and page templates
+     * @param array $args Route arguments
      */
-    public function showPages()
+    public function showPages($args)
     {
         // Get dependencies
-        $page = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
 
         // Fetch pages & templates
-        $data['pages'] = $page->findPages(true);
-        $data['templates'] = $this->getPageTemplates('page');
+        if (isset($args['type']) && $args['type'] === 'collection') {
+            $data['pages'] = $pageMapper->findCollectionPages(true);
+            $data['templates'] = $this->getPageTemplates('collection');
+            $data['type'] = 'collection';
+        } else {
+            $data['pages'] = $pageMapper->findPages(true);
+            $data['templates'] = $this->getPageTemplates('page');
+            $data['type'] = 'page';
+        }
 
         return $this->render('pages/pages.html', $data);
     }
@@ -42,20 +50,18 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
         $json = $this->container->json;
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
-            // Existing page
-            $page = $pageMapper->findPageById($args['id']);
+            // Load existing page from database
+            $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
             $page->settings = $pageSettingMapper->findPageSettings($args['id']);
         } else {
-            // Get query params
+            // Create new page, and get template from query string
             $definionParam = $this->request->getQueryParam('definition');
-            $collectionIdParam = $this->request->getQueryParam('collection_id');
 
             // Validate that we have a proper definition file name
             if (null === $definionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
@@ -65,17 +71,6 @@ class AdminPageController extends AdminBaseController
             // New page object
             $page = $pageMapper->make();
             $page->definition = $definionParam;
-
-            // Is this request for a collection detail page?
-            if (null !== $collectionIdParam) {
-                if (1 !== preg_match('/^\d+$/', $collectionIdParam)) {
-                    throw new Exception("PitonCMS: Invalid query parameter for 'collection_id': $collectionIdParam");
-                }
-
-                $collection = $collectionMapper->findById($collectionIdParam);
-                $page->collection_id = $collectionIdParam;
-                $page->collection_slug = $collection->slug;
-            }
         }
 
         // Path to JSON definition file
@@ -84,10 +79,13 @@ class AdminPageController extends AdminBaseController
             $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
         }
 
-        // Merge saved page settnigs with settings from page JSON definition
+        // Merge saved page settings with settings from page JSON definition
         if (isset($page->json->settings)) {
             $page->settings = $this->mergeSettings($page->settings, $page->json->settings);
         }
+
+        // Set template type: collection|page
+        $page->type = ($page->json->templateType === 'collection') ? 'collection' : 'page';
 
         return $this->render('pages/editPage.html', $page);
     }
@@ -109,25 +107,26 @@ class AdminPageController extends AdminBaseController
 
         // Get page object
         $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
-        $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('slug'));
+        $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('page_slug'));
 
+        // Get the original page from database, if exists, for update
         if (null !== $pageId) {
             $page = $pageMapper->findById($pageId);
 
             // Ensure we are not futzing with the home page slug
-            if ($page->slug === 'home' && $newSlug !== 'home') {
+            if ($page->page_slug === 'home' && $newSlug !== 'home') {
                 throw new Exception('PitonCMS: Cannot change home page slug');
             }
         } else {
             $page = $pageMapper->make();
         }
 
-        $page->collection_id = $this->request->getParsedBodyParam('collection_id');
+        $page->collection_slug = $this->request->getParsedBodyParam('collection_slug');
         $page->definition = $this->request->getParsedBodyParam('definition');
         $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
-        $page->slug = $newSlug;
+        $page->page_slug = $newSlug;
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
         $page->image_path = $this->request->getParsedBodyParam('image_path');
 
@@ -143,6 +142,8 @@ class AdminPageController extends AdminBaseController
 
             $date = \DateTime::createFromFormat($phpDateFormat[$this->siteSettings['dateFormat']], $publishedDate);
             $page->published_date = $date->format('Y-m-d');
+        } else {
+            $page->published_date = null;
         }
 
         // Save Page and get ID
@@ -181,7 +182,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
+            $pageElement->collection_slug = $this->request->getParsedBodyParam('element_collection_slug')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
 
@@ -205,21 +206,21 @@ class AdminPageController extends AdminBaseController
             $pageElement = $pageElementMapper->save($pageElement);
         }
 
-        // Determine redirect path based on whether this is a collection
-        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectPath = 'adminCollections';
+        // Determine redirect path based on whether this is a collection page
+        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+            $redirectSegment = ['type' => 'collection'];
         } else {
-            $redirectPath = 'adminPages';
+            $redirectSegment = [];
         }
 
         // Redirect back to show page
-        return $this->redirect($redirectPath);
+        return $this->redirect('adminPages', $redirectSegment);
     }
 
     /**
      * Delete Page
      *
-     * Home page is not restricted from being deleted
+     * Home page is restricted from being deleted
      */
     public function deletePage()
     {
@@ -234,7 +235,7 @@ class AdminPageController extends AdminBaseController
             // Ensure this is not the home page
             $page = $pageMapper->findById($pageId);
 
-            if ($page->slug === 'home') {
+            if ($page->page_slug === 'home') {
                 throw new Exception('PitonCMS: Cannot delete home page');
             }
 
@@ -246,8 +247,15 @@ class AdminPageController extends AdminBaseController
             $pageSettingMapper->deleteByPageId($pageId);
         }
 
+        // Determine redirect path based on whether this was a collection page
+        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+            $redirectSegment = ['type' => 'collection'];
+        } else {
+            $redirectSegment = [];
+        }
+
         // Redirect back to show pages
-        return $this->redirect('adminPages');
+        return $this->redirect('adminPages', $redirectSegment);
     }
 
     /**

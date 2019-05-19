@@ -93,19 +93,16 @@ class Front extends Base
     /**
      * Get Collection Page List
      *
-     * Get collection pages by collection ID
+     * Get collection pages by collection slug
      * For use in page element as collection landing page
-     * @param  int   $collectionId Collection ID
+     * @param  int   $collectionSlug Collection Slug
      * @return mixed               Array | null
      */
-    public function getCollectionPages($collectionId)
+    public function getCollectionPages($collectionSlug)
     {
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        // Page Collection
-        $data = $pageMapper->findCollectionPagesById($collectionId);
-
-        return $data;
+        return $pageMapper->findCollectionPagesBySlug($collectionSlug);
     }
 
     /**

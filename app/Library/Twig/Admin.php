@@ -139,7 +139,7 @@ class Admin extends Base
         }
 
         if (isset($alert[$key])) {
-            if ($key === 'message' ) {
+            if ($key === 'message') {
                 return '<ul><li>' . implode('</li><li>', $alert['message']) . '</ul>';
             }
 
@@ -175,9 +175,9 @@ class Admin extends Base
     }
 
     /**
-     * Get Collection Options
+     * Get Collections
      *
-     * Get all collection summary rows
+     * Get list of distinct collections
      * @param  void
      * @return mixed Array | null
      */
@@ -187,9 +187,9 @@ class Admin extends Base
             return $this->collections;
         }
 
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        return $this->collections = $collectionMapper->find();
+        return $this->collections = $pageMapper->findCollections();
     }
 
     /**

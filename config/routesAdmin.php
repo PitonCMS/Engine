@@ -11,7 +11,6 @@ use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminAccessController;
-use Piton\Controllers\AdminCollectionController;
 use Piton\Controllers\AdminMediaController;
 use Piton\Controllers\AdminMessageController;
 
@@ -35,8 +34,8 @@ $app->group('/admin', function () {
     // Page route
     $this->group('/page', function () {
         // Show All Pages
-        $this->get('[/]', function ($args) {
-            return (new AdminPageController($this))->showPages();
+        $this->get('[/{type:collection}]', function ($args) {
+            return (new AdminPageController($this))->showPages($args);
         })->setName('adminPages');
 
         // Edit or add new page. Must provide ID or page layout argument
@@ -71,37 +70,6 @@ $app->group('/admin', function () {
         // End page elements
     });
     // End page routes
-
-    // Collections
-    $this->group('/collection', function () {
-        // Show collections
-        $this->get('[/]', function ($args) {
-            return (new AdminCollectionController($this))->showCollections();
-        })->setName('adminCollections');
-
-        // Create or edit collection
-        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
-            return (new AdminCollectionController($this))->editCollection($args);
-        })->setName('adminEditCollection');
-
-        // Confirm delete of collection and pages
-        $this->get('/delete/{id:[0-9]+}', function ($args) {
-            return (new AdminCollectionController($this))->confirmDeleteCollection($args);
-        })->setName('adminConfirmDeleteCollection');
-
-        // Save Collection, Including Deletes
-        $this->post('/save', function ($args) {
-            if ($this->request->getParsedBodyParam('button') === 'save') {
-                return (new AdminCollectionController($this))->saveCollection();
-            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                return (new AdminCollectionController($this))->deleteCollection();
-            } else {
-                $notFound = $this->notFoundHanlder;
-                return $notFound($this->request, $this->response);
-            }
-        })->add('csrfGuard')->setName('adminSaveCollection');
-    });
-    // End collection
 
     // Media
     $this->group('/media', function () {

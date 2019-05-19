@@ -18,12 +18,12 @@ class PageMapper extends DataMapperAbstract
 {
     protected $table = 'page';
     protected $modifiableColumns = [
-        'collection_id',
+        'collection_slug',
+        'page_slug',
         'definition',
         'template',
         'title',
         'sub_title',
-        'slug',
         'meta_description',
         'published_date',
         'image_path'
@@ -31,39 +31,19 @@ class PageMapper extends DataMapperAbstract
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
 
     /**
-     * Find Page by ID
-     *
-     * Includes outer join to collection record
-     * @param  int   $pageId Page ID
-     * @return mixed         Page Object | null
-     */
-    public function findPageById($pageId)
-    {
-        $this->makeCollectionPageSelect(true);
-        $this->sql .= ' and p.id = ?';
-        $this->bindValues[] = $pageId;
-
-        return $this->findRow();
-    }
-
-    /**
      * Find Published Page By Slug
      *
-     * Finds published page by by slug
-     * Does not include collections
-     * @param mixed  $pageSlug Page slug
-     * @return mixed           Page object or null if not found
+     * Finds published page by by slug, including collection detail page
+     * @param string  $pageSlug       Page slug
+     * @param string  $collectionSlug Collection slug
+     * @return mixed                  Page object or null if not found
      */
-    public function findPublishedPageBySlug($pageSlug)
+    public function findPublishedPageBySlug(string $pageSlug, string $collectionSlug = '0')
     {
         $this->makeSelect();
-
-        if (is_string($pageSlug)) {
-            $this->sql .= ' and collection_id is null and slug = ?';
-            $this->bindValues[] = $pageSlug;
-        } else {
-            throw new Exception('Unknown page identifier type');
-        }
+        $this->sql .= ' and collection_slug = ? and page_slug = ?';
+        $this->bindValues[] = $collectionSlug;
+        $this->bindValues[] = $pageSlug;
 
         $this->sql .= " and published_date <= '{$this->today()}'";
 
@@ -74,16 +54,16 @@ class PageMapper extends DataMapperAbstract
      * Find All Pages
      *
      * Finds all pages, does not include element data
-     * Does not include collections
-     * @param  bool  $unpublished Filter on published pages
+     * Does not include collection detail pages
+     * @param  bool  $includeUnpublished Filter on published pages
      * @return mixed                     Array | null
      */
-    public function findPages($unpublished = false)
+    public function findPages(bool $includeUnpublished = false)
     {
         $this->makeSelect();
-        $this->sql .= " and collection_id is null";
+        $this->sql .= " and collection_slug = '0'";
 
-        if (!$unpublished) {
+        if (!$includeUnpublished) {
             $this->sql .= " and published_date <= '{$this->today()}'";
         }
 
@@ -91,32 +71,41 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
-     * Find All Collections
+     * Find All Collection Detail Pages
      *
-     * @return mixed Array | null
+     * Finds all pages, does not include element data
+     * @param  bool  $includeUnpublished Filter on unpublished pages
+     * @return mixed                     Array | null
      */
-    public function findCollectionPages()
+    public function findCollectionPages(bool $includeUnpublished = false)
     {
-        $this->makeCollectionPageSelect();
+        $this->makeSelect();
+        $this->sql .= " and collection_slug != '0'";
+
+        if (!$includeUnpublished) {
+            $this->sql .= " and published_date <= '{$this->today()}'";
+        }
+
+        $this->sql .= ' order by collection_slug';
 
         return $this->find();
     }
 
     /**
-     * Find Collection Pages by ID
+     * Find Collection Pages by Collection Slug
      *
-     * Finds all collection pages
-     * @param  int   $collectionId
-     * @param  bool  $published    Filter on published collection pages
-     * @return mixed               Array | null
+     * Finds all related collection detail pages
+     * @param  int   $collectionSlug
+     * @param  bool  $includeUnpublished    Include unpublished collection pages
+     * @return mixed                        Array | null
      */
-    public function findCollectionPagesById($collectionId, $published = true)
+    public function findCollectionPagesBySlug(string $collectionSlug, bool $includeUnpublished = false)
     {
-        $this->makeCollectionPageSelect();
-        $this->sql .= ' and c.id = ?';
-        $this->bindValues[] = $collectionId;
+        $this->makeSelect();
+        $this->sql .= ' and collection_slug = ?';
+        $this->bindValues[] = $collectionSlug;
 
-        if ($published) {
+        if (!$includeUnpublished) {
             $this->sql .= " and p.published_date <= '{$this->today()}'";
         }
 
@@ -124,43 +113,14 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
-     * Find Published Collection Page By Slug
+     * Find Collections
      *
-     * Finds collection page by collection slug and page slug
-     * @param  bool  $published Filter on published collection pages
-     * @return mixed            Array | null
+     * Return list of collections
      */
-    public function findPublishedCollectionPageBySlug($collectionSlug, $pageSlug)
+    public function findCollections()
     {
-        $this->makeCollectionPageSelect();
-        $this->sql .= " and p.published_date <= '{$this->today()}'";
-        $this->sql .= ' and c.slug = ? and p.slug = ?';
+        $this->sql = 'select distinct collection_slug from page where collection_slug != \'0\' order by collection_slug';
 
-        $this->bindValues[] = $collectionSlug;
-        $this->bindValues[] = $pageSlug;
-
-        return $this->findRow();
-    }
-
-    /**
-     * Make Collection-Page Select
-     *
-     * SQL statement for collection page inner join
-     * @param  void
-     * @return void
-     */
-    protected function makeCollectionPageSelect($outerJoin = false)
-    {
-        $joinType = ($outerJoin) ? 'left outer' : '';
-
-        $this->sql = <<<SQL
-select c.id collection_id,
-       c.title collection_title,
-       c.slug collection_slug,
-       p.*
-from page p
-$joinType join collection c on p.collection_id = c.id
-where 1=1
-SQL;
+        return $this->find();
     }
 }
