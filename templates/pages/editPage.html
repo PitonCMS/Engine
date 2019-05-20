@@ -27,24 +27,26 @@
 
   {% block sidebar %}
   <div class="pageNavigator">
-    <nav class="" id="page-edit-nav">
-      <nav class="nav">
+    <nav class="navbar" id="page-edit-nav">
+      <nav class="nav flex-column">
         <a class="nav-link" href="#page-settings-nav">Page Settings</a>
+
         {% if page.settings %}
-        <nav class="nav ">
-          <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
-        </nav>
+        <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
         {% endif %}
 
         {% for block in page.json.blocks %}
-        <a class="nav-link nav-link-header" href="#page-block-{{ block.key }}">{{ block.name }}</a>
-        <nav class="nav jsPageSubBlock-{{ block.key }}">
+        <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
+
+        <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
           {% for element in page.elements if element.block_key == block.key %}
-          <a class="nav-link pl-3 mb-1 nav-link-subheader" href="#page-element-{{ element.id }}">{{ element.title }}</a>
+          <a class="nav-link ml-3" href="#page-element-{{ element.id }}">{{ element.title }}</a>
           {% endfor %}
         </nav>
         {% endfor %}
+
       </nav>
+
     </nav>
   </div>
 
@@ -170,6 +172,20 @@
     </div>
   </div><!-- End scroll-container -->
   <div class="two-col-sidebar">
+    <div class="form-group status">
+      {% if page.getPublishedStatus() == 'draft' %}
+      <div class="mb-2 text-body" title="Not published">Draft</div>
+      {% elseif page.getPublishedStatus() == 'pending' %}
+      <div class="mb-2 text-warning">Pending</div>
+      {% elseif page.getPublishedStatus() == 'published' %}
+      <div class="mb-2 text-success">Published</div>
+      {% endif %}
+
+      <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+        value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+
+    </div>
+    <hr class="sidebar-divider">
     <!-- Control Buttons -->
     <div class="button-group">
       <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
@@ -181,22 +197,7 @@
       {% endif %}
     </div>
     <hr class="sidebar-divider">
-    <div class="form-group status">
-      {% if page.getPublishedStatus() == 'draft' %}
-      <div class="mb-2 btn" title="Not published">Draft</div>
-      {% elseif page.getPublishedStatus() == 'pending' %}
-      <div class="mb-2 btn bg-warning">Pending</div>
-      {% elseif page.getPublishedStatus() == 'published' %}
-      <div class="mb-2 btn bg-success text-light">Published</div>
-      {% endif %}
-
-      <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
-        value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
-      <small class="form-text text-muted">Select date to publish page and save. Clear date and save to
-        unpublish.</small>
-
-    </div>
-    <hr class="sidebar-divider">
 
   </div>
+
   {% endblock content %}
