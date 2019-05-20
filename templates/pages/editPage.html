@@ -18,7 +18,7 @@
 <form class="form-content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
-  <input type="hidden" name="collection_slug" value="{{ page.json.collectionSlug }}">
+  <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
   {% endblock openForm %}
@@ -86,7 +86,7 @@
           <label>Slug <span class="text-danger">*</span></label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text">{{ page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
+              <span class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
             </div>
             <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
               value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>

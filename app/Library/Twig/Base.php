@@ -233,12 +233,17 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      */
     public function getMediaPath($filename, $size = 'original')
     {
-        // If this is an external link to a media file, just return string
+        // Return if there is no filename
+        if (empty($filename)) {
+            return null;
+        }
+
+        // If this is an external link to a media file, just return
         if (mb_stripos($filename, 'http') === 0) {
             return $filename;
         }
 
-        // If the original is requested, pass through the URI and filename
+        // If the original is requested, pass through path and filename
         if ($size === 'original') {
             return ($this->container->mediaUri)($filename) . $filename;
         }
@@ -251,7 +256,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
         if (file_exists(ROOT_DIR . 'public' . $baseUri . $requestedSize)) {
             return $baseUri . $requestedSize;
         } else {
-            // Fall back is original file
+            // Fall back to original file
             return $baseUri . $filename;
         }
     }
