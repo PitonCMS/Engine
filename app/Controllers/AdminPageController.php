@@ -195,11 +195,12 @@ class AdminPageController extends AdminBaseController
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
 
-            // If the image path does not start with http then get base name
+            // If the image path starts with http then save as-is
             $imagePath = $this->request->getParsedBodyParam('element_image_path')[$key];
             if (mb_stripos($imagePath, 'http') === 0) {
                 $pageElement->image_path = $imagePath;
             } else {
+                // Else get the name name to save
                 $pageElement->image_path = pathinfo($imagePath, PATHINFO_BASENAME);
             }
 

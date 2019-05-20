@@ -243,7 +243,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             return ($this->container->mediaUri)($filename) . $filename;
         }
 
-        // Construct requsted file URI
+        // Construct requested file URI
         $pathParts = pathinfo($filename);
         $baseUri = ($this->container->mediaUri)($filename);
         $requestedSize = $pathParts['filename'] . ($this->container->mediaSizes)($size) . '.' . $pathParts['extension'];
