@@ -29,7 +29,7 @@ class FrontController extends FrontBaseController
 
         if (isset($args['slug2'])) {
             // This request is for a collection
-            $page = $pageMapper->findPublishedPageBySlug($args['slug1'], $args['slug2']);
+            $page = $pageMapper->findPublishedPageBySlug($args['slug2'], $args['slug1']);
         } else {
             // Get page data
             $page = $pageMapper->findPublishedPageBySlug($args['slug1']);
