@@ -5,49 +5,48 @@
 {% block mainClass 'contentTwoCol' %}
 
 {% block htmlTitle %}
-  {% if page.id %}Edit{% else %}Add{% endif %} Page
+{% if page.id %}Edit{% else %}Add{% endif %} Page
 {% endblock %}
 
 {% block headText %}
-  {% if page.id %}Edit{% else %}Add{% endif %}
-  {% if page.type == 'collection' %}Collection{% endif %}
-  {{ page.title|default(page.json.templateName) }}
+{% if page.id %}Edit{% else %}Add{% endif %}
+{% if page.type == 'collection' %}Collection{% endif %}
+{{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
 {% block openForm %}
-<form class="content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
+<form class="form-content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.json.collectionSlug }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
-{% endblock openForm %}
+  {% endblock openForm %}
 
-{% block sidebar %}
+  {% block sidebar %}
   <div class="pageNavigator">
-    <nav class="" id="page-edit-nav">
-      <nav class="nav">
+    <nav class="navbar" id="page-edit-nav">
+      <nav class="nav flex-column">
         <a class="nav-link" href="#page-settings-nav">Page Settings</a>
         {% if page.settings %}
-        <nav class="nav ">
-          <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
-        </nav>
+        <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
         {% endif %}
 
         {% for block in page.json.blocks %}
-        <a class="nav-link nav-link-header" href="#page-block-{{ block.key }}">{{ block.name }}</a>
-        <nav class="nav jsPageSubBlock-{{ block.key }}">
+        <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
+
+        <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
           {% for element in page.elements if element.block_key == block.key %}
-          <a class="nav-link pl-3 mb-1 nav-link-subheader" href="#page-element-{{ element.id }}">{{ element.title }}</a>
+          <a class="nav-link small-sidebar-text" href="#page-element-{{ element.id }}">{{ element.title }}</a>
           {% endfor %}
         </nav>
         {% endfor %}
       </nav>
     </nav>
   </div>
-{% endblock sidebar %}
+  {% endblock sidebar %}
 
-{% block content %}
+  {% block content %}
   {# Media Modal #}
   <div class="modal fade" id="mediaModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -92,7 +91,8 @@
             <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
               value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
           </div>
-          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being changed.</small>
+          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+            changed.</small>
         </div>
 
         <div class="form-group">
@@ -165,6 +165,20 @@
     </div>
   </div><!-- End scroll-container -->
   <div class="two-col-sidebar">
+    <div class="form-group status">
+      {% if page.getPublishedStatus() == 'draft' %}
+      <div class="mb-2 text-body" title="Not published">Draft</div>
+      {% elseif page.getPublishedStatus() == 'pending' %}
+      <div class="mb-2 text-warning">Pending</div>
+      {% elseif page.getPublishedStatus() == 'published' %}
+      <div class="mb-2 text-success">Published</div>
+      {% endif %}
+
+      <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+        value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+
+    </div>
+    <hr class="sidebar-divider">
     <!-- Control Buttons -->
     <div class="button-group">
       <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
@@ -172,24 +186,8 @@
 
       {% if page.id %}
       <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
-        {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+        {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
       {% endif %}
-    </div>
-    <hr class="sidebar-divider">
-    <div class="form-group status">
-      {% if page.getPublishedStatus() == 'draft' %}
-      <div class="mb-2 btn" title="Not published">Draft</div>
-      {% elseif page.getPublishedStatus() == 'pending' %}
-      <div class="mb-2 btn bg-warning">Pending</div>
-      {% elseif page.getPublishedStatus() == 'published' %}
-      <div class="mb-2 btn bg-success text-light">Published</div>
-      {% endif %}
-
-      <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
-        value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
-      <small class="form-text text-muted">Select date to publish page and save. Clear date and save to
-        unpublish.</small>
-
     </div>
     <hr class="sidebar-divider">
 

@@ -1,53 +1,53 @@
 {% extends '@admin/_adminBase.html' %}
 
 {% block htmlTitle %}
-  {% if page.type == 'collection' %}Collections{% else %}Pages{% endif %}
+{% if page.type == 'collection' %}Collections{% else %}Pages{% endif %}
 {% endblock htmlTitle %}
 
 {% block headText %}
-  {% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
+{% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
 {% endblock headText %}
 
 {% block sectionId 'pages' %}
 
 {% block sidebar %}
-  <h4>Create Page</h4>
-  {% for template in page.templates %}
-  <div class="sidebar-link">
-    <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
-      title="{{ template.description }}">{{ template.name }}</a>
-    <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
-      data-content="{{ template.description }}"></i>
-  </div>
-  {% else %}
-  <h5>No Page Definitions Found</h5>
-  {% endfor %}
+
+{% for template in page.templates %}
+<div class="sidebar-link">
+  <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
+    title="{{ template.description }}">{{ template.name }}</a>
+  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
+    data-content="{{ template.description }}"></i>
+</div>
+{% else %}
+<h5>No Page Definitions Found</h5>
+{% endfor %}
 {% endblock sidebar %}
 
 {% block content %}
-  {% if page.type == 'page' %}
+{% if page.type == 'page' %}
 
-    <h3>Saved Pages</h3>
-    <div class="card-wrapper">
-      {% for p in page.pages %}
-        {% include "@admin/pages/_pageCard.html" %}
-      {% else %}
-        <strong>No Pages Found</strong>
-      {% endfor %}
-    </div>
+<h3>Saved Pages</h3>
+<div class="card-wrapper">
+  {% for p in page.pages %}
+  {% include "@admin/pages/_pageCard.html" %}
+  {% else %}
+  <h5>No Pages Found</h5>
+  {% endfor %}
+</div>
 
-  {% elseif page.type == 'collection' %}
+{% elseif page.type == 'collection' %}
 
-    {% for c in page.collectionNames %}
-      <h3>Saved {{ c.name }} Pages</h3>
-      <div class="card-wrapper">
-        {% for p in page.pages if p.collection_slug == c.value %}
-          {% include "@admin/pages/_pageCard.html" %}
-        {% else %}
-          <strong>No Pages Found</strong>
-        {% endfor %}
-      </div>
-    {% endfor %}
+{% for c in page.collectionNames %}
+<h3>Saved {{ c.name }} Pages</h3>
+<div class="card-wrapper">
+  {% for p in page.pages if p.collection_slug == c.value %}
+  {% include "@admin/pages/_pageCard.html" %}
+  {% else %}
+  <h5>No Pages Found</h5>
+  {% endfor %}
+</div>
+{% endfor %}
 
-  {% endif %}
+{% endif %}
 {% endblock content %}

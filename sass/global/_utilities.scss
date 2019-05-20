@@ -1,9 +1,12 @@
-// utility classes
-
 .scroll-container {
   overflow-y: scroll;
   position: relative;
   scroll-behavior: smooth;
-  height: 100vh;
-  /* height: calc(100vh - 175px); */
+  height: calc(100vh - 56px);
+}
+
+.small-sidebar-text {
+  font-size: 0.8rem;
+  font-style: italic;
+  padding-left: 1rem !important;
 }
