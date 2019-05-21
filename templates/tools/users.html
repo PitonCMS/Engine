@@ -3,15 +3,18 @@
 {% block htmlTitle 'Users' %}
 {% block headText %}Manage Users{% endblock %}
 {% block sectionId 'tools' %}
+{% block mainClass 'contentTwoCol' %}
+
+{% block openForm %}
+<form class="jsUserForm" action="{{ pathFor('adminSaveUsers') }}" method="post" accept-charset="utf-8">
+{% endblock openForm %}
 
 {% block sidebar %}
   {% include "@admin/tools/_toolsSidebar.html" %}
 {% endblock sidebar %}
 
 {% block content %}
-<div class="row">
-  <div class="col">
-    <form class="jsUserForm" action="{{ pathFor('adminSaveUsers') }}" method="post" accept-charset="utf-8">
+
       {% for user in page %}
       <div class="form-group form-row">
         <div class="col-4">
@@ -34,7 +37,5 @@
       <hr>
       <a class="btn btn-warning" href="{{ pathFor('adminHome') }}">Cancel</a>
       <button type="submit" name="button" class="btn btn-primary">Save Users</button>
-    </form>
-  </div>
-</div>
+
 {% endblock content %}

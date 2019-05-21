@@ -6,13 +6,16 @@
 {% block sectionId 'tools' %}
 {% block mainClass 'contentTwoCol' %}
 
+{% block openForm %}
+<form class="form-content-wrapper" action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% endblock openForm %}
+
 {% block sidebar %}
 {% include "@admin/tools/_toolsSidebar.html" %}
 {% endblock sidebar %}
 
 {% block content %}
-<form action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <div class="form-wrapper">
     <ul class="nav nav-tabs" id="pills-tab" role="tablist">
       <li class="nav-item">
@@ -78,5 +81,4 @@
     <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
 
   </div>
-</form>
 {% endblock content %}
