@@ -34,7 +34,8 @@ $app->group('/admin', function () {
     // Page route
     $this->group('/page', function () {
         // Show All Pages
-        $this->get('[/{type:collection}]', function ($args) {
+        $this->get('[/]', function ($args) {
+            $args['type'] = 'page';
             return (new AdminPageController($this))->showPages($args);
         })->setName('adminPages');
 
@@ -70,6 +71,21 @@ $app->group('/admin', function () {
         // End page elements
     });
     // End page routes
+
+    // Collection routes, points to matching /page route
+    $this->group('/collection', function () {
+        // Show All Collection Pages
+        $this->get('[/]', function ($args) {
+            $args['type'] = 'collection';
+            return (new AdminPageController($this))->showPages($args);
+        })->setName('adminCollections');
+
+        // Edit or add new collection page. Must provide ID or page layout argument
+        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+            return (new AdminPageController($this))->editPage($args);
+        })->setName('adminEditCollectionPage');
+    });
+    // End collection
 
     // Media
     $this->group('/media', function () {

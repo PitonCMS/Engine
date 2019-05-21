@@ -16,6 +16,7 @@
   </div>
   <div class="card-body">
     <p class="card-text">{{ p.meta_description|default('Missing Meta Description!') }}</p>
-    <a class="card-link btn btn-sm btn-primary" href="{{ pathFor('adminEditPage', {'id': p.id}) }}">Edit Page</a>
+    {% set editRoute = page.type == 'page' ? 'adminEditPage' : 'adminEditCollectionPage' %}
+    <a class="card-link btn btn-sm btn-primary" href="{{ pathFor(editRoute, {'id': p.id}) }}">Edit Page</a>
   </div>
 </div>
