@@ -108,11 +108,7 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
-        $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $json = $this->container->json;
 
         // Get page object
         $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
@@ -156,7 +152,33 @@ class AdminPageController extends AdminBaseController
         }
 
         // Save Page and get ID
-        $page = $pageMapper->save($page);
+        $pageEntity = $pageMapper->save($page);
+
+        // Save settings and elements
+        $this->savePageSettings($pageEntity->id);
+        $this->savePageElements($pageEntity->id);
+
+        // Determine redirect path based on whether this is a collection page
+        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+            $redirectRoute = 'adminCollections';
+        } else {
+            $redirectRoute = 'adminPages';
+        }
+
+        // Redirect back to show page
+        return $this->redirect($redirectRoute);
+    }
+
+    /**
+     * Save Page Settings
+     *
+     * From $_POST array
+     * @param int $pageId
+     * @return void
+     */
+    protected function savePageSettings(int $pageId)
+    {
+        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
 
         // Save any custom page settings
         if ($this->request->getParsedBodyParam('setting_id')) {
@@ -170,20 +192,35 @@ class AdminPageController extends AdminBaseController
                     continue;
                 }
 
-                $setting->page_id = $page->id;
+                $setting->page_id = $pageId;
                 $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$settingKey];
                 $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$settingKey];
 
                 $pageSettingMapper->save($setting);
             }
         }
+    }
+
+    /**
+     * Save Page Elements
+     *
+     * From $_POST array
+     * @param int $pageId
+     * @return void
+     */
+    protected function savePageElements(int $pageId)
+    {
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $markdown = $this->container->markdownParser;
+        $toolbox = $this->container->toolbox;
+        $json = $this->container->json;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
             // Save element
             $pageElement = $pageElementMapper->make();
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
-            $pageElement->page_id = $page->id;
+            $pageElement->page_id = $pageId;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
             $pageElement->definition = $this->request->getParsedBodyParam('element_type')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
@@ -215,16 +252,6 @@ class AdminPageController extends AdminBaseController
 
             $pageElement = $pageElementMapper->save($pageElement);
         }
-
-        // Determine redirect path based on whether this is a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
-            $redirectRoute = 'adminCollections';
-        } else {
-            $redirectRoute = 'adminPages';
-        }
-
-        // Redirect back to show page
-        return $this->redirect($redirectRoute);
     }
 
     /**
