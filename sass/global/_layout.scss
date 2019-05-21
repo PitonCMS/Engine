@@ -16,7 +16,8 @@
       nav {
         @include padding(0.25rem 0.25rem 0.25rem 0);
       }
-      h5 {
+      h3,
+      h4 {
         text-align: center;
         @include margin(1rem null);
       }
@@ -49,6 +50,7 @@
 #editPage,
 #tools {
   width: 100vw;
+  @include margin(57px null null);
   &.content-wrapper {
     form {
       display: flex;
@@ -56,7 +58,7 @@
         top: 60px;
         justify-self: flex-start;
         background: $primary-light-grey;
-        @include padding(1rem 1rem 1rem 0rem);
+        // @include padding(1rem 1rem 1rem 0rem);
         nav {
           @include padding(0.25rem 0.25rem 0.25rem 0);
         }
@@ -81,6 +83,11 @@
           @include border-right-radius(30px);
           box-shadow: $box-shadow;
         }
+        .pageNavigator {
+          position: sticky;
+          top: 60px;
+          overflow-y: scroll;
+        }
       }
       .contentTwoCol {
         flex: 1;
@@ -92,6 +99,25 @@
         .two-col-sidebar {
           @include padding(1rem);
           background: $primary-light-grey;
+          .two-col-sidebar-inner {
+            @include padding(0.25rem null null);
+            position: sticky;
+            top: 60px;
+            .status {
+              display: flex;
+              flex-flow: column nowrap;
+              justify-content: center;
+              align-items: center;
+              @include padding(0.25rem null null);
+              input {
+                text-align: center;
+              }
+            }
+            .button-group {
+              display: flex;
+              flex-flow: column nowrap;
+            }
+          }
         }
       }
     }
