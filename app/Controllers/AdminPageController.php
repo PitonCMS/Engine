@@ -286,13 +286,13 @@ class AdminPageController extends AdminBaseController
 
         // Determine redirect path based on whether this was a collection page
         if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
-            $redirectSegment = ['type' => 'collection'];
+            $redirectRoute = 'adminCollections';
         } else {
-            $redirectSegment = [];
+            $redirectRoute = 'adminPages';
         }
 
         // Redirect back to show pages
-        return $this->redirect('adminPages', $redirectSegment);
+        return $this->redirect($redirectRoute);
     }
 
     /**
