@@ -1,10 +1,9 @@
 <div class="pageNavigator">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link {{ inUrl('tools') }}" href="{{ pathFor('adminSettings') }}">Settings</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ inUrl('tools') }}" href="{{ pathFor('adminUsers') }}">Users</a>
-        </li>
-    </ul>
+    <nav class="navbar" id="settings-edit-nav">
+        <nav class="nav flex-column">
+            <a class="nav-link {{ currentRoute('adminSettings') }}" href="{{ pathFor('adminSettings') }}">Settings</a>
+            <a class="nav-link {{ currentRoute('adminUsers') }}" href="{{ pathFor('adminUsers') }}">Users</a>
+        </nav>
+    </nav>
+
 </div>

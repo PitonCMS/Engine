@@ -141,7 +141,7 @@
         <div class="jsBlockParent" id="page-block-{{ block.key }}">
           <div class="block-title-wrapper">
             <h4>{{ block.name }} Block</h4>
-            <p class="lead">{{ block.description }}</p>
+
             {# Get count of elements in block to know if we need to disable the Add Element Button #}
             {% set elementLength = 0 %}
             {% for element in page.elements if element.block_key == block.key %}
