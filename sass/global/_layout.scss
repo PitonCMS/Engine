@@ -226,3 +226,9 @@
     }
   }
 }
+#mediaUpload,
+#mediaCategories {
+  form {
+    @include padding(1rem);
+  }
+}
