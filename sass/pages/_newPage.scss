@@ -1,30 +1,27 @@
-#editPage{
-  .sidebar{
+#editPage {
+  .sidebar {
     display: flex;
     flex-flow: column nowrap;
     width: 200px;
-    
   }
-
 }
 
-#pages{
+#pages {
   .card-wrapper {
-
-    max-width: 960px;
+    width: 80%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-gap: 1rem;
   }
-  .sidebar-link{
+  .sidebar-link {
     display: flex;
     flex-flow: row nowrap;
-    @include padding(0 .25rem .25rem);
+    @include padding(0 0.25rem 0.25rem);
     justify-content: space-between;
     align-items: center;
-    .fa-info-circle{
+    .fa-info-circle {
       color: #d4d4d4;
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }

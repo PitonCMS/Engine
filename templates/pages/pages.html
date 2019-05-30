@@ -16,7 +16,7 @@
 <div class="sidebar-link">
   <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
     title="{{ template.description }}">{{ template.name }}</a>
-  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus"
+  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
     data-content="{{ template.description }}"></i>
 </div>
 {% else %}
@@ -27,8 +27,8 @@
 {% block content %}
 {% if page.type == 'page' %}
 
-<h3>Saved Pages</h3>
-<div class="card-wrapper">
+<h3>Pages</h3>
+<div class="grid-wrapper">
   {% for p in page.pages %}
   {% include "@admin/pages/_pageCard.html" %}
   {% else %}
@@ -39,14 +39,20 @@
 {% elseif page.type == 'collection' %}
 
 {% for c in page.collectionNames %}
-<h3>Saved {{ c.name }} Pages</h3>
-<div class="card-wrapper">
-  {% for p in page.pages if p.collection_slug == c.value %}
-  {% include "@admin/pages/_pageCard.html" %}
-  {% else %}
-  <h5>No Pages Found</h5>
-  {% endfor %}
+<div class="collection-wrapper">
+  <div class="card-title">
+    <h3>{{ c.name }}</h3>
+  </div>
+
+  <div class="card-wrapper">
+    {% for p in page.pages if p.collection_slug == c.value %}
+    {% include "@admin/pages/_pageCard.html" %}
+    {% else %}
+    <h5>No Pages Found</h5>
+    {% endfor %}
+  </div>
 </div>
+
 {% endfor %}
 
 {% endif %}
