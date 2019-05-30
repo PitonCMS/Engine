@@ -1,44 +1,34 @@
+#adminHome,
+#releaseNotes,
 #pages,
-#media,
+#collections,
+#mediaAll,
 #mediaUpload,
 #mediaCategories,
-#messages,
-#adminHome,
-#releaseNotes {
-  &.content-wrapper {
-    display: flex;
-    .sidebar,
-    .content {
-      min-height: calc(100vh - 1px);
-    }
-    .sidebar {
-      min-width: 100px;
-      background: $primary-light-grey;
-      @include padding(1rem 0.5rem 1rem 0rem);
-      .sidebar-link {
-        display: flex;
-
-        i {
-          @include margin(null null null 1rem);
-        }
-        &:hover {
-          color: $primary-color;
-        }
-      }
-      nav {
-        @include padding(0.25rem 0.25rem 0.25rem 0);
-      }
-      h3,
-      h4 {
-        text-align: center;
-        @include margin(1rem null);
-      }
+#messages {
+  display: flex;
+  flex-flow: row nowrap;
+  aside,
+  main {
+    min-height: calc(100vh - 1px);
+    @include padding(1em);
+  }
+  aside {
+    background-color: $primary-light-grey;
+    @include padding(1em 0.5em 1em 0);
+    min-width: 200px;
+    .sidebar-links {
+      display: flex;
+      align-items: center;
       .nav-link {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         color: $primary-dark;
         letter-spacing: 1px;
-        @include padding(0.25rem 0.5rem);
+        @include padding(0.25em 0.5em);
         @include margin(null null null 0);
-
         &:hover {
           color: var(--primary) !important;
         }
@@ -51,184 +41,175 @@
         box-shadow: $box-shadow;
       }
     }
-    .content {
-      flex: 1;
-      @include padding(1rem);
-      .grid-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        grid-gap: 1rem;
-
-        .card-title {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          h5 {
-            @include margin(0);
-            @include padding(0);
-          }
-          .fas {
-            color: $primary-md-grey;
-          }
-        }
-      }
-      .collection-wrapper {
-        width: 100%;
-        @include padding(null null 1rem null);
-        @include margin(null null 1rem null);
-        border-bottom: solid 1px $primary-light-grey;
-        .card-title {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          h5 {
-            @include margin(0);
-            @include padding(0);
-          }
-          .fas {
-            color: $primary-md-grey;
-          }
-        }
-
-        grid-gap: 1rem;
-        h3 {
-          @include margin(0);
-          @include padding(0);
-        }
-        .card-wrapper {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-        }
-      }
-    }
   }
-}
-
-// Start Three column Layout
-#editPage,
-#tools,
-#users {
-  width: 100vw;
-
-  &.content-wrapper {
-    form {
-      display: flex;
-      .sidebar,
-      .content {
-        min-height: calc(100vh - 1px);
-      }
-      .sidebar {
-        top: 0px;
-        justify-self: flex-start;
-        background: $primary-light-grey;
-        nav {
-          @include padding(0.25rem 0.25rem 0.25rem 0);
-        }
-        h5 {
-          text-align: center;
-          @include margin(1rem null);
-        }
-        .nav-link {
-          color: $primary-dark;
-          letter-spacing: 1px;
-          @include padding(0.25rem 0.5rem);
-          @include margin(null null null 0);
-
-          &:hover {
-            color: var(--primary) !important;
-          }
-        }
-        .active {
-          background-color: rgba($primary-color, 0.5) !important;
-          color: $primary-light;
-          @include padding(null 1rem null null);
-          @include border-right-radius(30px);
-          box-shadow: $box-shadow;
-        }
-        .pageNavigator {
-          position: sticky;
-          top: 70px;
-          overflow-y: scroll;
-        }
-      }
-      .contentTwoCol {
-        flex: 1;
-        display: flex;
-        .scroll-container,
-        .form-wrapper {
-          flex: 1;
-          @include margin(1rem);
-          // .page-settings-wrapper,
-          // .block-element-wrapper {
-          //   @include padding(5rem null null);
-          // }
-
-          .element-block,
-          .form-group-wrapper {
-            @include margin(null null 1rem);
-            @include padding(null null 1rem);
-            border-bottom: solid 2px $primary-light-grey;
-          }
-          .tab-content {
-            @include padding(null 1rem 1rem);
-            @include border-color(null $primary-light-grey $primary-light-grey);
-            @include border-style(null solid solid);
-            @include border-width(null 1px 1px);
-            @include border-bottom-radius($border-radius);
-          }
-        }
-        .two-col-sidebar {
-          @include padding(1rem);
-          background: $primary-light-grey;
-          .two-col-sidebar-inner {
-            @include padding(0.25rem null null);
-            position: sticky;
-            top: 70px;
-            .status {
-              display: flex;
-              flex-flow: column nowrap;
-              justify-content: center;
-              align-items: center;
-              @include padding(0.25rem null null);
-              input {
-                text-align: center;
-              }
-            }
-            .button-group {
-              display: flex;
-              flex-flow: column nowrap;
-            }
-          }
-        }
-      }
-    }
+  main {
+    flex: 1;
   }
-}
-#users {
-  .form-wrapper {
+  .grid-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    grid-auto-rows: 300px;
-    justify-content: center;
-    align-items: center;
-    .user-card {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1em;
+    .card-title {
+      @include margin(0);
       display: flex;
-      flex-direction: column;
-      @include padding(2rem 3rem);
-      @include border-style(solid);
-      @include border-color($primary-light-grey);
-      @include border-width(1px);
-      box-shadow: $box-shadow;
-      border-radius: $border-radius;
+      justify-content: space-between;
+      align-items: center;
+
+      h5 {
+        @include margin(0);
+        @include padding(0);
+      }
+    }
+    .card-footer {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+  .fa-info-circle {
+    cursor: pointer;
+    color: $primary-md-grey;
+  }
+  .card {
+    border: none;
+    box-shadow: $box-shadow;
+  }
+}
+
+// Pages
+// #pages {
+// }
+// Collections
+#collections {
+  .collection-wrapper {
+    @include padding(1em 0.5em);
+    .collection-title {
+      border-bottom: solid 1px $primary-light-grey;
+      @include margin(null null 0.5em null);
+      @include padding(null null 0.25em null);
+      h3 {
+        @include margin(null null 0);
+        @include padding(null null 0);
+      }
     }
   }
 }
-#mediaUpload,
+
+// Media
+// #mediaAll {
+// }
+// #mediaUpload {
+// }
 #mediaCategories {
   form {
-    @include padding(1rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    .form-group {
+      display: grid;
+      grid-template-columns: 1fr 4em;
+      grid-gap: 1em;
+    }
   }
+}
+// Messages
+#messages {
+  .jsMessageWrap {
+    @include margin(null null 1.5em null);
+    @include padding(null null 1.5em null);
+    border-bottom: solid 1px $primary-light-grey;
+  }
+}
+/******************************************/
+/********* Detail Pages for Admin *********/
+/******************************************/
+
+#editPage form,
+#collectionDetail form,
+#tools form,
+#users form {
+  display: flex;
+  flex-flow: row nowrap;
+  max-height: calc(100vh - 56px);
+  overflow: scroll;
+  aside,
+  main {
+    min-height: calc(100vh - 1px);
+  }
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 225px;
+    a {
+      letter-spacing: 1px;
+      color: $primary-dark;
+      &:hover {
+        color: $primary-color !important;
+      }
+    }
+  }
+  main {
+    background: $primary-light-grey;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .scroll-container {
+    @include margin(0 1em);
+    @include padding(null 1em);
+    background: $primary-light;
+    overflow-y: scroll;
+    position: relative;
+    scroll-behavior: smooth;
+    flex: 1;
+    height: calc(100vh - 75px);
+  }
+  .active {
+    background-color: rgba($primary-color, 0.8) !important;
+    color: $primary-light;
+    @include padding(null 1rem null null);
+    @include border-right-radius(25px);
+    box-shadow: $box-shadow;
+  }
+  a.small-sidebar-text.active {
+    background-color: rgba($primary-color, 0.5) !important;
+    padding-left: 4em !important;
+    margin-left: -1em !important;
+  }
+  .navbar {
+    @include padding(null null null 0);
+  }
+  .two-col-sidebar {
+    @include padding(1em);
+  }
+}
+
+//Page Edit
+#editPage {
+  .block-title-wrapper {
+    @include padding(1em 2em 1em 1em);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card {
+    @include margin(null null 1em null);
+  }
+}
+// Collection Details Page
+#collectionDetail {
+}
+// Tools & Settings
+#tools {
+  main {
+    .active {
+      all: unset;
+    }
+    .tab-content {
+      flex: 1;
+      @include padding(1em);
+    }
+  }
+}
+// users
+#users {
 }

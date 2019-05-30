@@ -1,12 +1,17 @@
-.scroll-container {
-  overflow-y: scroll;
-  position: relative;
-  scroll-behavior: smooth;
-  height: calc(100vh - 10px);
+.alert-fixed {
+  position: fixed;
+  top: 100px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  z-index: 99;
 }
 
-.small-sidebar-text {
-  font-size: 0.8rem;
-  font-style: italic;
-  padding-left: 1rem !important;
+/* Fixes issue with fixed nav covering part of named anchor */
+.anchor-offset {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.popover {
+  box-shadow: $box-shadow;
 }

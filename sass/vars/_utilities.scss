@@ -1,12 +1,5 @@
-/* utilities */
-
 .span {
   grid-column: 1 / -1;
-}
-
-.sticky {
-  position: sticky;
-  box-shadow: $box-shadow;
 }
 
 .alert-fixed {
@@ -26,4 +19,11 @@
 .popover {
   box-shadow: $box-shadow;
   background-color: lightblue;
+}
+
+.small-sidebar-text {
+  font-size: 0.8rem;
+  font-style: italic;
+  padding-left: 4em !important;
+  margin-left: -1em !important;
 }

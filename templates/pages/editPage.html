@@ -1,7 +1,7 @@
 {% extends '@admin/_adminBase.html' %}
 {% import "@admin/pages/_editElementMacro.html" as form %}
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
-{% block sectionId 'editPage' %}
+
 {% block mainClass 'contentTwoCol' %}
 
 {% block htmlTitle %}
@@ -14,8 +14,12 @@
 {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
+{% block sectionId %}
+{% if page.type == 'collection' %}collectionDetail{% else %}editPage{% endif %}
+{% endblock sectionId %}
+
 {% block openForm %}
-<form class="form-content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
+<form action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
@@ -24,26 +28,26 @@
   {% endblock openForm %}
 
   {% block sidebar %}
-  <div class="pageNavigator">
-    <nav class="navbar" id="page-edit-nav">
-      <nav class="nav flex-column">
-        <a class="nav-link" href="#page-settings-nav">Page Settings</a>
-        {% if page.settings %}
-        <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
-        {% endif %}
 
-        {% for block in page.json.blocks %}
-        <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
+  <nav class="navbar" id="page-edit-nav">
+    <nav class="nav flex-column">
+      <a class="nav-link" href="#page-settings-nav">Page Settings</a>
+      {% if page.settings %}
+      <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
+      {% endif %}
 
-        <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
-          {% for element in page.elements if element.block_key == block.key %}
-          <a class="nav-link small-sidebar-text" href="#page-element-{{ element.id }}">{{ element.title }}</a>
-          {% endfor %}
-        </nav>
+      {% for block in page.json.blocks %}
+      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
+
+      <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
+        {% for element in page.elements if element.block_key == block.key %}
+        <a class="nav-link ml-3 small-sidebar-text  " href="#page-element-{{ element.id }}">{{ element.title }}</a>
         {% endfor %}
       </nav>
+      {% endfor %}
     </nav>
-  </div>
+  </nav>
+
   {% endblock sidebar %}
 
   {% block content %}
@@ -59,11 +63,11 @@
       </div>
     </div>
   </div>
-  <div class="scroll-container" data-spy="scroll" data-target="#page-edit-nav">
 
+  <div class="scroll-container" data-spy="scroll" data-target="#page-edit-nav" data-offset="0">
     <div class="page-settings-wrapper" id="page-settings-nav">
       <div class="block-title-wrapper">
-        <h3>Page Settings</h3>
+        <h3 class="pt-3">Page Settings</h3>
       </div>
 
       {# Page Standard Fields #}
@@ -118,7 +122,7 @@
       {# Page Custom Settings #}
       {% if page.settings %}
       <div class="block-title-wrapper" id="page-custom-settings-nav">
-        <h3>Custom Page Settings</h3>
+        <h3 class="">Custom Page Settings</h3>
       </div>
       <div class="form-group-wrapper">
         {% for setting in page.settings %}
@@ -140,7 +144,7 @@
       <div class="element-block">
         <div class="jsBlockParent" id="page-block-{{ block.key }}">
           <div class="block-title-wrapper">
-            <h4>{{ block.name }} Block</h4>
+            <h3>{{ block.name }} Block</h3>
 
             {# Get count of elements in block to know if we need to disable the Add Element Button #}
             {% set elementLength = 0 %}
@@ -163,22 +167,19 @@
       </div>
       {% endfor %}
     </div>
-
-
-
   </div><!-- End scroll-container -->
+
   <div class="two-col-sidebar">
     <div class="two-col-sidebar-inner">
-
       <div class="form-group status">
         <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
           value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
         {% if page.getPublishedStatus() == 'draft' %}
-        <div class="mb-2 text-body" title="Not published">Status: Draft</div>
+        <div class="text-body" title="Not published">Status: Draft</div>
         {% elseif page.getPublishedStatus() == 'pending' %}
-        <div class="mb-2 text-warning">Status: Pending</div>
+        <div class="text-warning">Status: Pending</div>
         {% elseif page.getPublishedStatus() == 'published' %}
-        <div class="mb-2 text-success">Status: Published</div>
+        <div class="text-success">Status: Published</div>
         {% endif %}
 
 
