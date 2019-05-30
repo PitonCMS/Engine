@@ -23,7 +23,8 @@
 
     <h6 class="card-subtitle text-muted small">URL:
       <code>{{ p.collection_slug ? '/' ~ p.collection_slug}}/{{ p.page_slug }}</code></h6>
-    <hr>
+  </div>
+  <div class="card-footer">
     {% set editRoute = page.type == 'page' ? 'adminEditPage' : 'adminEditCollectionPage' %}
     <a class="card-link btn btn-sm btn-primary" href="{{ pathFor(editRoute, {'id': p.id}) }}">Edit Page</a>
   </div>

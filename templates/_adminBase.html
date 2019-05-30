@@ -43,9 +43,9 @@
     let pitonConfig = {
       dateFormat: "{{ site.settings.dateFormat }}",
       weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
-      csrfTokenName: "{{ site.csrf.name }}",
+    csrfTokenName: "{{ site.csrf.name }}",
       csrfTokenValue: "{{ site.csrf.value }}",
-      {% block jsPitonConfig '' %}
+        {% block jsPitonConfig '' %}
     };
   </script>
   {% block head '' %}
@@ -55,22 +55,22 @@
   {% include "@admin/includes/_navbar.html" with {headText: block('headText') is defined ? block('headText')} %}
   {% include "@admin/includes/_alert.html" %}
 
-  <section id="{% block sectionId 'default' %}" class="content-wrapper">
+  <section id="{% block sectionId 'default' %}">
 
     {# Open form block if wrapping sidebar and content #}
     {% block openForm '' %}
 
-    <div class="sidebar">
+    <aside>
       {% block sidebar '' %}
-    </div>
+    </aside>
 
     <main role="main" class="{% block mainClass 'content' %}">
       {% block content '' %}
     </main>
 
     {% block closeForm %}
-      {# Self closing form tag #}
-      {{ block('openForm') != '' ? '</form>' }}
+    {# Self closing form tag #}
+    {{ block('openForm') != '' ? '</form>' }}
     {% endblock closeForm %}
 
   </section>

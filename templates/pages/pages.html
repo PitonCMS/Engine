@@ -8,16 +8,22 @@
 {% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
 {% endblock headText %}
 
-{% block sectionId 'pages' %}
+{% block sectionId %}
+{% if page.type == 'collection' %}collections{% else %}pages{% endif %}
+{% endblock sectionId %}
 
 {% block sidebar %}
 
 {% for template in page.templates %}
-<div class="sidebar-link">
+<div class="sidebar-links">
   <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
-    title="{{ template.description }}">{{ template.name }}</a>
+    title="{{ template.description }}">
+    <i class="fas fa-edit"></i>
+    {{ template.name }}
+  </a>
   <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
     data-content="{{ template.description }}"></i>
+
 </div>
 {% else %}
 <h5>No Page Definitions Found</h5>
@@ -40,17 +46,18 @@
 
 {% for c in page.collectionNames %}
 <div class="collection-wrapper">
-  <div class="card-title">
+  <div class="collection-title">
     <h3>{{ c.name }}</h3>
   </div>
 
-  <div class="card-wrapper">
+  <div class="grid-wrapper">
     {% for p in page.pages if p.collection_slug == c.value %}
     {% include "@admin/pages/_pageCard.html" %}
     {% else %}
     <h5>No Pages Found</h5>
     {% endfor %}
   </div>
+  <a class="muted-text" href="#">See All {{ c.name }}</a>
 </div>
 
 {% endfor %}

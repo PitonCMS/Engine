@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-    <span class="navbar-text">{{ headText }}</span>
+    <span class="navbar-text d-lg-block d-none">{{ headText }}</span>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
       aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,19 +14,23 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminPages') or inUrl('page') ? 'active' }}" href="{{ pathFor('adminPages') }}">Pages</a>
+          <a class="nav-link {{ currentRoute('adminPages') or inUrl('page') ? 'active' }}"
+            href="{{ pathFor('adminPages') }}">Pages</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminCollections') or inUrl('collection') ? 'active' }}" href="{{ pathFor('adminCollections') }}">Collections</a>
+          <a class="nav-link {{ currentRoute('adminCollections') or inUrl('collection') ? 'active' }}"
+            href="{{ pathFor('adminCollections') }}">Collections</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminShowMedia') }}">Media</a>
+          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}"
+            href="{{ pathFor('adminShowMedia') }}">Media</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminMessages') }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
+          <a class="nav-link {{ currentRoute('adminMessages') }}"
+            href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
             Messages <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span>
           </a>
         </li>

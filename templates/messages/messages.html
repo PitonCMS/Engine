@@ -6,49 +6,53 @@
 {% block sectionId 'messages' %}
 
 {% block sidebar %}
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">New Messages</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">Read Messages</a>
-        </li>
-    </ul>
+<div class="sidebar-links"> <a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}"
+        href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
+        <i class="fas fa-envelope"></i> New Messages</a></div>
+<div class="sidebar-links"><a class="nav-link {{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}"
+        href="{{ pathFor('adminMessages', {'status': 'read'}) }}"><i class="fas fa-envelope-open-text"></i> Read
+        Messages</a></div>
+
 {% endblock sidebar %}
 
 {% block content %}
-    {% if page.status == 'new' %}
-        {% for m in page.messages if m.isRead == 'N' %}
-            {{ html.message(m) }}
-        {% else %}
-            <p>You have no unread messages.</p>
-        {% endfor %}
+{% if page.status == 'new' %}
+{% for m in page.messages if m.isRead == 'N' %}
+{{ html.message(m) }}
+{% else %}
+<p>You have no unread messages.</p>
+{% endfor %}
 
-    {% else %}
+{% else %}
 
-        {% for m in page.messages if m.isRead == 'Y' %}
-            {{ html.message(m) }}
-        {% else %}
-            <p>You have no read messages.</p>
-        {% endfor %}
-    {% endif %}
+{% for m in page.messages if m.isRead == 'Y' %}
+{{ html.message(m) }}
+{% else %}
+<p>You have no read messages.</p>
+{% endfor %}
+{% endif %}
 {% endblock content %}
 
 {% macro message(m) %}
-    <div class="jsMessageWrap">
-        <form action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
-            <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-            <input type="hidden" name="id" value="{{ m.id }}">
-            <button class="btn btn-{% if m.isRead == 'Y' %}outline-{% endif %}primary btn-sm" type="submit" name="button" value="toggle" data-is-read="{{ m.isRead }}">Mark as
-                {% if m.isRead == 'Y' %}Unread{% else %}Read
-                {% endif %}
-            </button>
-            <button class="btn btn-outline-danger btn-sm" name="button" title="Delete message" type="submit" value="delete">Delete</button>
-        </form>
-        <p>
-            <a href="mailto:{{ m.email }}" target="_blank">{{ m.email }}</a>
-            {{ m.createdDate|date('d F Y  h:i a') }}
-        </p>
-        <p>{{ m.message }}</p>
-    </div>
+
+<div class="jsMessageWrap">
+
+    <p>
+        <a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
+        {{ m.createdDate|date('d F Y  h:i a') }}
+    </p>
+    {{ m.message|nl2br }}
+
+    <form class="mt-3" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
+        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+        <input type="hidden" name="id" value="{{ m.id }}">
+        <button class="btn btn-{% if m.isRead == 'Y' %}{% endif %}primary btn-sm" type="submit" name="button"
+            value="toggle" data-is-read="{{ m.isRead }}">Mark as
+            {% if m.isRead == 'Y' %}Unread{% else %}Read
+            {% endif %}
+        </button>
+        <button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit"
+            value="delete">Delete</button>
+    </form>
+</div>
 {% endmacro %}

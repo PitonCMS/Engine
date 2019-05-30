@@ -3,14 +3,15 @@
 
 {% block htmlTitle 'Media' %}
 {% block headText 'Media' %}
-{% block sectionId 'media' %}
+{% block sectionId 'mediaAll' %}
 
 {% block sidebar %}
-  {% include "@admin/media/_mediaSidebar.html" %}
+{% include "@admin/media/_mediaSidebar.html" %}
 {% endblock sidebar %}
 
 {% block content %}
-<div class="card-wrapper">
+<h3>All Media</h3>
+<div class="grid-wrapper">
   {% for media in page.media %}
   {{ file.mediaCard(media, page.categories, true) }}
   {% else %}

@@ -1,7 +1,7 @@
 {% extends '@admin/_adminBase.html' %}
 {% import "@admin/pages/_editElementMacro.html" as form %}
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
-{% block sectionId 'editPage' %}
+
 {% block mainClass 'contentTwoCol' %}
 
 {% block htmlTitle %}
@@ -14,8 +14,12 @@
 {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
+{% block sectionId %}
+{% if page.type == 'collection' %}collectionDetail{% else %}editPage{% endif %}
+{% endblock sectionId %}
+
 {% block openForm %}
-<form class="form-content-wrapper" action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
+<form action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
