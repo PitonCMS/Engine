@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `page_setting` (
 CREATE TABLE IF NOT EXISTS `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
+  `reference_id` int(11) DEFAULT NULL,
   `sort` smallint NOT NULL DEFAULT 1,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
@@ -91,7 +92,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `updated_by` int(11) NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `setting_category_idx` (`category`)
+  KEY `setting_category_idx` (`category`),
+  KEY `setting_ref_cat_idx` (`reference_id`, `category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media` (
