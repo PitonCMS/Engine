@@ -38,7 +38,7 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Get custom settings definition
-        $customSettingsPath = ROOT_DIR . 'structure/definitions/customSettings.json';
+        $customSettingsPath = ROOT_DIR . 'structure/definitions/siteSettings.json';
         if (null === $customSettings = $json->getJson($customSettingsPath, 'setting')) {
             $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
         }
@@ -61,11 +61,9 @@ class AdminSettingController extends AdminBaseController
         $json = $this->container->json;
 
         // Fetch settings definitions just so we can get the order of settings defined by the designer
-        $seededSettingsPath = ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json';
-        $customSettingsPath = ROOT_DIR . 'structure/definitions/customSettings.json';
         $settingDefinition = array_merge(
-            $json->getJson($seededSettingsPath, 'setting')->settings,
-            $json->getJson($customSettingsPath, 'setting')->settings
+            $json->getJson(ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json', 'setting')->settings,
+            $json->getJson(ROOT_DIR . 'structure/definitions/siteSettings.json', 'setting')->settings
         );
 
         // Get $_POST data array

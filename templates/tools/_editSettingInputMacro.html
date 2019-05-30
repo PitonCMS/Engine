@@ -39,8 +39,7 @@
                 <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[{{ arrayKey }}]">
-                  {% set options = setting.setting_key == 'theme' ? getThemes() : setting.options %}
-                  {% for key, option in options %}
+                  {% for key, option in setting.options %}
                   <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
                   {% endfor %}
                 </select>

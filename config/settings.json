@@ -11,16 +11,6 @@
         },
         {
             "category": "site",
-            "label": "Theme",
-            "key": "theme",
-            "value": "default",
-            "inputType": "select",
-            "options": [
-                {"name": "", "value": ""}
-            ]
-        },
-        {
-            "category": "site",
             "label": "Date Format",
             "key": "dateFormat",
             "value": "mm/dd/yyyy",

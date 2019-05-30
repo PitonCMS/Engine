@@ -79,7 +79,6 @@ class Admin extends Base
     public function getFunctions()
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('getThemes', [$this, 'getThemes']),
             new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
@@ -87,23 +86,6 @@ class Admin extends Base
             new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
             new \Twig_SimpleFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
         ]);
-    }
-
-    /**
-     * Get Array of Themes
-     *
-     * @param none
-     * @return array
-     */
-    public function getThemes()
-    {
-        $json = $this->container->json;
-
-        if (null === $definition = $json->getJson(ROOT_DIR . 'structure/definitions/themes.json', 'themes')) {
-            throw new Exception('PitonCMS: Get themes exception: ' . implode($json->getErrorMessages(), ','));
-        }
-
-        return array_column($definition->themes, 'name', 'value');
     }
 
     /**
