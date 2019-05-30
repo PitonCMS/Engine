@@ -167,8 +167,8 @@ $app->group('/admin', function () {
         // Settings
         $this->group('/settings', function () {
             // Show Settings
-            $this->get('[/]', function ($args) {
-                return (new AdminSettingController($this))->showSettings();
+            $this->get('/{cat:site|contact|social}', function ($args) {
+                return (new AdminSettingController($this))->showSettings($args);
             })->setName('adminSettings');
 
             // Save Settings

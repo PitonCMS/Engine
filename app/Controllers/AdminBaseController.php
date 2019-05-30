@@ -73,18 +73,23 @@ class AdminBaseController extends BaseController
      * Merge saved settings with those from page JSON definition file
      * @param  array  $savedSettings   Saved settings array
      * @param  array  $definedSettings Defined settings in JSON definition file
+     * @param  string $category        Optional category to filter setting definitions
      * @return array
      */
-    public function mergeSettings(array $savedSettings, array $definedSettings)
+    public function mergeSettings(array $savedSettings, array $definedSettings, string $category = null)
     {
-        // Test if the saved settings are for site or page. Only site settings have the category key
-        $pageSetting = isset($savedSettings[0]->category) ? false : true;
-
         // Make index of saved setting keys to setting array for easy lookup
         $settingIndex = array_combine(array_column($savedSettings, 'setting_key'), array_keys($savedSettings));
 
         // Loop through defined settings and update with saved values and meta info
-        foreach ($definedSettings as &$setting) {
+        foreach ($definedSettings as $key => &$setting) {
+            // Check category filter and remove unrelated settings
+            if (isset($category) && $category !== $setting->category) {
+                unset($definedSettings[$key]);
+                continue;
+            }
+
+            // If we have a matching saved setting key, then update who columns and ID
             if (isset($settingIndex[$setting->key])) {
                 $setting->id = $savedSettings[$settingIndex[$setting->key]]->id;
                 $setting->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
@@ -115,8 +120,8 @@ class AdminBaseController extends BaseController
             unset($setting->inputType);
         }
 
-        // Check remaining saved settings for orphaned settings.
-        array_walk($savedSettings, function(&$row) use ($pageSetting) {
+        // Check remaining saved settings for orphaned settings
+        array_walk($savedSettings, function(&$row) {
             $row->orphaned = true;
         });
 

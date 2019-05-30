@@ -15,26 +15,33 @@ use Piton\ORM\DataMapperAbstract;
  */
 class SettingMapper extends DataMapperAbstract
 {
-    protected $inCategories = '(\'site\',\'contact\',\'social\',\'contactForm\',\'custom\')';
+    protected $inCategories = '(\'site\',\'contact\',\'social\')';
     protected $table = 'setting';
     protected $modifiableColumns = [
         'category',
+        'reference_id',
         'sort',
         'setting_key',
         'setting_value',
     ];
 
     /**
-     * Find All Settings
+     * Find Settings
      *
-     * Find all settings
-     * @param void
+     * Find all settings, or a category of settings
+     * @param  $category 'site'|'contact'|'social'
      * @return array
      */
-    public function findSiteSettings()
+    public function findSiteSettings(string $category = null)
     {
         $this->makeSelect();
-        $this->sql .= ' and category in ' . $this->inCategories;
+        if (null === $category) {
+            $this->sql .= ' and category in ' . $this->inCategories;
+        } else {
+            $this->sql .= ' and category = ?';
+            $this->bindValues[] = $category;
+        }
+
         $this->sql .= ' order by sort';
 
         return $this->find();

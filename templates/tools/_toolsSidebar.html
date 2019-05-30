@@ -1,33 +1,18 @@
 <div class="" id="settings-tabContent" role="tablist" aria-orientation="vertical">
     <div class="sidebar-links">
-        <a class="nav-link active" id="settings-site-tab" data-toggle="pill" href="#settings-site" role="tab"
-            aria-controls="settings-site" aria-selected="true">
+        <a class="nav-link {{ currentRoute('adminSettings') and inUrl('site') ? 'active' }}" href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">
             <i class="fas fa-wrench"></i>
-            Site Settings</a>
+            General</a>
     </div>
     <div class="sidebar-links">
-        <a class="nav-link" id="settings-contact-tab" data-toggle="pill" href="#settings-contact" role="tab"
-            aria-controls="settings-contact" aria-selected="false">
-            <i class="fas fa-envelope"></i>
+            <a class="nav-link {{ currentRoute('adminSettings') and inUrl('contact') ? 'active' }}" href="{{ pathFor('adminSettings', {'cat': 'contact'}) }}">
+            <i class="fas fa-inbox"></i>
             Contact</a>
     </div>
     <div class="sidebar-links">
-        <a class="nav-link" id="settings-social-tab" data-toggle="pill" href="#settings-social" role="tab"
-            aria-controls="settings-social" aria-selected="false">
+            <a class="nav-link {{ currentRoute('adminSettings') and inUrl('social') ? 'active' }}" href="{{ pathFor('adminSettings', {'cat': 'social'}) }}">
             <i class="fas fa-comment"></i>
             Social</a>
-    </div>
-    <div class="sidebar-links">
-        <a class="nav-link" id="settings-social-tab" data-toggle="pill" href="#settings-contactForm" role="tab"
-            aria-controls="settings-contactForm" aria-selected="false">
-            <i class="fas fa-inbox"></i>
-            Contact Form</a>
-    </div>
-    <div class="sidebar-links">
-        <a class="nav-link" id="settings-custom-tab" data-toggle="pill" href="#settings-custom" role="tab"
-            aria-controls="settings-custom" aria-selected="false">
-            <i class="fas fa-cog"></i>
-            Custom</a>
     </div>
     <div class="sidebar-links">
         <a class="nav-link {{ currentRoute('adminUsers') }}" href="{{ pathFor('adminUsers') }}">

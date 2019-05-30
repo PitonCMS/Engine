@@ -10,9 +10,9 @@
                     "items": {
                         "properties": {
                             "category": {
-                                "description": "Setting category group key: site, contact, social, contactForm, or custom",
+                                "description": "Setting category group key: site, contact, social",
                                 "type": "string",
-                                "enum": ["site","contact","social","contactForm","custom"]
+                                "enum": ["site","contact","social"]
                             }
                         },
                         "required": ["category"]

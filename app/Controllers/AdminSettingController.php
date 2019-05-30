@@ -21,15 +21,17 @@ class AdminSettingController extends AdminBaseController
      * Manage Site Settings
      *
      * List all site configuration settings to bulk edit
+     * @param array $args
      */
-    public function showSettings()
+    public function showSettings($args)
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
         // Get saved settings from database
-        $savedSettings = $settingMapper->findSiteSettings();
+        $category = $args['cat'] ?? null;
+        $savedSettings = $settingMapper->findSiteSettings($category);
 
         // Get seeded PitonCMS settings definition
         $seededSettingsPath = ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json';
@@ -44,9 +46,16 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Merge saved settings with custom settings
-        $allSettings = $this->mergeSettings($savedSettings, array_merge($seededSettings->settings, $customSettings->settings));
+        $data['settings'] = $this->mergeSettings(
+            $savedSettings,
+            array_merge($seededSettings->settings, $customSettings->settings),
+            $category
+        );
 
-        return $this->render('tools/editSettings.html', $allSettings);
+        // Set category flag in page to help with redirects
+        $data['category'] = $category;
+
+        return $this->render('tools/editSettings.html', $data);
     }
 
     /**
@@ -98,6 +107,7 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        return $this->redirect('adminSettings');
+        $routeCategory = $this->request->getParsedBodyParam('category') ?? 'site';
+        return $this->redirect('adminSettings', ['cat' => $routeCategory]);
     }
 }

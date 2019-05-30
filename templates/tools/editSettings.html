@@ -9,6 +9,7 @@
 {% block openForm %}
 <form action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="category" value="{{ page.category }}">
   {% endblock openForm %}
 
   {% block sidebar %}
@@ -16,53 +17,19 @@
   {% endblock sidebar %}
 
   {% block content %}
-  <div class="tab-content" id="settings-tabContent">
-    <div class="tab-pane fade show active" id="settings-site" role="tabpanel" aria-labelledby="settings-site-tab">
-      {% for setting in page if setting.category == 'site' %}
+  <div class="tab-content">
+      {% for setting in page.settings %}
       {{ settingForm.settingInput(setting) }}
       {% endfor %}
-    </div>
-
-    <div class="tab-pane fade" id="settings-contact" role="tabpanel" aria-labelledby="settings-contact-tab">
-      {% for setting in page if setting.category == 'contact' %}
-      {{ settingForm.settingInput(setting) }}
-      {% endfor %}
-    </div>
-
-    <div class="tab-pane fade" id="settings-social" role="tabpanel" aria-labelledby="settings-social-tab">
-      {% for setting in page if setting.category == 'social' %}
-      {{ settingForm.settingInput(setting) }}
-      {% endfor %}
-    </div>
-
-    <div class="tab-pane fade" id="settings-contactForm" role="tabpanel" aria-labelledby="settings-contactForm-tab">
-      {% for setting in page if setting.category == 'contactForm' %}
-      {{ settingForm.settingInput(setting) }}
-      {% endfor %}
-    </div>
-
-    <div class="tab-pane fade" id="settings-custom" role="tabpanel" aria-labelledby="settings-custom-tab">
-      {% for setting in page if setting.category == 'custom' %}
-      {{ settingForm.settingInput(setting) }}
-      {% endfor %}
-    </div>
   </div>
-
-
-
-
 
   <div class="two-col-sidebar">
     <!-- Control Buttons -->
     <div class="two-col-sidebar-inner">
       <div class="button-group">
-        <a class="btn btn-warning mb-2" href="{{ pathFor('adminSettings') }}">Cancel</a>
+        <a class="btn btn-warning mb-2" href="{{ pathFor('adminSettings', {'cat': page.category ?? 'site' }) }}">Cancel</a>
         <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
       </div>
-
     </div>
-
-
-
   </div>
   {% endblock content %}
