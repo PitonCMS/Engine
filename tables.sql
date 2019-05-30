@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `updated_by` int(11) NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `setting_key_uq` (`setting_key`)
+  KEY `setting_category_idx` (`category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media` (

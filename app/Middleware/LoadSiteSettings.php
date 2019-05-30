@@ -87,7 +87,7 @@ class LoadSiteSettings
     public function loadSettings()
     {
         $SettingMapper = ($this->dataMapper)('SettingMapper');
-        $siteSettings = $SettingMapper->find();
+        $siteSettings = $SettingMapper->findSiteSettings();
 
         // Create new multi-dimensional array keyed by the setting category and key
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');

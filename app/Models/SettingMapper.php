@@ -15,6 +15,7 @@ use Piton\ORM\DataMapperAbstract;
  */
 class SettingMapper extends DataMapperAbstract
 {
+    protected $inCategories = '(\'site\',\'contact\',\'social\',\'contactForm\',\'custom\')';
     protected $table = 'setting';
     protected $modifiableColumns = [
         'category',
@@ -33,6 +34,7 @@ class SettingMapper extends DataMapperAbstract
     public function findSiteSettings()
     {
         $this->makeSelect();
+        $this->sql .= ' and category in ' . $this->inCategories;
         $this->sql .= ' order by sort';
 
         return $this->find();
