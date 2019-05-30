@@ -16,13 +16,15 @@
   aside {
     background-color: $primary-light-grey;
     @include padding(1em 0.5em 1em 0);
-    min-width: 150px;
+    min-width: 200px;
     .sidebar-links {
       display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
       align-items: center;
       .nav-link {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         color: $primary-dark;
         letter-spacing: 1px;
         @include padding(0.25em 0.5em);
@@ -43,10 +45,6 @@
   main {
     flex: 1;
   }
-}
-
-// Pages
-#pages {
   .grid-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -56,12 +54,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       h5 {
         @include margin(0);
         @include padding(0);
-      }
-      .fas {
-        color: $primary-md-grey;
       }
     }
     .card-footer {
@@ -70,6 +66,14 @@
       align-items: center;
     }
   }
+  .fa-info-circle {
+    cursor: pointer;
+    color: $primary-md-grey;
+  }
+}
+
+// Pages
+#pages {
 }
 // Collections
 #collections {
@@ -85,57 +89,10 @@
       }
     }
   }
-  .grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-    gap: 1em;
-    .card-title {
-      @include margin(0);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      h5 {
-        @include margin(0);
-        @include padding(0);
-      }
-      .fas {
-        color: $primary-md-grey;
-      }
-    }
-    .card-footer {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
 }
 
 // Media
 #mediaAll {
-  .grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1em;
-    .card-title {
-      @include margin(0);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      h5 {
-        @include margin(0);
-        @include padding(0);
-      }
-      .fas {
-        color: $primary-md-grey;
-      }
-    }
-    .card-footer {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
 }
 #mediaUpload {
 }
