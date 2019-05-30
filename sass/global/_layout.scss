@@ -70,11 +70,15 @@
     cursor: pointer;
     color: $primary-md-grey;
   }
+  .card {
+    border: none;
+    box-shadow: $box-shadow;
+  }
 }
 
 // Pages
-#pages {
-}
+// #pages {
+// }
 // Collections
 #collections {
   .collection-wrapper {
@@ -92,10 +96,10 @@
 }
 
 // Media
-#mediaAll {
-}
-#mediaUpload {
-}
+// #mediaAll {
+// }
+// #mediaUpload {
+// }
 #mediaCategories {
   form {
     display: grid;
@@ -116,169 +120,96 @@
     border-bottom: solid 1px $primary-light-grey;
   }
 }
+/******************************************/
+/********* Detail Pages for Admin *********/
+/******************************************/
 
-//Page Edit
-#editPage {
+#editPage form,
+#collectionDetail form,
+#tools form,
+#users form {
   display: flex;
   flex-flow: row nowrap;
+  max-height: calc(100vh - 56px);
+  overflow: scroll;
   aside,
   main {
     min-height: calc(100vh - 1px);
-    @include padding(1em);
   }
   aside {
-    background-color: $primary-light-grey;
-    @include padding(1em 0.5em 1em 0);
-    // min-width: 225px;
-    .sidebar-links {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      .nav-link {
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-        &:hover {
-          color: var(--primary) !important;
-        }
-      }
-      .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
+    background-color: $primary-md-grey;
+    min-width: 225px;
+    a {
+      letter-spacing: 1px;
+      color: $primary-dark;
+      &:hover {
+        color: $primary-color !important;
       }
     }
   }
   main {
+    background: $primary-light-grey;
+    display: flex;
     flex: 1;
+    overflow: hidden;
+  }
+  .scroll-container {
+    @include margin(0 1em);
+    @include padding(null 1em);
+    background: $primary-light;
+    overflow-y: scroll;
+    position: relative;
+    scroll-behavior: smooth;
+    flex: 1;
+    height: calc(100vh - 75px);
+  }
+  .active {
+    background-color: rgba($primary-color, 0.8) !important;
+    color: $primary-light;
+    @include padding(null 1rem null null);
+    @include border-right-radius(25px);
+    box-shadow: $box-shadow;
+  }
+  a.small-sidebar-text.active {
+    background-color: rgba($primary-color, 0.5) !important;
+    padding-left: 4em !important;
+    margin-left: -1em !important;
+  }
+  .navbar {
+    @include padding(null null null 0);
+  }
+  .two-col-sidebar {
+    @include padding(1em);
+  }
+}
+
+//Page Edit
+#editPage {
+  .block-title-wrapper {
+    @include padding(1em 2em 1em 1em);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card {
+    @include margin(null null 1em null);
   }
 }
 // Collection Details Page
 #collectionDetail {
-  display: flex;
-  flex-flow: row nowrap;
-  aside,
-  main {
-    min-height: calc(100vh - 1px);
-    @include padding(1em);
-  }
-  aside {
-    background-color: $primary-light-grey;
-    @include padding(1em 0.5em 1em 0);
-    // min-width: 225px;
-    .sidebar-links {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      .nav-link {
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-        &:hover {
-          color: var(--primary) !important;
-        }
-      }
-      .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
-      }
-    }
-  }
-  main {
-    flex: 1;
-  }
 }
 // Tools & Settings
 #tools {
-  display: flex;
-  flex-flow: row nowrap;
-  aside,
   main {
-    min-height: calc(100vh - 1px);
-    @include padding(1em);
-  }
-  aside {
-    background-color: $primary-light-grey;
-    @include padding(1em 0.5em 1em 0);
-    // min-width: 225px;
-    .sidebar-links {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      .nav-link {
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-        &:hover {
-          color: var(--primary) !important;
-        }
-      }
-      .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
-      }
+    .active {
+      all: unset;
     }
-  }
-  main {
-    flex: 1;
+    .tab-content {
+      flex: 1;
+      @include padding(1em);
+    }
   }
 }
 // users
 #users {
-  display: flex;
-  flex-flow: row nowrap;
-  aside,
-  main {
-    min-height: calc(100vh - 1px);
-    @include padding(1em);
-  }
-  aside {
-    background-color: $primary-light-grey;
-    @include padding(1em 0.5em 1em 0);
-    // min-width: 225px;
-    .sidebar-links {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      .nav-link {
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-        &:hover {
-          color: var(--primary) !important;
-        }
-      }
-      .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
-      }
-    }
-  }
-  main {
-    flex: 1;
-  }
-}
-
-.card {
-  border: none;
-  box-shadow: $box-shadow;
 }

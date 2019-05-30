@@ -8,74 +8,86 @@
 
 {% macro elementForm(element, blockKey, elementTypeOptions) %}
 
-  {% set arrayKey = element.id ?? uniqueKey() %}
-  {% set elementTypes = getElements() %}
-  {% set enableInput = '' %}
-  {% for e in elementTypes if e.filename == element.definition %}
-    {% set enableInput = e.enableInput %}
-  {% endfor %}
+{% set arrayKey = element.id ?? uniqueKey() %}
+{% set elementTypes = getElements() %}
+{% set enableInput = '' %}
+{% for e in elementTypes if e.filename == element.definition %}
+{% set enableInput = e.enableInput %}
+{% endfor %}
 
 <div class="card jsElementParent" id="page-element-{{ arrayKey }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
-	<input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
-	<div class="card-body">
-  	<div class="form-group input-group w-25">
+  <div class="card-body">
+    <div class="form-group input-group">
       <div class="input-group-prepend">
         <span class="input-group-text">Element Order</span>
       </div>
-  		<input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]" value="{{ element.element_sort|default('1') }}">
-  	</div>
+      <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
+        value="{{ element.element_sort|default('1') }}">
+    </div>
 
-  	<div class="form-group form-inline jsElementType">
+    <div class="form-group form-inline jsElementType">
       <label>Element Type&nbsp;<span class="text-danger">*</span>:&nbsp;</label>
       {% for elem in elementTypes if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]" id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.definition == elem.filename) }} required>
+        <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]"
+          id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
+          {{ checked(element.definition == elem.filename) }} required>
         <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}">{{ elem.elementName }}</label>
       </div>
       {% endfor %}
-  	</div>
+    </div>
 
     <div class="form-group">
       <label>Title</label>
-      <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}" placeholder="Element Title" autocomplete="off">
+      <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
+        placeholder="Element Title" autocomplete="off">
     </div>
 
-  	<div class="form-group">
-  		<label>Content</label>
-  		<textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
-  	</div>
+    <div class="form-group">
+      <label>Content</label>
+      <textarea class="form-control jsMDE" rows="5"
+        name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+    </div>
 
-    <div class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
+    <div
+      class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
       <label>Embedded HTML</label>
       <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
-    <div class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
+    <div
+      class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
       <label>Media</label>
-      <img src="{{ getMediaPath(element.image_path) }}" class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
+      <img src="{{ getMediaPath(element.image_path) }}"
+        class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
       <div class="input-group">
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
-        <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]" value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
+        <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]"
+          value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
       </div>
       <small class="form-text text-muted">Select media file to display.</small>
     </div>
 
-    <div class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
+    <div
+      class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
       <label>Collection</label>
       <select class="form-control" name="element_collection_slug[{{ arrayKey }}]">
         <option value="">- None -</option>
         {% for c in getCollections() %}
-        <option value="{{ c.value }}" {% if c.value == element.collection_slug %}selected{% endif %}>{{ c.name }}</option>
+        <option value="{{ c.value }}" {% if c.value == element.collection_slug %}selected{% endif %}>{{ c.name }}
+        </option>
         {% endfor %}
       </select>
     </div>
 
-    <div class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
+    <div
+      class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
       <label>Gallery</label>
       <select class="form-control" name="element_gallery_id[{{ arrayKey }}]">
         <option value="">- None -</option>
@@ -86,7 +98,8 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-outline-danger btn-sm jsDeleteBlockElement" type="button" data-element-id="{{ element.id }}" title="Delete element.">Delete Element</button>
+      <button class="btn btn-outline-danger btn-sm jsDeleteBlockElement" type="button"
+        data-element-id="{{ element.id }}" title="Delete element.">Delete Element</button>
     </div>
   </div>
 </div>
