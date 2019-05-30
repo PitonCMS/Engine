@@ -1,16 +1,15 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$comment": "Setting Inputs Definition",
-    "defintion": {
-        "description": "Define inputs for custom settings.",
+    "$comment": "Settings Definition for key-value pairs",
+    "definition": {
+        "description": "An array of form inputs for settings.",
         "type": "array",
         "items": {
             "type": "object",
             "properties": {
                 "label": {
                     "description": "Input label text",
-                    "type": "string",
-                    "maxLength": 60
+                    "type": "string"
                 },
                 "key": {
                     "description": "Single camelCase word with only a-z and A-Z characters",
@@ -22,13 +21,12 @@
                     "type": "string"
                 },
                 "inputType": {
-                    "description": "HTML input type: input, select, textarea.",
+                    "description": "HTML input type: input, select, or textarea.",
                     "type": "string",
                     "enum": ["input","select","textarea"]
                 },
                 "help": {
-                    "description": "Form input help text",
-                    "maxLength": 500
+                    "description": "Form input help text, optional"
                 },
                 "options": {
                     "description": "Only for select lists. List of values (saved) and names (readable).",
@@ -37,7 +35,7 @@
                         "type": "object",
                         "properties": {
                             "value": {
-                                "description": "Value to save.",
+                                "description": "Value to save",
                                 "type": "string"
                             },
                             "name": {
@@ -45,7 +43,7 @@
                                 "type": "string"
                             }
                         },
-                        "required": ["value"]
+                        "required": ["value","name"]
                     }
                 }
             },

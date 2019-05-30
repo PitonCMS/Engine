@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "Site settings schema",
+    "type": "object",
+    "properties": {
+        "settings": {
+            "allOf": [
+                {"$ref": "jsonSchemas/settingsDefinitionSchema.json#/definition"},
+                {
+                    "items": {
+                        "properties": {
+                            "category": {
+                                "description": "Setting category group key: site, contact, social, contactForm, or custom",
+                                "type": "string",
+                                "enum": ["site","contact","social","contactForm","custom"]
+                            }
+                        },
+                        "required": ["category"]
+                    }
+                }
+            ]
+        }
+    }
+}

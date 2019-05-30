@@ -72,7 +72,7 @@
             }
         },
         "settings": {
-            "$ref": "jsonSchemas/settingsDefinitionSchema.json#/defintion"
+            "$ref": "jsonSchemas/settingsDefinitionSchema.json#/definition"
         }
     },
     "anyOf": [

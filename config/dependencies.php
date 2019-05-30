@@ -39,8 +39,10 @@ $container['view'] = function ($c) {
         'dd.mm.yyyy' => 'd.m.Y'
         ];
 
-    $twigEnvironment = $view->getEnvironment();
-    $twigEnvironment->getExtension('Twig_Extension_Core')->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
+    if (isset($settings['site']['dateFormat'])) {
+        $twigEnvironment = $view->getEnvironment();
+        $twigEnvironment->getExtension('Twig_Extension_Core')->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
+    }
 
     // Load Twig debugger if in development
     if ($settings['site']['production'] === false) {

@@ -8,6 +8,8 @@
  */
 namespace Piton\Controllers;
 
+use Exception;
+
 /**
  * Admin Setting Controller
  *
@@ -26,17 +28,23 @@ class AdminSettingController extends AdminBaseController
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
-        // Fetch settings from database
-        $allSettings = $settingMapper->findSiteSettings();
+        // Get saved settings from database
+        $savedSettings = $settingMapper->findSiteSettings();
 
-        // Fetch custom settings
-        $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
-        if (null === $customSettings = $json->getJson($jsonFilePath, 'setting')) {
-            $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
-        } else {
-            // Merge saved settings with custom settings
-            $allSettings = $this->mergeSettings($allSettings, $customSettings->settings);
+        // Get seeded PitonCMS settings definition
+        $seededSettingsPath = ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json';
+        if (null === $seededSettings = $json->getJson($seededSettingsPath, 'setting')) {
+            throw new Exception('PitonCMS: Invalid seeded config/settings.json: ' . implode($json->getErrorMessages(), ','));
         }
+
+        // Get custom settings definition
+        $customSettingsPath = ROOT_DIR . 'structure/definitions/customSettings.json';
+        if (null === $customSettings = $json->getJson($customSettingsPath, 'setting')) {
+            $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
+        }
+
+        // Merge saved settings with custom settings
+        $allSettings = $this->mergeSettings($savedSettings, array_merge($seededSettings->settings, $customSettings->settings));
 
         return $this->render('tools/editSettings.html', $allSettings);
     }
@@ -52,40 +60,40 @@ class AdminSettingController extends AdminBaseController
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
-        // Fetch custom settings
-        $jsonFilePath = ROOT_DIR . "structure/definitions/customSettings.json";
-        $customSettings = $json->getJson($jsonFilePath, 'setting');
-        $customSettings = $customSettings->settings;
+        // Fetch settings definitions just so we can get the order of settings defined by the designer
+        $seededSettingsPath = ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json';
+        $customSettingsPath = ROOT_DIR . 'structure/definitions/customSettings.json';
+        $settingDefinition = array_merge(
+            $json->getJson($seededSettingsPath, 'setting')->settings,
+            $json->getJson($customSettingsPath, 'setting')->settings
+        );
 
         // Get $_POST data array
         $allSettings = $this->request->getParsedBody();
 
         // Save each setting
+        $sort = 1;
         foreach ($allSettings['setting_key'] as $key => $row) {
             $setting = $settingMapper->make();
             $setting->id = $allSettings['setting_id'][$key];
 
-            // Check for a custom setting delete
+            // Check for a setting delete flag
             if (isset($allSettings['setting_delete'][$key])) {
                 $settingMapper->delete($setting);
                 continue;
             }
 
             $setting->setting_value = $allSettings['setting_value'][$key];
+            $setting->sort = $sort++;
 
-            // If there is no ID, then this is a new custom setting to save
-            // Import setting information from custom file
+            // If there is no ID, then this is a new setting to save
             if (empty($allSettings['setting_id'][$key])) {
                 // Get custom setting array key for this setting_key for reference
-                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($customSettings, 'key'));
+                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($settingDefinition, 'key'));
 
                 // Populate the new custom setting and save
-                $setting->category = 'custom';
-                $setting->sort_order = 1; // Custom setting display order is based on JSON list order
-                $setting->setting_key = $customSettings[$jsonKey]->key;
-                $setting->input_type = $customSettings[$jsonKey]->inputType;
-                $setting->label = $customSettings[$jsonKey]->label;
-                $setting->help = $customSettings[$jsonKey]->help;
+                $setting->category = $settingDefinition[$jsonKey]->category ?? 'page';
+                $setting->setting_key = $settingDefinition[$jsonKey]->key;
             }
 
             $settingMapper->save($setting);

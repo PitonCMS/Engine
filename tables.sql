@@ -83,12 +83,9 @@ CREATE TABLE IF NOT EXISTS `page_setting` (
 CREATE TABLE IF NOT EXISTS `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
-  `sort_order` int(11) NOT NULL DEFAULT 1,
+  `sort` smallint NOT NULL DEFAULT 1,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
-  `input_type` varchar(20) DEFAULT NULL,
-  `label` varchar(60) DEFAULT NULL,
-  `help` varchar(500) DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int(11) NOT NULL DEFAULT 1,
@@ -162,33 +159,3 @@ INSERT INTO `page_setting` (`page_id`, `setting_key`, `setting_value`, `created_
 VALUES
   (1,'ctaTitle','Read more on Github',1,now(),1,now()),
   (1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now());
-
-INSERT INTO `setting` (`category`, `sort_order`, `setting_key`, `setting_value`, `input_type`, `label`, `help`, `created_by`, `created_date`, `updated_by`, `updated_date`)
-VALUES
-  ('site',1,'theme','default','select','Theme',NULL,1,now(),1,now()),
-  ('site',2,'urlDomainName',NULL,NULL,'Domain Name','Do not include the http(s):// or a trailing slash. For use in generated sitemaps.',1,now(),1,now()),
-  ('site',3,'dateFormat','mm/dd/yyyy','select','Date Format','Select date picker format to use across site.',1,now(),1,now()),
-  ('site',4,'googleWebMaster',NULL,NULL,'Google Webmaster Verification Link',NULL,1,now(),1,now()),
-  ('site',5,'googleAnalytics',NULL,'textarea','Google Analytics Code',NULL,1,now(),1,now()),
-  ('site',6,'statCounter',NULL,'textarea','Stat Counter',NULL,1,now(),1,now()),
-  ('site',7,'siteAuthor','Moritz Media',NULL,'Site Author','Who built this website',1,now(),1,now()),
-  ('site',8,'siteAuthorUrl','https://moritzmedia.com',NULL,'Site Author URL','Author website',1,now(),1,now()),
-  ('site',9,'tinifyApiKey',NULL,'Tinify API Key','Optimize your media files with TinyJPG. Save your API key <a href="https://tinyjpg.com/" target="_blank">https://tinyjpg.com/</a>.',1,now(),1,now()),
-  ('contact',1,'displayName',NULL,NULL,'Display Name',NULL,1,now(),1,now()),
-  ('contact',2,'telephone',NULL,NULL,'Telephone',NULL,1,now(),1,now()),
-  ('contact',3,'mobile',NULL,NULL,'Mobile',NULL,1,now(),1,now()),
-  ('contact',4, 'email', NULL, NULL, 'Email', 'Site email address', 1, now(), 1, now()),
-  ('contact',5,'address1',NULL,NULL,'Address Line 1',NULL,1,now(),1,now()),
-  ('contact',6,'address2',NULL,NULL,'Address Line 2',NULL,1,now(),1,now()),
-  ('contact',7,'address3',NULL,NULL,'Address Line 3',NULL,1,now(),1,now()),
-  ('contact',8,'city',NULL,NULL,'City',NULL,1,now(),1,now()),
-  ('contact',9,'province',NULL,NULL,'State',NULL,1,now(),1,now()),
-  ('contact',10,'postalCode',NULL,NULL,'Postal Code',NULL,1,now(),1,now()),
-  ('contact',11,'country',NULL,NULL,'Country',NULL,1,now(),1,now()),
-  ('contactForm',1, 'contactFormEmail', NULL, NULL, 'Contact Form Email', 'Send contact form submissions to this email.', 1, now(), 1, now()),
-  ('contactForm',2, 'contactFormAcknowledgement', 'Thank You', 'textarea', 'Contact Form Submission Acknowledgement', 'Message to display after the contact form is submitted', 1, now(), 1, now()),
-  ('social',1,'facebookLink','https://www.facebook.com/',NULL,'Facebook Link',NULL,1,now(),1,now()),
-  ('social',2,'twitterLink','https://twitter.com',NULL,'Twitter Link',NULL,1,now(),1,now()),
-  ('social',3,'instagramLink','https://www.instagram.com/',NULL,'Instagram Link',NULL,1,now(),1,now()),
-  ('social',4,'linkedinLink','https://www.linkedin.com/',NULL,'LinkedIn Link',NULL,1,now(),1,now()),
-  ('social',5,'githubLink','https://www.github.com/',NULL,'GitHub Link',NULL,1,now(),1,now());

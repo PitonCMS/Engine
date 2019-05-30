@@ -82,7 +82,6 @@ class Admin extends Base
             new \Twig_SimpleFunction('getThemes', [$this, 'getThemes']),
             new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
             new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
-            new \Twig_SimpleFunction('getSettingOptions', [$this, 'getSettingOptions']),
             new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
             new \Twig_SimpleFunction('getGalleries', [$this, 'getGalleries']),
             new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
@@ -147,31 +146,6 @@ class Admin extends Base
         }
 
         return null;
-    }
-
-    /**
-     * Get Setting Select Options
-     *
-     * Accepts a setting_key string and returns an array of selection options
-     * Limited to: "theme", "dateFormat"
-     * @param string $settingKey Setting key string
-     * @return array
-     */
-    public function getSettingOptions($settingKey)
-    {
-        if ($settingKey === 'theme') {
-            return $this->getThemes();
-        }
-
-        if ($settingKey === 'dateFormat') {
-            return [
-                'mm/dd/yyyy' => 'mm/dd/yyyy',
-                'dd-mm-yyyy' => 'dd-mm-yyyy',
-                'dd.mm.yyyy' => 'dd.mm.yyyy'
-            ];
-        }
-
-        return[];
     }
 
     /**

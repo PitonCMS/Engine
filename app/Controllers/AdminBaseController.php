@@ -84,45 +84,40 @@ class AdminBaseController extends BaseController
         $settingIndex = array_combine(array_column($savedSettings, 'setting_key'), array_keys($savedSettings));
 
         // Loop through defined settings and update with saved values and meta info
-        foreach ($definedSettings as $defKey => $setting) {
+        foreach ($definedSettings as &$setting) {
             if (isset($settingIndex[$setting->key])) {
-                $definedSettings[$defKey]->id = $savedSettings[$settingIndex[$setting->key]]->id;
-                $definedSettings[$defKey]->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
-                $definedSettings[$defKey]->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
-                $definedSettings[$defKey]->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
-                $definedSettings[$defKey]->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
-                $definedSettings[$defKey]->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
+                $setting->id = $savedSettings[$settingIndex[$setting->key]]->id;
+                $setting->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
+                $setting->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
+                $setting->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
+                $setting->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
+                $setting->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
 
                 // Remove saved setting from array parameter now that we have updated the setting definition
                 unset($savedSettings[$settingIndex[$setting->key]]);
             } else {
                 // If a matching saved setting was NOT found, then set default value
-                $definedSettings[$defKey]->setting_value = $definedSettings[$defKey]->value;
+                $setting->setting_value = $setting->value;
             }
 
             // Amend setting keys to what is expected in template
-            $definedSettings[$defKey]->setting_key = $setting->key;
-            $definedSettings[$defKey]->input_type = $definedSettings[$defKey]->inputType;
+            $setting->setting_key = $setting->key;
+            $setting->input_type = $setting->inputType;
 
             // Include select options array
-            if ($definedSettings[$defKey]->inputType === 'select') {
-                $definedSettings[$defKey]->options = array_column($definedSettings[$defKey]->options, 'name', 'value');
+            if ($setting->inputType === 'select') {
+                $setting->options = array_column($setting->options, 'name', 'value');
             }
 
-            // Add setting catagory. Not needed for page settings, but not in the way either
-            $definedSettings[$defKey]->category = 'custom';
-
             // Remove JSON keys to avoid confusion in template
-            unset($definedSettings[$defKey]->key);
-            unset($definedSettings[$defKey]->value);
-            unset($definedSettings[$defKey]->inputType);
+            unset($setting->key);
+            unset($setting->value);
+            unset($setting->inputType);
         }
 
         // Check remaining saved settings for orphaned settings.
         array_walk($savedSettings, function(&$row) use ($pageSetting) {
-            if ($pageSetting || (isset($row->category) && $row->category === 'custom')) {
-                $row->orphaned = true;
-            }
+            $row->orphaned = true;
         });
 
         // Append defined settings to end of saved settings array and return

@@ -18,25 +18,22 @@ class SettingMapper extends DataMapperAbstract
     protected $table = 'setting';
     protected $modifiableColumns = [
         'category',
-        'sort_order',
+        'sort',
         'setting_key',
         'setting_value',
-        'input_type',
-        'label',
-        'help'
     ];
 
     /**
      * Find All Settings
      *
-     * Find all settings, in order of setting category and sort
+     * Find all settings
      * @param void
      * @return array
      */
     public function findSiteSettings()
     {
         $this->makeSelect();
-        $this->sql .= ' order by category, sort_order';
+        $this->sql .= ' order by sort';
 
         return $this->find();
     }

@@ -1,0 +1,60 @@
+{
+    "description": "Seeded PitonCMS admin settings",
+    "settings": [
+        {
+            "category": "site",
+            "label": "Domain Name",
+            "key": "domainName",
+            "value": "",
+            "inputType": "input",
+            "help": "Do not include the http(s):// or a trailing slash. For use in generated sitemaps."
+        },
+        {
+            "category": "site",
+            "label": "Theme",
+            "key": "theme",
+            "value": "default",
+            "inputType": "select",
+            "options": [
+                {"name": "", "value": ""}
+            ]
+        },
+        {
+            "category": "site",
+            "label": "Date Format",
+            "key": "dateFormat",
+            "value": "mm/dd/yyyy",
+            "inputType": "select",
+            "options": [
+                {"name": "mm/dd/yyyy", "value": "mm/dd/yyyy"},
+                {"name": "dd-mm-yyyy", "value": "dd-mm-yyyy"},
+                {"name": "dd.mm.yyyy", "value": "dd.mm.yyyy"}
+            ],
+            "help": "Select date-picker date format preference for your location."
+        },
+        {
+            "category": "site",
+            "label": "Tinify API Key",
+            "key": "tinifyApiKey",
+            "value": "",
+            "inputType": "input",
+            "help": "Optimize your media files with TinyJPG. Save your API key <a href=\"https://tinyjpg.com/\" target=\"_blank\">https://tinyjpg.com/</a>."
+        },
+        {
+            "category": "contact",
+            "label": "Contact Form Email",
+            "key": "contactFormEmail",
+            "value": "",
+            "inputType": "input",
+            "help": "Contact form submissions are sent to this email."
+        },
+        {
+            "category": "contact",
+            "label": "Contact Form Submission Acknowledgement",
+            "key": "contactFormAcknowledgement",
+            "value": "Thank You",
+            "inputType": "textarea",
+            "help": "Message to display after the contact form is submitted."
+        }
+    ]
+}

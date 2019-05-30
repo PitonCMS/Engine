@@ -6,7 +6,7 @@
 {% macro settingInput(setting) %}
   {% import _self as input %}
   {% if setting.input_type == 'select' %}
-    {{ input.selectHtml(setting, getSettingOptions(setting.setting_key)) }}
+    {{ input.selectHtml(setting) }}
   {% elseif setting.input_type == 'textarea' %}
     {{ input.textareaHtml(setting) }}
   {% else %}
@@ -30,7 +30,7 @@
 {% endmacro inputHtml %}
 
 {# Select List Macro #}
-{% macro selectHtml(setting, options) %}
+{% macro selectHtml(setting) %}
   {% import _self as button %}
     {% set arrayKey = setting.id ?? uniqueKey() %}
             <div class="jsSettingParent">
@@ -39,6 +39,7 @@
                 <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[{{ arrayKey }}]">
+                  {% set options = setting.setting_key == 'theme' ? getThemes() : setting.options %}
                   {% for key, option in options %}
                   <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
                   {% endfor %}
