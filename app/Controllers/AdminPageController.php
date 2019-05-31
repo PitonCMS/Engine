@@ -59,7 +59,7 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $json = $this->container->json;
 
         // Fetch page, or create new page
@@ -67,7 +67,7 @@ class AdminPageController extends AdminBaseController
             // Load existing page from database
             $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
-            $page->settings = $pageSettingMapper->findPageSettings($args['id']);
+            $page->settings = $settingMapper->findPageSettings($args['id']);
         } else {
             // Create new page, and get template from query string
             $definionParam = $this->request->getQueryParam('definition');
@@ -178,25 +178,27 @@ class AdminPageController extends AdminBaseController
      */
     protected function savePageSettings(int $pageId)
     {
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
+        // Get dependencies
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
 
         // Save any custom page settings
         if ($this->request->getParsedBodyParam('setting_id')) {
-            foreach ($this->request->getParsedBodyParam('setting_id') as $settingKey => $settingValue) {
-                $setting = $pageSettingMapper->make();
-                $setting->id = $this->request->getParsedBodyParam('setting_id')[$settingKey];
+            foreach ($this->request->getParsedBodyParam('setting_id') as $key => $row) {
+                $setting = $settingMapper->make();
+                $setting->id = $this->request->getParsedBodyParam('setting_id')[$key];
 
                 // Check for a page setting delete
-                if (isset($this->request->getParsedBodyParam('setting_delete')[$settingKey])) {
-                    $pageSettingMapper->delete($setting);
+                if (isset($this->request->getParsedBodyParam('setting_delete')[$key])) {
+                    $settingMapper->delete($setting);
                     continue;
                 }
 
-                $setting->page_id = $pageId;
-                $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$settingKey];
-                $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$settingKey];
+                $setting->reference_id = $pageId;
+                $setting->category = $this->request->getParsedBodyParam('setting_category')[$key];
+                $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$key];
+                $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$key];
 
-                $pageSettingMapper->save($setting);
+                $settingMapper->save($setting);
             }
         }
     }
@@ -264,7 +266,7 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
 
         $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
 
@@ -281,7 +283,7 @@ class AdminPageController extends AdminBaseController
 
             // Delete page elements & page settings
             $pageElementMapper->deleteElementsByPageId($pageId);
-            $pageSettingMapper->deleteByPageId($pageId);
+            $settingMapper->deleteByPageId($pageId);
         }
 
         // Determine redirect path based on whether this was a collection page

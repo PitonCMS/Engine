@@ -43,4 +43,34 @@ class SettingMapper extends DataMapperAbstract
 
         return $this->find();
     }
+
+    /**
+     * Find Page Settings
+     *
+     * Get page level settings
+     * @param  int   $pageId  Page ID
+     * @return mixed          Array | null
+     */
+    public function findPageSettings(int $pageId)
+    {
+        $this->makeSelect();
+        $this->sql .= ' and category = \'page\' and reference_id = ?';
+        $this->bindValues[] = $pageId;
+
+        return $this->find();
+    }
+
+    /**
+     * Delete Page Settings
+     *
+     * @param  int  $pageId Page ID
+     * @return bool
+     */
+    public function deleteByPageId(int $pageId)
+    {
+        $this->sql = "delete from {$this->table} where category = \'page\' and reference_id = ?;";
+        $this->bindValues[] = $pageId;
+
+        return $this->execute();
+    }
 }

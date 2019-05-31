@@ -24,7 +24,7 @@ class FrontController extends FrontBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageSettingMapper = ($this->container->dataMapper)('PageSettingMapper');
+        $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $pageElementMedia = ($this->container->dataMapper)('PageElementMediaMapper');
 
         if (isset($args['slug2'])) {
@@ -44,7 +44,7 @@ class FrontController extends FrontBaseController
         $page->blocks = $this->buildElementsByBlock($pageElementMedia->findElementsByPageId($page->id));
 
         // Get page settings
-        $page->settings = $this->buildPageSettings($pageSettingMapper->findPageSettings($page->id));
+        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings($page->id));
 
         return $this->render($page->template, $page);
     }
