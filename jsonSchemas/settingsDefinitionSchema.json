@@ -7,6 +7,11 @@
         "items": {
             "type": "object",
             "properties": {
+                "category": {
+                    "description": "Setting category group key: site, contact, social",
+                    "type": "string",
+                    "enum": ["site","contact","social","piton","page"]
+                },
                 "label": {
                     "description": "Input label text",
                     "type": "string"
@@ -47,7 +52,7 @@
                     }
                 }
             },
-            "required": ["label","key"]
+            "required": ["label","key","category"]
         }
     }
 }

@@ -43,14 +43,14 @@ class AdminSettingController extends AdminBaseController
         $customSettingsPath = ROOT_DIR . 'structure/definitions/siteSettings.json';
         if (null === $customSettings = $json->getJson($customSettingsPath, 'setting')) {
             $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
+        } else {
+            // Merge saved settings with custom settings
+            $data['settings'] = $this->mergeSettings(
+                $savedSettings,
+                array_merge($seededSettings->settings, $customSettings->settings),
+                $category
+            );
         }
-
-        // Merge saved settings with custom settings
-        $data['settings'] = $this->mergeSettings(
-            $savedSettings,
-            array_merge($seededSettings->settings, $customSettings->settings),
-            $category
-        );
 
         // Set category flag in page to help with redirects
         $data['category'] = $category;

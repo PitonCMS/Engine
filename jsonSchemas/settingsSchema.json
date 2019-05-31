@@ -3,22 +3,6 @@
     "$comment": "Site settings schema",
     "type": "object",
     "properties": {
-        "settings": {
-            "allOf": [
-                {"$ref": "jsonSchemas/settingsDefinitionSchema.json#/definition"},
-                {
-                    "items": {
-                        "properties": {
-                            "category": {
-                                "description": "Setting category group key: site, contact, social",
-                                "type": "string",
-                                "enum": ["site","contact","social"]
-                            }
-                        },
-                        "required": ["category"]
-                    }
-                }
-            ]
-        }
+        "settings": {"$ref": "jsonSchemas/settingsDefinitionSchema.json#/definition"}
     }
 }
