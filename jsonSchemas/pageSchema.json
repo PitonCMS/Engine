@@ -92,5 +92,20 @@
             }
         }
     ],
+    "oneOf": [
+        {
+            "properties": {
+                "settings": {
+                    "items": {
+                        "properties": {
+                            "category": {
+                                "pattern": "^(?:page)$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
     "required": ["templateName","templateDescription","templateFile","templateType"]
 }
