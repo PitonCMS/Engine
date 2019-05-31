@@ -127,13 +127,7 @@
       </div>
       <div class="form-group-wrapper">
         {% for setting in page.settings %}
-        {% if setting.input_type == 'select' %}
-        {{ settingForm.selectHtml(setting, setting.options) }}
-        {% elseif setting.input_type == 'textarea' %}
-        {{ settingForm.textareaHtml(setting) }}
-        {% else %}
-        {{ settingForm.inputHtml(setting) }}
-        {% endif %}
+        {{ settingForm.settingInput(setting) }}
         {% endfor %}
       </div>
       {% endif %}
