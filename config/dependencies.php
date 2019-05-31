@@ -18,7 +18,7 @@ $container['view'] = function ($c) {
     $templatePaths['admin'] = ROOT_DIR . 'vendor/pitoncms/engine/templates/';
 
     $view = new Slim\Views\Twig($templatePaths, [
-        'cache' => ROOT_DIR . 'twigcache',
+        'cache' => ROOT_DIR . 'cache/twig',
         'debug' => !$settings['site']['production'],
         'autoescape' => false,
     ]);
