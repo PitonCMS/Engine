@@ -103,6 +103,7 @@ class AdminBaseController extends BaseController
             } else {
                 // If a matching saved setting was NOT found, then set default value
                 $setting->setting_value = $setting->value;
+                $setting->status = 'new';
             }
 
             // Amend setting keys to what is expected in template
@@ -122,7 +123,7 @@ class AdminBaseController extends BaseController
 
         // Check remaining saved settings for orphaned settings
         array_walk($savedSettings, function(&$row) {
-            $row->orphaned = true;
+            $row->status = 'orphaned';
         });
 
         // Append defined settings to end of saved settings array and return

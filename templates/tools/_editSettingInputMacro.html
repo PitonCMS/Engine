@@ -16,11 +16,11 @@
 
 {# Input Macro #}
 {% macro inputHtml(setting) %}
-  {% import _self as button %}
+  {% import _self as status %}
     {% set arrayKey = setting.id ?? uniqueKey() %}
             <div class="jsSettingParent">
               <div class="form-group">
-                <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+                <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
                 <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
                 <input type="text" class="form-control" name="setting_value[{{ arrayKey }}]" value="{{ setting.setting_value }}" autocomplete="off">
@@ -31,11 +31,11 @@
 
 {# Select List Macro #}
 {% macro selectHtml(setting) %}
-  {% import _self as button %}
+  {% import _self as status %}
     {% set arrayKey = setting.id ?? uniqueKey() %}
             <div class="jsSettingParent">
               <div class="form-group">
-                <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+                <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
                 <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
                 <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
                 <select class="form-control" name="setting_value[{{ arrayKey }}]">
@@ -50,11 +50,11 @@
 
 {# Textarea Macro #}
 {% macro textareaHtml(setting) %}
-  {% import _self as button %}
+  {% import _self as status %}
     {% set arrayKey = setting.id ?? uniqueKey() %}
             <div class="jsSettingParent">
                <div class="form-group">
-                  <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+                  <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
                   <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
                   <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
                   <textarea class="form-control" rows="3" name="setting_value[{{ arrayKey }}]">{{ setting.setting_value }}</textarea>
@@ -63,14 +63,16 @@
             </div>
 {% endmacro textareaHtml %}
 
-{# Orphaned Setting #}
-{% macro orphaned(status, key) %}
-  {% if status %}
+{# Setting Status Flag #}
+{% macro flag(status, key) %}
+  {% if status == 'orphaned' %}
     <span class="badge badge-danger">Orphaned</span>
     <div class="form-check form-check-inline">
       <input class="form-check-input" name="setting_delete[{{ key }}]" type="checkbox" value="delete" title="Deletes on save">
       <label class="text-danger mb-0">Delete?</label>
     </div>
+  {% elseif status == 'new' %}
+    <span class="badge badge-success">New</span>
   {% endif %}
-{% endmacro orphaned %}
+{% endmacro flag %}
 
