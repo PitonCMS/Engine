@@ -26,6 +26,21 @@ class MediaMapper extends DataMapperAbstract
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Media';
 
     /**
+     * Find All Media
+     *
+     * Return all media records
+     * @param  void
+     * @return array
+     */
+    public function findAllMedia()
+    {
+        $this->makeSelect();
+        $this->sql .= ' order by created_date desc';
+
+        return $this->find();
+    }
+
+    /**
      * Find Media By Category ID
      *
      * Find media by category ID

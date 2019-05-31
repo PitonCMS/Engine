@@ -27,7 +27,7 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        $data['media'] = $mediaMapper->find();
+        $data['media'] = $mediaMapper->findAllMedia();
         $data['categories'] = $mediaCategoryMapper->findCategories();
         $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments();
 
