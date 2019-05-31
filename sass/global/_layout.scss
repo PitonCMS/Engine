@@ -1,5 +1,4 @@
 #adminHome,
-#releaseNotes,
 #pages,
 #collections,
 #mediaAll,
@@ -34,7 +33,7 @@
         align-items: center;
         color: $primary-dark;
         letter-spacing: 1px;
-        @include padding(0.25em 1.5em);
+        @include padding(0.25em 0.5em);
         @include margin(null null null 0);
         &:hover {
           color: var(--primary) !important;
@@ -84,38 +83,40 @@
   }
 }
 
-// Pages
-// #pages {
-// }
+// Release Notes
+#releaseNotes {
+  display: flex;
+  aside,
+  main {
+    @include padding(1em);
+    height: calc(100vh - 56px);
+  }
+  aside {
+    min-width: 150px;
+    background-color: $primary-md-grey;
+  }
+  main {
+    @include margin(null 1em);
+    .block-content {
+      width: 75ch;
+    }
+  }
+}
+
 // Collections
 #collections {
   .card .card {
     box-shadow: none;
     border: 1px solid rgba(black, 0.125);
   }
-  // .collection-wrapper {
-  //   @include padding(1em 0.5em);
-  //   @include margin(null null 0.5em null);
-  //   border-radius: $border-radius;
-  //   box-shadow: $box-shadow;
-  //   background-color: $primary-light-grey;
-  //   .collection-title {
-  //     border-bottom: solid 1px $primary-light-grey;
-  //     @include margin(null null 0.5em null);
-  //     @include padding(null null 0.25em null);
+
   h3 {
     @include margin(null null 0);
     @include padding(null null 0);
   }
 }
-//   }
-// }
 
 // Media
-// #mediaAll {
-// }
-// #mediaUpload {
-// }
 #mediaCategories {
   form {
     display: grid;
@@ -128,6 +129,7 @@
     }
   }
 }
+
 // Messages
 #messages {
   .jsMessageWrap {
@@ -155,6 +157,7 @@
     }
   }
 }
+
 /******************************************/
 /********* Detail Pages for Admin *********/
 /******************************************/
@@ -249,9 +252,7 @@
     @include margin(null null 1em null);
   }
 }
-// Collection Details Page
-// #collectionDetail {
-// }
+
 // Tools & Settings
 #tools form {
   main {
