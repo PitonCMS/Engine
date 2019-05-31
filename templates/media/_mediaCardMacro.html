@@ -6,7 +6,7 @@
 #}
 
 {% macro mediaCard(media, categories, editable = false) %}
-{% import '@admin/media/_mediaSelectCategoryMacro.html' as catForm %}
+{% import '@admin/media/_mediaCategoryCheckboxMacro.html' as categoryInput %}
 <div class="card jsMediaCard">
   <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}"
     data-source="{{ getMediaPath(media.filename) }}">
@@ -34,7 +34,7 @@
       </div>
 
       {% for c in categories %}
-      {{ catForm.categorySelect(c, media.id) }}
+      {{ categoryInput.checkbox(c, media.id) }}
       {% endfor %}
 
       <div class="form-group">

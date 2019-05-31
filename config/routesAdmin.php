@@ -99,11 +99,6 @@ $app->group('/admin', function () {
             return (new AdminMediaController($this))->getMedia();
         })->setName('adminGetMedia');
 
-        // Upload Form
-        $this->get('/form', function ($args) {
-            return (new AdminMediaController($this))->uploadMediaForm();
-        })->setName('adminFileUploadForm');
-
         // File upload
         $this->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadMedia();

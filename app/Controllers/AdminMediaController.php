@@ -20,18 +20,6 @@ use \RecursiveIteratorIterator;
 class AdminMediaController extends AdminBaseController
 {
     /**
-     * Upload Media Form
-     *
-     */
-    public function uploadMediaForm()
-    {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $data['categories'] = $mediaCategoryMapper->findCategories();
-
-        return $this->render('media/mediaUploadForm.html', $data);
-    }
-
-    /**
      * Show All Media
      */
     public function showMedia()
@@ -171,7 +159,7 @@ HTML;
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
 
-        return $this->redirect('adminFileUploadForm');
+        return $this->redirect('adminShowMedia');
     }
 
     /**
