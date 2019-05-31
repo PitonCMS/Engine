@@ -1,5 +1,5 @@
 {#
-  Setting Input Macros
+  Setting Form Input Macros
 #}
 
 {# Wrapper Macro #}
@@ -16,11 +16,11 @@
 
 {# Input Macro #}
 {% macro inputHtml(setting) %}
-{% import _self as button %}
+{% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
 <div class="card jsSettingParent">
   <div class="card-header">
-    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
@@ -36,11 +36,11 @@
 
 {# Select List Macro #}
 {% macro selectHtml(setting) %}
-{% import _self as button %}
+{% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
 <div class="card jsSettingParent">
   <div class="card-header">
-    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
@@ -59,11 +59,11 @@
 
 {# Textarea Macro #}
 {% macro textareaHtml(setting) %}
-{% import _self as button %}
+{% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
 <div class="card jsSettingParent">
   <div class="card-header">
-    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
@@ -79,14 +79,16 @@
 </div>
 {% endmacro textareaHtml %}
 
-{# Orphaned Setting #}
-{% macro orphaned(status, key) %}
-{% if status %}
+{# Setting Status #}
+{% macro flag(status, key) %}
+{% if status == 'orphaned' %}
 <span class="badge badge-danger">Orphaned</span>
 <div class="form-check form-check-inline">
   <input class="form-check-input" name="setting_delete[{{ key }}]" type="checkbox" value="delete"
     title="Deletes on save">
   <label class="text-danger mb-0">Delete?</label>
 </div>
+{% elseif status == 'new' %}
+<span class="badge badge-success">New</span>
 {% endif %}
-{% endmacro orphaned %}
+{% endmacro flag %}
