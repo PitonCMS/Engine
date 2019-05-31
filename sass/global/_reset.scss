@@ -15,6 +15,6 @@ body {
 body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
-  @include margin(56px null null null);
+  @include padding(56px null null null);
   position: relative;
 }

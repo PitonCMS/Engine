@@ -5,18 +5,25 @@
 #mediaAll,
 #mediaUpload,
 #mediaCategories,
-#messages {
+#messages,
+#tools form,
+#users form {
   display: flex;
   flex-flow: row nowrap;
   aside,
   main {
-    min-height: calc(100vh - 1px);
+    min-height: calc(100vh - 56px);
     @include padding(1em);
   }
   aside {
-    background-color: $primary-light-grey;
+    background-color: $primary-md-grey;
     @include padding(1em 0.5em 1em 0);
     min-width: 200px;
+    position: relative;
+  }
+  .aside-inner {
+    position: sticky;
+    top: 72px;
     .sidebar-links {
       display: flex;
       align-items: center;
@@ -27,7 +34,7 @@
         align-items: center;
         color: $primary-dark;
         letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
+        @include padding(0.25em 1.5em);
         @include margin(null null null 0);
         &:hover {
           color: var(--primary) !important;
@@ -36,12 +43,13 @@
       .active {
         background-color: rgba($primary-color, 0.5) !important;
         color: $primary-light;
-        @include padding(null 1rem null null);
+        // @include padding(null 1rem null null);
         @include border-right-radius(30px);
         box-shadow: $box-shadow;
       }
     }
   }
+
   main {
     flex: 1;
   }
@@ -68,7 +76,7 @@
   }
   .fa-info-circle {
     cursor: pointer;
-    color: $primary-md-grey;
+    color: $primary-dark-grey;
   }
   .card {
     border: none;
@@ -81,19 +89,27 @@
 // }
 // Collections
 #collections {
-  .collection-wrapper {
-    @include padding(1em 0.5em);
-    .collection-title {
-      border-bottom: solid 1px $primary-light-grey;
-      @include margin(null null 0.5em null);
-      @include padding(null null 0.25em null);
-      h3 {
-        @include margin(null null 0);
-        @include padding(null null 0);
-      }
-    }
+  .card .card {
+    box-shadow: none;
+    border: 1px solid rgba(black, 0.125);
+  }
+  // .collection-wrapper {
+  //   @include padding(1em 0.5em);
+  //   @include margin(null null 0.5em null);
+  //   border-radius: $border-radius;
+  //   box-shadow: $box-shadow;
+  //   background-color: $primary-light-grey;
+  //   .collection-title {
+  //     border-bottom: solid 1px $primary-light-grey;
+  //     @include margin(null null 0.5em null);
+  //     @include padding(null null 0.25em null);
+  h3 {
+    @include margin(null null 0);
+    @include padding(null null 0);
   }
 }
+//   }
+// }
 
 // Media
 // #mediaAll {
@@ -115,9 +131,28 @@
 // Messages
 #messages {
   .jsMessageWrap {
-    @include margin(null null 1.5em null);
-    @include padding(null null 1.5em null);
-    border-bottom: solid 1px $primary-light-grey;
+    @include margin(null null 1em null);
+    display: flex;
+    border-radius: $border-radius;
+  }
+  .message-wrapper {
+    flex: 2;
+    @include padding(0.5em);
+    @include margin(null 0.25em null null);
+    background: $primary-light-grey;
+    box-shadow: $box-shadow;
+  }
+  .button-wrapper {
+    @include padding(0.5em);
+    box-shadow: $box-shadow;
+    background: $primary-light-grey;
+  }
+  .button-wrapper form {
+    display: flex;
+    flex-flow: column nowrap;
+    button {
+      @include margin(0.5em null);
+    }
   }
 }
 /******************************************/
@@ -126,7 +161,6 @@
 
 #editPage form,
 #collectionDetail form,
-#tools form,
 #users form {
   display: flex;
   flex-flow: row nowrap;
@@ -134,11 +168,16 @@
   overflow: scroll;
   aside,
   main {
-    min-height: calc(100vh - 1px);
+    min-height: calc(100vh - 56px);
   }
   aside {
     background-color: $primary-md-grey;
     min-width: 225px;
+    position: relative;
+    .aside-inner {
+      position: sticky;
+      top: 0px;
+    }
     a {
       letter-spacing: 1px;
       color: $primary-dark;
@@ -199,15 +238,10 @@
 #collectionDetail {
 }
 // Tools & Settings
-#tools {
-  main {
-    .active {
-      all: unset;
-    }
-    .tab-content {
-      flex: 1;
-      @include padding(1em);
-    }
+#tools form {
+  .grid-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-gap: 1em;
   }
 }
 // users

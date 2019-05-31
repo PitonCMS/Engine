@@ -36,23 +36,24 @@
 {% macro message(m) %}
 
 <div class="jsMessageWrap">
-
-    <p>
-        <a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
-        {{ m.createdDate|date('d F Y  h:i a') }}
-    </p>
-    {{ m.message|nl2br }}
-
-    <form class="mt-3" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
-        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-        <input type="hidden" name="id" value="{{ m.id }}">
-        <button class="btn btn-{% if m.isRead == 'Y' %}{% endif %}primary btn-sm" type="submit" name="button"
-            value="toggle" data-is-read="{{ m.isRead }}">Mark as
-            {% if m.isRead == 'Y' %}Unread{% else %}Read
-            {% endif %}
-        </button>
-        <button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit"
-            value="delete">Delete</button>
-    </form>
+    <div class="message-wrapper">
+        <p><a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
+            {{ m.createdDate|date('d F Y  h:i a') }}
+        </p>
+        {{ m.message|nl2br }}
+    </div>
+    <div class="button-wrapper">
+        <form class="" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
+            <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+            <input type="hidden" name="id" value="{{ m.id }}">
+            <button class="btn btn-{% if m.isRead == 'Y' %}{% endif %}primary btn-sm" type="submit" name="button"
+                value="toggle" data-is-read="{{ m.isRead }}">Mark as
+                {% if m.isRead == 'Y' %}Unread{% else %}Read
+                {% endif %}
+            </button>
+            <button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit"
+                value="delete">Delete</button>
+        </form>
+    </div>
 </div>
 {% endmacro %}

@@ -17,17 +17,18 @@
   {% endblock sidebar %}
 
   {% block content %}
-  <div class="tab-content">
-      {% for setting in page.settings %}
-      {{ settingForm.settingInput(setting) }}
-      {% endfor %}
+  <div class="grid-wrapper">
+    {% for setting in page.settings %}
+    {{ settingForm.settingInput(setting) }}
+    {% endfor %}
   </div>
 
   <div class="two-col-sidebar">
     <!-- Control Buttons -->
     <div class="two-col-sidebar-inner">
       <div class="button-group">
-        <a class="btn btn-warning mb-2" href="{{ pathFor('adminSettings', {'cat': page.category ?? 'site' }) }}">Cancel</a>
+        <a class="btn btn-warning mb-2"
+          href="{{ pathFor('adminSettings', {'cat': page.category ?? 'site' }) }}">Cancel</a>
         <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
       </div>
     </div>

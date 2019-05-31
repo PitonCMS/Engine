@@ -41,7 +41,8 @@
 
       <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
         {% for element in page.elements if element.block_key == block.key %}
-        <a class="nav-link ml-3 small-sidebar-text  " href="#page-element-{{ element.id }}">{{ element.title }}</a>
+        <a class="nav-link ml-3 small-sidebar-text  "
+          href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
         {% endfor %}
       </nav>
       {% endfor %}

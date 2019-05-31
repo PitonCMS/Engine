@@ -45,20 +45,26 @@
 {% elseif page.type == 'collection' %}
 
 {% for c in page.collectionNames %}
-<div class="collection-wrapper">
-  <div class="collection-title">
+<!-- <div class="collection-wrapper"> -->
+<div class="card mb-3">
+  <div class="card-header">
     <h3>{{ c.name }}</h3>
   </div>
 
-  <div class="grid-wrapper">
-    {% for p in page.pages if p.collection_slug == c.value %}
-    {% include "@admin/pages/_pageCard.html" %}
-    {% else %}
-    <h5>No Pages Found</h5>
-    {% endfor %}
+  <div class="card-body">
+    <div class="grid-wrapper">
+      {% for p in page.pages if p.collection_slug == c.value %}
+      {% include "@admin/pages/_pageCard.html" %}
+      {% else %}
+      <h5>No Pages Found</h5>
+      {% endfor %}
+    </div>
   </div>
-  <a class="muted-text" href="#">See All {{ c.name }}</a>
+  <div class="card-footer">
+    <a class="muted-text" href="#">See All {{ c.name }}</a>
+  </div>
 </div>
+<!-- </div> -->
 
 {% endfor %}
 
