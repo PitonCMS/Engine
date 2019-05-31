@@ -22,6 +22,7 @@
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">
@@ -42,6 +43,7 @@
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">
@@ -65,6 +67,7 @@
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
     <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">

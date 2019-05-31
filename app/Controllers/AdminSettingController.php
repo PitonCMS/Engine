@@ -67,47 +67,30 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $json = $this->container->json;
-
-        // Fetch settings definitions just so we can get the order of settings defined by the designer
-        $settingDefinition = array_merge(
-            $json->getJson(ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json', 'setting')->settings,
-            $json->getJson(ROOT_DIR . 'structure/definitions/siteSettings.json', 'setting')->settings
-        );
 
         // Get $_POST data array
-        $allSettings = $this->request->getParsedBody();
+        $postSettings = $this->request->getParsedBody();
 
         // Save each setting
-        $sort = 1;
-        foreach ($allSettings['setting_key'] as $key => $row) {
+        foreach ($postSettings['setting_key'] as $key => $row) {
             $setting = $settingMapper->make();
-            $setting->id = $allSettings['setting_id'][$key];
+            $setting->id = $postSettings['setting_id'][$key];
 
             // Check for a setting delete flag
-            if (isset($allSettings['setting_delete'][$key])) {
+            if (isset($postSettings['setting_delete'][$key])) {
                 $settingMapper->delete($setting);
                 continue;
             }
 
-            $setting->setting_value = $allSettings['setting_value'][$key];
-            $setting->sort = $sort++;
-
-            // If there is no ID, then this is a new setting to save
-            if (empty($allSettings['setting_id'][$key])) {
-                // Get custom setting array key for this setting_key for reference
-                $jsonKey = array_search($allSettings['setting_key'][$key], array_column($settingDefinition, 'key'));
-
-                // Populate the new custom setting and save
-                $setting->category = $settingDefinition[$jsonKey]->category ?? 'page';
-                $setting->setting_key = $settingDefinition[$jsonKey]->key;
-            }
+            $setting->category = $postSettings['setting_category'][$key];
+            $setting->setting_key = $postSettings['setting_key'][$key];
+            $setting->setting_value = $postSettings['setting_value'][$key];
 
             $settingMapper->save($setting);
         }
 
         // Redirect back to list of settings
-        $routeCategory = $this->request->getParsedBodyParam('category') ?? 'site';
+        $routeCategory = $this->request->getParsedBodyParam('category');
         return $this->redirect('adminSettings', ['cat' => $routeCategory]);
     }
 }

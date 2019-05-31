@@ -28,7 +28,7 @@
     <div class="two-col-sidebar-inner">
       <div class="button-group">
         <a class="btn btn-warning mb-2"
-          href="{{ pathFor('adminSettings', {'cat': page.category ?? 'site' }) }}">Cancel</a>
+          href="{{ pathFor('adminSettings', {'cat': page.category|default('site') }) }}">Cancel</a>
         <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
       </div>
     </div>

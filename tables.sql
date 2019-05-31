@@ -84,7 +84,6 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
   `reference_id` int(11) DEFAULT NULL,
-  `sort` smallint NOT NULL DEFAULT 1,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT 1,
