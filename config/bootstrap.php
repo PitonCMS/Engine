@@ -38,6 +38,7 @@ return call_user_func(
             ini_set('display_errors', 'Off');
             error_reporting(0);
             $config['displayErrorDetails'] = false;
+            $config['routerCacheFile'] = ROOT_DIR . 'cache/routerCache.php';
         } else {
             // Development
             error_reporting(-1);
