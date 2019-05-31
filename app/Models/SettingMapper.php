@@ -68,7 +68,7 @@ class SettingMapper extends DataMapperAbstract
      */
     public function deleteByPageId(int $pageId)
     {
-        $this->sql = "delete from {$this->table} where category = \'page\' and reference_id = ?;";
+        $this->sql = "delete from {$this->table} where category = 'page' and reference_id = ?;";
         $this->bindValues[] = $pageId;
 
         return $this->execute();
