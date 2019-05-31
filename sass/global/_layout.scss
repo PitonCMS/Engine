@@ -202,6 +202,21 @@
     flex: 1;
     height: calc(100vh - 75px);
   }
+  .two-col-sidebar {
+    background-color: $primary-md-grey;
+    height: 100%;
+    position: relative;
+    .two-col-sidebar-inner {
+      @include padding(1em);
+      position: sticky;
+      top: 0;
+
+      .button-group {
+        display: flex;
+        flex-flow: column nowrap;
+      }
+    }
+  }
   .active {
     background-color: rgba($primary-color, 0.8) !important;
     color: $primary-light;
@@ -235,15 +250,72 @@
   }
 }
 // Collection Details Page
-#collectionDetail {
-}
+// #collectionDetail {
+// }
 // Tools & Settings
 #tools form {
-  .grid-wrapper {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    grid-gap: 1em;
+  main {
+    @include padding(0);
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+
+    .grid-wrapper {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      grid-gap: 1em;
+      @include padding(1em);
+    }
+    .two-col-sidebar {
+      background-color: $primary-md-grey;
+      height: 100%;
+      position: relative;
+      .two-col-sidebar-inner {
+        @include padding(1em 1.5em);
+        position: sticky;
+        top: 72px;
+        .button-group {
+          display: flex;
+          flex-flow: column nowrap;
+        }
+      }
+    }
   }
 }
 // users
-#users {
+#users form {
+  main {
+    @include padding(0);
+    display: flex;
+    .form-wrapper {
+      @include padding(1em);
+      flex: 1;
+      .user-card {
+        @include margin(null null 1.5em null);
+        input {
+          @include padding(1em);
+          border-radius: $border-radius;
+        }
+      }
+    }
+    .two-col-sidebar {
+      background-color: $primary-md-grey;
+      height: 100%;
+      position: relative;
+      .two-col-sidebar-inner {
+        @include padding(1em 1.5em);
+        position: sticky;
+        top: 0;
+        .button-group {
+          display: flex;
+          flex-flow: column nowrap;
+          button,
+          a {
+            @include margin(null null 1em null);
+          }
+        }
+      }
+    }
+  }
 }
