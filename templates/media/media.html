@@ -55,25 +55,29 @@
           <div class="form-group">
             <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
           </div>
-          </form>
-      </div>
-      <div class="modal-footer">
-          {% if not site.settings.tinifyApiKey %}
-          <p class="small">
-            PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to automatically optimize
-            your media files for the web. To use TinyJPG with PitonCMS, go to <a href="https://tinyjpg.com/developers"
-              target="_blank">https://tinyjpg.com/developers</a> and enter your name and email address to receive an API
-            key. Save this key to <a href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site > Tinify API Key</a>.
-            TinyJPG has a generous free plan up to 500 transformations per month.
+        </form>
+        {% if not site.settings.tinifyApiKey %}
+        <div class="p-2 mb-0 bg-warning">
+          <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
+            automatically optimize your media files for the web. To use TinyJPG with PitonCMS, go to
+
+            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>
+
+            Enter your name and email address to receive an API key. Save this key to <a
+              href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
+              Tinify
+              API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
           </p>
-          {% endif %}
-          <hr>
-          <p class="lead">Select a file to upload. You can assign it as featured media and/or assign the image to a
-            gallery.
-            Giving your picture a caption will provide alt text.</p>
-          <p class="lead">The upload and conversion process of your images will take some time depending upon your browser
-            and
-            internet speed.</p>
+        </div>
+        <hr>
+        {% endif %}
+
+        <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
+          gallery.
+          Giving your picture a caption will provide alt text.</p>
+        <p>The upload and conversion process of your images will take some time depending upon your browser
+          and
+          internet speed.</p>
       </div>
     </div>
   </div>
