@@ -4,73 +4,89 @@
 
 {# Wrapper Macro #}
 {% macro settingInput(setting) %}
-  {% import _self as input %}
-  {% if setting.input_type == 'select' %}
-    {{ input.selectHtml(setting) }}
-  {% elseif setting.input_type == 'textarea' %}
-    {{ input.textareaHtml(setting) }}
-  {% else %}
-    {{ input.inputHtml(setting) }}
-  {% endif %}
+{% import _self as input %}
+{% if setting.input_type == 'select' %}
+{{ input.selectHtml(setting) }}
+{% elseif setting.input_type == 'textarea' %}
+{{ input.textareaHtml(setting) }}
+{% else %}
+{{ input.inputHtml(setting) }}
+{% endif %}
 {% endmacro settingInput %}
 
 {# Input Macro #}
 {% macro inputHtml(setting) %}
-  {% import _self as button %}
-    {% set arrayKey = setting.id ?? uniqueKey() %}
-            <div class="jsSettingParent">
-              <div class="form-group">
-                <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
-                <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-                <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
-                <input type="text" class="form-control" name="setting_value[{{ arrayKey }}]" value="{{ setting.setting_value }}" autocomplete="off">
-                <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-                </div>
-            </div>
+{% import _self as button %}
+{% set arrayKey = setting.id ?? uniqueKey() %}
+<div class="card jsSettingParent">
+  <div class="card-header">
+    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+  </div>
+  <div class="card-body">
+    <div class="card-text">
+      <input type="text" class="form-control" name="setting_value[{{ arrayKey }}]" value="{{ setting.setting_value }}"
+        autocomplete="off">
+      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+    </div>
+  </div>
+</div>
 {% endmacro inputHtml %}
 
 {# Select List Macro #}
 {% macro selectHtml(setting) %}
-  {% import _self as button %}
-    {% set arrayKey = setting.id ?? uniqueKey() %}
-            <div class="jsSettingParent">
-              <div class="form-group">
-                <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
-                <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-                <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
-                <select class="form-control" name="setting_value[{{ arrayKey }}]">
-                  {% for key, option in setting.options %}
-                  <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
-                  {% endfor %}
-                </select>
-                <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-              </div>
-            </div>
+{% import _self as button %}
+{% set arrayKey = setting.id ?? uniqueKey() %}
+<div class="card jsSettingParent">
+  <div class="card-header">
+    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+  </div>
+  <div class="card-body">
+    <div class="card-text">
+      <select class="form-control" name="setting_value[{{ arrayKey }}]">
+        {% for key, option in setting.options %}
+        <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+    </div>
+  </div>
+</div>
 {% endmacro selectHtml %}
 
 {# Textarea Macro #}
 {% macro textareaHtml(setting) %}
-  {% import _self as button %}
-    {% set arrayKey = setting.id ?? uniqueKey() %}
-            <div class="jsSettingParent">
-               <div class="form-group">
-                  <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
-                  <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-                  <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
-                  <textarea class="form-control" rows="3" name="setting_value[{{ arrayKey }}]">{{ setting.setting_value }}</textarea>
-                  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-                </div>
-            </div>
+{% import _self as button %}
+{% set arrayKey = setting.id ?? uniqueKey() %}
+<div class="card jsSettingParent">
+  <div class="card-header">
+    <label>{{ setting.label }}</label> {{ button.orphaned(setting.orphaned, arrayKey) }}
+    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+  </div>
+  <div class="card-body">
+    <div class="card-text">
+      <textarea class="form-control" rows="3"
+        name="setting_value[{{ arrayKey }}]">{{ setting.setting_value }}</textarea>
+      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+    </div>
+
+  </div>
+
+</div>
 {% endmacro textareaHtml %}
 
 {# Orphaned Setting #}
 {% macro orphaned(status, key) %}
-  {% if status %}
-    <span class="badge badge-danger">Orphaned</span>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" name="setting_delete[{{ key }}]" type="checkbox" value="delete" title="Deletes on save">
-      <label class="text-danger mb-0">Delete?</label>
-    </div>
-  {% endif %}
+{% if status %}
+<span class="badge badge-danger">Orphaned</span>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" name="setting_delete[{{ key }}]" type="checkbox" value="delete"
+    title="Deletes on save">
+  <label class="text-danger mb-0">Delete?</label>
+</div>
+{% endif %}
 {% endmacro orphaned %}
-
