@@ -23,7 +23,7 @@ class AdminController extends AdminBaseController
         $json = $this->container->json;
 
         // Get Piton Engine version from composer.lock
-        if (null === $definition = $json->getJson(ROOT_DIR . '/composer.lock')) {
+        if (null === $definition = $json->getJson(ROOT_DIR . 'composer.lock')) {
             $this->setAlert('danger', 'Error Reading composer.lock', $json->getErrorMessages());
         }
 
