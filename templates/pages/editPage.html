@@ -188,7 +188,7 @@
 
         {% if page.id %}
         <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
-          {% if page.slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+          {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
         {% endif %}
       </div>
       <hr class="sidebar-divider">
