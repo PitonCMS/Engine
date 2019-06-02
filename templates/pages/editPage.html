@@ -48,7 +48,7 @@
 
       <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
         {% for element in page.elements if element.block_key == block.key %}
-        <a class="nav-link ml-3 small-sidebar-text  "
+        <a class="nav-link ml-3 small-sidebar-text"
           href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
         {% endfor %}
       </nav>
@@ -191,10 +191,10 @@
       <!-- Control Buttons -->
       <div class="button-group">
         <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
-        <button class="mb-2 btn btn-primary" type="submit" name="button" value="save">Save</button>
+        <button class="mb-2 btn btn-primary" type="submit">Save</button>
 
         {% if page.id %}
-        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete" formaction="{{ pathFor(pageDeleteAction) }}"
+        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}"
           {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
         {% endif %}
       </div>

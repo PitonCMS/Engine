@@ -43,9 +43,19 @@
     let pitonConfig = {
       dateFormat: "{{ site.settings.dateFormat }}",
       weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
-    csrfTokenName: "{{ site.csrf.name }}",
+      csrfTokenName: "{{ site.csrf.name }}",
       csrfTokenValue: "{{ site.csrf.value }}",
-        {% block jsPitonConfig '' %}
+      routes: {
+        adminNewElement: "{{ pathFor('adminNewElement') }}",
+        adminDeleteElement: "{{ pathFor('adminDeleteElement') }}",
+        adminSaveMessage: "{{ pathFor('adminSaveMessage') }}",
+        adminDeleteMessage: "{{ pathFor('adminDeleteMessage') }}",
+        adminSaveMedia: "{{ pathFor('adminSaveMedia') }}",
+        adminGetMedia: "{{ pathFor('adminGetMedia') }}",
+        adminDeleteMedia: "{{ pathFor('adminDeleteMedia') }}",
+        adminDeleteMediaCategory: "{{ pathFor('adminDeleteMediaCategory') }}",
+      },
+      {% block jsPitonConfig '' %}
     };
   </script>
   {% block head '' %}

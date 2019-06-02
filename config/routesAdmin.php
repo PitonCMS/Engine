@@ -59,7 +59,7 @@ $app->group('/admin', function () {
             // Fetch element form
             $this->post('/new', function ($args) {
                 return (new AdminPageController($this))->newElementForm();
-            })->add('csrfGuard');
+            })->add('csrfGuard')->setName('adminNewElement');
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
@@ -114,15 +114,13 @@ $app->group('/admin', function () {
 
         // Media save
         $this->post('/save', function ($args) {
-            if ($this->request->getParsedBodyParam('button') === 'save') {
-                return (new AdminMediaController($this))->saveMedia();
-            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                return (new AdminMediaController($this))->deleteMedia();
-            } else {
-                $notFound = $this->notFoundHandler;
-                return $notFound($this->request, $this->response);
-            }
+            return (new AdminMediaController($this))->saveMedia();
         })->add('csrfGuard')->setName('adminSaveMedia');
+
+        // Media delete
+        $this->post('/delete', function ($args) {
+            return (new AdminMediaController($this))->deleteMedia();
+        })->add('csrfGuard')->setName('adminDeleteMedia');
 
         // Media categories
         $this->group('/category', function () {
@@ -151,17 +149,15 @@ $app->group('/admin', function () {
             return (new AdminMessageController($this))->showMessages($args);
         })->setName('adminMessages');
 
-        // Save message changes
+        // Save message status changes
         $this->post('/save', function ($args) {
-            if ($this->request->getParsedBodyParam('button') === 'toggle') {
-                return (new AdminMessageController($this))->toggleStatus();
-            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                return (new AdminMessageController($this))->delete();
-            } else {
-                $notFound = $this->notFoundHandler;
-                return $notFound($this->request, $this->response);
-            }
+            return (new AdminMessageController($this))->toggleStatus();
         })->add('csrfGuard')->setName('adminSaveMessage');
+
+        // Delete message
+        $this->post('/delete', function ($args) {
+            return (new AdminMessageController($this))->delete();
+        })->add('csrfGuard')->setName('adminDeleteMessage');
     });
     // End messages
 
