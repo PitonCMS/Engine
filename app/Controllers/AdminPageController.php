@@ -102,9 +102,33 @@ class AdminPageController extends AdminBaseController
     /**
      * Save Page
      *
-     * Create new page, or update existing page
+     * Create or update page wrapper
      */
     public function savePage()
+    {
+        // Save settings and elements
+        $pageEntity = $this->savePageHeader();
+        $this->savePageSettings($pageEntity->id);
+        $this->savePageElements($pageEntity->id);
+
+        // Determine redirect path based on whether this is a collection page
+        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+            $redirectRoute = 'adminCollections';
+        } else {
+            $redirectRoute = 'adminPages';
+        }
+
+        // Redirect back to show page
+        return $this->redirect($redirectRoute);
+    }
+
+    /**
+     * Save Page
+     *
+     * Create new page, or update existing page
+     * From $_POST array
+     */
+    public function savePageHeader()
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -151,22 +175,8 @@ class AdminPageController extends AdminBaseController
             $page->published_date = null;
         }
 
-        // Save Page and get ID
-        $pageEntity = $pageMapper->save($page);
-
-        // Save settings and elements
-        $this->savePageSettings($pageEntity->id);
-        $this->savePageElements($pageEntity->id);
-
-        // Determine redirect path based on whether this is a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
-            $redirectRoute = 'adminCollections';
-        } else {
-            $redirectRoute = 'adminPages';
-        }
-
-        // Redirect back to show page
-        return $this->redirect($redirectRoute);
+        // Save Page and return ID
+        return $pageMapper->save($page);
     }
 
     /**
