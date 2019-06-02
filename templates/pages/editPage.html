@@ -18,8 +18,15 @@
 {% if page.type == 'collection' %}collectionDetail{% else %}editPage{% endif %}
 {% endblock sectionId %}
 
+{# Set correct form action routes depending on whether this is for a page, or for a collection #}
+{% if (page.type == 'page') %}
+  {% set pageAction, pageDeleteAction = 'adminSavePage', 'adminDeletePage' %}
+{% else %}
+  {% set pageAction, pageDeleteAction = 'adminSaveCollectionPage', 'adminDeleteCollectionPage' %}
+{% endif %}
+
 {% block openForm %}
-<form action="{{  pathFor('adminSavePage') }}" method="post" accept-charset="utf-8">
+<form action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
@@ -187,7 +194,7 @@
         <button class="mb-2 btn btn-primary" type="submit" name="button" value="save">Save</button>
 
         {% if page.id %}
-        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete"
+        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" name="button" value="delete" formaction="{{ pathFor(pageDeleteAction) }}"
           {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
         {% endif %}
       </div>

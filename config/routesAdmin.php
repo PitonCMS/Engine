@@ -44,17 +44,15 @@ $app->group('/admin', function () {
             return (new AdminPageController($this))->editPage($args);
         })->setName('adminEditPage');
 
-        // Save Page for Update, Insert, and Delete
+        // Save Page for Update or Insert
         $this->post('/save', function ($args) {
-            if ($this->request->getParsedBodyParam('button') === 'save') {
-                return (new AdminPageController($this))->savePage();
-            } elseif ($this->request->getParsedBodyParam('button') === 'delete') {
-                return (new AdminPageController($this))->deletePage($args);
-            } else {
-                $notFound = $this->notFoundHanlder;
-                return $notFound($this->request, $this->response);
-            }
+            return (new AdminPageController($this))->savePage();
         })->add('csrfGuard')->setName('adminSavePage');
+
+        // Delete page
+        $this->post('/delete', function ($args) {
+            return (new AdminPageController($this))->deletePage($args);
+        })->add('csrfGuard')->setName('adminDeletePage');
 
         // Page elements
         $this->group('/element', function () {
@@ -84,6 +82,16 @@ $app->group('/admin', function () {
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editPage($args);
         })->setName('adminEditCollectionPage');
+
+        // Save Collection page for Update or Insert
+        $this->post('/save', function ($args) {
+            return (new AdminPageController($this))->savePage();
+        })->add('csrfGuard')->setName('adminSaveCollectionPage');
+
+        // Delete collection page
+        $this->post('/delete', function ($args) {
+            return (new AdminPageController($this))->deletePage($args);
+        })->add('csrfGuard')->setName('adminDeleteCollectionPage');
     });
     // End collection
 
