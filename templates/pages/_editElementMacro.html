@@ -55,7 +55,7 @@
     <div
       class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
       <label>Embedded HTML</label>
-      <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
+      <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]" {% if enableInput == 'embedded' %}required{% endif %}>{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
@@ -69,7 +69,7 @@
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
         <input type="text" class="form-control" name="element_image_path[{{ arrayKey }}]"
-          value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
+          value="{{ getMediaPath(element.image_path) }}" autocomplete="off" {% if enableInput == 'image' %}required{% endif %}>
       </div>
       <small class="form-text text-muted">Select media file to display.</small>
     </div>
@@ -77,7 +77,7 @@
     <div
       class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
       <label>Collection</label>
-      <select class="form-control" name="element_collection_slug[{{ arrayKey }}]">
+      <select class="form-control" name="element_collection_slug[{{ arrayKey }}]" {% if enableInput == 'collection' %}required{% endif %}>
         <option value="">- None -</option>
         {% for c in getCollections() %}
         <option value="{{ c.value }}" {% if c.value == element.collection_slug %}selected{% endif %}>{{ c.name }}
@@ -89,7 +89,7 @@
     <div
       class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
       <label>Gallery</label>
-      <select class="form-control" name="element_gallery_id[{{ arrayKey }}]">
+      <select class="form-control" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
         {% for c in getGalleries() %}
         <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>

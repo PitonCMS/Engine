@@ -9,6 +9,8 @@
 namespace Piton\Library\Twig;
 
 use Interop\Container\ContainerInterface;
+use Exception;
+use Twig\Error\LoaderError;
 
 /**
  * Piton Front End Twig Extension
@@ -87,7 +89,15 @@ class Front extends Base
             throw new Exception("Missing page element template");
         }
 
-        return $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
+        try {
+            $html = $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
+        } catch (LoaderError $e) {
+            // If template name is malformed, just return empty string to fail gracefully
+            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            $html = '';
+        }
+
+        return $html;
     }
 
     /**
