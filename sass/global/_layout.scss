@@ -243,10 +243,14 @@
 //Page Edit
 #editPage {
   .block-title-wrapper {
+    background: $primary-light-grey;
     @include padding(1em 2em 1em 1em);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0px;
+    z-index: 1049;
   }
   .card {
     @include margin(null null 1em null);
