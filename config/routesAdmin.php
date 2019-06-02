@@ -66,7 +66,7 @@ $app->group('/admin', function () {
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement();
-            })->add('csrfGuard');
+            })->add('csrfGuard')->setName('adminDeleteElement');
         });
         // End page elements
     });
@@ -114,7 +114,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHandler;
                 return $notFound($this->request, $this->response);
             }
-        })->add('csrfGuard')->setName('adminMediaSave');
+        })->add('csrfGuard')->setName('adminSaveMedia');
 
         // Media categories
         $this->group('/category', function () {
@@ -138,8 +138,8 @@ $app->group('/admin', function () {
     // Messages
     $this->group('/message', function () {
         // Show messages
-        $this->get('[/{status:new|read}]', function ($args) {
-            $args['status'] = isset($args['status']) ? $args['status'] : 'new';
+        $this->get('[/[{status:new|read}]]', function ($args) {
+            $args['status'] = $args['status'] ?? 'new';
             return (new AdminMessageController($this))->showMessages($args);
         })->setName('adminMessages');
 
@@ -153,7 +153,7 @@ $app->group('/admin', function () {
                 $notFound = $this->notFoundHandler;
                 return $notFound($this->request, $this->response);
             }
-        })->add('csrfGuard')->setName('adminMessageSave');
+        })->add('csrfGuard')->setName('adminSaveMessage');
     });
     // End messages
 
@@ -205,7 +205,7 @@ $app->group('/admin', function () {
     // Next call
     return $next($request, $response);
 })->add(function ($request, $response, $next) {
-    // Add http header to prevent back button access to admin
+    // Add http no-cache, no-store headers to prevent back button access to admin
     $response = $next($request, $response);
     return $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
 });
