@@ -206,7 +206,21 @@ class AdminPageController extends AdminBaseController
                 $setting->reference_id = $pageId;
                 $setting->category = $this->request->getParsedBodyParam('setting_category')[$key];
                 $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$key];
-                $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$key];
+
+                // If this is for a media image
+                if ($this->request->getParsedBodyParam('setting_type')[$key] === 'media') {
+                    $imagePath = $this->request->getParsedBodyParam('setting_value')[$key];
+                    // If the media starts with http then save as-is
+                    if (mb_stripos($imagePath, 'http') === 0) {
+                        $setting->setting_value = $imagePath;
+                    } else {
+                        // Else get the file basename to save
+                        $setting->setting_value = pathinfo($imagePath, PATHINFO_BASENAME);
+                    }
+                } else {
+                    // Otherwise just save value
+                    $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$key];
+                }
 
                 $settingMapper->save($setting);
             }

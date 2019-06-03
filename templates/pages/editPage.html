@@ -32,9 +32,9 @@
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
-  {% endblock openForm %}
+{% endblock openForm %}
 
-  {% block sidebar %}
+{% block sidebar %}
 
   <nav class="navbar" id="page-edit-nav">
     <nav class="nav flex-column">
@@ -56,9 +56,9 @@
     </nav>
   </nav>
 
-  {% endblock sidebar %}
+{% endblock sidebar %}
 
-  {% block content %}
+{% block content %}
   {# Media Modal #}
   <div class="modal fade" id="mediaModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <div class="scroll-container" data-spy="scroll" data-target="#page-edit-nav" data-offset="0">
+  <div class="scroll-container jsEditPageContainer" data-spy="scroll" data-target="#page-edit-nav" data-offset="0">
     <div class="page-settings-wrapper" id="page-settings-nav">
       <div class="block-title-wrapper">
         <h3 class="pt-3">Page Settings</h3>
@@ -134,7 +134,7 @@
       </div>
       <div class="form-group-wrapper">
         {% for setting in page.settings %}
-        {{ settingForm.settingInput(setting) }}
+          {{ settingForm.settingInput(setting) }}
         {% endfor %}
       </div>
       {% endif %}
@@ -203,4 +203,4 @@
 
 
   </div>
-  {% endblock content %}
+{% endblock content %}

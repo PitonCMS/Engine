@@ -4,14 +4,16 @@
 
 {# Wrapper Macro #}
 {% macro settingInput(setting) %}
-{% import _self as input %}
-{% if setting.input_type == 'select' %}
-{{ input.selectHtml(setting) }}
-{% elseif setting.input_type == 'textarea' %}
-{{ input.textareaHtml(setting) }}
-{% else %}
-{{ input.inputHtml(setting) }}
-{% endif %}
+  {% import _self as input %}
+  {% if setting.input_type == 'select' %}
+    {{ input.selectHtml(setting) }}
+  {% elseif setting.input_type == 'textarea' %}
+    {{ input.textareaHtml(setting) }}
+  {% elseif setting.input_type == 'media' %}
+    {{ input.mediaInputHtml(setting) }}
+  {% else %}
+    {{ input.inputHtml(setting) }}
+  {% endif %}
 {% endmacro settingInput %}
 
 {# Input Macro #}
@@ -34,6 +36,36 @@
   </div>
 </div>
 {% endmacro inputHtml %}
+
+{# Media Input Macro #}
+{% macro mediaInputHtml(setting) %}
+{% import _self as status %}
+{% set arrayKey = setting.id ?? uniqueKey() %}
+<div class="card jsSettingParent jsMediaInput">
+  <div class="card-header">
+    <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
+    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
+    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
+    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+    <input type="hidden" name="setting_type[{{ arrayKey }}]" value="media">
+  </div>
+  <div class="card-body">
+    <div class="card-text">
+      <img src="{{ getMediaPath(setting.setting_value, 'large') }}" class="img-fluid {% if setting.setting_value %}d-block{% else %}d-none{% endif %}">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
+        </div>
+        <input type="text" class="form-control jsMediaInputField" name="setting_value[{{ arrayKey }}]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-light jsMediaClear" type="button">Clear</button>
+        </div>
+      </div>
+      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+    </div>
+  </div>
+</div>
+{% endmacro mediaInputHtml %}
 
 {# Select List Macro #}
 {% macro selectHtml(setting) %}

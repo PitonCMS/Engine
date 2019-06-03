@@ -26,9 +26,9 @@
                     "type": "string"
                 },
                 "inputType": {
-                    "description": "HTML input type: input, select, or textarea.",
+                    "description": "HTML input type: input, select, textarea, media.",
                     "type": "string",
-                    "enum": ["input","select","textarea"]
+                    "enum": ["input","select","textarea","media"]
                 },
                 "help": {
                     "description": "Form input help text, optional"
