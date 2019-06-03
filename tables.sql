@@ -67,19 +67,6 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   KEY `page_id_idx` (`page_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `page_setting` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `page_id` int NOT NULL,
-  `setting_key` varchar(60) NOT NULL,
-  `setting_value` varchar(1000) DEFAULT NULL,
-  `created_by` int(11) NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `page_setting_uq` (`page_id`,`setting_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
