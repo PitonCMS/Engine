@@ -197,7 +197,7 @@ class Admin extends Base
 
         foreach ($toolbox->getDirectoryFiles($jsonPath) as $key => $file) {
             if (null === $definition = $json->getJson($jsonPath . $file['filename'], 'element')) {
-                throw new Exception('Element JSON definition error: ' . print_r($json->getErrorMessages(), true));
+                throw new Exception('PitonCMS: Element JSON definition error: ' . print_r($json->getErrorMessages(), true));
             } else {
                 $definition->filename = $file['filename'];
                 $elements[] = $definition;
