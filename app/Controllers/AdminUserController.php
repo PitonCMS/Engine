@@ -8,6 +8,8 @@
  */
 namespace Piton\Controllers;
 
+use PDOException;
+
 /**
  * Admin User Controller
  *
@@ -25,9 +27,16 @@ class AdminUserController extends AdminBaseController
         $userMapper = ($this->container->dataMapper)('UserMapper');
 
         // Fetch users
-        $users = $userMapper->find();
+        $data['users'] = $userMapper->findUsers();
 
-        return $this->render('tools/users.html', $users);
+        // If there is only one admin, set flag to suggest a recovery email
+        $admins = 0;
+        foreach ($data['users'] as $user) {
+            if ($user->role === 'A') $admins++;
+        }
+        $data['recommendRecoveryEmail'] = ($admins < 2) ? true : false;
+
+        return $this->render('tools/users.html', $data);
     }
 
     /**
@@ -39,14 +48,26 @@ class AdminUserController extends AdminBaseController
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $users = $this->request->getParsedBodyParam('email');
+        $post = $this->request->getParsedBody();
 
         // Save users
-        foreach ($users as $user) {
-            if (!empty($user)) {
-                $User = $userMapper->make();
-                $User->email = strtolower(trim($user));
-                $userMapper->save($User);
+        foreach ($post['email'] as $key => $row) {
+            if (!empty($post['email'][$key])) {
+                $user = $userMapper->make();
+                $user->id = $post['user_id'][$key];
+                $user->role = (isset($post['admin'][$key]) && $post['admin'][$key] === 'on') ? 'A' : null;
+                $user->email = strtolower(trim($post['email'][$key]));
+                try {
+                    $userMapper->save($user);
+                } catch (PDOException $e) {
+                    if ($e->getCode() === '23000') {
+                        // Duplicate entry error
+                        $this->setAlert('danger', 'Duplicate User', "The user {$post['email'][$key]} already exists.");
+                        break;
+                    }
+
+                    throw $e;
+                }
             }
         }
 
@@ -55,19 +76,29 @@ class AdminUserController extends AdminBaseController
     }
 
     /**
-     * Delete User
+     * Change User Status
      *
-     * Delete user email to deny access
+     * Sets user active status: Y|N
      */
-    public function deleteUser($args)
+    public function userStatus($args)
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
+        $post = $this->request->getParsedBody();
 
-        // Delete user
-        $User = $userMapper->make();
-        $User->id = $args['id'];
-        $userMapper->delete($User);
+        // Find user to change status
+        foreach ($post['user_id'] as $key => $row) {
+            // Both arguments will be strings, so no need to cast one or the other
+            if ($row === $args['id']) {
+                $user = $userMapper->make();
+                $user->id = $post['user_id'][$key];
+                $user->active = $args['status'];
+                $userMapper->save($user);
+
+                // All done here
+                break;
+            }
+        }
 
         // Redirect back to list of users
         return $this->redirect('adminUsers');

@@ -17,18 +17,18 @@ use Piton\ORM\DomainObject;
 class UserMapper extends DataMapperAbstract
 {
     protected $table = 'user';
-    protected $modifiableColumns = ['email', 'admin'];
+    protected $modifiableColumns = ['email', 'role','active'];
 
     /**
-     * Insert a Record
+     * Find Users
      *
-     * Sets IGNORE in insert to avoid duplication of email addresses
-     * @param  DomainObject $domainObject
-     * @param  bool                       If true, update on duplicate record
-     * @return mixd                       DomainObject | null
+     * Sorts by active
      */
-    public function insert(DomainObject $domainObject, $ignore = false)
+    public function findUsers()
     {
-        return $this->coreInsert($domainObject, true);
+        $this->makeSelect();
+        $this->sql .= ' order by `active`';
+
+        return $this->find();
     }
 }

@@ -13,8 +13,11 @@ CREATE TABLE IF NOT EXISTS `session` (
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(60) NULL DEFAULT NULL,
+  `last_name` varchar(60) NULL DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `role` char(1) NULL DEFAULT NULL,
+  `active` enum('Y', 'N') NOT NULL DEFAULT 'Y',
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,

@@ -189,10 +189,10 @@ $app->group('/admin', function () {
                 return (new AdminUserController($this))->saveUsers();
             })->add('csrfGuard')->setName('adminSaveUsers');
 
-            // Delete User
-            $this->get('/delete/{id:[0-9]{1,}}', function ($args) {
-                return (new AdminUserController($this))->deleteUser($args);
-            })->setName('adminDeleteUser');
+            // Change User Active Status
+            $this->post('/changestatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
+                return (new AdminUserController($this))->userStatus($args);
+            })->add('csrfGuard')->setName('adminChangeUserStatus');
         });
         // End user routes
     });
