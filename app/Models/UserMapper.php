@@ -31,4 +31,17 @@ class UserMapper extends DataMapperAbstract
 
         return $this->find();
     }
+
+    /**
+     * Find Active Users
+     *
+     * Filters out inactive user
+     */
+    public function findActiveUsers()
+    {
+        $this->makeSelect();
+        $this->sql .= ' and `active` = \'Y\'';
+
+        return $this->find();
+    }
 }

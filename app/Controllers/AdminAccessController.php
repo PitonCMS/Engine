@@ -60,7 +60,7 @@ class AdminAccessController extends AdminBaseController
         $body = $this->request->getParsedBody();
 
         // Fetch all users
-        $userList = $userMapper->find();
+        $userList = $userMapper->findActiveUsers();
 
         // Clean provided email
         $providedEmail = strtolower(trim($body['email']));
