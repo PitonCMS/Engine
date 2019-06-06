@@ -24,9 +24,19 @@ class PageElementMedia extends PitonEntity
             // Create new Media object and assign as sub-object
             $media = new Media();
             $media->id = $this->media_id;
-            $media->filename = $this->media_filename;
-            $media->width = $this->media_width;
-            $media->height = $this->media_height;
+
+            // If the media_filename is null, then rely on the image_path.
+            // This may happen when using external links
+            $media->filename = $this->media_filename ?? $this->image_path;
+
+            if (isset($this->media_width)) {
+                $media->width = $this->media_width;
+                $media->height = $this->media_height;
+            } else {
+                // This condition is likely when using external links
+                list($media->width, $media->height) = getimagesize($this->image_path);
+            }
+
             $media->feature = $this->media_feature;
             $media->caption = $this->media_caption;
             $media->__construct();
