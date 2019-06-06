@@ -20,7 +20,7 @@
 {% macro inputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent">
+<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
@@ -41,7 +41,7 @@
 {% macro mediaInputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent jsMediaInput">
+<div class="card jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
@@ -71,7 +71,7 @@
 {% macro selectHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent">
+<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
@@ -95,7 +95,7 @@
 {% macro textareaHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent">
+<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
