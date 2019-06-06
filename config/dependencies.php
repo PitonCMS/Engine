@@ -172,6 +172,7 @@ $container['mediaSizes'] = function ($c) {
         'original' => '',
         'xlarge' => '-xlarge',
         'large' => '-large',
+        'small' => '-small',
         'thumb' => '-thumb'
     ];
     return function ($size = 'original') use ($sizes) {

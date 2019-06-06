@@ -270,6 +270,7 @@ HTML;
             $mediaHandler->setSource($filename);
             $mediaHandler->makeXLarge();
             $mediaHandler->makeLarge();
+            $mediaHandler->makeSmall();
             $mediaHandler->makeThumb();
         }
     }

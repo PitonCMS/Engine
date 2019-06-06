@@ -228,7 +228,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
      * Get Media Path
      *
      * @param  string $filename Media file name to parse
-     * @param  string $size     Media size: original|xlarge|large|thumb
+     * @param  string $size     Media size: original|xlarge|large|small|thumb
      * @return string
      */
     public function getMediaPath($filename, $size = 'original')

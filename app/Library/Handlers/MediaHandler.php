@@ -122,7 +122,7 @@ class MediaHandler
 
         // Ensure source file exists
         if (!file_exists($absoluteMediaPath)) {
-            throw new Exception('PitonCMS MediaHandler: Source file not found ' . $absoluteMediaPath);
+            throw new Exception('PitonCMS: MediaHandler: Source file not found ' . $absoluteMediaPath);
         }
 
         // Get dimensions and set orientation
@@ -152,7 +152,7 @@ class MediaHandler
     }
 
     /**
-     * Make Optimized Reized Media File
+     * Make Optimized Large Media File
      *
      * Uses Tinify optimization
      * @param void
@@ -182,6 +182,44 @@ class MediaHandler
                 'method' => 'fit',
                 'width' => 1500,
                 'height' => 2000
+            ];
+        }
+
+        $resized = $this->tinifySource->resize($resize);
+        $resized->toFile($filename);
+    }
+
+    /**
+     * Make Optimized Small Media File
+     *
+     * Uses Tinify optimization
+     * @param void
+     * @return void
+     */
+    public function makeSmall()
+    {
+        $this->validateTinifySource();
+
+        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('small') . '.' . $this->extension;
+
+        // If square, keep aspect and constrain to 2000 x 2000
+        if ($this->width == $this->height) {
+            $resize = [
+                'method' => 'fit',
+                'width' => 2000,
+                'height' => 2000
+            ];
+        } elseif ($this->orientation === 'landscape') {
+            $resize = [
+                'method' => 'fit',
+                'width' => 1024,
+                'height' => 768
+            ];
+        } else {
+            $resize = [
+                'method' => 'fit',
+                'width' => 768,
+                'height' => 1024
             ];
         }
 
