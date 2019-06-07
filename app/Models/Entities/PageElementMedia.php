@@ -29,12 +29,15 @@ class PageElementMedia extends PitonEntity
             // This may happen when using external links
             $media->filename = $this->media_filename ?? $this->image_path;
 
-            if (isset($this->media_width)) {
-                $media->width = $this->media_width;
-                $media->height = $this->media_height;
-            } else {
+            $media->width = $this->media_width;
+            $media->height = $this->media_height;
+
+            if (mb_stripos($this->image_path, 'http') === 0) {
                 // This condition is likely when using external links
-                list($media->width, $media->height) = getimagesize($this->image_path);
+                // Yes, surpressing error exception here
+                $dims = @getimagesize($this->image_path);
+                $media->width = $dims[0];
+                $media->height = $dims[1];
             }
 
             $media->feature = $this->media_feature;
