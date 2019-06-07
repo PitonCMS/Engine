@@ -71,7 +71,7 @@ class FrontController extends FrontBaseController
             $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
             $email->setTo($this->siteSettings['contactFormEmail'], '')
                     ->setSubject("New Contact Message to $siteName")
-                    ->setMessage("From: {$message->email}\n\n{$message->message}")
+                    ->setMessage("{$message->name}\n{$message->email}\n\n{$message->message}")
                     ->send();
         }
 
