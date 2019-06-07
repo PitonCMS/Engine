@@ -115,7 +115,7 @@ class LoadSiteSettings
         $url = $request->getUri()->getPath();
         // Check if home page '/' to match slug name
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
-        $key = array_search($url, array_column($this->pages, 'slug'));
+        $key = array_search($url, array_column($this->pages, 'page_slug'));
 
         if (is_numeric($key)) {
             $this->pages[$key]->currentPage = true;
