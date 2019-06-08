@@ -38,14 +38,15 @@
         &:hover {
           color: var(--primary) !important;
         }
-      }
-      .active {
+            .active {
         background-color: rgba($primary-color, 0.5) !important;
         color: $primary-light;
         // @include padding(null 1rem null null);
         @include border-right-radius(30px);
         box-shadow: $box-shadow;
       }
+      }
+  
     }
   }
 
@@ -188,6 +189,13 @@
         color: $primary-color !important;
       }
     }
+      .active {
+    background-color: rgba($primary-color, 0.8) !important;
+    color: $primary-light;
+    @include padding(null 1rem null null);
+    @include border-right-radius(25px);
+    box-shadow: $box-shadow;
+  }
   }
   main {
     background: $primary-light-grey;
@@ -220,18 +228,13 @@
       }
     }
   }
-  .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    box-shadow: $box-shadow;
-  }
+
   a.small-sidebar-text.active {
     background-color: rgba($primary-color, 0.5) !important;
     padding-left: 4em !important;
     margin-left: -1em !important;
   }
+
   .navbar {
     @include padding(null null null 0);
   }
@@ -259,6 +262,15 @@
 
 // Tools & Settings
 #tools form {
+  aside{
+    .active {
+    background-color: rgba($primary-color, 0.8) !important;
+    color: $primary-light !important;
+    @include padding(null 1rem null null);
+    @include border-right-radius(25px);
+    box-shadow: $box-shadow;
+  }
+  }
   main {
     @include padding(0);
     display: flex;
