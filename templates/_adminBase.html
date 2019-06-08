@@ -103,14 +103,6 @@
   {% else %}
   <script src="https://cdn.pitoncms.com/0.17.1/js/main.js"></script>
   {% endif %}
-  <script>
-    [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
-      var simplemde = new SimpleMDE({
-        element: element,
-        forceSync: true
-      });
-    });
-  </script>
 
   {% block foot '' %}
 </body>
