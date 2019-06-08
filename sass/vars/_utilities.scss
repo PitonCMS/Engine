@@ -26,4 +26,6 @@
   font-style: italic;
   padding-left: 4em !important;
   margin-left: -1em !important;
+  @include padding(.15em null);
+  @include margin(0 null);
 }

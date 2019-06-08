@@ -20,9 +20,9 @@
 
 {# Set correct form action routes depending on whether this is for a page, or for a collection #}
 {% if (page.type == 'page') %}
-  {% set pageAction, pageDeleteAction = 'adminSavePage', 'adminDeletePage' %}
+{% set pageAction, pageDeleteAction = 'adminSavePage', 'adminDeletePage' %}
 {% else %}
-  {% set pageAction, pageDeleteAction = 'adminSaveCollectionPage', 'adminDeleteCollectionPage' %}
+{% set pageAction, pageDeleteAction = 'adminSaveCollectionPage', 'adminDeleteCollectionPage' %}
 {% endif %}
 
 {% block openForm %}
@@ -32,9 +32,9 @@
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
   <input type="hidden" name="definition" value="{{ page.definition }}">
   <input type="hidden" name="template" value="{{ page.json.templateFile }}">
-{% endblock openForm %}
+  {% endblock openForm %}
 
-{% block sidebar %}
+  {% block sidebar %}
 
   <nav class="navbar" id="page-edit-nav">
     <nav class="nav flex-column">
@@ -43,8 +43,7 @@
       <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
       <nav class="nav flex-column">
         {% for setting in page.settings %}
-        <a class="nav-link ml-3 small-sidebar-text"
-          href="#page-setting-{{ setting.setting_key }}">{{ setting.label }}</a>
+        <a class="small-sidebar-text nav-link ml-3" href="#page-setting-{{ setting.setting_key }}">{{ setting.label }}</a>
         {% endfor %}
       </nav>
       {% endif %}
@@ -54,17 +53,16 @@
 
       <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
         {% for element in page.elements if element.block_key == block.key %}
-        <a class="nav-link ml-3 small-sidebar-text"
-          href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
+        <a class="small-sidebar-text nav-link ml-3" href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
         {% endfor %}
       </nav>
       {% endfor %}
     </nav>
   </nav>
 
-{% endblock sidebar %}
+  {% endblock sidebar %}
 
-{% block content %}
+  {% block content %}
   {# Media Modal #}
   <div class="modal fade" id="mediaModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -88,8 +86,7 @@
       <div class="form-group-wrapper">
         <div class="form-group">
           <label>Title <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
-            value="{{ page.title }}" required>
+          <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
         </div>
 
         {% if not page.json.hideSubTitle %}
@@ -104,11 +101,9 @@
           <label>Slug <span class="text-danger">*</span></label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span
-                class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
+              <span class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
             </div>
-            <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
-              value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
+            <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug" value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
           </div>
           <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
             changed.</small>
@@ -116,8 +111,7 @@
 
         <div class="form-group">
           <label>Meta Description</label>
-          <input type="text" class="form-control" name="meta_description" maxlength="320"
-            placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+          <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
           <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching
             search
             results.</small>
@@ -126,8 +120,7 @@
         {% if not page.json.hideFeaturedImage %}
         <div class="form-group span">
           <label>Featured Image</label>
-          <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
-            value="{{ page.image_path }}">
+          <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path" value="{{ page.image_path }}">
           <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
         </div>
         {% endif %}
@@ -140,7 +133,7 @@
       </div>
       <div class="form-group-wrapper">
         {% for setting in page.settings %}
-          {{ settingForm.settingInput(setting) }}
+        {{ settingForm.settingInput(setting) }}
         {% endfor %}
       </div>
       {% endif %}
@@ -159,10 +152,8 @@
             {% for element in page.elements if element.block_key == block.key %}
             {% set elementLength = elementLength + 1 %}
             {% endfor %}
-            <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
-              data-element-type="{{ block.elementTypeDefault }}"
-              data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-              data-element-count-limit="{{ block.elementCountLimit }}"
+            <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementTypeDefault }}"
+              data-element-type-options="{{ block.elementTypeOptions|join(',') }}" data-element-count-limit="{{ block.elementCountLimit }}"
               {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
 
           </div>
@@ -180,8 +171,8 @@
   <div class="two-col-sidebar">
     <div class="two-col-sidebar-inner">
       <div class="form-group status">
-        <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
-          value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+        <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}"
+          autocomplete="off">
         {% if page.getPublishedStatus() == 'draft' %}
         <div class="text-body" title="Not published">Status: Draft</div>
         {% elseif page.getPublishedStatus() == 'pending' %}
@@ -200,8 +191,8 @@
         <button class="mb-2 btn btn-primary" type="submit">Save</button>
 
         {% if page.id %}
-        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}"
-          {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
+          title="The home page cannot be deleted." {% endif %}>Delete</button>
         {% endif %}
       </div>
       <hr class="sidebar-divider">
@@ -209,4 +200,4 @@
 
 
   </div>
-{% endblock content %}
+  {% endblock content %}
