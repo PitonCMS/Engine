@@ -174,6 +174,16 @@ $app->group('/admin', function () {
             $this->post('/save', function ($args) {
                 return (new AdminSettingController($this))->saveSettings();
             })->add('csrfGuard')->setName('adminSaveSettings');
+
+            // Sitemap submit page
+            $this->get('/sitemap', function ($args) {
+                return (new AdminController($this))->sitemap();
+            })->setName('adminSitemap');
+
+            // Update sitemap
+            $this->post('/sitemap/update', function ($args) {
+                return (new AdminController($this))->updateSitemap();
+            })->add('csrfGuard')->setName('adminUpdateSitemap');
         });
         // End settings
 

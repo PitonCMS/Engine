@@ -84,4 +84,57 @@ class AdminController extends AdminBaseController
 
         return $this->render('releaseNotes.html', ['releases' => $releases]);
     }
+
+    /**
+     * Sitemap
+     *
+     * Shows current sitemap, and sitemap update submit button
+     */
+    public function sitemap()
+    {
+        // Get current sitemap
+        $pathToSitemap = ROOT_DIR . 'public/sitemap.xml';
+        $data = [];
+        if (file_exists($pathToSitemap)) {
+            $data['sitemapXML'] = file_get_contents($pathToSitemap);
+            $data['lasteUpdateDate'] = filemtime($pathToSitemap);
+        }
+
+        return $this->render('tools/sitemap.html', $data);
+    }
+
+    /**
+     * Update Sitemap
+     *
+     * Generates sitemap to public/sitemap.xml
+     */
+    public function updateSitemap()
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $sitemapHandler = $this->container->get('sitemapHandler');
+
+        // Get all published content
+        $allContent = array_merge($pageMapper->findPages(), $pageMapper->findCollectionPages());
+        $links = [];
+
+        foreach ($allContent as $page) {
+            $link = ($page->collection_slug) ? $page->collection_slug . '/' : null;
+            $link .= ($page->page_slug === 'home') ? '' : $page->page_slug;
+
+            $links[] = [
+                'link' => urlencode($link),
+                'date' => date('c', strtotime($page->updated_date))
+            ];
+        }
+
+        // Make sitemap
+        if (!$sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->siteSettings['production'])) {
+            $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
+        } elseif ($this->siteSettings['production']) {
+            $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+        }
+
+        return $this->redirect('adminSitemap');
+    }
 }

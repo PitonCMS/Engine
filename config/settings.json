@@ -3,14 +3,6 @@
     "settings": [
         {
             "category": "site",
-            "label": "Domain Name",
-            "key": "domainName",
-            "value": "",
-            "inputType": "input",
-            "help": "Do not include the http(s):// or a trailing slash. For use in generated sitemaps."
-        },
-        {
-            "category": "site",
             "label": "Date Format",
             "key": "dateFormat",
             "value": "mm/dd/yyyy",
