@@ -57,6 +57,27 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
+     * Find Collection Pages by Collection Slug
+     *
+     * Finds all related collection detail pages
+     * @param  int   $collectionSlug
+     * @param  bool  $includeUnpublished    Include unpublished collection pages
+     * @return mixed                        Array | null
+     */
+    public function findCollectionPagesBySlug($collectionSlug, bool $includeUnpublished = false)
+    {
+        $this->makeSelect();
+        $this->sql .= ' and collection_slug = ?';
+        $this->bindValues[] = $collectionSlug;
+
+        if (!$includeUnpublished) {
+            $this->sql .= " and published_date <= '{$this->today()}'";
+        }
+
+        return $this->find();
+    }
+
+    /**
      * Find All Pages
      *
      * Finds all pages, does not include element data
@@ -93,27 +114,6 @@ class PageMapper extends DataMapperAbstract
         }
 
         $this->sql .= ' order by collection_slug';
-
-        return $this->find();
-    }
-
-    /**
-     * Find Collection Pages by Collection Slug
-     *
-     * Finds all related collection detail pages
-     * @param  int   $collectionSlug
-     * @param  bool  $includeUnpublished    Include unpublished collection pages
-     * @return mixed                        Array | null
-     */
-    public function findCollectionPagesBySlug($collectionSlug, bool $includeUnpublished = false)
-    {
-        $this->makeSelect();
-        $this->sql .= ' and collection_slug = ?';
-        $this->bindValues[] = $collectionSlug;
-
-        if (!$includeUnpublished) {
-            $this->sql .= " and published_date <= '{$this->today()}'";
-        }
 
         return $this->find();
     }
