@@ -11,7 +11,7 @@ namespace Piton\Controllers;
 /**
  * Piton Navigation Controller
  *
- * Manages page navigators
+ * Manage page navigators
  */
 class AdminNavigationController extends AdminBaseController
 {
@@ -20,6 +20,7 @@ class AdminNavigationController extends AdminBaseController
      */
     public function showNavigator($args)
     {
+        // Get dependencies and initiate $data variable
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
         $json = $this->container->json;
         $data = [];
@@ -32,7 +33,7 @@ class AdminNavigationController extends AdminBaseController
 
         $data['navigators'] = $navSettings->navigators;
 
-        // Verify a navigator was provided
+        // If a navigator was requested
         if (isset($args['nav'])) {
             $navigation = $navMapper->findNavHierarchy($args['nav']);
             $data['navigator'] = $args['nav'];
@@ -45,19 +46,19 @@ class AdminNavigationController extends AdminBaseController
     /**
      * Save Navigation
      *
-     * Save navigation
      */
     public function saveNavigation()
     {
+        // Get dependencies
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
+        // Get data
         $post = $this->request->getParsedBodyParam('navSet');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
         // Save each nav item
         $sort = 1;
         foreach ($post as $navItem) {
-            // echo "saving...";
             $sort++;
             $nav = $navigationMapper->make();
             $nav->id = $navItem['navId'];

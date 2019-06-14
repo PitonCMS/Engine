@@ -18,24 +18,32 @@ class NavigationMapper extends DataMapperAbstract
     protected $table = 'navigation';
     protected $modifiableColumns = ['navigator','parent_id','sort','page_id','title','active'];
 
+    /**
+     * All Navigation Data Rows
+     * @var array
+     */
     protected $allNavRows;
+
+    /**
+     * New Navigation
+     * @var array
+     */
     protected $newNav;
 
     /**
      * Find Navigation
      *
-     * Finds all pages and navigation rows
-     * @param  string $navigator
+     * Finds all navigation rows by navigator name
+     * @param  string $navigator Name of navigator
      * @return mixed             Array|null
      */
     public function findNavigation(string $navigator)
     {
-        $this->sql =<<<'SQL'
+        $this->sql =<<<SQL
 select n.id, n.navigator, n.parent_id, n.sort, n.page_id, p.title, n.title nav_title, n.active, p.published_date
 from page p
 join navigation n on p.id = n.page_id
 where n.navigator = ?
--- and n.active = 'Y'
 order by n.sort
 SQL;
         $this->bindValues[] = $navigator;
@@ -49,15 +57,20 @@ SQL;
      * Get navigation and build hierarchy
      * @param  string $navigator
      * @param  bool  $includeUnpublished Filter on published pages
-     * @return mixed             Array|null
+     * @return mixed                     Array|null
      */
     public function findNavHierarchy(string $navigator, bool $includeUnpublished = false)
     {
         // Get navigator rows
-        $this->allNavRows = $this->findNavigation($navigator);
+        $this->allNavRows = $this->findNavigation($navigator, $includeUnpublished);
 
         // Set top level (parent_id is null) rows first
         foreach ($this->allNavRows as &$row) {
+            // Skip if page is not published
+            if ($includeUnpublished && $row->published_date <= $this->today()) {
+                continue;
+            }
+
             if ($row->parent_id === null) {
                 $row->level = 1;
                 $this->newNav[] = &$row;
@@ -69,11 +82,20 @@ SQL;
         return $this->newNav;
     }
 
+    /**
+     * Add Child Nav Rows
+     *
+     * Recursive function to build multidimensional navigation object
+     * @var object  $parent
+     * @var integer $level  Recursion Depth
+     * @return void
+     */
     protected function addChildNav(&$parent, $level)
     {
+        // Recursive depth indicator
         $level++;
 
-        // Go through raw nav rows
+        // Go through raw nav rows and append child of $parent
         foreach ($this->allNavRows as &$row) {
             if ($parent->id === $row->parent_id) {
                 $row->level = $level;
@@ -94,20 +116,9 @@ SQL;
      */
     public function deleteByPageId(int $pageId)
     {
-        // TODO Delete child rows if parent
-        $this->sql = "delete from {$this->table} where `page_id` = ?";
+        // TODO Remove child rows if parent is being deleted
+        $this->sql = "delete from `{$this->table}` where `page_id` = ?";
         $this->bindValues[] = $pageId;
-
-        return $this->execute();
-    }
-
-    /**
-     *
-     */
-    public function deleteNavParentAndChildren(int $navId)
-    {
-        $this->sql = "delete from {$this->table} where `id` = ?";
-        $this->bindValues[] = $navId;
 
         return $this->execute();
     }

@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
 
 CREATE TABLE IF NOT EXISTS `navigation` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `navigatior` varchar(60) NOT NULL DEFAULT 'main',
+  `navigator` varchar(60) NOT NULL DEFAULT 'main',
   `parent_id` int NULL DEFAULT NULL,
   `sort` smallint NULL DEFAULT 1,
   `page_id` int NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `parent_id_idx` (`navigator`, `parent_id`),
+  KEY `navigator_idx` (`navigator`),
   KEY `page_id_idx` (`page_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
