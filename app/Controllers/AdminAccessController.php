@@ -93,9 +93,7 @@ class AdminAccessController extends AdminBaseController
             ]);
 
             // Get request details to create login link and email to user
-            $scheme = $this->request->getUri()->getScheme();
-            $host = $this->request->getUri()->getHost();
-            $link = $scheme . '://' . $host;
+            $link = $this->request->getUri()->getBaseUrl();
             $link .= $this->container->router->pathFor('adminProcessLoginToken', ['token' => $token]);
 
             // Send message

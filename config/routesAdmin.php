@@ -9,6 +9,7 @@
 use Piton\Controllers\AdminController;
 use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
+use Piton\Controllers\AdminNavigationController;
 use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminAccessController;
 use Piton\Controllers\AdminMediaController;
@@ -94,6 +95,20 @@ $app->group('/admin', function () {
         })->add('csrfGuard')->setName('adminDeleteCollectionPage');
     });
     // End collection
+
+    // Navigation route
+    $this->group('/navigation', function () {
+        // Show Navigations
+        $this->get('[/{nav:[a-zA-Z]+}]', function ($args) {
+            return (new AdminNavigationController($this))->showNavigator($args);
+        })->setName('adminNavigations');
+
+        // Save Navigation
+        $this->post('/save', function ($args) {
+            return (new AdminNavigationController($this))->saveNavigation();
+        })->add('csrfGuard')->setName('adminSaveNavigation');
+    });
+    // End Navigation
 
     // Media
     $this->group('/media', function () {

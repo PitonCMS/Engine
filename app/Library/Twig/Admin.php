@@ -42,6 +42,13 @@ class Admin extends Base
     protected $galleries;
 
     /**
+     * Pages Cache
+     * For multiple calls on getNavPages()
+     * @var array
+     */
+    protected $pages;
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
@@ -85,6 +92,7 @@ class Admin extends Base
             new \Twig_SimpleFunction('getGalleries', [$this, 'getGalleries']),
             new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
             new \Twig_SimpleFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
+            new \Twig_SimpleFunction('getNavPages', [$this, 'getNavPages']),
         ]);
     }
 
@@ -220,5 +228,22 @@ class Admin extends Base
         $count = $messageMapper->findUnreadCount();
 
         return ($count === 0) ? null : $count;
+    }
+
+    /**
+     * Get Pages
+     *
+     * Gets a list of all pages, including unpublished
+     * @param void
+     * @return mixed
+     */
+    public function getNavPages()
+    {
+        if ($this->pages) {
+            return $this->pages;
+        }
+
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        return $this->pages = $pageMapper->findPages(true);
     }
 }
