@@ -291,6 +291,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
         $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
 
@@ -305,9 +306,10 @@ class AdminPageController extends AdminBaseController
             // Delete page
             $pageMapper->delete($page);
 
-            // Delete page elements & page settings
+            // Delete page elements, page settings, and navigation entry
             $pageElementMapper->deleteElementsByPageId($pageId);
             $settingMapper->deleteByPageId($pageId);
+            $navigationMapper->deleteByPageId($pageId);
         }
 
         // Determine redirect path based on whether this was a collection page

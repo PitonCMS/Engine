@@ -31,11 +31,6 @@ class LoadSiteSettings
     protected $settings;
 
     /**
-     * @var Array
-     */
-    protected $pages;
-
-    /**
      * Constructor
      *
      * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
@@ -47,8 +42,6 @@ class LoadSiteSettings
     {
         $this->dataMapper = $dataMapper;
         $this->appSettings = $appSettings;
-        $this->loadSettings();
-        $this->loadPages($request);
     }
 
     /**
@@ -62,6 +55,8 @@ class LoadSiteSettings
      */
     public function __invoke($request, $response, $next)
     {
+        $this->loadSettings();
+
         // This is a bit of a Slim hack. This is the only $request object that actually has a route object attribute
         // Because of PSR7 immutability the $request object passed into the controller constructor is a copy
         // and does not have the route object attribute
@@ -70,8 +65,7 @@ class LoadSiteSettings
 
         // Replace site settings with new settings
         $this->appSettings->replace([
-            'site' => $this->settings,
-            'pages' => $this->pages,
+            'site' => $this->settings
         ]);
 
         // Next Middleware call
@@ -81,10 +75,10 @@ class LoadSiteSettings
     /**
      * Load settings from DB
      *
-     * @param none
+     * @param  void
      * @return void
      */
-    public function loadSettings()
+    protected function loadSettings()
     {
         $SettingMapper = ($this->dataMapper)('SettingMapper');
         $siteSettings = $SettingMapper->findSiteSettings();
@@ -92,35 +86,8 @@ class LoadSiteSettings
         // Create new multi-dimensional array keyed by the setting category and key
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
 
-        // Load some config file settings into new settings
+        // Load some config file settings into settings array
         $this->settings['production'] = $this->appSettings['site']['production'];
-        $this->settings['pitonDev'] = isset($this->appSettings['site']['pitonDev']) ? $this->appSettings['site']['pitonDev'] : false;
-    }
-
-    /**
-     * Load pages from DB
-     *
-     * Sets currentPage = true flag on page record for current request
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
-     * @return void
-     */
-    public function loadPages($request)
-    {
-        $pageMapper = ($this->dataMapper)('pageMapper');
-
-        // Fetch all published pages
-        $this->pages = $pageMapper->findPages();
-
-        // Set flag on page for current request
-        $url = $request->getUri()->getPath();
-        // Check if home page '/' to match slug name
-        $url = ($url === '/') ? 'home' : ltrim($url, '/');
-        $key = array_search($url, array_column($this->pages, 'page_slug'));
-
-        if (is_numeric($key)) {
-            $this->pages[$key]->currentPage = true;
-        }
-
-        return;
+        $this->settings['pitonDev'] = isset($this->appSettings['site']['pitonDev']) ?: false;
     }
 }

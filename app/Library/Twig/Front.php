@@ -20,6 +20,11 @@ use Twig\Error\LoaderError;
  */
 class Front extends Base
 {
+    /**
+     * Cache Navigations
+     * @var array
+     */
+    protected $navigation;
 
     /**
      * Constructor
@@ -51,6 +56,7 @@ class Front extends Base
             new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
             new \Twig_SimpleFunction('getGallery', [$this, 'getGallery']),
+            new \Twig_SimpleFunction('getNavigator', [$this, 'getNavigator']),
         ]);
     }
 
@@ -126,5 +132,30 @@ class Front extends Base
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         return $mediaMapper->findMediaByCategoryId($galleryId);
+    }
+
+    /**
+     * Get Navigator
+     *
+     * Get navigation by name
+     * @param  string $navigator
+     * @return mixed
+     */
+    public function getNavigator(string $navigator)
+    {
+        // Return cached navigator if available
+        if (isset($this->navigation[$navigator])) {
+            return $this->navigation[$navigator];
+        }
+
+        // Get dependencies
+        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+
+        // Set flag on page for current request
+        $url = $this->uri->getPath();
+        // Check if home page '/' to match slug name
+        $url = ($url === '/') ? 'home' : ltrim($url, '/');
+
+        return $this->navigator[$navigator] = $navigationMapper->findNavHierarchy($navigator, false, $url);
     }
 }

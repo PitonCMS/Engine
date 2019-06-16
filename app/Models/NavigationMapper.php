@@ -40,7 +40,9 @@ class NavigationMapper extends DataMapperAbstract
     public function findNavigation(string $navigator)
     {
         $this->sql =<<<SQL
-select n.id, n.navigator, n.parent_id, n.sort, n.page_id, p.title, n.title nav_title, n.active, p.published_date
+select
+    n.id, n.navigator, n.parent_id, n.sort, n.page_id,
+    p.title page_title, n.title nav_title, n.active, p.published_date, p.page_slug
 from page p
 join navigation n on p.id = n.page_id
 where n.navigator = ?
@@ -56,10 +58,11 @@ SQL;
      *
      * Get navigation and build hierarchy
      * @param  string $navigator
-     * @param  bool  $includeUnpublished Filter on published pages
-     * @return mixed                     Array|null
+     * @param  bool   $includeUnpublished Filter on published pages
+     * @param  string $currentRoute       Current route path to set active flag
+     * @return mixed                      Array|null
      */
-    public function findNavHierarchy(string $navigator, bool $includeUnpublished = false)
+    public function findNavHierarchy(string $navigator, bool $includeUnpublished = false, string $currentRoute = null)
     {
         // Get navigator rows
         $this->allNavRows = $this->findNavigation($navigator, $includeUnpublished);
@@ -73,7 +76,18 @@ SQL;
 
             if ($row->parent_id === null) {
                 $row->level = 1;
+
+                // Is this the current route? If so set flag
+                if ($currentRoute === $row->page_slug) {
+                    $row->currentPage = true;
+                }
+
+                // Set link title
+                $row->title = $row->nav_title ?? $row->page_title;
+
+                // Asign to new navigator array
                 $this->newNav[] = &$row;
+
                 // Find any children
                 $this->addChildNav($row, 1);
             }
@@ -86,11 +100,12 @@ SQL;
      * Add Child Nav Rows
      *
      * Recursive function to build multidimensional navigation object
-     * @var object  $parent
-     * @var integer $level  Recursion Depth
+     * @param object  $parent
+     * @param integer $level        Recursion Depth
+     * @param  string $currentRoute Current route path to set active flag
      * @return void
      */
-    protected function addChildNav(&$parent, $level)
+    protected function addChildNav(&$parent, int $level, string $currentRoute = null)
     {
         // Recursive depth indicator
         $level++;
@@ -99,10 +114,21 @@ SQL;
         foreach ($this->allNavRows as &$row) {
             if ($parent->id === $row->parent_id) {
                 $row->level = $level;
+
+                // Is this the current route?
+                if ($currentRoute === $row->page_slug) {
+                    $row->currentPage = true;
+                }
+
+                // Set link title
+                $row->title = $row->nav_title ?? $row->page_title;
+
+                // If has child, then assign to parent
                 isset($parent->childNav) ?: $parent->childNav = [];
                 $parent->childNav[] = &$row;
+
                 // Find any children
-                $this->addChildNav($row, $level);
+                $this->addChildNav($row, $level, $currentRoute);
             }
         }
     }
