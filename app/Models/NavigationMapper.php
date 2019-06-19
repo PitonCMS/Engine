@@ -31,6 +31,12 @@ class NavigationMapper extends DataMapperAbstract
     protected $newNav;
 
     /**
+     * Nav Placeholder Title
+     * @var string
+     */
+    protected $placeholderTitle = '[Placeholder]';
+
+    /**
      * Find Navigation
      *
      * Finds all navigation rows by navigator name
@@ -43,8 +49,8 @@ class NavigationMapper extends DataMapperAbstract
 select
     n.id, n.navigator, n.parent_id, n.sort, n.page_id,
     p.title page_title, n.title nav_title, n.active, p.published_date, p.page_slug
-from page p
-join navigation n on p.id = n.page_id
+from navigation n
+left join page p on n.page_id = p.id and p.collection_slug is null
 where n.navigator = ?
 order by n.sort
 SQL;
@@ -56,40 +62,49 @@ SQL;
     /**
      * Navigation Hierarchy
      *
-     * Get navigation and build hierarchy
-     * @param  string $navigator
-     * @param  bool   $includeUnpublished Filter on published pages
-     * @param  string $currentRoute       Current route path to set active flag
-     * @return mixed                      Array|null
+     * Get navigation records and build multidimensional hierarchy
+     * @param  string $navigator    Navigator name
+     * @param  string $currentRoute Current route path to match and set active flag
+     * @param  bool   $published    Filter on published pages
+     * @param  bool   $active       Filter on active links
+     * @return mixed                Array|null
      */
-    public function findNavHierarchy(string $navigator, bool $includeUnpublished = false, string $currentRoute = null)
+    public function findNavHierarchy(string $navigator, string $currentRoute = null, bool $published = true, bool $active = true)
     {
         // Get navigator rows
-        $this->allNavRows = $this->findNavigation($navigator, $includeUnpublished);
+        $this->allNavRows = $this->findNavigation($navigator);
+
+        // Recursive depth indicator
+        $level =  1;
 
         // Set top level (parent_id is null) rows first
         foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published
-            if ($includeUnpublished && $row->published_date <= $this->today()) {
+            // Skip if page is not published, or navigation link not active
+            if (
+                ($published && $row->published_date > $this->today) ||
+                ($active && $row->active === 'N')
+                ) {
                 continue;
             }
 
+            // Assign top level nav rows (parent_id is null)
             if ($row->parent_id === null) {
-                $row->level = 1;
+                $row->level = $level;
 
-                // Is this the current route? If so set flag
+                // Is this the current route? If so set currentPage flag
                 if ($currentRoute === $row->page_slug) {
                     $row->currentPage = true;
                 }
 
-                // Set link title
+                // Set page title if placeholder link, and link title
+                $row->page_title = $row->page_title ?? $this->placeholderTitle;
                 $row->title = $row->nav_title ?? $row->page_title;
 
-                // Asign to new navigator array
+                // Asign to navigator array
                 $this->newNav[] = &$row;
 
-                // Find any children
-                $this->addChildNav($row, 1);
+                // Add any nav children
+                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
             }
         }
 
@@ -97,21 +112,31 @@ SQL;
     }
 
     /**
-     * Add Child Nav Rows
+     * Add Child Navigation Item
      *
      * Recursive function to build multidimensional navigation object
-     * @param object  $parent
-     * @param integer $level        Recursion Depth
-     * @param  string $currentRoute Current route path to set active flag
+     * @param object  $parent       Parent nav item reference
+     * @param integer $level        Recursion depth of parent
+     * @param  string $currentRoute Current route path to match and set active flag
+     * @param  bool   $published    Filter on published pages
+     * @param  bool   $active       Filter on active links
      * @return void
      */
-    protected function addChildNav(&$parent, int $level, string $currentRoute = null)
+    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published, bool $active)
     {
         // Recursive depth indicator
         $level++;
 
-        // Go through raw nav rows and append child of $parent
+        // Go through all nav rows and append child of $parent
         foreach ($this->allNavRows as &$row) {
+            // Skip if page is not published, or navigation link not active
+            if (
+                ($published && $row->published_date > $this->today) ||
+                ($active && $row->active === 'N')
+                ) {
+                continue;
+            }
+
             if ($parent->id === $row->parent_id) {
                 $row->level = $level;
 
@@ -120,15 +145,16 @@ SQL;
                     $row->currentPage = true;
                 }
 
-                // Set link title
+                // Set page title if placeholder, and link title
+                $row->page_title = $row->page_title ?? $this->placeholderTitle;
                 $row->title = $row->nav_title ?? $row->page_title;
 
-                // If has child, then assign to parent
+                // If parent has child, then assign child to parent
                 isset($parent->childNav) ?: $parent->childNav = [];
                 $parent->childNav[] = &$row;
 
                 // Find any children
-                $this->addChildNav($row, $level, $currentRoute);
+                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
             }
         }
     }

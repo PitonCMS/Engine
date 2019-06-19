@@ -151,11 +151,11 @@ class Front extends Base
         // Get dependencies
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
-        // Set flag on page for current request
+        // Get current URL path to find currentPage in navigation
+        // And check if home page '/' and reset to match page slug
         $url = $this->uri->getPath();
-        // Check if home page '/' to match slug name
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
 
-        return $this->navigator[$navigator] = $navigationMapper->findNavHierarchy($navigator, false, $url);
+        return $this->navigator[$navigator] = $navigationMapper->findNavHierarchy($navigator, $url);
     }
 }

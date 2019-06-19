@@ -21,12 +21,13 @@
     /* Suggested Styles */
     .nav-controls {margin-left: 6rem;}
     .fa-trash-alt:hover {color: red;}
-    .delete-flag {background-color: lightpink;}
-    .disable-flag {background-color: lightgrey;}
+    .nav-item-delete {background-color: lightpink;}
+    .nav-item-disabled {background-color: lightgrey;}
     li.nav-item:first-child .fa-arrow-up,
     li.nav-item:last-child .fa-arrow-down,
-    li.nav-item.level-1 > .nav-controls > .fa-arrow-left
+    li.nav-item.nav-item-level-1 > .nav-controls > .fa-arrow-left
       {color: lightgray; cursor: not-allowed;}
+      /* nav-level 2, nav-item-level-3 ... */
   </style>
 
   <h3>Navigation</h3>
@@ -51,6 +52,7 @@
       <label>Add Page to Navigation</label>
       <select class="form-control jsNavPageSelector">
         <option value=""></option>
+        <option value="0">[Placeholder]</option>
         {% for p in getNavPages() %}
         <option value="{{ p.id }}">{{ p.title }}</option>
         {% endfor %}
@@ -68,7 +70,7 @@
 {% import _self as navSet %}
 
     {% for n in nav %}
-    <li class="mt-3 mb-3 nav-item {% if n.level == 1%}level-1{% endif %} {% if n.active == 'N' %}disable-flag{% endif %} jsNavItem" data-level="{{ n.level }}" data-id="{{ n.id }}">
+    <li class="mt-3 mb-3 nav-item nav-item-level-{{ n.level }} {% if n.active == 'N' %}nav-item-disabled{% endif %} jsNavItem" data-level="{{ n.level }}" data-id="{{ n.id }}">
       <span class="badge badge-pill badge-secondary jsNavItemTitle">{{ n.page_title }}</span>
       <input type="hidden" name="navSet[{{ n.id }}][navId]" value="{{ n.id }}">
       <input type="hidden" class="jsNavPageId" name="navSet[{{ n.id }}][pageId]" value="{{ n.page_id }}">
@@ -105,7 +107,7 @@
       if ($(this).val() !== "") {
         navItemKey++;
         let $new = $('.jsNewNavItem > .jsNavItem').clone();
-        $new.data('level', 1);
+        $new.data('level', 1).addClass('nav-item-level-1');
         $new.find('.jsNavPageId').val($(this).val());
         $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
         $new.find('input[name^=navSet]').each(function(i, e) {
@@ -138,7 +140,7 @@
         let $target = $navItem.closest('.jsNavParent').closest('.jsNavItem');
         $navItem.detach();
         let parentId = ($target.data('level') === 1) ? "" : $target.data('id');
-        ($target.data('level') === 1) ? $navItem.addClass('level-1') : null;
+        ($target.data('level') === 1) ? $navItem.addClass('nav-item-level-1') : null;
         $navItem.data('level', level - 1)
         $navItem.find('.jsNavParentId').val(parentId);
         $target.after($navItem);
@@ -153,7 +155,7 @@
         let $target = $navItem.prev('.jsNavItem');
         $navItem.find('.jsNavParentId').val($target.data('id'));
         $navItem.data('level', level + 1);
-        $navItem.removeClass('level-1');
+        $navItem.removeClass('nav-item-level-1');
         if ($target.children('ol.jsNavParent').length === 1) {
           $navItem.detach();
           $target.children('ol.jsNavParent').append($navItem);
@@ -168,19 +170,19 @@
           // Get current status and reverse
           if ($navItem.find('.jsNavDeleteFlag').val() === "") {
             $navItem.find('.jsNavDeleteFlag').val("on");
-            $navItem.addClass('delete-flag');
+            $navItem.addClass('nav-item-delete');
           } else {
             $navItem.find('.jsNavDeleteFlag').val("");
-            $navItem.removeClass('delete-flag');
+            $navItem.removeClass('nav-item-delete');
           }
         } else if (control === 'hide') {
           // Get current status and reverse
           if ($navItem.find('.jsNavActiveFlag').val() === "Y") {
             $navItem.find('.jsNavActiveFlag').val("N");
-            $navItem.addClass('disable-flag');
+            $navItem.addClass('nav-item-disabled');
           } else {
             $navItem.find('.jsNavActiveFlag').val("Y");
-            $navItem.removeClass('disable-flag');
+            $navItem.removeClass('nav-item-disabled');
           }
         }
     });

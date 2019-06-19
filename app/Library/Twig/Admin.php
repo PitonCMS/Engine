@@ -239,10 +239,12 @@ class Admin extends Base
      */
     public function getNavPages()
     {
+        // Get cached pages if available
         if ($this->pages) {
             return $this->pages;
         }
 
+        // Otherwise fetch all pages
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         return $this->pages = $pageMapper->findPages(true);
     }

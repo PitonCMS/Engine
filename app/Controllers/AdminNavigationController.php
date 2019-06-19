@@ -16,7 +16,9 @@ namespace Piton\Controllers;
 class AdminNavigationController extends AdminBaseController
 {
     /**
-     * Show All Media
+     * Show Navigator
+     *
+     * @param  array $args Route parameter segment 'nav'
      */
     public function showNavigator($args)
     {
@@ -35,7 +37,7 @@ class AdminNavigationController extends AdminBaseController
 
         // If a navigator was requested
         if (isset($args['nav'])) {
-            $navigation = $navMapper->findNavHierarchy($args['nav']);
+            $navigation = $navMapper->findNavHierarchy($args['nav'], null, false, false);
             $data['navigator'] = $args['nav'];
             $data['navigation'] = $navigation;
         }
@@ -45,19 +47,18 @@ class AdminNavigationController extends AdminBaseController
 
     /**
      * Save Navigation
-     *
      */
     public function saveNavigation()
     {
         // Get dependencies
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
-        // Get data
+        // Get POST data
         $post = $this->request->getParsedBodyParam('navSet');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
         // Save each nav item
-        $sort = 1;
+        $sort = 0;
         foreach ($post as $navItem) {
             $sort++;
             $nav = $navigationMapper->make();
@@ -70,7 +71,8 @@ class AdminNavigationController extends AdminBaseController
             }
 
             $nav->navigator = $navigator;
-            $nav->page_id = $navItem['pageId'];
+            // pageId 0 is for placeholder nav links
+            $nav->page_id = ($navItem['pageId'] === '0') ? null : $navItem['pageId'];
             $nav->parent_id = $navItem['parentId'];
             $nav->sort = $sort;
             $nav->title = $navItem['title'];

@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `navigator` varchar(60) NOT NULL DEFAULT 'main',
   `parent_id` int NULL DEFAULT NULL,
   `sort` smallint NULL DEFAULT 1,
-  `page_id` int NOT NULL,
+  `page_id` int NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `active` enum('Y', 'N') NOT NULL DEFAULT 'Y',
   `created_by` int NOT NULL DEFAULT 1,
