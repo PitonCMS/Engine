@@ -160,6 +160,34 @@ SQL;
     }
 
     /**
+     * Delete Navigation Link
+     *
+     * Recursively deletes children of nav link
+     * @param  int  $navId
+     * @return void
+     */
+    public function deleteByNavId(int $navId)
+    {
+        // Find any children to delete
+        $this->makeSelect();
+        $this->sql .= ' and `parent_id` = ?';
+        $this->bindValues[] = $navId;
+        $children = $this->find();
+
+        if ($children) {
+            foreach ($children as $child) {
+                $this->deleteByNavId($child->id);
+            }
+        }
+
+        // Delete nav link
+        $this->sql = 'delete from `navigation` where `id` = ?;';
+        $this->bindValues[] =  $navId;
+
+        return $this->execute();
+    }
+
+    /**
      * Delete by Page ID
      *
      * Delete navigation record by page_id
@@ -168,10 +196,14 @@ SQL;
      */
     public function deleteByPageId(int $pageId)
     {
-        // TODO Remove child rows if parent is being deleted
-        $this->sql = "delete from `{$this->table}` where `page_id` = ?";
+        // Get nav ID, and call deleteByNavId() to recursively delete children
+        $this->makeSelect();
+        $this->sql .= ' and `page_id` = ?';
         $this->bindValues[] = $pageId;
+        $nav = $this->findRow();
 
-        return $this->execute();
+        if ($nav) {
+            $this->deleteByNavId($nav->id);
+        }
     }
 }

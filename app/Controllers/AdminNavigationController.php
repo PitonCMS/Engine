@@ -60,16 +60,15 @@ class AdminNavigationController extends AdminBaseController
         // Save each nav item
         $sort = 0;
         foreach ($post as $navItem) {
-            $sort++;
-            $nav = $navigationMapper->make();
-            $nav->id = $navItem['navId'];
-
             // Check whether to just delete
-            if ($navItem['delete'] == 'on') {
-                $navigationMapper->delete($nav);
+            if ($navItem['delete'] == 'on' && is_numeric($navItem['navId'])) {
+                $navigationMapper->deleteByNavId($navItem['navId']);
                 continue;
             }
 
+            $sort++;
+            $nav = $navigationMapper->make();
+            $nav->id = $navItem['navId'];
             $nav->navigator = $navigator;
             // pageId 0 is for placeholder nav links
             $nav->page_id = ($navItem['pageId'] === '0') ? null : $navItem['pageId'];

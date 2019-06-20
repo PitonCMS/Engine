@@ -84,7 +84,8 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `navigator_idx` (`navigator`),
-  KEY `page_id_idx` (`page_id`)
+  KEY `page_id_idx` (`page_id`),
+  KEY `parent_id_idx` (`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
