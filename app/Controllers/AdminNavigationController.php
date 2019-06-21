@@ -59,10 +59,12 @@ class AdminNavigationController extends AdminBaseController
 
         // Save each nav item
         $sort = 0;
-        foreach ($post as $navItem) {
+        foreach ($post as $postKey => &$navItem) {
             // Check whether to just delete
-            if ($navItem['delete'] == 'on' && is_numeric($navItem['navId'])) {
-                $navigationMapper->deleteByNavId($navItem['navId']);
+            if ($navItem['delete'] == 'on') {
+                if (is_numeric($navItem['navId'])) {
+                    $navigationMapper->deleteByNavId($navItem['navId']);
+                }
                 continue;
             }
 
@@ -70,13 +72,22 @@ class AdminNavigationController extends AdminBaseController
             $nav = $navigationMapper->make();
             $nav->id = $navItem['navId'];
             $nav->navigator = $navigator;
-            // pageId 0 is for placeholder nav links
+
+            // pageId 0 is for placeholder nav links, which are not joined to page table
             $nav->page_id = ($navItem['pageId'] === '0') ? null : $navItem['pageId'];
-            $nav->parent_id = $navItem['parentId'];
+
+            // Get parent ID if set
+            // If parent ID is not numeric, then get parent nav link by post array key, and use that nav ID
+            $nav->parent_id = null;
+            if (!empty($navItem['parentId'])) {
+                $nav->parent_id = is_numeric($navItem['parentId']) ? (int) $navItem['parentId'] : $post[$navItem['parentId']]['navId'];
+            }
+
             $nav->sort = $sort;
             $nav->title = $navItem['title'];
             $nav->active = $navItem['active'] ?: 'Y';
-            $navigationMapper->save($nav);
+            $savedNav = $navigationMapper->save($nav);
+            $navItem['navId'] = $savedNav->id;
         }
 
         return $this->redirect('adminNavigations', ['nav' => $navigator]);

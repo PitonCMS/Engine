@@ -65,12 +65,12 @@
 {% endblock content %}
 
 
-{# This is a recursive function, which calls itself if a childNav exists #}
+{# This is a recursive function, which calls itself if the current nav item has a child #}
 {% macro navBlock(nav) %}
 {% import _self as navSet %}
 
     {% for n in nav %}
-    <li class="mt-3 mb-3 nav-item nav-item-level-{{ n.level }} {% if n.active == 'N' %}nav-item-disabled{% endif %} jsNavItem" data-level="{{ n.level }}" data-id="{{ n.id }}">
+    <li class="mt-3 mb-3 nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}nav-item-disabled{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
       <span class="badge badge-pill badge-secondary jsNavItemTitle">{{ n.page_title }}</span>
       <input type="hidden" name="navSet[{{ n.id }}][navId]" value="{{ n.id }}">
       <input type="hidden" class="jsNavPageId" name="navSet[{{ n.id }}][pageId]" value="{{ n.page_id }}">
@@ -80,7 +80,7 @@
       <input type="text" class="ml-2" name="navSet[{{ n.id }}][title]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Optional title">
 
       <span class="nav-controls">
-        <span class="fa fa-eye-slash jsNavItemCtrl" data-control="hide" title="Disable"></span> |
+        <span class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></span> |
         <span class="fa fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></span>
         <span class="fa fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></span> |
         <span class="fa fa-arrow-left jsNavItemCtrl" data-control="left" title="Move Left"></span>
@@ -105,21 +105,20 @@
     let navItemKey = 0;
     $('.jsNavPageSelector').on('change', function() {
       if ($(this).val() !== "") {
-        navItemKey++;
+        let key = (navItemKey++) + "n";
         let $new = $('.jsNewNavItem > .jsNavItem').clone();
-        $new.data('level', 1).addClass('nav-item-level-1');
+        $new.data('level', 1).data('key', key);
         $new.find('.jsNavPageId').val($(this).val());
         $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
         $new.find('input[name^=navSet]').each(function(i, e) {
           let name = $(e).attr('name');
-          name = name.replace(/(navSet\[)(\].*)/, "$1"+navItemKey+"n"+"$2");
-          $(e).attr('name', name);
+          $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1"+key+"$2"));
         });
         $('.jsEditNavBlock > .jsNavParent').append($new);
       }
     });
 
-    // Arrange nav items, as well as delete and hide
+    // Arrange nav items, as well as delete and disable
     $('.jsEditNavBlock').on('click', '.jsNavItemCtrl', function() {
       // Get nav item to move, direction, and zero index length of immediate siblings, and recursive level
       let $navItem = $(this).closest('.jsNavItem');
@@ -139,7 +138,7 @@
         // If ol is nested child of a jsNavItem, move up one level
         let $target = $navItem.closest('.jsNavParent').closest('.jsNavItem');
         $navItem.detach();
-        let parentId = ($target.data('level') === 1) ? "" : $target.data('id');
+        let parentId = ($target.data('level') === 1) ? "" : $target.data('key');
         $navItem.removeClass('nav-item-level-' + level).addClass('nav-item-level-'+(level - 1));
         $navItem.data('level', level - 1)
         $navItem.find('.jsNavParentId').val(parentId);
@@ -153,7 +152,7 @@
         // The first child should not be indented
         // If the above sibling has a child <ol> then insert into that
         let $target = $navItem.prev('.jsNavItem');
-        $navItem.find('.jsNavParentId').val($target.data('id'));
+        $navItem.find('.jsNavParentId').val($target.data('key'));
         $navItem.data('level', level + 1);
         $navItem.removeClass('nav-item-level-' + level).addClass('nav-item-level-' + (level + 1));
         if ($target.children('ol.jsNavParent').length === 1) {
@@ -175,13 +174,13 @@
             $navItem.find('.jsNavDeleteFlag').val("");
             $navItem.removeClass('nav-item-delete');
           }
-        } else if (control === 'hide') {
+        } else if (control === 'disable') {
           // Get current status and reverse
-          if ($navItem.find('.jsNavActiveFlag').val() === "Y") {
-            $navItem.find('.jsNavActiveFlag').val("N");
+          if ($navItem.children('.jsNavActiveFlag').val() === "Y") {
+            $navItem.children('.jsNavActiveFlag').val("N");
             $navItem.addClass('nav-item-disabled');
           } else {
-            $navItem.find('.jsNavActiveFlag').val("Y");
+            $navItem.children('.jsNavActiveFlag').val("Y");
             $navItem.removeClass('nav-item-disabled');
           }
         }
