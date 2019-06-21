@@ -13,7 +13,7 @@ use Exception;
 /**
  * Piton Sitemap Handler
  */
-class SitemapHandler
+class Sitemap
 {
     protected $sitemapFileName = 'sitemap.xml';
     protected $sitemapFilePath;

@@ -185,5 +185,5 @@ $container['mediaSizes'] = function ($c) {
 
 // Sitemap Handler
 $container['sitemapHandler'] = function ($c) {
-    return new Piton\Library\Handlers\SitemapHandler($c['logger']);
+    return new Piton\Library\Handlers\Sitemap($c['logger']);
 };
