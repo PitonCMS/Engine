@@ -1,0 +1,32 @@
+#navigation {
+  form {}
+
+  .nav-controls {
+    margin-left: 6rem;
+  }
+
+  .jsNavParent {
+    background: pink;
+  }
+
+  /* Suggested Styles */
+
+  .fa-trash-alt:hover {
+    color: red;
+  }
+
+  .delete-flag {
+    background-color: lightpink;
+  }
+
+  .disable-flag {
+    background-color: lightgrey;
+  }
+
+  li.nav-item:first-child .fa-arrow-up,
+  li.nav-item:last-child .fa-arrow-down,
+  li.nav-item.level-1>.nav-controls>.fa-arrow-left {
+    color: lightgray;
+    cursor: not-allowed;
+  }
+}
