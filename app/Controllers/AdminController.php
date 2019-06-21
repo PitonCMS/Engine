@@ -40,7 +40,6 @@ class AdminController extends AdminBaseController
      */
     public function release($args)
     {
-        $json = $this->container->json;
         $markdown = $this->container->markdownParser;
         $responseBody = '';
 
