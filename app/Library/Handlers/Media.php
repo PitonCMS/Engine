@@ -17,7 +17,7 @@ use \Closure;
  * Manages media manipulations and optimizations
  * Requires TinyJPG API
  */
-class MediaHandler
+class Media
 {
     /**
      * Public Root Directory
@@ -91,7 +91,7 @@ class MediaHandler
     {
         // Make sure there is a key
         if (empty($tinifyApiKey)) {
-            throw Exception('PitonCMS: MediaHandler requires a TinyJPG developer API Key');
+            throw Exception('PitonCMS: Media Handler requires a TinyJPG developer API Key');
         }
 
         try {
@@ -122,7 +122,7 @@ class MediaHandler
 
         // Ensure source file exists
         if (!file_exists($absoluteMediaPath)) {
-            throw new Exception('PitonCMS: MediaHandler: Source file not found ' . $absoluteMediaPath);
+            throw new Exception('PitonCMS: Media Handler: Source file not found ' . $absoluteMediaPath);
         }
 
         // Get dimensions and set orientation

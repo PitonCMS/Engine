@@ -163,7 +163,7 @@ $container['mediaUri'] = function ($c) {
 
 // Media Handler
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\MediaHandler($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\Media($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
 };
 
 // Media Size File Suffix Reference
