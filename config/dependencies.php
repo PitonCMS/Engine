@@ -148,7 +148,7 @@ $container['csrfGuard'] = function ($c) {
 
 // File Upload Handler
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles(), $c['mediaUri']);
+    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaUri']);
 };
 
 // Media File Uri
