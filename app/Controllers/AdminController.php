@@ -20,11 +20,9 @@ class AdminController extends AdminBaseController
      */
     public function home()
     {
-        $json = $this->container->json;
-
         // Get Piton Engine version from composer.lock
-        if (null === $definition = $json->getJson(ROOT_DIR . 'composer.lock')) {
-            $this->setAlert('danger', 'Error Reading composer.lock', $json->getErrorMessages());
+        if (null === $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
+            $this->setAlert('danger', 'Error Reading composer.lock');
         }
 
         $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));

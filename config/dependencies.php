@@ -131,9 +131,9 @@ $container['markdownParser'] = function ($c) {
     return new Piton\Library\Utilities\MDParse();
 };
 
-// JSON helper
-$container['json'] = function ($c) {
-    return new Piton\Library\Utilities\Json($c);
+// Definition handler
+$container['definition'] = function ($c) {
+    return new Piton\Library\Handlers\Definition(new Webmozart\Json\JsonDecoder());
 };
 
 // Piton Toolbox

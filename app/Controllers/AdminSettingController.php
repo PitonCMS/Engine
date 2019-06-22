@@ -27,22 +27,20 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $json = $this->container->json;
+        $definition = $this->container->definition;
 
         // Get saved settings from database
         $category = $args['cat'] ?? null;
         $savedSettings = $settingMapper->findSiteSettings($category);
 
         // Get seeded PitonCMS settings definition
-        $seededSettingsPath = ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json';
-        if (null === $seededSettings = $json->getJson($seededSettingsPath, 'setting')) {
-            throw new Exception('PitonCMS: Invalid seeded config/settings.json: ' . implode($json->getErrorMessages(), ','));
+        if (null === $seededSettings = $definition->getSeededSiteSettings()) {
+            throw new Exception('PitonCMS: Invalid seeded config/settings.json: ' . implode(', ', $definition->getErrorMessages()));
         }
 
         // Get custom settings definition
-        $customSettingsPath = ROOT_DIR . 'structure/definitions/siteSettings.json';
-        if (null === $customSettings = $json->getJson($customSettingsPath, 'setting')) {
-            $this->setAlert('danger', 'Custom Settings Error', $json->getErrorMessages());
+        if (null === $customSettings = $definition->getSiteSettings()) {
+            $this->setAlert('danger', 'Custom Settings Error', $definition->getErrorMessages());
         } else {
             // Merge saved settings with custom settings
             $data['settings'] = $this->mergeSettings(

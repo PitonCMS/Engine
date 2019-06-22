@@ -24,13 +24,12 @@ class AdminNavigationController extends AdminBaseController
     {
         // Get dependencies and initiate $data variable
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
-        $json = $this->container->json;
+        $definition = $this->container->definition;
         $data = [];
 
         // Get navigation definitions
-        $jsonPath = ROOT_DIR . 'structure/definitions/navigation.json';
-        if (null === $navSettings = $json->getJson($jsonPath)) {
-            $this->setAlert('danger', 'Navigation JSON Definition Error', $json->getErrorMessages());
+        if (null === $navSettings = $definition->getNavigation()) {
+            $this->setAlert('danger', 'Navigation JSON Definition Error', $definition->getErrorMessages());
         }
 
         $data['navigators'] = $navSettings->navigators;
