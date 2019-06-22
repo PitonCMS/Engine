@@ -44,6 +44,7 @@ class Definition extends JsonDecoder
     protected $validation = [
         'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/elementSchema.json',
         'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
+        'navigation' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/navigationSchema.json',
         'settings' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/settingsSchema.json',
     ];
 
@@ -123,7 +124,7 @@ class Definition extends JsonDecoder
      */
     public function getNavigation()
     {
-        return $this->decodeJson($this->definition['navigation']);
+        return $this->decodeJson($this->definition['navigation'], $this->validation['navigation']);
     }
 
     /**

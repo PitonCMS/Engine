@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "Navigation validation schema",
+    "type": "object",
+    "properties": {
+        "navigators": {
+            "description": "An array of navigator keys",
+            "type": "array",
+            "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z]+$"
+            }
+        }
+    },
+    "required": ["navigators"]
+}
