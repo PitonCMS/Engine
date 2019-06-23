@@ -58,7 +58,7 @@ class AdminNavigationController extends AdminBaseController
 
         // Save each nav item
         $sort = 0;
-        foreach ($post as $postKey => &$navItem) {
+        foreach ($post as &$navItem) {
             // Check whether to just delete
             if ($navItem['delete'] == 'on') {
                 if (is_numeric($navItem['navId'])) {
