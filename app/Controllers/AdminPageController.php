@@ -25,11 +25,12 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $definition = $this->container->definition;
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
             $data['pages'] = $pageMapper->findCollectionPages(true);
-            $data['templates'] = $this->getPageTemplates('collection');
+            $data['templates'] = $definition->getCollections();
             $data['type'] = 'collection';
 
             // Get distinct list of collection names for section separators
@@ -42,7 +43,7 @@ class AdminPageController extends AdminBaseController
             }
         } else {
             $data['pages'] = $pageMapper->findPages(true);
-            $data['templates'] = $this->getPageTemplates('page');
+            $data['templates'] = $definition->getPages();
             $data['type'] = 'page';
         }
 
@@ -60,7 +61,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $json = $this->container->json;
+        $definition = $this->container->definition;
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
@@ -82,10 +83,9 @@ class AdminPageController extends AdminBaseController
             $page->definition = $definionParam;
         }
 
-        // Path to JSON definition file
-        $jsonPath = ROOT_DIR . "structure/definitions/pages/{$page->definition}";
-        if (null === $page->json = $json->getJson($jsonPath, 'page')) {
-            $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
+        // Get page definition
+        if (null === $page->json = $definition->getPage($page->definition)) {
+            $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
         }
 
         // Merge saved page settings with settings from page JSON definition
@@ -239,7 +239,7 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $json = $this->container->json;
+        $definition = $this->container->definition;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
@@ -268,10 +268,8 @@ class AdminPageController extends AdminBaseController
             }
 
             // Get the elementTemplateFile from element JSON file
-            $jsonPath = ROOT_DIR . "structure/definitions/elements/{$pageElement->definition}";
-
-            if (null === $elementDefinition = $json->getJson($jsonPath, 'element')) {
-                throw new Exception('Element JSON Definition Error: ' . print_r($json->getErrorMessages(), true));
+            if (null === $elementDefinition = $definition->getElement($pageElement->definition)) {
+                throw new Exception('Element JSON Definition Error: ' . print_r($definition->getErrorMessages(), true));
             }
 
             $pageElement->template = $elementDefinition->elementTemplateFile;

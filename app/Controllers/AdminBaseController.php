@@ -129,45 +129,4 @@ class AdminBaseController extends BaseController
         // Append defined settings to end of saved settings array and return
         return array_merge($savedSettings, $definedSettings);
     }
-
-    /**
-     * Get Page or Collection Templates
-     *
-     * Get available templates from JSON files. If no param is provided, then all templates are returned
-     * @param  string $templateType 'page' | 'collection' | null
-     * @return array                Array of page templates
-     */
-    public function getPageTemplates(string $templateType = null)
-    {
-        $toolbox = $this->container->toolbox;
-        $json = $this->container->json;
-
-        // Validate inputs
-        if ($templateType !== null && !in_array($templateType, ['page','collection'])) {
-            throw new Exception("PitonCMS: Unexpected $templateType paramter. Expecting 'page' or 'collection'");
-        }
-
-        $jsonPath = ROOT_DIR . "structure/definitions/pages/";
-        $templates = [];
-
-        foreach ($toolbox->getDirectoryFiles($jsonPath) as $row) {
-            // Get definition files
-            if (null === $definition = $json->getJson($jsonPath . $row['filename'], 'page')) {
-                $this->setAlert('danger', 'Page JSON Definition Error', $json->getErrorMessages());
-                break;
-            }
-
-            if ($templateType !== null && $definition->templateType !== $templateType) {
-                continue;
-            }
-
-            $templates[] = [
-                'filename' => $row['filename'],
-                'name' => $definition->templateName,
-                'description' => $definition->templateDescription
-            ];
-        }
-
-        return $templates;
-    }
 }

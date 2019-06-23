@@ -25,7 +25,7 @@ class Admin extends Base
      * For multiple calls on getCustomElements()
      * @var array
      */
-    protected $elementOptions;
+    protected $elements;
 
     /**
      * Collections Cache
@@ -191,28 +191,14 @@ class Admin extends Base
      */
     public function getElements()
     {
+        // Return cached set of elements, if available
+        if (isset($this->elements)) {
+            return $this->elements;
+        }
+
         // Get dependencies
-        $toolbox = $this->container->toolbox;
-        $json = $this->container->json;
-
-        if (isset($this->elementOptions)) {
-            return $this->elementOptions;
-        }
-
-        // Get all JSON files in directory
-        $jsonPath = ROOT_DIR . "structure/definitions/elements/";
-        $elements = [];
-
-        foreach ($toolbox->getDirectoryFiles($jsonPath) as $key => $file) {
-            if (null === $definition = $json->getJson($jsonPath . $file['filename'], 'element')) {
-                throw new Exception('PitonCMS: Element JSON definition error: ' . print_r($json->getErrorMessages(), true));
-            } else {
-                $definition->filename = $file['filename'];
-                $elements[] = $definition;
-            }
-        }
-
-        return $this->elementOptions = $elements;
+        $definition = $this->container->definition;
+        return $this->elements = $definition->getElements();
     }
 
     /**

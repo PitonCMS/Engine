@@ -131,9 +131,9 @@ $container['markdownParser'] = function ($c) {
     return new Piton\Library\Utilities\MDParse();
 };
 
-// JSON helper
-$container['json'] = function ($c) {
-    return new Piton\Library\Utilities\Json($c);
+// Definition handler
+$container['definition'] = function ($c) {
+    return new Piton\Library\Handlers\Definition(new Webmozart\Json\JsonDecoder());
 };
 
 // Piton Toolbox
@@ -148,7 +148,7 @@ $container['csrfGuard'] = function ($c) {
 
 // File Upload Handler
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUploadHandler($c['request']->getUploadedFiles(), $c['mediaUri']);
+    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaUri']);
 };
 
 // Media File Uri
@@ -163,7 +163,7 @@ $container['mediaUri'] = function ($c) {
 
 // Media Handler
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\MediaHandler($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\Media($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
 };
 
 // Media Size File Suffix Reference
@@ -185,5 +185,5 @@ $container['mediaSizes'] = function ($c) {
 
 // Sitemap Handler
 $container['sitemapHandler'] = function ($c) {
-    return new Piton\Library\Handlers\SitemapHandler($c['logger']);
+    return new Piton\Library\Handlers\Sitemap($c['logger']);
 };

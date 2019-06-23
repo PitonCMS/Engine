@@ -16,7 +16,7 @@ use \Closure;
  *
  * Manages Media file uploads
  */
-class FileUploadHandler
+class FileUpload
 {
     /**
      * Uploaded Files Array
