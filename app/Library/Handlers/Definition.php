@@ -211,7 +211,7 @@ class Definition extends JsonDecoder
         foreach ($this->getDirectoryFiles($this->definition['pages']) as $file) {
             // Get all definition files
             if (null === $definition = $this->decodeJson($this->definition['pages'] . $file['filename'], $this->validation['page'])) {
-                $this->setAlert('danger', 'Page JSON Definition Error', print_r($this->getErrorMessages(), true));
+                throw new Exception('PitonCMS: Page definition JSON exception ' . print_r($this->getErrorMessages(), true));
                 break;
             }
 
