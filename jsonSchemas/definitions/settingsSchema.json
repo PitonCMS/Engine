@@ -3,6 +3,6 @@
     "$comment": "Site settings schema",
     "type": "object",
     "properties": {
-        "settings": {"$ref": "jsonSchemas/settingsDefinitionSchema.json#/definition"}
+        "settings": {"$ref": "definitions/settingsDefinitionSchema.json#/definition"}
     }
 }

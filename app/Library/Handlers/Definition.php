@@ -42,10 +42,10 @@ class Definition extends JsonDecoder
      * @var array
      */
     protected $validation = [
-        'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/elementSchema.json',
-        'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/pageSchema.json',
-        'navigation' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/navigationSchema.json',
-        'settings' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/settingsSchema.json',
+        'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/elementSchema.json',
+        'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/pageSchema.json',
+        'navigation' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/navigationSchema.json',
+        'settings' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/settingsSchema.json',
     ];
 
     /**
@@ -202,7 +202,7 @@ class Definition extends JsonDecoder
      * Get Page or Collection Definitions
      *
      * Get available templates from JSON files. If no param is provided, then all templates are returned
-     * @param  string $templateType 'page' | 'collection' | null
+     * @param  string $templateType page|collection
      * @return array                Array of page templates
      */
     protected function getPageDefinitions(string $templateType)
@@ -211,7 +211,7 @@ class Definition extends JsonDecoder
         foreach ($this->getDirectoryFiles($this->definition['pages']) as $file) {
             // Get all definition files
             if (null === $definition = $this->decodeJson($this->definition['pages'] . $file['filename'], $this->validation['page'])) {
-                $this->setAlert('danger', 'Page JSON Definition Error', print_r($this->getErrorMessages(), true));
+                throw new Exception('PitonCMS: Page definition JSON exception ' . print_r($this->getErrorMessages(), true));
                 break;
             }
 
