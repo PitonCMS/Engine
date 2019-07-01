@@ -1,32 +1,61 @@
 #navigation {
-  form {}
-
-  .nav-controls {
-    margin-left: 6rem;
+  .jsNavigatorForm {
+    width: 100%;
   }
 
-  .jsNavParent {
-    background: pink;
+  .jsEditNavBlock {
+    width: 100%;
   }
 
-  /* Suggested Styles */
+  .nav-item-level-1 {
+    display: grid;
+    grid-template-columns: 100px auto auto;
+    grid-gap: 1em;
+    @include margin(.5em null);
+    @include padding(.5em);
+    border-radius: $border-radius;
+    justify-content: flex-start;
+    align-items: center;
+
+  }
+
+  .jsNavItem:nth-child(odd):not(.nav-item-level-2) {
+    background-color: $primary-md-grey;
+  }
+
+  .nav-controls i {
+    cursor: pointer;
+    font-size: 1.25rem;
+    @include padding(null .25em);
+  }
+
+  input[type="text"] {
+    @include padding(.25em);
+    border-radius: $border-radius;
+  }
+
+  .nav-item-level-2 {
+    display: grid;
+    @include padding(.25em null .25em .5em);
+    @include margin(null null .5em 125px);
+    display: grid;
+    grid-template-columns: repeat(2, 125px) max-content;
+    grid-gap: 1em;
+    border-radius: $border-radius;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
   .fa-trash-alt:hover {
     color: red;
   }
 
-  .delete-flag {
-    background-color: lightpink;
-  }
-
-  .disable-flag {
-    background-color: lightgrey;
-  }
 
   li.nav-item:first-child .fa-arrow-up,
   li.nav-item:last-child .fa-arrow-down,
-  li.nav-item.level-1>.nav-controls>.fa-arrow-left {
-    color: lightgray;
+  li.nav-item.nav-item-level-1>.nav-controls>.fa-arrow-left {
+    color: $primary-dark-grey;
     cursor: not-allowed;
   }
+
 }
