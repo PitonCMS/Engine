@@ -8,22 +8,17 @@
             "type": "object",
             "properties": {
                 "category": {
-                    "description": "Setting category group key: site, contact, social",
-                    "type": "string",
-                    "enum": ["site","contact","social","piton","page"]
+                    "$ref": "validations/setting.json#/properties/category"
                 },
                 "label": {
                     "description": "Input label text",
                     "type": "string"
                 },
                 "key": {
-                    "description": "Single camelCase word with only a-z and A-Z characters",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z]{1,60}$"
+                    "$ref": "validations/setting.json#/properties/setting_key"
                 },
                 "value": {
-                    "description": "Default value, optional",
-                    "type": "string"
+                    "$ref": "validations/setting.json#/properties/setting_value"
                 },
                 "inputType": {
                     "description": "HTML input type: input, select, textarea, media.",

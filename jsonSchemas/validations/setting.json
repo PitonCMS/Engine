@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "Validations for `setting` table.",
+    "type": "object",
+    "properties": {
+        "category": {
+            "description": "Setting category group key. Can be one of site, contact, social, piton, and page",
+            "type": "string",
+            "enum": ["site","contact","social","piton","page"]
+        },
+        "reference_id": {
+            "description": "Table foreign key reference ID",
+            "type": "integer"
+        },
+        "setting_key": {
+            "description": "Template key using single camelCase word with only a-z and A-Z characters, up to 60 characters long.",
+            "type": "string",
+            "pattern": "^[a-zA-Z]{1,60}$"
+        },
+        "setting_value": {
+            "description": "Setting value, optional, max 4000 characters.",
+            "type": "string",
+            "maxLength": 4000
+        }
+    },
+    "required": ["category","reference_id","setting_key"]
+}
