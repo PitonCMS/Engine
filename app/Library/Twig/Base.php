@@ -50,6 +50,12 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     protected $csrfTokenValue;
 
     /**
+     * Form Constraints Cache
+     * @var array
+     */
+    protected $constraint = [];
+
+    /**
      * Constructor
      *
      * @param obj Interop\Container\ContainerInterface
@@ -110,6 +116,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
             new \Twig_SimpleFunction('checked', [$this, 'checked']),
             new \Twig_SimpleFunction('getMediaPath', [$this, 'getMediaPath']),
+            new \Twig_SimpleFunction('formConstraint', [$this, 'formConstraint']),
         ];
     }
 
@@ -258,6 +265,24 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
         } else {
             // Fall back to original file
             return $baseUri . $filename;
+        }
+    }
+
+    /**
+     * Form Input Constraints
+     *
+     * Source of constraints are JSON validation files
+     */
+    public function formConstraint(string $table, string $field, ?string $attribute)
+    {
+        // Return cached table constraint
+        if (isset($this->constraint[$table])) {
+            return $this->constraint[$table];
+        }
+
+        // Get constraint
+        if (file_exists(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json")) {
+            $this->constraint[$table] = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
         }
     }
 }
