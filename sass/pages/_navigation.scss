@@ -1,26 +1,34 @@
 #navigation {
+  ol {
+    @include margin(0);
+  }
+
   .jsNavigatorForm {
-    width: 100%;
+    width: 50vw;
   }
 
   .jsEditNavBlock {
     width: 100%;
+    border: solid 1px $secondary-color;
+    border-radius: $border-radius;
   }
 
   .nav-item-level-1 {
     display: grid;
     grid-template-columns: 100px auto auto;
     grid-gap: 1em;
-    @include margin(.5em null);
     @include padding(.5em);
-    border-radius: $border-radius;
     justify-content: flex-start;
     align-items: center;
 
   }
 
   .jsNavItem:nth-child(odd):not(.nav-item-level-2) {
-    background-color: $primary-md-grey;
+    background-color: $secondary-color;
+  }
+
+  .jsNavItem:nth-child(even):not(.nav-item-level-2) {
+    background-color: $primary-light-grey;
   }
 
   .nav-controls i {
@@ -46,16 +54,57 @@
     align-items: center;
   }
 
+  .nav-parent>li {
+    position: relative;
+  }
+
+  .nav-parent>li:before {
+    position: absolute;
+    left: 2px;
+    top: 13px;
+    content: '\2192';
+
+  }
+
+  .nav-parent-title {
+    @include padding(null null null .75em);
+  }
+
+  .nav-child>li {
+    position: relative;
+  }
+
+  .nav-child>li:before {
+    position: absolute;
+    left: 0px;
+    top: 13px;
+    content: '\21b5';
+
+  }
+
   .fa-trash-alt:hover {
     color: red;
   }
-
 
   li.nav-item:first-child .fa-arrow-up,
   li.nav-item:last-child .fa-arrow-down,
   li.nav-item.nav-item-level-1>.nav-controls>.fa-arrow-left {
     color: $primary-dark-grey;
     cursor: not-allowed;
+  }
+
+  .form-control {
+    width: 50%;
+  }
+
+  .help {
+    ol {
+      @include margin(null null 1em null);
+    }
+
+    li {
+      @include margin(null null .5em null);
+    }
   }
 
 }

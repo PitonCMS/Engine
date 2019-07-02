@@ -26,10 +26,10 @@
 <form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="navigator" value="{{ page.navigator }}">
-  <button type="submit" class="btn btn-primary btn-sm">Save Navigation</button>
+  <button type="submit" class="btn btn-primary btn-sm my-3">Save Navigation</button>
 
   <div class="jsEditNavBlock">
-    <ol class="jsNavParent">
+    <ol class="jsNavParent nav-parent">
       {{ navSet.navBlock(page.navigation) }}
     </ol>
   </div>
@@ -51,6 +51,39 @@
   {{ navSet.navBlock([1]) }}
 </div>
 {% endif %}
+<hr>
+<div class="help">
+  <h3>Support</h3>
+  <p>Instructions on setting up Main and Footer navigation for your website.</p>
+  <h4>Top Level Navigation</h4>
+  <ol>
+    <li>If you have not created the page you want to add to the navigation, do that now.</li>
+    <li>From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page will appear at the bottom of the navigation
+      area seen above.
+    </li>
+    <li>Using the arrows move the menu item up/down to position where you want it to appear.</li>
+    <li>Click on the <span class="bg-info text-white">Save Navigation</span> button.</li>
+    <li>Return to your website and refresh page. Your new navigation/page should now appear and be ready live.</li>
+  </ol>
+  <h4>Secondary Level Navigation</h4>
+  <ol>
+    <li>
+      If the secondary menu item you are creating is being associated with a new Top Level menu item, you will need to create the top level [Placeholder] menu item first. From the <span
+        class="bg-info text-white">Add Page to Navigation</span> dropdown select the [Placeholder] option. It will appear in the navigation area seen above. You are required to give this [Placeholder]
+      a name. Enter the navigation name.
+    </li>
+    <li>Create the page you want to add to the navigation.</li>
+    <li>
+      From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page will appear at the bottom of the navigation area seen above.
+    </li>
+    <li>Using the arrows move the new menu item up/down to position below the [Placeholder] item you created in the fist step. Press the right arrow
+      to position your menu item as a child of the top level [Placeholder] item.
+    </li>
+    <li>Click on the <span class="bg-info text-white">Save Navigation</span> button.</li>
+    <li>Return to your website and refresh page. Your new child navigation/page should now appear and be ready live.</li>
+  </ol>
+</div>
+
 {% endblock content %}
 
 
@@ -60,7 +93,7 @@
 
 {% for n in nav %}
 <li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-  <div class="jsNavItemTitle">{{ n.page_title }}</div>
+  <div class="jsNavItemTitle nav-parent-title">{{ n.page_title }}</div>
   <input type="hidden" name="navSet[{{ n.id }}][navId]" value="{{ n.id }}">
   <input type="hidden" class="jsNavPageId" name="navSet[{{ n.id }}][pageId]" value="{{ n.page_id }}">
   <input type="hidden" class="jsNavParentId" name="navSet[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
@@ -78,7 +111,7 @@
   </div>
 
   {% if n.childNav %}
-  <ol class="jsNavParent">
+  <ol class="jsNavParent nav-child">
     {{ navSet.navBlock(n.childNav) }}
   </ol>
   {% endif %}

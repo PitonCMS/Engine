@@ -16,6 +16,7 @@
   padding-top: 56px;
   margin-top: -56px;
 }
+
 .popover {
   box-shadow: $box-shadow;
   background-color: lightblue;
@@ -28,4 +29,10 @@
   margin-left: -1em !important;
   @include padding(.15em null);
   @include margin(0 null);
+}
+
+.help {
+  @include margin(1em);
+  max-width: 75ch;
+  font-size: 1.2rem;
 }
