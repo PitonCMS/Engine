@@ -123,6 +123,18 @@
 
 {% block foot %}
 <script>
+  // Listen for form input changes to update button status
+  let navSaveIndFlag = false;
+  const setNavSaveIndicator = () => {
+    if (!navSaveIndFlag) {
+      $('.jsNavigatorForm > button.btn').toggleClass('btn-outline-primary btn-primary');
+      navSaveIndFlag = true;
+    }
+  };
+  $('.jsNavigatorForm').on('input', function() {
+    setNavSaveIndicator();
+  });
+
   // Add new page item to nav list
   let navItemKey = 0;
   $('.jsNavPageSelector').on('change', function () {
@@ -141,19 +153,8 @@
         $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1" + key + "$2"));
       });
       $('.jsEditNavBlock > .jsNavParent').append($new);
+      setNavSaveIndicator();
     }
-  });
-
-  // Listen for form input changes to update button status
-  let navSaveIndFlag = false;
-  const setNavSaveIndicator = () => {
-    if (!navSaveIndFlag) {
-      $('.jsNavigatorForm > button.btn').toggleClass('btn-outline-primary btn-primary');
-      navSaveIndFlag = true;
-    }
-  };
-  $('.jsNavigatorForm').on('input', function() {
-    setNavSaveIndicator();
   });
 
   // Arrange nav items, as well as delete and disable
