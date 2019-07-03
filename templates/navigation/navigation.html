@@ -26,7 +26,8 @@
 <form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="navigator" value="{{ page.navigator }}">
-  <button type="submit" class="btn btn-outline-primary my-3">Save Navigation</button>
+  <a class="mb-2 btn btn-warning my-3" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+  <button type="submit" class="btn btn-primary my-3" disabled>Save Navigation</button>
 
   <div class="jsEditNavBlock">
     <ol class="jsNavParent nav-parent">
@@ -127,7 +128,7 @@
   let navSaveIndFlag = false;
   const setNavSaveIndicator = () => {
     if (!navSaveIndFlag) {
-      $('.jsNavigatorForm > button.btn').toggleClass('btn-outline-primary btn-primary');
+      $('.jsNavigatorForm > button.btn').attr('disabled', false);
       navSaveIndFlag = true;
     }
   };
