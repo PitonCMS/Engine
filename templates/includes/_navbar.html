@@ -5,8 +5,7 @@
     <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
     <span class="navbar-text d-lg-block d-none">{{ headText }}</span>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
-      aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar" aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -14,28 +13,23 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminPages') or inUrl('page') ? 'active' }}"
-            href="{{ pathFor('adminPages') }}">Pages</a>
+          <a class="nav-link {{ currentRoute('adminPages') or inUrl('page') ? 'active' }}" href="{{ pathFor('adminPages') }}">Pages</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminCollections') or inUrl('collection') ? 'active' }}"
-            href="{{ pathFor('adminCollections') }}">Collections</a>
+          <a class="nav-link {{ currentRoute('adminCollections') or inUrl('collection') ? 'active' }}" href="{{ pathFor('adminCollections') }}">Collections</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ currentRoute('adminNavigations') }}"
-              href="{{ pathFor('adminNavigations') }}">Navigation</a>
+          <a class="nav-link {{ currentRoute('adminNavigations') }}" href="{{ pathFor('adminNavigations') }}">Navigation</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}"
-            href="{{ pathFor('adminShowMedia') }}">Media</a>
+          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminShowMedia') }}">Media</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminMessages') }}"
-            href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
+          <a class="nav-link {{ currentRoute('adminMessages') }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
             Messages <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span>
           </a>
         </li>

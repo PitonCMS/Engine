@@ -33,6 +33,8 @@ class AdminNavigationController extends AdminBaseController
         }
 
         $data['navigators'] = $navSettings->navigators;
+        $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? 0;
+
 
         // If a navigator was requested
         if (isset($args['nav'])) {
@@ -53,7 +55,7 @@ class AdminNavigationController extends AdminBaseController
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
         // Get POST data
-        $post = $this->request->getParsedBodyParam('navSet');
+        $post = $this->request->getParsedBodyParam('nav');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
         // Save each nav item
@@ -83,7 +85,7 @@ class AdminNavigationController extends AdminBaseController
             }
 
             $nav->sort = $sort;
-            $nav->title = $navItem['title'];
+            $nav->title = $navItem['navTitle'];
             $nav->active = $navItem['active'] ?: 'Y';
             $savedNav = $navigationMapper->save($nav);
             $navItem['navId'] = $savedNav->id;
