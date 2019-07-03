@@ -40,8 +40,8 @@
 
 <label>Add Page to Navigation</label>
 <select class="form-control jsNavPageSelector">
-  <option selected>Add a page to the navigation</option>
-  <option value="0">[Placeholder]</option>
+  <option value="x" selected>Add a page to the navigation</option>
+  <option value="0">[Dropdown]</option>
   {% for p in getNavPages() %}
   <option value="{{ p.id }}">{{ p.title }}</option>
   {% endfor %}
@@ -93,13 +93,13 @@
 
 {% for n in nav %}
 <li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-  <div class="jsNavItemTitle nav-parent-title">{{ n.page_title }}</div>
+  <div class="jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
   <input type="hidden" name="navSet[{{ n.id }}][navId]" value="{{ n.id }}">
   <input type="hidden" class="jsNavPageId" name="navSet[{{ n.id }}][pageId]" value="{{ n.page_id }}">
   <input type="hidden" class="jsNavParentId" name="navSet[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
   <input type="hidden" class="jsNavDeleteFlag" name="navSet[{{ n.id }}][delete]" value="">
   <input type="hidden" class="jsNavActiveFlag" name="navSet[{{ n.id }}][active]" value="{{ n.active }}">
-  <input type="text" class="navItemInput" name="navSet[{{ n.id }}][title]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Optional title">
+  <input type="text" class="jsNavAltTitle" name="navSet[{{ n.id }}][title]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %}required{% endif %}>
 
   <div class="nav-controls">
     <i class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i> |
@@ -126,12 +126,15 @@
   // Add new page item to nav list
   let navItemKey = 0;
   $('.jsNavPageSelector').on('change', function () {
-    if ($(this).val() !== "") {
+    if ($(this).val() !== "x") {
       let key = (navItemKey++) + "n";
       let $new = $('.jsNewNavItem > .jsNavItem').clone();
       $new.data('level', 1).data('key', key);
       $new.find('.jsNavPageId').val($(this).val());
       $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
+      if ($(this).val() != 0) {
+        $new.find('.jsNavAltTitle').attr('required',false);
+      }
       $new.find('input[name^=navSet]').each(function (i, e) {
         let name = $(e).attr('name');
         $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1" + key + "$2"));

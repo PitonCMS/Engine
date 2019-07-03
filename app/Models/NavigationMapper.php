@@ -31,12 +31,6 @@ class NavigationMapper extends DataMapperAbstract
     protected $newNav;
 
     /**
-     * Nav Placeholder Title
-     * @var string
-     */
-    protected $placeholderTitle = '[Placeholder]';
-
-    /**
      * Find Navigation
      *
      * Finds all navigation rows by navigator name
@@ -96,10 +90,6 @@ SQL;
                     $row->currentPage = true;
                 }
 
-                // Set page title if placeholder link, and link title
-                $row->page_title = $row->page_title ?? $this->placeholderTitle;
-                $row->title = $row->nav_title ?? $row->page_title;
-
                 // Asign to navigator array
                 $this->newNav[] = &$row;
 
@@ -144,10 +134,6 @@ SQL;
                 if ($currentRoute === $row->page_slug) {
                     $row->currentPage = true;
                 }
-
-                // Set page title if placeholder, and link title
-                $row->page_title = $row->page_title ?? $this->placeholderTitle;
-                $row->title = $row->nav_title ?? $row->page_title;
 
                 // If parent has child, then assign child to parent
                 isset($parent->childNav) ?: $parent->childNav = [];
