@@ -94,12 +94,12 @@
 {% for n in nav %}
 <li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
   <div class="jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
-  <input type="hidden" name="navSet[{{ n.id }}][navId]" value="{{ n.id }}">
-  <input type="hidden" class="jsNavPageId" name="navSet[{{ n.id }}][pageId]" value="{{ n.page_id }}">
-  <input type="hidden" class="jsNavParentId" name="navSet[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
-  <input type="hidden" class="jsNavDeleteFlag" name="navSet[{{ n.id }}][delete]" value="">
-  <input type="hidden" class="jsNavActiveFlag" name="navSet[{{ n.id }}][active]" value="{{ n.active }}">
-  <input type="text" class="jsNavAltTitle" name="navSet[{{ n.id }}][title]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %}required{% endif %}>
+  <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
+  <input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
+  <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
+  <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
+  <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
+  <input type="text" class="jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %}required{% endif %}>
 
   <div class="nav-controls">
     <i class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i> |
@@ -135,7 +135,7 @@
       if ($(this).val() != 0) {
         $new.find('.jsNavAltTitle').attr('required',false);
       }
-      $new.find('input[name^=navSet]').each(function (i, e) {
+      $new.find('input[name^=nav]').each(function (i, e) {
         let name = $(e).attr('name');
         $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1" + key + "$2"));
       });

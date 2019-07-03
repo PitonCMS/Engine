@@ -90,6 +90,9 @@ SQL;
                     $row->currentPage = true;
                 }
 
+                // Set page title if placeholder link, and link title
+                $row->title = $row->nav_title ?? $row->page_title;
+
                 // Asign to navigator array
                 $this->newNav[] = &$row;
 
@@ -134,6 +137,9 @@ SQL;
                 if ($currentRoute === $row->page_slug) {
                     $row->currentPage = true;
                 }
+
+                // Set page title if placeholder link, and link title
+                $row->title = $row->nav_title ?? $row->page_title;
 
                 // If parent has child, then assign child to parent
                 isset($parent->childNav) ?: $parent->childNav = [];
