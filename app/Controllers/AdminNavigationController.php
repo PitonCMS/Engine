@@ -33,6 +33,8 @@ class AdminNavigationController extends AdminBaseController
         }
 
         $data['navigators'] = $navSettings->navigators;
+        $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? 0;
+
 
         // If a navigator was requested
         if (isset($args['nav'])) {

@@ -9,7 +9,7 @@
 {# Get list of defined navigagors in Piton navigation.json #}
 {% for navigator in page.navigators %}
 <div class="sidebar-links">
-  <a class="nav-link {{ inUrl(navigator) }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+  <a class="nav-link {{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
     <i class="fas fa-compass"></i>
     {{ navigator|capitalize }}</a>
 </div>
