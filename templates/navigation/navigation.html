@@ -9,7 +9,7 @@
 {# Get list of defined navigagors in Piton navigation.json #}
 {% for navigator in page.navigators %}
 <div class="sidebar-links">
-  <a class="nav-link {{ currentRoute('adminNavigations') }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+  <a class="nav-link {{ inUrl(navigator) }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
     <i class="fas fa-compass"></i>
     {{ navigator|capitalize }}</a>
 </div>
@@ -26,7 +26,7 @@
 <form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="navigator" value="{{ page.navigator }}">
-  <button type="submit" class="btn btn-primary btn-sm my-3">Save Navigation</button>
+  <button type="submit" class="btn btn-outline-primary my-3">Save Navigation</button>
 
   <div class="jsEditNavBlock">
     <ol class="jsNavParent nav-parent">
@@ -130,6 +130,7 @@
       let key = (navItemKey++) + "n";
       let $new = $('.jsNewNavItem > .jsNavItem').clone();
       $new.data('level', 1).data('key', key);
+      $new.addClass('nav-item-new');
       $new.find('.jsNavPageId').val($(this).val());
       $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
       if ($(this).val() != 0) {
@@ -141,6 +142,18 @@
       });
       $('.jsEditNavBlock > .jsNavParent').append($new);
     }
+  });
+
+  // Listen for form input changes to update button status
+  let navSaveIndFlag = false;
+  const setNavSaveIndicator = () => {
+    if (!navSaveIndFlag) {
+      $('.jsNavigatorForm > button.btn').toggleClass('btn-outline-primary btn-primary');
+      navSaveIndFlag = true;
+    }
+  };
+  $('.jsNavigatorForm').on('input', function() {
+    setNavSaveIndicator();
   });
 
   // Arrange nav items, as well as delete and disable
@@ -209,6 +222,7 @@
         $navItem.removeClass('bg-warning text-white');
       }
     }
+    setNavSaveIndicator();
   });
 </script>
 {% endblock foot %}
