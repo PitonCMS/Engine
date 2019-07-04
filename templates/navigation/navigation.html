@@ -130,11 +130,11 @@
       let key = (navItemKey++) + "n";
       let $new = $('.jsNewNavItem > .jsNavItem').clone();
       $new.data('level', 1).data('key', key);
-      $new.addClass('nav-item-new');
+      $new.addClass('bg-info text-white');
       $new.find('.jsNavPageId').val($(this).val());
       $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
       if ($(this).val() != 0) {
-        $new.find('.jsNavAltTitle').attr('required',false);
+        $new.find('.jsNavAltTitle').attr('required', false);
       }
       $new.find('input[name^=nav]').each(function (i, e) {
         let name = $(e).attr('name');
@@ -152,7 +152,7 @@
       navSaveIndFlag = true;
     }
   };
-  $('.jsNavigatorForm').on('input', function() {
+  $('.jsNavigatorForm').on('input', function () {
     setNavSaveIndicator();
   });
 
