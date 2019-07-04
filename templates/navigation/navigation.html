@@ -26,7 +26,8 @@
 <form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="navigator" value="{{ page.navigator }}">
-  <button type="submit" class="btn btn-outline-primary my-3">Save Navigation</button>
+  <a class="mb-2 btn btn-warning my-3" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+  <button type="submit" class="btn btn-primary my-3" disabled>Save Navigation</button>
 
   <div class="jsEditNavBlock">
     <ol class="jsNavParent nav-parent">
@@ -50,6 +51,8 @@
 <div class="jsNewNavItem d-none">
   {{ navSet.navBlock([1]) }}
 </div>
+{% else %}
+<p>No navigators are defined.</p>
 {% endif %}
 <hr>
 <div class="help">
@@ -123,6 +126,18 @@
 
 {% block foot %}
 <script>
+  // Listen for form input changes to update button status
+  let navSaveIndFlag = false;
+  const setNavSaveIndicator = () => {
+    if (!navSaveIndFlag) {
+      $('.jsNavigatorForm > button.btn').attr('disabled', false);
+      navSaveIndFlag = true;
+    }
+  };
+  $('.jsNavigatorForm').on('input', function() {
+    setNavSaveIndicator();
+  });
+
   // Add new page item to nav list
   let navItemKey = 0;
   $('.jsNavPageSelector').on('change', function () {
@@ -130,30 +145,19 @@
       let key = (navItemKey++) + "n";
       let $new = $('.jsNewNavItem > .jsNavItem').clone();
       $new.data('level', 1).data('key', key);
-      $new.addClass('bg-info text-white');
+      $new.addClass('nav-item-new');
       $new.find('.jsNavPageId').val($(this).val());
       $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
       if ($(this).val() != 0) {
-        $new.find('.jsNavAltTitle').attr('required', false);
+        $new.find('.jsNavAltTitle').attr('required',false);
       }
       $new.find('input[name^=nav]').each(function (i, e) {
         let name = $(e).attr('name');
         $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1" + key + "$2"));
       });
       $('.jsEditNavBlock > .jsNavParent').append($new);
+      setNavSaveIndicator();
     }
-  });
-
-  // Listen for form input changes to update button status
-  let navSaveIndFlag = false;
-  const setNavSaveIndicator = () => {
-    if (!navSaveIndFlag) {
-      $('.jsNavigatorForm > button.btn').toggleClass('btn-outline-primary btn-primary');
-      navSaveIndFlag = true;
-    }
-  };
-  $('.jsNavigatorForm').on('input', function () {
-    setNavSaveIndicator();
   });
 
   // Arrange nav items, as well as delete and disable

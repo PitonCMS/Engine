@@ -33,6 +33,8 @@ class AdminNavigationController extends AdminBaseController
         }
 
         $data['navigators'] = $navSettings->navigators;
+
+        // If no navigator was requested as a URL segment, load the first navigator from definitions, or falsy
         $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? 0;
 
 
