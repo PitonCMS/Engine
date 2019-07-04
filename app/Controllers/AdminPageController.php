@@ -188,40 +188,25 @@ class AdminPageController extends AdminBaseController
      */
     protected function savePageSettings(int $pageId)
     {
-        // Get dependencies
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
-
         // Save any custom page settings
-        if ($this->request->getParsedBodyParam('setting_id')) {
-            foreach ($this->request->getParsedBodyParam('setting_id') as $key => $row) {
+        if ($post = $this->request->getParsedBodyParam('setting')) {
+            // Get dependencies
+            $settingMapper = ($this->container->dataMapper)('SettingMapper');
+
+            foreach ($post as $row) {
                 $setting = $settingMapper->make();
-                $setting->id = $this->request->getParsedBodyParam('setting_id')[$key];
+                $setting->id = $row['id'];
 
                 // Check for a page setting delete
-                if (isset($this->request->getParsedBodyParam('setting_delete')[$key])) {
+                if (isset($row['delete'])) {
                     $settingMapper->delete($setting);
                     continue;
                 }
 
                 $setting->reference_id = $pageId;
-                $setting->category = $this->request->getParsedBodyParam('setting_category')[$key];
-                $setting->setting_key = $this->request->getParsedBodyParam('setting_key')[$key];
-
-                // If this is for a media image
-                if ($this->request->getParsedBodyParam('setting_type')[$key] === 'media') {
-                    $imagePath = $this->request->getParsedBodyParam('setting_value')[$key];
-                    // If the media starts with http then save as-is
-                    if (mb_stripos($imagePath, 'http') === 0) {
-                        $setting->setting_value = $imagePath;
-                    } else {
-                        // Else get the file basename to save
-                        $setting->setting_value = pathinfo($imagePath, PATHINFO_BASENAME);
-                    }
-                } else {
-                    // Otherwise just save value
-                    $setting->setting_value = $this->request->getParsedBodyParam('setting_value')[$key];
-                }
-
+                $setting->category = 'page';
+                $setting->setting_key = $row['setting_key'];
+                $setting->setting_value = $row['setting_value'];
                 $settingMapper->save($setting);
             }
         }
