@@ -1,6 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$comment": "Settings Definition for key-value pairs",
+    "$id": "jsonSchemas/definitions/settingsDefinitionSchema.json",
     "definition": {
         "description": "An array of form inputs for settings.",
         "type": "array",
@@ -8,17 +9,17 @@
             "type": "object",
             "properties": {
                 "category": {
-                    "$ref": "validations/setting.json#/properties/category"
+                    "$ref": "../validations/setting.json#/properties/category"
                 },
                 "label": {
                     "description": "Input label text",
                     "type": "string"
                 },
                 "key": {
-                    "$ref": "validations/setting.json#/properties/setting_key"
+                    "$ref": "../validations/setting.json#/properties/setting_key"
                 },
                 "value": {
-                    "$ref": "validations/setting.json#/properties/setting_value"
+                    "$ref": "../validations/setting.json#/properties/setting_value"
                 },
                 "inputType": {
                     "description": "HTML input type: input, select, textarea, media.",

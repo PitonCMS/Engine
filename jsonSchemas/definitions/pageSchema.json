@@ -1,5 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "jsonSchemas/definitions/pageSchema.json",
     "$comment": "Page Template Definition",
     "type": "object",
     "properties": {
@@ -72,7 +73,7 @@
             }
         },
         "settings": {
-            "$ref": "definitions/settingsDefinitionSchema.json#/definition"
+            "$ref": "settingsDefinitionSchema.json#/definition"
         }
     },
     "anyOf": [

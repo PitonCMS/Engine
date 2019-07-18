@@ -8,8 +8,6 @@
  */
 namespace Piton\Library\Handlers;
 
-use Webmozart\Json\JsonDecoder;
-use Webmozart\Json\ValidationFailedException;
 use Exception;
 use RuntimeException;
 use FilesystemIterator;
@@ -17,14 +15,8 @@ use FilesystemIterator;
 /**
  * Piton JSON Definition File Loader and Validator
  */
-class Definition extends JsonDecoder
+class Definition
 {
-    /**
-     * JSON Decoder
-     * @var Webmozart\Json\JsonDecoder
-     */
-    protected $decoder;
-
     /**
      * Definition Files
      * @var array
@@ -57,12 +49,11 @@ class Definition extends JsonDecoder
     /**
      * Constructor
      *
-     * @param  Webmozart\Json\JsonDecoder $jsonDecoder
      * @return void
      */
-    public function __construct(JsonDecoder $jsonDecoder)
+    public function __construct($container)
     {
-        $this->decoder = $jsonDecoder;
+        $this->container = $container;
     }
 
     /**
@@ -70,23 +61,25 @@ class Definition extends JsonDecoder
      *
      * Validation errors available from getErrorMessages()
      * @param string $json   Path to page JSON file to decode
-     * @param string $schema Name of validation: settings|page|element
+     * @param string $schema Path to validation JSON Schema file
      * @return mixed         Object|null
      */
     public function decodeJson(string $json, string $schema = null)
     {
-        try {
-            return $this->decoder->decodeFile($json, $schema);
-        } catch (RuntimeException $e) {
-            // Runtime errors such as file not found
-            $this->errors[] = $e->getMessage();
-        } catch (ValidationFailedException $e) {
-            // Schema validation errors
-            $this->errors[] = $e->getMessage();
-        } catch (Exception $e) {
-            // Anything else we did not anticipate
-            $this->errors[] = 'Unknown Exception';
-            $this->errors[] = $e->getMessage();
+        $validator = $this->container->jsonValidator;
+
+        // Get and decode JSON to be validated
+        $jsonDecodedInput = $this->getDecodedJson($this->getFileContents($json));
+
+        $validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+        if ($validator->isValid()) {
+            return $jsonDecodedInput;
+        }
+
+        // If not valid, record error messages and return null
+        foreach ($validator->getErrors() as $error) {
+            var_dump($error);
+            $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
 
         return null;
@@ -199,6 +192,17 @@ class Definition extends JsonDecoder
     }
 
     /**
+     * Get Errors
+     *
+     * @param void
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return $this->errors;
+    }
+
+    /**
      * Get Page or Collection Definitions
      *
      * Get available templates from JSON files. If no param is provided, then all templates are returned
@@ -211,8 +215,7 @@ class Definition extends JsonDecoder
         foreach ($this->getDirectoryFiles($this->definition['pages']) as $file) {
             // Get all definition files
             if (null === $definition = $this->decodeJson($this->definition['pages'] . $file['filename'], $this->validation['page'])) {
-                throw new Exception('PitonCMS: Page definition JSON exception ' . print_r($this->getErrorMessages(), true));
-                break;
+                throw new Exception('PitonCMS: Page definition JSON exception ' . implode(', ', $this->getErrorMessages()));
             }
 
             // Filter our unneeded templates
@@ -291,13 +294,32 @@ class Definition extends JsonDecoder
     }
 
     /**
-     * Get Errors
+     * Get File Contents
      *
-     * @param void
-     * @return array
+     * Wraps file_get_contents() to throw Exception on failure
+     * @param  string  $file
+     * @return string
+     * @throws Exception
      */
-    public function getErrorMessages()
+    protected function getFileContents(string $file)
     {
-        return $this->errors;
+        if (false !== $contents = file_get_contents($file)) {
+            return $contents;
+        } else {
+            throw new Exception('PitonCMS: Definition getFileContents() Exception: Unable to get file contents.');
+        }
+    }
+
+    /**
+     * Decode JSON
+     *
+     * Decodes JSON string to PHP object
+     * @param  string $json JSON to decode
+     * @return object
+     */
+    protected function getDecodedJson(string $json)
+    {
+        return json_decode($json);
+        // JSON_THROW_ON_ERROR >= 7.3
     }
 }
