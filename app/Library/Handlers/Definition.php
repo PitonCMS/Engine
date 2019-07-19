@@ -78,7 +78,6 @@ class Definition
 
         // If not valid, record error messages and return null
         foreach ($validator->getErrors() as $error) {
-            var_dump($error);
             $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
 
@@ -181,7 +180,7 @@ class Definition
         $elements = [];
         foreach ($this->getDirectoryFiles($this->definition['elements']) as $file) {
             if (null === $definition = $this->decodeJson($this->definition['elements'] . $file['filename'], $this->validation['element'])) {
-                throw new Exception('PitonCMS: Element JSON definition error: ' . print_r($this->getErrorMessages(), true));
+                throw new Exception('PitonCMS: Element JSON definition error: ' . implode(', ', $this->getErrorMessages()));
             } else {
                 $definition->filename = $file['filename'];
                 $elements[] = $definition;
