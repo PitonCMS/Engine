@@ -4,6 +4,54 @@
     "$comment": "Settings schema",
     "type": "object",
     "properties": {
-        "settings": {"$ref": "settingsDefinitionSchema.json#/definition"}
+        "settings": {
+            "description": "An array of form inputs for settings.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "$ref": "../validations/setting.json#/properties/category"
+                    },
+                    "label": {
+                        "description": "Input label text",
+                        "type": "string"
+                    },
+                    "key": {
+                        "$ref": "../validations/setting.json#/properties/setting_key"
+                    },
+                    "value": {
+                        "$ref": "../validations/setting.json#/properties/setting_value"
+                    },
+                    "inputType": {
+                        "description": "HTML input type: input, select, textarea, media.",
+                        "type": "string",
+                        "enum": ["input","select","textarea","media"]
+                    },
+                    "help": {
+                        "description": "Form input help text, optional"
+                    },
+                    "options": {
+                        "description": "Only for select lists. List of values (saved) and names (readable).",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "value": {
+                                    "description": "Value to save",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "Value to show in select list.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["value","name"]
+                        }
+                    }
+                },
+                "required": ["label","key","category"]
+            }
+        }
     }
 }
