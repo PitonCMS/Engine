@@ -23,13 +23,13 @@
 <div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
-    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">
     <div class="card-text">
-      <input type="text" class="form-control" name="setting_value[{{ arrayKey }}]" value="{{ setting.setting_value }}"
+      <input type="text" class="form-control" name="setting[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
         autocomplete="off">
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
@@ -44,10 +44,10 @@
 <div class="card jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
-    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
-    <input type="hidden" name="setting_type[{{ arrayKey }}]" value="media">
+    <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][type]" value="media">
   </div>
   <div class="card-body">
     <div class="card-text">
@@ -56,7 +56,7 @@
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
-        <input type="text" class="form-control jsMediaInputField" name="setting_value[{{ arrayKey }}]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
+        <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
         <div class="input-group-append">
             <button class="btn btn-light jsMediaClear" type="button">Clear</button>
         </div>
@@ -74,13 +74,13 @@
 <div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
-    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">
     <div class="card-text">
-      <select class="form-control" name="setting_value[{{ arrayKey }}]">
+      <select class="form-control" name="setting[{{ arrayKey }}][setting_value]">
         {% for key, option in setting.options %}
         <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
         {% endfor %}
@@ -98,14 +98,14 @@
 <div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <div class="card-header">
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-    <input type="hidden" name="setting_id[{{ arrayKey }}]" value="{{ setting.id }}">
-    <input type="hidden" name="setting_category[{{ arrayKey }}]" value="{{ setting.category }}">
-    <input type="hidden" name="setting_key[{{ arrayKey }}]" value="{{ setting.setting_key }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
+    <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
   </div>
   <div class="card-body">
     <div class="card-text">
       <textarea class="form-control" rows="3"
-        name="setting_value[{{ arrayKey }}]">{{ setting.setting_value }}</textarea>
+        name="setting[{{ arrayKey }}][setting_value]">{{ setting.setting_value }}</textarea>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
 
@@ -119,7 +119,7 @@
 {% if status == 'orphaned' %}
 <span class="badge badge-danger">Orphaned</span>
 <div class="form-check form-check-inline">
-  <input class="form-check-input" name="setting_delete[{{ key }}]" type="checkbox" value="delete"
+  <input class="form-check-input" name="setting[{{ key }}][delete]" type="checkbox" value="delete"
     title="Deletes on save">
   <label class="text-danger mb-0">Delete?</label>
 </div>

@@ -67,28 +67,27 @@ class AdminSettingController extends AdminBaseController
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
 
         // Get $_POST data array
-        $postSettings = $this->request->getParsedBody();
+        $post = $this->request->getParsedBody();
 
         // Save each setting
-        foreach ($postSettings['setting_key'] as $key => $row) {
+        foreach ($post['setting'] as $row) {
             $setting = $settingMapper->make();
-            $setting->id = $postSettings['setting_id'][$key];
+            $setting->id = $row['id'];
 
             // Check for a setting delete flag
-            if (isset($postSettings['setting_delete'][$key])) {
+            if (isset($row['delete'])) {
                 $settingMapper->delete($setting);
                 continue;
             }
 
-            $setting->category = $postSettings['setting_category'][$key];
-            $setting->setting_key = $postSettings['setting_key'][$key];
-            $setting->setting_value = $postSettings['setting_value'][$key];
-
+            $setting->category = $row['category'];
+            $setting->setting_key = $row['setting_key'];
+            $setting->setting_value = $row['setting_value'];
             $settingMapper->save($setting);
         }
 
         // Redirect back to list of settings
-        $routeCategory = $this->request->getParsedBodyParam('category');
+        $routeCategory = $post['category'];
         return $this->redirect('adminSettings', ['cat' => $routeCategory]);
     }
 }
