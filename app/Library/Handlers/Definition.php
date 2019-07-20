@@ -9,8 +9,8 @@
 namespace Piton\Library\Handlers;
 
 use Exception;
-use RuntimeException;
 use FilesystemIterator;
+use JsonSchema\Validator;
 
 /**
  * Piton JSON Definition File Loader and Validator
@@ -47,13 +47,20 @@ class Definition
     protected $errors = [];
 
     /**
+     * JSON Validator
+     * @var JsonSchema\Validator
+     */
+    protected $validator;
+
+    /**
      * Constructor
      *
+     * @param  JsonSchema\Validator $validator
      * @return void
      */
-    public function __construct($container)
+    public function __construct(Validator $validator)
     {
-        $this->container = $container;
+        $this->validator = $validator;
     }
 
     /**
@@ -66,18 +73,16 @@ class Definition
      */
     public function decodeJson(string $json, string $schema = null)
     {
-        $validator = $this->container->jsonValidator;
-
         // Get and decode JSON to be validated
         $jsonDecodedInput = $this->getDecodedJson($this->getFileContents($json));
 
-        $validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
-        if ($validator->isValid()) {
+        $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+        if ($this->validator->isValid()) {
             return $jsonDecodedInput;
         }
 
         // If not valid, record error messages and return null
-        foreach ($validator->getErrors() as $error) {
+        foreach ($this->validator->getErrors() as $error) {
             $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
 
