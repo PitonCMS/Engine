@@ -23,5 +23,5 @@
             "maxLength": 4000
         }
     },
-    "required": ["category","reference_id","setting_key"]
+    "required": ["category","setting_key"]
 }
