@@ -65,6 +65,7 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $validation = $this->container->validation;
 
         // Get $_POST data array
         $post = $this->request->getParsedBody();
@@ -83,6 +84,13 @@ class AdminSettingController extends AdminBaseController
             $setting->category = $row['category'];
             $setting->setting_key = $row['setting_key'];
             $setting->setting_value = $row['setting_value'];
+
+            // Validate data
+            if (!$validation->validate($setting, 'setting')) {
+                $this->setAlert('danger', 'Data Error', $validation->getErrorMessages());
+                break;
+            }
+
             $settingMapper->save($setting);
         }
 
