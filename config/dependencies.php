@@ -133,7 +133,7 @@ $container['markdownParser'] = function ($c) {
 
 // Definition handler
 $container['definition'] = function ($c) {
-    return new Piton\Library\Handlers\Definition($c);
+    return new Piton\Library\Handlers\Definition($c->jsonValidator);
 };
 
 // JSON Validator Dependencies for justinrainbow/json-schema
