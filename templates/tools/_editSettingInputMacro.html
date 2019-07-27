@@ -30,7 +30,8 @@
   <div class="card-body">
     <div class="card-text">
       <input type="text" class="form-control" name="setting[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
-        autocomplete="off">
+        autocomplete="off" {{ validation('setting','setting_value') }}>
+        <div class="invalid-feedback">{{ validation('setting','setting_value', true) }}</div>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
   </div>
@@ -56,11 +57,12 @@
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
-        <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
+        <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off" {{ validation('setting','setting_value') }}>
         <div class="input-group-append">
             <button class="btn btn-light jsMediaClear" type="button">Clear</button>
         </div>
       </div>
+      <div class="invalid-feedback">{{ validation('setting','setting_value', true) }}</div>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
   </div>
@@ -80,11 +82,12 @@
   </div>
   <div class="card-body">
     <div class="card-text">
-      <select class="form-control" name="setting[{{ arrayKey }}][setting_value]">
+      <select class="form-control" name="setting[{{ arrayKey }}][setting_value]" {{ validation('setting','setting_value') }}>
         {% for key, option in setting.options %}
         <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
         {% endfor %}
       </select>
+      <div class="invalid-feedback">{{ validation('setting','setting_value', true) }}</div>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
   </div>
@@ -105,8 +108,9 @@
   <div class="card-body">
     <div class="card-text">
       <textarea class="form-control" rows="3"
-        name="setting[{{ arrayKey }}][setting_value]">{{ setting.setting_value }}</textarea>
-      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+        name="setting[{{ arrayKey }}][setting_value]" {{ validation('setting','setting_value') }}>{{ setting.setting_value }}</textarea>
+        <div class="invalid-feedback">{{ validation('setting','setting_value', true) }}</div>
+        <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
     </div>
 
   </div>
