@@ -13,8 +13,7 @@
             "type": "string"
         },
         "templateFile": {
-            "description": "The template page HTML file.",
-            "type": "string"
+            "$ref": "../validations/page.json#/properties/template"
         },
         "templateType": {
             "description": "Template type. Defaults to 'page'.",
@@ -22,9 +21,7 @@
             "enum": ["page","collection"]
         },
         "collectionSlug": {
-            "description": "Collection URL slug",
-            "type": "string",
-            "pattern": "^[-a-zA-Z0-9]{1,100}$"
+            "$ref": "../validations/page.json#/properties/collection_slug"
         },
         "hideSubTitle": {
             "description": "Hides sub-title input",
