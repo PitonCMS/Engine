@@ -136,6 +136,11 @@ $container['definition'] = function ($c) {
     return new Piton\Library\Handlers\Definition($c->jsonValidator);
 };
 
+// Validation handler
+$container['validation'] = function ($c) {
+    return new Piton\Library\Handlers\Validation($c->jsonValidator);
+};
+
 // JSON Validator Dependencies for justinrainbow/json-schema
 $container['jsonValidator'] = function ($c) {
     return new JsonSchema\Validator();

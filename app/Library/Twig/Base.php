@@ -116,7 +116,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
             new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
             new \Twig_SimpleFunction('checked', [$this, 'checked']),
             new \Twig_SimpleFunction('getMediaPath', [$this, 'getMediaPath']),
-            new \Twig_SimpleFunction('formConstraint', [$this, 'formConstraint']),
+            new \Twig_SimpleFunction('validation', [$this, 'validation']),
         ];
     }
 
@@ -269,20 +269,76 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     }
 
     /**
-     * Form Input Constraints
+     * Form Input Validation Constraints
      *
-     * Source of constraints are JSON validation files
+     * Validation are in JSON Schema files by table
+     * @param string $table             Table name
+     * @param string $field             Table field name
+     * @param bool   $returnDescription Whether to return HTML5 input constraints string (false), or field description (true)
+     * @return string
      */
-    public function formConstraint(string $table, string $field, ?string $attribute)
+    public function validation(string $table, string $field, bool $returnDescription = false)
     {
-        // Return cached table constraint
-        if (isset($this->constraint[$table])) {
-            return $this->constraint[$table];
+        // Return cached table constraints
+        if (isset($this->constraint[$table][$field])) {
+            if ($returnDescription) {
+                return $this->constraint[$table][$field]['description'];
+            } else {
+                return $this->constraint[$table][$field]['constraints'];
+            }
         }
 
-        // Get constraint
+        // Get field constraint details from validation JSON Schema
         if (file_exists(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json")) {
-            $this->constraint[$table] = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
+            $schema = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
+
+            // Identify required properties for later reference
+            if (!isset($this->constraint[$table]->required)) {
+                $this->constraint[$table]['required'] = $schema->required ?? null;
+            }
+
+            // Build constraints for requested field
+            if ($schema->properties->{$field}) {
+                // Set property description if available
+                $this->constraint[$table][$field]['description'] = $schema->properties->{$field}->description ?? null;
+
+                $constraints = '';
+                foreach ($schema->properties->{$field} as $attr => $value) {
+                    // Check each attribute and set appropriate constraint string
+                    if ($attr === 'type') {
+                        switch ($value) {
+                            case 'integer':
+                                $constraints .= ' pattern="\d+"';
+                                break;
+                        }
+                    }
+
+                    if ($attr === 'maxLength') {
+                        $constraints .= ' maxlength="' . $value . '"';
+                    }
+
+                    if ($attr === 'minLength') {
+                        $constraints .= ' minlength="' . $value . '"';
+                    }
+
+                    if ($attr === 'pattern') {
+                        $constraints .= ' pattern="' . $value . '"';
+                    }
+
+                    if ($attr === 'enum') {
+                        $constraints .= ' pattern="' . implode('|', $value) . '"';
+                    }
+                }
+
+                // Determine if field is required
+                if (in_array($field, $this->constraint[$table]['required'])) {
+                    $constraints .= ' required';
+                }
+
+                return $this->constraint[$table][$field]['constraints'] = $constraints;
+            }
         }
+
+        return '';
     }
 }
