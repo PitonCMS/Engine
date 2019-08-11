@@ -28,10 +28,11 @@ class AdminSettingController extends AdminBaseController
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $definition = $this->container->definition;
+        $session = $this->container->sessionHandler;
 
-        // Get saved settings from database
+        // Get saved settings from session in case of reload, then database
         $category = $args['cat'] ?? null;
-        $savedSettings = $settingMapper->findSiteSettings($category);
+        $savedSettings =  $session->getFlashData('reloadData') ?? $settingMapper->findSiteSettings($category);
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {
@@ -87,7 +88,11 @@ class AdminSettingController extends AdminBaseController
 
             // Validate data
             if (!$validation->validate($setting, 'setting')) {
+                // Failed. Set alert message, objectify post data array, and set in session flash data
                 $this->setAlert('danger', 'Data Error', $validation->getErrorMessages());
+                $session = $this->container->sessionHandler;
+                array_walk($post['setting'], function(&$val, $key) { $val = (object) $val; } );
+                $session->setFlashData('reloadData', $post['setting']);
                 break;
             }
 
