@@ -15,11 +15,11 @@
 {% block sidebar %}
 
 {% for template in page.templates %}
-<div class="sidebar-links">
+<div class="sidebar-links sidebar-links-flex">
   <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
     title="{{ template.description }}">
-    <i class="fas fa-edit"></i>
-    {{ template.name }}
+    <i class="fas d-none d-lg-block fa-edit"></i>
+    <div>{{ template.name }}</div>
   </a>
   <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
     data-content="{{ template.description }}"></i>

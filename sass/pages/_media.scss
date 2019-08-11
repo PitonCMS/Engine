@@ -1,0 +1,20 @@
+#mediaAll {
+  form {
+    width: 100%;
+  }
+  .grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-gap: 1em;
+  }
+}
+#mediaCategories {
+  .form-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 2em;
+  }
+  .form-control {
+    @include margin(null 1em null null);
+  }
+}
