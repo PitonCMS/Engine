@@ -1,339 +1,128 @@
-#adminHome,
-#pages,
-#navigation,
-#collections,
-#mediaAll,
-#mediaUpload,
-#mediaCategories,
-#messages,
-#tools form,
-#users form {
-  display: flex;
-  flex-flow: row nowrap;
-  aside,
-  main {
-    min-height: calc(100vh - 56px);
-    @include padding(1em);
-  }
+#adminHome {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
+
   aside {
     background-color: $primary-md-grey;
-    @include padding(1em 0.5em 1em 0);
-    min-width: 200px;
-    position: relative;
+    min-width: 15vw;
   }
-  .aside-inner {
-    position: sticky;
-    top: 72px;
-    .sidebar-links {
-      display: flex;
-      align-items: center;
-      .nav-link {
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-        &:hover {
-          color: var(--primary) !important;
-        }
-            .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        // @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
-      }
-      }
-  
-    }
-  }
-
   main {
-    flex: 1;
-  }
-  .grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1em;
-    .card-title {
-      @include margin(0);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      h5 {
-        @include margin(0);
-        @include padding(0);
-      }
-    }
-    .card-footer {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
-  .fa-info-circle {
-    cursor: pointer;
-    color: $primary-dark-grey;
-  }
-  .card {
-    border: none;
-    box-shadow: $box-shadow;
-  }
-}
-
-// Release Notes
-#releaseNotes {
-  display: flex;
-  aside,
-  main {
+    width: 100%;
     @include padding(1em);
-    height: calc(100vh - 56px);
-  }
-  aside {
-    min-width: 150px;
-    background-color: $primary-md-grey;
-  }
-  main {
-    @include margin(null 1em);
-    .block-content {
-      width: 75ch;
-    }
   }
 }
+#pages {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
 
-// Collections
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 15vw;
+  }
+  main {
+    width: 100%;
+    @include padding(1em);
+  }
+}
 #collections {
-  .card .card {
-    box-shadow: none;
-    border: 1px solid rgba(black, 0.125);
-  }
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
 
-  h3 {
-    @include margin(null null 0);
-    @include padding(null null 0);
-  }
-}
-
-// Media
-#mediaCategories {
-  form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1em;
-    .form-group {
-      display: grid;
-      grid-template-columns: 1fr 4em;
-      grid-gap: 1em;
-    }
-  }
-}
-
-// Messages
-#messages {
-  .jsMessageWrap {
-    @include margin(null null 1em null);
-    display: flex;
-    border-radius: $border-radius;
-  }
-  .message-wrapper {
-    flex: 2;
-    @include padding(0.5em);
-    @include margin(null 0.25em null null);
-    background: $primary-light-grey;
-    box-shadow: $box-shadow;
-  }
-  .button-wrapper {
-    @include padding(0.5em);
-    box-shadow: $box-shadow;
-    background: $primary-light-grey;
-  }
-  .button-wrapper form {
-    display: flex;
-    flex-flow: column nowrap;
-    button {
-      @include margin(0.5em null);
-    }
-  }
-}
-
-/******************************************/
-/********* Detail Pages for Admin *********/
-/******************************************/
-
-#editPage form,
-#collectionDetail form,
-#users form {
-  display: flex;
-  flex-flow: row nowrap;
-  max-height: calc(100vh - 56px);
-  overflow: scroll;
-  aside,
-  main {
-    min-height: calc(100vh - 56px);
-  }
   aside {
     background-color: $primary-md-grey;
-    min-width: 225px;
-    position: relative;
-    .aside-inner {
-      position: sticky;
-      top: 0px;
-    }
-    a {
-      letter-spacing: 1px;
-      color: $primary-dark;
-      &:hover {
-        color: $primary-color !important;
-      }
-    }
-      .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    box-shadow: $box-shadow;
-  }
+    min-width: 15vw;
   }
   main {
-    background: $primary-light-grey;
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  .scroll-container {
-    @include margin(0 1em);
-    @include padding(null 1em);
-    background: $primary-light;
-    overflow-y: scroll;
-    position: relative;
-    scroll-behavior: smooth;
-    flex: 1;
-    height: calc(100vh - 75px);
-  }
-  .two-col-sidebar {
-    background-color: $primary-md-grey;
-    height: 100%;
-    position: relative;
-    .two-col-sidebar-inner {
-      @include padding(1em);
-      position: sticky;
-      top: 0;
-
-      .button-group {
-        display: flex;
-        flex-flow: column nowrap;
-      }
-    }
-  }
-
-  a.small-sidebar-text.active {
-    background-color: rgba($primary-color, 0.5) !important;
-    padding-left: 4em !important;
-    margin-left: -1em !important;
-  }
-
-  .navbar {
-    @include padding(null null null 0);
-  }
-  .two-col-sidebar {
+    width: 100%;
     @include padding(1em);
   }
 }
+#navigation {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
 
-//Page Edit
-#editPage {
-  .block-title-wrapper {
-    background: $primary-light-grey;
-    @include padding(1em 2em 1em 1em);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0px;
-    z-index: 1049;
-  }
-  .card {
-    @include margin(null null 1em null);
-  }
-}
-
-// Tools & Settings
-#tools form {
-  aside{
-    .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light !important;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    box-shadow: $box-shadow;
-  }
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 15vw;
   }
   main {
-    @include padding(0);
-    display: flex;
-    align-items: flex-start;
-    position: relative;
+    width: 100%;
+    @include padding(1em);
+  }
+}
+#mediaAll,
+#mediaCategories {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
 
-    .grid-wrapper {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      grid-gap: 1em;
-      @include padding(1em);
-    }
-    .two-col-sidebar {
-      background-color: $primary-md-grey;
-      height: 100%;
-      position: relative;
-      .two-col-sidebar-inner {
-        @include padding(1em 1.5em);
-        position: sticky;
-        top: 72px;
-        .button-group {
-          display: flex;
-          flex-flow: column nowrap;
-        }
-      }
-    }
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 15vw;
   }
-}
-// users
-#users form {
   main {
-    @include padding(0);
-    display: flex;
-    .form-wrapper {
-      @include padding(1em);
-      flex: 1;
-      .user-card {
-        @include margin(null null 1.5em null);
-        input {
-          @include padding(1em);
-          border-radius: $border-radius;
-        }
-      }
-    }
-    .two-col-sidebar {
-      background-color: $primary-md-grey;
-      height: 100%;
-      position: relative;
-      .two-col-sidebar-inner {
-        @include padding(1em 1.5em);
-        position: sticky;
-        top: 0;
-        .button-group {
-          display: flex;
-          flex-flow: column nowrap;
-          button,
-          a {
-            @include margin(null null 1em null);
-          }
-        }
-      }
-    }
+    width: 100%;
+    @include padding(1em);
   }
 }
+#messages {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
+
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 15vw;
+  }
+  main {
+    width: 100%;
+    @include padding(1em);
+  }
+}
+#tools form,
+#users form,
+#sitemap {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: 20vw 1fr;
+  grid-gap: 1em;
+
+  aside {
+    background-color: $primary-md-grey;
+    min-width: 15vw;
+  }
+  main {
+    width: 100%;
+    @include padding(1em);
+  }
+}
+// #users {
+//   .contentTwoCol {
+//     display: flex;
+//   }
+//   .two-col-sidebar {
+//     background: $primary-md-grey;
+//   }
+//   .two-col-sidebar-inner {
+//     @include padding(null 1em);
+//     flex: 1;
+//   }
+//   .button-group {
+//     display: flex;
+//     flex-flow: column nowrap;
+//     justify-content: space-between;
+//     button {
+//       @include margin(1em null);
+//     }
+//   }
+// }

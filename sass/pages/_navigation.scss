@@ -1,110 +1,63 @@
 #navigation {
-  ol {
-    @include margin(0);
-  }
-
-  .jsNavigatorForm {
-    // width: 50vw;
-  }
-
-  .jsEditNavBlock {
+  @include padding(0);
+  form {
     width: 100%;
-    border: solid 1px $secondary-color;
+  }
+  .grid-navigation {
+    width: 100%;
+    max-width: 100vw;
+  }
+  .grid-nav-header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 200px 300px 1fr;
+    // grid-gap: 0.5em;
+    @include margin(2em null null null);
+    background: $primary-color;
+    color: white;
+    @include padding(0.5em);
+    text-align: center;
+    font-weight: bold;
+  }
+  .nav-link-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 200px 300px 1fr;
+    grid-gap: 0.5em;
+    @include padding(0.5em null);
     border-radius: $border-radius;
   }
-
-  .nav-item-level-1 {
+  .nav-link-wrapper:nth-child(even) {
+    background: $primary-md-grey;
+  }
+  .nav-template-name {
+    @include padding(null null null 1em);
+  }
+  .nav-link-wrapper-child {
+    width: 100%;
+    grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 100px auto auto;
-    grid-gap: 1em;
-    @include padding(.5em);
-    justify-content: flex-start;
-    align-items: center;
-
-  }
-
-  .jsNavItem:nth-child(odd):not(.nav-item-level-2) {
-    background-color: $secondary-color;
-  }
-
-  .jsNavItem:nth-child(even):not(.nav-item-level-2) {
-    background-color: $primary-light-grey;
-  }
-
-  .nav-controls i {
-    cursor: pointer;
-    font-size: 1.25rem;
-    @include padding(null .25em);
-  }
-
-  input[type="text"] {
-    @include padding(.25em);
-    border-radius: $border-radius;
-  }
-
-  .nav-item-level-2 {
-    display: grid;
-    @include padding(.25em null .25em .5em);
-    @include margin(null null .5em 125px);
-    display: grid;
-    grid-template-columns: repeat(2, 125px) max-content;
-    grid-gap: 1em;
-    border-radius: $border-radius;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  .nav-parent>li {
-    position: relative;
-  }
-
-  .nav-parent>li:before {
-    position: absolute;
-    left: 2px;
-    top: 13px;
-    content: '\2192';
-
-  }
-
-  .nav-parent-title {
-    @include padding(null null null .75em);
-  }
-
-  .nav-child>li {
-    position: relative;
-  }
-
-  .nav-child>li:before {
-    position: absolute;
-    left: 0px;
-    top: 13px;
-    content: '\21b5';
-
-  }
-
-  .fa-trash-alt:hover {
-    color: red;
-  }
-
-  li.nav-item:first-child .fa-arrow-up,
-  li.nav-item:last-child .fa-arrow-down,
-  li.nav-item.nav-item-level-1>.nav-controls>.fa-arrow-left {
-    color: $primary-dark-grey;
-    cursor: not-allowed;
-  }
-
-  .form-control {
-    width: 50%;
-  }
-
-  .help {
-    ol {
-      @include margin(null null 1em null);
-    }
-
-    li {
-      @include margin(null null .5em null);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 200px 300px 1fr;
+    grid-gap: 0.5em;
+    @include padding(0.5em null);
+    .nav-template-name {
+      @include margin(null null null 2.25em);
     }
   }
-
+  .nav-page-controls {
+    justify-self: center;
+  }
+  .nav-page-link-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .add-new-nav {
+    background: $primary-md-grey;
+    border-radius: $border-radius;
+    @include padding(1em);
+  }
 }
