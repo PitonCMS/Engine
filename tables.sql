@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `message` (
 
 INSERT INTO `page` (`id`, `collection_slug`, `page_slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-  (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now()),;
+  (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now());
 
 INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_slug`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
