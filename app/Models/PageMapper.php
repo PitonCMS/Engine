@@ -60,11 +60,11 @@ class PageMapper extends DataMapperAbstract
      * Find Collection Pages by Collection Slug
      *
      * Finds all related collection detail pages
-     * @param  int   $collectionSlug
+     * @param  string   $collectionSlug
      * @param  bool  $includeUnpublished    Include unpublished collection pages
      * @return mixed                        Array | null
      */
-    public function findCollectionPagesBySlug($collectionSlug, bool $includeUnpublished = false)
+    public function findCollectionPagesBySlug(string $collectionSlug, bool $includeUnpublished = false)
     {
         $this->makeSelect();
         $this->sql .= ' and collection_slug = ?';

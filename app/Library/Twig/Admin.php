@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Twig;
 
 use Psr\Container\ContainerInterface;
@@ -19,39 +23,16 @@ use Twig\TwigFunction;
  */
 class Admin extends Base
 {
-
     /**
-     * Elements Cache
-     * For multiple calls on getCustomElements()
+     * Cache
      * @var array
      */
-    protected $elements;
-
-    /**
-     * Collections Cache
-     * For multiple calls on getCollections()
-     * @var array
-     */
-    protected $collections;
-
-    /**
-     * Gallery Cache
-     * For multiple calls on getGalleries()
-     * @var array
-     */
-    protected $galleries;
-
-    /**
-     * Pages Cache
-     * For multiple calls on getNavPages()
-     * @var array
-     */
-    protected $pages;
+    protected $cache = [];
 
     /**
      * Constructor
      *
-     * @param object Psr\Container\ContainerInterface
+     * @param ContainerInterface
      */
     public function __construct(ContainerInterface $container)
     {
@@ -60,6 +41,9 @@ class Admin extends Base
 
     /**
      * Register Global variables
+     *
+     * @param void
+     * @return array
      */
     public function getGlobals(): array
     {
@@ -72,6 +56,9 @@ class Admin extends Base
 
     /**
      * Register Custom Filters
+     *
+     * @param void
+     * @return array
      */
     public function getFilters(): array
     {
@@ -82,6 +69,9 @@ class Admin extends Base
 
     /**
      * Register Custom Functions
+     *
+     * @param void
+     * @return array
      */
     public function getFunctions(): array
     {
@@ -100,10 +90,10 @@ class Admin extends Base
      * Generate Key
      *
      * Generates unique key of n-length.
-     * @param int  $length length of key, optional (default=4)
-     * @return str
+     * @param int $length length of key, optional (default=4)
+     * @return string
      */
-    public function uniqueKey($length = 4)
+    public function uniqueKey(int $length = 4): string
     {
         return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, $length);
     }
@@ -114,14 +104,14 @@ class Admin extends Base
      * Get alert data. Returns null if no alert found.
      * @param  array  $context Twig context, includes controller alert array
      * @param  string $key     Alert keys: severity|heading|message
-     * @return mixed           array|string|null
+     * @return array|string|null
      */
-    public function getAlert($context, $key = null)
+    public function getAlert(array $context, string $key = null)
     {
         $session = $this->container->sessionHandler;
 
         // Get alert notices from page context, or failing that then session flash data
-        $alert = (isset($context['alert'])) ? $context['alert'] : $session->getFlashData('alert');
+        $alert = $context['alert'] ?? $session->getFlashData('alert');
 
         if ($key === null) {
             return $alert;
@@ -143,12 +133,12 @@ class Admin extends Base
      *
      * Get list of distinct collections
      * @param  void
-     * @return mixed Array | null
+     * @return array|null
      */
-    public function getCollections()
+    public function getCollections(): ?array
     {
-        if ($this->collections) {
-            return $this->collections;
+        if (isset($this->cache['collections'])) {
+            return $this->cache['collections'];
         }
 
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -162,7 +152,7 @@ class Admin extends Base
             ];
         }, $data);
 
-        return $this->collections = $collections;
+        return $this->cache['collections'] = $collections;
     }
 
     /**
@@ -170,17 +160,17 @@ class Admin extends Base
      *
      * Get all gallery media categories
      * @param  void
-     * @return mixed Array | null
+     * @return array|null
      */
-    public function getGalleries()
+    public function getGalleries(): ?array
     {
-        if ($this->galleries) {
-            return $this->galleries;
+        if (isset($this->cache['galleries'])) {
+            return $this->cache['galleries'];
         }
 
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        return $this->galleries = $mediaCategoryMapper->findCategories();
+        return $this->cache['galleries'] = $mediaCategoryMapper->findCategories();
     }
 
     /**
@@ -189,16 +179,16 @@ class Admin extends Base
      * @param  void
      * @return array
      */
-    public function getElements()
+    public function getElements(): array
     {
         // Return cached set of elements, if available
-        if (isset($this->elements)) {
-            return $this->elements;
+        if (isset($this->cache['elements'])) {
+            return $this->cache['elements'];
         }
 
         // Get dependencies
         $definition = $this->container->definition;
-        return $this->elements = $definition->getElements();
+        return $this->cache['elements'] = $definition->getElements();
     }
 
     /**
@@ -206,9 +196,9 @@ class Admin extends Base
      *
      * Gets count of unread messages
      * @param  void
-     * @return mixed
+     * @return int|null
      */
-    public function getUnreadMessageCount()
+    public function getUnreadMessageCount(): ?int
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $count = $messageMapper->findUnreadCount();
@@ -221,17 +211,17 @@ class Admin extends Base
      *
      * Gets a list of all pages, including unpublished
      * @param void
-     * @return mixed
+     * @return array
      */
-    public function getNavPages()
+    public function getNavPages(): ?array
     {
         // Get cached pages if available
-        if ($this->pages) {
-            return $this->pages;
+        if ($this->cache['pages']) {
+            return $this->cache['pages'];
         }
 
         // Otherwise fetch all pages
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        return $this->pages = $pageMapper->findPages(true);
+        return $this->cache['pages'] = $pageMapper->findPages(true);
     }
 }
