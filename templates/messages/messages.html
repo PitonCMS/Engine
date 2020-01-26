@@ -6,32 +6,31 @@
 {% block sectionId 'messages' %}
 
 {% block sidebar %}
-<div class="sidebar-links">
-    <a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}"
+<div class="sidebar-links"> <a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}"
         href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
-        <i class="fas d-none d-lg-block fa-envelope">&nbsp;&nbsp;</i>
-        <div> New Messages</div>
-    </a></div>
+        <i class="fas fa-envelope"></i> New Messages</a></div>
 <div class="sidebar-links"><a class="nav-link {{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}"
-        href="{{ pathFor('adminMessages', {'status': 'read'}) }}"><i
-            class="fas d-none d-lg-block fa-envelope-open-text">&nbsp;&nbsp;</i>
-        <div>Read Messages</div>
-    </a></div>
+        href="{{ pathFor('adminMessages', {'status': 'read'}) }}"><i class="fas fa-envelope-open-text"></i> Read
+        Messages</a></div>
 
 {% endblock sidebar %}
 
 {% block content %}
 {% if page.status == 'new' %}
-{% for m in page.messages if m.isRead == 'N' %}
-{{ html.message(m) }}
+{% for m in page.messages %}
+    {% if m.isRead == 'N' %}
+        {{ html.message(m) }}
+    {% endif %}
 {% else %}
 <p>You have no unread messages.</p>
 {% endfor %}
 
 {% else %}
 
-{% for m in page.messages if m.isRead == 'Y' %}
-{{ html.message(m) }}
+{% for m in page.messages %}
+    {% if m.isRead == 'Y' %}
+        {{ html.message(m) }}
+    {% endif %}
 {% else %}
 <p>You have no read messages.</p>
 {% endfor %}
@@ -42,25 +41,22 @@
 
 <div class="jsMessageWrap">
     <div class="message-wrapper">
-        <div class="meta-wrapper">
-            <p class="bold-text"><a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a> </p>
-
-            <p>Sent on: {{ m.createdDate|date('d F Y  h:i a') }}</p>
-        </div>
+        <p><a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
+            {{ m.createdDate|date('d F Y  h:i a') }}
+        </p>
         {{ m.message|nl2br }}
     </div>
     <div class="button-wrapper">
         <form class="" action="{{ pathFor('adminSaveMessage') }}" method="post" accept-charset="utf-8">
             <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
             <input type="hidden" name="id" value="{{ m.id }}">
-            <button class="btn btn-primary btn-sm btn-block" type="submit" name="button" value="toggle"
-                data-is-read="{{ m.isRead }}">Mark as
+            <button class="btn btn-primary btn-sm" type="submit" name="button"
+                value="toggle" data-is-read="{{ m.isRead }}">Mark as
                 {% if m.isRead == 'Y' %}Unread{% else %}Read
                 {% endif %}
             </button>
-            <button class="btn btn-danger btn-sm btn-block" name="button" title="Delete message" type="submit"
-                data-is-read="{{ m.isRead }}" value="delete"
-                formaction="{{ pathFor('adminDeleteMessage') }}">Delete</button>
+            <button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit" data-is-read="{{ m.isRead }}"
+                value="delete" formaction="{{ pathFor('adminDeleteMessage') }}">Delete</button>
         </form>
     </div>
 </div>

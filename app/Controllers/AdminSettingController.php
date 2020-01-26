@@ -28,11 +28,10 @@ class AdminSettingController extends AdminBaseController
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
         $definition = $this->container->definition;
-        $session = $this->container->sessionHandler;
 
-        // Get saved settings from session in case of reload, then database
+        // Get saved settings from database
         $category = $args['cat'] ?? null;
-        $savedSettings =  $session->getFlashData('reloadData') ?? $settingMapper->findSiteSettings($category);
+        $savedSettings = $settingMapper->findSiteSettings($category);
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {
@@ -66,7 +65,6 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $validation = $this->container->validation;
 
         // Get $_POST data array
         $post = $this->request->getParsedBody();
@@ -85,17 +83,6 @@ class AdminSettingController extends AdminBaseController
             $setting->category = $row['category'];
             $setting->setting_key = $row['setting_key'];
             $setting->setting_value = $row['setting_value'];
-
-            // Validate data
-            if (!$validation->validate($setting, 'setting')) {
-                // Failed. Set alert message, objectify post data array, and set in session flash data
-                $this->setAlert('danger', 'Data Error', $validation->getErrorMessages());
-                $session = $this->container->sessionHandler;
-                array_walk($post['setting'], function(&$val, $key) { $val = (object) $val; } );
-                $session->setFlashData('reloadData', $post['setting']);
-                break;
-            }
-
             $settingMapper->save($setting);
         }
 

@@ -11,8 +11,10 @@
 {% set arrayKey = element.id ?? uniqueKey() %}
 {% set elementTypes = getElements() %}
 {% set enableInput = '' %}
-{% for e in elementTypes if e.filename == element.definition %}
-{% set enableInput = e.enableInput %}
+{% for e in elementTypes %}
+  {% if e.filename == element.definition %}
+    {% set enableInput = e.enableInput %}
+  {% endif %}
 {% endfor %}
 
 <div class="card jsElementParent" id="page-element-{{ arrayKey }}">
@@ -30,13 +32,15 @@
 
     <div class="form-group form-inline jsElementType">
       <label>Element Type&nbsp;<span class="text-danger">*</span>:&nbsp;</label>
-      {% for elem in elementTypes if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
+      {% for elem in elementTypes %}
+      {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]"
           id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
           {{ checked(element.definition == elem.filename) }} required>
         <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}">{{ elem.elementName }}</label>
       </div>
+      {% endif %}
       {% endfor %}
     </div>
 

@@ -8,9 +8,10 @@
  */
 namespace Piton\Library\Twig;
 
-use Interop\Container\ContainerInterface;
-use Exception;
+use Psr\Container\ContainerInterface;
 use Twig\Error\LoaderError;
+use Twig\TwigFunction;
+use Exception;
 
 /**
  * Piton Front End Twig Extension
@@ -29,7 +30,7 @@ class Front extends Base
     /**
      * Constructor
      *
-     * @param obj Interop\Container\ContainerInterface
+     * @param object Psr\Container\ContainerInterface
      */
     public function __construct(ContainerInterface $container)
     {
@@ -39,7 +40,7 @@ class Front extends Base
     /**
      * Register Custom Filters
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return array_merge(parent::getFilters(), [
             // Custom filters
@@ -49,14 +50,14 @@ class Front extends Base
     /**
      * Register Custom Functions
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('getCollectionPages', [$this, 'getCollectionPages']),
-            new \Twig_SimpleFunction('getGallery', [$this, 'getGallery']),
-            new \Twig_SimpleFunction('getNavigator', [$this, 'getNavigator']),
+            new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
+            new TwigFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
+            new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
+            new TwigFunction('getGallery', [$this, 'getGallery']),
+            new TwigFunction('getNavigator', [$this, 'getNavigator']),
         ]);
     }
 

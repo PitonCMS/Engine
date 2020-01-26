@@ -52,8 +52,10 @@
       <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
 
       <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
-        {% for element in page.elements if element.block_key == block.key %}
+        {% for element in page.elements %}
+        {% if if element.block_key == block.key %}
         <a class="small-sidebar-text nav-link ml-3" href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
+        {% endif %}
         {% endfor %}
       </nav>
       {% endfor %}
@@ -149,8 +151,10 @@
 
             {# Get count of elements in block to know if we need to disable the Add Element Button #}
             {% set elementLength = 0 %}
-            {% for element in page.elements if element.block_key == block.key %}
-            {% set elementLength = elementLength + 1 %}
+            {% for element in page.elements %}
+              {% if element.block_key == block.key %}
+                {% set elementLength = elementLength + 1 %}
+              {% endif %}
             {% endfor %}
             <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementTypeDefault }}"
               data-element-type-options="{{ block.elementTypeOptions|join(',') }}" data-element-count-limit="{{ block.elementCountLimit }}"
@@ -158,9 +162,10 @@
 
           </div>
 
-          {% for element in page.elements if element.block_key == block.key %}
+          {% for element in page.elements %}
+          {% if element.block_key == block.key %}
           {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
-          {% else %}
+          {% endif %}
           {% endfor %}
         </div>
       </div>

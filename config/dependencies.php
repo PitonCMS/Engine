@@ -46,7 +46,7 @@ $container['view'] = function ($c) {
 
     // Load Twig debugger if in development
     if ($settings['site']['production'] === false) {
-        $view->addExtension(new Twig_Extension_Debug());
+        $view->addExtension(new Twig\Extension\DebugExtension());
     }
 
     return $view;
@@ -133,12 +133,7 @@ $container['markdownParser'] = function ($c) {
 
 // Definition handler
 $container['definition'] = function ($c) {
-    return new Piton\Library\Handlers\Definition($c->jsonValidator);
-};
-
-// Validation handler
-$container['validation'] = function ($c) {
-    return new Piton\Library\Handlers\Validation($c->jsonValidator);
+    return new Piton\Library\Handlers\Definition($c);
 };
 
 // JSON Validator Dependencies for justinrainbow/json-schema

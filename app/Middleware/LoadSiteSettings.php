@@ -8,8 +8,6 @@
  */
 namespace Piton\Middleware;
 
-use Interop\Container\ContainerInterface;
-
 /*
  * Load site settings from database into Container
  */

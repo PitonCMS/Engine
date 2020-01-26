@@ -13,7 +13,8 @@
             "type": "string"
         },
         "templateFile": {
-            "$ref": "../validations/page.json#/properties/template"
+            "description": "The template page HTML file.",
+            "type": "string"
         },
         "templateType": {
             "description": "Template type. Defaults to 'page'.",
@@ -21,7 +22,9 @@
             "enum": ["page","collection"]
         },
         "collectionSlug": {
-            "$ref": "../validations/page.json#/properties/collection_slug"
+            "description": "Collection URL slug",
+            "type": "string",
+            "pattern": "^[-a-zA-Z0-9]{1,100}$"
         },
         "hideSubTitle": {
             "description": "Hides sub-title input",
@@ -70,7 +73,7 @@
             }
         },
         "settings": {
-            "$ref": "settingsSchema.json#/properties/settings"
+            "$ref": "settingsDefinitionSchema.json#/definition"
         }
     },
     "anyOf": [

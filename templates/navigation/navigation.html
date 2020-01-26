@@ -10,9 +10,8 @@
 {% for navigator in page.navigators %}
 <div class="sidebar-links">
   <a class="nav-link {{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
-    <i class="fas d-none d-lg-block fa-compass"></i>
-    <div>{{ navigator|capitalize }}</div>
-  </a>
+    <i class="fas fa-compass"></i>
+    {{ navigator|capitalize }}</a>
 </div>
 {% endfor %}
 {% endblock sidebar %}
@@ -30,41 +29,31 @@
   <a class="mb-2 btn btn-warning my-3" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
   <button type="submit" class="btn btn-primary my-3" disabled>Save Navigation</button>
 
-  <div class="jsEditNavBlock ">
-
-    <div class="grid-nav-header">
-      <div class="nav-header-title">Page Template</div>
-      <div class="nav-header-title">Nav Placement</div>
-      <div class="nav-header-title">Link Name</div>
-    </div>
-
-    <div class="jsNavParent grid-navigation">
+  <div class="jsEditNavBlock">
+    <ol class="jsNavParent nav-parent">
       {{ navSet.navBlock(page.navigation) }}
-    </div>
+    </ol>
   </div>
 
 </form>
 
 <hr>
-<div class="add-new-nav">
-  <label>Add a Page to Navigation</label>
-  <select class="form-control jsNavPageSelector">
-    <option value="x" selected>Add a page to the navigation</option>
-    <option value="0">[Dropdown]</option>
-    {% for p in getNavPages() %}
-    <option value="{{ p.id }}">{{ p.title }}</option>
-    {% endfor %}
-  </select>
 
-  <div class="jsNewNavItem d-none">
-    {{ navSet.navBlock([1]) }}
-  </div>
-  {% else %}
-  <p>No navigators are defined.</p>
-  {% endif %}
+<label>Add Page to Navigation</label>
+<select class="form-control jsNavPageSelector">
+  <option value="x" selected>Add a page to the navigation</option>
+  <option value="0">[Dropdown]</option>
+  {% for p in getNavPages() %}
+  <option value="{{ p.id }}">{{ p.title }}</option>
+  {% endfor %}
+</select>
 
-
+<div class="jsNewNavItem d-none">
+  {{ navSet.navBlock([1]) }}
 </div>
+{% else %}
+<p>No navigators are defined.</p>
+{% endif %}
 <hr>
 <div class="help">
   <h3>Support</h3>
@@ -72,8 +61,7 @@
   <h4>Top Level Navigation</h4>
   <ol>
     <li>If you have not created the page you want to add to the navigation, do that now.</li>
-    <li>From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page
-      will appear at the bottom of the navigation
+    <li>From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page will appear at the bottom of the navigation
       area seen above.
     </li>
     <li>Using the arrows move the menu item up/down to position where you want it to appear.</li>
@@ -83,24 +71,19 @@
   <h4>Secondary Level Navigation</h4>
   <ol>
     <li>
-      If the secondary menu item you are creating is being associated with a new Top Level menu item, you will need to
-      create the top level [Placeholder] menu item first. From the <span class="bg-info text-white">Add Page to
-        Navigation</span> dropdown select the [Placeholder] option. It will appear in the navigation area seen above.
-      You are required to give this [Placeholder]
+      If the secondary menu item you are creating is being associated with a new Top Level menu item, you will need to create the top level [Placeholder] menu item first. From the <span
+        class="bg-info text-white">Add Page to Navigation</span> dropdown select the [Placeholder] option. It will appear in the navigation area seen above. You are required to give this [Placeholder]
       a name. Enter the navigation name.
     </li>
     <li>Create the page you want to add to the navigation.</li>
     <li>
-      From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page will
-      appear at the bottom of the navigation area seen above.
+      From the <span class="bg-info text-white">Add Page to Navigation</span> dropdown, select your page. The page will appear at the bottom of the navigation area seen above.
     </li>
-    <li>Using the arrows move the new menu item up/down to position below the [Placeholder] item you created in the fist
-      step. Press the right arrow
+    <li>Using the arrows move the new menu item up/down to position below the [Placeholder] item you created in the fist step. Press the right arrow
       to position your menu item as a child of the top level [Placeholder] item.
     </li>
     <li>Click on the <span class="bg-info text-white">Save Navigation</span> button.</li>
-    <li>Return to your website and refresh page. Your new child navigation/page should now appear and be ready live.
-    </li>
+    <li>Return to your website and refresh page. Your new child navigation/page should now appear and be ready live.</li>
   </ol>
 </div>
 
@@ -112,17 +95,16 @@
 {% import _self as navSet %}
 
 {% for n in nav %}
-<div class="nav-link-wrapper{% if n.level > 1 %}-child{% endif %} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-
+<li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
+  <div class="jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
   <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
   <input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
   <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
   <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
   <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
+  <input type="text" class="jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %}required{% endif %}>
 
-  <div class="jsNavItemTitle nav-template-name">{{ n.page_title ?? n.nav_title }}</div>
-
-  <div class="nav-page-controls">
+  <div class="nav-controls">
     <i class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i> |
     <i class="fa fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></i>
     <i class="fa fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></i> |
@@ -131,18 +113,12 @@
     <i class="fa fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
   </div>
 
-  <!-- <input type="text" class="jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %}required{% endif %}> -->
-
-  <div class="nav-page-link-title">
-    Services <div class="btn btn-link btn-small">Rename Link</div>
-  </div>
-
   {% if n.childNav %}
-  <!-- <div class="jsNavParent"> -->
-  {{ navSet.navBlock(n.childNav) }}
-  <!-- </div> -->
+  <ol class="jsNavParent nav-child">
+    {{ navSet.navBlock(n.childNav) }}
+  </ol>
   {% endif %}
-</div>
+</li>
 {% endfor %}
 
 {% endmacro navBlock %}
@@ -158,7 +134,7 @@
       navSaveIndFlag = true;
     }
   };
-  $('.jsNavigatorForm').on('input', function () {
+  $('.jsNavigatorForm').on('input', function() {
     setNavSaveIndicator();
   });
 
@@ -173,7 +149,7 @@
       $new.find('.jsNavPageId').val($(this).val());
       $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
       if ($(this).val() != 0) {
-        $new.find('.jsNavAltTitle').attr('required', false);
+        $new.find('.jsNavAltTitle').attr('required',false);
       }
       $new.find('input[name^=nav]').each(function (i, e) {
         let name = $(e).attr('name');

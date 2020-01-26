@@ -10,7 +10,8 @@
 {% endblock sidebar %}
 
 {% block content %}
-<form class="jsEditMediaCategory" action="{{ pathFor('adminSaveMediaCategories') }}" method="post" accept-charset="utf-8">
+<form class="jsEditMediaCategory" action="{{ pathFor('adminSaveMediaCategories') }}" method="post"
+  accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
   {# 
@@ -23,29 +24,26 @@
   </div>
 
   {% for c in page.categories %}
-  <div class="input-wrapper">
-    {{ form.categoryInput(c) }}
-  </div>
-
+  {{ form.categoryInput(c) }}
   {% endfor %}
-  <hr>
+
   {# Extra empty form on page load to add a new category #}
   {{ form.categoryInput(c) }}
 
 </form>
-
 {% endblock content %}
 
 {% macro categoryInput(category) %}
 <div class="form-group jsMediaCategory">
   <input type="hidden" name="id[{{ category.id }}]" value="{{ category.id }}">
 
-  <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}" placeholder="New Gallery name" autocomplete="off">
+  <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
+    placeholder="New Gallery name" autocomplete="off">
   {% if not category.id  %}
-  <button class="btn btn-success btn-sm btn-block" type="submit" name="button" value="save">Add New</button>
+  <button class="btn btn-success btn-sm" type="submit" name="button" value="save">Add</button>
   {% endif %}
   {% if category.id %}
-  <button class="btn btn-danger btn-sm btn-block" type="button" name="button" value="{{ category.id }}">Delete</button>
+  <button class="btn btn-danger btn-sm" type="button" name="button" value="{{ category.id }}">Delete</button>
   {% endif %}
 
 </div>

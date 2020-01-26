@@ -93,10 +93,10 @@ class AdminBaseController extends BaseController
             if (isset($settingIndex[$setting->key])) {
                 $setting->id = $savedSettings[$settingIndex[$setting->key]]->id;
                 $setting->setting_value = $savedSettings[$settingIndex[$setting->key]]->setting_value;
-                // $setting->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
-                // $setting->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
-                // $setting->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
-                // $setting->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
+                $setting->created_by = $savedSettings[$settingIndex[$setting->key]]->created_by;
+                $setting->created_date = $savedSettings[$settingIndex[$setting->key]]->created_date;
+                $setting->updated_by = $savedSettings[$settingIndex[$setting->key]]->updated_by;
+                $setting->updated_date = $savedSettings[$settingIndex[$setting->key]]->updated_date;
 
                 // Remove saved setting from array parameter now that we have updated the setting definition
                 unset($savedSettings[$settingIndex[$setting->key]]);

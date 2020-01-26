@@ -15,11 +15,11 @@
 {% block sidebar %}
 
 {% for template in page.templates %}
-<div class="sidebar-links sidebar-links-flex">
+<div class="sidebar-links">
   <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
     title="{{ template.description }}">
-    <i class="fas d-none d-lg-block fa-edit"></i>
-    <div>{{ template.name }}</div>
+    <i class="fas fa-edit"></i>
+    {{ template.name }}
   </a>
   <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
     data-content="{{ template.description }}"></i>
@@ -53,8 +53,10 @@
 
   <div class="card-body">
     <div class="grid-wrapper">
-      {% for p in page.pages if p.collection_slug == c.value %}
-      {% include "@admin/pages/_pageCard.html" %}
+      {% for p in page.pages %}
+        {% if p.collection_slug == c.value %}
+          {% include "@admin/pages/_pageCard.html" %}
+        {% endif %}
       {% else %}
       <h5>No Pages Found</h5>
       {% endfor %}

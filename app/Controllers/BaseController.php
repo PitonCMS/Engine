@@ -6,11 +6,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
-use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Piton Base Controller
@@ -21,7 +22,7 @@ class BaseController
 {
     /**
      * Container
-     * @var Interop\Container\ContainerInterface
+     * @var Psr\Container\ContainerInterface
      */
     protected $container;
 

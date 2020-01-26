@@ -9,8 +9,8 @@
 namespace Piton\Library\Handlers;
 
 use Exception;
+use RuntimeException;
 use FilesystemIterator;
-use JsonSchema\Validator;
 
 /**
  * Piton JSON Definition File Loader and Validator
@@ -47,20 +47,13 @@ class Definition
     protected $errors = [];
 
     /**
-     * JSON Validator
-     * @var JsonSchema\Validator
-     */
-    protected $validator;
-
-    /**
      * Constructor
      *
-     * @param  JsonSchema\Validator $validator
      * @return void
      */
-    public function __construct(Validator $validator)
+    public function __construct($container)
     {
-        $this->validator = $validator;
+        $this->container = $container;
     }
 
     /**
@@ -73,16 +66,19 @@ class Definition
      */
     public function decodeJson(string $json, string $schema = null)
     {
+        $validator = $this->container->jsonValidator;
+
         // Get and decode JSON to be validated
         $jsonDecodedInput = $this->getDecodedJson($this->getFileContents($json));
 
-        $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
-        if ($this->validator->isValid()) {
+        $validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+        if ($validator->isValid()) {
             return $jsonDecodedInput;
         }
 
         // If not valid, record error messages and return null
-        foreach ($this->validator->getErrors() as $error) {
+        foreach ($validator->getErrors() as $error) {
+            var_dump($error);
             $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
 
@@ -185,7 +181,7 @@ class Definition
         $elements = [];
         foreach ($this->getDirectoryFiles($this->definition['elements']) as $file) {
             if (null === $definition = $this->decodeJson($this->definition['elements'] . $file['filename'], $this->validation['element'])) {
-                throw new Exception('PitonCMS: Element JSON definition error: ' . implode(', ', $this->getErrorMessages()));
+                throw new Exception('PitonCMS: Element JSON definition error: ' . print_r($this->getErrorMessages(), true));
             } else {
                 $definition->filename = $file['filename'];
                 $elements[] = $definition;

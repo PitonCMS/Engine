@@ -8,14 +8,17 @@
  */
 namespace Piton\Library\Twig;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
+use Twig\TwigFunction;
 
 /**
  * Piton Base Twig Extension
  *
  * Has core Twig properties and functions used on public and on admin sites.
  */
-class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class Base extends AbstractExtension implements GlobalsInterface
 {
     /**
      * @var string|\Slim\Http\Uri
@@ -23,7 +26,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     protected $uri;
 
     /**
-     * @var Interop\Container\ContainerInterface
+     * @var Psr\Container\ContainerInterface
      */
     protected $container;
 
@@ -58,7 +61,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     /**
      * Constructor
      *
-     * @param obj Interop\Container\ContainerInterface
+     * @param object Psr\Container\ContainerInterface
      */
     public function __construct(ContainerInterface $container)
     {
@@ -72,16 +75,10 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
         $this->csrfTokenValue = ($container->csrfGuard)->getTokenValue();
     }
 
-    // Identifer
-    public function getName()
-    {
-        return 'Piton';
-    }
-
     /**
      * Register Global variables
      */
-    public function getGlobals()
+    public function getGlobals(): array
     {
         return [
             'site' => [
@@ -98,7 +95,7 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     /**
      * Register Custom Filters
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [];
     }
@@ -106,17 +103,17 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     /**
      * Register Custom Functions
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('pathFor', [$this, 'pathFor']),
-            new \Twig_SimpleFunction('baseUrl', [$this, 'baseUrl']),
-            new \Twig_SimpleFunction('basePath', [$this, 'basePath']),
-            new \Twig_SimpleFunction('currentRoute', [$this, 'currentRoute']),
-            new \Twig_SimpleFunction('inUrl', [$this, 'inUrl']),
-            new \Twig_SimpleFunction('checked', [$this, 'checked']),
-            new \Twig_SimpleFunction('getMediaPath', [$this, 'getMediaPath']),
-            new \Twig_SimpleFunction('validation', [$this, 'validation']),
+            new TwigFunction('pathFor', [$this, 'pathFor']),
+            new TwigFunction('baseUrl', [$this, 'baseUrl']),
+            new TwigFunction('basePath', [$this, 'basePath']),
+            new TwigFunction('currentRoute', [$this, 'currentRoute']),
+            new TwigFunction('inUrl', [$this, 'inUrl']),
+            new TwigFunction('checked', [$this, 'checked']),
+            new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
+            new TwigFunction('formConstraint', [$this, 'formConstraint']),
         ];
     }
 
@@ -269,76 +266,20 @@ class Base extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
     }
 
     /**
-     * Form Input Validation Constraints
+     * Form Input Constraints
      *
-     * Validation are in JSON Schema files by table
-     * @param string $table             Table name
-     * @param string $field             Table field name
-     * @param bool   $returnDescription Whether to return HTML5 input constraints string (false), or field description (true)
-     * @return string
+     * Source of constraints are JSON validation files
      */
-    public function validation(string $table, string $field, bool $returnDescription = false)
+    public function formConstraint(string $table, string $field, ?string $attribute)
     {
-        // Return cached table constraints
-        if (isset($this->constraint[$table][$field])) {
-            if ($returnDescription) {
-                return $this->constraint[$table][$field]['description'];
-            } else {
-                return $this->constraint[$table][$field]['constraints'];
-            }
+        // Return cached table constraint
+        if (isset($this->constraint[$table])) {
+            return $this->constraint[$table];
         }
 
-        // Get field constraint details from validation JSON Schema
+        // Get constraint
         if (file_exists(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json")) {
-            $schema = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
-
-            // Identify required properties for later reference
-            if (!isset($this->constraint[$table]->required)) {
-                $this->constraint[$table]['required'] = $schema->required ?? null;
-            }
-
-            // Build constraints for requested field
-            if ($schema->properties->{$field}) {
-                // Set property description if available
-                $this->constraint[$table][$field]['description'] = $schema->properties->{$field}->description ?? null;
-
-                $constraints = '';
-                foreach ($schema->properties->{$field} as $attr => $value) {
-                    // Check each attribute and set appropriate constraint string
-                    if ($attr === 'type') {
-                        switch ($value) {
-                            case 'integer':
-                                $constraints .= ' pattern="\d+"';
-                                break;
-                        }
-                    }
-
-                    if ($attr === 'maxLength') {
-                        $constraints .= ' maxlength="' . $value . '"';
-                    }
-
-                    if ($attr === 'minLength') {
-                        $constraints .= ' minlength="' . $value . '"';
-                    }
-
-                    if ($attr === 'pattern') {
-                        $constraints .= ' pattern="' . $value . '"';
-                    }
-
-                    if ($attr === 'enum') {
-                        $constraints .= ' pattern="' . implode('|', $value) . '"';
-                    }
-                }
-
-                // Determine if field is required
-                if (in_array($field, $this->constraint[$table]['required'])) {
-                    $constraints .= ' required';
-                }
-
-                return $this->constraint[$table][$field]['constraints'] = $constraints;
-            }
+            $this->constraint[$table] = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
         }
-
-        return '';
     }
 }

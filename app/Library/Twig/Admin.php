@@ -8,8 +8,8 @@
  */
 namespace Piton\Library\Twig;
 
-use Interop\Container\ContainerInterface;
-use Exception;
+use Psr\Container\ContainerInterface;
+use Twig\TwigFunction;
 
 /**
  * Piton Back End Admin Twig Extension
@@ -51,7 +51,7 @@ class Admin extends Base
     /**
      * Constructor
      *
-     * @param obj Interop\Container\ContainerInterface
+     * @param object Psr\Container\ContainerInterface
      */
     public function __construct(ContainerInterface $container)
     {
@@ -61,7 +61,7 @@ class Admin extends Base
     /**
      * Register Global variables
      */
-    public function getGlobals()
+    public function getGlobals(): array
     {
         return array_merge_recursive(parent::getGlobals(), [
             'site' => [
@@ -73,7 +73,7 @@ class Admin extends Base
     /**
      * Register Custom Filters
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return array_merge_recursive(parent::getFilters(), [
             // Custom filters
@@ -83,16 +83,16 @@ class Admin extends Base
     /**
      * Register Custom Functions
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array_merge(parent::getFunctions(), [
-            new \Twig_SimpleFunction('uniqueKey', [$this, 'uniqueKey']),
-            new \Twig_SimpleFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
-            new \Twig_SimpleFunction('getCollections', [$this, 'getCollections']),
-            new \Twig_SimpleFunction('getGalleries', [$this, 'getGalleries']),
-            new \Twig_SimpleFunction('getElements', [$this, 'getElements']),
-            new \Twig_SimpleFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
-            new \Twig_SimpleFunction('getNavPages', [$this, 'getNavPages']),
+            new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
+            new TwigFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
+            new TwigFunction('getCollections', [$this, 'getCollections']),
+            new TwigFunction('getGalleries', [$this, 'getGalleries']),
+            new TwigFunction('getElements', [$this, 'getElements']),
+            new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
+            new TwigFunction('getNavPages', [$this, 'getNavPages']),
         ]);
     }
 

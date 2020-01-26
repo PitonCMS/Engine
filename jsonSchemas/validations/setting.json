@@ -1,12 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$comment": "Validations for setting table.",
+    "$comment": "Validations for `setting` table.",
     "type": "object",
     "properties": {
-        "id": {
-            "description": "Table primary key ID",
-            "type": "integer"
-        },
         "category": {
             "description": "Setting category group key. Can be one of site, contact, social, piton, and page",
             "type": "string",
@@ -27,5 +23,5 @@
             "maxLength": 4000
         }
     },
-    "required": ["category","setting_key"]
+    "required": ["category","reference_id","setting_key"]
 }
