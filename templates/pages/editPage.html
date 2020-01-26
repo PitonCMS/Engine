@@ -53,7 +53,7 @@
 
       <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
         {% for element in page.elements %}
-        {% if if element.block_key == block.key %}
+        {% if element.block_key == block.key %}
         <a class="small-sidebar-text nav-link ml-3" href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
         {% endif %}
         {% endfor %}

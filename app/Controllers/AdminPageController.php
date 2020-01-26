@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,8 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
+use Slim\Http\Response;
 use Exception;
 
 /**
@@ -68,7 +73,7 @@ class AdminPageController extends AdminBaseController
             // Load existing page from database
             $page = $pageMapper->findById($args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
-            $page->settings = $settingMapper->findPageSettings($args['id']);
+            $page->settings = $settingMapper->findPageSettings((int) $args['id']);
         } else {
             // Create new page, and get template from query string
             $definionParam = $this->request->getQueryParam('definition');

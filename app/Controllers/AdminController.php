@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,7 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
+
+use Slim\Http\Response;
 
 /**
  * Piton Admin Controller
@@ -17,8 +23,9 @@ class AdminController extends AdminBaseController
      * Admin Home Page
      *
      * @param void
+     * @param Response
      */
-    public function home()
+    public function home(): Response
     {
         // Get Piton Engine version from composer.lock
         if (null === $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
@@ -35,8 +42,9 @@ class AdminController extends AdminBaseController
      * Show Piton Engine Release Notes
      *
      * @param array $args GET Segment array
+     * @return Response
      */
-    public function release($args)
+    public function release(array $args): Response
     {
         $markdown = $this->container->markdownParser;
         $responseBody = '';
@@ -86,8 +94,10 @@ class AdminController extends AdminBaseController
      * Sitemap
      *
      * Shows current sitemap, and sitemap update submit button
+     * @param void
+     * @return Response
      */
-    public function sitemap()
+    public function sitemap(): Response
     {
         // Get current sitemap
         $pathToSitemap = ROOT_DIR . 'public/sitemap.xml';
@@ -104,8 +114,10 @@ class AdminController extends AdminBaseController
      * Update Sitemap
      *
      * Generates sitemap to public/sitemap.xml
+     * @param void
+     * @return Response
      */
-    public function updateSitemap()
+    public function updateSitemap(): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
