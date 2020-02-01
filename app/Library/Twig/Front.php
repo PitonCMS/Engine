@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Piton\Library\Twig;
 
 use Piton\Models\Entities\PitonEntity;
-use Psr\Container\ContainerInterface;
 use Twig\Error\LoaderError;
 use Twig\TwigFunction;
 use Exception;
@@ -31,16 +30,6 @@ class Front extends Base
      * @var array
      */
     protected $navigation;
-
-    /**
-     * Constructor
-     *
-     * @param ContainerInterface
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
 
     /**
      * Register Custom Filters

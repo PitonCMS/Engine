@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Piton\Library\Twig;
 
-use Psr\Container\ContainerInterface;
 use Twig\TwigFunction;
 
 /**
@@ -28,16 +27,6 @@ class Admin extends Base
      * @var array
      */
     protected $cache = [];
-
-    /**
-     * Constructor
-     *
-     * @param ContainerInterface
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
 
     /**
      * Register Global variables

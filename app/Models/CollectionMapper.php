@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -16,9 +20,5 @@ use Piton\ORM\DataMapperAbstract;
 class CollectionMapper extends DataMapperAbstract
 {
     protected $table = 'collection';
-    protected $modifiableColumns = [
-        'title',
-        'slug',
-        'definition',
-    ];
+    protected $modifiableColumns = ['title', 'slug', 'definition', ];
 }

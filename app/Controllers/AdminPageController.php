@@ -71,8 +71,8 @@ class AdminPageController extends AdminBaseController
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
             // Load existing page from database
-            $page = $pageMapper->findById($args['id']);
-            $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
+            $page = $pageMapper->findById((int) $args['id']);
+            $page->elements = $pageElementMapper->findElementsByPageId((int) $args['id']);
             $page->settings = $settingMapper->findPageSettings((int) $args['id']);
         } else {
             // Create new page, and get template from query string

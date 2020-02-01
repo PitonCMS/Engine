@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -16,18 +20,16 @@ use Piton\ORM\DataMapperAbstract;
 class MediaCategoryMapper extends DataMapperAbstract
 {
     protected $table = 'media_category';
-    protected $modifiableColumns = [
-        'category'
-    ];
+    protected $modifiableColumns = ['category'];
 
     /**
      * Find Categories
      *
      * Find all categories sorted by category name
      * @param  void
-     * @return mixed
+     * @return array|null
      */
-    public function findCategories()
+    public function findCategories(): ?array
     {
         $this->makeSelect();
         $this->sql .= ' order by category';
@@ -39,11 +41,12 @@ class MediaCategoryMapper extends DataMapperAbstract
      * Find All Media Category Assignments
      *
      * @param void
-     * @return mixed
+     * @return array|null
      */
-    public function findAllMediaCategoryAssignments()
+    public function findAllMediaCategoryAssignments(): ?array
     {
         $this->sql = 'select media_id, category_id from media_category_map;';
+
         return $this->find();
     }
 
@@ -53,9 +56,9 @@ class MediaCategoryMapper extends DataMapperAbstract
      * For a media ID, save category array
      * @param int   $mediaId
      * @param array $categoryIds
-     * @return void
+     * @return bool
      */
-    public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null)
+    public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null): bool
     {
         // Delete current category assignments for this media ID
         $this->deleteMediaCategoryAssignmentsByMediaId($mediaId);
@@ -69,7 +72,8 @@ class MediaCategoryMapper extends DataMapperAbstract
                 $this->bindValues[] = $catId;
             }
             $this->sql = rtrim($this->sql, ',') . ';';
-            $this->execute();
+
+            return $this->execute();
         }
     }
 
@@ -77,25 +81,27 @@ class MediaCategoryMapper extends DataMapperAbstract
      *  Delete Media Category Assignments by Media ID
      *
      * @param int    $mediaId
-     * @return void
+     * @return bool
      */
-    public function deleteMediaCategoryAssignmentsByMediaId(int $mediaId)
+    public function deleteMediaCategoryAssignmentsByMediaId(int $mediaId): bool
     {
         $this->sql = 'delete from media_category_map where media_id = ?';
         $this->bindValues[] = $mediaId;
-        $this->execute();
+
+        return $this->execute();
     }
 
     /**
      *  Delete Media Category Assignments by Category ID
      *
      * @param int    $categoryId
-     * @return void
+     * @return bool
      */
-    public function deleteMediaCategoryAssignmentsByCategoryId(int $categoryId)
+    public function deleteMediaCategoryAssignmentsByCategoryId(int $categoryId): bool
     {
         $this->sql = 'delete from media_category_map where category_id = ?';
         $this->bindValues[] = $categoryId;
-        $this->execute();
+
+        return $this->execute();
     }
 }

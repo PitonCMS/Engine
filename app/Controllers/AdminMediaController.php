@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use \FilesystemIterator;
-use \RecursiveDirectoryIterator;
-use \RecursiveIteratorIterator;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Piton Media Controller

@@ -25,7 +25,7 @@ use Twig\TwigFunction;
 class Base extends AbstractExtension implements GlobalsInterface
 {
     /**
-     * @var string|\Slim\Http\Uri
+     * @var Slim\Http\Uri
      */
     protected $uri;
 
@@ -33,16 +33,6 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @var Psr\Container\ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var Array
-     */
-    protected $sitePages;
-
-    /**
-     * @var Array
-     */
-    protected $siteSettings;
 
     /**
      * Piton CSRF Token Name
@@ -64,10 +54,7 @@ class Base extends AbstractExtension implements GlobalsInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-
         $this->uri = $container->request->getUri();
-        $this->sitePages = $container['settings']['pages'] ?? null;
-        $this->siteSettings = $container['settings']['site']?? null;
 
         $this->csrfTokenName = ($container->csrfGuard)->getTokenName();
         $this->csrfTokenValue = ($container->csrfGuard)->getTokenValue();
@@ -80,8 +67,8 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'pages' => $this->sitePages,
-                'settings' => $this->siteSettings,
+                'pages' => $this->container['settings']['pages'] ?? null,
+                'settings' => $this->container['settings']['site'] ?? null,
                 'csrf' => [
                     'name' => $this->csrfTokenName,
                     'value' => $this->csrfTokenValue
@@ -142,10 +129,6 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function baseUrl(): string
     {
-        if (is_string($this->uri)) {
-            return $this->uri;
-        }
-
         return $this->uri->getBaseUrl();
     }
 

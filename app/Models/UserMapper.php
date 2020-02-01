@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
-use Piton\ORM\DomainObject;
 
 /**
  * Piton User Mapper
@@ -20,11 +23,13 @@ class UserMapper extends DataMapperAbstract
     protected $modifiableColumns = ['email', 'role','active'];
 
     /**
-     * Find Users
+     * Find All Users
      *
      * Sorts by active
+     * @param void
+     * @return array|null
      */
-    public function findUsers()
+    public function findUsers(): ?array
     {
         $this->makeSelect();
         $this->sql .= ' order by `active`';
@@ -35,9 +40,10 @@ class UserMapper extends DataMapperAbstract
     /**
      * Find Active Users
      *
-     * Filters out inactive user
+     * @param void
+     * @return array|null
      */
-    public function findActiveUsers()
+    public function findActiveUsers(): ?array
     {
         $this->makeSelect();
         $this->sql .= ' and `active` = \'Y\'';
