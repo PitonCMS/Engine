@@ -89,7 +89,7 @@ class AdminMediaController extends AdminBaseController
 
         // Get the media record
         if (null !== $id = $this->request->getParsedBodyParam('id')) {
-            $mediaFile = $mediaMapper->findById($id);
+            $mediaFile = $mediaMapper->findById((int) $id);
 
             if (is_string($mediaFile->filename)) {
                 $rootDir = substr($mediaFile->filename, 0, 2);

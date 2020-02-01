@@ -145,7 +145,7 @@ class AdminPageController extends AdminBaseController
 
         // Get the original page from database, if exists, for update
         if (null !== $pageId) {
-            $page = $pageMapper->findById($pageId);
+            $page = $pageMapper->findById((int) $pageId);
 
             // Ensure we are not futzing with the home page slug
             if ($page->page_slug === 'home' && $newSlug !== 'home') {
@@ -285,7 +285,7 @@ class AdminPageController extends AdminBaseController
 
         if (null !== $pageId) {
             // Ensure this is not the home page
-            $page = $pageMapper->findById($pageId);
+            $page = $pageMapper->findById((int) $pageId);
 
             if ($page->page_slug === 'home') {
                 throw new Exception('PitonCMS: Cannot delete home page');
