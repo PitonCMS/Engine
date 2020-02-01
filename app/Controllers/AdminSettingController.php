@@ -35,7 +35,7 @@ class AdminSettingController extends AdminBaseController
 
         // Get saved settings from database
         $category = $args['cat'] ?? null;
-        $savedSettings = $settingMapper->findSiteSettings($category);
+        $savedSettings = $settingMapper->findSiteSettings($category) ?? [];
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {

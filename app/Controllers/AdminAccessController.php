@@ -130,7 +130,7 @@ class AdminAccessController extends AdminBaseController
         $session = $this->container->sessionHandler;
         $security = $this->container->accessHandler;
         $savedToken = $session->getData($this->loginTokenKey);
-        $tokenExpires = $session->getData($this->loginTokenExpiresKey);
+        $tokenExpires = (int) $session->getData($this->loginTokenExpiresKey);
 
         // Checks whether token matches, and if within expires time
         if ($args['token'] === $savedToken && time() < $tokenExpires) {
