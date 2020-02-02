@@ -84,7 +84,7 @@ class PageMapper extends DataMapperAbstract
     /**
      * Find All Pages
      *
-     * Finds all pages, does not include element data
+     * Gets all pages without elements
      * Does not include collection detail pages
      * @param  bool  $includeUnpublished Filter on published pages
      * @return array|null

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
 use Exception;
@@ -43,9 +47,9 @@ class Sitemap
      * @param  bool $alertSearchEngines Set true in production to ping search engines
      * @return bool
      */
-    public function make(array $links = null, string $domain, bool $alertSearchEngines = null)
+    public function make(array $links = null, string $domain, bool $alertSearchEngines = null): bool
     {
-        $this->logger->notice('Making sitemap');
+        $this->logger->notice('PitonCMS: Making sitemap');
 
         if (empty($links)) {
             $this->messages[] = 'No content links to create sitemap.';
@@ -73,7 +77,7 @@ class Sitemap
      * @param  array  $links  Array of links
      * @return void
      */
-    public function generateXML(array $links)
+    public function generateXML(array $links): void
     {
         $this->logger->notice('..Generating XML');
 
@@ -94,9 +98,9 @@ class Sitemap
      * Write XML File
      *
      * @param  void
-     * @return boolean
+     * @return bool
      */
-    public function writeXMLFile()
+    public function writeXMLFile(): bool
     {
         // Write the sitemap data to file
         $this->logger->notice('..Writing data to file');
@@ -105,6 +109,8 @@ class Sitemap
             $fh = fopen($this->sitemapFilePath, 'w');
             fwrite($fh, $this->sitemapXML);
             fclose($fh);
+
+            return true;
         } catch (Exception $e) {
             // Log failure
             $this->logger->error('..Failed to write sitemap');
@@ -113,14 +119,16 @@ class Sitemap
 
             return false;
         }
-
-        return true;
     }
 
     /**
      * Alert Search Engines
+     *
+     * Inform Google and Bing that there is a new sitemap
+     * @param void
+     * @return void
      */
-    public function alertSearchEngines()
+    public function alertSearchEngines(): void
     {
         // Ping Google and Bing with the updated sitemap
         $sitemapUrl = $this->domain . '/' . $this->sitemapFileName;
@@ -161,9 +169,9 @@ class Sitemap
      *
      * Returns any messages generated from creating sitemap
      * @param  void
-     * @return array
+     * @return array|null
      */
-    public function getMessages()
+    public function getMessages(): ?array
     {
         return $this->messages;
     }

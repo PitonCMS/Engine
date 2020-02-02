@@ -190,7 +190,7 @@ $app->group('/admin', function () {
                 return (new AdminSettingController($this))->saveSettings();
             })->add('csrfGuard')->setName('adminSaveSettings');
 
-            // Sitemap submit page
+            // Show sitemap submit page
             $this->get('/sitemap', function ($args) {
                 return (new AdminController($this))->sitemap();
             })->setName('adminSitemap');

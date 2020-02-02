@@ -124,7 +124,7 @@ class AdminController extends AdminBaseController
         $sitemapHandler = $this->container->get('sitemapHandler');
 
         // Get all published content
-        $allContent = array_merge($pageMapper->findPages(), $pageMapper->findCollectionPages());
+        $allContent = array_merge($pageMapper->findPages() ?: [], $pageMapper->findCollectionPages() ?: []);
         $links = [];
 
         foreach ($allContent as $page) {
@@ -138,10 +138,10 @@ class AdminController extends AdminBaseController
         }
 
         // Make sitemap
-        if (!$sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->siteSettings['production'])) {
-            $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
-        } elseif ($this->siteSettings['production']) {
+        if ($sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->siteSettings['production'])) {
             $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+        } else {
+            $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
         }
 
         return $this->redirect('adminSitemap');
