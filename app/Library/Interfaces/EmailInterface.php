@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Interfaces;
 
 /**
@@ -20,7 +24,7 @@ interface EmailInterface
      * @param  string  $name    Sender name, optional
      * @return object  $this    EmailInterface
      */
-    public function setFrom($address, $name = null) : EmailInterface;
+    public function setFrom(string $address, string $name = null): EmailInterface;
 
     /**
      * Add Recipient To Address
@@ -30,7 +34,7 @@ interface EmailInterface
      * @param  string $name    Recipient name, optiona
      * @return object $this    EmailInterface
      */
-    public function setTo($address, $name = null) : EmailInterface;
+    public function setTo(string $address, string $name = null): EmailInterface;
 
     /**
      * Set Email Subject
@@ -38,7 +42,7 @@ interface EmailInterface
      * @param  string $subject Email subject line
      * @return object $this    EmailInterface
      */
-    public function setSubject($subject) : EmailInterface;
+    public function setSubject(string $subject): EmailInterface;
 
     /**
      * Set Email Message Body
@@ -46,7 +50,7 @@ interface EmailInterface
      * @param  string $body Email body
      * @return object $this EmailInterface
      */
-    public function setMessage($message) : EmailInterface;
+    public function setMessage(string $message): EmailInterface;
 
     /**
      * Send Email
@@ -54,5 +58,5 @@ interface EmailInterface
      * @param  void
      * @return void
      */
-    public function send() : void;
+    public function send(): void;
 }

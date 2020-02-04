@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,13 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
-use \Exception;
-use \Closure;
+use Exception;
+use Closure;
 
 /**
  * Piton Media Handler
@@ -91,7 +95,7 @@ class Media
     {
         // Make sure there is a key
         if (empty($tinifyApiKey)) {
-            throw Exception('PitonCMS: Media Handler requires a TinyJPG developer API Key');
+            throw new Exception('PitonCMS: Media Handler requires a TinyJPG developer API Key');
         }
 
         try {
@@ -112,7 +116,7 @@ class Media
      * @param string $soureMedia Source Filename
      * @return void
      */
-    public function setSource(string $sourceMedia)
+    public function setSource(string $sourceMedia): void
     {
         // Construct media path, ignoring the first two pathinfo return elements
         $parts = pathinfo($sourceMedia);
@@ -143,7 +147,7 @@ class Media
      * @param void
      * @return void
      */
-    public function makeXLarge()
+    public function makeXLarge(): void
     {
         $this->validateTinifySource();
 
@@ -158,7 +162,7 @@ class Media
      * @param void
      * @return void
      */
-    public function makeLarge()
+    public function makeLarge(): void
     {
         $this->validateTinifySource();
 
@@ -196,7 +200,7 @@ class Media
      * @param void
      * @return void
      */
-    public function makeSmall()
+    public function makeSmall(): void
     {
         $this->validateTinifySource();
 
@@ -234,7 +238,7 @@ class Media
      * @param void
      * @return void
      */
-    public function makeThumb()
+    public function makeThumb(): void
     {
         $this->validateTinifySource();
 
@@ -254,7 +258,7 @@ class Media
      * @param  void
      * @return string
      */
-    public function getFileUri()
+    public function getFileUri(): string
     {
         return ($this->mediaUri)($this->filename);
     }
@@ -266,7 +270,7 @@ class Media
      * @return void
      * @throws Exception
      */
-    protected function validateTinifySource()
+    protected function validateTinifySource(): void
     {
         if (!$this->tinifySource instanceof \Tinify\Source) {
             throw new Exception('PitonCMS: Media setSource() has not been set with a valid media file.');

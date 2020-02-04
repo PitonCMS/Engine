@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
 use Exception;
-use RuntimeException;
 use FilesystemIterator;
 
 /**
@@ -17,6 +20,12 @@ use FilesystemIterator;
  */
 class Definition
 {
+    /**
+     * JSON Validator
+     * @var object
+     */
+    protected $validator;
+
     /**
      * Definition Files
      * @var array
@@ -49,11 +58,12 @@ class Definition
     /**
      * Constructor
      *
+     * @param  object JSON Validator
      * @return void
      */
-    public function __construct($container)
+    public function __construct(object $validator)
     {
-        $this->container = $container;
+        $this->validator = $validator;
     }
 
     /**
@@ -62,22 +72,20 @@ class Definition
      * Validation errors available from getErrorMessages()
      * @param string $json   Path to page JSON file to decode
      * @param string $schema Path to validation JSON Schema file
-     * @return mixed         Object|null
+     * @return object
      */
-    public function decodeJson(string $json, string $schema = null)
+    public function decodeJson(string $json, string $schema = null): ?object
     {
-        $validator = $this->container->jsonValidator;
-
         // Get and decode JSON to be validated
         $jsonDecodedInput = $this->getDecodedJson($this->getFileContents($json));
 
-        $validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
-        if ($validator->isValid()) {
+        $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+        if ($this->validator->isValid()) {
             return $jsonDecodedInput;
         }
 
         // If not valid, record error messages and return null
-        foreach ($validator->getErrors() as $error) {
+        foreach ($this->validator->getErrors() as $error) {
             var_dump($error);
             $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
@@ -319,7 +327,6 @@ class Definition
      */
     protected function getDecodedJson(string $json)
     {
-        return json_decode($json);
-        // JSON_THROW_ON_ERROR >= 7.3
+        return json_decode($json, false, 512, JSON_THROW_ON_ERROR);
     }
 }

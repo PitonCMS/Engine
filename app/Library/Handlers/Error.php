@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,11 +7,15 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
-use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface as Logger;
+use Exception;
 
 /**
  * Error Handler
@@ -21,16 +26,17 @@ class Error extends \Slim\Handlers\Error
 {
     /**
      * Logger
-     * @var Object
+     * @var Logger
      */
     protected $logger;
 
     /**
      * Constructor
      *
-     * @param object Logging instance
+     * @param bool   $displayErrorDetails
+     * @param Logger $logger Logging instance
      */
-    public function __construct($displayErrorDetails, Logger $logger)
+    public function __construct(bool $displayErrorDetails, Logger $logger)
     {
         $this->logger = $logger;
         parent::__construct($displayErrorDetails);
@@ -42,12 +48,12 @@ class Error extends \Slim\Handlers\Error
      * Logs error exceptions and then calls parent method
      * @param ServerRequestInterface $request   The most recent Request object
      * @param ResponseInterface      $response  The most recent Response object
-     * @param \Exception             $exception The caught Exception object
+     * @param Exception             $exception The caught Exception object
      *
      * @return ResponseInterface
      * @throws UnexpectedValueException
      */
-    public function __invoke(Request $request, Response $response, \Exception $exception)
+    public function __invoke(Request $request, Response $response, Exception $exception): Response
     {
         // Log the message
         $this->logger->critical('ERROR!');

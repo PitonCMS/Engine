@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,15 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\log\LoggerInterface as Logger;
+use Slim\Views\Twig;
 
 /**
  * Piton Not Found Handler
@@ -42,10 +48,10 @@ class NotFound extends \Slim\Handlers\NotFound
     /**
      * Constructor
      *
-     * @param object Slim\Views\Twig Slim Twig view handler
-     * @param object \Monolog\Logger Logging
+     * @param Twig   $view   Slim Twig view handler
+     * @param Logger $logger Logging
      */
-    public function __construct(\Slim\Views\Twig $view, \Monolog\Logger $logger)
+    public function __construct(Twig $view, Logger $logger)
     {
         $this->view = $view;
         $this->logger = $logger;
@@ -56,12 +62,12 @@ class NotFound extends \Slim\Handlers\NotFound
      *
      * Adds logging for not found pages
      * Determines public or admin facing 404 page template path
-     * @param  ServerRequestInterface $request  The most recent Request object
-     * @param  ResponseInterface      $response The most recent Response object
+     * @param  Request $request  The most recent Request object
+     * @param  Response      $response The most recent Response object
      *
      * @return ResponseInterface
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    public function __invoke(Request $request, Response $response): Response
     {
         // Get request URL to determine if this was thrown in /admin or on the public site
         $path = $request->getUri()->getPath();
@@ -87,12 +93,11 @@ class NotFound extends \Slim\Handlers\NotFound
     /**
      * Return a custom not found page
      *
-     * @param  ServerRequestInterface $request  The most recent Request object
-     * @param  ResponseInterface      $response The most recent Response object
-     *
-     * @return ResponseInterface
+     * @param  Request  $request  The most recent Request object
+     * @param  Response $response The most recent Response object
+     * @return string
      */
-    protected function renderHtmlNotFoundOutput(ServerRequestInterface $request)
+    protected function renderHtmlNotFoundOutput(Request $request): string
     {
         // Render and return temmplate as string
         return $this->view->fetch($this->templatePath);

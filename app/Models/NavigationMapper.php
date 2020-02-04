@@ -74,7 +74,7 @@ SQL;
         bool $active = true
     ): ?array {
         // Get navigator rows
-        $this->allNavRows = $this->findNavigation($navigator) ?: [];
+        $this->allNavRows = $this->findNavigation($navigator) ?? [];
 
         // Recursive depth indicator
         $level =  1;

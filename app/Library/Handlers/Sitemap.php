@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use Psr\Log\LoggerInterface as Logger;
 use Exception;
 
 /**
@@ -29,10 +30,10 @@ class Sitemap
     /**
      *  Constructor
      *
-     * @param  object $logger   Logging object
+     * @param  Logger $logger
      * @return void
      */
-    public function __construct(object $logger)
+    public function __construct(Logger $logger)
     {
         $this->logger = $logger;
         $this->sitemapFilePath = ROOT_DIR . 'public/' . $this->sitemapFileName;

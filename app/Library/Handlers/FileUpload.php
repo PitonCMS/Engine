@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,13 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
-use \Exception;
-use \Closure;
+use Exception;
+use Closure;
 
 /**
  * Piton Media File Upload Handler
@@ -85,9 +89,9 @@ class FileUpload
      *
      * Upload file from $_FILES array
      * @param  string  $fileKey Array key for file upload
-     * @return boolean          True|False
+     * @return bool
      */
-    public function upload(string $fileKey)
+    public function upload(string $fileKey): bool
     {
         if (!isset($this->uploadedFiles[$fileKey])) {
             throw new Exception('PitonCMS: File upload key does not exist');
@@ -128,7 +132,7 @@ class FileUpload
      * @param  void
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return "{$this->filename}.{$this->extension}";
     }
@@ -140,7 +144,7 @@ class FileUpload
      * @param  void
      * @return string
      */
-    public function getAbsoluteFilename()
+    public function getAbsoluteFilename(): string
     {
         return $this->publicRoot . $this->getFileUri() . $this->getFilename();
     }
@@ -152,7 +156,7 @@ class FileUpload
      * @param  void
      * @return string
      */
-    public function getFileUri()
+    public function getFileUri(): string
     {
         return ($this->mediaUriClosure)($this->filename);
     }
@@ -161,9 +165,10 @@ class FileUpload
      * Make Directory Path
      *
      * Creates the directory path
+     * @param void
      * @return bool
      */
-    protected function makeFileDirectory()
+    protected function makeFileDirectory(): bool
     {
         $filePath = $this->publicRoot . $this->getFileUri();
 
@@ -188,7 +193,7 @@ class FileUpload
      * @param  void
      * @return void
      */
-    protected function makeFilename()
+    protected function makeFilename(): void
     {
         $this->filename = bin2hex(random_bytes(6));
     }
@@ -200,7 +205,7 @@ class FileUpload
      * @param  void
      * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         switch ($this->error) {
             case UPLOAD_ERR_INI_SIZE:
