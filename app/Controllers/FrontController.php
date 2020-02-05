@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,7 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
+
+use Slim\Http\Response;
 
 /**
  * Piton Front End Controller
@@ -19,8 +25,9 @@ class FrontController extends FrontBaseController
      *
      * Displays page matching URL slug, or throws 404 Not Found
      * @param array $args Array of URL parameters, expecting 'slug1', 'slug2'
+     * @return Response
      */
-    public function showPage($args)
+    public function showPage(array $args): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -52,9 +59,11 @@ class FrontController extends FrontBaseController
     /**
      * Submit Contact Message
      *
-     * @param POST array
+     * Expects POST array
+     * @param void
+     * @return Response
      */
-    public function submitMessage()
+    public function submitMessage(): Response
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $email = $this->container->emailHandler;

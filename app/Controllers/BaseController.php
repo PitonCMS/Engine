@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -12,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Psr\Container\ContainerInterface;
+use Slim\Http\Response;
 
 /**
  * Piton Base Controller
@@ -61,7 +63,6 @@ class BaseController
         $this->request = $container->request;
         $this->response = $container->response;
         $this->siteSettings = $container->get('settings')['site'];
-
         $session = $this->container->sessionHandler;
         $this->alert = $session->getFlashData('alert');
     }
@@ -71,8 +72,9 @@ class BaseController
      *
      * @param string $template Path to template
      * @param mixed  $data     Data to echo, Domain object or array
+     * @return Response
      */
-    protected function render($template, $data = null)
+    protected function render(string $template, $data = null): Response
     {
         $twigView = $this->container->view;
 
@@ -90,8 +92,9 @@ class BaseController
      *
      * @param string $name Route name
      * @param array  $args Associative array of route arguments
+     * @return Response
      */
-    protected function redirect($routeName, $args = [])
+    protected function redirect(string $routeName, array $args = []): Response
     {
         // Save any alert messages to session flash data
         if (isset($this->alert)) {
@@ -106,8 +109,10 @@ class BaseController
      * Show Page Not Found (404)
      *
      * Returns http status 404 Not Found and custom error template
+     * @param void
+     * @return Response
      */
-    protected function notFound()
+    protected function notFound(): Response
     {
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);

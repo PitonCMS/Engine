@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -15,7 +19,7 @@ use Piton\ORM\DataMapperAbstract;
  */
 class SettingMapper extends DataMapperAbstract
 {
-    protected $inCategories = '(\'site\',\'contact\',\'social\',\'piton\')';
+    protected $inCategories = "('site','contact','social','piton')";
     protected $table = 'setting';
     protected $modifiableColumns = [
         'category',
@@ -29,9 +33,9 @@ class SettingMapper extends DataMapperAbstract
      *
      * Find all settings, or a category of settings
      * @param  $category site|contact|social|piton
-     * @return array
+     * @return array|null
      */
-    public function findSiteSettings(string $category = null)
+    public function findSiteSettings(string $category = null): ?array
     {
         $this->makeSelect();
         if (null === $category) {
@@ -49,9 +53,9 @@ class SettingMapper extends DataMapperAbstract
      *
      * Get page level settings
      * @param  int   $pageId  Page ID
-     * @return mixed          Array | null
+     * @return array|null
      */
-    public function findPageSettings(int $pageId)
+    public function findPageSettings(int $pageId): ?array
     {
         $this->makeSelect();
         $this->sql .= ' and category = \'page\' and reference_id = ?';
@@ -66,7 +70,7 @@ class SettingMapper extends DataMapperAbstract
      * @param  int  $pageId Page ID
      * @return bool
      */
-    public function deleteByPageId(int $pageId)
+    public function deleteByPageId(int $pageId): bool
     {
         $this->sql = "delete from {$this->table} where category = 'page' and reference_id = ?;";
         $this->bindValues[] = $pageId;

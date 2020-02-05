@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Utilities;
 
 /**
@@ -20,10 +24,10 @@ class Toolbox
      *
      * Accepts an HTML string, and returns just the unformatted text, truncated to the number of words
      * @param string $text Input HTML string
-     * @param intger, $characters Number of characters to return
+     * @param int, $characters Number of characters to return
      * @return string
      */
-    public function truncateHtmlText($text, $characters = 300)
+    public function truncateHtmlText(string $text, int $characters = 300): string
     {
         // Clean up html tags and special characters
         $text = preg_replace('/<[^>]*>/', ' ', $text);
@@ -59,7 +63,7 @@ class Toolbox
      * @param string $string Unformatted URL
      * @return string
      */
-    public function cleanUrl($string)
+    public function cleanUrl(string $string): string
     {
         // First replace ampersands with the word 'and'
         $string = str_replace('&', 'and', $string);

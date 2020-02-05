@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,11 +7,14 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
-use \FilesystemIterator;
-use \RecursiveDirectoryIterator;
-use \RecursiveIteratorIterator;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Piton Media Controller
@@ -27,8 +31,8 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        $data['media'] = $mediaMapper->findAllMedia();
-        $data['categories'] = $mediaCategoryMapper->findCategories();
+        $data['media'] = $mediaMapper->findAllMedia() ?? [];
+        $data['categories'] = $mediaCategoryMapper->findCategories() ?? [];
         $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments();
 
         // Identify any media ID's assigned to each category
@@ -85,7 +89,7 @@ class AdminMediaController extends AdminBaseController
 
         // Get the media record
         if (null !== $id = $this->request->getParsedBodyParam('id')) {
-            $mediaFile = $mediaMapper->findById($id);
+            $mediaFile = $mediaMapper->findById((int) $id);
 
             if (is_string($mediaFile->filename)) {
                 $rootDir = substr($mediaFile->filename, 0, 2);
@@ -151,7 +155,7 @@ HTML;
             $mediaMapper->save($media);
 
             // Save category assignments
-            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
 
             // Make optimized copies
             $this->makeMediaSet($fileUpload->getFilename());

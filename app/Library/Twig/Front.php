@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,9 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Twig;
 
-use Psr\Container\ContainerInterface;
+use Piton\Models\Entities\PitonEntity;
 use Twig\Error\LoaderError;
 use Twig\TwigFunction;
 use Exception;
@@ -28,17 +32,10 @@ class Front extends Base
     protected $navigation;
 
     /**
-     * Constructor
-     *
-     * @param object Psr\Container\ContainerInterface
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
-
-    /**
      * Register Custom Filters
+     *
+     * @param void
+     * @return array
      */
     public function getFilters(): array
     {
@@ -49,6 +46,9 @@ class Front extends Base
 
     /**
      * Register Custom Functions
+     *
+     * @param void
+     * @return array
      */
     public function getFunctions(): array
     {
@@ -64,14 +64,14 @@ class Front extends Base
     /**
      * Get All Block Elements HTML
      *
-     * Gets all all Element's HTML within a Block, rendered with data
+     * Gets all Element's HTML within a Block, rendered with data
      * @param  array $block Array of Elements within a Block
-     * @return string        HTML
+     * @return string|null
      */
-    public function getBlockElementsHtml($block)
+    public function getBlockElementsHtml(?array $block): ?string
     {
         if (empty($block)) {
-            return '';
+            return null;
         }
 
         $blockHtml = '';
@@ -86,10 +86,10 @@ class Front extends Base
      * Get HTML Element
      *
      * Gets Element HTML fragments rendered with data
-     * @param  array  $element Element values
-     * @return string          HTML
+     * @param  PitonEntity  $element Element values
+     * @return string
      */
-    public function getElementHtml($element)
+    public function getElementHtml(?PitonEntity $element): ?string
     {
         // Ensure we have an element type
         if (!isset($element->template) && empty($element->template)) {
@@ -101,7 +101,7 @@ class Front extends Base
         } catch (LoaderError $e) {
             // If template name is malformed, just return empty string to fail gracefully
             $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
-            $html = '';
+            $html = null;
         }
 
         return $html;
@@ -112,10 +112,10 @@ class Front extends Base
      *
      * Get collection pages by collection slug
      * For use in page element as collection landing page
-     * @param  int   $collectionSlug Collection Slug
-     * @return mixed               Array | null
+     * @param  string   $collectionSlug Collection Slug
+     * @return array|null
      */
-    public function getCollectionPages($collectionSlug)
+    public function getCollectionPages(string $collectionSlug): ?array
     {
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
@@ -126,9 +126,9 @@ class Front extends Base
      * Get Gallery by ID
      *
      * @param int $galleryId
-     * @return mixed
+     * @return array|null
      */
-    public function getGallery(int $galleryId = null)
+    public function getGallery(int $galleryId = null): ?array
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
@@ -140,9 +140,9 @@ class Front extends Base
      *
      * Get navigation by name
      * @param  string $navigator
-     * @return mixed
+     * @return array|null
      */
-    public function getNavigator(string $navigator)
+    public function getNavigator(string $navigator): ?array
     {
         // Return cached navigator if available
         if (isset($this->navigation[$navigator])) {

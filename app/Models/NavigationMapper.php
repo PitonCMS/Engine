@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -35,9 +39,9 @@ class NavigationMapper extends DataMapperAbstract
      *
      * Finds all navigation rows by navigator name
      * @param  string $navigator Name of navigator
-     * @return mixed             Array|null
+     * @return array|null
      */
-    public function findNavigation(string $navigator)
+    public function findNavigation(string $navigator): ?array
     {
         $this->sql =<<<SQL
 select
@@ -61,12 +65,16 @@ SQL;
      * @param  string $currentRoute Current route path to match and set active flag
      * @param  bool   $published    Filter on published pages
      * @param  bool   $active       Filter on active links
-     * @return mixed                Array|null
+     * @return array|null
      */
-    public function findNavHierarchy(string $navigator, string $currentRoute = null, bool $published = true, bool $active = true)
-    {
+    public function findNavHierarchy(
+        string $navigator,
+        string $currentRoute = null,
+        bool $published = true,
+        bool $active = true
+    ): ?array {
         // Get navigator rows
-        $this->allNavRows = $this->findNavigation($navigator);
+        $this->allNavRows = $this->findNavigation($navigator) ?? [];
 
         // Recursive depth indicator
         $level =  1;
@@ -115,7 +123,7 @@ SQL;
      * @param  bool   $active       Filter on active links
      * @return void
      */
-    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published, bool $active)
+    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published, bool $active): void
     {
         // Recursive depth indicator
         $level++;
@@ -156,9 +164,9 @@ SQL;
      *
      * Recursively deletes children of nav link
      * @param  int  $navId
-     * @return void
+     * @return bool
      */
-    public function deleteByNavId(int $navId)
+    public function deleteByNavId(int $navId): bool
     {
         // Find any children to delete
         $this->makeSelect();
@@ -186,7 +194,7 @@ SQL;
      * @param  int $pageId Page ID
      * @return void
      */
-    public function deleteByPageId(int $pageId)
+    public function deleteByPageId(int $pageId): void
     {
         // Get nav ID, and call deleteByNavId() to recursively delete children
         $this->makeSelect();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,7 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
+
+use Slim\Http\Response;
 
 /**
  * Piton Front End Base Controller
@@ -21,20 +27,21 @@ class FrontBaseController extends BaseController
      * Modifies path to template then calls parent render() method
      * @param string $template Path to template
      * @param mixed  $data   Data to echo, Domain object or array
+     * @return Response
      */
-    public function render($template, $data = null)
+    public function render(string $template, $data = null): Response
     {
         return parent::render('pages/' . $template, $data);
     }
 
-   /**
-     * Build Page Elements by Block
-     *
-     * Takes array of page elements and changes keys to use block->key as array keys
-     * @param array  $elements Array of page element domain models
-     * @return array
-     */
-    protected function buildElementsByBlock($elements)
+    /**
+      * Build Page Elements by Block
+      *
+      * Takes array of page elements and changes keys to use block->key as array keys
+      * @param array  $elements Array of page element domain models
+      * @return array
+      */
+    protected function buildElementsByBlock(array $elements): array
     {
         if (empty($elements)) {
             return $elements;
@@ -55,7 +62,7 @@ class FrontBaseController extends BaseController
      * @param array  $settings Array of page settings
      * @return array
      */
-    protected function buildPageSettings($settings)
+    protected function buildPageSettings(array $settings): array
     {
         if (empty($settings)) {
             return $settings;

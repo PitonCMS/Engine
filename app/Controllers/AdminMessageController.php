@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
 /**
@@ -40,7 +44,7 @@ class AdminMessageController extends AdminBaseController
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
 
         $messageId = $this->request->getParsedBodyParam('id');
-        $message = $messageMapper->findById($messageId);
+        $message = $messageMapper->findById((int) $messageId);
         if ($message->isRead === 'Y') {
             $messageMapper->markAsUnread($messageId);
         } else {

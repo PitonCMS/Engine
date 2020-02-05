@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
 use Exception;
@@ -31,7 +35,7 @@ class AdminSettingController extends AdminBaseController
 
         // Get saved settings from database
         $category = $args['cat'] ?? null;
-        $savedSettings = $settingMapper->findSiteSettings($category);
+        $savedSettings = $settingMapper->findSiteSettings($category) ?? [];
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {

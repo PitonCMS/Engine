@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,8 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
+use Slim\Http\Response;
 use Exception;
 
 /**
@@ -29,7 +34,7 @@ class AdminPageController extends AdminBaseController
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
-            $data['pages'] = $pageMapper->findCollectionPages(true);
+            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
             $data['templates'] = $definition->getCollections();
             $data['type'] = 'collection';
 
@@ -66,9 +71,9 @@ class AdminPageController extends AdminBaseController
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
             // Load existing page from database
-            $page = $pageMapper->findById($args['id']);
-            $page->elements = $pageElementMapper->findElementsByPageId($args['id']);
-            $page->settings = $settingMapper->findPageSettings($args['id']);
+            $page = $pageMapper->findById((int) $args['id']);
+            $page->elements = $pageElementMapper->findElementsByPageId((int) $args['id']);
+            $page->settings = $settingMapper->findPageSettings((int) $args['id']);
         } else {
             // Create new page, and get template from query string
             $definionParam = $this->request->getQueryParam('definition');
@@ -140,7 +145,7 @@ class AdminPageController extends AdminBaseController
 
         // Get the original page from database, if exists, for update
         if (null !== $pageId) {
-            $page = $pageMapper->findById($pageId);
+            $page = $pageMapper->findById((int) $pageId);
 
             // Ensure we are not futzing with the home page slug
             if ($page->page_slug === 'home' && $newSlug !== 'home') {
@@ -280,7 +285,7 @@ class AdminPageController extends AdminBaseController
 
         if (null !== $pageId) {
             // Ensure this is not the home page
-            $page = $pageMapper->findById($pageId);
+            $page = $pageMapper->findById((int) $pageId);
 
             if ($page->page_slug === 'home') {
                 throw new Exception('PitonCMS: Cannot delete home page');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,8 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
 
 // Dependency Injection Container (DIC) Configuration
 
@@ -41,7 +44,7 @@ $container['view'] = function ($c) {
 
     if (isset($settings['site']['dateFormat'])) {
         $twigEnvironment = $view->getEnvironment();
-        $twigEnvironment->getExtension('Twig_Extension_Core')->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
+        $twigEnvironment->getExtension(Twig\Extension\CoreExtension::class)->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
     }
 
     // Load Twig debugger if in development
@@ -133,7 +136,7 @@ $container['markdownParser'] = function ($c) {
 
 // Definition handler
 $container['definition'] = function ($c) {
-    return new Piton\Library\Handlers\Definition($c);
+    return new Piton\Library\Handlers\Definition($c->jsonValidator);
 };
 
 // JSON Validator Dependencies for justinrainbow/json-schema

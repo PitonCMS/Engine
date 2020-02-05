@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
 use PDOException;
@@ -32,7 +36,9 @@ class AdminUserController extends AdminBaseController
         // If there is only one admin, set flag to suggest a recovery email
         $admins = 0;
         foreach ($data['users'] as $user) {
-            if ($user->role === 'A') $admins++;
+            if ($user->role === 'A') {
+                $admins++;
+            }
         }
         $data['recommendRecoveryEmail'] = ($admins < 2) ? true : false;
 

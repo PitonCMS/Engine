@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 use Piton\Controllers\AdminController;
 use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
@@ -190,7 +194,7 @@ $app->group('/admin', function () {
                 return (new AdminSettingController($this))->saveSettings();
             })->add('csrfGuard')->setName('adminSaveSettings');
 
-            // Sitemap submit page
+            // Show sitemap submit page
             $this->get('/sitemap', function ($args) {
                 return (new AdminController($this))->sitemap();
             })->setName('adminSitemap');

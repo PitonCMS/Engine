@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,8 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
 
 /**
  * Load Base Files and Return Application
@@ -30,7 +33,7 @@ return call_user_func(
         if (file_exists(ROOT_DIR . 'config/config.local.php')) {
             require ROOT_DIR . 'config/config.local.php';
         } else {
-            throw new \Exception("No local configuration file found");
+            throw new \Exception("PitonCMS: No local configuration file found");
         }
 
         // Set error reporting level based on environment

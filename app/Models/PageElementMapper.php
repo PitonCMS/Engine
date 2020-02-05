@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -36,9 +40,9 @@ class PageElementMapper extends DataMapperAbstract
      * Find Elements by Page ID
      *
      * @param int    $pageId Page ID
-     * @return mixed Array or null
+     * @return array|null
      */
-    public function findElementsByPageId($pageId)
+    public function findElementsByPageId(int $pageId): ?array
     {
         $this->makeSelect();
         $this->sql .= ' and page_element.page_id = ? order by block_key, element_sort';
@@ -51,9 +55,9 @@ class PageElementMapper extends DataMapperAbstract
      * Delete Page Elements by Page ID
      *
      * @param int   $pageId Page ID
-     * @return void
+     * @return bool
      */
-    public function deleteElementsByPageId($pageId)
+    public function deleteElementsByPageId($pageId): bool
     {
         $this->sql = "delete from {$this->table} where page_id = ?;";
         $this->bindValues[] = $pageId;

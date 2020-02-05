@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,9 +7,13 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
 use Piton\Interfaces\SessionInterface;
+use SessionIdInterface;
 
 /**
  * Access Control Handler
@@ -20,19 +25,22 @@ class Access
     /**
      * Session Handler
      *
-     * @var Session Class
+     * @var Piton\Interfaces\SessionInterface
      */
     protected $session;
 
     /**
     * Logged in Key Name
     *
-    * @var
+    * @var string
     */
     protected $loggedInKey = 'loggedIn';
 
     /**
      * Constructor
+     *
+     * @param SessionIdInterface
+     * @return void
      */
     public function __construct(SessionInterface $sessionHandler)
     {
@@ -43,25 +51,32 @@ class Access
      * Is Authenticated
      *
      * Checks if user is currently logged in
-     * @return boolean
+     * @param void
+     * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->session->getData($this->loggedInKey);
     }
 
     /**
      * Start Authenicated Session
+     *
+     * @param void
+     * @return void
      */
-    public function startAuthenticatedSession()
+    public function startAuthenticatedSession(): void
     {
         $this->session->setData([$this->loggedInKey => true]);
     }
 
     /**
      * End Authenticated Session
+     *
+     * @param void
+     * @return void
      */
-    public function endAuthenticatedSession()
+    public function endAuthenticatedSession(): void
     {
         $this->session->unsetData($this->loggedInKey);
     }
@@ -69,10 +84,10 @@ class Access
     /**
      * Generate Login Token Hash
      *
-     * Generates login token
+     * @param void
      * @return string
      */
-    public function generateLoginToken()
+    public function generateLoginToken(): string
     {
         return hash('sha256', microtime() . bin2hex(random_bytes(32)));
     }
@@ -81,10 +96,10 @@ class Access
      * Is Authorized
      *
      * Validates that the user has the required role in session
-     * @param str Required permission: A: Admin, S: Super Admin
+     * @param string Required permission: A: Admin, S: Super Admin
      * @return bool
      */
-    public function isAuthorized($requiredRole)
+    public function isAuthorized(string $requiredRole): bool
     {
         $userRole = $this->session->getData('role');
         $permissions = ['N' => 1, 'A' => 2, 'S' => 3];

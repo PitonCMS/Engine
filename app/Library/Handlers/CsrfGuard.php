@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,10 +7,15 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface as Logger;
+use Piton\Interfaces\SessionInterface;
 use Exception;
 
 /**
@@ -33,24 +39,24 @@ class CsrfGuard
 
     /**
      * Session Storage
-     * @var object Piton\Library\Handlers\Session
+     * @var Piton\Interfaces\SessionInterface
      */
     protected $session;
 
     /**
      * Logging Object
-     * @var object
+     * @var Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * Constructor
      *
-     * @param  obj $session Piton\Library\Handlers\Session
-     * $param  obj $logger  Logging object
+     * @param  SessionInterface $session
+     * @param  Logger           $logger  Logging object
      * @return void
      */
-    public function __construct(Session $session, $logger)
+    public function __construct(SessionInterface $session, Logger $logger = null)
     {
         $this->session = $session;
         $this->logger = $logger;
@@ -61,12 +67,12 @@ class CsrfGuard
      * Invoke CSRF Guard
      *
      * Invoked on designated POST routes
-     * @param  obj $request Psr\Http\Message\ServerRequestInterface
-     * @param  obj $respose Psr\Http\Message\ResponseInterface
-     * @param  callable     Next middleware to run
-     * @return mixed        Callable, or HTTP 403 Error
+     * @param  Request  $request
+     * @param  Response $respose
+     * @param  callable Next middleware to run
+     * @return Response
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
+    public function __invoke(Request $request, Response $response, callable $next): Response
     {
         // Validate POST request
         if ($request->getMethod() === 'POST') {
@@ -76,7 +82,9 @@ class CsrfGuard
                 // Bad token. Clear and reset
                 $this->csrfTokenValue = null;
                 $this->loadSessionToken();
-                $this->logger->alert('PitonCMS: 403 Forbidden request, CSRF token mismatch');
+                if ($this->logger) {
+                    $this->logger->alert('PitonCMS: 403 Forbidden request, CSRF token mismatch');
+                }
 
                 return $this->forbidden($request, $response);
             }
@@ -89,9 +97,9 @@ class CsrfGuard
      * Get Token Name
      *
      * @param  void
-     * @return str
+     * @return string
      */
-    public function getTokenName()
+    public function getTokenName(): string
     {
         return $this->csrfTokenName;
     }
@@ -100,9 +108,9 @@ class CsrfGuard
      * Get Token Value
      *
      * @param  void
-     * @return str
+     * @return string
      */
-    public function getTokenValue()
+    public function getTokenValue(): string
     {
         return $this->csrfTokenValue;
     }
@@ -114,7 +122,7 @@ class CsrfGuard
      * @param  void
      * @return void
      */
-    public function unsetToken()
+    public function unsetToken(): void
     {
         $this->session->unsetData($this->csrfTokenName);
     }
@@ -123,10 +131,10 @@ class CsrfGuard
      * Validate Token
      *
      * Uses hash_equals() to compare saved token ($this->csrfTokenValue) with provided token
-     * @param  str $token Token hash to comapre
+     * @param  string $token Token hash to comapre
      * @return bool
      */
-    protected function validateToken($token)
+    protected function validateToken(string $token): bool
     {
         return hash_equals($this->csrfTokenValue, $token);
     }
@@ -138,7 +146,7 @@ class CsrfGuard
      * @param  void
      * @return void
      */
-    protected function loadSessionToken()
+    protected function loadSessionToken(): void
     {
         if (null === $this->csrfTokenValue = $this->session->getData($this->csrfTokenName)) {
             $this->csrfTokenValue = $this->generateToken();
@@ -151,9 +159,9 @@ class CsrfGuard
      *
      * Creates new token value
      * @param  void
-     * @return void
+     * @return string
      */
-    protected function generateToken()
+    protected function generateToken(): string
     {
         return base64_encode(random_bytes(64));
     }
@@ -163,11 +171,11 @@ class CsrfGuard
      *
      * Code borrowed and modified from Slim Error
      * Respond with HTTP 403 Forbidden
-     * @param ServerRequestInterface $request   The most recent Request object
-     * @param ResponseInterface      $response  The most recent Response object
-     * @return HTTP 403 Forbidden
+     * @param Request  $request   The most recent Request object
+     * @param Response $response  The most recent Response object
+     * @return Response
      */
-    public function forbidden(ServerRequestInterface $request, ResponseInterface $response)
+    public function forbidden(Request $request, Response $response): Response
     {
         $contentType = $this->determineContentType($request);
         switch ($contentType) {
@@ -193,10 +201,10 @@ class CsrfGuard
      * Determine Request Content Type
      *
      * Code borrowed and modified from Slim Error
-     * @param ServerRequestInterface $request
+     * @param Request $request
      * @return string
      */
-    protected function determineContentType(ServerRequestInterface $request)
+    protected function determineContentType(Request $request): string
     {
         $knownContentTypes = [
             'application/json',
@@ -225,9 +233,10 @@ class CsrfGuard
      * Render HTML 403 Forbidden page
      *
      * Code borrowed and modified from Slim Error
+     * @param void
      * @return string
      */
-    protected function renderHtmlErrorMessage()
+    protected function renderHtmlErrorMessage(): string
     {
         $title = 'Piton 403 Forbidden Error';
         $html = '<p>This request is forbidden.</p>';
@@ -249,9 +258,10 @@ class CsrfGuard
      * Render JSON 403 Forbidden page
      *
      * Code borrowed and modified from Slim Error
+     * @param void
      * @return string
      */
-    protected function renderJsonErrorMessage()
+    protected function renderJsonErrorMessage(): string
     {
         $error = [
             'message' => 'Piton 403 Forbidden Error',

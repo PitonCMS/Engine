@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
@@ -28,9 +32,9 @@ class MessageMapper extends DataMapperAbstract
      * Find Messages in Date Order
      *
      * @param void
-     * @return mixed
+     * @return array|null
      */
-    public function findAllInDateOrder()
+    public function findAllInDateOrder(): ?array
     {
         $this->makeSelect();
         $this->sql .= ' order by created_date desc';
@@ -45,7 +49,7 @@ class MessageMapper extends DataMapperAbstract
      * @param  void
      * @return int
      */
-    public function findUnreadCount()
+    public function findUnreadCount(): int
     {
         $this->sql = 'select count(*) unread from message where is_read = \'N\'';
 
@@ -57,9 +61,9 @@ class MessageMapper extends DataMapperAbstract
      *
      * Gets all unread messages
      * @param  void
-     * @return mixed
+     * @return array|null
      */
-    public function findUnread()
+    public function findUnread(): ?array
     {
         $this->makeSelect();
         $this->sql .= 'and is_read = \'N\'';
@@ -71,9 +75,9 @@ class MessageMapper extends DataMapperAbstract
      * Mark As Read
      *
      * @param  int  $messageId
-     * @return void
+     * @return bool
      */
-    public function markAsRead(int $messageId)
+    public function markAsRead(int $messageId): bool
     {
         $this->sql = 'update message set is_read = \'Y\' where id = ?';
         $this->bindValues[] = $messageId;
@@ -85,9 +89,9 @@ class MessageMapper extends DataMapperAbstract
      * Mark As Unread
      *
      * @param  int  $messageId
-     * @return void
+     * @return bool
      */
-    public function markAsUnread(int $messageId)
+    public function markAsUnread(int $messageId): bool
     {
         $this->sql = 'update message set is_read = \'N\' where id = ?';
         $this->bindValues[] = $messageId;

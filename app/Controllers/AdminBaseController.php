@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,8 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
 
+use Slim\Http\Response;
 use Exception;
 
 /**
@@ -24,7 +29,7 @@ class AdminBaseController extends BaseController
      * @param string $layout Path to layout
      * @param mixed  $data   Data to echo, Domain object or array
      */
-    public function render($layout, $data = null)
+    public function render(string $layout, $data = null): Response
     {
         return parent::render('@admin/' . $layout, $data);
     }
@@ -33,12 +38,12 @@ class AdminBaseController extends BaseController
      * Set Alert
      *
      * Set alert using flash data to session
-     * @param string $severity Severity level
-     * @param string $heading  Heading text
-     * @param mixed  $messge   Message or array of messages (Optional)
+     * @param string        $severity Severity level
+     * @param string        $heading  Heading text
+     * @param string|array  $messge   Message or array of messages (Optional)
      * @return void
      */
-    public function setAlert($severity, $heading, $message = null)
+    public function setAlert(string $severity, string $heading, $message = null): void
     {
         // Make sure severity level is in our Bootstrap CSS
         $severityList = ['primary','secondary','success','danger','warning','info'];
@@ -62,7 +67,7 @@ class AdminBaseController extends BaseController
      * @param  string $message
      * @return void
      */
-    public function appendAlertMessage(string $message)
+    public function appendAlertMessage(string $message): void
     {
         $this->alert['message'][] = $message;
     }
@@ -76,7 +81,7 @@ class AdminBaseController extends BaseController
      * @param  string $category        Optional category to filter setting definitions
      * @return array
      */
-    public function mergeSettings(array $savedSettings, array $definedSettings, string $category = null)
+    public function mergeSettings(array $savedSettings, array $definedSettings, string $category = null): array
     {
         // Make index of saved setting keys to setting array for easy lookup
         $settingIndex = array_combine(array_column($savedSettings, 'setting_key'), array_keys($savedSettings));
@@ -122,7 +127,7 @@ class AdminBaseController extends BaseController
         }
 
         // Check remaining saved settings for orphaned settings
-        array_walk($savedSettings, function(&$row) {
+        array_walk($savedSettings, function (&$row) {
             $row->status = 'orphaned';
         });
 

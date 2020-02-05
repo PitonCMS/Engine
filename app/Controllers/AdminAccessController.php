@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,7 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Controllers;
+
+use Slim\Http\Response;
 
 /**
  * Piton Access Controller
@@ -39,18 +45,22 @@ class AdminAccessController extends AdminBaseController
      * Show Login Form
      *
      * Render page with form to submit email
+     * @param void
+     * @return Response
      */
-    public function showLoginForm()
+    public function showLoginForm(): Response
     {
-        $this->render('login.html');
+        return $this->render('login.html');
     }
 
     /**
      * Request Login Token
      *
      * Validates email and sends login link to user
+     * @param void
+     * @return Response
      */
-    public function requestLoginToken()
+    public function requestLoginToken(): Response
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
@@ -99,7 +109,7 @@ class AdminAccessController extends AdminBaseController
             // Send message
             $email->setTo($providedEmail, '')
                 ->setSubject('PitonCMS Login')
-                ->setMessage("Click to login\n\n {$link}")
+                ->setMessage("Click to login\n\n $link")
                 ->send();
         }
 
@@ -111,14 +121,16 @@ class AdminAccessController extends AdminBaseController
      * Process Login Token
      *
      * Validate login token and authenticate request
+     * @param array
+     * @return Response
      */
-    public function processLoginToken($args)
+    public function processLoginToken(array $args): Response
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
         $security = $this->container->accessHandler;
         $savedToken = $session->getData($this->loginTokenKey);
-        $tokenExpires = $session->getData($this->loginTokenExpiresKey);
+        $tokenExpires = (int) $session->getData($this->loginTokenExpiresKey);
 
         // Checks whether token matches, and if within expires time
         if ($args['token'] === $savedToken && time() < $tokenExpires) {
@@ -144,8 +156,10 @@ class AdminAccessController extends AdminBaseController
      * Logout
      *
      * Unsets logged in status
+     * @param void
+     * @return Response
      */
-    public function logout()
+    public function logout(): Response
     {
         // Unset authenticated session
         $security = $this->container->accessHandler;

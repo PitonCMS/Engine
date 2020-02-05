@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,9 +7,13 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
+use Twig\Node\Expression\Test\NullTest;
 
 /**
  * Piton Media Mapper
@@ -30,9 +35,9 @@ class MediaMapper extends DataMapperAbstract
      *
      * Return all media records
      * @param  void
-     * @return array
+     * @return array|null
      */
-    public function findAllMedia()
+    public function findAllMedia(): ?array
     {
         $this->makeSelect();
         $this->sql .= ' order by created_date desc';
@@ -45,12 +50,12 @@ class MediaMapper extends DataMapperAbstract
      *
      * Find media by category ID
      * @param  int   $catId
-     * @return mixed
+     * @return array|null
      */
-    public function findMediaByCategoryId(int $catId = null)
+    public function findMediaByCategoryId(int $catId = null): ?array
     {
         if (null === $catId) {
-            return;
+            return null;
         }
 
         $this->sql = <<<SQL

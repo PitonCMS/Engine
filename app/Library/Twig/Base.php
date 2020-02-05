@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Twig;
 
 use Psr\Container\ContainerInterface;
@@ -21,7 +25,7 @@ use Twig\TwigFunction;
 class Base extends AbstractExtension implements GlobalsInterface
 {
     /**
-     * @var string|\Slim\Http\Uri
+     * @var Slim\Http\Uri
      */
     protected $uri;
 
@@ -29,16 +33,6 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @var Psr\Container\ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var Array
-     */
-    protected $sitePages;
-
-    /**
-     * @var Array
-     */
-    protected $siteSettings;
 
     /**
      * Piton CSRF Token Name
@@ -53,12 +47,6 @@ class Base extends AbstractExtension implements GlobalsInterface
     protected $csrfTokenValue;
 
     /**
-     * Form Constraints Cache
-     * @var array
-     */
-    protected $constraint = [];
-
-    /**
      * Constructor
      *
      * @param object Psr\Container\ContainerInterface
@@ -66,10 +54,7 @@ class Base extends AbstractExtension implements GlobalsInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-
         $this->uri = $container->request->getUri();
-        $this->sitePages = isset($container['settings']['pages']) ? $container['settings']['pages'] : null;
-        $this->siteSettings = isset($container['settings']['site']) ? $container['settings']['site'] : null;
 
         $this->csrfTokenName = ($container->csrfGuard)->getTokenName();
         $this->csrfTokenValue = ($container->csrfGuard)->getTokenValue();
@@ -82,8 +67,8 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'pages' => $this->sitePages,
-                'settings' => $this->siteSettings,
+                'pages' => $this->container['settings']['pages'] ?? null,
+                'settings' => $this->container['settings']['site'] ?? null,
                 'csrf' => [
                     'name' => $this->csrfTokenName,
                     'value' => $this->csrfTokenValue
@@ -113,7 +98,6 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('inUrl', [$this, 'inUrl']),
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
-            new TwigFunction('formConstraint', [$this, 'formConstraint']),
         ];
     }
 
@@ -125,7 +109,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @param array $queryParams Query string parameters
      * @return string The desired route path without the domain, but does include the basePath
      */
-    public function pathFor($name, $data = [], $queryParams = [])
+    public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
         // The `pathfor('showPage', {'url': 'home'})` route should be an alias for `pathFor('home')`
         if ($name === 'showPage' && isset($data['url']) && $data['url'] === 'home') {
@@ -140,15 +124,11 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Base URL
      *
      * Returns the base url including scheme, domain, port, and base path
-     * @param none
+     * @param void
      * @return string The base url
      */
-    public function baseUrl()
+    public function baseUrl(): string
     {
-        if (is_string($this->uri)) {
-            return $this->uri;
-        }
-
         return $this->uri->getBaseUrl();
     }
 
@@ -161,7 +141,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @param void
      * @return string The base path segments
      */
-    public function basePath()
+    public function basePath(): string
     {
         return $this->uri->getBasePath();
     }
@@ -171,10 +151,10 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * If the supplied route name is the current route, returns the second parameter
      * @param  string $routeName   Name of the route to test
-     * @param  mixed  $returnValue Value to return
-     * @return mixed
+     * @param  string  $returnValue Value to return
+     * @return string|null
      */
-    public function currentRoute($routeName, $returnValue = 'active')
+    public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
         if ($routeName === $this->container->settings['site']['currentRouteName']) {
             return $returnValue;
@@ -188,10 +168,10 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Checks if the supplied string is one of the current URL segments
      * @param string  $segment       URL segment to find
-     * @param mixed   $valueToReturn Value to return if true
-     * @return mixed                 Returns $valueToReturn or null
+     * @param string   $valueToReturn Value to return if true
+     * @return string|null                 Returns $valueToReturn or null
      */
-    public function inUrl($segmentToTest = null, $valueToReturn = 'active')
+    public function inUrl(string $segmentToTest = null, $valueToReturn = 'active'): ?string
     {
         // Verify we have a segment to find
         if ($segmentToTest === null) {
@@ -222,7 +202,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @param mixed $value
      * @return string
      */
-    public function checked($value = 0)
+    public function checked($value = 0): string
     {
         //      ------------------------- Exactly True ------------------------------| Truthy Fallback
         return ($value === 'Y' || $value === 1 || $value === true || $value === 'on' || $value == 1) ? 'checked' : '';
@@ -235,7 +215,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * @param  string $size     Media size: original|xlarge|large|small|thumb
      * @return string
      */
-    public function getMediaPath($filename, $size = 'original')
+    public function getMediaPath(?string $filename, string $size = 'original'): ?string
     {
         // Return if there is no filename
         if (empty($filename)) {
@@ -262,24 +242,6 @@ class Base extends AbstractExtension implements GlobalsInterface
         } else {
             // Fall back to original file
             return $baseUri . $filename;
-        }
-    }
-
-    /**
-     * Form Input Constraints
-     *
-     * Source of constraints are JSON validation files
-     */
-    public function formConstraint(string $table, string $field, ?string $attribute)
-    {
-        // Return cached table constraint
-        if (isset($this->constraint[$table])) {
-            return $this->constraint[$table];
-        }
-
-        // Get constraint
-        if (file_exists(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json")) {
-            $this->constraint[$table] = json_decode(file_get_contents(ROOT_DIR . "vendor/pitoncms/engine/jsonSchemas/validations/$table.json"));
         }
     }
 }

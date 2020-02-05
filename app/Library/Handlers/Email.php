@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,8 +7,12 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
+use Psr\Log\LoggerInterface as Logger;
 use Piton\Interfaces\EmailInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -28,7 +33,7 @@ class Email implements EmailInterface
 
     /**
      * Logger Object
-     * @var object
+     * @var Logger
      */
     protected $logger;
 
@@ -41,12 +46,12 @@ class Email implements EmailInterface
     /**
      * Constructor
      *
-     * @param  object $mailer   PHPMailer
-     * @param  object $logger   Logging object
-     * @param  array  $settings Array of configuration settings
+     * @param  PHPMailer $mailer   PHPMailer
+     * @param  Logger    $logger   Logging object
+     * @param  array     $settings Array of configuration settings
      * @return void
      */
-    public function __construct(PHPMailer $mailer, $logger, $settings)
+    public function __construct(PHPMailer $mailer, Logger $logger, array $settings)
     {
         $this->mailer = $mailer;
         $this->logger = $logger;
@@ -63,9 +68,9 @@ class Email implements EmailInterface
      *
      * @param  string  $address From email address
      * @param  string  $name    Sender name, optional
-     * @return object  $this    EmailInterface
+     * @return EmailInterface  $this
      */
-    public function setFrom($address, $name = null) : EmailInterface
+    public function setFrom(string $address, string $name = null): EmailInterface
     {
         // When using mail/sendmail, we need to set the PHPMailer "auto" flag to false
         // https://github.com/PHPMailer/PHPMailer/issues/1634
@@ -80,9 +85,9 @@ class Email implements EmailInterface
      * Can be called multiple times to add additional recipients
      * @param  string $address To email address
      * @param  string $name    Recipient name, optiona
-     * @return object $this    EmailInterface
+     * @return EmailInterface $this
      */
-    public function setTo($address, $name = null) : EmailInterface
+    public function setTo(string $address, string $name = null): EmailInterface
     {
         $this->mailer->addAddress($address, $name);
 
@@ -93,9 +98,9 @@ class Email implements EmailInterface
      * Set Email Subject
      *
      * @param  string $subject Email subject line
-     * @return object $this    EmailInterface
+     * @return EmailInterface $this
      */
-    public function setSubject($subject) : EmailInterface
+    public function setSubject(string $subject): EmailInterface
     {
         $this->mailer->Subject = $subject;
 
@@ -106,9 +111,9 @@ class Email implements EmailInterface
      * Set Email Message Body
      *
      * @param  string $body Email body
-     * @return object $this EmailInterface
+     * @return EmailInterface $this
      */
-    public function setMessage($message) : EmailInterface
+    public function setMessage(string $message): EmailInterface
     {
         $this->mailer->Body = $message;
 
@@ -121,7 +126,7 @@ class Email implements EmailInterface
      * @param  void
      * @return void
      */
-    public function send() : void
+    public function send(): void
     {
         // Has the from address not been set properly? If not, use config default
         if ($this->mailer->From = 'root@localhost' || empty($this->mailer->From)) {
@@ -144,7 +149,7 @@ class Email implements EmailInterface
      * @param  void
      * @return void
      */
-    public function configSMTP() : void
+    public function configSMTP(): void
     {
         $this->mailer->isSMTP();
         $this->mailer->SMTPDebug = 0;

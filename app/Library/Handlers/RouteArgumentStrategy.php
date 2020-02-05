@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Library\Handlers;
 
 use Psr\Http\Message\ResponseInterface;
@@ -37,7 +41,7 @@ class RouteArgumentStrategy implements InvocationStrategyInterface
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $routeArguments
-    ) {
+    ): ResponseInterface {
         foreach ($routeArguments as $k => $v) {
             $request = $request->withAttribute($k, $v);
         }
