@@ -31,8 +31,8 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        $data['media'] = $mediaMapper->findAllMedia();
-        $data['categories'] = $mediaCategoryMapper->findCategories();
+        $data['media'] = $mediaMapper->findAllMedia() ?? [];
+        $data['categories'] = $mediaCategoryMapper->findCategories() ?? [];
         $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments();
 
         // Identify any media ID's assigned to each category
@@ -155,7 +155,7 @@ HTML;
             $mediaMapper->save($media);
 
             // Save category assignments
-            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
 
             // Make optimized copies
             $this->makeMediaSet($fileUpload->getFilename());

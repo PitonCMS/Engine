@@ -34,7 +34,7 @@ class AdminPageController extends AdminBaseController
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
-            $data['pages'] = $pageMapper->findCollectionPages(true);
+            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
             $data['templates'] = $definition->getCollections();
             $data['type'] = 'collection';
 

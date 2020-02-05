@@ -56,9 +56,9 @@ class MediaCategoryMapper extends DataMapperAbstract
      * For a media ID, save category array
      * @param int   $mediaId
      * @param array $categoryIds
-     * @return bool
+     * @return void
      */
-    public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null): bool
+    public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null): void
     {
         // Delete current category assignments for this media ID
         $this->deleteMediaCategoryAssignmentsByMediaId($mediaId);
@@ -73,7 +73,7 @@ class MediaCategoryMapper extends DataMapperAbstract
             }
             $this->sql = rtrim($this->sql, ',') . ';';
 
-            return $this->execute();
+            $this->execute();
         }
     }
 
