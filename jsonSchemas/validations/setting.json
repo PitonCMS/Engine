@@ -8,8 +8,8 @@
             "type": "string",
             "enum": ["site","contact","social","piton","page"]
         },
-        "reference_id": {
-            "description": "Table foreign key reference ID",
+        "page_id": {
+            "description": "Table foreign key page reference ID",
             "type": "integer"
         },
         "setting_key": {
@@ -23,5 +23,5 @@
             "maxLength": 4000
         }
     },
-    "required": ["category","reference_id","setting_key"]
+    "required": ["category","page_id","setting_key"]
 }

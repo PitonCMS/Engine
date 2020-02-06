@@ -67,7 +67,8 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `page_id_idx` (`page_id`)
+  KEY `page_id_idx` (`page_id`),
+  CONSTRAINT `page_element_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `navigation` (
@@ -85,13 +86,15 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   PRIMARY KEY (`id`),
   KEY `navigator_idx` (`navigator`),
   KEY `page_id_idx` (`page_id`),
-  KEY `parent_id_idx` (`parent_id`)
+  KEY `parent_id_idx` (`parent_id`),
+  CONSTRAINT `navigation_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `navigation_fk2` FOREIGN KEY (`parent_id`) REFERENCES `navigation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
-  `reference_id` int(11) DEFAULT NULL,
+  `page_id` int DEFAULT NULL,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT 1,
@@ -100,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `setting_category_idx` (`category`),
-  KEY `setting_ref_cat_idx` (`reference_id`, `category`)
+  KEY `setting_ref_cat_idx` (`page_id`, `category`),
+  CONSTRAINT `setting_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media` (
@@ -132,7 +136,9 @@ CREATE TABLE IF NOT EXISTS `media_category_map` (
   `media_id` int NOT NULL,
   `category_id` int NOT NULL,
   UNIQUE KEY `media_cat_uq` (`media_id`, `category_id`),
-  KEY `category_id_idx` (`category_id`)
+  KEY `category_id_idx` (`category_id`),
+  CONSTRAINT `media_category_map_fk1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `media_category_map_fk2` FOREIGN KEY (`category_id`) REFERENCES `media_category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `message` (
@@ -152,14 +158,14 @@ CREATE TABLE IF NOT EXISTS `message` (
 
 INSERT INTO `page` (`id`, `collection_slug`, `page_slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-  (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now()),;
+  (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now());
 
 INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_slug`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,1,'aboveTheFoldHero','hero.json','hero.html',1,'Welcome to PitonCMS','A flexible content management system for your personal website.','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,NULL,1,now(),1,now()),
   (2,1,'introBlock','text.json','text.html',1,'Where to Start?','Congratulations! You have successfully installed PitonCMS. \r\n\r\nTo start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  \r\n\r\n','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,NULL,1,now(),1,now());
 
-INSERT INTO `setting` (`category`,`reference_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `setting` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now());

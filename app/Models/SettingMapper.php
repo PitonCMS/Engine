@@ -21,12 +21,7 @@ class SettingMapper extends DataMapperAbstract
 {
     protected $inCategories = "('site','contact','social','piton')";
     protected $table = 'setting';
-    protected $modifiableColumns = [
-        'category',
-        'reference_id',
-        'setting_key',
-        'setting_value',
-    ];
+    protected $modifiableColumns = ['category', 'page_id', 'setting_key', 'setting_value'];
 
     /**
      * Find Settings
@@ -58,7 +53,7 @@ class SettingMapper extends DataMapperAbstract
     public function findPageSettings(int $pageId): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' and category = \'page\' and reference_id = ?';
+        $this->sql .= ' and category = \'page\' and page_id = ?';
         $this->bindValues[] = $pageId;
 
         return $this->find();
@@ -72,7 +67,7 @@ class SettingMapper extends DataMapperAbstract
      */
     public function deleteByPageId(int $pageId): bool
     {
-        $this->sql = "delete from {$this->table} where category = 'page' and reference_id = ?;";
+        $this->sql = "delete from {$this->table} where category = 'page' and page_id = ?;";
         $this->bindValues[] = $pageId;
 
         return $this->execute();

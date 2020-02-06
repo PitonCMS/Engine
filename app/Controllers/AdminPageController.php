@@ -208,7 +208,7 @@ class AdminPageController extends AdminBaseController
                     continue;
                 }
 
-                $setting->reference_id = $pageId;
+                $setting->page_id = $pageId;
                 $setting->category = 'page';
                 $setting->setting_key = $row['setting_key'];
                 $setting->setting_value = $row['setting_value'];
