@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 use Piton\Interfaces\EmailInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Slim\Collection;
 
 /**
  * Piton Email Class
@@ -46,12 +47,12 @@ class Email implements EmailInterface
     /**
      * Constructor
      *
-     * @param  PHPMailer $mailer   PHPMailer
-     * @param  Logger    $logger   Logging object
-     * @param  array     $settings Array of configuration settings
+     * @param  PHPMailer          $mailer   PHPMailer
+     * @param  Logger             $logger   Logging object
+     * @param  Slim\Collection $settings Array of configuration settings
      * @return void
      */
-    public function __construct(PHPMailer $mailer, Logger $logger, array $settings)
+    public function __construct(PHPMailer $mailer, Logger $logger, Collection $settings)
     {
         $this->mailer = $mailer;
         $this->logger = $logger;

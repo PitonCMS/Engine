@@ -238,7 +238,7 @@ class CsrfGuard
      */
     protected function renderHtmlErrorMessage(): string
     {
-        $title = 'Piton 403 Forbidden Error';
+        $title = 'PitonCMS 403 Forbidden Error';
         $html = '<p>This request is forbidden.</p>';
 
         $output = sprintf(

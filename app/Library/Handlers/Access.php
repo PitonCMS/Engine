@@ -56,7 +56,7 @@ class Access
      */
     public function isAuthenticated(): bool
     {
-        return $this->session->getData($this->loggedInKey);
+        return ($this->session->getData($this->loggedInKey)) ?: false;
     }
 
     /**
