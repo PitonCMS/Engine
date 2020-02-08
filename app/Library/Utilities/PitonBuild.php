@@ -17,7 +17,6 @@ use Composer\Script\Event;
  */
 class PitonBuild
 {
-
     /**
      * Piton Create Project
      *
@@ -28,11 +27,14 @@ class PitonBuild
      */
     public static function createProject(Event $event)
     {
-        echo "...Completing new project setup\n";
+        static::printOutput("...Completing new project setup");
 
         static::updateDockerYaml($event);
         static::updateApacheHost();
         static::copyConfig();
+
+        static::printOutput('> To start Docker, from the root of this project run docker-compose up -d', 'info');
+        static::printOutput('> Then navigate to your domain /install.php to finish the installation.', 'info');
     }
 
     /**
@@ -53,7 +55,7 @@ class PitonBuild
      */
     protected static function copyConfig()
     {
-        echo "...Creating config file for local development\n";
+        static::printOutput("...Creating config file for local development");
 
         $projectDir = self::getProjectDir();
         $salt = bin2hex(random_bytes(32));
@@ -70,11 +72,11 @@ class PitonBuild
                 $line = str_replace('$config[\'session\'][\'salt\'] = \'\';', '$config[\'session\'][\'salt\'] = \'' . $salt . '\';', $line);
             }
 
-            echo "...If using SMTP email set credentials in config.local.php. Otherwise delete email config block to use 'mail' protocol\n";
+            static::printOutput("...If using SMTP email set credentials in config.local.php. Otherwise delete email config block to use default 'mail' protocol", 'info');
 
             file_put_contents('config/config.local.php', $lines);
         } else {
-            echo "...Copy config/config.default.php to config/config.local.php and edit configuration settings\n";
+            static::printOutput("...Copy config/config.default.php to config/config.local.php and edit configuration settings");
         }
     }
 
@@ -88,7 +90,7 @@ class PitonBuild
      */
     protected static function updateDockerYaml(Event $event)
     {
-        echo "...Updating docker-compose with project directory\n";
+        static::printOutput("...Updating docker-compose with project directory");
 
         $projectDir = self::getProjectDir();
 
@@ -134,7 +136,7 @@ TEXT;
      */
     protected static function updateApacheHost()
     {
-        echo "...Updating apache host file\n";
+        static::printOutput("...Updating apache host file");
 
         $projectDir = self::getProjectDir();
 
@@ -155,5 +157,21 @@ TEXT;
 TEXT;
 
         file_put_contents('docker/web/apache-host.conf', $content);
+    }
+
+    /**
+     * Print Output
+     *
+     * @param string $string
+     * @param string $type status|info
+     * @return void
+     */
+    protected static function printOutput(string $string, $type = 'status')
+    {
+        if ($type === 'status') {
+            echo "\033[0;32m$string\033[0m\n";
+        } elseif ($type === 'info') {
+            echo "\033[43m$string\033[0m\n";
+        }
     }
 }
