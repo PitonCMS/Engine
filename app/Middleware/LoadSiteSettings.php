@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Middleware;
 
+use ArrayAccess;
+
 /*
  * Load site settings from database into Container
  */
@@ -40,7 +42,7 @@ class LoadSiteSettings
      * @param  ArrayAccess
      * @return void
      */
-    public function __construct($request, $dataMapper, $appSettings)
+    public function __construct($request, $dataMapper, ArrayAccess $appSettings)
     {
         $this->dataMapper = $dataMapper;
         $this->appSettings = $appSettings;
@@ -82,10 +84,10 @@ class LoadSiteSettings
      */
     protected function loadSettings()
     {
-        $SettingMapper = ($this->dataMapper)('SettingMapper');
-        $siteSettings = $SettingMapper->findSiteSettings() ?? [];
+        $settingMapper = ($this->dataMapper)('SettingMapper');
+        $siteSettings = $settingMapper->findSiteSettings() ?? [];
 
-        // Create new multi-dimensional array keyed by the setting category and key
+        // Create new multi-dimensional array
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
 
         // Load some config file settings into settings array
