@@ -34,6 +34,7 @@ class PitonBuild
         static::copyConfig();
 
         static::printOutput('> To start Docker, from the root of this project run docker-compose up -d', 'info');
+        static::printOutput('> Then navigate to your domain /install.php to finish the installation.', 'info');
     }
 
     /**
