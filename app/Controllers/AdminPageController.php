@@ -95,7 +95,7 @@ class AdminPageController extends AdminBaseController
 
         // Merge saved page settings with settings from page JSON definition
         if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettings($page->settings, $page->json->settings);
+            $page->settings = $this->mergeSettings($page->settings ?? [], $page->json->settings);
         }
 
         // Set template type: collection|page
@@ -291,13 +291,8 @@ class AdminPageController extends AdminBaseController
                 throw new Exception('PitonCMS: Cannot delete home page');
             }
 
-            // Delete page
+            // Delete page. Elements, Settings, and Navigation records are deleted by foreign key database constraints
             $pageMapper->delete($page);
-
-            // Delete page elements, page settings, and navigation entry
-            $pageElementMapper->deleteElementsByPageId($pageId);
-            $settingMapper->deleteByPageId($pageId);
-            $navigationMapper->deleteByPageId($pageId);
         }
 
         // Determine redirect path based on whether this was a collection page

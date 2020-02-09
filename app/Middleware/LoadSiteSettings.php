@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Middleware;
 
 use ArrayAccess;
+use PDOException;
 
 /*
  * Load site settings from database into Container
@@ -84,7 +85,22 @@ class LoadSiteSettings
      */
     protected function loadSettings()
     {
-        $settingMapper = ($this->dataMapper)('SettingMapper');
+        // This middleware data request is the first DB query in the application lifecycle.
+        // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
+        // Otherwise rethrow to let the application handler deal with whatever happened.
+        try {
+            $settingMapper = ($this->dataMapper)('SettingMapper');
+        } catch (PDOException $th) {
+            // SQLSTATE[42S02]
+            if ($th->getCode() === '42S02') {
+                // Go to installer
+                header('Location: /install.php', true, 302);
+                exit;
+            } else {
+                throw $th;
+            }
+        }
+
         $siteSettings = $settingMapper->findSiteSettings() ?? [];
 
         // Create new multi-dimensional array
