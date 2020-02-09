@@ -1,5 +1,12 @@
 {% extends '@admin/_adminBase.html' %}
 
 {% block content %}
-    <h1>Admin Page Not Found</h1>
+<section>
+    <div class="container">
+        <h1>Admin Page Not Found</h1>
+        <p style="font-size: 1.5rem;">
+            <i class="far fa-compass"></i> Lost? Try going to the <a href="{{ pathFor('adminHome') }}">home</a> page to find what you are looking for.
+        </p>
+    </div>
+</section>
 {% endblock %}
