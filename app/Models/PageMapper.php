@@ -55,7 +55,7 @@ class PageMapper extends DataMapperAbstract
             $this->bindValues[] = $collectionSlug;
         }
 
-        $this->sql .= " and published_date <= '{$this->today()}'";
+        $this->sql .= " and published_date <= '{$this->today}'";
 
         return $this->findRow();
     }
@@ -75,7 +75,7 @@ class PageMapper extends DataMapperAbstract
         $this->bindValues[] = $collectionSlug;
 
         if (!$includeUnpublished) {
-            $this->sql .= " and published_date <= '{$this->today()}'";
+            $this->sql .= " and published_date <= '{$this->today}'";
         }
 
         return $this->find();
@@ -95,7 +95,7 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= " and collection_slug is null";
 
         if (!$includeUnpublished) {
-            $this->sql .= " and published_date <= '{$this->today()}'";
+            $this->sql .= " and published_date <= '{$this->today}'";
         }
 
         return $this->find();
@@ -114,7 +114,7 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= " and collection_slug is not null";
 
         if (!$includeUnpublished) {
-            $this->sql .= " and published_date <= '{$this->today()}'";
+            $this->sql .= " and published_date <= '{$this->today}'";
         }
 
         $this->sql .= ' order by collection_slug';

@@ -83,9 +83,9 @@ SQL;
         foreach ($this->allNavRows as &$row) {
             // Skip if page is not published, or navigation link not active
             if (
-                ($published && $row->published_date > $this->today) ||
+                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
                 ($active && $row->active === 'N')
-                ) {
+            ) {
                 continue;
             }
 
@@ -168,19 +168,6 @@ SQL;
      */
     public function deleteByNavId(int $navId): bool
     {
-        // Find any children to delete
-        $this->makeSelect();
-        $this->sql .= ' and `parent_id` = ?';
-        $this->bindValues[] = $navId;
-        $children = $this->find();
-
-        if ($children) {
-            foreach ($children as $child) {
-                $this->deleteByNavId($child->id);
-            }
-        }
-
-        // Delete nav link
         $this->sql = 'delete from `navigation` where `id` = ?;';
         $this->bindValues[] =  $navId;
 
@@ -192,18 +179,13 @@ SQL;
      *
      * Delete navigation record by page_id
      * @param  int $pageId Page ID
-     * @return void
+     * @return bool
      */
-    public function deleteByPageId(int $pageId): void
+    public function deleteByPageId(int $pageId): bool
     {
-        // Get nav ID, and call deleteByNavId() to recursively delete children
-        $this->makeSelect();
-        $this->sql .= ' and `page_id` = ?';
-        $this->bindValues[] = $pageId;
-        $nav = $this->findRow();
+        $this->sql = 'delete from `navigation` where `page_id` = ?;';
+        $this->bindValues[] =  $pageId;
 
-        if ($nav) {
-            $this->deleteByNavId($nav->id);
-        }
+        return $this->execute();
     }
 }

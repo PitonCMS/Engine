@@ -41,7 +41,6 @@ class AdminNavigationController extends AdminBaseController
         // If no navigator was requested as a URL segment, load the first navigator from definitions, or falsy
         $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? 0;
 
-
         // If a navigator was requested
         if (isset($args['nav'])) {
             $navigation = $navMapper->findNavHierarchy($args['nav'], null, false, false);
@@ -70,7 +69,7 @@ class AdminNavigationController extends AdminBaseController
             // Check whether to just delete
             if ($navItem['delete'] == 'on') {
                 if (is_numeric($navItem['navId'])) {
-                    $navigationMapper->deleteByNavId($navItem['navId']);
+                    $navigationMapper->deleteByNavId((int) $navItem['navId']);
                 }
                 continue;
             }

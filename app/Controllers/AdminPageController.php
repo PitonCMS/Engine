@@ -291,13 +291,8 @@ class AdminPageController extends AdminBaseController
                 throw new Exception('PitonCMS: Cannot delete home page');
             }
 
-            // Delete page
+            // Delete page. Elements, Settings, and Navigation records are deleted by foreign key database constraints
             $pageMapper->delete($page);
-
-            // Delete page elements, page settings, and navigation entry
-            $pageElementMapper->deleteElementsByPageId((int) $pageId);
-            $settingMapper->deleteByPageId((int) $pageId);
-            $navigationMapper->deleteByPageId((int) $pageId);
         }
 
         // Determine redirect path based on whether this was a collection page
