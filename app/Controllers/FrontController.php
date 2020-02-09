@@ -48,10 +48,10 @@ class FrontController extends FrontBaseController
         }
 
         // Get elements and assign to blocks
-        $page->blocks = $this->buildElementsByBlock($pageElementMedia->findElementsByPageId($page->id));
+        $page->blocks = $this->buildElementsByBlock($pageElementMedia->findElementsByPageId((int) $page->id) ?? []);
 
         // Get page settings
-        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings($page->id));
+        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings((int) $page->id) ?? []);
 
         return $this->render($page->template, $page);
     }

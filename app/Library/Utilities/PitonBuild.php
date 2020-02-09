@@ -33,8 +33,8 @@ class PitonBuild
         static::updateApacheHost();
         static::copyConfig();
 
-        static::printOutput('> To start Docker, from the root of this project run docker-compose up -d', 'info');
-        static::printOutput('> Then navigate to your domain /install.php to finish the installation.', 'info');
+        static::printOutput('> To start Docker, from the root of this project first run \'docker-compose build\' to create the image, a one-time step.', 'info');
+        static::printOutput('> Then run \'docker-compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
     }
 
     /**

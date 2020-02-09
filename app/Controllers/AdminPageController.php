@@ -95,7 +95,7 @@ class AdminPageController extends AdminBaseController
 
         // Merge saved page settings with settings from page JSON definition
         if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettings($page->settings, $page->json->settings);
+            $page->settings = $this->mergeSettings($page->settings ?? [], $page->json->settings);
         }
 
         // Set template type: collection|page
@@ -295,9 +295,9 @@ class AdminPageController extends AdminBaseController
             $pageMapper->delete($page);
 
             // Delete page elements, page settings, and navigation entry
-            $pageElementMapper->deleteElementsByPageId($pageId);
-            $settingMapper->deleteByPageId($pageId);
-            $navigationMapper->deleteByPageId($pageId);
+            $pageElementMapper->deleteElementsByPageId((int) $pageId);
+            $settingMapper->deleteByPageId((int) $pageId);
+            $navigationMapper->deleteByPageId((int) $pageId);
         }
 
         // Determine redirect path based on whether this was a collection page
