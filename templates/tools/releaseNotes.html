@@ -1,22 +1,33 @@
 {% extends '@admin/_adminBase.html' %}
-{% block headText 'Release Notes' %}
-{% block sectionId 'releaseNotes' %}
+
+{% block htmlTitle 'Piton Release Notes' %}
+{% block headText 'Piton Release Notes' %}
+{% block sectionId 'tools' %}
+{% block mainClass 'contentTwoCol' %}
+
+{% block openForm %}
+<form>
+{% endblock openForm %}
+
+{% block sidebar %}
+{% include "@admin/tools/_toolsSidebar.html" %}
+{% endblock sidebar %}
 
 {% block content %}
-<div class="block-content" style="width: 75ch">
+<div class="grid-wrapper">
     {% for rel in page.releases %}
     <h3 id="rel-{{ rel.tag_name }}">{{ rel.name }}</h3>
     <p class="lead">
         Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
         Published {{ rel.published_at|date }}
     </p>
-    {{ rel.body }}
+    <p>{{ rel.body }}</p>
     <hr>
     {% endfor %}
-    <i>To see older release notes, or to contribute to PitonCMS, go to <a href="https://github.com/PitonCMS"
-            target="_blank">GitHub PitonCMS</a>.</i>
+    <i>To see older release notes, or to contribute to PitonCMS, go to
+        <a href="https://github.com/PitonCMS/Engine/releases" target="_blank">GitHub PitonCMS</a>.
+    </i>
 </div>
-
 
 {% endblock content %}
 

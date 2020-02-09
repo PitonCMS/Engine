@@ -108,6 +108,6 @@ class LoadSiteSettings
 
         // Load some config file settings into settings array
         $this->settings['production'] = $this->appSettings['site']['production'];
-        $this->settings['pitonDev'] = isset($this->appSettings['site']['pitonDev']) ?: false;
+        $this->settings['pitonDev'] = $this->appSettings['site']['pitonDev'] ?? false;
     }
 }

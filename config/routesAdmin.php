@@ -29,13 +29,6 @@ $app->group('/admin', function () {
         return (new AdminController($this))->home();
     })->setName('adminHome');
 
-    $this->group('/help', function () {
-        $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
-            return (new AdminController($this))->release($args);
-        })->setName('adminEngineRelease');
-    });
-    // End Help
-
     // Page route
     $this->group('/page', function () {
         // Show All Pages
@@ -203,6 +196,11 @@ $app->group('/admin', function () {
             $this->post('/sitemap/update', function ($args) {
                 return (new AdminController($this))->updateSitemap();
             })->add('csrfGuard')->setName('adminUpdateSitemap');
+
+            // GitHub release notes
+            $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
+                return (new AdminController($this))->release($args);
+            })->setName('adminEngineRelease');
         });
         // End settings
 
