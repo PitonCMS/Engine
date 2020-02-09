@@ -2,31 +2,38 @@
 
 {% block htmlTitle 'Sitemap' %}
 {% block headText 'Sitemap' %}
-{% block sectionId 'sitemap' %}
+{% block sectionId 'tools' %}
 {% block mainClass 'contentTwoCol' %}
+
+{% block openForm %}
+<form class="jsUserForm" action="{{ pathFor('adminUpdateSitemap') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% endblock openForm %}
 
 {% block sidebar %}
 {% include "@admin/tools/_toolsSidebar.html" %}
 {% endblock sidebar %}
 
 {% block content %}
-<form class="jsUserForm" action="{{ pathFor('adminUpdateSitemap') }}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-    <button type="submit" class="btn btn-primary btn-sm">Update Sitemap</button>
-    <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
-</form>
-<hr>
-
 <h3>Sitemap</h3>
+<p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
 
-{% if page.sitemapXML %}
-<a href="/sitemap.xml" target="_blank">Link to sitemap</a> |
-Last updated {{ page.lasteUpdateDate|date }}
-<br><br>
+<div>
+    {% if page.sitemapXML %}
+        <a href="/sitemap.xml" target="_blank">Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
+        <pre>{{ page.sitemapXML|escape }}</pre>
+    {% else %}
+        No Sitemap Found - Click Update Sitemap
+    {% endif %}
+</div>
 
-<pre>{{ page.sitemapXML|escape }}</pre>
-{% else %}
-No Sitemap Found - Click Update Sitemap
-{% endif %}
+<div class="two-col-sidebar">
+    <!-- Control Buttons -->
+    <div class="two-col-sidebar-inner">
+      <div class="button-group">
+        <button class="btn btn-primary mb-2" type="submit">Update Sitemap</button>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}
