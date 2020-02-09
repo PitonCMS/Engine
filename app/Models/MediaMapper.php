@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Piton\Models;
 
 use Piton\ORM\DataMapperAbstract;
-use Twig\Node\Expression\Test\NullTest;
 
 /**
  * Piton Media Mapper

@@ -72,19 +72,19 @@ class NotFound extends \Slim\Handlers\NotFound
         // Get request URL to determine if this was thrown in /admin or on the public site
         $path = $request->getUri()->getPath();
 
-        // Set notFound template path context
+        // Set notFound template path context, frontend or admin
         $this->templatePath = 'core/notFound.html';
         if (explode('/', $path)[1] === 'admin') {
             $this->templatePath = '@admin/system/notFound.html';
         }
 
         // If request is for a file or image then just return the 404 status and stop
-        if (preg_match('/^.*\.(jpg|jpeg|png|gif|css|js)$/i', $path)) {
+        if (preg_match('/^.*\.(jpg|jpeg|png|gif|css|js|ico)$/i', $path)) {
             return $response->withStatus(404);
         }
 
         // Log 404 request
-        $this->logger->info("Not Found (404): {$request->getMethod()} {$path}");
+        $this->logger->info("Not Found (404): {$request->getMethod()} $path");
 
         // Return status 404 and template
         return parent::__invoke($request, $response);
