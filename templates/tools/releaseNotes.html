@@ -1,18 +1,6 @@
 {% extends '@admin/_adminBase.html' %}
-
-{% block htmlTitle 'Release Notes' %}
 {% block headText 'Release Notes' %}
-{% block sectionId 'tools' %}
-{% block mainClass 'contentTwoCol' %}
-
-
-{% block openForm %}
-<form>
-{% endblock openForm %}
-
-{% block sidebar %}
-{% include "@admin/tools/_toolsSidebar.html" %}
-{% endblock sidebar %}
+{% block sectionId 'releaseNotes' %}
 
 {% block content %}
 <div class="block-content" style="width: 75ch">
@@ -28,6 +16,7 @@
     <i>To see older release notes, or to contribute to PitonCMS, go to <a href="https://github.com/PitonCMS"
             target="_blank">GitHub PitonCMS</a>.</i>
 </div>
+
 
 {% endblock content %}
 

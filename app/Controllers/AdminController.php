@@ -79,7 +79,7 @@ class AdminController extends AdminBaseController
             }
         }
 
-        return $this->render('releaseNotes.html', ['releases' => $releases]);
+        return $this->render('tools/releaseNotes.html', ['releases' => $releases]);
     }
 
     /**

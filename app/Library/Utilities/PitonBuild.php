@@ -93,6 +93,8 @@ class PitonBuild
 
             $stmt = $pdo->prepare($updateEngineSetting);
             $stmt->execute($settingValue);
+
+            self::printOutput("Updated PitonCMS Engine version setting.");
         } catch (Throwable $e) {
             self::printOutput("Failed to update engine setting: {$e->getMessage()}.", 'exception');
         }
