@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Slim\Http\Response;
 
 /**
  * Piton Media Controller
@@ -25,15 +25,18 @@ class AdminMediaController extends AdminBaseController
 {
     /**
      * Show All Media
+     *
+     * @param void
+     * @return Response
      */
-    public function showMedia()
+    public function showMedia(): Response
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         $data['media'] = $mediaMapper->findAllMedia() ?? [];
         $data['categories'] = $mediaCategoryMapper->findCategories() ?? [];
-        $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments();
+        $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments() ?? [];
 
         // Identify any media ID's assigned to each category
         foreach ($data['categories'] as &$cat) {
@@ -52,14 +55,16 @@ class AdminMediaController extends AdminBaseController
      * Save Media
      *
      * Save media caption, categories
+     * @param void
+     * @return Response
      */
-    public function saveMedia()
+    public function saveMedia(): Response
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         $media = $mediaMapper->make();
-        $media->id = $this->request->getParsedBodyParam('id');
+        $media->id = (int) $this->request->getParsedBodyParam('id');
         $media->caption = $this->request->getParsedBodyParam('caption');
         $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
         $mediaMapper->save($media);
@@ -80,10 +85,10 @@ class AdminMediaController extends AdminBaseController
      * Delete Media
      *
      * Deletes file and media record
-     * @param
-     * @return void
+     * @param void
+     * @return Response
      */
-    public function deleteMedia()
+    public function deleteMedia(): Response
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
@@ -92,9 +97,10 @@ class AdminMediaController extends AdminBaseController
             $mediaFile = $mediaMapper->findById((int) $id);
 
             if (is_string($mediaFile->filename)) {
+                // Delete all files then delete record
                 $rootDir = substr($mediaFile->filename, 0, 2);
-                $this->deleteRecursive(ROOT_DIR . 'public/media/' . $rootDir);
-
+                $path = ROOT_DIR . 'public/media/' . $rootDir . '/' . pathinfo($mediaFile->filename, PATHINFO_FILENAME);
+                $this->deleteRecursive($path);
                 $mediaMapper->delete($mediaFile);
             }
         }
@@ -112,8 +118,10 @@ class AdminMediaController extends AdminBaseController
      * Get All Media
      *
      * Gets all media asynchronously with HTML
+     * @param void
+     * @return Response
      */
-    public function getMedia()
+    public function getMedia(): Response
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
@@ -137,8 +145,11 @@ HTML;
 
     /**
      * Upload File
+     *
+     * @param void
+     * @return Response
      */
-    public function uploadMedia()
+    public function uploadMedia(): Response
     {
         $fileUpload = $this->container->fileUploadHandler;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
@@ -168,8 +179,11 @@ HTML;
 
     /**
      * Edit Media Categories
+     *
+     * @param void
+     * @return Response
      */
-    public function editMediaCategories()
+    public function editMediaCategories(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
@@ -180,11 +194,13 @@ HTML;
 
     /**
      * Save Media Categories
+     *
+     * @param void
+     * @return Response
      */
-    public function saveMediaCategories()
+    public function saveMediaCategories(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-
         $categoriesPost = $this->request->getParsedBody();
 
         foreach ($categoriesPost['category'] as $key => $cat) {
@@ -195,7 +211,7 @@ HTML;
 
             // Make category object
             $category = $mediaCategoryMapper->make();
-            $category->id = $categoriesPost['id'][$key];
+            $category->id = (int) $categoriesPost['id'][$key];
 
             // Check if we need to delete a category, but only if this has been previously saved with an ID
             if (isset($categoriesPost['delete'][$key]) && !empty($categoriesPost['id'][$key])) {
@@ -214,8 +230,10 @@ HTML;
     /**
      * Delete Media Category
      *
+     * @param void
+     * @return Response
      */
-    public function deleteMediaCategory()
+    public function deleteMediaCategory(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $categoryId = (int) $this->request->getParsedBodyParam('id');
@@ -239,11 +257,11 @@ HTML;
     /**
      * Recursively Delete File and Directory
      *
-     * Deletes entire chain of directories for one media file path
+     * Deletes entire chain of directories for media file path
      * @param  string $dir Media file base folder to delete
      * @return void
      */
-    protected function deleteRecursive($dir)
+    protected function deleteRecursive($dir): void
     {
         $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
@@ -265,7 +283,7 @@ HTML;
      * @param  string $filename
      * @return void
      */
-    protected function makeMediaSet($filename)
+    protected function makeMediaSet($filename): void
     {
         // Ensure there is a Tinify API key
         if (($this->container->settings)['site']['tinifyApiKey']) {
