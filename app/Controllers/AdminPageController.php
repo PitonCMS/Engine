@@ -113,8 +113,8 @@ class AdminPageController extends AdminBaseController
     {
         // Save settings and elements
         $pageEntity = $this->savePageHeader();
-        $this->savePageSettings($pageEntity->id);
-        $this->savePageElements($pageEntity->id);
+        $this->savePageSettings((int) $pageEntity->id);
+        $this->savePageElements((int) $pageEntity->id);
 
         // Determine redirect path based on whether this is a collection page
         if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
