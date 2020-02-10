@@ -43,8 +43,8 @@ class AdminMessageController extends AdminBaseController
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
 
-        $messageId = $this->request->getParsedBodyParam('id');
-        $message = $messageMapper->findById((int) $messageId);
+        $messageId = (int) $this->request->getParsedBodyParam('id');
+        $message = $messageMapper->findById($messageId);
         if ($message->isRead === 'Y') {
             $messageMapper->markAsUnread($messageId);
         } else {
