@@ -86,7 +86,7 @@ class AdminAccessController extends AdminBaseController
         // Did we find a match?
         if (!$foundValidUser) {
             // No, log and silently redirect to home
-            $this->container->logger->info('Failed login attempt: ' . $body['email']);
+            $this->container->logger->info('PitonCMS: Failed login attempt: ' . $body['email']);
 
             return $this->redirect('home');
         }
@@ -147,7 +147,7 @@ class AdminAccessController extends AdminBaseController
 
         // Not valid, direct home
         $message = $args['token'] . ' saved: ' . $savedToken . ' time: ' . time() . ' expires: ' . $tokenExpires;
-        $this->container->logger->info('Invalid login token, supplied: ' . $message);
+        $this->container->logger->info('PitonCMS: Invalid login token, supplied: ' . $message);
 
         return $this->notFound();
     }
