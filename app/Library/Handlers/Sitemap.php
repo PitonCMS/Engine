@@ -50,11 +50,8 @@ class Sitemap
      */
     public function make(array $links = null, string $domain, bool $alertSearchEngines = null): bool
     {
-        $this->logger->notice('PitonCMS: Making sitemap');
-
         if (empty($links)) {
             $this->messages[] = 'No content links to create sitemap.';
-            $this->logger->notice('..No links provided for sitemap');
             return null;
         }
 
@@ -64,7 +61,7 @@ class Sitemap
 
         // Only alert search engines if in production
         if ($status && $alertSearchEngines) {
-            $this->logger->notice('..Alerting search engines with updated sitemap');
+            $this->messages[] = 'Alerting search engines with updated sitemap';
             $this->alertSearchEngines();
         }
 
@@ -80,8 +77,6 @@ class Sitemap
      */
     public function generateXML(array $links): void
     {
-        $this->logger->notice('..Generating XML');
-
         // Start sitemap XML header
         $this->sitemapXML = "<\x3Fxml version=\"1.0\" encoding=\"UTF-8\"\x3F>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
 
@@ -104,8 +99,6 @@ class Sitemap
     public function writeXMLFile(): bool
     {
         // Write the sitemap data to file
-        $this->logger->notice('..Writing data to file');
-
         try {
             $fh = fopen($this->sitemapFilePath, 'w');
             fwrite($fh, $this->sitemapXML);
@@ -114,7 +107,6 @@ class Sitemap
             return true;
         } catch (Exception $e) {
             // Log failure
-            $this->logger->error('..Failed to write sitemap');
             $this->logger->error(print_r($e->getMessage(), true));
             $this->messages[] = 'Failed to write sitemap: ' . print_r($e->getMessage(), true);
 
@@ -153,16 +145,13 @@ class Sitemap
                 curl_close($ch);
 
                 // Save messages
-                $this->logger->notice($logMessage . ' Return status: ' . $httpResponseStatus);
                 $this->messages[] = "Search Engine: $searchEngine, Return Status: $httpResponseStatus";
             } catch (Exception $e) {
                 // Log failure
-                $this->logger->error('PitonCMS: Failed to connect to search engines ' . print_r($e->getMessage(), true));
+                $this->logger->error("PitonCMS: Search engine sitemap update failed for $searchEngine, status $httpResponseStatus");
                 $this->messages[] = "Search Engine: $searchEngine, Return Status: $httpResponseStatus";
             }
         }
-
-        $this->logger->notice('..Sitemap update complete');
     }
 
     /**

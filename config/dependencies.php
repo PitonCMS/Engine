@@ -80,14 +80,21 @@ $container['database'] = function ($c) {
     return new \PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
 };
 
-// Custom error handling (overwrite Slim errorHandler to add logging)
+// Custom error exception handling
 $container['errorHandler'] = function ($c) {
     return new Piton\Library\Handlers\Error($c->get('settings')['displayErrorDetails'], $c['logger']);
 };
 
+// Custom PHP runtime exception handling reuses the error exception handler
+$container['phpErrorHandler'] = function ($c) {
+    return $c->errorHandler;
+};
+
 // Sessions
 $container['sessionHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Session($c['database'], $c->get('settings')['session']);
+    $session = $c->get('settings')['session'];
+    $session['log'] = $c->logger;
+    return new Piton\Library\Handlers\Session($c['database'], $session);
 };
 
 // Access Control
