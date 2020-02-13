@@ -86,7 +86,7 @@ class AdminAccessController extends AdminBaseController
         // Did we find a match?
         if (!$foundValidUser) {
             // No, log and silently redirect to home
-            $this->container->logger->alert('Failed login attempt: ' . $body['email']);
+            $this->container->logger->info('Failed login attempt: ' . $body['email']);
 
             return $this->redirect('home');
         }

@@ -83,7 +83,7 @@ class CsrfGuard
                 $this->csrfTokenValue = null;
                 $this->loadSessionToken();
                 if ($this->logger) {
-                    $this->logger->alert('PitonCMS: 403 Forbidden request, CSRF token mismatch');
+                    $this->logger->info('PitonCMS: 403 Forbidden request, CSRF token mismatch');
                 }
 
                 return $this->forbidden($request, $response);

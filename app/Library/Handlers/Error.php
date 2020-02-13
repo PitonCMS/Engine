@@ -57,7 +57,7 @@ class Error extends \Slim\Handlers\PhpError
     public function __invoke(Request $request, Response $response, Throwable $exception): Response
     {
         // Log the message
-        $this->logger->alert($exception->getMessage() . ' ' . $exception->getTraceAsString());
+        $this->logger->error($exception->getMessage() . ' ' . $exception->getTraceAsString());
 
         return parent::__invoke($request, $response, $exception);
     }

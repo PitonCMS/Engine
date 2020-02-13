@@ -138,7 +138,7 @@ class Email implements EmailInterface
             $this->mailer->send();
         } catch (Exception $e) {
             // Log for debugging and then rethrow
-            $this->logger->critical('PitonCMS: Failed to send mail: ' . $e->getMessage());
+            $this->logger->error('PitonCMS: Failed to send mail: ' . $e->getMessage());
             throw new \Exception($e->getMessage());
         }
     }
