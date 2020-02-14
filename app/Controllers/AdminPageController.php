@@ -277,9 +277,6 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
         $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
 
@@ -353,7 +350,7 @@ class AdminPageController extends AdminBaseController
         if ($this->request->getParsedBodyParam('id')) {
             // Delete block element
             $blockElement = $PageElement->make();
-            $blockElement->id = $this->request->getParsedBodyParam('id');
+            $blockElement->id = (int) $this->request->getParsedBodyParam('id');
             $PageElement->delete($blockElement);
 
             $status = 'success';
