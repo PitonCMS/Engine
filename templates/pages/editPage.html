@@ -2,7 +2,7 @@
 {% import "@admin/pages/_editElementMacro.html" as form %}
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
 
-{% block mainClass 'contentTwoCol' %}
+{# {% block mainClass 'contentTwoCol' %} #}
 
 {% block htmlTitle %}
 {% if page.id %}Edit{% else %}Add{% endif %} Page
@@ -26,7 +26,7 @@
 {% endif %}
 
 {% block openForm %}
-<form action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
+<form class="pageEditForm" action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
@@ -35,182 +35,163 @@
   {% endblock openForm %}
 
   {% block sidebar %}
+  <!-- Published Status Input & Notification -->
+  <div class="sidebar-block form-group status">
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : age.published_date|date }}" autocomplete="off">
 
-  <nav class="navbar" id="page-edit-nav">
-    <nav class="nav flex-column">
-      <a class="nav-link" href="#page-settings-nav">Page Settings</a>
-      {% if page.settings %}
-      <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
-      <nav class="nav flex-column">
-        {% for setting in page.settings %}
-        <a class="small-sidebar-text nav-link ml-3" href="#page-setting-{{ setting.setting_key }}">{{ setting.label }}</a>
-        {% endfor %}
-      </nav>
-      {% endif %}
+    {% if page.getPublishedStatus() == 'draft' %}
+    <div class="text-danger" title="Not published">Status: Draft/Not Published</div>
+    
+    {% elseif page.getPublishedStatus() == 'pending' %}
+    <div class="text-warning">Status: Pending</div>
+    
+    {% elseif page.getPublishedStatus() == 'published' %}
+    <div class="text-success">Status: Published</div>
+    {% endif %}
+  
+  </div>
 
-      {% for block in page.json.blocks %}
-      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
-
-      <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
-        {% for element in page.elements %}
-        {% if element.block_key == block.key %}
-        <a class="small-sidebar-text nav-link ml-3" href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
-        {% endif %}
-        {% endfor %}
-      </nav>
-      {% endfor %}
-    </nav>
-  </nav>
-
+  <!-- Control Buttons -->
+  <div class="sidebar-block button-group">
+    <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
+    <button class="mb-2 btn btn-primary" type="submit">Save</button>
+    {% if page.id %}
+    <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit"
+      formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
+      title="The home page cannot be deleted." {% endif %}>Delete</button>
+    {% endif %}
+  </div>
   {% endblock sidebar %}
 
   {% block content %}
   {# Media Modal #}
-  <div class="modal fade" id="mediaModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-body">
+  {% include "@admin/pages/_pageEditModal.html" %}
+
+  <div class="jsEditPageContainer">
+    <ul class="nav nav-tabs mb-3" id="tabs-tab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="pageSettings-tab" data-toggle="pill" href="#pageSettings" role="tab"
+          aria-controls="pageSettings" aria-selected="true">Page Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pageCustom-tab" data-toggle="pill" href="#pageCustom" role="tab"
+          aria-controls="pageCustom" aria-selected="false">Custom Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="content-tab" data-toggle="pill" href="#content" role="tab" aria-controls="content"
+          aria-selected="false">Content</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="tabs-tabContent">
+<!-- Page Settings Tab -->
+      <div class="tab-pane fade show active" id="pageSettings" role="tabpanel" aria-labelledby="pageSettings-tab">
+        <div class="block-title-wrapper">
+          <h3>Page Settings</h3>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="scroll-container jsEditPageContainer" data-spy="scroll" data-target="#page-edit-nav" data-offset="0">
-    <div class="page-settings-wrapper" id="page-settings-nav">
-      <div class="block-title-wrapper">
-        <h3 class="pt-3">Page Settings</h3>
-      </div>
-
-      {# Page Standard Fields #}
-      <div class="form-group-wrapper">
-        <div class="form-group">
-          <label>Title <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" required>
-        </div>
-
-        {% if not page.json.hideSubTitle %}
-        <div class="form-group">
-          <label>Sub Title</label>
-          <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
-          <small class="form-text text-muted">Optional. Limit 150 characters.</small>
-        </div>
-        {% endif %}
-
-        <div class="form-group">
-          <label>Slug <span class="text-danger">*</span></label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
-            </div>
-            <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug" value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
-          </div>
-          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-            changed.</small>
-        </div>
-
-        <div class="form-group">
-          <label>Meta Description</label>
-          <input type="text" class="form-control" name="meta_description" maxlength="320" placeholder="Description to appear in search results" value="{{ page.meta_description }}">
-          <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching
-            search
-            results.</small>
-        </div>
-
-        {% if not page.json.hideFeaturedImage %}
-        <div class="form-group span">
-          <label>Featured Image</label>
-          <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path" value="{{ page.image_path }}">
-          <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
-        </div>
-        {% endif %}
-      </div>
-
-      {# Page Custom Settings #}
-      {% if page.settings %}
-      <div class="block-title-wrapper" id="page-custom-settings-nav">
-        <h3 class="">Custom Page Settings</h3>
-      </div>
-      <div class="form-group-wrapper">
-        {% for setting in page.settings %}
-        {{ settingForm.settingInput(setting) }}
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    {# Page Blocks and Elements #}
-    <div class="block-element-wrapper">
-      {% for block in page.json.blocks %}
-      <div class="element-block">
-        <div class="jsBlockParent" id="page-block-{{ block.key }}">
-          <div class="block-title-wrapper">
-            <h3>{{ block.name }} Block</h3>
-
-            {# Get count of elements in block to know if we need to disable the Add Element Button #}
-            {% set elementLength = 0 %}
-            {% for element in page.elements %}
-              {% if element.block_key == block.key %}
-                {% set elementLength = elementLength + 1 %}
-              {% endif %}
-            {% endfor %}
-            <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}" data-element-type="{{ block.elementTypeDefault }}"
-              data-element-type-options="{{ block.elementTypeOptions|join(',') }}" data-element-count-limit="{{ block.elementCountLimit }}"
-              {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
-
+        {# Page Standard Fields #}
+        <div class="form-group-wrapper">
+          <div class="form-group">
+            <label>Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+              value="{{ page.title }}" required>
           </div>
 
-          {% for element in page.elements %}
-          {% if element.block_key == block.key %}
-          {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
+          {% if not page.json.hideSubTitle %}
+          <div class="form-group">
+            <label>Sub Title</label>
+            <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
+            <small class="form-text text-muted">Optional. Limit 150 characters.</small>
+          </div>
           {% endif %}
+
+          <div class="form-group">
+            <label>Slug <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span
+                  class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
+              </div>
+              <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
+                value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
+            </div>
+            <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+              changed.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Meta Description</label>
+            <input type="text" class="form-control" name="meta_description" maxlength="320"
+              placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+            <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching
+              search
+              results.</small>
+          </div>
+
+          {% if not page.json.hideFeaturedImage %}
+          <div class="form-group">
+            <label>Featured Image</label>
+            <input type="text" class="form-control" name="image_path" maxlength="100" placeholder="Image path"
+              value="{{ page.image_path }}">
+            <small class="form-text text-muted">Limit 100 characters. Page featured image to display.</small>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Custom Settings Tab -->
+      <div class="tab-pane fade" id="pageCustom" role="tabpanel" aria-labelledby="pageCustom-tab">
+        {# Page Custom Settings #}
+        {% if page.settings %}
+        <div class="block-title-wrapper">
+          <h3 class="">Custom Page Settings</h3>
+        </div>
+        <div class="form-group-wrapper">
+          {% for setting in page.settings %}
+          {{ settingForm.settingInput(setting) }}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Content Tab -->
+      <div class="tab-pane fade" id="content" role="tabpanel" aria-labelledby="content-tab">
+        {# Page Blocks and Elements #}
+        <div class="block-element-wrapper">
+          {% for block in page.json.blocks %}
+          <div class="element-block">
+            <div class="block-title-wrapper">
+              <h3>{{ block.name }} Block</h3>
+            </div>
+            <div class="block-content jsBlockParent">
+          
+              {# Get count of elements in block to know if we need to disable the Add Element Button #}
+              {% set elementLength = 0 %}
+              {% for element in page.elements %}
+              {% if element.block_key == block.key %}
+              {% set elementLength = elementLength + 1 %}
+              {% endif %}
+              {% endfor %}
+              <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
+                data-element-type="{{ block.elementTypeDefault }}"
+                data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+                data-element-count-limit="{{ block.elementCountLimit }}"
+                {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
+              {% for element in page.elements %}
+              {% if element.block_key == block.key %}
+              {{ form.elementForm(element, block.key, block.elementTypeOptions) }}
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
           {% endfor %}
         </div>
       </div>
-      {% endfor %}
     </div>
-  </div><!-- End scroll-container -->
-
-  <div class="two-col-sidebar">
-    <div class="two-col-sidebar-inner">
-      <div class="form-group status">
-        <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}"
-          autocomplete="off">
-        {% if page.getPublishedStatus() == 'draft' %}
-        <div class="text-body" title="Not published">Status: Draft</div>
-        {% elseif page.getPublishedStatus() == 'pending' %}
-        <div class="text-warning">Status: Pending</div>
-        {% elseif page.getPublishedStatus() == 'published' %}
-        <div class="text-success">Status: Published</div>
-        {% endif %}
-
-
-
-      </div>
-      <hr class="sidebar-divider">
-      <!-- Control Buttons -->
-      <div class="button-group">
-        <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
-        <button class="mb-2 btn btn-primary" type="submit">Save</button>
-
-        {% if page.id %}
-        <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
-          title="The home page cannot be deleted." {% endif %}>Delete</button>
-        {% endif %}
-      </div>
-      <hr class="sidebar-divider">
-    </div>
-
-
-  </div>
-
+  </div><!-- End content container -->
   {% endblock content %}
 
   {% block foot %}
   <script>
-
     let getMediaForMDE = function (editor) {
       // Bind media click once, and load media in modal
       $('#mediaModal').unbind().on('click', 'img', function () {
@@ -252,3 +233,33 @@
     });
   </script>
   {% endblock %}
+
+  {% block sidebarLeft %}
+  <nav class="navbar" id="page-edit-nav">
+    <nav class="nav flex-column">
+      <a class="nav-link" href="#page-settings-nav">Page Settings</a>
+      {% if page.settings %}
+      <a class="nav-link" href="#page-custom-settings-nav">Custom Settings</a>
+      <nav class="nav flex-column">
+        {% for setting in page.settings %}
+        <a class="small-sidebar-text nav-link ml-3"
+          href="#page-setting-{{ setting.setting_key }}">{{ setting.label }}</a>
+        {% endfor %}
+      </nav>
+      {% endif %}
+
+      {% for block in page.json.blocks %}
+      <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
+
+      <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
+        {% for element in page.elements %}
+        {% if element.block_key == block.key %}
+        <a class="small-sidebar-text nav-link ml-3"
+          href="#page-element-{{ element.id }}">{{ element.title|default('content') }}</a>
+        {% endif %}
+        {% endfor %}
+      </nav>
+      {% endfor %}
+    </nav>
+  </nav>
+  {% endblock sidebarLeft %}

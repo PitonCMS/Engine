@@ -4,36 +4,30 @@
 
 {# Wrapper Macro #}
 {% macro settingInput(setting) %}
-  {% import _self as input %}
-  {% if setting.input_type == 'select' %}
-    {{ input.selectHtml(setting) }}
-  {% elseif setting.input_type == 'textarea' %}
-    {{ input.textareaHtml(setting) }}
-  {% elseif setting.input_type == 'media' %}
-    {{ input.mediaInputHtml(setting) }}
-  {% else %}
-    {{ input.inputHtml(setting) }}
-  {% endif %}
+{% import _self as input %}
+{% if setting.input_type == 'select' %}
+{{ input.selectHtml(setting) }}
+{% elseif setting.input_type == 'textarea' %}
+{{ input.textareaHtml(setting) }}
+{% elseif setting.input_type == 'media' %}
+{{ input.mediaInputHtml(setting) }}
+{% else %}
+{{ input.inputHtml(setting) }}
+{% endif %}
 {% endmacro settingInput %}
 
 {# Input Macro #}
 {% macro inputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
-  <div class="card-header">
-    <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-    <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
-    <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
-    <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-  </div>
-  <div class="card-body">
-    <div class="card-text">
-      <input type="text" class="form-control" name="setting[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
-        autocomplete="off">
-      <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-    </div>
-  </div>
+<div class="form-group jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+  <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
+  <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
+  <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
+  <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+  <input type="text" class="form-control" name="setting[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}" autocomplete="off">
+  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+
 </div>
 {% endmacro inputHtml %}
 
@@ -41,29 +35,29 @@
 {% macro mediaInputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
-  <div class="card-header">
+<div class="form-group jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
+  
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
     <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
     <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
     <input type="hidden" name="setting[{{ arrayKey }}][type]" value="media">
-  </div>
-  <div class="card-body">
-    <div class="card-text">
-      <img src="{{ getMediaPath(setting.setting_value, 'large') }}" class="img-fluid {% if setting.setting_value %}d-block{% else %}d-none{% endif %}">
+ 
+  
+      <img src="{{ getMediaPath(setting.setting_value, 'large') }}"
+        class="img-fluid {% if setting.setting_value %}d-block{% else %}d-none{% endif %}">
       <div class="input-group">
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
-        <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]" value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
+        <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]"
+          value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
         <div class="input-group-append">
-            <button class="btn btn-light jsMediaClear" type="button">Clear</button>
+          <button class="btn btn-light jsMediaClear" type="button">Clear</button>
         </div>
       </div>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-    </div>
-  </div>
+   
 </div>
 {% endmacro mediaInputHtml %}
 
@@ -71,23 +65,21 @@
 {% macro selectHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
-  <div class="card-header">
+<div class="form-group jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+ 
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
     <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
     <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-  </div>
-  <div class="card-body">
-    <div class="card-text">
+ 
+  
       <select class="form-control" name="setting[{{ arrayKey }}][setting_value]">
         {% for key, option in setting.options %}
         <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
         {% endfor %}
       </select>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-    </div>
-  </div>
+  
 </div>
 {% endmacro selectHtml %}
 
@@ -95,22 +87,17 @@
 {% macro textareaHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="card jsSettingParent" id="page-setting-{{ setting.setting_key }}">
-  <div class="card-header">
+<div class="form-group jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
     <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
     <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-  </div>
-  <div class="card-body">
-    <div class="card-text">
+
+
       <textarea class="form-control" rows="3"
         name="setting[{{ arrayKey }}][setting_value]">{{ setting.setting_value }}</textarea>
       <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-    </div>
-
-  </div>
-
 </div>
 {% endmacro textareaHtml %}
 
