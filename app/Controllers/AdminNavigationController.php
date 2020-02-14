@@ -67,7 +67,7 @@ class AdminNavigationController extends AdminBaseController
         $sort = 0;
         foreach ($post as &$navItem) {
             // Check whether to just delete
-            if ($navItem['delete'] == 'on') {
+            if (isset($navItem['delete'])) {
                 if (is_numeric($navItem['navId'])) {
                     $navigationMapper->deleteByNavId((int) $navItem['navId']);
                 }
