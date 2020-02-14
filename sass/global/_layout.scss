@@ -10,23 +10,28 @@
 #users form {
   display: flex;
   flex-flow: row nowrap;
+
   aside,
   main {
     min-height: calc(100vh - 56px);
     @include padding(1em);
   }
+
   aside {
     background-color: $primary-md-grey;
     @include padding(1em 0.5em 1em 0);
     min-width: 200px;
     position: relative;
   }
+
   .aside-inner {
     position: sticky;
     top: 72px;
+
     .sidebar-links {
       display: flex;
       align-items: center;
+
       .nav-link {
         flex: 1;
         display: flex;
@@ -36,28 +41,32 @@
         letter-spacing: 1px;
         @include padding(0.25em 0.5em);
         @include margin(null null null 0);
+
         &:hover {
           color: var(--primary) !important;
         }
-            .active {
-        background-color: rgba($primary-color, 0.5) !important;
-        color: $primary-light;
-        // @include padding(null 1rem null null);
-        @include border-right-radius(30px);
-        box-shadow: $box-shadow;
+
+        .active {
+          background-color: rgba($primary-color, 0.5) !important;
+          color: $primary-light;
+          // @include padding(null 1rem null null);
+          @include border-right-radius(30px);
+          box-shadow: $box-shadow;
+        }
       }
-      }
-  
+
     }
   }
 
   main {
     flex: 1;
   }
+
   .grid-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1em;
+
     .card-title {
       @include margin(0);
       display: flex;
@@ -69,16 +78,19 @@
         @include padding(0);
       }
     }
+
     .card-footer {
       display: flex;
       justify-content: flex-start;
       align-items: center;
     }
   }
+
   .fa-info-circle {
     cursor: pointer;
     color: $primary-dark-grey;
   }
+
   .card {
     border: none;
     box-shadow: $box-shadow;
@@ -88,17 +100,21 @@
 // Release Notes
 #releaseNotes {
   display: flex;
+
   aside,
   main {
     @include padding(1em);
     height: calc(100vh - 56px);
   }
+
   aside {
     min-width: 150px;
     background-color: $primary-md-grey;
   }
+
   main {
     @include margin(null 1em);
+
     .block-content {
       width: 75ch;
     }
@@ -124,6 +140,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1em;
+
     .form-group {
       display: grid;
       grid-template-columns: 1fr 4em;
@@ -139,6 +156,7 @@
     display: flex;
     border-radius: $border-radius;
   }
+
   .message-wrapper {
     flex: 2;
     @include padding(0.5em);
@@ -146,14 +164,17 @@
     background: $primary-light-grey;
     box-shadow: $box-shadow;
   }
+
   .button-wrapper {
     @include padding(0.5em);
     box-shadow: $box-shadow;
     background: $primary-light-grey;
   }
+
   .button-wrapper form {
     display: flex;
     flex-flow: column nowrap;
+
     button {
       @include margin(0.5em null);
     }
@@ -164,46 +185,52 @@
 /********* Detail Pages for Admin *********/
 /******************************************/
 
-#editPage form,
-#collectionDetail form,
 #users form {
   display: flex;
   flex-flow: row nowrap;
   max-height: calc(100vh - 56px);
   overflow: scroll;
+
   aside,
   main {
     min-height: calc(100vh - 56px);
   }
+
   aside {
     background-color: $primary-md-grey;
     min-width: 225px;
     position: relative;
+
     .aside-inner {
       position: sticky;
       top: 0px;
     }
+
     a {
       letter-spacing: 1px;
       color: $primary-dark;
+
       &:hover {
         color: $primary-color !important;
       }
     }
-      .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    box-shadow: $box-shadow;
+
+    .active {
+      background-color: rgba($primary-color, 0.8) !important;
+      color: $primary-light;
+      @include padding(null 1rem null null);
+      @include border-right-radius(25px);
+      box-shadow: $box-shadow;
+    }
   }
-  }
+
   main {
     background: $primary-light-grey;
     display: flex;
     flex: 1;
     overflow: hidden;
   }
+
   .scroll-container {
     @include margin(0 1em);
     @include padding(null 1em);
@@ -214,10 +241,12 @@
     flex: 1;
     height: calc(100vh - 75px);
   }
+
   .two-col-sidebar {
     background-color: $primary-md-grey;
     height: 100%;
     position: relative;
+
     .two-col-sidebar-inner {
       @include padding(1em);
       position: sticky;
@@ -239,39 +268,24 @@
   .navbar {
     @include padding(null null null 0);
   }
+
   .two-col-sidebar {
     @include padding(1em);
   }
 }
 
-//Page Edit
-#editPage {
-  .block-title-wrapper {
-    background: $primary-light-grey;
-    @include padding(1em 2em 1em 1em);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0px;
-    z-index: 1049;
-  }
-  .card {
-    @include margin(null null 1em null);
-  }
-}
-
 // Tools & Settings
 #tools form {
-  aside{
+  aside {
     .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light !important;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    box-shadow: $box-shadow;
+      background-color: rgba($primary-color, 0.8) !important;
+      color: $primary-light !important;
+      @include padding(null 1rem null null);
+      @include border-right-radius(25px);
+      box-shadow: $box-shadow;
+    }
   }
-  }
+
   main {
     @include padding(0);
     display: flex;
@@ -285,14 +299,17 @@
       grid-gap: 1em;
       @include padding(1em);
     }
+
     .two-col-sidebar {
       background-color: $primary-md-grey;
       height: 100%;
       position: relative;
+
       .two-col-sidebar-inner {
         @include padding(1em 1.5em);
         position: sticky;
         top: 72px;
+
         .button-group {
           display: flex;
           flex-flow: column nowrap;
@@ -301,33 +318,41 @@
     }
   }
 }
+
 // users
 #users form {
   main {
     @include padding(0);
     display: flex;
+
     .form-wrapper {
       @include padding(1em);
       flex: 1;
+
       .user-card {
         @include margin(null null 1.5em null);
+
         input {
           @include padding(1em);
           border-radius: $border-radius;
         }
       }
     }
+
     .two-col-sidebar {
       background-color: $primary-md-grey;
       height: 100%;
       position: relative;
+
       .two-col-sidebar-inner {
         @include padding(1em 1.5em);
         position: sticky;
         top: 0;
+
         .button-group {
           display: flex;
           flex-flow: column nowrap;
+
           button,
           a {
             @include margin(null null 1em null);
@@ -337,3 +362,116 @@
     }
   }
 }
+
+/********************************************/
+/******* Page & Collection Edit Pages *******/
+/********************************************/
+#editPage,
+#collectionDetail {
+  .pageEditForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+    position: relative;
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: max-content 1fr;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 100%;
+      background: #efefef;
+      position: relative;
+
+      .aside-inner {
+        @include padding(1em);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1em;
+
+        position: sticky;
+        top: 60px;
+        z-index: 5;
+
+        @media screen and (min-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .sidebar-block {
+
+        @media screen and (min-width: 768px) {
+          display: flex;
+          flex-flow: column nowrap;
+        }
+      }
+    }
+
+    .content {
+      position: relative;
+      @include padding(null 1em);
+
+      @media screen and (min-width: 768px) {
+        @include padding(1em null null);
+      }
+      .block-element-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1em;
+      }
+      .nav-tabs {
+        background: white;
+        position: sticky;
+        top: 55px;
+        z-index: 5;
+      }
+    }
+  }
+
+  .form-group-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: #efefef;
+    border-radius: 7px;
+
+    .form-group {
+      background: white;
+      border-radius: 7px;
+      @include padding(1em);
+      @include margin(1em);
+    }
+    .form-group {
+     
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .5em;
+    }
+  }
+  // EditPage Content Tab
+  .block-element-wrapper {
+   
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+    .element-block{
+      position: relative;
+     
+    }
+    .block-title-wrapper {
+      background: white;
+      
+    }
+    .block-content{
+     
+     background: #efefef;
+      @include padding(1em);
+      border-radius: 7px;
+      .jsAddElement {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+}  
