@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
@@ -6,6 +7,9 @@
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
+
+declare(strict_types=1);
+
 namespace Piton\Models\Entities;
 
 use Piton\ORM\DomainObject;
@@ -19,20 +23,13 @@ class PitonEntity extends DomainObject
      * Get Object Property
      *
      * The switch statement maps non-existent camelCase properties to real properties in database
-     * @param  mixed $key Property name to get
+     * @param  string $key Property name to get
      * @return mixed      Property value | null
      */
     public function __get($key)
     {
-        switch ($key) {
-            case "createdBy":
-                return $this->created_by ?: null;
-            case "createdDate":
-                return $this->created_date ?: null;
-            case "updatedBy":
-                return $this->updated_by ?: null;
-            case "updatedDate":
-                return $this->updated_date ?: null;
+        if ($this->getCamelCaseToUnderScores($key)) {
+            return $this->{$key};
         }
 
         return parent::__get($key);
@@ -47,12 +44,27 @@ class PitonEntity extends DomainObject
      */
     public function __isset($key)
     {
-        switch ($key) {
-            case "createdBy":
-            case "createdDate":
-            case "updatedBy":
-            case "updatedDate":
-                return true;
+        return $this->getCamelCaseToUnderScores($key);
+    }
+
+    /**
+     * Get Camel Case to Under Score Property Value
+     *
+     * Converts camelCase property values to underscores and checks if property exists
+     * If it does, then adds the camelCase property to this object with a pointer to the under score equivalent
+     * @param string $key
+     * @return bool
+     */
+    private function getCamelCaseToUnderScores($key): bool
+    {
+        // Split camelCase variables to underscores and see if there is a match to an existing property
+        $property = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+
+        // Create object reference to actual property
+        if (property_exists($this, $property)) {
+            $this->{$key} = $this->{$property};
+
+            return true;
         }
 
         return false;
