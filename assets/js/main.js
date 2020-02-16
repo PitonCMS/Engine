@@ -185,6 +185,73 @@ $('.jsBlockParent').on('click', '.jsElementType input[type="radio"]', function (
     }
 });
 
+// Clean Page URL slug from title
+let $pageSlug = $('.jsPageSlug');
+$('.jsPageTitle').on('change', function () {
+    if ($pageSlug.val() === 'home') return;
+    if (pitonConfig.pageSlugLocked !== 'lock') {
+    let slug = this.value;
+        slug = slug.replace('&', 'and');
+        slug = slug.replace(`'`, '');
+        slug = slug.toLowerCase();
+        slug = slug.replace(/[^a-z0-9]+/gi, '-');
+        slug = slug.replace(/-+$/gi, '');
+        $pageSlug.val(slug);
+    }
+});
+
+// Unlock Page URL slug on request
+$('.jsPageSlugFaLockStatus').on('click', function () {
+    // Ignore if home page
+    if ($pageSlug.val() === 'home') return;
+    if (pitonConfig.pageSlugLocked === 'lock' && confirmPrompt('Are you sure you want to change the URL Slug? This can impact links and search engines.')) {
+        pitonConfig.pageSlugLocked = 'unlock';
+        $pageSlug.attr('readonly', false);
+        $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
+    }
+});
+
+// Bind Markdown Editor to Textareas
+let getMediaForMDE = function (editor) {
+    // Bind media click once, and load media in modal
+    $('#mediaModal').unbind().on('click', 'img', function () {
+      let imgsrc = $(this).data('source');
+      let imgalt = $(this).data('caption');
+      let output = '![' + imgalt + '](' + imgsrc + ') ';
+      editor.codemirror.replaceSelection(output);
+      editor.codemirror.focus();
+
+      $('#mediaModal').modal('hide');
+    });
+
+    $.ajax({
+      url: pitonConfig.routes.adminGetMedia,
+      method: "GET",
+      success: function (r) {
+        $('#mediaModal').find('.modal-body').html(r.html).end().modal();
+      }
+    });
+  };
+
+  [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
+    let simplemde = new SimpleMDE({
+      element: element,
+      forceSync: true,
+      promptURLs: true,
+      toolbar: [
+        "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
+        "horizontal-rule", "table", "|", "link",
+        {
+          name: "image",
+          action: getMediaForMDE,
+          className: "fa fa-picture-o",
+          title: "Media"
+        },
+        "guide"
+      ]
+    });
+  });
+
 // --------------------------------------------------------
 // Media Management
 // --------------------------------------------------------
@@ -352,8 +419,6 @@ $('.jsMediaCard').on('click', 'button', function (e) {
     });
 });
 
-
-
 // Upload media action
 $('.jsMediaUploadForm').on('submit', function (e) {
     let processingText = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -369,5 +434,110 @@ $(function () {
 })
 $('.popover-dismiss').popover({
     trigger: 'focus',
+});
 
-})
+// --------------------------------------------------------
+// Navigation management
+// --------------------------------------------------------
+  // Listen for form input changes to update button status
+  let navSaveIndFlag = false;
+  const setNavSaveIndicator = () => {
+    if (!navSaveIndFlag) {
+      $('.jsNavigatorForm > button.btn').attr('disabled', false);
+      navSaveIndFlag = true;
+    }
+  };
+  $('.jsNavigatorForm').on('input', function() {
+    setNavSaveIndicator();
+  });
+
+  // Add new page item to nav list
+  let navItemKey = 0;
+  $('.jsNavPageSelector').on('change', function () {
+    if ($(this).val() !== "x") {
+      let key = (navItemKey++) + "n";
+      let $new = $('.jsNewNavItem > .jsNavItem').clone();
+      $new.data('level', 1).data('key', key);
+      $new.addClass('nav-item-new');
+      $new.find('.jsNavPageId').val($(this).val());
+      $new.find('.jsNavItemTitle').html($(this).find('option:selected').text());
+      if ($(this).val() != 0) {
+        $new.find('.jsNavAltTitle').attr('required',false);
+      }
+      $new.find('input[name^=nav]').each(function (i, e) {
+        let name = $(e).attr('name');
+        $(e).attr('name', name.replace(/(.+?\[)(\].+)/, "$1" + key + "$2"));
+      });
+      $('.jsEditNavBlock > .jsNavParent').append($new);
+      setNavSaveIndicator();
+    }
+  });
+
+  // Arrange nav items, as well as delete and disable
+  $('.jsEditNavBlock').on('click', '.jsNavItemCtrl', function () {
+    // Get nav item to move, direction, and zero index length of immediate siblings, and recursive level
+    let $navItem = $(this).closest('.jsNavItem');
+    let control = $(this).data('control');
+    let navLength = $navItem.siblings('.jsNavItem').length;
+    let level = $navItem.data('level');
+
+    if (control === 'up' && $navItem.index() !== 0) {
+      let $target = $navItem.prev('.jsNavItem');
+      $navItem.detach();
+      $target.before($navItem);
+    } else if (control === 'down' && $navItem.index() !== navLength) {
+      let $target = $navItem.next('.jsNavItem');
+      $navItem.detach();
+      $target.after($navItem);
+    } else if (control === 'left' && level > 1) {
+      // If ol is nested child of a jsNavItem, move up one level
+      let $target = $navItem.closest('.jsNavParent').closest('.jsNavItem');
+      $navItem.detach();
+      let parentId = ($target.data('level') === 1) ? "" : $target.data('key');
+      $navItem.removeClass('nav-item-level-' + level).addClass('nav-item-level-' + (level - 1));
+      $navItem.data('level', level - 1)
+      $navItem.find('.jsNavParentId').val(parentId);
+      $target.after($navItem);
+      // Clean up, if there is an empty <ol> left in this li, then remove
+      let $empty = $target.find('.jsNavParent');
+      if ($empty.is(':empty')) {
+        $empty.remove();
+      }
+    } else if (control === 'right' && level <= 3 && $navItem.index() !== 0) {
+      // The first child should not be indented
+      // If the above sibling has a child <ol> then insert into that
+      let $target = $navItem.prev('.jsNavItem');
+      $navItem.find('.jsNavParentId').val($target.data('key'));
+      $navItem.data('level', level + 1);
+      $navItem.removeClass('nav-item-level-' + level).addClass('nav-item-level-' + (level + 1));
+      if ($target.children('ol.jsNavParent').length === 1) {
+        $navItem.detach();
+        $target.children('ol.jsNavParent').append($navItem);
+      } else if ($navItem.index() !== 0) {
+        // Otherwise wrap in <ol> and insert into <li> above
+        $target = $navItem.prev('.jsNavItem');
+        $navItem.detach();
+        $target.append($navItem);
+        $navItem.wrap('<ol class="jsNavParent"></ol>');
+      }
+    } else if (control === 'delete') {
+      // Get current status and reverse
+      if ($navItem.find('.jsNavDeleteFlag').val() === "") {
+        $navItem.find('.jsNavDeleteFlag').val("on");
+        $navItem.addClass('bg-danger text-white');
+      } else {
+        $navItem.find('.jsNavDeleteFlag').val("");
+        $navItem.removeClass('bg-danger text-white');
+      }
+    } else if (control === 'disable') {
+      // Get current status and reverse
+      if ($navItem.children('.jsNavActiveFlag').val() === "Y") {
+        $navItem.children('.jsNavActiveFlag').val("N");
+        $navItem.addClass('bg-warning text-white');
+      } else {
+        $navItem.children('.jsNavActiveFlag').val("Y");
+        $navItem.removeClass('bg-warning text-white');
+      }
+    }
+    setNavSaveIndicator();
+  });

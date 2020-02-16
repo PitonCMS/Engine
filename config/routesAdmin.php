@@ -217,7 +217,7 @@ $app->group('/admin', function () {
             })->add('csrfGuard')->setName('adminSaveUsers');
 
             // Change User Active Status
-            $this->post('/changestatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
+            $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
                 return (new AdminUserController($this))->userStatus($args);
             })->add('csrfGuard')->setName('adminChangeUserStatus');
         });
@@ -226,7 +226,7 @@ $app->group('/admin', function () {
     // End tools
 
     // Help page
-    $this->get('/help[/{file}]', function ($args) {
+    $this->get('/help[/{file}[/{link}]]', function ($args) {
         return (new AdminController($this))->showHelp($args);
     })->setName('adminHelp');
 
@@ -261,12 +261,12 @@ $app->get('/login', function ($args) {
 })->setName('adminLoginForm');
 
 // Accept and validate email, and send login token
-$app->post('/requestlogintoken/', function ($args) {
+$app->post('/requestLoginToken/', function ($args) {
     return (new AdminAccessController($this))->requestLoginToken();
 })->add('csrfGuard')->setName('adminRequestLoginToken');
 
 // Accept and validate login token and set session
-$app->get('/processlogintoken/{token:[a-zA-Z0-9]{64}}', function ($args) {
+$app->get('/processLoginToken/{token:[a-zA-Z0-9]{64}}', function ($args) {
     return (new AdminAccessController($this))->processLoginToken($args);
 })->setName('adminProcessLoginToken');
 

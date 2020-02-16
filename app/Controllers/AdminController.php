@@ -148,7 +148,8 @@ class AdminController extends AdminBaseController
     public function showHelp($args): Response
     {
         $helpFile = $args['file'] ?? null;
-        return $this->render("help/_helpIndex.html", ['file' => $helpFile]);
+        $linkTo = $args['link'] ?? null;
+        return $this->render("help/_helpIndex.html", ['file' => $helpFile, 'link' => $linkTo]);
     }
 
     /**

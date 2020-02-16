@@ -79,7 +79,6 @@ SQL;
         // Recursive depth indicator
         $level =  1;
 
-        // Set top level (parent_id is null) rows first
         foreach ($this->allNavRows as &$row) {
             // Skip if page is not published, or navigation link not active
             if (
@@ -98,7 +97,7 @@ SQL;
                     $row->currentPage = true;
                 }
 
-                // Set page title if placeholder link, and link title
+                // Set nav title, default to page title
                 $row->title = $row->nav_title ?? $row->page_title;
 
                 // Asign to navigator array
@@ -132,9 +131,9 @@ SQL;
         foreach ($this->allNavRows as &$row) {
             // Skip if page is not published, or navigation link not active
             if (
-                ($published && $row->published_date > $this->today) ||
+                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
                 ($active && $row->active === 'N')
-                ) {
+            ) {
                 continue;
             }
 
@@ -146,10 +145,10 @@ SQL;
                     $row->currentPage = true;
                 }
 
-                // Set page title if placeholder link, and link title
+                // Set nav title, default to page title
                 $row->title = $row->nav_title ?? $row->page_title;
 
-                // If parent has child, then assign child to parent
+                // If parent row already has child array, then assign child to parent, othwerwise create childNav array
                 isset($parent->childNav) ?: $parent->childNav = [];
                 $parent->childNav[] = &$row;
 

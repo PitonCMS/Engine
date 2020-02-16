@@ -205,7 +205,7 @@ class Admin extends Base
     public function getNavPages(): ?array
     {
         // Get cached pages if available
-        if ($this->cache['pages']) {
+        if (isset($this->cache['pages'])) {
             return $this->cache['pages'];
         }
 

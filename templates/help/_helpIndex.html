@@ -35,7 +35,8 @@
     </style>
 
     {% if page.file %}
-    <iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}"></iframe>
+    {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
+    <iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}{{ deepLink }}"></iframe>
     {% else %}
     <h3>Select a Help Topic</h3>
     {% endif %}

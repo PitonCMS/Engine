@@ -25,8 +25,9 @@ class AdminPageController extends AdminBaseController
      *
      * Show all pages and page templates
      * @param array $args Route arguments
+     * @return Response
      */
-    public function showPages($args)
+    public function showPages($args): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -59,8 +60,10 @@ class AdminPageController extends AdminBaseController
      * Edit Page
      *
      * Create new page, or edit existing page
+     * @param array $args
+     * @return Response
      */
-    public function editPage($args)
+    public function editPage($args): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -72,8 +75,8 @@ class AdminPageController extends AdminBaseController
         if (isset($args['id']) && is_numeric($args['id'])) {
             // Load existing page from database
             $page = $pageMapper->findById((int) $args['id']);
-            $page->elements = $pageElementMapper->findElementsByPageId((int) $args['id']);
-            $page->settings = $settingMapper->findPageSettings((int) $args['id']);
+            $page->elements = $pageElementMapper->findElementsByPageId($page->id);
+            $page->settings = $settingMapper->findPageSettings($page->id);
         } else {
             // Create new page, and get template from query string
             $definionParam = $this->request->getQueryParam('definition');
@@ -113,8 +116,8 @@ class AdminPageController extends AdminBaseController
     {
         // Save settings and elements
         $pageEntity = $this->savePageHeader();
-        $this->savePageSettings((int) $pageEntity->id);
-        $this->savePageElements((int) $pageEntity->id);
+        $this->savePageSettings($pageEntity->id);
+        $this->savePageElements($pageEntity->id);
 
         // Determine redirect path based on whether this is a collection page
         if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
@@ -140,12 +143,12 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Get page object
-        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
+        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : (int) $this->request->getParsedBodyParam('id');
         $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('page_slug'));
 
         // Get the original page from database, if exists, for update
         if (null !== $pageId) {
-            $page = $pageMapper->findById((int) $pageId);
+            $page = $pageMapper->findById($pageId);
 
             // Ensure we are not futzing with the home page slug
             if ($page->page_slug === 'home' && $newSlug !== 'home') {

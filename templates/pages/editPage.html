@@ -37,18 +37,18 @@
   {% block sidebar %}
   <!-- Published Status Input & Notification -->
   <div class="sidebar-block form-group status">
-    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : age.published_date|date }}" autocomplete="off">
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
-    {% if page.getPublishedStatus() == 'draft' %}
+    {% if page.getPublishedStatus == 'draft' %}
     <div class="text-danger" title="Not published">Status: Draft/Not Published</div>
-    
-    {% elseif page.getPublishedStatus() == 'pending' %}
+
+    {% elseif page.getPublishedStatus == 'pending' %}
     <div class="text-warning">Status: Pending</div>
-    
-    {% elseif page.getPublishedStatus() == 'published' %}
+
+    {% elseif page.getPublishedStatus == 'published' %}
     <div class="text-success">Status: Published</div>
     {% endif %}
-  
+
   </div>
 
   <!-- Control Buttons -->
@@ -92,7 +92,7 @@
         <div class="form-group-wrapper">
           <div class="form-group">
             <label>Title <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+            <input type="text" class="form-control jsPageTitle" name="title" maxlength="60" placeholder="Page title"
               value="{{ page.title }}" required>
           </div>
 
@@ -104,6 +104,23 @@
           </div>
           {% endif %}
 
+          {#
+            When to Set or Update the URL Slug
+
+            The URL slug is created from the page title, but cleaned (replace &, -, and spaces with dashes, and to lower case). Rules:
+            - Absolutely Never change or modify the 'home' page slug. Should always be readonly and locked
+            - Never change a locked page slug. Allow unlock but warn the user
+            - Published pages should always be readonly and locked
+            - Unpublished pages should be unlocked and update page slug based on title
+
+            Set readonly and locked status as Twig variables to keep logic understandable.
+          #}
+          {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
+            {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+          {% else %}
+            {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+          {% endif %}
+          <script> pitonConfig.pageSlugLocked = `{{ lockedStatus }}`</script>
           <div class="form-group">
             <label>Slug <span class="text-danger">*</span></label>
             <div class="input-group">
@@ -111,11 +128,15 @@
                 <span
                   class="input-group-text">{{ page.type == 'collection' and page.json.collectionSlug ? '/' ~ page.json.collectionSlug }}/</span>
               </div>
-              <input type="text" class="form-control" name="page_slug" maxlength="100" placeholder="URL slug"
-                value="{{ page.page_slug }}" required {% if page.page_slug == 'home' %}readonly{% endif %}>
+              <input type="text" class="form-control jsPageSlug" name="page_slug" maxlength="100" placeholder="URL slug"
+                value="{{ page.page_slug }}" required {{ readonlyStatus }}>
+              <div class="input-group-append jsPageSlugFaLockStatus">
+                <span
+                  class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
+              </div>
             </div>
             <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-              changed.</small>
+              changed. Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
           </div>
 
           <div class="form-group">
@@ -163,7 +184,7 @@
               <h3>{{ block.name }} Block</h3>
             </div>
             <div class="block-content jsBlockParent">
-          
+
               {# Get count of elements in block to know if we need to disable the Add Element Button #}
               {% set elementLength = 0 %}
               {% for element in page.elements %}
@@ -189,50 +210,6 @@
     </div>
   </div><!-- End content container -->
   {% endblock content %}
-
-  {% block foot %}
-  <script>
-    let getMediaForMDE = function (editor) {
-      // Bind media click once, and load media in modal
-      $('#mediaModal').unbind().on('click', 'img', function () {
-        let imgsrc = $(this).data('source');
-        let imgalt = $(this).data('caption');
-        let output = '![' + imgalt + '](' + imgsrc + ') ';
-        editor.codemirror.replaceSelection(output);
-        editor.codemirror.focus();
-
-        $('#mediaModal').modal('hide');
-      });
-
-      $.ajax({
-        url: pitonConfig.routes.adminGetMedia,
-        method: "GET",
-        success: function (r) {
-          $('#mediaModal').find('.modal-body').html(r.html).end().modal();
-        }
-      });
-    };
-
-    [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
-      let simplemde = new SimpleMDE({
-        element: element,
-        forceSync: true,
-        promptURLs: true,
-        toolbar: [
-          "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
-          "horizontal-rule", "table", "|", "link",
-          {
-            name: "image",
-            action: getMediaForMDE,
-            className: "fa fa-picture-o",
-            title: "Media"
-          },
-          "guide"
-        ]
-      });
-    });
-  </script>
-  {% endblock %}
 
   {% block sidebarLeft %}
   <nav class="navbar" id="page-edit-nav">

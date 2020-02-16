@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Slim\Http\Response;
+
 /**
  * Piton Navigation Controller
  *
@@ -23,8 +25,9 @@ class AdminNavigationController extends AdminBaseController
      * Show Navigator
      *
      * @param  array $args Route parameter segment 'nav'
+     * @return Response
      */
-    public function showNavigator($args)
+    public function showNavigator($args): Response
     {
         // Get dependencies and initiate $data variable
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
@@ -39,11 +42,11 @@ class AdminNavigationController extends AdminBaseController
         $data['navigators'] = $navSettings->navigators;
 
         // If no navigator was requested as a URL segment, load the first navigator from definitions, or falsy
-        $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? 0;
+        $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? [];
 
         // If a navigator was requested
         if (isset($args['nav'])) {
-            $navigation = $navMapper->findNavHierarchy($args['nav'], null, false, false);
+            $navigation = $navMapper->findNavHierarchy($args['nav'], null, false, false) ?? [];
             $data['navigator'] = $args['nav'];
             $data['navigation'] = $navigation;
         }
@@ -53,8 +56,11 @@ class AdminNavigationController extends AdminBaseController
 
     /**
      * Save Navigation
+     *
+     * @param void
+     * @return Resonse
      */
-    public function saveNavigation()
+    public function saveNavigation(): Response
     {
         // Get dependencies
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
@@ -67,26 +73,28 @@ class AdminNavigationController extends AdminBaseController
         $sort = 0;
         foreach ($post as &$navItem) {
             // Check whether to just delete
-            if (isset($navItem['delete'])) {
+            if (isset($navItem['delete']) && $navItem['delete'] === 'on') {
                 if (is_numeric($navItem['navId'])) {
+                    // This has been saved to the database, so do a physical delete
                     $navigationMapper->deleteByNavId((int) $navItem['navId']);
                 }
+                // Simply skip processing row if not saved to database
                 continue;
             }
 
             $sort++;
             $nav = $navigationMapper->make();
-            $nav->id = $navItem['navId'];
+            $nav->id = (int) $navItem['navId'];
             $nav->navigator = $navigator;
 
             // pageId 0 is for placeholder nav links, which are not joined to page table
-            $nav->page_id = ($navItem['pageId'] === '0') ? null : $navItem['pageId'];
+            $nav->page_id = ($navItem['pageId'] === '0') ? null : (int) $navItem['pageId'];
 
-            // Get parent ID if set
+            // Get parent nav ID if set
             // If parent ID is not numeric, then get parent nav link by post array key, and use that nav ID
             $nav->parent_id = null;
             if (!empty($navItem['parentId'])) {
-                $nav->parent_id = is_numeric($navItem['parentId']) ? (int) $navItem['parentId'] : $post[$navItem['parentId']]['navId'];
+                $nav->parent_id = (int) is_numeric($navItem['parentId']) ? $navItem['parentId'] : $post[$navItem['parentId']]['navId'];
             }
 
             $nav->sort = $sort;
