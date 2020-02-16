@@ -158,146 +158,6 @@
   }
 }
 
-/******************************************/
-/********* Detail Pages for Admin *********/
-/******************************************/
-
-#users1 form,
-#sitemap1 form {
-  display: flex;
-  flex-flow: row nowrap;
-  max-height: calc(100vh - 56px);
-  overflow: scroll;
-
-  aside,
-  main {
-    min-height: calc(100vh - 56px);
-  }
-
-  aside {
-    background-color: $primary-md-grey;
-    min-width: 225px;
-    position: relative;
-
-    .sidebar-inner {
-      position: sticky;
-      top: 0px;
-    }
-
-    a {
-      letter-spacing: 1px;
-      color: $primary-dark;
-
-      &:hover {
-        color: $primary-color !important;
-      }
-    }
-
-    .active {
-      background-color: rgba($primary-color, 0.8) !important;
-      color: $primary-light;
-      @include padding(null 1rem null null);
-      @include border-right-radius(25px);
-      box-shadow: $box-shadow;
-    }
-  }
-
-  main {
-    background: $primary-light-grey;
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .scroll-container {
-    @include margin(0 1em);
-    @include padding(null 1em);
-    background: $primary-light;
-    overflow-y: scroll;
-    position: relative;
-    scroll-behavior: smooth;
-    flex: 1;
-    height: calc(100vh - 75px);
-  }
-
-  .two-col-sidebar {
-    background-color: $primary-md-grey;
-    height: 100%;
-    position: relative;
-
-    .two-col-sidebar-inner {
-      @include padding(1em);
-      position: sticky;
-      top: 0;
-
-      .button-group {
-        display: flex;
-        flex-flow: column nowrap;
-      }
-    }
-  }
-
-  a.small-sidebar-text.active {
-    background-color: rgba($primary-color, 0.5) !important;
-    padding-left: 4em !important;
-    margin-left: -1em !important;
-  }
-
-  .navbar {
-    @include padding(null null null 0);
-  }
-
-  .two-col-sidebar {
-    @include padding(1em);
-  }
-}
-
-// users
-#users1 form {
-  main {
-    @include padding(0);
-    display: flex;
-
-    .form-wrapper {
-      @include padding(1em);
-      flex: 1;
-
-      .user-card {
-        @include margin(null null 1.5em null);
-
-        input {
-          @include padding(1em);
-          border-radius: $border-radius;
-        }
-      }
-    }
-
-    .two-col-sidebar {
-      background-color: $primary-md-grey;
-      height: 100%;
-      position: relative;
-
-      .two-col-sidebar-inner {
-        @include padding(1em 1.5em);
-        position: sticky;
-        top: 0;
-
-        .button-group {
-          display: flex;
-          flex-flow: column nowrap;
-
-          button,
-          a {
-            @include margin(null null 1em null);
-          }
-        }
-      }
-    }
-  }
-}
-
-
-
 /********************************************/
 /******* Page & Collection Edit Pages *******/
 /********************************************/
@@ -315,7 +175,7 @@
     }
 
     .sidebar {
-      min-height: 100%;
+      min-height: calc(100vh - 56px);
       width: 100%;
       background: #efefef;
       position: relative;
@@ -421,12 +281,20 @@
 }
 
 
-/********************************************/
-/******************** Tools *****************/
-/********************************************/
+/*****************************************************************/
+/****** Tools - general, users, contact, *************************/
+/****** social, sitemap, releaseNotes ****************************/
+/*****************************************************************/
 
-#tools {
+#tools,
+#users,
+#sitemap,
+#releaseNotes {
   .toolsEditForm {
+    background: #efefef;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100%;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1em;
@@ -435,65 +303,104 @@
       grid-template-columns: 1fr 3fr;
       gap: 0;
     }
-    @media screen and (min-width: 900px){
+
+    @media screen and (min-width: 900px) {
       grid-template-columns: 1fr 4fr;
     }
   }
 
   .sidebar {
     background: #efefef;
+    position: relative;
+    border-bottom: solid 1px darken(#efefef, 8);
+
+    @media screen and (min-width: 768px) {
+      border: none;
+    }
   }
 
   .sidebar-inner {
     @include padding(1em 1em null 1em);
-
+    position: sticky;
+    top: 60px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     justify-content: center;
     align-items: center;
     text-align: center;
 
-    @media screen and (min-width: 768px){
+    @media screen and (min-width: 768px) {
       @include padding(null null null 0);
       grid-template-columns: 1fr;
       justify-content: flex-start;
       text-align: left;
     }
 
-    .nav-link{
+    .nav-link {
+      color: $primary-dark;
+      letter-spacing: 1px;
       display: grid;
-      grid-template-columns: 2.5rem 1fr;
+      grid-template-columns: 1.5rem 1fr;
       justify-content: center;
       align-items: center;
-      i{
+      @include margin(null null 1em null);
+
+      @media screen and (min-width: 768px) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @include padding(0.25em 0.5em);
+        @include margin(null null null 0);
+      }
+
+      &:hover {
+        color: var(--primary) !important;
+      }
+
+      i {
         justify-self: center;
         align-self: center;
       }
     }
-    .button-group{
-      @include padding(null null .5em null);
+
+    .button-group {
+      @include padding(null null .25em null);
       display: flex;
       justify-content: center;
-     
 
-      @media screen and (min-width: 768px){
+      @media screen and (min-width: 768px) {
         @include padding(1em null null 1em);
         flex-flow: column nowrap;
-      
       }
-      .btn{
-        @include margin(1em 1em 0 .5em);
-        @media screen and (min-width: 768px){
+
+      .btn {
+        @include margin(null null 1em 1em);
+
+        @media screen and (min-width: 768px) {
           @include margin(0 0 1em 0);
-       
         }
-       
       }
     }
   }
 
   .content {
-    @include padding(1em);
+
+    @include padding(null 1em);
+    background: #efefef;
+
+    .grid-wrapper {
+      @include margin(.5em 1em);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+
+    }
+
+    .form-group {
+      background: white;
+      @include padding(1em);
+      border-radius: 7px;
+    }
   }
 
   .active {
@@ -509,4 +416,29 @@
     }
   }
 
+}
+
+/****************************************/
+/********* Release Notes Code Wrap ******/
+/****************************************/
+
+pre {
+  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-size: 95%;
+  line-height: 140%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+}
+
+code {
+  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+  font-size: 95%;
+  line-height: 140%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  background: rgb(250, 248, 230);
 }

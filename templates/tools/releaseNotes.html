@@ -3,19 +3,18 @@
 {% block htmlTitle 'Piton Release Notes' %}
 {% block headText 'Piton Release Notes' %}
 {% block sectionId 'releaseNotes' %}
-{# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
+<form class="toolsEditForm">
+    {% endblock openForm %}
 
-{% endblock openForm %}
+    {% block sidebar %}
+    {% include "@admin/tools/_toolsSidebar.html" %}
+    {% endblock sidebar %}
 
-{% block sidebar %}
-{% include "@admin/tools/_toolsSidebar.html" %}
-{% endblock sidebar %}
-
-{% block content %}
-
+    {% block content %}
     {% for rel in page.releases %}
+   <div class="form-group">
     <h3 id="rel-{{ rel.tag_name }}">{{ rel.name }}</h3>
     <p class="lead">
         Version <a href="{{ rel.html_url }}" target="_blank">{{ rel.tag_name }}</a>
@@ -27,12 +26,14 @@
     <i>To see older release notes, or to contribute to PitonCMS, go to
         <a href="https://github.com/PitonCMS/Engine/releases" target="_blank">GitHub PitonCMS</a>.
     </i>
+   </div>
+       
 
+    {% endblock content %}
 
-{% endblock content %}
+    {% block footJs %}
+    let path = window.location.pathname;
+    let release = path.match(/\d+\.\d+\.\d+$/g);
+    if (release[0]) window.location.hash = "rel-" + release[0];
 
-{% block footJs %}
-let path = window.location.pathname;
-let release = path.match(/\d+\.\d+\.\d+$/g);
-if (release[0]) window.location.hash = "rel-" + release[0];
-{% endblock footJs %}
+    {% endblock footJs %}

@@ -10218,136 +10218,6 @@ body {
   margin-bottom: 0.5em;
 }
 
-/******************************************/
-/********* Detail Pages for Admin *********/
-/******************************************/
-#users1 form,
-#sitemap1 form {
-  display: flex;
-  flex-flow: row nowrap;
-  max-height: calc(100vh - 56px);
-  overflow: scroll;
-}
-#users1 form aside,
-#users1 form main,
-#sitemap1 form aside,
-#sitemap1 form main {
-  min-height: calc(100vh - 56px);
-}
-#users1 form aside,
-#sitemap1 form aside {
-  background-color: #efefef;
-  min-width: 225px;
-  position: relative;
-}
-#users1 form aside .sidebar-inner,
-#sitemap1 form aside .sidebar-inner {
-  position: sticky;
-  top: 0px;
-}
-#users1 form aside a,
-#sitemap1 form aside a {
-  letter-spacing: 1px;
-  color: #333;
-}
-#users1 form aside a:hover,
-#sitemap1 form aside a:hover {
-  color: #336699 !important;
-}
-#users1 form aside .active,
-#sitemap1 form aside .active {
-  background-color: rgba(51, 102, 153, 0.8) !important;
-  color: #ffffff;
-  padding-right: 1rem;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-#users1 form main,
-#sitemap1 form main {
-  background: #f6f6f6;
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-#users1 form .scroll-container,
-#sitemap1 form .scroll-container {
-  margin: 0 1em;
-  padding-right: 1em;
-  padding-left: 1em;
-  background: #ffffff;
-  overflow-y: scroll;
-  position: relative;
-  scroll-behavior: smooth;
-  flex: 1;
-  height: calc(100vh - 75px);
-}
-#users1 form .two-col-sidebar,
-#sitemap1 form .two-col-sidebar {
-  background-color: #efefef;
-  height: 100%;
-  position: relative;
-}
-#users1 form .two-col-sidebar .two-col-sidebar-inner,
-#sitemap1 form .two-col-sidebar .two-col-sidebar-inner {
-  padding: 1em;
-  position: sticky;
-  top: 0;
-}
-#users1 form .two-col-sidebar .two-col-sidebar-inner .button-group,
-#sitemap1 form .two-col-sidebar .two-col-sidebar-inner .button-group {
-  display: flex;
-  flex-flow: column nowrap;
-}
-#users1 form a.small-sidebar-text.active,
-#sitemap1 form a.small-sidebar-text.active {
-  background-color: rgba(51, 102, 153, 0.5) !important;
-  padding-left: 4em !important;
-  margin-left: -1em !important;
-}
-#users1 form .navbar,
-#sitemap1 form .navbar {
-  padding-left: 0;
-}
-#users1 form .two-col-sidebar,
-#sitemap1 form .two-col-sidebar {
-  padding: 1em;
-}
-
-#users1 form main {
-  padding: 0;
-  display: flex;
-}
-#users1 form main .form-wrapper {
-  padding: 1em;
-  flex: 1;
-}
-#users1 form main .form-wrapper .user-card {
-  margin-bottom: 1.5em;
-}
-#users1 form main .form-wrapper .user-card input {
-  padding: 1em;
-  border-radius: 5px;
-}
-#users1 form main .two-col-sidebar {
-  background-color: #efefef;
-  height: 100%;
-  position: relative;
-}
-#users1 form main .two-col-sidebar .two-col-sidebar-inner {
-  padding: 1em 1.5em;
-  position: sticky;
-  top: 0;
-}
-#users1 form main .two-col-sidebar .two-col-sidebar-inner .button-group {
-  display: flex;
-  flex-flow: column nowrap;
-}
-#users1 form main .two-col-sidebar .two-col-sidebar-inner .button-group button,
-#users1 form main .two-col-sidebar .two-col-sidebar-inner .button-group a {
-  margin-bottom: 1em;
-}
-
 /********************************************/
 /******* Page & Collection Edit Pages *******/
 /********************************************/
@@ -10366,7 +10236,7 @@ body {
 }
 #editPage .pageEditForm .sidebar,
 #collectionDetail .pageEditForm .sidebar {
-  min-height: 100%;
+  min-height: calc(100vh - 56px);
   width: 100%;
   background: #efefef;
   position: relative;
@@ -10466,80 +10336,180 @@ body {
   right: 0;
 }
 
-/********************************************/
-/******************** Tools *****************/
-/********************************************/
-#tools .toolsEditForm {
+/*****************************************************************/
+/****** Tools - general, users, contact, *************************/
+/****** social, sitemap, releaseNotes ****************************/
+/*****************************************************************/
+#tools .toolsEditForm,
+#users .toolsEditForm,
+#sitemap .toolsEditForm,
+#releaseNotes .toolsEditForm {
+  background: #efefef;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100%;
   display: grid;
   grid-template-columns: 1fr;
   gap: 1em;
 }
 @media screen and (min-width: 768px) {
-  #tools .toolsEditForm {
+  #tools .toolsEditForm,
+#users .toolsEditForm,
+#sitemap .toolsEditForm,
+#releaseNotes .toolsEditForm {
     grid-template-columns: 1fr 3fr;
     gap: 0;
   }
 }
 @media screen and (min-width: 900px) {
-  #tools .toolsEditForm {
+  #tools .toolsEditForm,
+#users .toolsEditForm,
+#sitemap .toolsEditForm,
+#releaseNotes .toolsEditForm {
     grid-template-columns: 1fr 4fr;
   }
 }
-#tools .sidebar {
+#tools .sidebar,
+#users .sidebar,
+#sitemap .sidebar,
+#releaseNotes .sidebar {
   background: #efefef;
+  position: relative;
+  border-bottom: solid 1px #dbdbdb;
 }
-#tools .sidebar-inner {
+@media screen and (min-width: 768px) {
+  #tools .sidebar,
+#users .sidebar,
+#sitemap .sidebar,
+#releaseNotes .sidebar {
+    border: none;
+  }
+}
+#tools .sidebar-inner,
+#users .sidebar-inner,
+#sitemap .sidebar-inner,
+#releaseNotes .sidebar-inner {
   padding-top: 1em;
   padding-right: 1em;
   padding-left: 1em;
+  position: sticky;
+  top: 60px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   justify-content: center;
   align-items: center;
   text-align: center;
 }
 @media screen and (min-width: 768px) {
-  #tools .sidebar-inner {
+  #tools .sidebar-inner,
+#users .sidebar-inner,
+#sitemap .sidebar-inner,
+#releaseNotes .sidebar-inner {
     padding-left: 0;
     grid-template-columns: 1fr;
     justify-content: flex-start;
     text-align: left;
   }
 }
-#tools .sidebar-inner .nav-link {
+#tools .sidebar-inner .nav-link,
+#users .sidebar-inner .nav-link,
+#sitemap .sidebar-inner .nav-link,
+#releaseNotes .sidebar-inner .nav-link {
+  color: #333;
+  letter-spacing: 1px;
   display: grid;
-  grid-template-columns: 2.5rem 1fr;
+  grid-template-columns: 1.5rem 1fr;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1em;
 }
-#tools .sidebar-inner .nav-link i {
+@media screen and (min-width: 768px) {
+  #tools .sidebar-inner .nav-link,
+#users .sidebar-inner .nav-link,
+#sitemap .sidebar-inner .nav-link,
+#releaseNotes .sidebar-inner .nav-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25em 0.5em;
+    margin-left: 0;
+  }
+}
+#tools .sidebar-inner .nav-link:hover,
+#users .sidebar-inner .nav-link:hover,
+#sitemap .sidebar-inner .nav-link:hover,
+#releaseNotes .sidebar-inner .nav-link:hover {
+  color: var(--primary) !important;
+}
+#tools .sidebar-inner .nav-link i,
+#users .sidebar-inner .nav-link i,
+#sitemap .sidebar-inner .nav-link i,
+#releaseNotes .sidebar-inner .nav-link i {
   justify-self: center;
   align-self: center;
 }
-#tools .sidebar-inner .button-group {
-  padding-bottom: 0.5em;
+#tools .sidebar-inner .button-group,
+#users .sidebar-inner .button-group,
+#sitemap .sidebar-inner .button-group,
+#releaseNotes .sidebar-inner .button-group {
+  padding-bottom: 0.25em;
   display: flex;
   justify-content: center;
 }
 @media screen and (min-width: 768px) {
-  #tools .sidebar-inner .button-group {
+  #tools .sidebar-inner .button-group,
+#users .sidebar-inner .button-group,
+#sitemap .sidebar-inner .button-group,
+#releaseNotes .sidebar-inner .button-group {
     padding-top: 1em;
     padding-left: 1em;
     flex-flow: column nowrap;
   }
 }
-#tools .sidebar-inner .button-group .btn {
-  margin: 1em 1em 0 0.5em;
+#tools .sidebar-inner .button-group .btn,
+#users .sidebar-inner .button-group .btn,
+#sitemap .sidebar-inner .button-group .btn,
+#releaseNotes .sidebar-inner .button-group .btn {
+  margin-bottom: 1em;
+  margin-left: 1em;
 }
 @media screen and (min-width: 768px) {
-  #tools .sidebar-inner .button-group .btn {
+  #tools .sidebar-inner .button-group .btn,
+#users .sidebar-inner .button-group .btn,
+#sitemap .sidebar-inner .button-group .btn,
+#releaseNotes .sidebar-inner .button-group .btn {
     margin: 0 0 1em;
   }
 }
-#tools .content {
-  padding: 1em;
+#tools .content,
+#users .content,
+#sitemap .content,
+#releaseNotes .content {
+  padding-right: 1em;
+  padding-left: 1em;
+  background: #efefef;
 }
-#tools .active {
+#tools .content .grid-wrapper,
+#users .content .grid-wrapper,
+#sitemap .content .grid-wrapper,
+#releaseNotes .content .grid-wrapper {
+  margin: 0.5em 1em;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+}
+#tools .content .form-group,
+#users .content .form-group,
+#sitemap .content .form-group,
+#releaseNotes .content .form-group {
+  background: white;
+  padding: 1em;
+  border-radius: 7px;
+}
+#tools .active,
+#users .active,
+#sitemap .active,
+#releaseNotes .active {
   background-color: rgba(51, 102, 153, 0.8) !important;
   color: #ffffff !important;
   padding-right: 1rem;
@@ -10550,10 +10520,37 @@ body {
   box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
 }
 @media screen and (min-width: 768px) {
-  #tools .active {
+  #tools .active,
+#users .active,
+#sitemap .active,
+#releaseNotes .active {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
+}
+
+/****************************************/
+/********* Release Notes Code Wrap ******/
+/****************************************/
+pre {
+  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-size: 95%;
+  line-height: 140%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+}
+
+code {
+  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+  font-size: 95%;
+  line-height: 140%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  background: #faf8e6;
 }
 
 .modal-body .card-wrapper {
