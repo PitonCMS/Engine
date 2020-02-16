@@ -10559,6 +10559,10 @@ code {
   gap: 1em !important;
 }
 
+.CodeMirror, .CodeMirror-scroll {
+  min-height: 100px !important;
+}
+
 #navigation ol {
   margin: 0;
 }
