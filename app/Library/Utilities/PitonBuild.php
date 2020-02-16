@@ -34,6 +34,7 @@ class PitonBuild
         static::updateDockerYaml($event);
         static::updateApacheHost();
         static::copyConfig();
+        static::updateProjectGitIgnore();
 
         static::printOutput('> To start Docker, from the root of this project first run \'docker-compose build\' to create the image, a one-time step.', 'info');
         static::printOutput('> Then run \'docker-compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
@@ -220,6 +221,23 @@ TEXT;
 TEXT;
 
         file_put_contents('docker/web/apache-host.conf', $content);
+    }
+
+    /**
+     * Update Project Git Ignore
+     *
+     * When creating a project, update the default gitignore file to remove restriction on composer.lock,
+     * so projects will check in that file.
+     * @param void
+     * @return void
+     */
+    protected static function updateProjectGitIgnore()
+    {
+        static::printOutput("...Updating project .gitignore to remove composer.lock exclusion");
+
+        $lockFile = file_get_contents('./.gitignore');
+        $lockFile = str_replace('composer.lock', '', $lockFile);
+        file_put_contents('./.gitignore', $lockFile);
     }
 
     /**
