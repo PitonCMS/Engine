@@ -2,11 +2,11 @@
 
 {% block htmlTitle 'Piton Release Notes' %}
 {% block headText 'Piton Release Notes' %}
-{% block sectionId 'tools' %}
-{% block mainClass 'contentTwoCol' %}
+{% block sectionId 'releaseNotes' %}
+{# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
-<form>
+
 {% endblock openForm %}
 
 {% block sidebar %}
@@ -14,7 +14,7 @@
 {% endblock sidebar %}
 
 {% block content %}
-<div class="grid-wrapper">
+
     {% for rel in page.releases %}
     <h3 id="rel-{{ rel.tag_name }}">{{ rel.name }}</h3>
     <p class="lead">
@@ -27,7 +27,7 @@
     <i>To see older release notes, or to contribute to PitonCMS, go to
         <a href="https://github.com/PitonCMS/Engine/releases" target="_blank">GitHub PitonCMS</a>.
     </i>
-</div>
+
 
 {% endblock content %}
 

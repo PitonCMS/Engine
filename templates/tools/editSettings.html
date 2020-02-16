@@ -4,16 +4,22 @@
 {% block htmlTitle 'Edit Settings' %}
 {% block headText 'Manage Site Settings' %}
 {% block sectionId 'tools' %}
-{% block mainClass 'contentTwoCol' %}
+{# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
-<form action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
+<form class="toolsEditForm" action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="category" value="{{ page.category }}">
   {% endblock openForm %}
 
   {% block sidebar %}
   {% include "@admin/tools/_toolsSidebar.html" %}
+
+  <div class="button-group sidebar-controls span">
+    <!-- Control Buttons -->
+        <a class="btn btn-warning" href="{{ pathFor('adminSettings', {'cat': page.category|default('site') }) }}">Cancel</a>
+        <button class="btn btn-primary" type="submit" name="button" value="save">Save</button>
+  </div>
   {% endblock sidebar %}
 
   {% block content %}
@@ -23,14 +29,5 @@
     {% endfor %}
   </div>
 
-  <div class="two-col-sidebar">
-    <!-- Control Buttons -->
-    <div class="two-col-sidebar-inner">
-      <div class="button-group">
-        <a class="btn btn-warning mb-2"
-          href="{{ pathFor('adminSettings', {'cat': page.category|default('site') }) }}">Cancel</a>
-        <button class="btn btn-primary mb-2" type="submit" name="button" value="save">Save</button>
-      </div>
-    </div>
-  </div>
+
   {% endblock content %}

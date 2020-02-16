@@ -5,9 +5,7 @@
 #mediaAll,
 #mediaUpload,
 #mediaCategories,
-#messages,
-#tools form,
-#users form {
+#messages {
   display: flex;
   flex-flow: row nowrap;
 
@@ -24,7 +22,7 @@
     position: relative;
   }
 
-  .aside-inner {
+  .sidebar-inner {
     position: sticky;
     top: 72px;
 
@@ -98,28 +96,7 @@
 }
 
 // Release Notes
-#releaseNotes {
-  display: flex;
-
-  aside,
-  main {
-    @include padding(1em);
-    height: calc(100vh - 56px);
-  }
-
-  aside {
-    min-width: 150px;
-    background-color: $primary-md-grey;
-  }
-
-  main {
-    @include margin(null 1em);
-
-    .block-content {
-      width: 75ch;
-    }
-  }
-}
+#releaseNotes {}
 
 // Collections
 #collections {
@@ -185,7 +162,8 @@
 /********* Detail Pages for Admin *********/
 /******************************************/
 
-#users form {
+#users1 form,
+#sitemap1 form {
   display: flex;
   flex-flow: row nowrap;
   max-height: calc(100vh - 56px);
@@ -201,7 +179,7 @@
     min-width: 225px;
     position: relative;
 
-    .aside-inner {
+    .sidebar-inner {
       position: sticky;
       top: 0px;
     }
@@ -274,53 +252,8 @@
   }
 }
 
-// Tools & Settings
-#tools form {
-  aside {
-    .active {
-      background-color: rgba($primary-color, 0.8) !important;
-      color: $primary-light !important;
-      @include padding(null 1rem null null);
-      @include border-right-radius(25px);
-      box-shadow: $box-shadow;
-    }
-  }
-
-  main {
-    @include padding(0);
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-
-    .grid-wrapper {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      grid-gap: 1em;
-      @include padding(1em);
-    }
-
-    .two-col-sidebar {
-      background-color: $primary-md-grey;
-      height: 100%;
-      position: relative;
-
-      .two-col-sidebar-inner {
-        @include padding(1em 1.5em);
-        position: sticky;
-        top: 72px;
-
-        .button-group {
-          display: flex;
-          flex-flow: column nowrap;
-        }
-      }
-    }
-  }
-}
-
 // users
-#users form {
+#users1 form {
   main {
     @include padding(0);
     display: flex;
@@ -363,11 +296,14 @@
   }
 }
 
+
+
 /********************************************/
 /******* Page & Collection Edit Pages *******/
 /********************************************/
 #editPage,
 #collectionDetail {
+
   .pageEditForm {
     display: grid;
     grid-template-columns: 1fr;
@@ -379,12 +315,12 @@
     }
 
     .sidebar {
-      height: 100%;
+      min-height: 100%;
       width: 100%;
       background: #efefef;
       position: relative;
 
-      .aside-inner {
+      .sidebar-inner {
         @include padding(1em);
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -415,11 +351,13 @@
       @media screen and (min-width: 768px) {
         @include padding(1em null null);
       }
+
       .block-element-wrapper {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1em;
       }
+
       .nav-tabs {
         background: white;
         position: sticky;
@@ -441,32 +379,38 @@
       @include padding(1em);
       @include margin(1em);
     }
+
     .form-group {
-     
+
       display: grid;
       grid-template-columns: 1fr;
       gap: .5em;
     }
   }
+
   // EditPage Content Tab
   .block-element-wrapper {
-   
+
     display: grid;
     grid-template-columns: 1fr;
     gap: 1em;
-    .element-block{
+
+    .element-block {
       position: relative;
-     
+
     }
+
     .block-title-wrapper {
       background: white;
-      
+
     }
-    .block-content{
-     
-     background: #efefef;
+
+    .block-content {
+
+      background: #efefef;
       @include padding(1em);
       border-radius: 7px;
+
       .jsAddElement {
         position: absolute;
         top: 0;
@@ -474,4 +418,95 @@
       }
     }
   }
-}  
+}
+
+
+/********************************************/
+/******************** Tools *****************/
+/********************************************/
+
+#tools {
+  .toolsEditForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 3fr;
+      gap: 0;
+    }
+    @media screen and (min-width: 900px){
+      grid-template-columns: 1fr 4fr;
+    }
+  }
+
+  .sidebar {
+    background: #efefef;
+  }
+
+  .sidebar-inner {
+    @include padding(1em 1em null 1em);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    @media screen and (min-width: 768px){
+      @include padding(null null null 0);
+      grid-template-columns: 1fr;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .nav-link{
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      justify-content: center;
+      align-items: center;
+      i{
+        justify-self: center;
+        align-self: center;
+      }
+    }
+    .button-group{
+      @include padding(null null .5em null);
+      display: flex;
+      justify-content: center;
+     
+
+      @media screen and (min-width: 768px){
+        @include padding(1em null null 1em);
+        flex-flow: column nowrap;
+      
+      }
+      .btn{
+        @include margin(1em 1em 0 .5em);
+        @media screen and (min-width: 768px){
+          @include margin(0 0 1em 0);
+       
+        }
+       
+      }
+    }
+  }
+
+  .content {
+    @include padding(1em);
+  }
+
+  .active {
+    background-color: rgba($primary-color, 0.8) !important;
+    color: $primary-light !important;
+    @include padding(null 1rem null null);
+    @include border-right-radius(25px);
+    @include border-left-radius(25px);
+    box-shadow: $box-shadow;
+
+    @media screen and (min-width: 768px) {
+      @include border-left-radius(0);
+    }
+  }
+
+}
