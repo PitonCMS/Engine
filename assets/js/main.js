@@ -191,7 +191,7 @@ $('.jsPageTitle').on('change', function () {
     if ($pageSlug.val() === 'home') return;
     if (pitonConfig.pageSlugLocked !== 'lock') {
     let slug = this.value;
-        slug = slug.replace('&', 'and');
+        slug = slug.replace(/&/g, 'and');
         slug = slug.replace(`'`, '');
         slug = slug.toLowerCase();
         slug = slug.replace(/[^a-z0-9]+/gi, '-');
