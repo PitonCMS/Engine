@@ -37,15 +37,15 @@
   {% block sidebar %}
   <!-- Published Status Input & Notification -->
   <div class="sidebar-block form-group status">
-    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : age.published_date|date }}" autocomplete="off">
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
-    {% if page.getPublishedStatus() == 'draft' %}
+    {% if page.getPublishedStatus == 'draft' %}
     <div class="text-danger" title="Not published">Status: Draft/Not Published</div>
 
-    {% elseif page.getPublishedStatus() == 'pending' %}
+    {% elseif page.getPublishedStatus == 'pending' %}
     <div class="text-warning">Status: Pending</div>
 
-    {% elseif page.getPublishedStatus() == 'published' %}
+    {% elseif page.getPublishedStatus == 'published' %}
     <div class="text-success">Status: Published</div>
     {% endif %}
 
