@@ -25,7 +25,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminShowMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminShowMedia') }}">Media</a>
+          <a class="nav-link {{ currentRoute('adminMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminMedia') }}">Media</a>
         </li>
 
         <li class="nav-item">
@@ -39,7 +39,11 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
+          <a class="nav-link" href="{{ pathFor('adminHelp') }}" target="_blank" title="Help">Help</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
         </li>
       </ul>
     </div>

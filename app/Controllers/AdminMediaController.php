@@ -78,7 +78,7 @@ class AdminMediaController extends AdminBaseController
             return $r->write(json_encode(["status" => "success"]));
         }
 
-        return $this->redirect('adminShowMedia');
+        return $this->redirect('adminMedia');
     }
 
     /**
@@ -111,7 +111,7 @@ class AdminMediaController extends AdminBaseController
             return $r->write(json_encode(["status" => "success"]));
         }
 
-        return $this->redirect('adminShowMedia');
+        return $this->redirect('adminMedia');
     }
 
     /**
@@ -174,7 +174,7 @@ HTML;
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
 
-        return $this->redirect('adminShowMedia');
+        return $this->redirect('adminMedia');
     }
 
     /**

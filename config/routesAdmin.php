@@ -112,7 +112,7 @@ $app->group('/admin', function () {
         // Show all media
         $this->get('[/]', function ($args) {
             return (new AdminMediaController($this))->showMedia();
-        })->setName('adminShowMedia');
+        })->setName('adminMedia');
 
         // Show all media in modal asynchronously
         $this->get('/get', function ($args) {
@@ -224,6 +224,16 @@ $app->group('/admin', function () {
         // End user routes
     });
     // End tools
+
+    // Help page
+    $this->get('/help[/{file}]', function ($args) {
+        return (new AdminController($this))->showHelp($args);
+    })->setName('adminHelp');
+
+    // Help get content
+    $this->get('/getHelpContent/{file}', function ($args) {
+        return (new AdminController($this))->getHelpContent($args);
+    })->setName('adminHelpContent');
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;
@@ -246,7 +256,7 @@ $app->group('/admin', function () {
 //
 
 // Login page with form to submit email
-$app->get('/letmein', function ($args) {
+$app->get('/login', function ($args) {
     return (new AdminAccessController($this))->showLoginForm();
 })->setName('adminLoginForm');
 

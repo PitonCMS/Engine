@@ -138,4 +138,28 @@ class AdminController extends AdminBaseController
 
         return $this->redirect('adminSitemap');
     }
+
+    /**
+     * Show Help Page
+     *
+     * @param string $args
+     * @return Response
+     */
+    public function showHelp($args): Response
+    {
+        $helpFile = $args['file'] ?? null;
+        return $this->render("help/_helpIndex.html", ['file' => $helpFile]);
+    }
+
+    /**
+     * Get Help Content
+     *
+     * Gets help content file to load in iframe
+     * @param array $args
+     * @return Response
+     */
+    public function getHelpContent($args): Response
+    {
+        return $this->render("help/{$args['file']}.html");
+    }
 }
