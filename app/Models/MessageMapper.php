@@ -20,7 +20,6 @@ use Piton\ORM\DataMapperAbstract;
 class MessageMapper extends DataMapperAbstract
 {
     protected $table = 'message';
-    protected $domainObjectClass = __NAMESPACE__ . '\Entities\Message';
     protected $modifiableColumns = [
         'name',
         'email',
