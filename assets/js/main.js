@@ -191,7 +191,7 @@ $('.jsPageTitle').on('change', function () {
     if ($pageSlug.val() === 'home') return;
     if (pitonConfig.pageSlugLocked !== 'lock') {
     let slug = this.value;
-        slug = slug.replace('&', 'and');
+        slug = slug.replace(/&/g, 'and');
         slug = slug.replace(`'`, '');
         slug = slug.toLowerCase();
         slug = slug.replace(/[^a-z0-9]+/gi, '-');
@@ -210,6 +210,14 @@ $('.jsPageSlugFaLockStatus').on('click', function () {
         $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
     }
 });
+
+// If on edit existing page, then focus on Content tab
+if (/\/admin\/page\/edit\//.test(window.location.pathname)) {
+    let $pageInputId = $('input[name="id"]');
+    if ($pageInputId.val() !== '') {
+        $('#content-tab').tab('show');
+    }
+}
 
 // Bind Markdown Editor to Textareas
 let getMediaForMDE = function (editor) {
