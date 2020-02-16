@@ -80,7 +80,7 @@ class Toolbox
         // Lower case
         $string = mb_strtolower($string);
 
-        // Finally remove and trailing dashes
+        // Finally remove any trailing dashes
         $string = trim($string, '-');
 
         return $string;

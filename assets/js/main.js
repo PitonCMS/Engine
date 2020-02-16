@@ -185,6 +185,73 @@ $('.jsBlockParent').on('click', '.jsElementType input[type="radio"]', function (
     }
 });
 
+// Clean Page URL slug from title
+let $pageSlug = $('.jsPageSlug');
+$('.jsPageTitle').on('change', function () {
+    if ($pageSlug.val() === 'home') return;
+    if (pitonConfig.pageSlugLocked !== 'lock') {
+    let slug = this.value;
+        slug = slug.replace('&', 'and');
+        slug = slug.replace(`'`, '');
+        slug = slug.toLowerCase();
+        slug = slug.replace(/[^a-z0-9]+/gi, '-');
+        slug = slug.replace(/-+$/gi, '');
+        $pageSlug.val(slug);
+    }
+});
+
+// Unlock Page URL slug on request
+$('.jsPageSlugFaLockStatus').on('click', function () {
+    // Ignore if home page
+    if ($pageSlug.val() === 'home') return;
+    if (pitonConfig.pageSlugLocked === 'lock' && confirmPrompt('Are you sure you want to change the URL Slug? This can impact links and search engines.')) {
+        pitonConfig.pageSlugLocked = 'unlock';
+        $pageSlug.attr('readonly', false);
+        $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
+    }
+});
+
+// Bind Markdown Editor to Textareas
+let getMediaForMDE = function (editor) {
+    // Bind media click once, and load media in modal
+    $('#mediaModal').unbind().on('click', 'img', function () {
+      let imgsrc = $(this).data('source');
+      let imgalt = $(this).data('caption');
+      let output = '![' + imgalt + '](' + imgsrc + ') ';
+      editor.codemirror.replaceSelection(output);
+      editor.codemirror.focus();
+
+      $('#mediaModal').modal('hide');
+    });
+
+    $.ajax({
+      url: pitonConfig.routes.adminGetMedia,
+      method: "GET",
+      success: function (r) {
+        $('#mediaModal').find('.modal-body').html(r.html).end().modal();
+      }
+    });
+  };
+
+  [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
+    let simplemde = new SimpleMDE({
+      element: element,
+      forceSync: true,
+      promptURLs: true,
+      toolbar: [
+        "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
+        "horizontal-rule", "table", "|", "link",
+        {
+          name: "image",
+          action: getMediaForMDE,
+          className: "fa fa-picture-o",
+          title: "Media"
+        },
+        "guide"
+      ]
+    });
+  });
+
 // --------------------------------------------------------
 // Media Management
 // --------------------------------------------------------
