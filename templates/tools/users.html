@@ -4,50 +4,45 @@
 {% block htmlTitle 'Users' %}
 {% block headText %}Manage Users{% endblock %}
 {% block sectionId 'users' %}
-{% block mainClass 'contentTwoCol' %}
 
 {% block openForm %}
-<form class="jsUserForm" action="{{ pathFor('adminSaveUsers') }}" method="post" accept-charset="utf-8">
+<form class="toolsEditForm jsUserForm" action="{{ pathFor('adminSaveUsers') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   {% endblock openForm %}
 
   {% block sidebar %}
   {% include "@admin/tools/_toolsSidebar.html" %}
+
+  <div class="button-group sidebar-controls span">
+  
+      <button type="button" class="btn btn-success jsAddUserRow">Add User</button>
+      <a class="btn btn-warning" href="{{ pathFor('adminUsers') }}">Cancel</a>
+      <button type="submit" name="button" class="btn btn-primary">Save User(s)</button>
+  
+  </div>
+
   {% endblock sidebar %}
 
   {% block content %}
-    {% if page.recommendRecoveryEmail %}
-    <p>You only have one Administrator email registered. You should consider adding a second Administrator recovery email address.</p>
-    {% endif %}
+  {% if page.recommendRecoveryEmail %}
+  <p>You only have one Administrator email registered. You should consider adding a second Administrator recovery email
+    address.</p>
+  {% endif %}
 
   <div class="grid-wrapper">
     {% for user in page.users %}
     {% set arrayKey = uniqueKey() %}
-    <div class="card jsUser">
-        <div class="card-body">
-          <div class="card-text">
-            <input type="hidden" name="user_id[{{ arrayKey }}]" value="{{ user.id }}">
-            <input type="email" class="form-control" name="email[{{ arrayKey }}]" maxlength="255" value="{{ user.email }}" autocomplete="off"
-              {% if user.id %}required{% endif %} {% if user.active == 'N' %}readonly{% endif %}>
-            <input type="checkbox" name="admin[{{ arrayKey }}]" id="admin-{{ arrayKey }}" {{ checked(user.role == 'A') }}>
-            <label for="admin-{{ arrayKey }}">Administrator</label>
-            <button class="btn btn-outline-{% if user.active == 'Y' %}danger{% else %}success{% endif %} ml-2"
-              formaction="{{ pathFor('adminChangeUserStatus', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
-                {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
-            </button>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+    <div class="form-group user-element-block jsUser">
 
-  <div class="two-col-sidebar">
-    <div class="two-col-sidebar-inner">
-      <div class="button-group">
-        <button type="button" class="btn btn-success jsAddUserRow">Add User</button>
-        <a class="btn btn-warning" href="{{ pathFor('adminUsers') }}">Cancel</a>
-        <button type="submit" name="button" class="btn btn-primary">Save Users</button>
-      </div>
+      <input type="hidden" name="user_id[{{ arrayKey }}]" value="{{ user.id }}">
+      <input type="email" class="form-control" name="email[{{ arrayKey }}]" maxlength="255" value="{{ user.email }}" autocomplete="off" {% if user.id %}required{% endif %} {% if user.active == 'N' %}readonly{% endif %}>
+      <input type="checkbox" name="admin[{{ arrayKey }}]" id="admin-{{ arrayKey }}" {{ checked(user.role == 'A') }}>
+
+      <label for="admin-{{ arrayKey }}">Administrator</label>
+      <button class="btn btn-outline-{% if user.active == 'Y' %}danger{% else %}success{% endif %} ml-2" formaction="{{ pathFor('adminChangeUserStatus', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
+        {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
+      </button>
     </div>
+    {% endfor %}
   </div>
   {% endblock content %}
