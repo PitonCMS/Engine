@@ -17,11 +17,10 @@
   {% endif %}
 {% endfor %}
 
-<div class="card jsElementParent" id="page-element-{{ arrayKey }}">
+<div class="jsElementParent" id="page-element-{{ arrayKey }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
-  <div class="card-body">
     <div class="form-group input-group">
       <div class="input-group-prepend">
         <span class="input-group-text">Element Order</span>
@@ -56,22 +55,23 @@
         name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
     </div>
 
-    <div
-      class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
+    <div class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
       <label>Embedded HTML</label>
       <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
     <div
-      class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
+      class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}"> 
       <label>Media</label>
-      <img src="{{ getMediaPath(element.image_path, 'large') }}"
-        class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
-      <div class="input-group">
+      <img src="{{ getMediaPath(element.image_path, 'large') }}" class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
+
+      <div class="input-group" style="padding-top: 1em">
+
         <div class="input-group-prepend">
           <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
         </div>
+
         <input type="text" class="form-control jsMediaInputField" name="element_image_path[{{ arrayKey }}]"
           value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
         <div class="input-group-append">
@@ -108,6 +108,6 @@
       <button class="btn btn-outline-danger btn-sm jsDeleteBlockElement" type="button"
         data-element-id="{{ arrayKey }}" title="Delete element.">Delete Element</button>
     </div>
-  </div>
+  
 </div>
 {% endmacro elementForm %}
