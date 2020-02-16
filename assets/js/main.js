@@ -211,14 +211,6 @@ $('.jsPageSlugFaLockStatus').on('click', function () {
     }
 });
 
-// If on edit existing page, then focus on Content tab
-if (/\/admin\/page\/edit\//.test(window.location.pathname)) {
-    let $pageInputId = $('input[name="id"]');
-    if ($pageInputId.val() !== '') {
-        $('#content-tab').tab('show');
-    }
-}
-
 // Bind Markdown Editor to Textareas
 let getMediaForMDE = function (editor) {
     // Bind media click once, and load media in modal
