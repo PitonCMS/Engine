@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Slim\Http\Response;
+
 /**
  * Piton Message Controller
  *
@@ -24,8 +26,9 @@ class AdminMessageController extends AdminBaseController
      *
      * Displays all messages in descending date order
      * @param array $args
+     * @return Response
      */
-    public function showMessages($args)
+    public function showMessages($args): Response
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $data['messages'] = $messageMapper->findAllInDateOrder();
@@ -38,8 +41,10 @@ class AdminMessageController extends AdminBaseController
      * Toggle Status
      *
      * Sets the read status to the opposite of the current status
+     * @param void
+     * @return Response
      */
-    public function toggleStatus()
+    public function toggleStatus(): Response
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
 
@@ -62,8 +67,10 @@ class AdminMessageController extends AdminBaseController
 
     /**
      * Delete Message
+     * @param void
+     * @return Response
      */
-    public function delete()
+    public function delete(): Response
     {
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
 

@@ -122,17 +122,18 @@ $container['emailHandler'] = function ($c) {
     );
 };
 
-// Data mapper to CRUD the database tables
+// Data mapper ORM to CRUD the database tables
 $container['dataMapper'] = function ($c) {
     return function ($mapper) use ($c) {
-        // Get session user ID
+        // Load session user ID to set update column, and provide PSR3 logger
         $session = $c->sessionHandler;
-        $dmConfig['sessionUserId'] = $session->getData('user_id');
-        $dmConfig['logger'] = $c['logger'];
+        $options['sessionUserId'] = (int) $session->getData('user_id');
+        $options['logger'] = $c['logger'];
+        $options['defaultDomainObjectClass'] = 'Piton\\Models\\Entities\\PitonEntity';
 
         // Return instantiated mapper
         $fqn = 'Piton\\Models\\' . $mapper;
-        return new $fqn($c['database'], $dmConfig);
+        return new $fqn($c['database'], $options);
     };
 };
 

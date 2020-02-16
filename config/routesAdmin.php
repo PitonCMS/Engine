@@ -227,6 +227,7 @@ $app->group('/admin', function () {
 
     // Help page
     $this->get('/help[/{file}[/{link}]]', function ($args) {
+        $args['file'] = $args['file'] ?? 'adminHome';
         return (new AdminController($this))->showHelp($args);
     })->setName('adminHelp');
 
