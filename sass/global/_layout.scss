@@ -175,10 +175,13 @@
     }
 
     .sidebar {
-      min-height: calc(100vh - 56px);
+   
       width: 100%;
       background: #efefef;
       position: relative;
+      @media screen and (min-width: 768px){
+        min-height: calc(100vh - 56px);
+      }
 
       .sidebar-inner {
         @include padding(1em);
@@ -293,7 +296,7 @@
   .toolsEditForm {
     background: #efefef;
     width: 100%;
-    max-width: 1200px;
+    // max-width: 1200px;
     min-height: 100%;
     display: grid;
     grid-template-columns: 1fr;
@@ -316,7 +319,9 @@
 
     @media screen and (min-width: 768px) {
       border: none;
+      min-height: calc(100vh - 56px);
     }
+   
   }
 
   .sidebar-inner {
@@ -384,12 +389,12 @@
   }
 
   .content {
-
+width: 100%;
     @include padding(null 1em);
     background: #efefef;
 
     .grid-wrapper {
-      @include margin(.5em 1em);
+      @include margin(1em);
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1em;
@@ -399,10 +404,10 @@
     .form-group {
       background: white;
       @include padding(1em);
+      @include margin(1em);
       border-radius: 7px;
     }
   }
-
   .active {
     background-color: rgba($primary-color, 0.8) !important;
     color: $primary-light !important;

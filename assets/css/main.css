@@ -10236,10 +10236,15 @@ body {
 }
 #editPage .pageEditForm .sidebar,
 #collectionDetail .pageEditForm .sidebar {
-  min-height: calc(100vh - 56px);
   width: 100%;
   background: #efefef;
   position: relative;
+}
+@media screen and (min-width: 768px) {
+  #editPage .pageEditForm .sidebar,
+#collectionDetail .pageEditForm .sidebar {
+    min-height: calc(100vh - 56px);
+  }
 }
 #editPage .pageEditForm .sidebar .sidebar-inner,
 #collectionDetail .pageEditForm .sidebar .sidebar-inner {
@@ -10346,7 +10351,6 @@ body {
 #releaseNotes .toolsEditForm {
   background: #efefef;
   width: 100%;
-  max-width: 1200px;
   min-height: 100%;
   display: grid;
   grid-template-columns: 1fr;
@@ -10383,6 +10387,7 @@ body {
 #sitemap .sidebar,
 #releaseNotes .sidebar {
     border: none;
+    min-height: calc(100vh - 56px);
   }
 }
 #tools .sidebar-inner,
@@ -10485,6 +10490,7 @@ body {
 #users .content,
 #sitemap .content,
 #releaseNotes .content {
+  width: 100%;
   padding-right: 1em;
   padding-left: 1em;
   background: #efefef;
@@ -10493,7 +10499,7 @@ body {
 #users .content .grid-wrapper,
 #sitemap .content .grid-wrapper,
 #releaseNotes .content .grid-wrapper {
-  margin: 0.5em 1em;
+  margin: 1em;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1em;
@@ -10504,6 +10510,7 @@ body {
 #releaseNotes .content .form-group {
   background: white;
   padding: 1em;
+  margin: 1em;
   border-radius: 7px;
 }
 #tools .active,
