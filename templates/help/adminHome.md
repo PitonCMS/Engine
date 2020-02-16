@@ -3,12 +3,12 @@
 PitonCMS is an easy to use, powerful Content Management System for personal and business websites.
 
 ## Login
-PitonCMS does not store confidential passwords. When your website was setup by your designer, your email address was added as a registered email. To login, simply go to your website and add `/login` to the URL.
+PitonCMS does not store confidential passwords. When your website was setup by your designer, your email address was added as a registered email. To login, simply go to your website and add [/login](/login) to the URL.
 
-Enter your email address and click Login. A link will be sent to your personal email with a one-time use login token that takes you to this administration page. The link expires in 5 minutes, and cannot be reused.
+Enter your email address and click *Request Login*. A link will be sent to your personal email with a one-time use login token that takes you to this administration page. The link expires in 5 minutes, and cannot be reused.
 
 ## Overview
-From this administration console, you can:
+From this PitonCMS administration console, you can:
 
 * **Pages** Pages have unique content as specific URL's, such as About, Contact, Home.
 * **Collections** Collections are groups of Pages, associated by a common theme, such as Recipes, Travel, Blog Posts.
