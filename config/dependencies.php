@@ -184,16 +184,16 @@ $container['mediaHandler'] = function ($c) {
 
 // Media Size File Suffix Reference
 $container['mediaSizes'] = function ($c) {
-    $sizes = [
+    $mediaSizes = [
         'original' => '',
         'xlarge' => '-xlarge',
         'large' => '-large',
         'small' => '-small',
         'thumb' => '-thumb'
     ];
-    return function ($size = 'original') use ($sizes) {
-        if (isset($sizes[$size])) {
-            return $sizes[$size];
+    return function ($size = 'original') use ($mediaSizes) {
+        if (isset($mediaSizes[$size])) {
+            return $mediaSizes[$size];
         }
         return '';
     };

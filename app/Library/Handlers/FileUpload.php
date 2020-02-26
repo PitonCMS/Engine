@@ -71,6 +71,26 @@ class FileUpload
     protected $error = UPLOAD_ERR_OK;
 
     /**
+     * Mime Type
+     * @var string
+     */
+    public $mimeType;
+
+    /**
+     * Image Mime Types
+     * @var array
+     */
+    public $imageMimeTypes = [
+        'image/png',
+        'image/jpeg',
+        'image/gif',
+        'image/bmp',
+        'image/vnd.microsoft.icon',
+        'image/tiff',
+        'image/svg+xml',
+    ];
+
+    /**
      * Constructor
      *
      * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
@@ -97,29 +117,20 @@ class FileUpload
         }
 
         if ($this->uploadedFiles[$fileKey]->getError() === UPLOAD_ERR_OK) {
-            /* What should happen
-            - Check upload key exists
-            - Confirm upload success UPLOAD_ERR_OK
-            - Confirm MIME type
-            - Get extension
-            - Make new file name
-            - Make new directory, check
-            - Move file and rename
-            - Set dims
-            - clear for next upload
-
-            */
             // Get original file name and save extension
             $this->extension = mb_strtolower(pathinfo(
                 $this->uploadedFiles[$fileKey]->getClientFilename(),
                 PATHINFO_EXTENSION
             ));
+            $this->mimeType = $this->uploadedFiles[$fileKey]->getClientMediaType();
 
             $this->makeDirectoryPath();
             $this->uploadedFiles[$fileKey]->moveTo($this->getFilename(true));
 
-            // Set file size attributes
-            list($this->width, $this->height) = getimagesize($this->getFilename(true));
+            // Set file size attributes if an image
+            if ($this->isImage()) {
+                list($this->width, $this->height) = getimagesize($this->getFilename(true));
+            }
 
             return true;
         }
@@ -128,6 +139,18 @@ class FileUpload
         $this->error = $this->uploadedFiles[$fileKey]->getError();
 
         return false;
+    }
+
+    /**
+     * Is Image
+     *
+     * Does the uploaded file have an image mime type?
+     * @param void
+     * @return bool
+     */
+    public function isImage(): bool
+    {
+        return in_array($this->mimeType ?? '', $this->imageMimeTypes);
     }
 
     /**
@@ -202,6 +225,7 @@ class FileUpload
         $this->width = null;
         $this->height = null;
         $this->error = null;
+        $this->mimeType = null;
     }
 
     /**
