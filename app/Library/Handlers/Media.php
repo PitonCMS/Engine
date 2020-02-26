@@ -27,7 +27,7 @@ class Media
      * Public Root Directory
      * @var string
      */
-    protected $publicRoot;
+    protected $publicRoot = ROOT_DIR . 'public';
 
     /**
      * New File Name
@@ -90,14 +90,11 @@ class Media
      * @param  closure $mediaSizes   Function to derive media size suffix
      * @param  string  $tinifyApiKey TinyJPG API Key
      * @return void
+     * @throws Exception
      */
     public function __construct(closure $mediaUri, closure $mediaSizes, string $tinifyApiKey)
     {
-        // Make sure there is a key
-        if (empty($tinifyApiKey)) {
-            throw new Exception('PitonCMS: Media Handler requires a TinyJPG developer API Key');
-        }
-
+        // Make sure there is a valid key
         try {
             \Tinify\setKey($tinifyApiKey);
             \Tinify\validate();
@@ -105,7 +102,6 @@ class Media
             throw new Exception('PitonCMS: Invalid TinyJPG key submitted: ' . $e->getMessage());
         }
 
-        $this->publicRoot = ROOT_DIR . 'public';
         $this->mediaUri = $mediaUri;
         $this->mediaSizes = $mediaSizes;
     }
@@ -115,6 +111,7 @@ class Media
      *
      * @param string $soureMedia Source Filename
      * @return void
+     * @throws Exception
      */
     public function setSource(string $sourceMedia): void
     {
@@ -122,7 +119,7 @@ class Media
         $parts = pathinfo($sourceMedia);
         $this->extension = $parts['extension'];
         $this->filename = $parts['filename'];
-        $absoluteMediaPath = $this->publicRoot . $this->getFileUri() . $sourceMedia;
+        $absoluteMediaPath = $this->getFilePath() . $sourceMedia;
 
         // Ensure source file exists
         if (!file_exists($absoluteMediaPath)) {
@@ -151,8 +148,7 @@ class Media
     {
         $this->validateTinifySource();
 
-        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('xlarge') . '.' . $this->extension;
-        $this->tinifySource->toFile($filename);
+        $this->tinifySource->toFile($this->getAbsoluteFilenameBySize('xlarge'));
     }
 
     /**
@@ -165,8 +161,6 @@ class Media
     public function makeLarge(): void
     {
         $this->validateTinifySource();
-
-        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('large') . '.' . $this->extension;
 
         // If square, keep aspect and constrain to 2000 x 2000
         if ($this->width == $this->height) {
@@ -189,8 +183,7 @@ class Media
             ];
         }
 
-        $resized = $this->tinifySource->resize($resize);
-        $resized->toFile($filename);
+        $this->tinifySource->resize($resize)->toFile($this->getAbsoluteFilenameBySize('large'));
     }
 
     /**
@@ -203,8 +196,6 @@ class Media
     public function makeSmall(): void
     {
         $this->validateTinifySource();
-
-        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('small') . '.' . $this->extension;
 
         // If square, keep aspect and constrain to 2000 x 2000
         if ($this->width == $this->height) {
@@ -227,8 +218,7 @@ class Media
             ];
         }
 
-        $resized = $this->tinifySource->resize($resize);
-        $resized->toFile($filename);
+        $this->tinifySource->resize($resize)->toFile($this->getAbsoluteFilenameBySize('small'));
     }
 
     /**
@@ -242,25 +232,35 @@ class Media
     {
         $this->validateTinifySource();
 
-        $filename = $this->publicRoot . $this->getFileUri() . $this->filename . ($this->mediaSizes)('thumb') . '.' . $this->extension;
-        $resized = $this->tinifySource->resize([
+        $this->tinifySource->resize([
             'method' => 'thumb',
             'width' => ($this->orientation === 'landscape') ? 350 : 265,
             'height' => ($this->orientation === 'landscape') ? 265 : 350
-        ]);
-        $resized->toFile($filename);
+        ])->toFile($this->getAbsoluteFilenameBySize('thumb'));
     }
 
     /**
-     * Get File URI
+     * Get Absolute Filename by Size
      *
-     * Derive file URI based on file name
+     * Returns absolute filename with size and extension
+     * @param string $size
+     * @return string
+     */
+    protected function getAbsoluteFilenameBySize(string $size = ''): string
+    {
+        return $this->getFilePath() . $this->filename . ($this->mediaSizes)($size) . '.' . $this->extension;
+    }
+
+    /**
+     * Get File Path
+     *
+     * Derive file Path from parsed file name
      * @param  void
      * @return string
      */
-    public function getFileUri(): string
+    protected function getFilePath(): string
     {
-        return ($this->mediaUri)($this->filename);
+        return $this->publicRoot . ($this->mediaUri)($this->filename);
     }
 
     /**
