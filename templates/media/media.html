@@ -91,6 +91,7 @@
 {% endblock content %}
 
 {% block foot %}
+<script src="{{ basePath() }}/admin/js/media.js"></script>
 {# This fixes an issue with the BS file upload so that the selected filename shows in the input #}
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 <script>bsCustomFileInput.init()</script>
