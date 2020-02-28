@@ -168,11 +168,16 @@ HTML;
             // Save category assignments
             $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
 
-            // Make optimized copies
-            $this->makeMediaSet($fileUpload->getFilename());
+            // Make optimized images
+            if ($fileUpload->isImage()) {
+                $this->makeMediaSet($fileUpload->getFilename());
+            }
         } else {
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
+
+        // Clear file upload
+        $fileUpload->clear('media-file');
 
         return $this->redirect('adminMedia');
     }
@@ -261,7 +266,7 @@ HTML;
      * @param  string $dir Media file base folder to delete
      * @return void
      */
-    protected function deleteRecursive($dir): void
+    protected function deleteRecursive(string $dir): void
     {
         $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
@@ -283,10 +288,10 @@ HTML;
      * @param  string $filename
      * @return void
      */
-    protected function makeMediaSet($filename): void
+    protected function makeMediaSet(string $filename): void
     {
         // Ensure there is a Tinify API key
-        if (($this->container->settings)['site']['tinifyApiKey']) {
+        if (!empty($this->siteSettings['tinifyApiKey'])) {
             $mediaHandler = $this->container->mediaHandler;
 
             $mediaHandler->setSource($filename);

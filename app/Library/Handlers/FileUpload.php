@@ -16,14 +16,14 @@ use Exception;
 use Closure;
 
 /**
- * Piton Media File Upload Handler
+ * Piton File Upload Handler
  *
- * Manages Media file uploads
+ * Manages file uploads
  */
 class FileUpload
 {
     /**
-     * Uploaded Files Array
+     * Array of Slim\Http\UploadedFile
      * @var array
      */
     protected $uploadedFiles;
@@ -32,7 +32,7 @@ class FileUpload
      * Public Root Directory
      * @var string
      */
-    protected $publicRoot;
+    protected $publicRoot = ROOT_DIR . 'public';
 
     /**
      * New File Name
@@ -71,94 +71,102 @@ class FileUpload
     protected $error = UPLOAD_ERR_OK;
 
     /**
+     * Mime Type
+     * @var string
+     */
+    public $mimeType;
+
+    /**
+     * Image Mime Types
+     * @var array
+     */
+    public $imageMimeTypes = [
+        'image/png',
+        'image/jpeg',
+        'image/gif',
+        'image/bmp',
+        'image/vnd.microsoft.icon',
+        'image/tiff',
+        'image/svg+xml',
+    ];
+
+    /**
      * Constructor
      *
      * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
-     * @param  closure $mediaUriClosure Function to derive media file URI
+     * @param  closure $mediaUriClosure Function to derive file URI
      * @return void
      */
     public function __construct(array $uploadedFiles, closure $mediaUriClosure)
     {
         $this->uploadedFiles = $uploadedFiles;
-        $this->publicRoot = ROOT_DIR . 'public';
         $this->mediaUriClosure = $mediaUriClosure;
     }
 
     /**
-     * Upload Media File
+     * Upload File
      *
-     * Upload file from $_FILES array
+     * Upload file given input name
      * @param  string  $fileKey Array key for file upload
      * @return bool
      */
     public function upload(string $fileKey): bool
     {
         if (!isset($this->uploadedFiles[$fileKey])) {
-            throw new Exception('PitonCMS: File upload key does not exist');
+            throw new Exception('PitonCMS: File upload key does not exist.');
         }
 
-        $file = $this->uploadedFiles[$fileKey];
+        if ($this->uploadedFiles[$fileKey]->getError() === UPLOAD_ERR_OK) {
+            // Get original file name and save extension
+            $this->extension = mb_strtolower(pathinfo(
+                $this->uploadedFiles[$fileKey]->getClientFilename(),
+                PATHINFO_EXTENSION
+            ));
+            $this->mimeType = $this->uploadedFiles[$fileKey]->getClientMediaType();
 
-        if ($file->getError() === UPLOAD_ERR_OK) {
-            // Get file name and extension
-            $uploadFileName = $file->getClientFilename();
-            $this->extension = mb_strtolower(pathinfo($uploadFileName, PATHINFO_EXTENSION));
+            $this->makeDirectoryPath();
+            $this->uploadedFiles[$fileKey]->moveTo($this->getFilename(true));
 
-            // Create new file name and directory and ensure it is unique
-            do {
-                $this->makeFilename();
-            } while (!$this->makeFileDirectory());
-
-            $file->moveTo($this->getAbsoluteFilename());
-
-            // Set file attributes
-            list($this->width, $this->height) = getimagesize($this->getAbsoluteFilename());
-
-            unset($this->uploadedFiles[$fileKey]);
+            // Set file size attributes if an image
+            if ($this->isImage()) {
+                list($this->width, $this->height) = getimagesize($this->getFilename(true));
+            }
 
             return true;
         }
 
         // Otherwise save error code
-        $this->error = $file->getError();
+        $this->error = $this->uploadedFiles[$fileKey]->getError();
 
         return false;
     }
 
     /**
-     * Get File Name
+     * Is Image
+     *
+     * Does the uploaded file have an image mime type?
+     * @param void
+     * @return bool
+     */
+    public function isImage(): bool
+    {
+        return in_array($this->mimeType ?? '', $this->imageMimeTypes);
+    }
+
+    /**
+     * Get New Basename Name
      *
      * Returns filename plus extension
-     * @param  void
+     * @param  bool  $absolute Get absolute path
      * @return string
      */
-    public function getFilename(): string
+    public function getFilename(bool $absolute = false): string
     {
-        return "{$this->filename}.{$this->extension}";
-    }
-
-    /**
-     * Get Absolute Filename
-     *
-     * Returns absolute path to file with extension
-     * @param  void
-     * @return string
-     */
-    public function getAbsoluteFilename(): string
-    {
-        return $this->publicRoot . $this->getFileUri() . $this->getFilename();
-    }
-
-    /**
-     * Get File URI
-     *
-     * Derive file URI based on file name
-     * @param  void
-     * @return string
-     */
-    public function getFileUri(): string
-    {
-        return ($this->mediaUriClosure)($this->filename);
+        if ($absolute) {
+            return $this->publicRoot . ($this->mediaUriClosure)($this->filename) . "{$this->filename}.{$this->extension}";
+        } else {
+            return "{$this->filename}.{$this->extension}";
+        }
     }
 
     /**
@@ -166,42 +174,64 @@ class FileUpload
      *
      * Creates the directory path
      * @param void
-     * @return bool
+     * @return void
      */
-    protected function makeFileDirectory(): bool
+    protected function makeDirectoryPath(): void
     {
-        $filePath = $this->publicRoot . $this->getFileUri();
+        // Create new file name and directory and ensure it is unique
+        $dirDoesNotExist = true;
+        do {
+            $this->generateFilename();
+            $filePath = $this->publicRoot . ($this->mediaUriClosure)($this->filename);
 
-        // Create the path if the directory does not exist
-        if (!is_dir($filePath)) {
-            try {
-                mkdir($filePath, 0775, true);
-                return true;
-            } catch (Exception $e) {
-                throw new Exception('PitonCMS: Failed to create file upload directory. ' . $e->getMessage());
+            // Create the path if the directory does not exist
+            if (!is_dir($filePath)) {
+                try {
+                    mkdir($filePath, 0775, true);
+                    $dirDoesNotExist = false;
+                } catch (Exception $e) {
+                    throw new Exception('PitonCMS: Failed to create file upload directory. ' . $e->getMessage());
+                }
             }
-        }
+        } while ($dirDoesNotExist);
 
-        // The directory already exists
-        return false;
+        return;
     }
 
     /**
-     * Make Filename
+     * Generate Filename
      *
-     * Generates new filename
+     * Generates new random filename and assigns to filename property
      * @param  void
      * @return void
      */
-    protected function makeFilename(): void
+    protected function generateFilename(): void
     {
         $this->filename = bin2hex(random_bytes(6));
     }
 
     /**
+     * Clear Upload
+     *
+     * Resets FileUpload for the next file
+     * @param string $fileKey Array key for file upload to remove
+     * @return void
+     */
+    public function clear(string $fileKey): void
+    {
+        unset($this->uploadedFiles[$fileKey]);
+        $this->filename = null;
+        $this->extension = null;
+        $this->width = null;
+        $this->height = null;
+        $this->error = null;
+        $this->mimeType = null;
+    }
+
+    /**
      * Get Upload Error Message
      *
-     * Converts PHP UPLOAD_ERR_* codes to text
+     * Converts PHP UPLOAD_ERR_* codes to plain text
      * @param  void
      * @return string
      */
