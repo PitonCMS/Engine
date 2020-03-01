@@ -164,11 +164,11 @@ $container['csrfGuard'] = function ($c) {
 
 // File Upload Handler
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaUri']);
+    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPath']);
 };
 
-// Media File Uri
-$container['mediaUri'] = function ($c) {
+// Media File Path Pattern
+$container['mediaPath'] = function ($c) {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = mb_substr($directory, 0, 2);
@@ -179,23 +179,24 @@ $container['mediaUri'] = function ($c) {
 
 // Media Handler
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Media($c['mediaUri'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\Media($c['mediaPath'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
 };
 
-// Media Size File Suffix Reference
+// Media image size list
+$container['mediaSizeList'] = function ($c) {
+    return ['xlarge', 'large', 'small', 'thumb'];
+};
+
+// Media Size File Suffix Validator
 $container['mediaSizes'] = function ($c) {
-    $mediaSizes = [
-        'original' => '',
-        'xlarge' => '-xlarge',
-        'large' => '-large',
-        'small' => '-small',
-        'thumb' => '-thumb'
-    ];
-    return function ($size = 'original') use ($mediaSizes) {
-        if (isset($mediaSizes[$size])) {
-            return $mediaSizes[$size];
+    return function ($filename, $size = '') use ($c) {
+        if (in_array($size, $c->mediaSizeList)) {
+            $parts = pathinfo($filename);
+            return "{$parts['filename']}-$size.{$parts['extension']}";
         }
-        return '';
+
+        // If not a listed size, just return the filename as-is
+        return $filename;
     };
 };
 

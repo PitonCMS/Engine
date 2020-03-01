@@ -93,14 +93,14 @@ class Front extends Base
     {
         // Ensure we have an element type
         if (!isset($element->template) && empty($element->template)) {
-            throw new Exception("Missing page element template");
+            throw new Exception("PitonCMS: Missing page element template");
         }
 
         try {
             $html = $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
         } catch (LoaderError $e) {
-            // If template name is malformed, just return empty string to fail gracefully
-            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            // If template name is malformed, just return null to fail gracefully
+            $this->container->logger->error('Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
             $html = null;
         }
 
