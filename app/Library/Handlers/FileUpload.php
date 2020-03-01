@@ -65,6 +65,12 @@ class FileUpload
     protected $mediaPathClosure;
 
     /**
+     * Media New Filename Generator
+     * @var closure
+     */
+    protected $filenameGenerator;
+
+    /**
      * PHP Upload Error Code
      * @var int
      */
@@ -93,14 +99,16 @@ class FileUpload
     /**
      * Constructor
      *
-     * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
-     * @param  closure $mediaPathClosure Function to derive file URI
+     * @param  array   $uploadedfiles        Array of Slim\Http\UploadedFile objects
+     * @param  closure $mediaPathClosure     Function to derive file URI
+     * @param  closure $filenameGenerator Function to generate new filenames
      * @return void
      */
-    public function __construct(array $uploadedFiles, closure $mediaPathClosure)
+    public function __construct(array $uploadedFiles, closure $mediaPathClosure, closure $filenameGenerator)
     {
         $this->uploadedFiles = $uploadedFiles;
         $this->mediaPathClosure = $mediaPathClosure;
+        $this->filenameGenerator = $filenameGenerator;
     }
 
     /**
@@ -207,7 +215,7 @@ class FileUpload
      */
     protected function generateFilename(): void
     {
-        $this->filename = bin2hex(random_bytes(6));
+        $this->filename = ($this->filenameGenerator)();
     }
 
     /**
