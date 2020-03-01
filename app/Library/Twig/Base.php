@@ -112,7 +112,7 @@ class Base extends AbstractExtension implements GlobalsInterface
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
         // The `pathfor('showPage', {'url': 'home'})` route should be an alias for `pathFor('home')`
-        if ($name === 'showPage' && isset($data['url']) && $data['url'] === 'home') {
+        if ($name === 'showPage' && isset($data['slug1']) && $data['slug1'] === 'home') {
             $name = 'home';
             unset($data['url']);
         }
@@ -168,8 +168,8 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Checks if the supplied string is one of the current URL segments
      * @param string  $segment       URL segment to find
-     * @param string   $valueToReturn Value to return if true
-     * @return string|null                 Returns $valueToReturn or null
+     * @param string  $valueToReturn Value to return if true
+     * @return string|null           Returns $valueToReturn or null
      */
     public function inUrl(string $segmentToTest = null, $valueToReturn = 'active'): ?string
     {
@@ -200,12 +200,12 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * If the supplied value is truthy, 1, or 'Y' returns the checked string
      * @param mixed $value
-     * @return string
+     * @return string|null
      */
-    public function checked($value = 0): string
+    public function checked($value = 0): ?string
     {
         //      ------------------------- Exactly True ------------------------------| Truthy Fallback
-        return ($value === 'Y' || $value === 1 || $value === true || $value === 'on' || $value == 1) ? 'checked' : '';
+        return ($value === 'Y' || $value === 1 || $value === true || $value === 'on' || $value == 1) ? 'checked' : null;
     }
 
     /**
@@ -217,31 +217,28 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function getMediaPath(?string $filename, string $size = 'original'): ?string
     {
-        // Return if there is no filename
+        // Return nothing if no filename was provided
         if (empty($filename)) {
             return null;
         }
 
-        // If this is an external link to a media file, just return
+        // If this is an external link to a file, just return
         if (mb_stripos($filename, 'http') === 0) {
             return $filename;
         }
 
-        // If the original is requested, pass through path and filename
+        // If the original is requested, return path and filename
         if ($size === 'original') {
-            return ($this->container->mediaUri)($filename) . $filename;
+            return ($this->container->mediaPath)($filename) . $filename;
         }
 
-        // Construct requested file URI
-        $pathParts = pathinfo($filename);
-        $baseUri = ($this->container->mediaUri)($filename);
-        $requestedSize = $pathParts['filename'] . ($this->container->mediaSizes)($size) . '.' . $pathParts['extension'];
-
-        if (file_exists(ROOT_DIR . 'public' . $baseUri . $requestedSize)) {
-            return $baseUri . $requestedSize;
-        } else {
-            // Fall back to original file
-            return $baseUri . $filename;
+        // Construct path and requested file size, and if file exists then return
+        $media = ($this->container->mediaPath)($filename) . ($this->container->mediaSizes)($filename, $size);
+        if (file_exists(ROOT_DIR . 'public' . $media)) {
+            return $media;
         }
+
+        // Fall back to original file if other size not found
+        return ($this->container->mediaPath)($filename) . $filename;
     }
 }

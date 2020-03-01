@@ -56,6 +56,10 @@
 
 {% endblock content %}
 
+{% block foot %}
+	<script src="{{ basePath() }}/admin/js/navigation.js"></script>
+{% endblock foot %}
+
 
 {# This is a recursive macro function, which calls itself if the current nav item has a child #}
 {% macro navBlock(nav) %}

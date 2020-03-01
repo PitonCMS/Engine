@@ -93,19 +93,20 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         // Get the media record
-        if (null !== $id = $this->request->getParsedBodyParam('id')) {
-            $mediaFile = $mediaMapper->findById((int) $id);
+        if (null !== $id = (int) $this->request->getParsedBodyParam('id')) {
+            $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {
-                // Delete all files then delete record
-                $rootDir = substr($mediaFile->filename, 0, 2);
-                $path = ROOT_DIR . 'public/media/' . $rootDir . '/' . pathinfo($mediaFile->filename, PATHINFO_FILENAME);
+                // Delete all files and directory, then delete database record
+                $dirToDelete = ($this->container->mediaPath)($mediaFile->filename);
+                $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
+
                 $mediaMapper->delete($mediaFile);
             }
         }
 
-        // Set the response type
+        // Ajax response
         if ($this->request->isXhr()) {
             $r = $this->response->withHeader('Content-Type', 'application/json');
             return $r->write(json_encode(["status" => "success"]));
@@ -169,7 +170,7 @@ HTML;
             $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
 
             // Make optimized images
-            if ($fileUpload->isImage()) {
+            if ($fileUpload->isCompressableImage()) {
                 $this->makeMediaSet($fileUpload->getFilename());
             }
         } else {

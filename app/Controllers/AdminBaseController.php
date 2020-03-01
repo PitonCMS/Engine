@@ -42,13 +42,14 @@ class AdminBaseController extends BaseController
      * @param string        $heading  Heading text
      * @param string|array  $messge   Message or array of messages (Optional)
      * @return void
+     * @throws Exception
      */
     public function setAlert(string $severity, string $heading, $message = null): void
     {
         // Make sure severity level is in our Bootstrap CSS
         $severityList = ['primary','secondary','success','danger','warning','info'];
         if (!in_array($severity, $severityList)) {
-            throw new Exception("Alert severity not found in list.");
+            throw new Exception("PitonCMS: Alert severity not found in list.");
         }
 
         // Alert data is made available in the template, or if $this->redirect() is called

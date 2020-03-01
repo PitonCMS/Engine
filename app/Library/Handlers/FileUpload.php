@@ -62,7 +62,13 @@ class FileUpload
      * Media File URI Closure
      * @var closure
      */
-    protected $mediaUriClosure;
+    protected $mediaPathClosure;
+
+    /**
+     * Media New Filename Generator
+     * @var closure
+     */
+    protected $filenameGenerator;
 
     /**
      * PHP Upload Error Code
@@ -93,14 +99,16 @@ class FileUpload
     /**
      * Constructor
      *
-     * @param  array   $uploadedfiles   Array of Slim\Http\UploadedFile objects
-     * @param  closure $mediaUriClosure Function to derive file URI
+     * @param  array   $uploadedfiles        Array of Slim\Http\UploadedFile objects
+     * @param  closure $mediaPathClosure     Function to derive file URI
+     * @param  closure $filenameGenerator Function to generate new filenames
      * @return void
      */
-    public function __construct(array $uploadedFiles, closure $mediaUriClosure)
+    public function __construct(array $uploadedFiles, closure $mediaPathClosure, closure $filenameGenerator)
     {
         $this->uploadedFiles = $uploadedFiles;
-        $this->mediaUriClosure = $mediaUriClosure;
+        $this->mediaPathClosure = $mediaPathClosure;
+        $this->filenameGenerator = $filenameGenerator;
     }
 
     /**
@@ -127,8 +135,8 @@ class FileUpload
             $this->makeDirectoryPath();
             $this->uploadedFiles[$fileKey]->moveTo($this->getFilename(true));
 
-            // Set file size attributes if an image
-            if ($this->isImage()) {
+            // Set file size attributes if an image type
+            if (in_array($this->mimeType, $this->imageMimeTypes)) {
                 list($this->width, $this->height) = getimagesize($this->getFilename(true));
             }
 
@@ -142,15 +150,15 @@ class FileUpload
     }
 
     /**
-     * Is Image
+     * Is Compressable Image
      *
-     * Does the uploaded file have an image mime type?
+     * Is the uploaded file a JPG or PNG that can be compressed by TinyJPG?
      * @param void
      * @return bool
      */
-    public function isImage(): bool
+    public function isCompressableImage(): bool
     {
-        return in_array($this->mimeType ?? '', $this->imageMimeTypes);
+        return in_array($this->mimeType ?? '', ['image/png', 'image/jpeg']);
     }
 
     /**
@@ -163,7 +171,7 @@ class FileUpload
     public function getFilename(bool $absolute = false): string
     {
         if ($absolute) {
-            return $this->publicRoot . ($this->mediaUriClosure)($this->filename) . "{$this->filename}.{$this->extension}";
+            return $this->publicRoot . ($this->mediaPathClosure)($this->filename) . "{$this->filename}.{$this->extension}";
         } else {
             return "{$this->filename}.{$this->extension}";
         }
@@ -182,7 +190,7 @@ class FileUpload
         $dirDoesNotExist = true;
         do {
             $this->generateFilename();
-            $filePath = $this->publicRoot . ($this->mediaUriClosure)($this->filename);
+            $filePath = $this->publicRoot . ($this->mediaPathClosure)($this->filename);
 
             // Create the path if the directory does not exist
             if (!is_dir($filePath)) {
@@ -207,7 +215,7 @@ class FileUpload
      */
     protected function generateFilename(): void
     {
-        $this->filename = bin2hex(random_bytes(6));
+        $this->filename = ($this->filenameGenerator)();
     }
 
     /**

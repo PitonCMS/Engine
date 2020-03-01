@@ -24,40 +24,28 @@ use Closure;
 class Media
 {
     /**
-     * Public Root Directory
-     * @var string
-     */
-    protected $publicRoot = ROOT_DIR . 'public';
-
-    /**
-     * New File Name
+     * Provided File Name
      * @var string
      */
     protected $filename;
 
     /**
-     * Extension
+     * Absolute File Path
      * @var string
      */
-    protected $extension;
+    protected $mediaPath;
 
     /**
      * Media File Width
      * @var int
      */
-    public $width;
+    protected $width;
 
     /**
      * Media File Height
      * @var int
      */
-    public $height;
-
-    /**
-     * Aspect Ratio
-     * @var float
-     */
-    protected $aspectRatio;
+    protected $height;
 
     /**
      * Orientation
@@ -72,27 +60,27 @@ class Media
     protected $tinifySource;
 
     /**
-     * Media File URI Closure
+     * Media File Path Closure
      * @var closure
      */
-    protected $mediaUri;
+    protected $mediaPathClosure;
 
     /**
      * Media Sizes Closure
      * @var closure
      */
-    protected $mediaSizes;
+    protected $mediaSizesClosure;
 
     /**
      * Constructor
      *
-     * @param  closure $mediaUri     Function to derive media file URI
+     * @param  closure $mediaPath    Function to derive media file Path
      * @param  closure $mediaSizes   Function to derive media size suffix
      * @param  string  $tinifyApiKey TinyJPG API Key
      * @return void
      * @throws Exception
      */
-    public function __construct(closure $mediaUri, closure $mediaSizes, string $tinifyApiKey)
+    public function __construct(closure $mediaPath, closure $mediaSizes, string $tinifyApiKey)
     {
         // Make sure there is a valid key
         try {
@@ -102,39 +90,38 @@ class Media
             throw new Exception('PitonCMS: Invalid TinyJPG key submitted: ' . $e->getMessage());
         }
 
-        $this->mediaUri = $mediaUri;
-        $this->mediaSizes = $mediaSizes;
+        $this->mediaPathClosure = $mediaPath;
+        $this->mediaSizesClosure = $mediaSizes;
     }
 
     /**
      * Set Media Source
      *
-     * @param string $soureMedia Source Filename
+     * @param string $soureMedia Source media filename
      * @return void
      * @throws Exception
      */
     public function setSource(string $sourceMedia): void
     {
-        // Construct media path, ignoring the first two pathinfo return elements
-        $parts = pathinfo($sourceMedia);
-        $this->extension = $parts['extension'];
-        $this->filename = $parts['filename'];
-        $absoluteMediaPath = $this->getFilePath() . $sourceMedia;
+        // Get path to file and keep as property
+        $this->filename = $sourceMedia;
+        $this->mediaPath = ROOT_DIR . 'public' . ($this->mediaPathClosure)($sourceMedia);
+        $absoluteSourceMedia = $this->mediaPath . $sourceMedia;
 
         // Ensure source file exists
-        if (!file_exists($absoluteMediaPath)) {
-            throw new Exception('PitonCMS: Media Handler: Source file not found ' . $absoluteMediaPath);
+        if (!file_exists($absoluteSourceMedia)) {
+            throw new Exception('PitonCMS: Media Handler: Source file not found ' . $absoluteSourceMedia);
         }
 
         // Get dimensions and set orientation
-        list($this->width, $this->height) = getimagesize($absoluteMediaPath);
+        list($this->width, $this->height) = getimagesize($absoluteSourceMedia);
 
         if (isset($this->height) && $this->height > 0) {
-            $this->aspectRatio = round($this->width / $this->height, 2);
-            $this->orientation = ($this->aspectRatio > 1) ? 'landscape' : 'portrait';
+            $aspectRatio = round($this->width / $this->height, 2);
+            $this->orientation = ($aspectRatio > 1) ? 'landscape' : 'portrait';
         }
 
-        $this->tinifySource = \Tinify\fromFile($absoluteMediaPath);
+        $this->tinifySource = \Tinify\fromFile($absoluteSourceMedia);
     }
 
     /**
@@ -248,19 +235,7 @@ class Media
      */
     protected function getAbsoluteFilenameBySize(string $size = ''): string
     {
-        return $this->getFilePath() . $this->filename . ($this->mediaSizes)($size) . '.' . $this->extension;
-    }
-
-    /**
-     * Get File Path
-     *
-     * Derive file Path from parsed file name
-     * @param  void
-     * @return string
-     */
-    protected function getFilePath(): string
-    {
-        return $this->publicRoot . ($this->mediaUri)($this->filename);
+        return $this->mediaPath . ($this->mediaSizesClosure)($this->filename, $size);
     }
 
     /**
