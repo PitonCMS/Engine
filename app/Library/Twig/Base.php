@@ -56,8 +56,8 @@ class Base extends AbstractExtension implements GlobalsInterface
         $this->container = $container;
         $this->uri = $container->request->getUri();
 
-        $this->csrfTokenName = ($container->csrfGuard)->getTokenName();
-        $this->csrfTokenValue = ($container->csrfGuard)->getTokenValue();
+        $this->csrfTokenName = ($container->csrfGuardHandler)->getTokenName();
+        $this->csrfTokenValue = ($container->csrfGuardHandler)->getTokenValue();
     }
 
     /**
@@ -229,16 +229,16 @@ class Base extends AbstractExtension implements GlobalsInterface
 
         // If the original is requested, return path and filename
         if ($size === 'original') {
-            return ($this->container->mediaPath)($filename) . $filename;
+            return ($this->container->mediaPathHandler)($filename) . $filename;
         }
 
         // Construct path and requested file size, and if file exists then return
-        $media = ($this->container->mediaPath)($filename) . ($this->container->mediaSizes)($filename, $size);
+        $media = ($this->container->mediaPathHandler)($filename) . ($this->container->mediaSizes)($filename, $size);
         if (file_exists(ROOT_DIR . 'public' . $media)) {
             return $media;
         }
 
         // Fall back to original file if other size not found
-        return ($this->container->mediaPath)($filename) . $filename;
+        return ($this->container->mediaPathHandler)($filename) . $filename;
     }
 }

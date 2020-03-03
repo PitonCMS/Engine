@@ -86,7 +86,6 @@ class Definition
 
         // If not valid, record error messages and return null
         foreach ($this->validator->getErrors() as $error) {
-            var_dump($error);
             $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
         }
 

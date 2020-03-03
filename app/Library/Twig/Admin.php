@@ -176,7 +176,7 @@ class Admin extends Base
         }
 
         // Get dependencies
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
         return $this->cache['elements'] = $definition->getElements();
     }
 

@@ -31,7 +31,7 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
@@ -69,7 +69,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
@@ -232,7 +232,7 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {

@@ -98,7 +98,7 @@ class AdminMediaController extends AdminBaseController
 
             if (is_string($mediaFile->filename)) {
                 // Delete all files and directory, then delete database record
-                $dirToDelete = ($this->container->mediaPath)($mediaFile->filename);
+                $dirToDelete = ($this->container->mediaPathHandler)($mediaFile->filename);
                 $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
 
