@@ -30,7 +30,7 @@ class PageMapper extends DataMapperAbstract
         'sub_title',
         'meta_description',
         'published_date',
-        'image_path'
+        'media_id'
     ];
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
 

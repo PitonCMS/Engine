@@ -1,7 +1,7 @@
 {#
-  Element Form
+  Edit Element Form
 
-  var arrayKey: Keeps each set of element inputs together on save
+  var arrayKey: Each block element gets a unique arrayKey set to keep those inputs all together on save.
   var elementTypes: List of available elements to select
   var enableInput: Flag to enable optional input, textarea, or collection select for saved elements
 #}
@@ -61,24 +61,21 @@
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
-    <div
-      class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}"> 
+    {#
+      Media Select Option
+
+      Allows user to select a saved media file to link with this block element.
+      This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
+      Selecting an image sets the media table ID in the element_media_id input.
+    #}
+    <div class="form-group jsElementOption jsMediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}">
+      <img src="{{ getMediaPath(element.media.filename, 'large') }}" class="img-fluid {% if element.media.filename %}d-block{% else %}d-none{% endif %}">
+      <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]" value="{{ element.media.id }}">
       <label>Media</label>
-      <img src="{{ getMediaPath(element.image_path, 'large') }}" class="img-fluid {% if element.image_path %}d-block{% else %}d-none{% endif %}">
-
       <div class="input-group" style="padding-top: 1em">
-
-        <div class="input-group-prepend">
-          <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
-        </div>
-
-        <input type="text" class="form-control jsMediaInputField" name="element_image_path[{{ arrayKey }}]"
-          value="{{ getMediaPath(element.image_path) }}" autocomplete="off">
-        <div class="input-group-append">
-            <button class="btn btn-light jsMediaClear" type="button">Clear</button>
-        </div>
+        <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
+        <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
       </div>
-      <small class="form-text text-muted">Select media file to display.</small>
     </div>
 
     <div
@@ -108,6 +105,6 @@
       <button class="btn btn-outline-danger btn-sm jsDeleteBlockElement" type="button"
         data-element-id="{{ arrayKey }}" title="Delete element.">Delete Element</button>
     </div>
-  
+
 </div>
 {% endmacro elementForm %}

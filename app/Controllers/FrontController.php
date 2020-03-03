@@ -32,7 +32,7 @@ class FrontController extends FrontBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $pageElementMedia = ($this->container->dataMapper)('PageElementMediaMapper');
+        $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
         if (isset($args['slug2'])) {
             // This request is for a collection
@@ -48,7 +48,7 @@ class FrontController extends FrontBaseController
         }
 
         // Get elements and assign to blocks
-        $page->blocks = $this->buildElementsByBlock($pageElementMedia->findElementsByPageId((int) $page->id) ?? []);
+        $page->blocks = $this->buildElementsByBlock($pageElement->findElementsByPageId((int) $page->id) ?? []);
 
         // Get page settings
         $page->settings = $this->buildPageSettings($settingMapper->findPageSettings((int) $page->id) ?? []);
