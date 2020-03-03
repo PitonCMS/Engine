@@ -135,4 +135,25 @@ class PageMapper extends DataMapperAbstract
 
         return $this->find();
     }
+
+    /**
+     * Make Default Page Select
+     *
+     * Make select statement with outer join to media
+     * Overrides and sets $this->sql.
+     * @param  bool $foundRows Set to true to get foundRows() after query
+     * @return void
+     */
+    protected function makeSelect(bool $foundRows = false)
+    {
+        $modifier = $foundRows ? 'SQL_CALC_FOUND_ROWS ' : '';
+        $this->sql = <<<SQL
+select $modifier
+    page.*,
+    media.id media_id, media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption
+from page
+left outer join media on media.id = page.media_id
+where 1=1
+SQL;
+    }
 }

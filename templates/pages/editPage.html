@@ -63,7 +63,7 @@
 {% endblock sidebar %}
 
 {% block content %}
-  {# Media Modal #}
+  {# Media Modal Selector #}
   {% include "@admin/pages/_pageEditModal.html" %}
 
   <div class="jsEditPageContainer">
@@ -147,10 +147,21 @@
               results.</small>
           </div>
 
+          {#
+            Featured Media Select Option
+
+            Allows user to select a saved media file to link as featured image for this page.
+            Selecting an image sets the media table ID in the media_id input
+          #}
           {% if not page.json.hideFeaturedImage %}
-          <div class="form-group">
+          <div class="form-group jsMediaInput">
+            <img src="{{ getMediaPath(page.media.filename, 'large') }}" class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
+            <input type="hidden" class="form-control jsMediaInputField" name="media_id" value="{{ page.media_id }}">
             <label>Featured Page Image</label>
-            <input type="text" class="form-control" name="media_id" value="{{ page.media_id }}" placeholder="UNDER CONSTRUCTION">
+            <div class="input-group" style="padding-top: 1em">
+              <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
+              <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
+            </div>
           </div>
           {% endif %}
         </div>

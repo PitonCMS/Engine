@@ -32,7 +32,7 @@ $('.jsLogout').on('click', function () {
 // Clear media input and remove image display
 $('.jsEditPageContainer').on('click', '.jsMediaClear', function () {
     $(this).parents('.jsMediaInput').find('.jsMediaInputField').val('');
-    $(this).parents('.jsMediaInput').find('img').attr('src', '');
+    $(this).parents('.jsMediaInput').find('img').attr('src', '').addClass('d-none');
 });
 
 // Select media for page element
@@ -42,7 +42,7 @@ $('.jsEditPageContainer').on('click', '.jsSelectMediaFile', function () {
     // Set media ID and source into page form inputs when media file is selected
     $('#mediaModal').on('click', 'img', function () {
         $targetMediaInput.find('.jsMediaInputField').val($(this).data('mediaId'));
-        $targetMediaInput.find('img').attr('src', $(this).data('source')).toggleClass('d-none d-block');
+        $targetMediaInput.find('img').attr('src', $(this).data('source')).removeClass('d-none');
         $('#mediaModal').modal('hide');
     });
 
