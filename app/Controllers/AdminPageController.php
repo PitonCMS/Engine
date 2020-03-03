@@ -31,7 +31,7 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
@@ -69,7 +69,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
@@ -165,7 +165,7 @@ class AdminPageController extends AdminBaseController
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->page_slug = $newSlug;
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
-        $page->image_path = $this->request->getParsedBodyParam('image_path');
+        $page->media_id = $this->request->getParsedBodyParam('media_id');
 
         // Process published date
         $publishedDate = $this->request->getParsedBodyParam('published_date');
@@ -232,7 +232,7 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
@@ -250,15 +250,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->collection_slug = $this->request->getParsedBodyParam('element_collection_slug')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
-
-            // If the image path starts with http then save as-is
-            $imagePath = $this->request->getParsedBodyParam('element_image_path')[$key];
-            if (mb_stripos($imagePath, 'http') === 0) {
-                $pageElement->image_path = $imagePath;
-            } else {
-                // Else get the name name to save
-                $pageElement->image_path = pathinfo($imagePath, PATHINFO_BASENAME);
-            }
+            $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
 
             // Get the elementTemplateFile from element JSON file
             if (null === $elementDefinition = $definition->getElement($pageElement->definition)) {

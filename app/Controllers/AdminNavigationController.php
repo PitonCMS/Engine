@@ -31,7 +31,7 @@ class AdminNavigationController extends AdminBaseController
     {
         // Get dependencies and initiate $data variable
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
         $data = [];
 
         // Get navigation definitions

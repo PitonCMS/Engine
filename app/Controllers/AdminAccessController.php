@@ -166,7 +166,7 @@ class AdminAccessController extends AdminBaseController
         $security->endAuthenticatedSession();
 
         // Unset CSRF Token
-        $csrfGuard = $this->container->csrfGuard;
+        $csrfGuard = $this->container->csrfGuardHandler;
         $csrfGuard->unsetToken();
 
         return $this->redirect('home');

@@ -32,9 +32,10 @@ class PageElementMapper extends DataMapperAbstract
         'excerpt',
         'collection_slug',
         'gallery_id',
-        'image_path',
+        'media_id',
         'embedded'
     ];
+    protected $domainObjectClass = __NAMESPACE__ . '\Entities\PageElement';
 
     /**
      * Find Elements by Page ID
@@ -44,8 +45,14 @@ class PageElementMapper extends DataMapperAbstract
      */
     public function findElementsByPageId(int $pageId): ?array
     {
-        $this->makeSelect();
-        $this->sql .= ' and page_element.page_id = ? order by block_key, element_sort';
+        $this->sql = <<<SQL
+select  page_element.*,
+        media.id media_id, media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption
+from page_element
+left outer join media on media.id = page_element.media_id
+where page_element.page_id = ? order by block_key, element_sort
+SQL;
+
         $this->bindValues[] = $pageId;
 
         return $this->find();
@@ -57,7 +64,7 @@ class PageElementMapper extends DataMapperAbstract
      * @param int   $pageId Page ID
      * @return bool
      */
-    public function deleteElementsByPageId($pageId): bool
+    public function deleteElementsByPageId(int $pageId): bool
     {
         $this->sql = "delete from {$this->table} where page_id = ?;";
         $this->bindValues[] = $pageId;

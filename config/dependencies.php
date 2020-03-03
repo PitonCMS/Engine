@@ -143,7 +143,7 @@ $container['accessHandler'] = function ($c) {
 };
 
 /**
- * Route Strategy
+ * Route Strategy Handler
  *
  * PitonCMS route strategy handler for Slim
  * @link https://www.slimframework.com/docs/v3/objects/router.html#route-strategies
@@ -198,7 +198,7 @@ $container['dataMapper'] = function ($c) {
 };
 
 /**
- * Markdown Handler
+ * Markdown Parser
  *
  * Markdown parser
  * @return Piton\Library\Utilities\MDParse
@@ -212,7 +212,7 @@ $container['markdownParser'] = function ($c) {
  *
  * @return Piton\Library\Handlers\Definition
  */
-$container['definition'] = function ($c) {
+$container['jsonDefinitionHandler'] = function ($c) {
     return new Piton\Library\Handlers\Definition($c->jsonValidator);
 };
 
@@ -236,13 +236,23 @@ $container['toolbox'] = function ($c) {
 };
 
 /**
- * CSRF Guard
+ * CSRF Guard Handler
  *
  * Checks submitted CSRF token on POST requests
  * @return Piton\Library\Handlers\CsrfGuard
  */
-$container['csrfGuard'] = function ($c) {
+$container['csrfGuardHandler'] = function ($c) {
     return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler, $c->logger);
+};
+
+/**
+ * Sitemap Handler
+ *
+ * Creates XML sitemap based on saved pages
+ * @return Piton\Library\Handlers\Sitemap
+ */
+$container['sitemapHandler'] = function ($c) {
+    return new Piton\Library\Handlers\Sitemap($c['logger']);
 };
 
 /**
@@ -257,12 +267,12 @@ $container['fileUploadHandler'] = function ($c) {
 };
 
 /**
- * Media File Path Pattern
+ * Media File Path Pattern Handler
  *
  * Define upload media path under public/media/
  * @return string
  */
-$container['mediaPath'] = function ($c) {
+$container['mediaPathHandler'] = function ($c) {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = mb_substr($directory, 0, 2);
@@ -321,14 +331,4 @@ $container['filenameGenerator'] = function ($c) {
     return function () {
         return bin2hex(random_bytes(6));
     };
-};
-
-/**
- * Sitemap Handler
- *
- * Creates XML sitemap based on saved pages
- * @return Piton\Library\Handlers\Sitemap
- */
-$container['sitemapHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Sitemap($c['logger']);
 };

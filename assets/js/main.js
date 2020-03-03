@@ -31,30 +31,22 @@ $('.jsLogout').on('click', function () {
 
 // Clear media input and remove image display
 $('.jsEditPageContainer').on('click', '.jsMediaClear', function () {
-    $(this).parents('.jsMediaInput').find('.jsMediaInputField').val('').trigger("input");
+    $(this).parents('.jsMediaInput').find('.jsMediaInputField').val('');
+    $(this).parents('.jsMediaInput').find('img').attr('src', '').addClass('d-none');
 });
-
-// Listen for media input changes by user to update media img display
-$('.jsEditPageContainer').on('input', '.jsMediaInputField', function() {
-    let src = $(this).val();
-    let $img = $(this).parents('.jsMediaInput').find('img');
-    $img.attr('src', src);
-    if (src.length > 0) {
-        $img.removeClass('d-none').addClass('d-block');
-    } else {
-        $img.removeClass('d-block').addClass('d-none');
-    }
-})
 
 // Select media for page element
 $('.jsEditPageContainer').on('click', '.jsSelectMediaFile', function () {
-    let $input = $(this).parents('.jsMediaInput').find('input.jsMediaInputField');
+    let $targetMediaInput = $(this).parents('.jsMediaInput');
 
+    // Set media ID and source into page form inputs when media file is selected
     $('#mediaModal').on('click', 'img', function () {
-        $input.val($(this).data('source')).trigger("input");
+        $targetMediaInput.find('.jsMediaInputField').val($(this).data('mediaId'));
+        $targetMediaInput.find('img').attr('src', $(this).data('source')).removeClass('d-none');
         $('#mediaModal').modal('hide');
     });
 
+    // Fetch available media into selector modal
     $.ajax({
         url: pitonConfig.routes.adminGetMedia,
         method: "GET",
