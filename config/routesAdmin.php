@@ -45,24 +45,24 @@ $app->group('/admin', function () {
         // Save Page for Update or Insert
         $this->post('/save', function ($args) {
             return (new AdminPageController($this))->savePage();
-        })->add('csrfGuard')->setName('adminSavePage');
+        })->add('csrfGuardHandler')->setName('adminSavePage');
 
         // Delete page
         $this->post('/delete', function ($args) {
             return (new AdminPageController($this))->deletePage($args);
-        })->add('csrfGuard')->setName('adminDeletePage');
+        })->add('csrfGuardHandler')->setName('adminDeletePage');
 
         // Page elements
         $this->group('/element', function () {
             // Fetch element form
             $this->post('/new', function ($args) {
                 return (new AdminPageController($this))->newElementForm();
-            })->add('csrfGuard')->setName('adminNewElement');
+            })->add('csrfGuardHandler')->setName('adminNewElement');
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement();
-            })->add('csrfGuard')->setName('adminDeleteElement');
+            })->add('csrfGuardHandler')->setName('adminDeleteElement');
         });
         // End page elements
     });
@@ -84,12 +84,12 @@ $app->group('/admin', function () {
         // Save Collection page for Update or Insert
         $this->post('/save', function ($args) {
             return (new AdminPageController($this))->savePage();
-        })->add('csrfGuard')->setName('adminSaveCollectionPage');
+        })->add('csrfGuardHandler')->setName('adminSaveCollectionPage');
 
         // Delete collection page
         $this->post('/delete', function ($args) {
             return (new AdminPageController($this))->deletePage($args);
-        })->add('csrfGuard')->setName('adminDeleteCollectionPage');
+        })->add('csrfGuardHandler')->setName('adminDeleteCollectionPage');
     });
     // End collection
 
@@ -103,7 +103,7 @@ $app->group('/admin', function () {
         // Save Navigation
         $this->post('/save', function ($args) {
             return (new AdminNavigationController($this))->saveNavigation();
-        })->add('csrfGuard')->setName('adminSaveNavigation');
+        })->add('csrfGuardHandler')->setName('adminSaveNavigation');
     });
     // End Navigation
 
@@ -122,17 +122,17 @@ $app->group('/admin', function () {
         // File upload
         $this->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadMedia();
-        })->add('csrfGuard')->setName('adminFileUpload');
+        })->add('csrfGuardHandler')->setName('adminFileUpload');
 
         // Media save
         $this->post('/save', function ($args) {
             return (new AdminMediaController($this))->saveMedia();
-        })->add('csrfGuard')->setName('adminSaveMedia');
+        })->add('csrfGuardHandler')->setName('adminSaveMedia');
 
         // Media delete
         $this->post('/delete', function ($args) {
             return (new AdminMediaController($this))->deleteMedia();
-        })->add('csrfGuard')->setName('adminDeleteMedia');
+        })->add('csrfGuardHandler')->setName('adminDeleteMedia');
 
         // Media categories
         $this->group('/category', function () {
@@ -143,12 +143,12 @@ $app->group('/admin', function () {
             // Save media category
             $this->post('/save', function ($args) {
                 return (new AdminMediaController($this))->saveMediaCategories();
-            })->add('csrfGuard')->setName('adminSaveMediaCategories');
+            })->add('csrfGuardHandler')->setName('adminSaveMediaCategories');
 
             // Delete media category
             $this->post('/delete', function ($args) {
                 return (new AdminMediaController($this))->deleteMediaCategory();
-            })->add('csrfGuard')->setName('adminDeleteMediaCategory');
+            })->add('csrfGuardHandler')->setName('adminDeleteMediaCategory');
         });
     });
     // End media
@@ -164,12 +164,12 @@ $app->group('/admin', function () {
         // Save message status changes
         $this->post('/save', function ($args) {
             return (new AdminMessageController($this))->toggleStatus();
-        })->add('csrfGuard')->setName('adminSaveMessage');
+        })->add('csrfGuardHandler')->setName('adminSaveMessage');
 
         // Delete message
         $this->post('/delete', function ($args) {
             return (new AdminMessageController($this))->delete();
-        })->add('csrfGuard')->setName('adminDeleteMessage');
+        })->add('csrfGuardHandler')->setName('adminDeleteMessage');
     });
     // End messages
 
@@ -185,7 +185,7 @@ $app->group('/admin', function () {
             // Save Settings
             $this->post('/save', function ($args) {
                 return (new AdminSettingController($this))->saveSettings();
-            })->add('csrfGuard')->setName('adminSaveSettings');
+            })->add('csrfGuardHandler')->setName('adminSaveSettings');
 
             // Show sitemap submit page
             $this->get('/sitemap', function ($args) {
@@ -195,7 +195,7 @@ $app->group('/admin', function () {
             // Update sitemap
             $this->post('/sitemap/update', function ($args) {
                 return (new AdminController($this))->updateSitemap();
-            })->add('csrfGuard')->setName('adminUpdateSitemap');
+            })->add('csrfGuardHandler')->setName('adminUpdateSitemap');
 
             // GitHub release notes
             $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
@@ -214,12 +214,12 @@ $app->group('/admin', function () {
             // Save Users
             $this->post('/save', function ($args) {
                 return (new AdminUserController($this))->saveUsers();
-            })->add('csrfGuard')->setName('adminSaveUsers');
+            })->add('csrfGuardHandler')->setName('adminSaveUsers');
 
             // Change User Active Status
             $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
                 return (new AdminUserController($this))->userStatus($args);
-            })->add('csrfGuard')->setName('adminChangeUserStatus');
+            })->add('csrfGuardHandler')->setName('adminChangeUserStatus');
         });
         // End user routes
     });
@@ -264,7 +264,7 @@ $app->get('/login', function ($args) {
 // Accept and validate email, and send login token
 $app->post('/requestLoginToken/', function ($args) {
     return (new AdminAccessController($this))->requestLoginToken();
-})->add('csrfGuard')->setName('adminRequestLoginToken');
+})->add('csrfGuardHandler')->setName('adminRequestLoginToken');
 
 // Accept and validate login token and set session
 $app->get('/processLoginToken/{token:[a-zA-Z0-9]{64}}', function ($args) {
