@@ -14,10 +14,10 @@
   accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
-  {# 
+  {#
   <div class="button-group span">
     <a class="btn btn-warning ml-2" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
-  </div> 
+  </div>
   #}
   <div class="page-title span">
     <h3>Gallery Management</h3>
@@ -32,6 +32,10 @@
 
 </form>
 {% endblock content %}
+
+{% block foot %}
+	<script src="{{ basePath() }}/admin/js/media.js"></script>
+{% endblock foot %}
 
 {% macro categoryInput(category) %}
 <div class="form-group jsMediaCategory">

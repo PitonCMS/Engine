@@ -41,6 +41,11 @@
 	{% endif %}
 {% endblock content %}
 
+{% block foot %}
+	<script src="{{ basePath() }}/admin/js/message.js"></script>
+{% endblock foot %}
+
+
 {% macro message(m) %}
 	<div class="jsMessageWrap">
 		<div class="message-wrapper">

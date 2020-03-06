@@ -7,9 +7,10 @@
 
 {% macro mediaCard(media, categories, editable = false) %}
 {% import '@admin/media/_mediaCategoryCheckboxMacro.html' as categoryInput %}
+
 <div class="card jsMediaCard">
   <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}"
-    data-source="{{ getMediaPath(media.filename) }}" data-caption="{{ media.caption }}">
+    data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
   <div class="card-body">
 
     {% if editable %}
@@ -45,7 +46,7 @@
     </form>
     {% else %}
 
-    {# This is for displaying in the media modal when selecting images #}
+    {# This is for displaying in the page media modal when selecting images #}
     <p>{{ media.caption }}</p>
     {% endif %}
 

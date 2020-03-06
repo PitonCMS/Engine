@@ -23,12 +23,6 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
-     * Cache
-     * @var array
-     */
-    protected $cache = [];
-
-    /**
      * Register Global variables
      *
      * @param void
@@ -108,7 +102,7 @@ class Admin extends Base
 
         if (isset($alert[$key])) {
             if ($key === 'message') {
-                return '<ul><li>' . implode('</li><li>', $alert['message']) . '</ul>';
+                return ($alert['message']) ? '<ul>' . implode('</li><li>', $alert['message']) . '</ul>' : null;
             }
 
             return $alert[$key];
@@ -176,7 +170,7 @@ class Admin extends Base
         }
 
         // Get dependencies
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
         return $this->cache['elements'] = $definition->getElements();
     }
 

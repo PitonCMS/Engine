@@ -26,51 +26,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `email_uq` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `page` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `collection_slug` varchar(100) NULL DEFAULT NULL,
-  `page_slug` varchar(100) NOT NULL,
-  `definition` varchar(60) NOT NULL,
-  `template` varchar(60) NOT NULL,
-  `title` varchar(60) NOT NULL,
-  `sub_title` varchar(150) NULL DEFAULT NULL,
-  `meta_description` varchar(320) NULL DEFAULT NULL,
-  `published_date` date NULL DEFAULT NULL,
-  `image_path` varchar(100) NULL DEFAULT NULL,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `page_slug_idx` (`page_slug`),
-  UNIQUE KEY `slug_uq` (`collection_slug`,`page_slug`),
-  KEY `published_date_idx` (`published_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `page_element` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `page_id` int NOT NULL,
-  `block_key` varchar(60) NOT NULL,
-  `definition` varchar(60) NULL DEFAULT NULL,
-  `template` varchar(60) NOT NULL,
-  `element_sort` int NOT NULL DEFAULT 1,
-  `title` varchar(200) NULL DEFAULT NULL,
-  `content_raw` mediumtext NULL DEFAULT NULL,
-  `content` mediumtext NULL DEFAULT NULL,
-  `excerpt` varchar(60) NULL DEFAULT NULL,
-  `collection_slug` varchar(100) NULL DEFAULT NULL,
-  `gallery_id` int NULL DEFAULT NULL,
-  `image_path` varchar(100) NULL DEFAULT NULL,
-  `embedded` varchar(1000) NULL DEFAULT NULL,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `page_id_idx` (`page_id`),
-  CONSTRAINT `page_element_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `navigation` (
   `id` int NOT NULL AUTO_INCREMENT,
   `navigator` varchar(60) NOT NULL DEFAULT 'main',
@@ -141,6 +96,55 @@ CREATE TABLE IF NOT EXISTS `media_category_map` (
   CONSTRAINT `media_category_map_fk2` FOREIGN KEY (`category_id`) REFERENCES `media_category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `page` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `collection_slug` varchar(100) NULL DEFAULT NULL,
+  `page_slug` varchar(100) NOT NULL,
+  `definition` varchar(60) NOT NULL,
+  `template` varchar(60) NOT NULL,
+  `title` varchar(60) NOT NULL,
+  `sub_title` varchar(150) NULL DEFAULT NULL,
+  `meta_description` varchar(320) NULL DEFAULT NULL,
+  `published_date` date NULL DEFAULT NULL,
+  `media_id` int NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `page_slug_idx` (`page_slug`),
+  UNIQUE KEY `slug_uq` (`collection_slug`,`page_slug`),
+  KEY `published_date_idx` (`published_date`),
+  KEY `media_id_idx` (`media_id`),
+  CONSTRAINT `page_fk1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `page_element` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `page_id` int NOT NULL,
+  `block_key` varchar(60) NOT NULL,
+  `definition` varchar(60) NULL DEFAULT NULL,
+  `template` varchar(60) NOT NULL,
+  `element_sort` int NOT NULL DEFAULT 1,
+  `title` varchar(200) NULL DEFAULT NULL,
+  `content_raw` mediumtext NULL DEFAULT NULL,
+  `content` mediumtext NULL DEFAULT NULL,
+  `excerpt` varchar(60) NULL DEFAULT NULL,
+  `collection_slug` varchar(100) NULL DEFAULT NULL,
+  `gallery_id` int NULL DEFAULT NULL,
+  `media_id` int NULL DEFAULT NULL,
+  `embedded` varchar(1000) NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `page_id_idx` (`page_id`),
+  KEY `media_id_idx` (`media_id`),
+  CONSTRAINT `page_element_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `page_element_fk2` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `message` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NULL DEFAULT NULL,
@@ -156,11 +160,11 @@ CREATE TABLE IF NOT EXISTS `message` (
   KEY `message_date_idx` (`created_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `page` (`id`, `collection_slug`, `page_slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `image_path`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page` (`id`, `collection_slug`, `page_slug`, `definition`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `media_id`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,NULL,'home','home.json','home.html','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now());
 
-INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_slug`, `gallery_id`, `image_path`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `definition`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `collection_slug`, `gallery_id`, `media_id`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,1,'aboveTheFoldHero','hero.json','hero.html',1,'Welcome to PitonCMS','A flexible content management system for your personal website.','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,NULL,1,now(),1,now()),
   (2,1,'introBlock','text.json','text.html',1,'Where to Start?','Congratulations! You have successfully installed PitonCMS. \r\n\r\nTo start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  \r\n\r\n','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,NULL,1,now(),1,now());

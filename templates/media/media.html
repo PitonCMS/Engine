@@ -56,12 +56,13 @@
             <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
           </div>
         </form>
+
         {% if not site.settings.tinifyApiKey %}
         <div class="p-2 mb-0 bg-warning">
           <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
-            automatically optimize your media files for the web. To use TinyJPG with PitonCMS, go to
+             optimize your media files for the web. To use TinyJPG with PitonCMS, go to
 
-            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>
+            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
 
             Enter your name and email address to receive an API key. Save this key to <a
               href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
@@ -73,11 +74,8 @@
         {% endif %}
 
         <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
-          gallery.
-          Giving your picture a caption will provide alt text.</p>
-        <p>The upload and conversion process of your images will take some time depending upon your browser
-          and
-          internet speed.</p>
+          gallery. Giving your picture a caption will provide alt text.</p>
+        <p>The upload and conversion process of your images may take extra time depending upon your internet speed.</p>
       </div>
     </div>
   </div>
@@ -93,6 +91,7 @@
 {% endblock content %}
 
 {% block foot %}
+<script src="{{ basePath() }}/admin/js/media.js"></script>
 {# This fixes an issue with the BS file upload so that the selected filename shows in the input #}
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 <script>bsCustomFileInput.init()</script>

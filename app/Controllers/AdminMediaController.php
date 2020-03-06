@@ -93,19 +93,20 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         // Get the media record
-        if (null !== $id = $this->request->getParsedBodyParam('id')) {
-            $mediaFile = $mediaMapper->findById((int) $id);
+        if (null !== $id = (int) $this->request->getParsedBodyParam('id')) {
+            $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {
-                // Delete all files then delete record
-                $rootDir = substr($mediaFile->filename, 0, 2);
-                $path = ROOT_DIR . 'public/media/' . $rootDir . '/' . pathinfo($mediaFile->filename, PATHINFO_FILENAME);
+                // Delete all files and directory, then delete database record
+                $dirToDelete = ($this->container->mediaPathHandler)($mediaFile->filename);
+                $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
+
                 $mediaMapper->delete($mediaFile);
             }
         }
 
-        // Set the response type
+        // Ajax response
         if ($this->request->isXhr()) {
             $r = $this->response->withHeader('Content-Type', 'application/json');
             return $r->write(json_encode(["status" => "success"]));
@@ -168,11 +169,16 @@ HTML;
             // Save category assignments
             $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
 
-            // Make optimized copies
-            $this->makeMediaSet($fileUpload->getFilename());
+            // Make optimized images
+            if ($fileUpload->isCompressableImage()) {
+                $this->makeMediaSet($fileUpload->getFilename());
+            }
         } else {
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
         }
+
+        // Clear file upload
+        $fileUpload->clear('media-file');
 
         return $this->redirect('adminMedia');
     }
@@ -261,7 +267,7 @@ HTML;
      * @param  string $dir Media file base folder to delete
      * @return void
      */
-    protected function deleteRecursive($dir): void
+    protected function deleteRecursive(string $dir): void
     {
         $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
@@ -283,10 +289,10 @@ HTML;
      * @param  string $filename
      * @return void
      */
-    protected function makeMediaSet($filename): void
+    protected function makeMediaSet(string $filename): void
     {
         // Ensure there is a Tinify API key
-        if (($this->container->settings)['site']['tinifyApiKey']) {
+        if (!empty($this->siteSettings['tinifyApiKey'])) {
             $mediaHandler = $this->container->mediaHandler;
 
             $mediaHandler->setSource($filename);

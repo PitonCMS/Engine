@@ -13,10 +13,14 @@ declare(strict_types=1);
 namespace Piton\Models\Entities;
 
 /**
- * Piton Page Element Media Value Object
+ * Piton Page Element Value Object
  */
-class PageElementMedia extends PitonEntity
+class PageElement extends PitonEntity
 {
+    /**
+     * Media Sub-Object
+     * @var PitonEntity
+     */
     public $media;
 
     /**
@@ -24,13 +28,14 @@ class PageElementMedia extends PitonEntity
      */
     public function __construct()
     {
-        if (isset($this->image_path)) {
+        // The class properties are set by PDO::FETCH_CLASS *before* the constructor is called.
+        // This checks if a media file was joined in the query, and then builds a media sub-object.
+        // Media constructor sets additional calculated properties based on the image.
+        if (isset($this->media_filename)) {
             // Create new Media object and assign as sub-object
             $media = new Media();
             $media->id = $this->media_id;
-            // If the media_filename is null, then rely on the image_path.
-            // This may happen when using external links
-            $media->filename = $this->media_filename ?? $this->image_path;
+            $media->filename = $this->media_filename;
             $media->width = $this->media_width;
             $media->height = $this->media_height;
             $media->feature = $this->media_feature;
@@ -39,13 +44,12 @@ class PageElementMedia extends PitonEntity
             $this->media = $media;
         }
 
-        // Remove media properties
-        unset($this->media_id);
+        // Remove media properties from page element object
+        // unset($this->media_id);
         unset($this->media_filename);
         unset($this->media_width);
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
-        unset($this->image_path);
     }
 }

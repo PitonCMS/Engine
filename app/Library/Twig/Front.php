@@ -26,12 +26,6 @@ use Exception;
 class Front extends Base
 {
     /**
-     * Cache Navigations
-     * @var array
-     */
-    protected $navigation;
-
-    /**
      * Register Custom Filters
      *
      * @param void
@@ -93,14 +87,14 @@ class Front extends Base
     {
         // Ensure we have an element type
         if (!isset($element->template) && empty($element->template)) {
-            throw new Exception("Missing page element template");
+            throw new Exception("PitonCMS: Missing page element template");
         }
 
         try {
             $html = $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
         } catch (LoaderError $e) {
-            // If template name is malformed, just return empty string to fail gracefully
-            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            // If template name is malformed, just return null to fail gracefully
+            $this->container->logger->error('Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
             $html = null;
         }
 
@@ -145,8 +139,8 @@ class Front extends Base
     public function getNavigator(string $navigator): ?array
     {
         // Return cached navigator if available
-        if (isset($this->navigation[$navigator])) {
-            return $this->navigation[$navigator];
+        if (isset($this->cache['navigator'][$navigator])) {
+            return $this->cache['navigator'][$navigator];
         }
 
         // Get dependencies
@@ -157,6 +151,6 @@ class Front extends Base
         $url = $this->uri->getPath();
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
 
-        return $this->navigator[$navigator] = $navigationMapper->findNavHierarchy($navigator, $url);
+        return $this->cache['navigator'][$navigator] = $navigationMapper->findNavHierarchy($navigator, $url);
     }
 }

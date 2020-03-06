@@ -31,7 +31,7 @@ class AdminSettingController extends AdminBaseController
     {
         // Get dependencies
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
-        $definition = $this->container->definition;
+        $definition = $this->container->jsonDefinitionHandler;
 
         // Get saved settings from database
         $category = $args['cat'] ?? null;

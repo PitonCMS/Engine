@@ -14,11 +14,11 @@
   {% include "@admin/tools/_toolsSidebar.html" %}
 
   <div class="button-group sidebar-controls span">
-  
+
       <button type="button" class="btn btn-success jsAddUserRow">Add User</button>
       <a class="btn btn-warning" href="{{ pathFor('adminUsers') }}">Cancel</a>
       <button type="submit" name="button" class="btn btn-primary">Save User(s)</button>
-  
+
   </div>
 
   {% endblock sidebar %}
@@ -46,3 +46,7 @@
     {% endfor %}
   </div>
   {% endblock content %}
+
+{% block foot %}
+	<script src="{{ basePath() }}/admin/js/user.js"></script>
+{% endblock foot %}
