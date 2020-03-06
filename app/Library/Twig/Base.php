@@ -291,7 +291,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         return sprintf(
             "<img srcset=\"%s\" sizes=\"%s\" src=\"%s\" alt=\"%s\">",
             implode(', ', $sources),
-            $sizes,
+            $sizes ?? '',
             $imageDir . ($this->container->mediaSizes)($filename, 'xlarge'),
             $altText ?? ''
         );
