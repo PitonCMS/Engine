@@ -23,12 +23,6 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
-     * Cache
-     * @var array
-     */
-    protected $cache = [];
-
-    /**
      * Register Global variables
      *
      * @param void

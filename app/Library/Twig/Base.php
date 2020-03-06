@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
+use FilesystemIterator;
 
 /**
  * Piton Base Twig Extension
@@ -24,6 +25,12 @@ use Twig\TwigFunction;
  */
 class Base extends AbstractExtension implements GlobalsInterface
 {
+    /**
+     * Cache
+     * @var array
+     */
+    protected $cache = [];
+
     /**
      * @var Slim\Http\Uri
      */
@@ -98,6 +105,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('inUrl', [$this, 'inUrl']),
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
+            new TwigFunction('getImageSrcSet', [$this, 'getImageSrcSet']),
         ];
     }
 
@@ -240,5 +248,52 @@ class Base extends AbstractExtension implements GlobalsInterface
 
         // Fall back to original file if other size not found
         return ($this->container->mediaPathHandler)($filename) . $filename;
+    }
+
+    /**
+     * Get Image Source Set
+     *
+     * Creates image element with source set based on available images and media query
+     * @param string $filename Media filename
+     * @param string $sizes    Media query
+     * @param string $altText  Text to use in alt attribute
+     * @return string
+     */
+    public function getImageSrcSet(string $filename = null, string $sizes = null, string $altText = null): ?string
+    {
+        // If filename is empty, just return
+        if (empty($filename)) {
+            return null;
+        }
+
+        // Get image directory and scan for all sizes
+        $imageDir = ($this->container->mediaPathHandler)($filename);
+        if (!is_dir(ROOT_DIR . 'public' . $imageDir)) {
+            // Something wrong here
+            $this->container->logger->warning("Twig Base getImageSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
+            return null;
+        }
+        $files = new FilesystemIterator(ROOT_DIR . 'public' . $imageDir);
+
+        // Create array of available images with actual sizes
+        $sources = [];
+        foreach ($files as $file) {
+            // Include only image variants, not the original
+            if ($filename !== $file->getFilename()) {
+                // Only include in source set if width is non-zero (possible error)
+                $info = getimagesize($file->getPathname());
+                if (is_int($info[0]) && $info[0] > 0) {
+                    $sources[] = "$imageDir{$file->getFilename()} {$info[0]}w";
+                }
+            }
+        }
+
+        return sprintf(
+            "<img srcset=\"%s\" sizes=\"%s\" src=\"%s\" alt=\"%s\">",
+            implode(', ', $sources),
+            $sizes,
+            $imageDir . ($this->container->mediaSizes)($filename, 'xlarge'),
+            $altText ?? ''
+        );
     }
 }
