@@ -1,0 +1,54 @@
+ #navigationPage {
+  .navigator-title {
+   font-size: 1.4rem;
+  }
+  .nav-parent {
+   width: 100%;
+   @include padding(null null null 0);
+   @include margin(0 null null null);
+   .nav-parent-title{
+    @include padding(.5em null null null);
+   }
+  
+
+   .nav-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1em;
+
+    .form-group {
+     @include margin(0);
+    }
+   }
+  }
+
+  .nav-child {
+   grid-column: 1 / -1;
+  }
+
+  .nav-controls {
+   display: flex;
+   flex-flow: row nowrap;
+   justify-content: center;
+   align-items: center;
+   font-size: 1rem;
+   .divider {
+    @include margin(null .25em null null);
+    color: $primary-color;
+   }
+  }
+
+  .fas {
+   @include padding(.25em .5em);
+   @include margin(null .25em null null);
+   color: $primary-light;
+   border-radius: $border-radius;
+   background: $primary-color;
+
+   &:hover {
+    cursor: pointer;
+    color: $primary-dark-grey;
+   }
+  }
+
+ }

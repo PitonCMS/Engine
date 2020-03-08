@@ -3,7 +3,7 @@
 
 {% block htmlTitle 'Navigation' %}
 {% block headText 'Manage Navigation' %}
-{% block sectionId 'summaryPage' %}
+{% block sectionId 'navigationPage' %}
 
 {% block sidebar %}
 	{# Get list of defined navigagors from navigation.json #}
@@ -23,15 +23,17 @@
 
 	<h3>Navigation</h3>
 	{% if page.navigator %}
-		<strong>{{ page.navigator|capitalize }}
-			Navigator</strong>
+		
 
 		<form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="navigator" value="{{ page.navigator }}">
-			<a class="btn btn-warning" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
-			<button type="submit" class="btn btn-primary" disabled>Save Navigation</button>
 
+
+			<a class="btn btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+			<button type="submit" class="btn btn-primary btn-sm" disabled>Save Navigation</button>
+<hr>
+<div class="navigator-title">{{ page.navigator|capitalize }} Navigator</div>
 			<div class="jsEditNavBlock">
 				<ol class="jsNavParent nav-parent">
 					{{ navSet.navBlock(page.navigation) }}
@@ -70,24 +72,28 @@
 
 	{% for n in nav %}
 		<li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-			<div class="jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
+			<div class="span jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
 			<input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
 			<input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
 			<input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
 			<input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
+			
 			<input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
-			<input type="text" class="jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %} required {% endif %}>
+			<div class="form-group">
+				<input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
 
+			</div>
+			
 			<div class="nav-controls">
-				<i class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i>
-				|
-				<i class="fa fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></i>
-				<i class="fa fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></i>
-				|
-				<i class="fa fa-arrow-left jsNavItemCtrl" data-control="left" title="Move Left"></i>
-				<i class="fa fa-arrow-right jsNavItemCtrl" data-control="right" title="Move Right"></i>
-				|
-				<i class="fa fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
+				<i class="fas fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i>
+				<span class="divider">|</span>
+				<i class="fas fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></i>
+				<i class="fas fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></i>
+				<span class="divider">|</span>
+				<i class="fas fa-arrow-left jsNavItemCtrl" data-control="left" title="Move Left"></i>
+				<i class="fas fa-arrow-right jsNavItemCtrl" data-control="right" title="Move Right"></i>
+				<span class="divider">|</span>
+				<i class="fas fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
 			</div>
 
 			{% if n.childNav %}

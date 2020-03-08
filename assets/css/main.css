@@ -10259,4 +10259,49 @@ div[class*=user-element] {
   padding-top: 1em;
 }
 
+#navigationPage .navigator-title {
+  font-size: 1.4rem;
+}
+#navigationPage .nav-parent {
+  width: 100%;
+  padding-left: 0;
+  margin-top: 0;
+}
+#navigationPage .nav-parent .nav-parent-title {
+  padding-top: 0.5em;
+}
+#navigationPage .nav-parent .nav-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 1em;
+}
+#navigationPage .nav-parent .nav-item .form-group {
+  margin: 0;
+}
+#navigationPage .nav-child {
+  grid-column: 1/-1;
+}
+#navigationPage .nav-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+#navigationPage .nav-controls .divider {
+  margin-right: 0.25em;
+  color: #336699;
+}
+#navigationPage .fas {
+  padding: 0.25em 0.5em;
+  margin-right: 0.25em;
+  color: #ffffff;
+  border-radius: 5px;
+  background: #336699;
+}
+#navigationPage .fas:hover {
+  cursor: pointer;
+  color: #afafaf;
+}
+
 /*# sourceMappingURL=main.css.map */
