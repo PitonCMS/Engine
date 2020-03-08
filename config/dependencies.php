@@ -271,11 +271,11 @@ $container['sitemapHandler'] = function ($c) {
  * File Upload Handler
  *
  * Manages file uploads.
- * Renames uploaded files and places in the directory defined in the mediaPath handler
+ * Renames uploaded files and places in the directory defined in the mediaPathHandler
  * @return Piton\Library\Handlers\FileUpload
  */
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPath'], $c['filenameGenerator']);
+    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPathHandler'], $c['filenameGenerator']);
 };
 
 /**
@@ -300,7 +300,7 @@ $container['mediaPathHandler'] = function ($c) {
  * @return Piton\Library\Handlers\Media
  */
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Media($c['mediaPath'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\Media($c['mediaPathHandler'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
 };
 
 /**
