@@ -253,13 +253,11 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Media Source Set
      *
-     * Creates image element with source set based on available images and media query
+     * Creates list of available image files with width in source set format
      * @param string $filename Media filename
-     * @param string $sizes    Media query
-     * @param string $altText  Text to use in alt attribute
      * @return string
      */
-    public function getMediaSrcSet(string $filename = null, string $sizes = null, string $altText = null): ?string
+    public function getMediaSrcSet(string $filename = null): ?string
     {
         // If filename is empty, just return
         if (empty($filename)) {
@@ -275,11 +273,11 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
         $files = new FilesystemIterator(ROOT_DIR . 'public' . $imageDir);
 
-        // Create array of available images with actual sizes, sorted by size ascending
+        // Create array of available images with actual sizes, sorted by ascending size
         $sources = [];
         foreach ($files as $file) {
-            // Include only image variants, not the original
-            if ($filename !== $file->getFilename()) {
+            // Include only image variants, not the original or thumb. Thumbnails will be loaded explicity when needed
+            if ($filename !== $file->getFilename() && false === mb_strpos($file->getFilename(), 'thumb')) {
                 // Only include in source set if width is non-zero (possible error)
                 $info = getimagesize($file->getPathname());
                 if (is_int($info[0]) && $info[0] > 0) {
