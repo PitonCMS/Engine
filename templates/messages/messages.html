@@ -60,7 +60,8 @@
 			<a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
 			{{ m.createdDate|date('d F Y  h:i a') }}
 		</p>
-		{{ m.message|nl2br }}
+		<hr>
+		<p>{{ m.message|nl2br }}</p>
 	</div>
 	<div class="button-wrapper">
 		<form class="" action="{{ pathFor('adminSaveMessage') }}" method="post" accept-charset="utf-8">

@@ -1,0 +1,16 @@
+.jsMessageWrap {
+ @include margin(1em null);
+ @include padding(1em);
+ display: flex;
+ flex-flow: column nowrap;
+ justify-content: space-between;
+ background: $primary-light-grey;
+ border-radius: $border-radius;
+ box-shadow: $box-shadow;
+ .message-wrapper{
+  br {
+   display: block;
+   @include margin(.25em null);
+}
+ }
+}
