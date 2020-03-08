@@ -10154,13 +10154,15 @@ section .block-title-wrapper,
 
 /* Grid Container */
 .grid-wrapper {
+  padding-top: 1em;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1em;
 }
 
 .content {
   padding: 1em;
+  background: #f6f6f6;
 }
 .content .card {
   box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
@@ -10169,6 +10171,10 @@ section .block-title-wrapper,
 
 /******* Components Included in All Pages *******/
 /******* Page Level Styles *******/
+#editPage .card,
+#collectionDetail .card {
+  background: #ffffff;
+}
 #editPage .block-title-wrapper:nth-child(1),
 #collectionDetail .block-title-wrapper:nth-child(1) {
   margin-top: 1em;
@@ -10208,6 +10214,10 @@ section .block-title-wrapper,
   background: #ebebeb;
   border-radius: 5px;
 }
+#editPage .block-element-wrapper,
+#collectionDetail .block-element-wrapper {
+  margin-top: 1em;
+}
 
 #pageContent .block-title-wrapper:nth-child(1) {
   margin-top: 0;
@@ -10216,6 +10226,7 @@ section .block-title-wrapper,
 div[id*=page-setting],
 div[class*=user-element] {
   padding: 1em;
+  background: #ffffff;
   border: none;
   border-radius: 5px;
   box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
@@ -10243,8 +10254,9 @@ div[class*=user-element] {
 }
 
 .jsMediaCard img {
-  max-height: 150px;
+  max-height: 200px;
   object-fit: contain;
+  padding-top: 1em;
 }
 
 /*# sourceMappingURL=main.css.map */

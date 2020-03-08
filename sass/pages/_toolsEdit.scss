@@ -1,6 +1,7 @@
 div[id*="page-setting"],
 div[class*="user-element"] {
  @include padding(1em);
+ background: $primary-light;
  border: none;
  border-radius: $border-radius;
  box-shadow: $box-shadow;

@@ -1,5 +1,8 @@
 #editPage,
 #collectionDetail {
+ .card{
+  background: $primary-light;
+ }
 
  .block-title-wrapper:nth-child(1){
   @include margin(1em null null);
@@ -33,6 +36,9 @@
   @include padding(1em);
   background: $primary-md-grey;
   border-radius: $border-radius;
+ }
+ .block-element-wrapper {
+  @include margin(1em null null);
  }
 }
 #pageContent{
