@@ -4,18 +4,22 @@
 
 {% block htmlTitle 'Media' %}
 {% block headText 'Media' %}
-{% block sectionId 'mediaAll' %}
+{% block sectionId 'summaryPage' %}
 
 {% block sidebar %}
 {% include "@admin/media/_mediaSidebar.html" %}
+<!-- Button trigger modal -->
+<div class="button-group">
+  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+    Upload New Media
+  </button>
+</div>
+
 {% endblock sidebar %}
 
 {% block content %}
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-  Upload New Media
-</button>
-<hr>
+
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -58,7 +62,7 @@
         </form>
 
         {% if not site.settings.tinifyApiKey %}
-        <div class="p-2 mb-0 bg-warning">
+        <div class="bg-warning">
           <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
              optimize your media files for the web. To use TinyJPG with PitonCMS, go to
 

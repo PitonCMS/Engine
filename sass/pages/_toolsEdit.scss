@@ -1,0 +1,10 @@
+div[id*="page-setting"],
+div[class*="user-element"] {
+ @include padding(1em);
+ border: solid 1px $primary-dark-grey;
+ border-radius: $border-radius;
+ box-shadow: $box-shadow;
+}
+.sitemap-wrapper {
+ @include padding(1em);
+}

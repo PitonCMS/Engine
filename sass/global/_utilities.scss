@@ -1,17 +1,48 @@
-.alert-fixed {
-  position: fixed;
-  top: 100px;
-  left: 0px;
-  right: 0px;
-  width: 100%;
-  z-index: 99;
+/****************************************/
+/********* Release Notes Code Wrap ******/
+/****************************************/
+
+pre {
+ font-family: "Courier 10 Pitch", Courier, monospace;
+ font-size: 95%;
+ line-height: 140%;
+ white-space: pre;
+ white-space: pre-wrap;
+ white-space: -moz-pre-wrap;
+ white-space: -o-pre-wrap;
 }
 
-/* Fixes issue with fixed nav covering part of named anchor */
-.anchor-offset {
-  padding-top: 56px;
-  margin-top: -56px;
+code {
+ font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+ font-size: 95%;
+ line-height: 140%;
+ white-space: pre;
+ white-space: pre-wrap;
+ white-space: -moz-pre-wrap;
+ white-space: -o-pre-wrap;
+ background: rgb(250, 248, 230);
 }
-.popover {
-  box-shadow: $box-shadow;
+
+/***** Lobotomized Owl ******/
+*+* {
+ // @include margin(1em null null null);
+ // border: solid 1px red;
+}
+
+/****** Grid Utilities *******/
+.span {
+ grid-column: 1 / -1;
+}
+
+/***** MDE Styles ********/
+
+/****** Use this to resize default height of textarea within editor *****/
+.CodeMirror, .CodeMirror-scroll {
+ min-height: 100px !important;
+}
+.img-50{
+ width: 50%;
+ height: auto;
+ object-fit: cover;
+ @include margin(0 auto);
 }

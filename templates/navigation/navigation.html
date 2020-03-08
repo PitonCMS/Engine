@@ -3,16 +3,19 @@
 
 {% block htmlTitle 'Navigation' %}
 {% block headText 'Manage Navigation' %}
-{% block sectionId 'navigation' %}
+{% block sectionId 'summaryPage' %}
 
 {% block sidebar %}
 	{# Get list of defined navigagors from navigation.json #}
 	{% for navigator in page.navigators %}
-		<div class="sidebar-links">
-			<a class="nav-link {{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+		<div class="sidebar-link">
+			<a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
 				<i class="fas fa-compass"></i>
-				{{ navigator|capitalize }}</a>
+			<div class="sidebar-link__text">	{{ navigator|capitalize }}</div>
+			</a>
 		</div>
+	
+	
 	{% endfor %}
 {% endblock sidebar %}
 
@@ -26,8 +29,8 @@
 		<form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="navigator" value="{{ page.navigator }}">
-			<a class="mb-2 btn btn-warning my-3" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
-			<button type="submit" class="btn btn-primary my-3" disabled>Save Navigation</button>
+			<a class="btn btn-warning" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+			<button type="submit" class="btn btn-primary" disabled>Save Navigation</button>
 
 			<div class="jsEditNavBlock">
 				<ol class="jsNavParent nav-parent">

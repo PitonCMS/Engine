@@ -2,48 +2,77 @@
 
 {% block htmlTitle 'PitonCMS Help' %}
 {% block headText 'PitonCMS Help' %}
-{% block sectionId 'adminHome' %}
+{% block sectionId 'summaryPage' %}
 
 {% block sidebar %}
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}"><i class="fas fa-file"></i>PitonCMS</a>
+
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">PitonCMS</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}"><i class="fas fa-file"></i>Pages</a>
+
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Pages</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}"><i class="fas fa-file"></i>Collections</a>
+
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Collections</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminNavigations'}) }}"><i class="fas fa-file"></i>Navigation</a>
+
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminNavigations'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Navigation</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}"><i class="fas fa-file"></i>Media</a>
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Media</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminMessages'}) }}"><i class="fas fa-file"></i>Messages</a>
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminMessages'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Messages</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminSettings'}) }}"><i class="fas fa-file"></i>Tools</a>
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminHelp', {'file': 'adminSettings'}) }}">
+        <i class="fas fa-file"></i>
+        <div class="sidebar-link__text">Tools</div>
+    </a>
 </div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminEngineRelease', {'release': site.settings.engine}) }}"><i class="fas fa-file"></i>Versions</a>
+<div class="sidebar-link">
+    <a href="{{ pathFor('adminEngineRelease', {'release': site.settings.engine}) }}"><i
+            class="fas fa-file"></i>
+        <div class="sidebar-link__text">Versions</div>
+    </a>
 </div>
+
 {% endblock sidebar %}
 
 {% block content %}
-    <style>
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+<style>
+    iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 
-    {% if page.file %}
-        {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
-        <iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}{{ deepLink }}"></iframe>
-    {% else %}
-        <h3>Select a Help Topic</h3>
-    {% endif %}
+{% if page.file %}
+{% set deepLink = (page.link) ? '#' ~ page.link : '' %}
+<iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}{{ deepLink }}"></iframe>
+{% else %}
+<h3>Select a Help Topic</h3>
+{% endif %}
 {% endblock content %}
