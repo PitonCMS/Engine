@@ -14,7 +14,7 @@ section,
     position: relative;
 
     @media screen and (min-width: 768px) {
-      @include padding(65px null null null);
+      @include padding(65px null null);
     }
 
     .jsEditPageContainer {
@@ -34,11 +34,9 @@ section,
       }
     }
 
-
-    .tab-pane {
-      @include padding(1em);
-
-    }
+    // .tab-pane {
+    //   @include padding(1em);
+    // }
 
     .form-group-wrapper {
       display: grid;
@@ -74,16 +72,12 @@ section,
 }
 /* Grid Container */
 .grid-wrapper{
-  @include padding(1em);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
   gap: 1em;
 }
 .content {
   @include padding(1em);
-  h3{
-    @include padding(.5em null null);
-  }
   .card{
     box-shadow: $box-shadow;
     border: none;

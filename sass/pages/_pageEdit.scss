@@ -1,0 +1,42 @@
+#editPage,
+#collectionDetail {
+
+ .block-title-wrapper:nth-child(1){
+  @include margin(1em null null);
+ }
+
+ .jsBlockParent {
+  @include margin(0);
+  .btn{
+   @include margin(0);
+  }
+ }
+
+ .jsElementParent {
+  @include margin(1em null null);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+  @media screen and (min-width: 768px){
+   grid-template-columns: 1fr 1fr;
+  }
+
+  .form-group {
+   @include padding(.5em);
+   @include margin(0);
+   border-radius: $border-radius;
+   background: white;
+   box-shadow: $box-shadow;
+  }
+ }
+ .element-block {
+  @include padding(1em);
+  background: $primary-md-grey;
+  border-radius: $border-radius;
+ }
+}
+#pageContent{
+ .block-title-wrapper:nth-child(1){
+  @include margin(0 null null);
+ }
+}

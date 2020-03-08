@@ -77,7 +77,7 @@
           aria-controls="pageCustom" aria-selected="false">Custom Settings</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {% if page.id %}active{% endif %}" id="content-tab" data-toggle="pill" href="#content" role="tab" aria-controls="content"
+        <a class="nav-link {% if page.id %}active{% endif %}" id="content-tab" data-toggle="pill" href="#pageContent" role="tab" aria-controls="content"
           aria-selected="false">Content</a>
       </li>
     </ul>
@@ -138,7 +138,7 @@
               changed. Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
           </div>
 
-          <div class="form-group span">
+          <div class="form-group">
             <label>Meta Description</label>
             <input type="text" class="form-control" name="meta_description" maxlength="320"
               placeholder="Description to appear in search results" value="{{ page.meta_description }}">
@@ -183,7 +183,7 @@
       </div>
 
       <!-- Content Tab -->
-      <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="content" role="tabpanel" aria-labelledby="content-tab">
+      <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="pageContent" role="tabpanel" aria-labelledby="content-tab">
         {# Page Blocks and Elements #}
         <div class="block-element-wrapper">
           {% for block in page.json.blocks %}
@@ -191,7 +191,7 @@
             <div class="block-title-wrapper">
               <h3>{{ block.name }}</h3>
             </div>
-            <div class="block-content jsBlockParent">
+            <div class="jsBlockParent">
 
               {# Get count of elements in block to know if we need to disable the Add Element button #}
               {% set elementLength = 0 %}
