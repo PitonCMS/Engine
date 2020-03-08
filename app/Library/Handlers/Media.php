@@ -184,12 +184,12 @@ class Media
     {
         $this->validateTinifySource();
 
-        // If square, keep aspect and constrain to 2000 x 2000
+        // If square, keep aspect and constrain to 1024 x 1024
         if ($this->width == $this->height) {
             $resize = [
                 'method' => 'fit',
-                'width' => 2000,
-                'height' => 2000
+                'width' => 1024,
+                'height' => 1024
             ];
         } elseif ($this->orientation === 'landscape') {
             $resize = [
