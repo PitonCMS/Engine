@@ -86,16 +86,28 @@ class PageMapper extends DataMapperAbstract
      *
      * Gets all pages without elements
      * Does not include collection detail pages
-     * @param  bool  $includeUnpublished Filter on published pages
+     * @param  bool $includeUnpublished Filter on published pages
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findPages(bool $includeUnpublished = false): ?array
+    public function findPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect();
+        $this->makeSelect(true);
         $this->sql .= " and collection_slug is null";
 
         if (!$includeUnpublished) {
             $this->sql .= " and published_date <= '{$this->today}'";
+        }
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
         }
 
         return $this->find();
@@ -106,11 +118,13 @@ class PageMapper extends DataMapperAbstract
      *
      * Finds all pages, does not include element data
      * @param  bool  $includeUnpublished Filter on unpublished pages
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findCollectionPages(bool $includeUnpublished = false): ?array
+    public function findCollectionPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect();
+        $this->makeSelect(true);
         $this->sql .= " and collection_slug is not null";
 
         if (!$includeUnpublished) {
@@ -118,6 +132,16 @@ class PageMapper extends DataMapperAbstract
         }
 
         $this->sql .= ' order by collection_slug';
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
 
         return $this->find();
     }

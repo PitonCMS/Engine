@@ -32,10 +32,13 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $definition = $this->container->jsonDefinitionHandler;
+        $pagination = $this->container->adminPagination;
+        $pagination->setPagePath($this->container->router->pathFor('adminPages'));
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
-            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
+            $data['pages'] = $pageMapper->findCollectionPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $pagination->setTotalResultsFound($pageMapper->foundRows());
             $data['templates'] = $definition->getCollections();
             $data['type'] = 'collection';
 
@@ -48,10 +51,13 @@ class AdminPageController extends AdminBaseController
                 ];
             }
         } else {
-            $data['pages'] = $pageMapper->findPages(true);
+            $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $pagination->setTotalResultsFound($pageMapper->foundRows());
             $data['templates'] = $definition->getPages();
             $data['type'] = 'page';
         }
+
+        $this->container->view->addExtension($pagination);
 
         return $this->render('pages/pages.html', $data);
     }

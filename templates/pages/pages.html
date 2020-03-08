@@ -21,7 +21,7 @@
    <div class="sidebar-link__text"> {{ template.name }}</div>
   </a>
     <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{{ template.description }}"></i>
- 
+
 </div>
 
 
@@ -48,7 +48,7 @@
 <!-- <div class="collection-wrapper"> -->
 
     <h3>{{ c.name }}</h3>
- 
+
     <div class="grid-wrapper">
       {% for p in page.pages %}
         {% if p.collection_slug == c.value %}
@@ -58,7 +58,7 @@
       <h5>No Pages Found</h5>
       {% endfor %}
     </div>
- 
+
 <hr>
     <a class="muted-text" href="#">See All {{ c.name }}</a>
 
@@ -67,4 +67,7 @@
 {% endfor %}
 
 {% endif %}
+
+{{ pagination() }}
+
 {% endblock content %}

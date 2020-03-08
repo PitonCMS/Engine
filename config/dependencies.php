@@ -55,6 +55,7 @@ $container['view'] = function ($c) {
         'dd.mm.yyyy' => 'd.m.Y'
         ];
 
+    // Set default date format based on site settings
     if (isset($settings['site']['dateFormat'])) {
         $twigEnvironment = $view->getEnvironment();
         $twigEnvironment->getExtension(Twig\Extension\CoreExtension::class)->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
@@ -66,6 +67,17 @@ $container['view'] = function ($c) {
     }
 
     return $view;
+};
+
+/**
+ * Admin Twig Pagination
+ *
+ * Loads Piton Pagination to use in Twig templates for page numbered links
+ */
+$container['adminPagination'] = function ($c) {
+    $config['resultsPerPage'] = 6;
+    $config['paginationWrapperClass'] = 'pagination';
+    return new Piton\Pagination\TwigPagination($config);
 };
 
 /**
