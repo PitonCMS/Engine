@@ -105,7 +105,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('inUrl', [$this, 'inUrl']),
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
-            new TwigFunction('getImageSrcSet', [$this, 'getImageSrcSet']),
+            new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
         ];
     }
 
@@ -251,15 +251,13 @@ class Base extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * Get Image Source Set
+     * Get Media Source Set
      *
-     * Creates image element with source set based on available images and media query
+     * Creates list of available image files with width in source set format
      * @param string $filename Media filename
-     * @param string $sizes    Media query
-     * @param string $altText  Text to use in alt attribute
      * @return string
      */
-    public function getImageSrcSet(string $filename = null, string $sizes = null, string $altText = null): ?string
+    public function getMediaSrcSet(string $filename = null): ?string
     {
         // If filename is empty, just return
         if (empty($filename)) {
@@ -270,30 +268,25 @@ class Base extends AbstractExtension implements GlobalsInterface
         $imageDir = ($this->container->mediaPathHandler)($filename);
         if (!is_dir(ROOT_DIR . 'public' . $imageDir)) {
             // Something wrong here
-            $this->container->logger->warning("Twig Base getImageSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
+            $this->container->logger->warning("Twig Base getMediaSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
             return null;
         }
         $files = new FilesystemIterator(ROOT_DIR . 'public' . $imageDir);
 
-        // Create array of available images with actual sizes
+        // Create array of available images with actual sizes, sorted by ascending size
         $sources = [];
         foreach ($files as $file) {
-            // Include only image variants, not the original
-            if ($filename !== $file->getFilename()) {
+            // Include only image variants, not the original or thumb. Thumbnails will be loaded explicity when needed
+            if ($filename !== $file->getFilename() && false === mb_strpos($file->getFilename(), 'thumb')) {
                 // Only include in source set if width is non-zero (possible error)
                 $info = getimagesize($file->getPathname());
                 if (is_int($info[0]) && $info[0] > 0) {
-                    $sources[] = "$imageDir{$file->getFilename()} {$info[0]}w";
+                    $sources[$info[0]] = "$imageDir{$file->getFilename()} {$info[0]}w";
                 }
             }
         }
+        ksort($sources);
 
-        return sprintf(
-            "<img srcset=\"%s\" sizes=\"%s\" src=\"%s\" alt=\"%s\">",
-            implode(', ', $sources),
-            $sizes ?? '',
-            $imageDir . ($this->container->mediaSizes)($filename, 'xlarge'),
-            $altText ?? ''
-        );
+        return implode(",\n", $sources);
     }
 }
