@@ -5,7 +5,7 @@
 {# {% block mainClass 'contentTwoCol' %} #}
 
 {% block htmlTitle %}
-{% if page.id %}Edit{% else %}Add{% endif %} Page
+{% if page.id %}Edit {% else %}Add {% endif %} Page
 {% endblock %}
 
 {% block headText %}
@@ -26,7 +26,7 @@
 {% endif %}
 
 {% block openForm %}
-<form class="pageEditForm" action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
+<form class="contentWrapper" action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="id" value="{{ page.id }}">
   <input type="hidden" name="collection_slug" value="{{ page.type == 'collection' ? page.json.collectionSlug }}">
@@ -36,8 +36,8 @@
 
 {% block sidebar %}
   <!-- Published Status Input & Notification -->
-  <div class="sidebar-block form-group status">
-    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+  <div class="sidebar-block status">
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Choose publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
     {% if page.getPublishedStatus == 'draft' %}
     <div class="text-danger" title="Not published">Status: Draft/Not Published</div>
@@ -52,10 +52,10 @@
 
   <!-- Control Buttons -->
   <div class="sidebar-block button-group">
-    <a class="mb-2 btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
-    <button class="mb-2 btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
+    <button class="btn btn-primary" type="submit">Save</button>
     {% if page.id %}
-    <button class="mb-2 btn btn-outline-danger jsDeleteConfirm" type="submit"
+    <button class="btn btn-outline-danger jsDeleteConfirm" type="submit"
       formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
       title="The home page cannot be deleted." {% endif %}>Delete</button>
     {% endif %}
@@ -67,7 +67,7 @@
   {% include "@admin/pages/_pageEditModal.html" %}
 
   <div class="jsEditPageContainer">
-    <ul class="nav nav-tabs mb-3" id="tabs-tab" role="tablist">
+    <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
       <li class="nav-item">
         <a class="nav-link {% if not page.id %}active{% endif %}" id="pageSettings-tab" data-toggle="pill" href="#pageSettings" role="tab"
           aria-controls="pageSettings" aria-selected="true">Page Settings</a>
@@ -138,7 +138,7 @@
               changed. Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
           </div>
 
-          <div class="form-group">
+          <div class="form-group span">
             <label>Meta Description</label>
             <input type="text" class="form-control" name="meta_description" maxlength="320"
               placeholder="Description to appear in search results" value="{{ page.meta_description }}">
@@ -189,7 +189,7 @@
           {% for block in page.json.blocks %}
           <div class="element-block">
             <div class="block-title-wrapper">
-              <h3>{{ block.name }} Block</h3>
+              <h3>{{ block.name }}</h3>
             </div>
             <div class="block-content jsBlockParent">
 
@@ -221,7 +221,7 @@
       </div>
     </div>
   </div>
-  {# End content container and .jsEditPageContainer #}
+<!-- End content container -->
 {% endblock content %}
 
 {% block sidebarLeft %}
@@ -257,3 +257,4 @@
 {% block foot %}
 	<script src="{{ basePath() }}/admin/js/page.js"></script>
 {% endblock foot %}
+

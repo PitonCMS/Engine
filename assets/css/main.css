@@ -9877,82 +9877,43 @@ h3 {
     border-color: #dee2e6;
   }
 }
-.span {
-  grid-column: 1/-1;
+/*********** Custom Variables *********/
+/***** Theme Settings ******/
+:root {
+  font-size: 14px;
 }
 
-.alert-fixed {
-  position: fixed;
-  top: 100px;
-  left: 0px;
-  right: 0px;
-  width: 100%;
-  z-index: 99;
+@media (min-width: 576px) and (max-width: 900px) {
+  :root {
+    font-size: calc( 14px + (18 - 14) * ( (100vw - 576px) / ( 900 - 576) ));
+  }
+}
+@media (min-width: 900px) {
+  :root {
+    font-size: 18px;
+  }
+}
+p {
+  font-size: 1rem;
 }
 
-/* Fixes issue with fixed nav covering part of named anchor */
-.anchor-offset {
-  padding-top: 56px;
-  margin-top: -56px;
+h1 {
+  font-size: 2.25rem;
 }
 
-.popover {
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-  background-color: lightblue;
+h2 {
+  font-size: 2rem;
 }
 
-.small-sidebar-text {
-  font-size: 0.8rem;
-  font-style: italic;
-  padding-left: 4em !important;
-  margin-left: -1em !important;
-  padding-top: 0.15em;
-  padding-bottom: 0.15em;
-  margin-top: 0;
-  margin-bottom: 0;
+h3 {
+  font-size: 1.75rem;
 }
 
-.help {
-  margin: 1em;
-  max-width: 75ch;
-  font-size: 1.2rem;
+h4 {
+  font-size: 1.5rem;
 }
 
-/*  These are the media queries and how to use them. Copy/paste into sass file.
-
---
-
-@include for-phone-only {
-  background-color: white;
-}
-
-@include for-tablet-portrait-up {
-  background-color: lightgoldenrodyellow;
-}
-
-@include for-tablet-landscape-up {
-  background-color: lightcoral;
-}
-
-@include for-desktop-up {
-  background-color: lightblue;
-}
-
-@include for-big-desktop-up {
-  background-color: lavender;
-}
-
---
-
-*/
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/*********** Global Styles ***********/
 html,
 body {
   min-height: 100vh;
@@ -9962,578 +9923,12 @@ body {
 body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
-  padding-top: 56px;
   position: relative;
 }
-
-.alert-fixed {
-  position: fixed;
-  top: 100px;
-  left: 0px;
-  right: 0px;
+img {
   width: 100%;
-  z-index: 99;
-}
-
-/* Fixes issue with fixed nav covering part of named anchor */
-.anchor-offset {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-
-.popover {
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-
-#adminHome,
-#pages,
-#navigation,
-#collections,
-#mediaAll,
-#mediaUpload,
-#mediaCategories,
-#messages {
-  display: flex;
-  flex-flow: row nowrap;
-}
-#adminHome aside,
-#adminHome main,
-#pages aside,
-#pages main,
-#navigation aside,
-#navigation main,
-#collections aside,
-#collections main,
-#mediaAll aside,
-#mediaAll main,
-#mediaUpload aside,
-#mediaUpload main,
-#mediaCategories aside,
-#mediaCategories main,
-#messages aside,
-#messages main {
-  min-height: calc(100vh - 56px);
-  padding: 1em;
-}
-#adminHome aside,
-#pages aside,
-#navigation aside,
-#collections aside,
-#mediaAll aside,
-#mediaUpload aside,
-#mediaCategories aside,
-#messages aside {
-  background-color: #efefef;
-  padding: 1em 0.5em 1em 0;
-  min-width: 200px;
-  position: relative;
-}
-#adminHome .sidebar-inner,
-#pages .sidebar-inner,
-#navigation .sidebar-inner,
-#collections .sidebar-inner,
-#mediaAll .sidebar-inner,
-#mediaUpload .sidebar-inner,
-#mediaCategories .sidebar-inner,
-#messages .sidebar-inner {
-  position: sticky;
-  top: 72px;
-}
-#adminHome .sidebar-inner .sidebar-links,
-#pages .sidebar-inner .sidebar-links,
-#navigation .sidebar-inner .sidebar-links,
-#collections .sidebar-inner .sidebar-links,
-#mediaAll .sidebar-inner .sidebar-links,
-#mediaUpload .sidebar-inner .sidebar-links,
-#mediaCategories .sidebar-inner .sidebar-links,
-#messages .sidebar-inner .sidebar-links {
-  display: flex;
-  align-items: center;
-}
-#adminHome .sidebar-inner .sidebar-links .nav-link,
-#pages .sidebar-inner .sidebar-links .nav-link,
-#navigation .sidebar-inner .sidebar-links .nav-link,
-#collections .sidebar-inner .sidebar-links .nav-link,
-#mediaAll .sidebar-inner .sidebar-links .nav-link,
-#mediaUpload .sidebar-inner .sidebar-links .nav-link,
-#mediaCategories .sidebar-inner .sidebar-links .nav-link,
-#messages .sidebar-inner .sidebar-links .nav-link {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #333;
-  letter-spacing: 1px;
-  padding: 0.25em 0.5em;
-  margin-left: 0;
-}
-#adminHome .sidebar-inner .sidebar-links .nav-link:hover,
-#pages .sidebar-inner .sidebar-links .nav-link:hover,
-#navigation .sidebar-inner .sidebar-links .nav-link:hover,
-#collections .sidebar-inner .sidebar-links .nav-link:hover,
-#mediaAll .sidebar-inner .sidebar-links .nav-link:hover,
-#mediaUpload .sidebar-inner .sidebar-links .nav-link:hover,
-#mediaCategories .sidebar-inner .sidebar-links .nav-link:hover,
-#messages .sidebar-inner .sidebar-links .nav-link:hover {
-  color: var(--primary) !important;
-}
-#adminHome .sidebar-inner .sidebar-links .nav-link .active,
-#pages .sidebar-inner .sidebar-links .nav-link .active,
-#navigation .sidebar-inner .sidebar-links .nav-link .active,
-#collections .sidebar-inner .sidebar-links .nav-link .active,
-#mediaAll .sidebar-inner .sidebar-links .nav-link .active,
-#mediaUpload .sidebar-inner .sidebar-links .nav-link .active,
-#mediaCategories .sidebar-inner .sidebar-links .nav-link .active,
-#messages .sidebar-inner .sidebar-links .nav-link .active {
-  background-color: rgba(51, 102, 153, 0.5) !important;
-  color: #ffffff;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-#adminHome main,
-#pages main,
-#navigation main,
-#collections main,
-#mediaAll main,
-#mediaUpload main,
-#mediaCategories main,
-#messages main {
-  flex: 1;
-}
-#adminHome .grid-wrapper,
-#pages .grid-wrapper,
-#navigation .grid-wrapper,
-#collections .grid-wrapper,
-#mediaAll .grid-wrapper,
-#mediaUpload .grid-wrapper,
-#mediaCategories .grid-wrapper,
-#messages .grid-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1em;
-}
-#adminHome .grid-wrapper .card-title,
-#pages .grid-wrapper .card-title,
-#navigation .grid-wrapper .card-title,
-#collections .grid-wrapper .card-title,
-#mediaAll .grid-wrapper .card-title,
-#mediaUpload .grid-wrapper .card-title,
-#mediaCategories .grid-wrapper .card-title,
-#messages .grid-wrapper .card-title {
-  margin: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-#adminHome .grid-wrapper .card-title h5,
-#pages .grid-wrapper .card-title h5,
-#navigation .grid-wrapper .card-title h5,
-#collections .grid-wrapper .card-title h5,
-#mediaAll .grid-wrapper .card-title h5,
-#mediaUpload .grid-wrapper .card-title h5,
-#mediaCategories .grid-wrapper .card-title h5,
-#messages .grid-wrapper .card-title h5 {
-  margin: 0;
-  padding: 0;
-}
-#adminHome .grid-wrapper .card-footer,
-#pages .grid-wrapper .card-footer,
-#navigation .grid-wrapper .card-footer,
-#collections .grid-wrapper .card-footer,
-#mediaAll .grid-wrapper .card-footer,
-#mediaUpload .grid-wrapper .card-footer,
-#mediaCategories .grid-wrapper .card-footer,
-#messages .grid-wrapper .card-footer {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-#adminHome .fa-info-circle,
-#pages .fa-info-circle,
-#navigation .fa-info-circle,
-#collections .fa-info-circle,
-#mediaAll .fa-info-circle,
-#mediaUpload .fa-info-circle,
-#mediaCategories .fa-info-circle,
-#messages .fa-info-circle {
-  cursor: pointer;
-  color: #afafaf;
-}
-#adminHome .card,
-#pages .card,
-#navigation .card,
-#collections .card,
-#mediaAll .card,
-#mediaUpload .card,
-#mediaCategories .card,
-#messages .card {
-  border: none;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-
-#collections .card .card {
-  box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-}
-#collections h3 {
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-#mediaCategories form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1em;
-}
-#mediaCategories form .form-group {
-  display: grid;
-  grid-template-columns: 1fr 4em;
-  grid-gap: 1em;
-}
-
-#messages .jsMessageWrap {
-  margin-bottom: 1em;
-  display: flex;
-  border-radius: 5px;
-}
-#messages .message-wrapper {
-  flex: 2;
-  padding: 0.5em;
-  margin-right: 0.25em;
-  background: #f6f6f6;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-#messages .button-wrapper {
-  padding: 0.5em;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-  background: #f6f6f6;
-}
-#messages .button-wrapper form {
-  display: flex;
-  flex-flow: column nowrap;
-}
-#messages .button-wrapper form button {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-/********************************************/
-/******* Page & Collection Edit Pages *******/
-/********************************************/
-#editPage .pageEditForm,
-#collectionDetail .pageEditForm {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1em;
-  position: relative;
-}
-@media screen and (min-width: 768px) {
-  #editPage .pageEditForm,
-#collectionDetail .pageEditForm {
-    grid-template-columns: max-content 1fr;
-  }
-}
-#editPage .pageEditForm .sidebar,
-#collectionDetail .pageEditForm .sidebar {
-  width: 100%;
-  background: #efefef;
-  position: relative;
-}
-@media screen and (min-width: 768px) {
-  #editPage .pageEditForm .sidebar,
-#collectionDetail .pageEditForm .sidebar {
-    min-height: calc(100vh - 56px);
-  }
-}
-#editPage .pageEditForm .sidebar .sidebar-inner,
-#collectionDetail .pageEditForm .sidebar .sidebar-inner {
-  padding: 1em;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1em;
-  position: sticky;
-  top: 60px;
-  z-index: 5;
-}
-@media screen and (min-width: 768px) {
-  #editPage .pageEditForm .sidebar .sidebar-inner,
-#collectionDetail .pageEditForm .sidebar .sidebar-inner {
-    grid-template-columns: 1fr;
-  }
-}
-@media screen and (min-width: 768px) {
-  #editPage .pageEditForm .sidebar .sidebar-block,
-#collectionDetail .pageEditForm .sidebar .sidebar-block {
-    display: flex;
-    flex-flow: column nowrap;
-  }
-}
-#editPage .pageEditForm .content,
-#collectionDetail .pageEditForm .content {
-  position: relative;
-  padding-right: 1em;
-  padding-left: 1em;
-}
-@media screen and (min-width: 768px) {
-  #editPage .pageEditForm .content,
-#collectionDetail .pageEditForm .content {
-    padding-top: 1em;
-  }
-}
-#editPage .pageEditForm .content .block-element-wrapper,
-#collectionDetail .pageEditForm .content .block-element-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1em;
-}
-#editPage .pageEditForm .content .nav-tabs,
-#collectionDetail .pageEditForm .content .nav-tabs {
-  background: white;
-  position: sticky;
-  top: 55px;
-  z-index: 5;
-}
-#editPage .form-group-wrapper,
-#collectionDetail .form-group-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  background: #efefef;
-  border-radius: 7px;
-}
-#editPage .form-group-wrapper .form-group,
-#collectionDetail .form-group-wrapper .form-group {
-  background: white;
-  border-radius: 7px;
-  padding: 1em;
-  margin: 1em;
-}
-#editPage .form-group-wrapper .form-group,
-#collectionDetail .form-group-wrapper .form-group {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5em;
-}
-#editPage .block-element-wrapper,
-#collectionDetail .block-element-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1em;
-}
-#editPage .block-element-wrapper .element-block,
-#collectionDetail .block-element-wrapper .element-block {
-  position: relative;
-}
-#editPage .block-element-wrapper .block-title-wrapper,
-#collectionDetail .block-element-wrapper .block-title-wrapper {
-  background: white;
-}
-#editPage .block-element-wrapper .block-content,
-#collectionDetail .block-element-wrapper .block-content {
-  background: #efefef;
-  padding: 1em;
-  border-radius: 7px;
-}
-#editPage .block-element-wrapper .block-content .jsAddElement,
-#collectionDetail .block-element-wrapper .block-content .jsAddElement {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-/*****************************************************************/
-/****** Tools - general, users, contact, *************************/
-/****** social, sitemap, releaseNotes ****************************/
-/*****************************************************************/
-#tools .toolsEditForm,
-#users .toolsEditForm,
-#sitemap .toolsEditForm,
-#releaseNotes .toolsEditForm {
-  background: #efefef;
-  width: 100%;
-  min-height: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1em;
-}
-@media screen and (min-width: 768px) {
-  #tools .toolsEditForm,
-#users .toolsEditForm,
-#sitemap .toolsEditForm,
-#releaseNotes .toolsEditForm {
-    grid-template-columns: 1fr 3fr;
-    gap: 0;
-  }
-}
-@media screen and (min-width: 900px) {
-  #tools .toolsEditForm,
-#users .toolsEditForm,
-#sitemap .toolsEditForm,
-#releaseNotes .toolsEditForm {
-    grid-template-columns: 1fr 4fr;
-  }
-}
-#tools .sidebar,
-#users .sidebar,
-#sitemap .sidebar,
-#releaseNotes .sidebar {
-  background: #efefef;
-  position: relative;
-  border-bottom: solid 1px #dbdbdb;
-}
-@media screen and (min-width: 768px) {
-  #tools .sidebar,
-#users .sidebar,
-#sitemap .sidebar,
-#releaseNotes .sidebar {
-    border: none;
-    min-height: calc(100vh - 56px);
-  }
-}
-#tools .sidebar-inner,
-#users .sidebar-inner,
-#sitemap .sidebar-inner,
-#releaseNotes .sidebar-inner {
-  padding-top: 1em;
-  padding-right: 1em;
-  padding-left: 1em;
-  position: sticky;
-  top: 60px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-@media screen and (min-width: 768px) {
-  #tools .sidebar-inner,
-#users .sidebar-inner,
-#sitemap .sidebar-inner,
-#releaseNotes .sidebar-inner {
-    padding-left: 0;
-    grid-template-columns: 1fr;
-    justify-content: flex-start;
-    text-align: left;
-  }
-}
-#tools .sidebar-inner .nav-link,
-#users .sidebar-inner .nav-link,
-#sitemap .sidebar-inner .nav-link,
-#releaseNotes .sidebar-inner .nav-link {
-  color: #333;
-  letter-spacing: 1px;
-  display: grid;
-  grid-template-columns: 1.5rem 1fr;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1em;
-}
-@media screen and (min-width: 768px) {
-  #tools .sidebar-inner .nav-link,
-#users .sidebar-inner .nav-link,
-#sitemap .sidebar-inner .nav-link,
-#releaseNotes .sidebar-inner .nav-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.25em 0.5em;
-    margin-left: 0;
-  }
-}
-#tools .sidebar-inner .nav-link:hover,
-#users .sidebar-inner .nav-link:hover,
-#sitemap .sidebar-inner .nav-link:hover,
-#releaseNotes .sidebar-inner .nav-link:hover {
-  color: var(--primary) !important;
-}
-#tools .sidebar-inner .nav-link i,
-#users .sidebar-inner .nav-link i,
-#sitemap .sidebar-inner .nav-link i,
-#releaseNotes .sidebar-inner .nav-link i {
-  justify-self: center;
-  align-self: center;
-}
-#tools .sidebar-inner .button-group,
-#users .sidebar-inner .button-group,
-#sitemap .sidebar-inner .button-group,
-#releaseNotes .sidebar-inner .button-group {
-  padding-bottom: 0.25em;
-  display: flex;
-  justify-content: center;
-}
-@media screen and (min-width: 768px) {
-  #tools .sidebar-inner .button-group,
-#users .sidebar-inner .button-group,
-#sitemap .sidebar-inner .button-group,
-#releaseNotes .sidebar-inner .button-group {
-    padding-top: 1em;
-    padding-left: 1em;
-    flex-flow: column nowrap;
-  }
-}
-#tools .sidebar-inner .button-group .btn,
-#users .sidebar-inner .button-group .btn,
-#sitemap .sidebar-inner .button-group .btn,
-#releaseNotes .sidebar-inner .button-group .btn {
-  margin-bottom: 1em;
-  margin-left: 1em;
-}
-@media screen and (min-width: 768px) {
-  #tools .sidebar-inner .button-group .btn,
-#users .sidebar-inner .button-group .btn,
-#sitemap .sidebar-inner .button-group .btn,
-#releaseNotes .sidebar-inner .button-group .btn {
-    margin: 0 0 1em;
-  }
-}
-#tools .content,
-#users .content,
-#sitemap .content,
-#releaseNotes .content {
-  width: 100%;
-  padding-right: 1em;
-  padding-left: 1em;
-  background: #efefef;
-}
-#tools .content .grid-wrapper,
-#users .content .grid-wrapper,
-#sitemap .content .grid-wrapper,
-#releaseNotes .content .grid-wrapper {
-  margin: 1em;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1em;
-}
-#tools .content .form-group,
-#users .content .form-group,
-#sitemap .content .form-group,
-#releaseNotes .content .form-group {
-  background: white;
-  padding: 1em;
-  margin: 1em;
-  border-radius: 7px;
-}
-#tools .active,
-#users .active,
-#sitemap .active,
-#releaseNotes .active {
-  background-color: rgba(51, 102, 153, 0.8) !important;
-  color: #ffffff !important;
-  padding-right: 1rem;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
-}
-@media screen and (min-width: 768px) {
-  #tools .active,
-#users .active,
-#sitemap .active,
-#releaseNotes .active {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
+  display: block;
+  height: auto;
 }
 
 /****************************************/
@@ -10560,103 +9955,227 @@ code {
   background: #faf8e6;
 }
 
-.modal-body .card-wrapper {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)) !important;
-  gap: 1em !important;
+/***** Lobotomized Owl ******/
+/****** Grid Utilities *******/
+.span {
+  grid-column: 1/-1;
 }
 
+/***** MDE Styles ********/
+/****** Use this to resize default height of textarea within editor *****/
 .CodeMirror, .CodeMirror-scroll {
   min-height: 100px !important;
 }
 
-#navigation ol {
-  margin: 0;
-}
-#navigation .jsNavigatorForm {
-  width: 50vw;
-}
-#navigation .jsEditNavBlock {
-  width: 100%;
-  border: solid 1px rgba(51, 102, 153, 0.4);
-  border-radius: 5px;
-}
-#navigation .nav-item-level-1 {
-  display: grid;
-  grid-template-columns: 100px auto auto;
-  grid-gap: 1em;
-  padding: 0.5em;
-  justify-content: flex-start;
-  align-items: center;
-}
-#navigation .jsNavItem:nth-child(odd):not(.nav-item-level-2) {
-  background-color: rgba(51, 102, 153, 0.4);
-}
-#navigation .jsNavItem:nth-child(even):not(.nav-item-level-2) {
-  background-color: #f6f6f6;
-}
-#navigation .nav-controls i {
-  cursor: pointer;
-  font-size: 1.25rem;
-  padding-right: 0.25em;
-  padding-left: 0.25em;
-}
-#navigation input[type=text] {
-  padding: 0.25em;
-  border-radius: 5px;
-}
-#navigation .nav-item-level-2 {
-  display: grid;
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
-  padding-left: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: 125px;
-  display: grid;
-  grid-template-columns: repeat(2, 125px) max-content;
-  grid-gap: 1em;
-  border-radius: 5px;
-  justify-content: flex-start;
-  align-items: center;
-}
-#navigation .nav-parent > li {
-  position: relative;
-}
-#navigation .nav-parent > li:before {
-  position: absolute;
-  left: 2px;
-  top: 13px;
-  content: "→";
-}
-#navigation .nav-parent-title {
-  padding-left: 0.75em;
-}
-#navigation .nav-child > li {
-  position: relative;
-}
-#navigation .nav-child > li:before {
-  position: absolute;
-  left: 0px;
-  top: 13px;
-  content: "↵";
-}
-#navigation .fa-trash-alt:hover {
-  color: red;
-}
-#navigation li.nav-item:first-child .fa-arrow-up,
-#navigation li.nav-item:last-child .fa-arrow-down,
-#navigation li.nav-item.nav-item-level-1 > .nav-controls > .fa-arrow-left {
-  color: #afafaf;
-  cursor: not-allowed;
-}
-#navigation .form-control {
+.img-50 {
   width: 50%;
+  height: auto;
+  object-fit: cover;
+  margin: 0 auto;
 }
-#navigation .help ol {
+
+/*  All Top / Left Sidebars */
+.sidebar {
+  padding-top: 65px;
+  background: #ebebeb;
+  position: sticky;
+  top: 0px;
+  z-index: 5;
+}
+@media screen and (min-width: 768px) {
+  .sidebar {
+    min-height: calc(100vh - 1px);
+    position: static;
+  }
+}
+.sidebar .sidebar-inner {
+  padding: 0.5em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+@media screen and (min-width: 768px) {
+  .sidebar .sidebar-inner {
+    position: sticky;
+    top: 63px;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+}
+.sidebar .sidebar-inner .sidebar-block {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar .sidebar-inner .button-group {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+@media screen and (min-width: 768px) {
+  .sidebar .sidebar-inner .button-group {
+    flex-flow: column nowrap;
+  }
+}
+.sidebar .sidebar-inner .button-group .btn {
+  margin-right: 0.75em;
+}
+@media screen and (min-width: 768px) {
+  .sidebar .sidebar-inner .button-group .btn {
+    width: 100%;
+    margin: 1em 0 0;
+  }
+}
+.sidebar .sidebar-link {
+  background: #336699;
+  color: #ffffff;
+  margin-right: 1.2em;
+  margin-bottom: 0.5em;
+  padding: 0.25em 0.5em;
+  border-radius: 5px;
+  border: solid 1px #333;
+  display: grid;
+  grid-template-columns: auto max-content auto;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar .sidebar-link:hover {
+  background: #333;
+  color: #ffffff;
+  text-decoration: none;
+}
+.sidebar .sidebar-link a {
+  padding-right: 0.5em;
+  width: 100%;
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar .sidebar-link a:hover {
+  background: #333;
+  color: #ffffff;
+  text-decoration: none;
+}
+@media screen and (min-width: 768px) {
+  .sidebar .sidebar-link {
+    margin: 0 0 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+  }
+}
+.sidebar .fa-info-circle:hover {
+  cursor: pointer;
+  color: #afafaf;
+}
+
+section,
+.contentWrapper {
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media screen and (min-width: 768px) {
+  section,
+.contentWrapper {
+    grid-template-columns: 200px 3fr;
+  }
+}
+section .content,
+.contentWrapper .content {
+  position: relative;
+}
+@media screen and (min-width: 768px) {
+  section .content,
+.contentWrapper .content {
+    padding-top: 65px;
+  }
+}
+section .content .jsEditPageContainer,
+.contentWrapper .content .jsEditPageContainer {
+  position: relative;
+}
+section .content .jsEditPageContainer .nav-tabs,
+.contentWrapper .content .jsEditPageContainer .nav-tabs {
+  background: #ffffff;
+  padding-top: 0.5em;
+  padding-left: 0.25em;
+  position: sticky;
+  top: 161px;
+  z-index: 5;
+}
+@media screen and (min-width: 768px) {
+  section .content .jsEditPageContainer .nav-tabs,
+.contentWrapper .content .jsEditPageContainer .nav-tabs {
+    top: 57px;
+  }
+}
+section .content .tab-pane,
+.contentWrapper .content .tab-pane {
+  padding: 1em;
+}
+section .content .form-group-wrapper,
+.contentWrapper .content .form-group-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+section .content .form-group-wrapper .form-group,
+.contentWrapper .content .form-group-wrapper .form-group {
+  background: #f6f6f6;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+}
+section .content .element-block,
+.contentWrapper .content .element-block {
   margin-bottom: 1em;
 }
-#navigation .help li {
-  margin-bottom: 0.5em;
+section .content .block-content,
+.contentWrapper .content .block-content {
+  background: #f6f6f6;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+}
+section .content .block-content .btn,
+.contentWrapper .content .block-content .btn {
+  margin-bottom: 1em;
+}
+section .block-title-wrapper,
+.contentWrapper .block-title-wrapper {
+  width: 100%;
+  display: flex;
+}
+
+/* Grid Container */
+.grid-wrapper {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1em;
+}
+
+/******* Components Included in All Pages *******/
+/******* Page Level Styles *******/
+div[id*=page-setting],
+div[class*=user-element] {
+  padding: 1em;
+  border: solid 1px #afafaf;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+}
+
+.sitemap-wrapper {
+  padding: 1em;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -2,11 +2,11 @@
 
 {% block htmlTitle 'Sitemap' %}
 {% block headText 'Sitemap' %}
-{% block sectionId 'sitemap' %}
+{% block sectionId 'detailPage' %}
 {# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
-<form class="toolsEditForm jsUserForm" action="{{ pathFor('adminUpdateSitemap') }}" method="post" accept-charset="utf-8">
+<form class="contentWrapper jsUserForm" action="{{ pathFor('adminUpdateSitemap') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 
@@ -15,13 +15,13 @@
 <div class="button-group sidebar-controls span">
   <!-- Control Buttons -->
    
-      <button class="btn btn-primary mb-2" type="submit">Update Sitemap</button>
+      <button class="btn btn-primary" type="submit">Update Sitemap</button>
 
 </div>
 {% endblock sidebar %}
 
 {% block content %}
-<div class="form-group">
+<div class="sitemap-wrapper">
   <h3>Sitemap</h3>
   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
   
