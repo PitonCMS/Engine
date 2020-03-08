@@ -79,3 +79,13 @@ section,
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1em;
 }
+.content {
+  @include padding(1em);
+  h3{
+    @include padding(.5em null null);
+  }
+  .card{
+    box-shadow: $box-shadow;
+    border: none;
+  }
+}

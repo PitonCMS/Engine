@@ -10164,18 +10164,46 @@ section .block-title-wrapper,
   gap: 1em;
 }
 
+.content {
+  padding: 1em;
+}
+.content h3 {
+  padding-top: 0.5em;
+}
+.content .card {
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+  border: none;
+}
+
 /******* Components Included in All Pages *******/
 /******* Page Level Styles *******/
 div[id*=page-setting],
 div[class*=user-element] {
   padding: 1em;
-  border: solid 1px #afafaf;
+  border: none;
   border-radius: 5px;
   box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
 }
 
 .sitemap-wrapper {
   padding: 1em;
+}
+
+.jsMessageWrap {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  background: #f6f6f6;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+}
+.jsMessageWrap .message-wrapper br {
+  display: block;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
 }
 
 /*# sourceMappingURL=main.css.map */
