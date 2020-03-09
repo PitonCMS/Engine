@@ -10170,10 +10170,71 @@ section .block-title-wrapper,
 }
 
 /******* Components Included in All Pages *******/
+.pagination {
+  padding: 1em 0.5em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.4rem;
+  background: #ebebeb;
+}
+.pagination .active a {
+  background: #336699;
+  color: #ffffff;
+}
+.pagination .active a:hover {
+  cursor: default;
+  color: #ffffff;
+}
+.pagination div a {
+  padding: 0.25em;
+  margin: 1em 0.25em;
+  background: transparent;
+  color: #333;
+  border-radius: 5px;
+}
+.pagination div a:hover {
+  text-decoration: none;
+  color: #ffffff;
+  background: #336699;
+  cursor: pointer;
+}
+.pagination div:first-child a, .pagination div:last-child a {
+  padding: 0;
+  margin: 0;
+}
+.pagination div:first-child a:hover, .pagination div:last-child a:hover {
+  background-color: transparent;
+  color: #afafaf;
+}
+.pagination .disabled {
+  color: #afafaf;
+}
+
 /******* Page Level Styles *******/
 #editPage .card,
 #collectionDetail .card {
   background: #ffffff;
+}
+#editPage .modal .card-wrapper,
+#collectionDetail .modal .card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1em;
+}
+#editPage .modal .card-wrapper .media,
+#collectionDetail .modal .card-wrapper .media {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+#editPage .modal .card-wrapper .media img,
+#collectionDetail .modal .card-wrapper .media img {
+  max-height: 100px;
+  object-fit: contain;
 }
 #editPage .block-title-wrapper:nth-child(1),
 #collectionDetail .block-title-wrapper:nth-child(1) {
@@ -10253,10 +10314,27 @@ div[class*=user-element] {
   margin-bottom: 0.25em;
 }
 
-.jsMediaCard img {
-  max-height: 200px;
+#mediaPage .media-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+}
+#mediaPage .media-wrapper .media {
+  display: grid;
+  border: solid 1px #afafaf;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+}
+#mediaPage .media-wrapper .media form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  column-gap: 1em;
+}
+#mediaPage .media-wrapper img {
+  max-height: 100px;
+  max-width: 100px;
+  min-width: 100px;
   object-fit: contain;
-  padding-top: 1em;
 }
 
 #navigationPage .navigator-title {

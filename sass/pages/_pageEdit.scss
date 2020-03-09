@@ -3,7 +3,24 @@
  .card{
   background: $primary-light;
  }
-
+.modal {
+ .card-wrapper{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1em;
+  .media{
+   display: flex;
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   img{
+    max-height: 100px;
+    object-fit: contain;
+   }
+  }
+}
+}
  .block-title-wrapper:nth-child(1){
   @include margin(1em null null);
  }
