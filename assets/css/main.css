@@ -9931,6 +9931,15 @@ img {
   height: auto;
 }
 
+.alert-fixed {
+  position: fixed;
+  top: 100px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  z-index: 99;
+}
+
 /****************************************/
 /********* Release Notes Code Wrap ******/
 /****************************************/
@@ -9959,6 +9968,12 @@ code {
 /****** Grid Utilities *******/
 .span {
   grid-column: 1/-1;
+}
+
+/******** Text Utilities ******/
+.text-small {
+  font-size: 0.8rem;
+  line-height: 1.2;
 }
 
 /***** MDE Styles ********/
@@ -10316,25 +10331,51 @@ div[class*=user-element] {
 
 #mediaPage .media-wrapper {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(425px, 1fr));
   gap: 1em;
 }
 #mediaPage .media-wrapper .media {
   display: grid;
   border: solid 1px #afafaf;
+  border-radius: 5px;
   grid-template-columns: auto 1fr;
-  gap: 1em;
 }
-#mediaPage .media-wrapper .media form {
+#mediaPage .media-wrapper .media .mediaImageThumb {
+  grid-area: mediaImageThumb;
+  padding-top: 0.5em;
+  padding-left: 0.5em;
+}
+#mediaPage .media-wrapper .media .mediaCaption {
+  padding-bottom: 0.5em;
+  padding-left: 0.5em;
+  grid-area: mediaCaption;
+}
+#mediaPage .media-wrapper .media .mediaFeatured {
+  grid-area: mediaFeatured;
+  border-bottom: solid 1px #afafaf;
+}
+#mediaPage .media-wrapper .media .mediaCategories {
+  grid-area: mediaCategories;
+}
+#mediaPage .media-wrapper .media .mediaControls {
+  grid-area: mediaControls;
+  background: #ebebeb;
+  padding: 0.5em;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+#mediaPage .media-wrapper .media .mediaForm {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  column-gap: 1em;
+  gap: 10px;
+  grid-template-columns: auto 4fr 1fr;
+  grid-template-areas: "mediaImageThumb mediaFeatured   mediaControls" "mediaImageThumb mediaCategories mediaControls" "mediaCaption    mediaCategories mediaControls";
 }
-#mediaPage .media-wrapper img {
-  max-height: 100px;
-  max-width: 100px;
-  min-width: 100px;
-  object-fit: contain;
+#mediaPage img {
+  max-height: 125px;
+  max-width: 197px;
+  object-fit: cover;
 }
 
 #navigationPage .navigator-title {
@@ -10358,6 +10399,15 @@ div[class*=user-element] {
 }
 #navigationPage .nav-child {
   grid-column: 1/-1;
+}
+#navigationPage .nav-child .nav-parent-title {
+  padding: 0;
+}
+#navigationPage .nav-child .nav-item-level-2 {
+  background: #afafaf;
+  border-radius: 5px;
+  padding: 0 0.5em 0.5em;
+  margin: 0.5em 0 0;
 }
 #navigationPage .nav-controls {
   display: flex;

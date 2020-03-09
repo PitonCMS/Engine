@@ -1,7 +1,60 @@
-.jsMediaCard{
- img{
-  max-height: 200px;
-  object-fit: contain;
-  @include padding(1em null null);
+#mediaPage {
+ .media-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(425px, 1fr));
+  gap: 1em;
+
+  .media {
+   display: grid;
+   border: solid 1px $primary-dark-grey;
+   border-radius: $border-radius;
+   grid-template-columns: auto 1fr;
+
+   .mediaImageThumb {
+    grid-area: mediaImageThumb;
+    @include padding(.5em null null .5em);
+   }
+
+   .mediaCaption {
+    @include padding(null null .5em .5em);
+    grid-area: mediaCaption;
+   }
+
+   .mediaFeatured {
+    
+    grid-area: mediaFeatured;
+    border-bottom: solid 1px $primary-dark-grey;
+   }
+
+   .mediaCategories {
+    grid-area: mediaCategories;
+   }
+
+   .mediaControls {
+    grid-area: mediaControls;
+    background: $primary-md-grey;
+    @include padding(.5em);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+   }
+
+   .mediaForm {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: auto 4fr 1fr;
+    grid-template-areas:
+     "mediaImageThumb mediaFeatured   mediaControls"
+     "mediaImageThumb mediaCategories mediaControls"
+     "mediaCaption    mediaCategories mediaControls";
+   }
+  }
+ }
+ 
+ img {
+  max-height: 125px;
+  max-width: 197px;
+  object-fit: cover;
  }
 }

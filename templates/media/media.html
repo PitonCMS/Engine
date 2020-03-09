@@ -4,7 +4,7 @@
 
 {% block htmlTitle 'Media' %}
 {% block headText 'Media' %}
-{% block sectionId 'summaryPage' %}
+{% block sectionId 'mediaPage' %}
 
 {% block sidebar %}
 {% include "@admin/media/_mediaSidebar.html" %}
@@ -85,7 +85,7 @@
   </div>
 </div>
 <h3>All Media</h3>
-<div class="grid-wrapper">
+<div class="media-wrapper">
   {% for media in page.media %}
   {{ file.mediaCard(media, page.categories, true) }}
   {% else %}

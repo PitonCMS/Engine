@@ -24,6 +24,17 @@
 
   .nav-child {
    grid-column: 1 / -1;
+   .nav-parent-title {
+    @include padding(0);
+   }
+  
+   .nav-item-level-2 {
+    background: $primary-dark-grey;
+    border-radius: $border-radius;
+    @include padding(0 .5em .5em);
+    @include margin(.5em 0 0);
+   }
+  
   }
 
   .nav-controls {

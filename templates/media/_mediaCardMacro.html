@@ -8,49 +8,61 @@
 {% macro mediaCard(media, categories, editable = false) %}
 {% import '@admin/media/_mediaCategoryCheckboxMacro.html' as categoryInput %}
 
-<div class="card jsMediaCard">
-  <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="card-img-top" alt="{{ media.caption }}"
-    data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
-  <div class="card-body">
+<div class="media jsMediaCard">
+  <form class="mediaForm" action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+    <input type="hidden" name="id" value="{{ media.id }}">
 
-    {% if editable %}
-    <div class="form-group">
-      <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename, 'large') }}"
+    {# Media Image Thumbnail for preview 100px wide #}
+    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
+      data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
+      data-media-id="{{ media.id }}">
+  
+      {% if editable %}
+
+      {#   <div class="">
+     <input type="text" class="form-control form-control-sm" value="{{ getMediaPath(media.filename, 'large') }}"
         readonly title="Link to media">
-    </div>
+    </div> #}
 
-    <form action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
-      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-      <input type="hidden" name="id" value="{{ media.id }}">
-
-      <div class="form-group">
+      {# Media Caption Input #}
+      <div class="mediaCaption">
         <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
           placeholder="No caption">
       </div>
 
-      <div class="form-group form-check">
-        <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
+      {# Featured Media? #}
+      <div class="mediaFeatured">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
           {{ checked(media.feature) }}>
-        <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
+        <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
+        </div>
+       
       </div>
 
-      {% for c in categories %}
-      {{ categoryInput.checkbox(c, media.id) }}
-      {% endfor %}
+      {# Media Categories #}
+      <div class="mediaCategories">
+        {% for c in categories %}
+        {{ categoryInput.checkbox(c, media.id) }}
+        {% endfor %}
+      </div>
 
-      <div class="form-group">
+      {# Media Controls #}
+      <div class="mediaControls">
         <button class="btn btn-outline-primary btn-sm mt-2" type="submit" value="save">Save</button>
         <button class="btn btn-outline-danger btn-sm mt-2" type="submit" formaction="{{ pathFor('adminDeleteMedia') }}" value="delete">Delete</button>
+        <a class="btn btn-warning btn-sm mt-2" href="/admin/media/">Cancel</a>
       </div>
 
-    </form>
-    {% else %}
+  </form>
+  {% else %}
 
-    {# This is for displaying in the page media modal when selecting images #}
-    <p>{{ media.caption }}</p>
-    {% endif %}
+  {# This is for displaying in the page media modal when selecting images #}
+  <p>{{ media.caption }}</p>
+  {% endif %}
 
-  </div>
 </div>
+
 
 {% endmacro mediaCard %}

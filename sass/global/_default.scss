@@ -19,3 +19,12 @@ img{
   display: block;
   height: auto;
 }
+
+.alert-fixed {
+  position: fixed;
+  top: 100px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  z-index: 99;
+}

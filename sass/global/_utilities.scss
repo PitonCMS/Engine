@@ -34,6 +34,12 @@ code {
  grid-column: 1 / -1;
 }
 
+/******** Text Utilities ******/
+.text-small {
+ font-size: .8rem;
+ line-height: 1.2;
+}
+
 /***** MDE Styles ********/
 
 /****** Use this to resize default height of textarea within editor *****/
