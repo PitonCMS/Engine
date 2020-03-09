@@ -221,8 +221,8 @@ class Media
 
         $this->tinifySource->resize([
             'method' => 'thumb',
-            'width' => ($this->orientation === 'landscape') ? 350 : 265,
-            'height' => ($this->orientation === 'landscape') ? 265 : 350
+            'width' => 350,
+            'height' => 265
         ])->toFile($this->getAbsoluteFilenameBySize('thumb'));
     }
 
