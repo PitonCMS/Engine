@@ -66,12 +66,12 @@ class AdminNavigationController extends AdminBaseController
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
         // Get POST data
-        $post = $this->request->getParsedBodyParam('nav');
+        $navPost = $this->request->getParsedBodyParam('nav');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
         // Save each nav item
         $sort = 0;
-        foreach ($post as &$navItem) {
+        foreach ($navPost as &$navItem) {
             // Check whether to just delete
             if (isset($navItem['delete']) && $navItem['delete'] === 'on') {
                 if (is_numeric($navItem['navId'])) {
@@ -87,19 +87,21 @@ class AdminNavigationController extends AdminBaseController
             $nav->id = (int) $navItem['navId'];
             $nav->navigator = $navigator;
 
-            // pageId 0 is for placeholder nav links, which are not joined to page table
-            $nav->page_id = ($navItem['pageId'] === '0') ? null : (int) $navItem['pageId'];
+            // Page ID 0 is for placeholder nav links, which are not joined to page table
+            $nav->page_id = (is_numeric($navItem['pageId']) && $navItem['pageId'] != '0') ? (int) $navItem['pageId'] : null;
 
             // Get parent nav ID if set
-            // If parent ID is not numeric, then get parent nav link by post array key, and use that nav ID
+            // If parent ID is not numeric (new pages use a '0+x'), then get parent nav link by navPost array key, and use that nav ID
             $nav->parent_id = null;
             if (!empty($navItem['parentId'])) {
-                $nav->parent_id = (int) is_numeric($navItem['parentId']) ? $navItem['parentId'] : $post[$navItem['parentId']]['navId'];
+                $nav->parent_id = is_numeric($navItem['parentId']) ? (int) $navItem['parentId'] : $navPost[$navItem['parentId']]['navId'];
             }
 
             $nav->sort = $sort;
             $nav->title = $navItem['navTitle'];
             $nav->active = $navItem['active'] ?: 'Y';
+
+            // Save and assign inserted nav ID for child rows
             $savedNav = $navigationMapper->save($nav);
             $navItem['navId'] = $savedNav->id;
         }
