@@ -6,37 +6,33 @@
 {% block sectionId 'navigationPage' %}
 
 {% block sidebar %}
-	{# Get list of defined navigagors from navigation.json #}
+	{# Get list of defined navigators from navigation.json #}
 	{% for navigator in page.navigators %}
 		<div class="sidebar-link">
 			<a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
 				<i class="fas fa-compass"></i>
-			<div class="sidebar-link__text">	{{ navigator|capitalize }}</div>
+				<div class="sidebar-link__text">{{ navigator|capitalize }}</div>
 			</a>
 		</div>
-	
-	
 	{% endfor %}
 {% endblock sidebar %}
 
 {% block content %}
-
 	<h3>Navigation</h3>
 	{% if page.navigator %}
-		
-
 		<form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="navigator" value="{{ page.navigator }}">
-
-
 			<a class="btn btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
 			<button type="submit" class="btn btn-primary btn-sm" disabled>Save Navigation</button>
-<hr>
-<div class="navigator-title">{{ page.navigator|capitalize }} Navigator</div>
+
+			<hr>
+
+			<div class="navigator-title">{{ page.navigator|capitalize }} Navigator</div>
+
 			<div class="jsEditNavBlock">
 				<ol class="jsNavParent nav-parent">
-					{{ navSet.navBlock(page.navigation) }}
+					{{ navSet.navItem(page.navigation) }}
 				</ol>
 			</div>
 		</form>
@@ -45,20 +41,20 @@
 
 		<label>Add Page to Navigation</label>
 		<select class="form-control jsNavPageSelector">
-			<option value="x" selected>Add a page to the navigation</option>
+			<option value="x" selected>Add Page</option>
 			<option value="0">[Dropdown]</option>
 			{% for p in getNavPages() %}
 				<option value="{{ p.id }}">{{ p.title }}</option>
 			{% endfor %}
 		</select>
 
+		{# Hidden extra navItem block for easy cloning when adding a page #}
 		<div class="jsNewNavItem d-none">
-			{{ navSet.navBlock([1]) }}
+			{{ navSet.navItem([1]) }}
 		</div>
 	{% else %}
 		<p>No navigators are defined.</p>
 	{% endif %}
-
 {% endblock content %}
 
 {% block foot %}
@@ -66,24 +62,27 @@
 {% endblock foot %}
 
 
-{# This is a recursive macro function, which calls itself if the current nav item has a child #}
-{% macro navBlock(nav) %}
+
+{#
+	Navigation Item Macro
+
+	This is a recursive Twig macro, which calls itself if the current nav item has a child nav item
+#}
+{% macro navItem(nav) %}
 	{% import _self as navSet %}
 
 	{% for n in nav %}
-		<li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
+		<li class="jsNavItem nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %}" data-level="{{ n.level }}" data-key="{{ n.id }}">
 			<div class="span jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
 			<input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
 			<input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
 			<input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
 			<input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
-			
 			<input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
 			<div class="form-group">
 				<input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
-
 			</div>
-			
+
 			<div class="nav-controls">
 				<i class="fas fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i>
 				<span class="divider">|</span>
@@ -96,12 +95,13 @@
 				<i class="fas fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
 			</div>
 
-			{% if n.childNav %}
-				<ol class="jsNavParent nav-child">
-					{{ navSet.navBlock(n.childNav) }}
-				</ol>
-			{% endif %}
+			<ol class="jsNavParent nav-child" data-parent-id="{{ n.id|default(0) }}">
+				{% if n.childNav %}
+					{{ navSet.navItem(n.childNav) }}
+				{% endif %}
+			</ol>
+
 		</li>
 	{% endfor %}
 
-{% endmacro navBlock %}
+{% endmacro navItem %}
