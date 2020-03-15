@@ -1,107 +1,105 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as navSet %}
+{% import _self as navItem %}
 
 {% block htmlTitle 'Navigation' %}
 {% block headText 'Manage Navigation' %}
 {% block sectionId 'navigationPage' %}
 
+{% block openForm %}
+    <form class="jsNavigatorForm" style="display: flex;" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
+        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+        <input type="hidden" name="navigator" value="{{ page.navigator }}">
+{% endblock openForm %}
+
 {% block sidebar %}
-	{# Get list of defined navigagors from navigation.json #}
-	{% for navigator in page.navigators %}
-		<div class="sidebar-link">
-			<a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
-				<i class="fas fa-compass"></i>
-			<div class="sidebar-link__text">	{{ navigator|capitalize }}</div>
-			</a>
-		</div>
-	
-	
-	{% endfor %}
+    {# Get list of defined navigators from navigation.json #}
+    {% for navigator in page.navigators %}
+        <div class="sidebar-link">
+            <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+                <i class="fas fa-compass"></i>
+                <div class="sidebar-link__text">{{ navigator|capitalize }}</div>
+            </a>
+        </div>
+    {% endfor %}
+
+    <a class="btn btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+    <button type="submit" class="btn btn-primary btn-sm" id="jsSaveNavButton" title="Save navigation" disabled>Save</button>
 {% endblock sidebar %}
 
 {% block content %}
+    <h3>{{ page.navigator|capitalize }} Navigation</h3>
+    <hr>
 
-	<h3>Navigation</h3>
-	{% if page.navigator %}
-		
-
-		<form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
-			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-			<input type="hidden" name="navigator" value="{{ page.navigator }}">
-
-
-			<a class="btn btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
-			<button type="submit" class="btn btn-primary btn-sm" disabled>Save Navigation</button>
-<hr>
-<div class="navigator-title">{{ page.navigator|capitalize }} Navigator</div>
-			<div class="jsEditNavBlock">
-				<ol class="jsNavParent nav-parent">
-					{{ navSet.navBlock(page.navigation) }}
-				</ol>
-			</div>
-		</form>
-
-		<hr>
-
-		<label>Add Page to Navigation</label>
-		<select class="form-control jsNavPageSelector">
-			<option value="x" selected>Add a page to the navigation</option>
-			<option value="0">[Dropdown]</option>
-			{% for p in getNavPages() %}
-				<option value="{{ p.id }}">{{ p.title }}</option>
-			{% endfor %}
-		</select>
-
-		<div class="jsNewNavItem d-none">
-			{{ navSet.navBlock([1]) }}
-		</div>
-	{% else %}
-		<p>No navigators are defined.</p>
-	{% endif %}
-
+    {% if page.navigator %}
+        <div class="jsEditNavBlock">
+            <ul class="jsNavParent nav-parent" data-parent-id="0">
+                {{ navItem.selectPage(page.navigation, page.navigator) }}
+                <li>
+                    <button class="btn btn-outline-light jsAddPageSelect" type="button" title="Add top level page navigation link"><i class="fas fa-plus"></i></button>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
 {% endblock content %}
 
+{% block closeForm %}
+    </form>
+
+    {# Spare hidden nav page select list to clone and add to navigation, keep outside of form #}
+    <ul class="d-none" id="jsPageSelect">
+        {{ navItem.selectPage([{'navigator': page.navigator}], page.navigator) }}
+    </ul>
+{% endblock closeForm %}
+
 {% block foot %}
-	<script src="{{ basePath() }}/admin/js/navigation.js"></script>
+    <script src="{{ basePath() }}/admin/js/navigation.js"></script>
 {% endblock foot %}
 
 
-{# This is a recursive macro function, which calls itself if the current nav item has a child #}
-{% macro navBlock(nav) %}
-	{% import _self as navSet %}
+{#
+    Page Select Macro
 
-	{% for n in nav %}
-		<li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-			<div class="span jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
-			<input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
-			<input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
-			<input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
-			<input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
-			
-			<input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
-			<div class="form-group">
-				<input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
+    Displays select list of pages for navigation
+    @param nav Piton Navigation object
+#}
+{% macro selectPage(nav, navigator) %}
+{% import _self as navItem %}
 
-			</div>
-			
-			<div class="nav-controls">
-				<i class="fas fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i>
-				<span class="divider">|</span>
-				<i class="fas fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></i>
-				<i class="fas fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></i>
-				<span class="divider">|</span>
-				<i class="fas fa-arrow-left jsNavItemCtrl" data-control="left" title="Move Left"></i>
-				<i class="fas fa-arrow-right jsNavItemCtrl" data-control="right" title="Move Right"></i>
-				<span class="divider">|</span>
-				<i class="fas fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
-			</div>
-
-			{% if n.childNav %}
-				<ol class="jsNavParent nav-child">
-					{{ navSet.navBlock(n.childNav) }}
-				</ol>
-			{% endif %}
-		</li>
-	{% endfor %}
-
-{% endmacro navBlock %}
+{% for n in nav %}
+    {% if n.navigator == navigator %}
+        <li class="jsNavItem">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-danger jsNavDelete" type="button" title="Remove"><i class="fas fa-minus"></i></button>
+                </div>
+                <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
+                <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
+                <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
+                <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
+                <select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
+                    <option value="x" selected>Add Page</option>
+                    {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
+                    <option value="0" {% if n.id is not empty and n.page_id is empty %}selected{% endif %}>[Dropdown]</option>
+                    {% for p in getNavPages() %}
+                        <option value="{{ p.id }}" {% if n.page_id == p.id %}selected{% endif %}>{{ p.title }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-warning jsNavActive" type="button" title="Disable navigation links temporarily"><i class="far fa-times-circle"></i></button>
+                </div>
+            </div>
+            <ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}">
+                {% if n.childNav %}
+                    {{ navItem.selectPage(n.childNav, navigator) }}
+                {% endif %}
+                <li>
+                    <button class="btn btn-outline-light jsAddPageSelect" type="button" title="Add page navigation link"><i class="fas fa-plus"></i></button>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+{% endfor %}
+{# TODO How to handle alt title?
+    <input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
+#}
+{% endmacro selectPage %}

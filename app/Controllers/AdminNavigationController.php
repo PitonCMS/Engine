@@ -84,21 +84,21 @@ class AdminNavigationController extends AdminBaseController
 
             $sort++;
             $nav = $navigationMapper->make();
-            $nav->id = (int) $navItem['navId'];
+            $nav->id = (is_numeric($navItem['navId'])) ? (int) $navItem['navId'] : null;
             $nav->navigator = $navigator;
 
             // Page ID 0 is for placeholder nav links, which are not joined to page table
-            $nav->page_id = (is_numeric($navItem['pageId']) && $navItem['pageId'] != '0') ? (int) $navItem['pageId'] : null;
+            $nav->page_id = (is_numeric($navItem['pageId']) && $navItem['pageId'] !== '0') ? (int) $navItem['pageId'] : null;
 
             // Get parent nav ID if set
             // If parent ID is not numeric (new pages use a '0+x'), then get parent nav link by navPost array key, and use that nav ID
             $nav->parent_id = null;
-            if (!empty($navItem['parentId'])) {
+            if (!empty($navItem['parentId']) && $navItem['parentId'] !== '0') {
                 $nav->parent_id = is_numeric($navItem['parentId']) ? (int) $navItem['parentId'] : $navPost[$navItem['parentId']]['navId'];
             }
 
             $nav->sort = $sort;
-            $nav->title = $navItem['navTitle'];
+            // $nav->title = $navItem['navTitle'];
             $nav->active = $navItem['active'] ?: 'Y';
 
             // Save and assign inserted nav ID for child rows
