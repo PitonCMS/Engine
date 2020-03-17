@@ -26,42 +26,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `email_uq` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `navigation` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `navigator` varchar(60) NOT NULL DEFAULT 'main',
-  `parent_id` int NULL DEFAULT NULL,
-  `sort` smallint NULL DEFAULT 1,
-  `page_id` int NULL DEFAULT NULL,
-  `title` varchar(60) NULL DEFAULT NULL,
-  `active` enum('Y', 'N') NOT NULL DEFAULT 'Y',
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `navigator_idx` (`navigator`),
-  KEY `page_id_idx` (`page_id`),
-  KEY `parent_id_idx` (`parent_id`),
-  CONSTRAINT `navigation_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `navigation_fk2` FOREIGN KEY (`parent_id`) REFERENCES `navigation` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `setting` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `category` varchar(60) NOT NULL,
-  `page_id` int DEFAULT NULL,
-  `setting_key` varchar(60) NOT NULL,
-  `setting_value` varchar(4000) DEFAULT NULL,
-  `created_by` int(11) NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `setting_category_idx` (`category`),
-  KEY `setting_ref_cat_idx` (`page_id`, `category`),
-  CONSTRAINT `setting_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int NOT NULL AUTO_INCREMENT,
   `filename` varchar(20) NOT NULL,
@@ -119,6 +83,26 @@ CREATE TABLE IF NOT EXISTS `page` (
   CONSTRAINT `page_fk1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `navigation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `navigator` varchar(60) NOT NULL DEFAULT 'main',
+  `parent_id` int NULL DEFAULT NULL,
+  `sort` smallint NULL DEFAULT 1,
+  `page_id` int NULL DEFAULT NULL,
+  `title` varchar(60) NULL DEFAULT NULL,
+  `active` enum('Y', 'N') NOT NULL DEFAULT 'Y',
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `navigator_idx` (`navigator`),
+  KEY `page_id_idx` (`page_id`),
+  KEY `parent_id_idx` (`parent_id`),
+  CONSTRAINT `navigation_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `navigation_fk2` FOREIGN KEY (`parent_id`) REFERENCES `navigation` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `page_element` (
   `id` int NOT NULL AUTO_INCREMENT,
   `page_id` int NOT NULL,
@@ -144,6 +128,22 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   CONSTRAINT `page_element_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
   CONSTRAINT `page_element_fk2` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `setting` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category` varchar(60) NOT NULL,
+  `page_id` int DEFAULT NULL,
+  `setting_key` varchar(60) NOT NULL,
+  `setting_value` varchar(4000) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `setting_category_idx` (`category`),
+  KEY `setting_ref_cat_idx` (`page_id`, `category`),
+  CONSTRAINT `setting_fk1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `message` (
   `id` int NOT NULL AUTO_INCREMENT,
