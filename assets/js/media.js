@@ -1,7 +1,7 @@
 // --------------------------------------------------------
 // Media management
 // --------------------------------------------------------
-// Append category input to media categories form
+// Append category/gallery name input to media categories form
 $('form.jsEditMediaCategory').on('focus', 'input[name^=category]:last', function () {
     let $newInputRow = $(this).parents('.jsMediaCategory').clone();
     $newInputRow.find('input[name^=category]').val('');

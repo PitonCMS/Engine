@@ -64,7 +64,7 @@ class AdminMediaController extends AdminBaseController
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         $media = $mediaMapper->make();
-        $media->id = (int) $this->request->getParsedBodyParam('id');
+        $media->id = (int) $this->request->getParsedBodyParam('media_id');
         $media->caption = $this->request->getParsedBodyParam('caption');
         $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
         $mediaMapper->save($media);
@@ -93,7 +93,7 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         // Get the media record
-        if (null !== $id = (int) $this->request->getParsedBodyParam('id')) {
+        if (null !== $id = (int) $this->request->getParsedBodyParam('media_id')) {
             $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {

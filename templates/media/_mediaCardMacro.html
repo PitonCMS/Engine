@@ -11,13 +11,13 @@
 <div class="media jsMediaCard">
   <form class="mediaForm" action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-    <input type="hidden" name="id" value="{{ media.id }}">
+    <input type="hidden" name="media_id" value="{{ media.id }}">
 
     {# Media Image Thumbnail for preview 100px wide #}
     <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
       data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
       data-media-id="{{ media.id }}">
-  
+
       {% if editable %}
 
       {#   <div class="">
@@ -38,7 +38,7 @@
           {{ checked(media.feature) }}>
         <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
         </div>
-       
+
       </div>
 
       {# Media Categories #}

@@ -149,16 +149,18 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Get page object
-        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : (int) $this->request->getParsedBodyParam('id');
+        $pageId = empty($this->request->getParsedBodyParam('page_id')) ? null : (int) $this->request->getParsedBodyParam('page_id');
         $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('page_slug'));
 
-        // Get the original page from database, if exists, for update
+        // Try to get the original page from database for update
         if (null !== $pageId) {
-            $page = $pageMapper->findById($pageId);
+            if (null === $page = $pageMapper->findById($pageId)) {
+                throw new Exception("PitonCMS: savePageHeader Page $pageId not found.");
+            }
 
             // Ensure we are not futzing with the home page slug
             if ($page->page_slug === 'home' && $newSlug !== 'home') {
-                throw new Exception('PitonCMS: Cannot change home page slug');
+                throw new Exception('PitonCMS: Cannot change home page slug.');
             }
         } else {
             $page = $pageMapper->make();
@@ -171,7 +173,7 @@ class AdminPageController extends AdminBaseController
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->page_slug = $newSlug;
         $page->meta_description = $this->request->getParsedBodyParam('meta_description');
-        $page->media_id = $this->request->getParsedBodyParam('media_id');
+        $page->media_id = $this->request->getParsedBodyParam('page_media_id');
 
         // Process published date
         $publishedDate = $this->request->getParsedBodyParam('published_date');
@@ -260,7 +262,7 @@ class AdminPageController extends AdminBaseController
 
             // Get the elementTemplateFile from element JSON file
             if (null === $elementDefinition = $definition->getElement($pageElement->definition)) {
-                throw new Exception('Element JSON Definition Error: ' . print_r($definition->getErrorMessages(), true));
+                throw new Exception('PitonCMS: Element JSON Definition Error: ' . print_r($definition->getErrorMessages(), true));
             }
 
             $pageElement->template = $elementDefinition->elementTemplateFile;
@@ -279,7 +281,7 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        $pageId = empty($this->request->getParsedBodyParam('id')) ? null : $this->request->getParsedBodyParam('id');
+        $pageId = empty($this->request->getParsedBodyParam('page_id')) ? null : $this->request->getParsedBodyParam('page_id');
 
         if (null !== $pageId) {
             // Ensure this is not the home page
@@ -345,14 +347,14 @@ class AdminPageController extends AdminBaseController
     public function deleteElement()
     {
         // Get dependencies
-        $PageElement = ($this->container->dataMapper)('PageElementMapper');
+        $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
         // Check that we received an ID
         if ($this->request->getParsedBodyParam('id')) {
             // Delete block element
-            $blockElement = $PageElement->make();
+            $blockElement = $pageElement->make();
             $blockElement->id = (int) $this->request->getParsedBodyParam('id');
-            $PageElement->delete($blockElement);
+            $pageElement->delete($blockElement);
 
             $status = 'success';
         } else {
