@@ -1,65 +1,37 @@
- #navigationPage {
-  .navigator-title {
-   font-size: 1.4rem;
-  }
-  .nav-parent {
-   width: 100%;
-   @include padding(null null null 0);
-   @include margin(0 null null null);
-   .nav-parent-title{
-    @include padding(.5em null null null);
-   }
-  
+li {
+ display: flex;
+ flex-flow: column nowrap;
+}
 
-   .nav-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    column-gap: 1em;
+.nav-parent {
+ @include padding(1em);
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+ gap: 1rem;
+}
 
-    .form-group {
-     @include margin(0);
-    }
-   }
-  }
+.navigator-button-group {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+ gap: 10px;
+ @include margin(.25em);
 
-  .nav-child {
-   grid-column: 1 / -1;
-   .nav-parent-title {
-    @include padding(0);
-   }
-  
-   .nav-item-level-2 {
-    background: $primary-dark-grey;
-    border-radius: $border-radius;
-    @include padding(0 .5em .5em);
-    @include margin(.5em 0 0);
-   }
-  
-  }
-
-  .nav-controls {
-   display: flex;
-   flex-flow: row nowrap;
-   justify-content: center;
-   align-items: center;
-   font-size: 1rem;
-   .divider {
-    @include margin(null .25em null null);
-    color: $primary-color;
-   }
-  }
-
-  .fas {
-   @include padding(.25em .5em);
-   @include margin(null .25em null null);
-   color: $primary-light;
-   border-radius: $border-radius;
-   background: $primary-color;
-
-   &:hover {
-    cursor: pointer;
-    color: $primary-dark-grey;
-   }
-  }
-
+ .btn {
+  color: white;
  }
+}
+
+.nav-child {
+ padding-left: 10px;
+}
+
+.add-page,
+.add-sub-page {
+ width: 40px;
+}
+
+.navItem {
+ display: flex;
+ flex-flow: column nowrap;
+ @include padding(.5em);
+}
