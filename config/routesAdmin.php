@@ -235,6 +235,11 @@ $app->group('/admin', function () {
     $this->get('/getHelpContent/{file}', function ($args) {
         return (new AdminController($this))->getHelpContent($args);
     })->setName('adminHelpContent');
+
+    // Fallback for when calling /admin to redirect to /admin/home (adminHome)
+    $this->get('[/]', function () {
+        return $this->response->withRedirect($this->router->pathFor('adminHome'));
+    });
 })->add(function ($request, $response, $next) {
     // Authentication
     $Security = $this->accessHandler;
