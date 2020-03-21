@@ -70,7 +70,7 @@
 {% for n in nav %}
 {% if n.navigator == navigator %}
 
-<li class="jsNavItem navItem {% if n.active == 'Y' %}navigation-disabled{% endif %}">
+<li class="jsNavItem navItem {% if n.active == 'N' %}navigation-disabled{% endif %}">
  <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
  <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
  <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">

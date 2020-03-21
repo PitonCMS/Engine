@@ -10471,4 +10471,8 @@ div[class*=user-element] {
   margin-top: 0.25em;
 }
 
+.navigation-disabled {
+  background: rgba(255, 215, 0, 0.5);
+}
+
 /*# sourceMappingURL=main.css.map */
