@@ -9940,6 +9940,61 @@ img {
   z-index: 99;
 }
 
+li {
+  list-style: none;
+}
+
+.icon {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.icon-green {
+  background: green;
+}
+.icon-green:hover {
+  background: #005700;
+  transition: all 0.3s ease;
+}
+.icon-green:active {
+  background: #000100;
+}
+
+.icon-blue {
+  background: blue;
+}
+.icon-blue:hover {
+  background: #0000d6;
+  transition: all 0.3s ease;
+}
+.icon-blue:active {
+  background: navy;
+}
+
+.icon-yellow {
+  background: gold;
+}
+.icon-yellow:hover {
+  background: #d6b500;
+  transition: all 0.3s ease;
+}
+.icon-yellow:active {
+  background: #806c00;
+}
+
+.icon-red {
+  background: red;
+}
+.icon-red:hover {
+  background: #d60000;
+  transition: all 0.3s ease;
+}
+.icon-red:active {
+  background: maroon;
+}
+
 /****************************************/
 /********* Release Notes Code Wrap ******/
 /****************************************/
@@ -10378,41 +10433,42 @@ div[class*=user-element] {
   object-fit: cover;
 }
 
-li {
-  display: flex;
-  flex-flow: column nowrap;
-}
-
 .nav-parent {
-  padding: 1em;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  width: 100%;
+  padding-inline-start: 0;
+  display: flex;
+  flex-flow: row wrap;
 }
-
-.navigator-button-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: 10px;
-  margin: 0.25em;
+.nav-parent .navItem {
+  width: 185px;
+  padding: 0.5em;
+  margin-right: 0.5em;
+  margin-bottom: 1em;
+  border: solid 2px #afafaf;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+  border-radius: 5px;
 }
-.navigator-button-group .btn {
-  color: white;
+.nav-parent .navItem select {
+  width: 100%;
 }
 
 .nav-child {
-  padding-left: 10px;
+  margin-top: 0.5em;
+  padding: 0.25em;
+  background: #ebebeb;
+  padding-inline-start: 10px;
+  border-radius: none;
+}
+.nav-child .navItem {
+  width: 100%;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
-.add-page,
-.add-sub-page {
-  width: 40px;
-}
-
-.navItem {
-  display: flex;
-  flex-flow: column nowrap;
-  padding: 0.5em;
+.navigator-button-group {
+  margin-top: 0.25em;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -6,55 +6,55 @@
 {% block sectionId 'navigationPage' %}
 
 {% block openForm %}
-	<form class="jsNavigatorForm contentWrapper" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
-		<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-		<input type="hidden" name="navigator" value="{{ page.navigator }}">
-{% endblock openForm %}
+<form class="jsNavigatorForm contentWrapper" action="{{ pathFor('adminSaveNavigation') }}" method="post"
+ accept-charset="utf-8">
+ <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+ <input type="hidden" name="navigator" value="{{ page.navigator }}">
+ {% endblock openForm %}
 
-{% block sidebar %}
-  {# Get list of defined navigators from navigation.json #}
-  {% for navigator in page.navigators %}
-    <div class="sidebar-link">
-      <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
-        <i class="fas fa-compass"></i>
-        <div class="sidebar-link__text">{{ navigator|capitalize }}</div>
-      </a>
-    </div>
-  {% endfor %}
+ {% block sidebar %}
+ {# Get list of defined navigators from navigation.json #}
+ {% for navigator in page.navigators %}
+ <div class="sidebar-link">
+  <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+   <i class="fas fa-compass"></i>
+   <div class="sidebar-link__text">{{ navigator|capitalize }}</div>
+  </a>
+ </div>
+ {% endfor %}
 
-  <a class="btn btn-sm btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
-  <button type="submit" class="btn btn-sm btn-primary btn-sm" id="jsSaveNavButton" title="Save navigation" disabled>Save</button>
-{% endblock sidebar %}
+ <a class="btn btn-sm btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+ <button type="submit" class="btn btn-sm btn-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
+  disabled>Save</button>
+ {% endblock sidebar %}
 
-{% block content %}
-  <h3>{{ page.navigator|capitalize }} Navigation</h3>
-  <hr>
+ {% block content %}
+ <h3>{{ page.navigator|capitalize }} Navigation</h3>
+ <hr>
 
-  {% if page.navigator %}
-    <div class="jsEditNavBlock">
-      <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
-        {{ navItem.selectPage(page.navigation, page.navigator) }}
-        <li>
-          <button class="btn btn-sm btn-primary jsAddNavItem add-page" type="button" title="Add page navigation link">
-            <i class="fas fa-plus"></i>
-          </button>
-        </li>
-      </ul>
-    </div>
-  {% endif %}
-{% endblock content %}
+ {% if page.navigator %}
+ <div class="jsEditNavBlock">
+  <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
+   {{ navItem.selectPage(page.navigation, page.navigator) }}
+   <li>
+    <i class="fas fa-plus jsAddNavItem icon icon-green" title="Add New Navigation Link"></i>
+   </li>
+  </ul>
+ </div>
+ {% endif %}
+ {% endblock content %}
 
-{% block closeForm %}
-	</form>
+ {% block closeForm %}
+</form>
 
-	{# Spare hidden nav page select list to clone and add to navigation, keep outside of form #}
-	<ul class="d-none" id="jsPageSelect">
-		{{ navItem.selectPage([{'navigator': page.navigator}], page.navigator) }}
-	</ul>
+{# Spare hidden nav page select list to clone and add to navigation, keep outside of form #}
+<ul class="d-none" id="jsPageSelect">
+ {{ navItem.selectPage([{'navigator': page.navigator}], page.navigator) }}
+</ul>
 {% endblock closeForm %}
 
 {% block foot %}
-	<script src="{{ basePath() }}/admin/js/navigation.js"></script>
+<script src="{{ basePath() }}/admin/js/navigation.js"></script>
 {% endblock foot %}
 
 
@@ -65,52 +65,46 @@
     @param nav Piton Navigation object
 #}
 {% macro selectPage(nav, navigator) %}
-	{% import _self as navItem %}
+{% import _self as navItem %}
 
-	{% for n in nav %}
-		{% if n.navigator == navigator %}
+{% for n in nav %}
+{% if n.navigator == navigator %}
 
-			<li class="jsNavItem navItem">
-				<input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
-				<input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
-				<input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
-				<input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
+<li class="jsNavItem navItem">
+ <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
+ <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
+ <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
+ <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
 
-				<select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
-					<option value="x">Add Page</option>
-					{# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
-					<option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
-					{% for p in getNavPages() %}
-						<option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
-					{% endfor %}
-				</select>
+ <select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
+  <option value="x">Add Page</option>
+  {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
+  <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
+  {% for p in getNavPages() %}
+  <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
+  {% endfor %}
+ </select>
 
-				<div class="navigator-button-group">
-					<button class="btn btn-sm btn-danger jsNavDelete" type="button" title="Remove">
-						<i class="fas fa-minus"></i>
-					</button>
-					<button class="btn btn-sm btn-warning jsNavActive" type="button" title="Disable navigation links temporarily">
-						<i class="fas fa-exclamation-triangle"></i>
-					</button>
-				</div>
+ <div class="navigator-button-group">
+  <i class="fas fa-times jsNavDelete icon icon-red" title="Delete Navigation Link"></i>
+  <i class="fas fa-exclamation jsNavActive icon icon-yellow" title="Disable Navigation Link"></i>
+ </div>
 
-				<ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}" data-level="{{ n.level }}">
-					{% if n.childNav %}
-						{{ navItem.selectPage(n.childNav, navigator) }}
-					{% endif %}
-					{% if n.level < 2 %}
-						<li>
-							<button class="btn btn-sm btn-success jsAddNavItem add-sub-page" type="button" title="Add page navigation link">
-								<i class="fas fa-plus"></i>
-							</button>
-						</li>
-					{% endif %}
-				</ul>
-			</li>
+ <ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}" data-level="{{ n.level }}">
+  {% if n.childNav %}
+  {{ navItem.selectPage(n.childNav, navigator) }}
+  {% endif %}
+  {% if n.level < 2 %}
+  <li>
+   <i class="fas fa-plus jsAddNavItem add-sub-page icon icon-green" title="Add Sub Navigation Link"></i>
+  </li>
+  {% endif %}
+ </ul>
+</li>
 
-		{% endif %}
-	{% endfor %}
-	{# TODO How to handle alt title?
+{% endif %}
+{% endfor %}
+{# TODO How to handle alt title?
 	    <input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
 	#}
 {% endmacro selectPage %}
