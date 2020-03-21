@@ -75,7 +75,7 @@ $container['view'] = function ($c) {
  * Loads Piton Pagination to use in Twig templates for page numbered links
  */
 $container['adminPagination'] = function ($c) {
-    $config['resultsPerPage'] = 6;
+    $config['resultsPerPage'] = 50; // 6; while in development
     $config['paginationWrapperClass'] = 'pagination';
     return new Piton\Pagination\TwigPagination($config);
 };
