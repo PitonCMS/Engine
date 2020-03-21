@@ -59,10 +59,10 @@ $('.jsEditNavBlock').on('click', '.jsNavActive', function() {
   // Get current status and reverse
   if ($navItem.find('.jsNavActiveFlag:first').val() === "Y") {
     $navItem.find('.jsNavActiveFlag:first').val("N");
-    $navItem.addClass('navigation-disabled');
+    $navItem.addClass('bg-warning text-white');
   } else {
     $navItem.find('.jsNavActiveFlag:first').val("Y");
-    $navItem.removeClass('navigation-disabled');
+    $navItem.removeClass('bg-warning text-white');
   }
   setNavSaveIndicator();
 });
