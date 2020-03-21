@@ -1,37 +1,79 @@
-li {
- display: flex;
- flex-flow: column nowrap;
-}
+// li {
+//  display: flex;
+//  flex-flow: column nowrap;
+// }
 
+// .nav-parent {
+//  @include padding(1em);
+//  display: grid;
+//  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+//  gap: 10px;
+// }
+
+// .navigator-button-group {
+//  display: grid;
+//  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+//  gap: 10px;
+//  @include margin(.25em);
+
+//  .btn {
+//   color: white;
+//  }
+// }
+
+// .nav-child {
+//  padding-left: 10px;
+// }
+
+// .add-page,
+// .add-sub-page {
+//  width: 40px;
+// }
+
+// .navItem {
+//  display: flex;
+//  flex-flow: column nowrap;
+//  @include padding(.5em);
+// }
 .nav-parent {
- @include padding(1em);
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
- gap: 1rem;
-}
+ // display: grid;
+ // grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+ // gap: 1em;
+ width: 100%;
+ padding-inline-start: 0;
+ display: flex;
+  flex-flow: row wrap;
 
-.navigator-button-group {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
- gap: 10px;
- @include margin(.25em);
+ .navItem {
+  width: 185px;
+  @include padding(.5em);
+  @include margin(null .5em 1em null);
+  border: solid 2px $primary-dark-grey;
+  box-shadow: $box-shadow;
+  border-radius: $border-radius;
 
- .btn {
-  color: white;
+  
+
+  select {
+   width: 100%;
+  }
  }
 }
 
 .nav-child {
- padding-left: 10px;
+ @include margin(.5em null null);
+ @include padding(.25em);
+ background: $primary-md-grey;
+ padding-inline-start: 10px;
+ border-radius: none;
+ .navItem{
+  width: 100%;
+  box-shadow: none;
+  border: none;
+ @include padding(0);
+ @include margin(0);
+ }
 }
-
-.add-page,
-.add-sub-page {
- width: 40px;
-}
-
-.navItem {
- display: flex;
- flex-flow: column nowrap;
- @include padding(.5em);
+.navigator-button-group{
+ @include margin(.25em null null);
 }

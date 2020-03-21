@@ -1,30 +1,60 @@
 /*********** Global Styles ***********/
 html,
 body {
-  min-height: 100vh;
-  width: 100vw;
+ min-height: 100vh;
+ width: 100vw;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.5;
-  // @include padding(57px null null null);
-  position: relative;
-  @media screen and (min-width: 768px){
-    // @include padding(63px null null null);
-  }
+ font-family: Arial, Helvetica, sans-serif;
+ line-height: 1.5;
+ // @include padding(57px null null null);
+ position: relative;
+
+ @media screen and (min-width: 768px) {
+  // @include padding(63px null null null);
+ }
 }
-img{
-  width: 100%;
-  display: block;
-  height: auto;
+
+img {
+ width: 100%;
+ display: block;
+ height: auto;
 }
 
 .alert-fixed {
-  position: fixed;
-  top: 100px;
-  left: 0px;
-  right: 0px;
-  width: 100%;
-  z-index: 99;
+ position: fixed;
+ top: 100px;
+ left: 0px;
+ right: 0px;
+ width: 100%;
+ z-index: 99;
+}
+
+li {
+ list-style: none;
+}
+
+.icon {
+ color: white;
+ text-decoration: none;
+ padding: 5px 10px;
+ border-radius: 3px;
+
+}
+
+.icon-green {
+ @include button-bg(green);
+}
+
+.icon-blue {
+ @include button-bg(blue);
+}
+
+.icon-yellow {
+ @include button-bg(gold);
+}
+
+.icon-red {
+ @include button-bg(red);
 }
