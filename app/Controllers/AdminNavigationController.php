@@ -82,6 +82,11 @@ class AdminNavigationController extends AdminBaseController
                 continue;
             }
 
+            // If the page ID is 'x' then skip, nothing to save
+            if ($navItem['pageId'] === 'x') {
+                continue;
+            }
+
             $sort++;
             $nav = $navigationMapper->make();
             $nav->id = (is_numeric($navItem['navId'])) ? (int) $navItem['navId'] : null;
