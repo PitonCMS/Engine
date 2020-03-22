@@ -95,7 +95,7 @@
       <label>Gallery</label>
       <select class="form-control" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
-        {% for c in getGalleries() %}
+        {% for c in getMediaCategories() %}
         <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
         {% endfor %}
       </select>

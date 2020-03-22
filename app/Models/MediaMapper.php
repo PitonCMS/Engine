@@ -75,4 +75,36 @@ SQL;
 
         return $this->find();
     }
+
+    /**
+     * Find Media By Category Name (Optional)
+     *
+     * Find media by optional category name
+     * @param  string $category
+     * @return array|null
+     */
+    public function findMediaByCategoryName(string $category = null): ?array
+    {
+        if (null === $category) {
+            return $this->findAllMedia();
+        }
+
+        $this->sql = <<<SQL
+select
+    mc.category,
+    m.id,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
+    m.caption
+from media_category mc
+join media_category_map mcp on mc.id = mcp.category_id
+join media m on mcp.media_id = m.id
+where mc.category = ?
+SQL;
+        $this->bindValues[] = $category;
+
+        return $this->find();
+    }
 }

@@ -1,93 +1,37 @@
 {% extends '@admin/_adminBase.html' %}
-{% import "@admin/media/_mediaCardMacro.html" as file %}
-{% import '@admin/media/_mediaCategoryCheckboxMacro.html' as categoryInput %}
+{% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
-{% block htmlTitle 'Media' %}
-{% block headText 'Media' %}
+{% block htmlTitle 'Manage Media' %}
+{% block headText 'Manage Media' %}
 {% block sectionId 'mediaPage' %}
 
 {% block sidebar %}
 {% include "@admin/media/_mediaSidebar.html" %}
 <!-- Button trigger modal -->
 <div class="button-group">
-  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#mediaUpload">
     Upload New Media
   </button>
 </div>
-
 {% endblock sidebar %}
 
 {% block content %}
+{{ mediaMacro.upload() }}
 
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Media Manager</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
-          enctype="multipart/form-data">
-          <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
-            <label class="custom-file-label" for="mediaFile">Choose a file</label>
-          </div>
-
-          <hr>
-          <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="feature" name="feature">
-            <label class="form-check-label" for="feature">Featured Media</label>
-          </div>
-          <hr>
-          {% for category in page.categories %}
-          {{ categoryInput.checkbox(category) }}
-          {% endfor %}
-          <hr>
-          <div class="form-group">
-            <label>Caption</label>
-            <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
-          </div>
-        </form>
-
-        {% if not site.settings.tinifyApiKey %}
-        <div class="bg-warning">
-          <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
-             optimize your media files for the web. To use TinyJPG with PitonCMS, go to
-
-            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
-
-            Enter your name and email address to receive an API key. Save this key to <a
-              href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
-              Tinify
-              API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
-          </p>
-        </div>
-        <hr>
-        {% endif %}
-
-        <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
-          gallery. Giving your picture a caption will provide alt text.</p>
-        <p>The upload and conversion process of your images may take extra time depending upon your internet speed.</p>
-      </div>
-    </div>
-  </div>
+<div class="form-inline">
+  <h3>Media</h3>
+  <select class="form-control ml-2 jsMediaCategorySelect">
+    <option value="0">All Media</option>
+    {% for c in getMediaCategories() %}
+    <option value="{{ c.id }}">{{ c.category }}</option>
+    {% endfor %}
+  </select>
 </div>
-<h3>All Media</h3>
+
+<hr>
 <div class="media-wrapper">
   {% for media in page.media %}
-  {{ file.mediaCard(media, page.categories, true) }}
+  {{ mediaMacro.card(media, page.categories, true) }}
   {% else %}
   <strong>No Media Found</strong>
   {% endfor %}

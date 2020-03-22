@@ -116,7 +116,7 @@ $app->group('/admin', function () {
 
         // Show all media in modal asynchronously
         $this->get('/get', function ($args) {
-            return (new AdminMediaController($this))->getMedia();
+            return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminGetMedia');
 
         // File upload

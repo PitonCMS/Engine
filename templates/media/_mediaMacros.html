@@ -1,0 +1,153 @@
+{#
+    All Twig Macros for Media and Media Category Management
+#}
+
+{#
+  Media Card
+
+  Used in the media modal in the page editor.
+  Also used in the All Media manager with editable form fields.
+#}
+{% macro card(media, categories, editable = false) %}
+{% import _self as mediaMacro %}
+
+<div class="media jsMediaCard">
+{# TODO: This <form> should really be inside the else statement but breaks layout #}
+  <form class="mediaForm" action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+    <input type="hidden" name="media_id" value="{{ media.id }}">
+
+    {# Media Image Thumbnail for preview 100px wide #}
+    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
+      data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
+      data-media-id="{{ media.id }}">
+
+      {% if not editable %}
+      {# This is for displaying in the page media modal when selecting images #}
+      <p>{{ media.caption }}</p>
+      {% else %}
+      {# Show editable fields and controls #}
+
+      {# Media Caption Input #}
+      <div class="mediaCaption">
+        <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
+          placeholder="No caption">
+      </div>
+
+      {# Featured Media? #}
+      <div class="mediaFeatured">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
+          {{ checked(media.feature) }}>
+        <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
+        </div>
+      </div>
+
+      {# Media Categories #}
+      <div class="mediaCategories">
+        {% for c in categories %}
+        {{ mediaMacro.checkbox(c, media.id) }}
+        {% endfor %}
+      </div>
+
+      {# Media Controls #}
+      <div class="mediaControls">
+        <button class="btn btn-outline-primary btn-sm mt-2" type="submit" value="save">Save</button>
+        <button class="btn btn-outline-danger btn-sm mt-2" type="submit" formaction="{{ pathFor('adminDeleteMedia') }}" value="delete">Delete</button>
+        <a class="btn btn-warning btn-sm mt-2" href="/admin/media/">Cancel</a>
+      </div>
+    {% endif %}
+    </form>
+</div>
+{% endmacro card %}
+
+{#
+  Media Category Checkboxes
+
+  Presents a list of available category checkboxes to assign categories in media
+#}
+{% macro checkbox(category, mediaId) %}
+{% if category %}
+<div class="form-group form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]"
+    value="{{ category.id }}" {{ checked(category.media[mediaId]) }}>
+  <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
+</div>
+{% endif %}
+{% endmacro checkbox %}
+
+{#
+    Media Upload Modal Include
+
+    Really can be an include but easier as a modal as it references another media macro
+    Open modal with:
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#mediaUpload">
+        Upload New Media
+    </button>
+#}
+{% macro upload() %}
+{% import _self as mediaMacro %}
+<div class="modal fade" id="mediaUpload" tabindex="-1" role="dialog" aria-labelledby="mediaUploadLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mediaUploadLabel">Upload Media Manager</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
+          enctype="multipart/form-data">
+          <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
+            <label class="custom-file-label" for="mediaFile">Choose a file</label>
+          </div>
+
+          <hr>
+          <div class="form-group form-check">
+            <input class="form-check-input" type="checkbox" id="feature" name="feature">
+            <label class="form-check-label" for="feature">Featured Media</label>
+          </div>
+          <hr>
+          {% for category in page.categories %}
+          {{ mediaMacro.checkbox(category) }}
+          {% endfor %}
+          <hr>
+          <div class="form-group">
+            <label>Caption</label>
+            <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
+          </div>
+        </form>
+
+        {% if not site.settings.tinifyApiKey %}
+        <div class="bg-warning">
+          <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
+             optimize your media files for the web. To use TinyJPG with PitonCMS, go to
+
+            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
+
+            Enter your name and email address to receive an API key. Save this key to <a
+              href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
+              Tinify
+              API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
+          </p>
+        </div>
+        <hr>
+        {% endif %}
+
+        <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
+          gallery. Giving your picture a caption will provide alt text.</p>
+        <p>The upload and conversion process of your images may take extra time depending upon your internet speed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro upload %}

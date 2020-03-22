@@ -62,7 +62,7 @@ class Admin extends Base
             new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
             new TwigFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new TwigFunction('getCollections', [$this, 'getCollections']),
-            new TwigFunction('getGalleries', [$this, 'getGalleries']),
+            new TwigFunction('getMediaCategories', [$this, 'getMediaCategories']),
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
             new TwigFunction('getNavPages', [$this, 'getNavPages']),
@@ -139,13 +139,13 @@ class Admin extends Base
     }
 
     /**
-     * Get Gallery Options
+     * Get Media Categories
      *
-     * Get all gallery media categories
+     * Get all media category galleries
      * @param  void
      * @return array|null
      */
-    public function getGalleries(): ?array
+    public function getMediaCategories(): ?array
     {
         if (isset($this->cache['galleries'])) {
             return $this->cache['galleries'];

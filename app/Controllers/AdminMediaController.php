@@ -129,10 +129,10 @@ class AdminMediaController extends AdminBaseController
         $data = $mediaMapper->find();
 
         $template = <<<HTML
-            {% import "@admin/media/_mediaCardMacro.html" as file %}
+            {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
             <div class="card-wrapper">
             {% for media in page.media %}
-              {{ file.mediaCard(media) }}
+              {{ mediaMacro.card(media) }}
             {% endfor %}
             </div>
 HTML;
