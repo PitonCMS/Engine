@@ -70,12 +70,23 @@ $container['view'] = function ($c) {
 };
 
 /**
- * Admin Twig Pagination
+ * Admin Twig Page Pagination
  *
  * Loads Piton Pagination to use in Twig templates for page numbered links
  */
-$container['adminPagination'] = function ($c) {
-    $config['resultsPerPage'] = 50; // 6; while in development
+$container['adminPagePagination'] = function ($c) {
+    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminPagePagination']['resultsPerPage'];
+    $config['paginationWrapperClass'] = 'pagination';
+    return new Piton\Pagination\TwigPagination($config);
+};
+
+/**
+ * Admin Twig Media Pagination
+ *
+ * Loads Piton Pagination to use in Twig templates for media numbered links
+ */
+$container['adminMediaPagination'] = function ($c) {
+    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminMediaPagination']['resultsPerPage'];
     $config['paginationWrapperClass'] = 'pagination';
     return new Piton\Pagination\TwigPagination($config);
 };

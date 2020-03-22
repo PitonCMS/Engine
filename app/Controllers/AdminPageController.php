@@ -32,7 +32,7 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $definition = $this->container->jsonDefinitionHandler;
-        $pagination = $this->container->adminPagination;
+        $pagination = $this->container->adminPagePagination;
         $pagination->setPagePath($this->container->router->pathFor('adminPages'));
 
         // Fetch pages & templates

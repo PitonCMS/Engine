@@ -1,20 +1,35 @@
 // --------------------------------------------------------
 // Media management
 // --------------------------------------------------------
-// Append category/gallery name input to media categories form
-$('form.jsEditMediaCategory').on('focus', 'input[name^=category]:last', function () {
-    let $newInputRow = $(this).parents('.jsMediaCategory').clone();
-    $newInputRow.find('input[name^=category]').val('');
-    $(this).parents('form.jsEditMediaCategory').append($newInputRow);
+
+// Listen for media category changes to enable save button
+$('.jsEditMediaCategory').on('input', function () {
+    setSaveButtonIndicator();
+});
+
+// Add category/gallery name input to media categories form
+$('.jsEditMediaCategory').on('click', '.jsAddMediaCategory', function () {
+    let $newInputRow = $('.jsMediaCategoryElement > .jsMediaCategory').clone();
+    $newInputRow.find('button').attr('disabled', false);
+    $(this).parent('div').before($newInputRow);
+    setSaveButtonIndicator();
 });
 
 // Delete category from media categories form
-$('.jsMediaCategory').on('click', 'button[type=button]', function (e) {
+$('.jsEditMediaCategory').on('click', 'button[type=button]', function (e) {
     e.preventDefault();
     if (!confirmPrompt()) {
         return false;
     }
-    let $category = $(e.target).parents('.jsMediaCategory');
+    let $category = $(e.target).parent('.jsMediaCategory');
+    if ($category.children('input[name^=category_id]').val() == '') {
+        // Not yet saved so just remove.
+        $category.fadeOut(function () {
+            $(this).remove();
+        });
+        return;
+    }
+    // Otherwise continue with physical delete
     let postData = {
         "id": $(e.target).attr('value')
     }

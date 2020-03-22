@@ -62,7 +62,7 @@ $('.jsEditNavBlock').on('click', '.jsNavActive', function() {
     $navItem.addClass('bg-warning text-white');
   } else {
     $navItem.find('.jsNavActiveFlag:first').val("Y");
-    $navItem.removeClass('bg-warning text-white');
+    $navItem.removeClass('navigation-disabled bg-warning text-white');
   }
   setNavSaveIndicator();
 });

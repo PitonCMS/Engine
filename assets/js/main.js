@@ -17,13 +17,25 @@ let confirmPrompt = function (msg) {
     return confirm(message);
 }
 
+// Listen for any delete click event with this class
 $('body').on('click', '.jsDeleteConfirm', function () {
     return confirmPrompt();
 });
 
+// Confirm logout
 $('.jsLogout').on('click', function () {
     return confirmPrompt('Are you sure you want to logout?');
 });
+
+// Listen for form input changes to update save button status
+let saveButtonFlag = false;
+const setSaveButtonIndicator = (buttonId) => {
+  if (!saveButtonFlag) {
+    buttonId = buttonId || '#jsSaveButtonInd';
+    $(buttonId).attr('disabled', false);
+    saveButtonFlag = true;
+  }
+};
 
 // --------------------------------------------------------
 // Media Page Management
@@ -65,4 +77,3 @@ $(function () {
 $('.popover-dismiss').popover({
     trigger: 'focus',
 });
-

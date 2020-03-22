@@ -209,7 +209,7 @@ HTML;
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $categoriesPost = $this->request->getParsedBody();
 
-        foreach ($categoriesPost['category'] as $key => $cat) {
+        foreach ($categoriesPost['category_name'] as $key => $cat) {
             // Skip if category name is empty
             if (empty($cat)) {
                 continue;
@@ -217,10 +217,10 @@ HTML;
 
             // Make category object
             $category = $mediaCategoryMapper->make();
-            $category->id = (int) $categoriesPost['id'][$key];
+            $category->id = (int) $categoriesPost['category_id'][$key];
 
             // Check if we need to delete a category, but only if this has been previously saved with an ID
-            if (isset($categoriesPost['delete'][$key]) && !empty($categoriesPost['id'][$key])) {
+            if (isset($categoriesPost['delete'][$key]) && !empty($categoriesPost['category_id'][$key])) {
                 $mediaCategoryMapper->delete($category);
             }
 
