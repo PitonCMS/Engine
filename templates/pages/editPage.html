@@ -37,25 +37,25 @@
 {% block sidebar %}
   <!-- Published Status Input & Notification -->
   <div class="sidebar-block status">
+   <p class="mb-0">Publish date</p>
     <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Choose publish date" value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
     {% if page.getPublishedStatus == 'draft' %}
-    <div class="text-danger" title="Not published">Status: Draft/Not Published</div>
+    <div class="text-danger mb-3" title="Not published">Status: Draft/Not Published</div>
 
     {% elseif page.getPublishedStatus == 'pending' %}
-    <div class="text-warning">Status: Pending</div>
+    <div class="text-warning mb-3">Status: Pending</div>
 
     {% elseif page.getPublishedStatus == 'published' %}
-    <div class="text-success">Status: Published</div>
+    <div class="text-success mb-3">Status: Published</div>
     {% endif %}
   </div>
-
   <!-- Control Buttons -->
   <div class="sidebar-block button-group">
-    <a class="btn btn-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
-    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn mb-0 btn-outline-warning" href="{{ pathFor('adminPages') }}">Cancel</a>
+    <button class="btn mb-0 btn-outline-primary" type="submit">Save</button>
     {% if page.id %}
-    <button class="btn btn-outline-danger jsDeleteConfirm" type="submit"
+    <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit"
       formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
       title="The home page cannot be deleted." {% endif %}>Delete</button>
     {% endif %}
@@ -202,7 +202,7 @@
               {% endfor %}
 
               {# Add Element Button #}
-              <button class="btn btn-success btn-sm jsAddElement" type="button" data-block-key="{{ block.key }}"
+              <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" data-block-key="{{ block.key }}"
                 data-element-type="{{ block.elementTypeDefault }}"
                 data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
                 data-element-count-limit="{{ block.elementCountLimit }}"

@@ -22,9 +22,9 @@
   </a>
  </div>
  {% endfor %}
-
- <a class="btn btn-sm btn-warning btn-sm" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
- <button type="submit" class="btn btn-sm btn-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
+<hr>
+ <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+ <button type="submit" class="btn btn-sm btn-outline-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
   disabled>Save</button>
  {% endblock sidebar %}
 

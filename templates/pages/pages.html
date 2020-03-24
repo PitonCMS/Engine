@@ -15,7 +15,7 @@
 {# {% block sectionId {{ page.type }} %} #}
 {% block sidebar %}
 {# There needs to be an if/else statement to say either Page Templates or Add a new item to collection. #}
-<h6>Page Templates</h6>
+<!-- <h6>Templates</h6> -->
 {% for template in page.templates %}
 
 <div class="sidebar-link">
@@ -32,16 +32,14 @@
 {% else %}
 <h5>No Page Definitions Found</h5>
 {% endfor %}
-<p class="text-muted text-small">There could be a short description here also.</p>
-<p class="text-muted text-small">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto porro consequuntur
-  assumenda dolor alias exercitationem magni dolorem aperiam labore recusandae!</p>
+
 {% endblock sidebar %}
 
 {% block content %}
 
 {% if page.type == 'page' %}
 <h3>Pages</h3>
-<div class="grid-wrapper">
+<div class="list-items-wrapper">
   {% for p in page.pages %}
   {% include "@admin/pages/_pageCard.html" %}
   {% else %}
@@ -55,7 +53,7 @@
 
 <h3>{{ c.name }}</h3>
 
-<div class="grid-wrapper">
+<div class="list-items-wrapper">
   {% for p in page.pages %}
   {% if p.collection_slug == c.value %}
   {% include "@admin/pages/_pageCard.html" %}
@@ -65,14 +63,14 @@
   {% endfor %}
 </div>
 
-<hr>
-<a class="muted-text" href="#">See All {{ c.name }}</a>
 
+<a class="muted-text" href="#">See All {{ c.name }}</a>
+<hr>
 
 {% endfor %}
 
 {% endif %}
 
-{{ pagination() }}
+ {{ pagination() }} 
 
 {% endblock content %}

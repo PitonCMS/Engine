@@ -1,7 +1,7 @@
  /*  All Top / Left Sidebars */
 
  .sidebar {
-  @include padding(65px null null null);
+  // @include padding(65px null null null);
   background: $primary-md-grey;
   position: sticky;
   top: 0px;
@@ -31,7 +31,10 @@
     justify-content: center;
     align-items: center;
    }
-
+.sidebar-title{
+@include padding(0);
+@include margin(0);
+}
    .button-group {
     display: flex;
     flex-flow: row nowrap;

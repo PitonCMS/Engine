@@ -9,7 +9,7 @@
 {% include "@admin/media/_mediaSidebar.html" %}
 <!-- Button trigger modal -->
 <div class="button-group">
-  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#mediaUpload">
+  <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
     Upload New Media
   </button>
 </div>
@@ -18,14 +18,16 @@
 {% block content %}
 {{ mediaMacro.upload() }}
 
-<div class="form-inline">
+<div class="form-inline mt-0">
   <h3>Media</h3>
-  <select class="form-control ml-2 jsMediaCategorySelect">
+  <hr>
+  <select class="form-control ml-auto jsMediaCategorySelect">
     <option value="0">All Media</option>
     {% for c in getMediaCategories() %}
     <option value="{{ c.id }}">{{ c.category }}</option>
     {% endfor %}
   </select>
+
 </div>
 
 <hr>

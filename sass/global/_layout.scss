@@ -2,87 +2,127 @@
 
 section,
 .contentWrapper {
-  width: 100vw;
-  display: grid;
-  grid-template-columns: 1fr;
+ width: 100vw;
+ display: grid;
+ grid-template-columns: 1fr;
+
+ @media screen and (min-width: 768px) {
+  grid-template-columns: 200px 3fr;
+ }
+
+ .content {
+  position: relative;
 
   @media screen and (min-width: 768px) {
-    grid-template-columns: 200px 3fr;
+   // @include padding(65px null null);
   }
 
-  .content {
-    position: relative;
+  .jsEditPageContainer {
+   position: relative;
+
+   .nav-tabs {
+    background: $primary-light;
+    @include padding(.5em null null .25em);
+    position: sticky;
+    top: 161px;
+    z-index: 5;
 
     @media screen and (min-width: 768px) {
-      @include padding(65px null null);
+
+     top: 57px;
     }
-
-    .jsEditPageContainer {
-      position: relative;
-
-      .nav-tabs {
-        background: $primary-light;
-        @include padding(.5em null null .25em);
-        position: sticky;
-        top: 161px;
-        z-index: 5;
-
-        @media screen and (min-width: 768px) {
-
-          top: 57px;
-        }
-      }
-    }
-
-    .form-group-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1em;
-
-      .form-group {
-        background: $primary-light-grey;
-        @include padding(1em);
-        border-radius: $border-radius;
-        box-shadow: $box-shadow;
-      }
-    }
-
-    .element-block {
-      @include margin(null null 1em null);
-    }
-
-    .block-content {
-      background: $primary-light-grey;
-      @include padding(1em);
-      border-radius: $border-radius;
-      box-shadow: $box-shadow;
-
-      .btn {
-        @include margin(null null 1em null);
-      }
-    }
+   }
   }
 
-  .block-title-wrapper {
-    width: 100%;
-    display: flex;
+  .form-group-wrapper {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 1em;
+
+   .form-group {
+    background: $primary-light-grey;
+    @include padding(1em);
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+   }
   }
+
+  .element-block {
+   @include margin(null null 1em null);
+  }
+
+  .block-content {
+   background: $primary-light-grey;
+   @include padding(1em);
+   border-radius: $border-radius;
+   box-shadow: $box-shadow;
+
+   .btn {
+    @include margin(null null 1em null);
+   }
+  }
+ }
+
+ .block-title-wrapper {
+  width: 100%;
+  display: flex;
+ }
 }
 
-/* Grid Container */
+/* Card Grid Container */
 .grid-wrapper {
-  @include padding(1em null null);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1em;
+ @include padding(1em null null);
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+ gap: 1em;
 }
 
 .content {
-  @include padding(1em);
-  background: $primary-light-grey;
+ @include padding(1em);
+ background: $primary-light-grey;
 
-  .card {
-    box-shadow: $box-shadow;
-    border: none;
+ .card {
+  box-shadow: $box-shadow;
+  border: none;
+ }
+}
+
+/* List Item Container */
+.list-items-wrapper {
+ display: grid;
+
+ .page-list {
+  background: #efefef;
+  @include padding(.25em);
+  @include margin(0 0 .5em 0);
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 1em;
+  justify-content: flex-start;
+  // align-items: center;
+
+  &__title {
+
+   display: flex;
+   justify-content: space-between;
+
+   span {
+    overflow: hidden;
+   }
+
+   i {
+    color: $primary-dark-grey;
+   }
   }
+
+  &__body {
+   p {
+    @include margin(0);
+   }
+  }
+
+  &__action {}
+ }
 }

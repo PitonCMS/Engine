@@ -9944,6 +9944,10 @@ li {
   list-style: none;
 }
 
+hr {
+  background-color: #336699;
+}
+
 .icon {
   color: white;
   text-decoration: none;
@@ -10046,7 +10050,6 @@ code {
 
 /*  All Top / Left Sidebars */
 .sidebar {
-  padding-top: 65px;
   background: #ebebeb;
   position: sticky;
   top: 0px;
@@ -10078,6 +10081,10 @@ code {
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
+}
+.sidebar .sidebar-inner .sidebar-title {
+  padding: 0;
+  margin: 0;
 }
 .sidebar .sidebar-inner .button-group {
   display: flex;
@@ -10163,12 +10170,6 @@ section .content,
 .contentWrapper .content {
   position: relative;
 }
-@media screen and (min-width: 768px) {
-  section .content,
-.contentWrapper .content {
-    padding-top: 65px;
-  }
-}
 section .content .jsEditPageContainer,
 .contentWrapper .content .jsEditPageContainer {
   position: relative;
@@ -10222,7 +10223,7 @@ section .block-title-wrapper,
   display: flex;
 }
 
-/* Grid Container */
+/* Card Grid Container */
 .grid-wrapper {
   padding-top: 1em;
   display: grid;
@@ -10239,49 +10240,47 @@ section .block-title-wrapper,
   border: none;
 }
 
+/* List Item Container */
+.list-items-wrapper {
+  display: grid;
+}
+.list-items-wrapper .page-list {
+  background: #efefef;
+  padding: 0.25em;
+  margin: 0 0 0.5em;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(51, 51, 51, 0.25);
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 1em;
+  justify-content: flex-start;
+}
+.list-items-wrapper .page-list__title {
+  display: flex;
+  justify-content: space-between;
+}
+.list-items-wrapper .page-list__title span {
+  overflow: hidden;
+}
+.list-items-wrapper .page-list__title i {
+  color: #afafaf;
+}
+.list-items-wrapper .page-list__body p {
+  margin: 0;
+}
 /******* Components Included in All Pages *******/
 .pagination {
-  padding: 1em 0.5em;
+  padding: 1em;
   display: flex;
-  flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-  font-size: 1.4rem;
-  background: #ebebeb;
 }
-.pagination .active a {
-  background: #336699;
-  color: #ffffff;
-}
-.pagination .active a:hover {
-  cursor: default;
-  color: #ffffff;
-}
-.pagination div a {
-  padding: 0.25em;
-  margin: 1em 0.25em;
-  background: transparent;
-  color: #333;
-  border-radius: 5px;
+.pagination div {
+  margin-right: 0.25em;
 }
 .pagination div a:hover {
   text-decoration: none;
-  color: #ffffff;
-  background: #336699;
-  cursor: pointer;
 }
-.pagination div:first-child a, .pagination div:last-child a {
-  padding: 0;
-  margin: 0;
-}
-.pagination div:first-child a:hover, .pagination div:last-child a:hover {
-  background-color: transparent;
-  color: #afafaf;
-}
-.pagination .disabled {
-  color: #afafaf;
-}
-
 /******* Page Level Styles *******/
 #editPage .card,
 #collectionDetail .card {
@@ -10414,12 +10413,11 @@ div[class*=user-element] {
 }
 #mediaPage .media-wrapper .media .mediaControls {
   grid-area: mediaControls;
-  background: #ebebeb;
+  background: #efefef;
   padding: 0.5em;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: flex-start;
 }
 #mediaPage .media-wrapper .media .mediaForm {
   display: grid;

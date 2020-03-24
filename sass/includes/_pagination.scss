@@ -1,54 +1,31 @@
 .pagination {
- @include padding(1em .5em);
- display: flex;
- flex-flow: row nowrap;
- justify-content: flex-start;
- align-items: center;
- font-size: 1.4rem;
- background: $primary-md-grey;
-
- .active {
-  a {
-   background: $primary-color;
-   color: $primary-light;
-
-   &:hover {
-    cursor: default;
-    color: $primary-light;
-   }
+@include padding(1em);
+display: flex;
+justify-content: flex-start;
+align-items: center;
+div{
+ @include margin(null .25em null null);
+ a {
+  &:hover {
+   text-decoration: none;
   }
  }
-
- & div {
+}
+ .active {
   a {
-   @include padding(.25em);
-   @include margin(1em .25em);
-   background: transparent;
-   color: $primary-dark;
-   border-radius: $border-radius;
-
-   &:hover {
-    text-decoration: none;
-    color: $primary-light;
-    background: $primary-color;
-    cursor: pointer;
-   }
+  
+   &:hover {}
   }
+ }
+ & div {
+
 
   &:first-child,
   &:last-child {
    a {
-    @include padding(0);
-    @include margin(0);
-    &:hover{
-     background-color: transparent;
-     color: $primary-dark-grey;
-    }
+    &:hover {}
    }
   }
  }
-
- .disabled {
-  color: $primary-dark-grey;
- }
+ .disabled {}
 }
