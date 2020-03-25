@@ -33,10 +33,10 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $definition = $this->container->jsonDefinitionHandler;
         $pagination = $this->container->adminPagePagination;
-        $pagination->setPagePath($this->container->router->pathFor('adminPages'));
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
+            $pagination->setPagePath($this->container->router->pathFor('adminCollections'));
             $data['pages'] = $pageMapper->findCollectionPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
             $data['templates'] = $definition->getCollections();
@@ -51,6 +51,7 @@ class AdminPageController extends AdminBaseController
                 ];
             }
         } else {
+            $pagination->setPagePath($this->container->router->pathFor('adminPages'));
             $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
             $data['templates'] = $definition->getPages();
