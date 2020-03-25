@@ -174,4 +174,5 @@ VALUES
 	('site', NULL, 'dateFormat', 'mm/dd/yyyy', 1, now(), 1, now()),
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
-  ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now());
+  ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
+  ('piton', NULL, 'engine', NULL, 1, now(), 1, now());
