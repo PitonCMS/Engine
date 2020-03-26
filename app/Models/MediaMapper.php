@@ -33,13 +33,24 @@ class MediaMapper extends DataMapperAbstract
      * Find All Media
      *
      * Return all media records
-     * @param  void
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findAllMedia(): ?array
+    public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect();
         $this->sql .= ' order by created_date desc';
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
 
         return $this->find();
     }
@@ -49,16 +60,18 @@ class MediaMapper extends DataMapperAbstract
      *
      * Find media by category ID
      * @param  int   $catId
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findMediaByCategoryId(int $catId = null): ?array
+    public function findMediaByCategoryId(int $catId = null, int $limit = null, int $offset = null): ?array
     {
         if (null === $catId) {
             return null;
         }
 
         $this->sql = <<<SQL
-select
+select SQL_CALC_FOUND_ROWS
     mc.category,
     m.id,
     m.filename,
@@ -73,24 +86,37 @@ where mc.id = ?
 SQL;
         $this->bindValues[] = $catId;
 
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
+
         return $this->find();
     }
 
     /**
      * Find Media By Category Name (Optional)
      *
-     * Find media by optional category name
+     * Find media by optional category name.
+     * If no category is provided then return all
      * @param  string $category
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findMediaByCategoryName(string $category = null): ?array
+    public function findMediaByCategoryName(string $category = null, int $limit = null, int $offset = null): ?array
     {
         if (null === $category) {
-            return $this->findAllMedia();
+            return $this->findAllMedia($limit, $offset);
         }
 
         $this->sql = <<<SQL
-select
+select SQL_CALC_FOUND_ROWS
     mc.category,
     m.id,
     m.filename,
@@ -104,6 +130,16 @@ join media m on mcp.media_id = m.id
 where mc.category = ?
 SQL;
         $this->bindValues[] = $category;
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
 
         return $this->find();
     }
