@@ -36,6 +36,7 @@ class AdminPageController extends AdminBaseController
 
         // Fetch pages & templates
         if (isset($args['type']) && $args['type'] === 'collection') {
+            // Collection case
             $pagination->setPagePath($this->container->router->pathFor('adminCollections'));
             $data['pages'] = $pageMapper->findCollectionPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
@@ -51,6 +52,7 @@ class AdminPageController extends AdminBaseController
                 ];
             }
         } else {
+            // Page case
             $pagination->setPagePath($this->container->router->pathFor('adminPages'));
             $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);

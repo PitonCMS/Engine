@@ -5,7 +5,7 @@
 {% endblock htmlTitle %}
 
 {% block headText %}
-{% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
+Manage {% if page.type == 'collection' %}Collection {% endif %}Pages
 {% endblock headText %}
 
 {% block sectionId %}
@@ -71,6 +71,6 @@
 
 {% endif %}
 
- {{ pagination() }} 
+ {{ pagination() }}
 
 {% endblock content %}

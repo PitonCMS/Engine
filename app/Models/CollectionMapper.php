@@ -20,5 +20,5 @@ use Piton\ORM\DataMapperAbstract;
 class CollectionMapper extends DataMapperAbstract
 {
     protected $table = 'collection';
-    protected $modifiableColumns = ['title', 'slug', 'definition', ];
+    protected $modifiableColumns = ['collection_slug', 'collection_title', ];
 }

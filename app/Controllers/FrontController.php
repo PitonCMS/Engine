@@ -35,10 +35,10 @@ class FrontController extends FrontBaseController
         $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
         if (isset($args['slug2'])) {
-            // This request is for a collection
-            $page = $pageMapper->findPublishedPageBySlug($args['slug2'], $args['slug1']);
+            // This request is for a collection detail
+            $page = $pageMapper->findPublishedCollectionPageBySlug($args['slug1'], $args['slug2']);
         } else {
-            // Get page data
+            // This request is for a page
             $page = $pageMapper->findPublishedPageBySlug($args['slug1']);
         }
 
@@ -48,10 +48,10 @@ class FrontController extends FrontBaseController
         }
 
         // Get elements and assign to blocks
-        $page->blocks = $this->buildElementsByBlock($pageElement->findElementsByPageId((int) $page->id) ?? []);
+        $page->blocks = $this->buildElementsByBlock($pageElement->findElementsByPageId($page->id) ?? []);
 
         // Get page settings
-        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings((int) $page->id) ?? []);
+        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings($page->id) ?? []);
 
         return $this->render($page->template, $page);
     }

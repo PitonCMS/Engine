@@ -48,7 +48,7 @@ select
     n.id, n.navigator, n.parent_id, n.sort, n.page_id,
     p.title page_title, n.title nav_title, n.active, p.published_date, p.page_slug
 from navigation n
-left join page p on n.page_id = p.id and p.collection_slug is null
+left join page p on n.page_id = p.id and p.collection_id is null
 where n.navigator = ?
 order by n.sort
 SQL;
