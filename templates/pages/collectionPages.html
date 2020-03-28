@@ -21,6 +21,7 @@
 
 {% block content %}
   {% if page.type == 'collection' and page.collections %}
+
     {# Show the most recent 5 collection detail pages first #}
     {% for c in page.collections %}
       <h3>{{ c.collection_title }} Pages</h3>
@@ -28,11 +29,13 @@
       <a href="{{ pathFor('adminEditCollectionPage', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}" title="Add collection detail page">Add {{ c.collection_title }} Detail Page</a>
 
       <div class="list-items-wrapper">
-        {# Change slice() to number of desired items to display #}
-        {% for p in page.pages|slice(0, 5) %}
-          {% if p.collection_id == c.id %}
+        {% set loopCount = 1 %}
+        {% for p in page.pages %}
+          {# Change loopCount condition to number of desired items to display #}
+          {% if p.collection_id == c.id and loopCount <= 5 %}
             {# From _pageMacros #}
             {{ pageMacro.pageListItem(p) }}
+            {% set loopCount = loopCount + 1 %}
           {% endif %}
         {% else %}
           <h5>No Collection Pages Found</h5>
@@ -47,8 +50,12 @@
     {# End page.collections loop #}
 
   {% elseif page.type == 'collectionAll' %}
-    {# If the request is to see more pages in this collection detail set #}
+
+    {# If the request is to see all pages in this collection detail set #}
     <h3>{{ page.collection_title }} Pages</h3>
+    <a href="{{ pathFor('adminEditCollection', {'id': page.collection_id}) }}" title="Edit collection group">Edit {{ page.collection_title }}</a> |
+    <a href="{{ pathFor('adminEditCollectionPage', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}" title="Add collection detail page">Add {{ page.collection_title }} Detail Page</a>
+
     <div class="list-items-wrapper">
       {% for p in page.pages %}
         {# From _pageMacros #}

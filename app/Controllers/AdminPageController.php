@@ -75,10 +75,13 @@ class AdminPageController extends AdminBaseController
             // Get collection info
             $collection = $collectionMapper->findCollectionBySlug($args['collectionSlug']);
             $data['collection_title'] = $collection->collection_title;
+            $data['collection_id'] = $collection->id;
+            $data['collection_slug'] = $collection->collection_slug;
+            $data['collection_definition'] = $collection->collection_definition;
             $data['type'] = 'collectionAll';
         } else {
             // See top collection pages across all collections
-            $data['pages'] = $pageMapper->findCollectionPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
             $data['collections'] = $collectionMapper->find() ?? [];
             $data['type'] = 'collection';
         }
