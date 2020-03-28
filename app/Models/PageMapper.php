@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Piton\Models;
 
-use Exception;
 use Piton\Models\Entities\PitonEntity;
 use Piton\ORM\DataMapperAbstract;
 use PDO;
@@ -157,18 +156,6 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
-     * Find Collections
-     *
-     * Return list of collections
-     * @param void
-     * @return array|null
-     */
-    public function findCollections(): ?array
-    {
-        throw Exception('move this to collection mapper');
-    }
-
-    /**
      * Page Count by Collection ID
      *
      * Returns the total number of pages by collection ID
@@ -184,6 +171,24 @@ class PageMapper extends DataMapperAbstract
         $this->execute();
 
         return $this->statement->fetch() ?: 0;
+    }
+
+    /**
+     * Find Page by ID
+     *
+     * Override from parent class to allow use of table alias.
+     * Find one table row using the primary key ID
+     * @param  int   $id Primary key ID
+     * @return PitonEntity|null
+     */
+    public function findById(int $id): ?PitonEntity
+    {
+        $this->makeSelect();
+
+        $this->sql .= " and p.id = ?";
+        $this->bindValues[] = $id;
+
+        return $this->findRow();
     }
 
     /**

@@ -112,9 +112,9 @@ class Admin extends Base
     }
 
     /**
-     * Get Collections
+     * Get All Collections
      *
-     * Get list of distinct collections
+     * Get list of collections
      * @param  void
      * @return array|null
      */
@@ -124,18 +124,10 @@ class Admin extends Base
             return $this->cache['collections'];
         }
 
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
 
-        // Structure return array
-        $data = $pageMapper->findCollections();
-        $collections = array_map(function ($col) {
-            return [
-                'name' => ucfirst($col->collection_slug),
-                'value' => $col->collection_slug
-            ];
-        }, $data);
-
-        return $this->cache['collections'] = $collections;
+        // Return and cache
+        return $this->cache['collections'] = $collectionMapper->find();
     }
 
     /**

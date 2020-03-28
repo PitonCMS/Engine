@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `collection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `collection_slug` varchar(100) NULL DEFAULT NULL,
   `collection_title` varchar(60) NOT NULL,
+  `collection_definition` varchar(60) NOT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,

@@ -1,6 +1,7 @@
 // --------------------------------------------------------
 // Page Management
 // --------------------------------------------------------
+
 // Add Page Block Element
 $('.jsAddElement').on('click', function () {
     let $addButton = $(this);
@@ -135,7 +136,7 @@ $('.jsBlockParent').on('click', '.jsElementType input[type="radio"]', function (
 });
 
 // Clean Page URL slug from title
-let $pageSlug = $('.jsPageSlug');
+let $pageSlug = $('.jsUrlSlug');
 $('.jsPageTitle').on('change', function () {
     if ($pageSlug.val() === 'home') return;
     if (pitonConfig.pageSlugLocked !== 'lock') {
@@ -150,7 +151,7 @@ $('.jsPageTitle').on('change', function () {
 });
 
 // Unlock Page URL slug on request
-$('.jsPageSlugFaLockStatus').on('click', function () {
+$('.jsUrlSlugFaLockStatus').on('click', function () {
     // Ignore if home page
     if ($pageSlug.val() === 'home') return;
     if (pitonConfig.pageSlugLocked === 'lock' && confirmPrompt('Are you sure you want to change the URL Slug? This can impact links and search engines.')) {
@@ -158,6 +159,11 @@ $('.jsPageSlugFaLockStatus').on('click', function () {
         $pageSlug.attr('readonly', false);
         $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
     }
+});
+
+// Listen for changes to the edit collection form
+$('.jsCollectionGroup').on('input', function () {
+    setSaveButtonIndicator();
 });
 
 // Bind Markdown Editor to Textareas
