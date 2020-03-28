@@ -40,6 +40,20 @@ class CollectionMapper extends DataMapperAbstract
     }
 
     /**
+     * Find Collection by Slug
+     *
+     * @param string $collectionSlug
+     * @return PitonEntity|null
+     */
+    public function findCollectionBySlug(string $collectionSlug = null): ?PitonEntity
+    {
+        $this->makeSelect(false, ' and c.collection_slug = ?');
+        $this->bindValues[] = $collectionSlug;
+
+        return $this->findRow();
+    }
+
+    /**
      * Make Default Collection Select
      *
      * Make select statement with collection page detail count

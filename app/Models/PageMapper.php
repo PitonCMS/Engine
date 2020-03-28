@@ -36,6 +36,56 @@ class PageMapper extends DataMapperAbstract
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
 
     /**
+     * Find Page by ID
+     *
+     * Override from parent class to allow use of table alias.
+     * Find one table row using the primary key ID
+     * @param  int   $id Primary key ID
+     * @return PitonEntity|null
+     */
+    public function findById(int $id): ?PitonEntity
+    {
+        $this->makeSelect();
+
+        $this->sql .= " and p.id = ?";
+        $this->bindValues[] = $id;
+
+        return $this->findRow();
+    }
+
+    /**
+     * Find All Pages
+     *
+     * Gets all pages without elements
+     * Does not include collection detail pages
+     * @param  bool $includeUnpublished Filter on published pages
+     * @param  int  $limit
+     * @param  int  $offset
+     * @return array|null
+     */
+    public function findPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
+    {
+        $this->makeSelect(true);
+        $this->sql .= ' and p.collection_id is null';
+
+        if (!$includeUnpublished) {
+            $this->sql .= " and p.published_date <= '{$this->today}'";
+        }
+
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
      * Find Published Page By Slug
      *
      * Finds published page by by slug
@@ -74,12 +124,18 @@ class PageMapper extends DataMapperAbstract
      *
      * Finds all related collection detail pages
      * @param  string   $collectionSlug
-     * @param  bool  $includeUnpublished    Include unpublished collection pages
+     * @param  bool     $includeUnpublished Include unpublished collection pages
+     * @param  int  $limit
+     * @param  int  $offset
      * @return array|null
      */
-    public function findCollectionPagesBySlug(string $collectionSlug, bool $includeUnpublished = false): ?array
-    {
-        $this->makeSelect();
+    public function findCollectionPagesBySlug(
+        string $collectionSlug,
+        bool $includeUnpublished = false,
+        int $limit = null,
+        int $offset = null
+    ): ?array {
+        $this->makeSelect(true);
         $this->sql .= ' and c.collection_slug = ?';
         $this->bindValues[] = $collectionSlug;
 
@@ -87,27 +143,46 @@ class PageMapper extends DataMapperAbstract
             $this->sql .= " and p.published_date <= '{$this->today}'";
         }
 
+        $this->sql .= ' order by p.created_date desc';
+
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
+
         return $this->find();
     }
 
     /**
-     * Find All Pages
+     * Find All Collection Pages by Collection ID
      *
-     * Gets all pages without elements
-     * Does not include collection detail pages
-     * @param  bool $includeUnpublished Filter on published pages
+     * Finds all related collection detail pages
+     * @param  int   $collectionId
+     * @param  bool  $includeUnpublished Include unpublished collection pages
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
-    public function findPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
-    {
-        $this->makeSelect(true);
-        $this->sql .= ' and p.collection_id is null';
+    public function findCollectionPagesById(
+        int $collectionId,
+        bool $includeUnpublished = false,
+        int $limit = null,
+        int $offset = null
+    ): ?array {
+        $this->makeSelect();
+        $this->sql .= ' and p.collection_id = ?';
+        $this->bindValues[] = $collectionId;
 
         if (!$includeUnpublished) {
             $this->sql .= " and p.published_date <= '{$this->today}'";
         }
+
+        $this->sql .= ' order by p.created_date desc';
 
         if ($limit) {
             $this->sql .= ' limit ?';
@@ -140,7 +215,7 @@ class PageMapper extends DataMapperAbstract
             $this->sql .= " and published_date <= '{$this->today}'";
         }
 
-        $this->sql .= ' order by c.collection_title';
+        $this->sql .= ' order by p.created_date desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -171,24 +246,6 @@ class PageMapper extends DataMapperAbstract
         $this->execute();
 
         return $this->statement->fetch() ?: 0;
-    }
-
-    /**
-     * Find Page by ID
-     *
-     * Override from parent class to allow use of table alias.
-     * Find one table row using the primary key ID
-     * @param  int   $id Primary key ID
-     * @return PitonEntity|null
-     */
-    public function findById(int $id): ?PitonEntity
-    {
-        $this->makeSelect();
-
-        $this->sql .= " and p.id = ?";
-        $this->bindValues[] = $id;
-
-        return $this->findRow();
     }
 
     /**

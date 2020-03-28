@@ -26,6 +26,7 @@
       <h3>{{ c.collection_title }} Pages</h3>
       <a href="{{ pathFor('adminEditCollection', {'id': c.id}) }}" title="Edit collection group">Edit {{ c.collection_title }}</a> |
       <a href="{{ pathFor('adminEditCollectionPage', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}" title="Add collection detail page">Add {{ c.collection_title }} Detail Page</a>
+
       <div class="list-items-wrapper">
         {# Change slice() to number of desired items to display #}
         {% for p in page.pages|slice(0, 5) %}
@@ -37,7 +38,7 @@
           <h5>No Collection Pages Found</h5>
         {% endfor %}
         <hr>
-        <a class="muted-text" href="#">See All {{ c.collection_title }} Pages</a>
+        <a class="muted-text" href="{{ pathFor('adminCollections', {'collectionSlug': c.collection_slug}) }}">See All {{ c.collection_title }} Pages</a>
       </div>
       <hr>
     {% else %}
@@ -47,7 +48,7 @@
 
   {% elseif page.type == 'collectionAll' %}
     {# If the request is to see more pages in this collection detail set #}
-    <h3>{{ c.collection_title }} Pages</h3>
+    <h3>{{ page.collection_title }} Pages</h3>
     <div class="list-items-wrapper">
       {% for p in page.pages %}
         {# From _pageMacros #}

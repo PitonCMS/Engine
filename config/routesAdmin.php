@@ -105,7 +105,7 @@ $app->group('/admin', function () {
         });
 
         // Show all collection pages, optionally by category
-        $this->get('[/{category}]', function ($args) {
+        $this->get('[/{collectionSlug}]', function ($args) {
             return (new AdminPageController($this))->showCollectionPages($args);
         })->setName('adminCollections');
     });
