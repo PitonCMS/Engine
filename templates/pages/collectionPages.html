@@ -34,7 +34,7 @@
           {# Change loopCount condition to number of desired items to display #}
           {% if p.collection_id == c.id and loopCount <= 5 %}
             {# From _pageMacros #}
-            {{ pageMacro.pageListItem(p) }}
+            {{ pageMacro.pageListItem(p, 'adminEditCollectionPage') }}
             {% set loopCount = loopCount + 1 %}
           {% endif %}
         {% else %}
@@ -59,7 +59,7 @@
     <div class="list-items-wrapper">
       {% for p in page.pages %}
         {# From _pageMacros #}
-        {{ pageMacro.pageListItem(p) }}
+        {{ pageMacro.pageListItem(p, 'adminEditCollectionPage') }}
       {% else %}
       <h5>No Pages Found</h5>
       {% endfor %}

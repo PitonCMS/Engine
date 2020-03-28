@@ -30,7 +30,7 @@ class PageElementMapper extends DataMapperAbstract
         'content_raw',
         'content',
         'excerpt',
-        'collection_slug',
+        'collection_id',
         'gallery_id',
         'media_id',
         'embedded'

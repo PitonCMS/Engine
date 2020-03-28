@@ -174,8 +174,8 @@ class PageMapper extends DataMapperAbstract
         int $limit = null,
         int $offset = null
     ): ?array {
-        $this->makeSelect();
-        $this->sql .= ' and p.collection_id = ?';
+        $this->makeSelect(true);
+        $this->sql .= ' and c.id = ?';
         $this->bindValues[] = $collectionId;
 
         if (!$includeUnpublished) {

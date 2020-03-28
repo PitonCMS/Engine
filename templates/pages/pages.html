@@ -26,7 +26,7 @@
   <div class="list-items-wrapper">
     {% for p in page.pages %}
       {# From _pageMacros #}
-      {{ pageMacro.pageListItem(p) }}
+      {{ pageMacro.pageListItem(p, 'adminEditPage') }}
     {% else %}
     <h5>No Pages Found</h5>
     {% endfor %}

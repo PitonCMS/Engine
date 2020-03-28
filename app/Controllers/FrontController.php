@@ -35,7 +35,7 @@ class FrontController extends FrontBaseController
         $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
         if (isset($args['slug2'])) {
-            // This request is for a collection detail
+            // This request is for a collection detail page
             $page = $pageMapper->findPublishedCollectionPageBySlug($args['slug1'], $args['slug2']);
         } else {
             // This request is for a page
