@@ -218,7 +218,7 @@ $app->group('/admin', function () {
             // GitHub release notes
             $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
                 return (new AdminController($this))->release($args);
-            })->setName('adminEngineRelease');
+            })->setName('adminToolEngineReleas');
         });
         // End settings
 
