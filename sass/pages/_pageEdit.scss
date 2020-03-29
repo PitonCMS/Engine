@@ -62,4 +62,13 @@
  .block-title-wrapper:nth-child(1){
   @include margin(0 null null);
  }
-}
+ .mediaInput{
+  width: 40%;
+  max-height: 300px;
+  overflow: hidden;
+  img{
+   object-fit: contain;
+  }
+  
+ }
+} 
