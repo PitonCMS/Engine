@@ -29,7 +29,7 @@ $('.jsMessageWrap').on('click', 'button', function (e) {
     let $message = $(e.target).parents('.jsMessageWrap');
     let postData = $message.find('form').serialize();
     $.ajax({
-        url: (request == 'delete') ? pitonConfig.routes.adminDeleteMessage : pitonConfig.routes.adminSaveMessage,
+        url: (request == 'delete') ? pitonConfig.routes.adminDeleteMessage : pitonConfig.routes.adminMessageSave,
         method: "POST",
         data: postData,
         success: function (r) {

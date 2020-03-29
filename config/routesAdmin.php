@@ -182,7 +182,7 @@ $app->group('/admin', function () {
         // Save message status changes
         $this->post('/save', function ($args) {
             return (new AdminMessageController($this))->toggleStatus();
-        })->add('csrfGuardHandler')->setName('adminSaveMessage');
+        })->add('csrfGuardHandler')->setName('adminMessageSave');
 
         // Delete message
         $this->post('/delete', function ($args) {

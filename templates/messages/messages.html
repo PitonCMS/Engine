@@ -64,7 +64,7 @@
 		<p>{{ m.message|nl2br }}</p>
 	</div>
 	<div class="button-wrapper">
-		<form class="" action="{{ pathFor('adminSaveMessage') }}" method="post" accept-charset="utf-8">
+		<form class="" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="id" value="{{ m.id }}">
 			<button class="btn btn-primary btn-sm" type="submit" name="button" value="toggle"
