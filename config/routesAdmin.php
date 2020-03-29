@@ -91,7 +91,7 @@ $app->group('/admin', function () {
             $this->get('/edit[/{id:[0-9]+}]', function ($args) {
                 $args['type'] = 'collection';
                 return (new AdminPageController($this))->editPage($args);
-            })->setName('adminEditCollectionPage');
+            })->setName('adminCollectionPageEdit');
 
             // Save collection page for Update or Insert
             $this->post('/save', function ($args) {
