@@ -66,7 +66,7 @@
       This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
       Selecting an image sets the media table ID in the element_media_id input.
     #}
- <div class="form-group jsElementOption jsMediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
+ <div class="form-group jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
   <img src="{{ getMediaPath(element.media.filename, 'large') }}"
    class="img-fluid {% if not element.media.filename %}d-none{% endif %}">
   <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]"
@@ -86,7 +86,7 @@
    <option value="">- None -</option>
    {% for c in getCollections() %}
    <option value="{{ c.value }}" {% if c.value == element.collection_slug %}selected{% endif %}>{{ c.name }}
-   </option>
+   </option> 
    {% endfor %}
   </select>
  </div>
