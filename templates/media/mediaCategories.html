@@ -6,7 +6,7 @@
 {% block sectionId 'detailPage' %}
 
 {% block openForm %}
-  <form class="jsEditMediaCategory contentWrapper" action="{{ pathFor('adminSaveMediaCategories') }}" method="post" accept-charset="utf-8">
+  <form class="jsEditMediaCategory contentWrapper" action="{{ pathFor('adminMediaCategorySave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 

@@ -161,7 +161,7 @@ $app->group('/admin', function () {
             // Save media category
             $this->post('/save', function ($args) {
                 return (new AdminMediaController($this))->saveMediaCategories();
-            })->add('csrfGuardHandler')->setName('adminSaveMediaCategories');
+            })->add('csrfGuardHandler')->setName('adminMediaCategorySave');
 
             // Delete media category
             $this->post('/delete', function ($args) {
