@@ -38,7 +38,7 @@ class AdminPageController extends AdminBaseController
         $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Setup pagination
-        $pagination->setPagePath($this->container->router->pathFor('adminPages'));
+        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
@@ -174,7 +174,7 @@ class AdminPageController extends AdminBaseController
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
             $redirectRoute = 'adminCollections';
         } else {
-            $redirectRoute = 'adminPages';
+            $redirectRoute = 'adminPage';
         }
 
         // Redirect back to show page
@@ -344,7 +344,7 @@ class AdminPageController extends AdminBaseController
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
             $redirectRoute = 'adminCollections';
         } else {
-            $redirectRoute = 'adminPages';
+            $redirectRoute = 'adminPage';
         }
 
         // Redirect back to show pages

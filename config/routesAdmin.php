@@ -34,7 +34,7 @@ $app->group('/admin', function () {
         // Show All Pages
         $this->get('[/]', function ($args) {
             return (new AdminPageController($this))->showPages($args);
-        })->setName('adminPages');
+        })->setName('adminPage');
 
         // Edit or add new page. Must provide ID or page layout argument
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
