@@ -22,7 +22,7 @@
 {% if (page.type == 'page') %}
   {% set pageAction, pageDeleteAction, pageCancelLink = 'adminPageSave', 'adminPageDelete', 'adminPage' %}
 {% else %}
-  {% set pageAction, pageDeleteAction, pageCancelLink = 'adminCollectionPageSave', 'adminDeleteCollectionPage', 'adminCollections' %}
+  {% set pageAction, pageDeleteAction, pageCancelLink = 'adminCollectionPageSave', 'adminCollectionPageDelete', 'adminCollections' %}
 {% endif %}
 
 {% block openForm %}

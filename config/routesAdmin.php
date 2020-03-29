@@ -101,7 +101,7 @@ $app->group('/admin', function () {
             // Delete collection page
             $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deletePage($args);
-            })->add('csrfGuardHandler')->setName('adminDeleteCollectionPage');
+            })->add('csrfGuardHandler')->setName('adminCollectionPageDelete');
         });
 
         // Show all collection pages, optionally by category
