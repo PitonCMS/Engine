@@ -156,7 +156,7 @@ $app->group('/admin', function () {
         $this->group('/category', function () {
             $this->get('/edit', function ($args) {
                 return (new AdminMediaController($this))->editMediaCategories();
-            })->setName('adminEditMediaCategories');
+            })->setName('adminMediaCategoryEdit');
 
             // Save media category
             $this->post('/save', function ($args) {
