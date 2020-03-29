@@ -72,7 +72,7 @@ $('.jsMediaCard').on('click', 'button', function (e) {
     // jQuery ignores the button value, so append that to post data
     let postData = $button.parents('form').serialize();
     $.ajax({
-        url: ('delete' === $button.attr('value')) ? pitonConfig.routes.adminDeleteMedia : pitonConfig.routes.adminSaveMedia,
+        url: ('delete' === $button.attr('value')) ? pitonConfig.routes.adminDeleteMedia : pitonConfig.routes.adminMediaSave,
         method: "POST",
         data: postData,
         success: function (r) {

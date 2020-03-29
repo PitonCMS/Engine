@@ -13,7 +13,7 @@
 
 <div class="media jsMediaCard">
 {# TODO: This <form> should really be inside the else statement but breaks layout #}
-  <form class="mediaForm" action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
+  <form class="mediaForm" action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
     <input type="hidden" name="media_id" value="{{ media.id }}">
 

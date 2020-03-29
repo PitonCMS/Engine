@@ -145,7 +145,7 @@ $app->group('/admin', function () {
         // Media save
         $this->post('/save', function ($args) {
             return (new AdminMediaController($this))->saveMedia();
-        })->add('csrfGuardHandler')->setName('adminSaveMedia');
+        })->add('csrfGuardHandler')->setName('adminMediaSave');
 
         // Media delete
         $this->post('/delete', function ($args) {
