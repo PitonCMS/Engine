@@ -213,7 +213,7 @@ $app->group('/admin', function () {
             // Update sitemap
             $this->post('/sitemap/update', function ($args) {
                 return (new AdminController($this))->updateSitemap();
-            })->add('csrfGuardHandler')->setName('adminUpdateSitemap');
+            })->add('csrfGuardHandler')->setName('adminToolSitemapUpdate');
 
             // GitHub release notes
             $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
