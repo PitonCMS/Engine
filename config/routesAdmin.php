@@ -208,7 +208,7 @@ $app->group('/admin', function () {
             // Show sitemap submit page
             $this->get('/sitemap', function ($args) {
                 return (new AdminController($this))->sitemap();
-            })->setName('adminSitemap');
+            })->setName('adminToolSitemap');
 
             // Update sitemap
             $this->post('/sitemap/update', function ($args) {
