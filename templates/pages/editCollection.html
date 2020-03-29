@@ -26,7 +26,7 @@
   <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminCollections') }}">Cancel</a>
   <button type="submit" class="btn btn-sm btn-primary" id="jsSaveButtonInd" title="Save collection" disabled>Save</button>
   {% if page.collection.id %}
-  <button class="btn btn-danger btn-sm jsDeleteConfirm" type="submit" name="delete_button" formaction="{{ pathFor('adminDeleteCollection') }}"
+  <button class="btn btn-danger btn-sm jsDeleteConfirm" type="submit" name="delete_button" formaction="{{ pathFor('adminCollectionDelete') }}"
     {% if page.collection.page_count > 0 %}disabled title="You must remove all detail pages assigned to this collection before deleting"{% endif %}
     value="delete">Delete</button>
   {% endif %}

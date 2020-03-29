@@ -83,7 +83,7 @@ $app->group('/admin', function () {
         // Delete collection
         $this->post('/delete', function ($args) {
             return (new AdminPageController($this))->deleteCollection();
-        })->add('csrfGuardHandler')->setName('adminDeleteCollection');
+        })->add('csrfGuardHandler')->setName('adminCollectionDelete');
 
         // Collection Pages
         $this->group('/page', function () {
