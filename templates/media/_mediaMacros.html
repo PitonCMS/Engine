@@ -13,7 +13,7 @@
 
 <div class="media jsMediaCard">
 {# TODO: This <form> should really be inside the else statement but breaks layout #}
-  <form class="mediaForm" action="{{ pathFor('adminSaveMedia') }}" method="post" accept-charset="utf-8">
+  <form class="mediaForm" action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
     <input type="hidden" name="media_id" value="{{ media.id }}">
 
@@ -53,7 +53,7 @@
       {# Media Controls #}
       <div class="mediaControls">
         <button class="btn btn-outline-primary btn-sm mt-2" type="submit" value="save">Save</button>
-        <button class="btn btn-outline-danger btn-sm mt-2" type="submit" formaction="{{ pathFor('adminDeleteMedia') }}" value="delete">Delete</button>
+        <button class="btn btn-outline-danger btn-sm mt-2" type="submit" formaction="{{ pathFor('adminMediaDelete') }}" value="delete">Delete</button>
         <a class="btn btn-outline-warning btn-sm mt-2" href="/admin/media/">Cancel</a>
       </div>
     {% endif %}
@@ -99,7 +99,7 @@
       </div>
       <div class="modal-body">
 
-        <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
+        <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8"
           enctype="multipart/form-data">
           <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
@@ -135,7 +135,7 @@
             <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
 
             Enter your name and email address to receive an API key. Save this key to <a
-              href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
+              href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">PitonCMS Tools > Site >
               Tinify
               API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
           </p>

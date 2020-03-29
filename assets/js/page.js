@@ -24,7 +24,7 @@ $('.jsAddElement').on('click', function () {
     postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
 
     $.ajax({
-        url: pitonConfig.routes.adminNewElement,
+        url: pitonConfig.routes.adminPageElementNew,
         method: "POST",
         data: postData,
         success: function (r) {
@@ -92,7 +92,7 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
 
     if (!isNaN(blockElementId)) {
         $.ajax({
-            url: pitonConfig.routes.adminDeleteElement,
+            url: pitonConfig.routes.adminPageElementDelete,
             method: "POST",
             data: postData,
             success: function (r) {
@@ -180,7 +180,7 @@ let getMediaForMDE = function (editor) {
     });
 
     $.ajax({
-      url: pitonConfig.routes.adminGetMedia,
+      url: pitonConfig.routes.adminMediaGet,
       method: "GET",
       success: function (r) {
         $('#mediaModal').find('.modal-body').html(r.html).end().modal();

@@ -5,25 +5,22 @@
 {% block headText 'Manage Messages' %}
 {% block sectionId 'summaryPage' %}
 
+{#
 {% block sidebar %}
-<div class="sidebar-link"> 
-	<a class="{{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
+<div class="sidebar-link">
+	<a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
 		<i class="fas fa-envelope"></i>
 		<div class="sidebar-link__text">New Messages</div>
 	</a>
 </div>
-<div class="sidebar-link"> 
-	<a class="{{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">
+<div class="sidebar-link">
+	<a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
 		<i class="fas fa-envelope-open-text"></i>
 		<div class="sidebar-link__text">Read Messages</div>
 	</a>
 </div>
-
-
-
-
-
 {% endblock sidebar %}
+#}
 
 {% block content %}
 {% if page.status == 'new' %}
@@ -64,7 +61,7 @@
 		<p>{{ m.message|nl2br }}</p>
 	</div>
 	<div class="button-wrapper">
-		<form class="" action="{{ pathFor('adminSaveMessage') }}" method="post" accept-charset="utf-8">
+		<form class="" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="id" value="{{ m.id }}">
 			<button class="btn btn-primary btn-sm" type="submit" name="button" value="toggle"
@@ -74,7 +71,7 @@
 			</button>
 			<button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit"
 				data-is-read="{{ m.isRead }}" value="delete"
-				formaction="{{ pathFor('adminDeleteMessage') }}">Delete</button>
+				formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
 		</form>
 	</div>
 </div>

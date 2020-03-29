@@ -92,6 +92,6 @@ class AdminSettingController extends AdminBaseController
 
         // Redirect back to list of settings
         $routeCategory = $post['category'];
-        return $this->redirect('adminSettings', ['cat' => $routeCategory]);
+        return $this->redirect('adminToolSetting', ['cat' => $routeCategory]);
     }
 }

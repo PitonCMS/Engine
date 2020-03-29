@@ -62,7 +62,7 @@ class AdminMessageController extends AdminBaseController
             return $r->write(json_encode(["status" => "success"]));
         }
 
-        return $this->redirect('adminMessages');
+        return $this->redirect('adminMessage');
     }
 
     /**
@@ -84,6 +84,6 @@ class AdminMessageController extends AdminBaseController
             return $r->write(json_encode(["status" => "success"]));
         }
 
-        return $this->redirect('adminMessages');
+        return $this->redirect('adminMessage');
     }
 }

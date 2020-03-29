@@ -103,7 +103,7 @@
   </div>
 
   {#
-    Gallery Categor Select
+    Gallery Category Select
   #}
   <div
     class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
@@ -131,7 +131,7 @@
 
   Displays a single template link
   @param template Template object
-  @param linkName Either 'adminEditPage' or 'adminEditCollectionPage'
+  @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
 {% macro templateLink(template, linkName) %}
 
@@ -151,7 +151,7 @@
 
   For the summary display of either pages or collection detail pages
   @param pageItem Page object
-  @param linkName Either 'adminEditPage' or 'adminEditCollectionPage'
+  @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
 {% macro pageListItem(pageItem, linkName) %}
 
@@ -163,18 +163,18 @@
     <div class="page-list__body">
       {% if pageItem.getPublishedStatus() == 'draft' %}
       <p>
-       <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span> 
+       <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span>
        <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
        <span>| Template: <code>{{ pageItem.definition }}</code> </span>
       </p>
-    
+
       {% elseif pageItem.getPublishedStatus() == 'pending' %}
-      <p> 
-       <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span> 
+      <p>
+       <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span>
        <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span>| Template: <code>{{ pageItem.definition }}</code></span> 
+       <span>| Template: <code>{{ pageItem.definition }}</code></span>
       </p>
-      
+
       {% elseif pageItem.getPublishedStatus() == 'published' %}
       <p>
        <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published {{ pageItem.published_date|date }}</span>

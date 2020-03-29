@@ -102,6 +102,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('baseUrl', [$this, 'baseUrl']),
             new TwigFunction('basePath', [$this, 'basePath']),
             new TwigFunction('currentRoute', [$this, 'currentRoute']),
+            new TwigFunction('currentRouteGroup', [$this, 'currentRouteGroup']),
             new TwigFunction('inUrl', [$this, 'inUrl']),
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
@@ -159,12 +160,31 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * If the supplied route name is the current route, returns the second parameter
      * @param  string $routeName   Name of the route to test
-     * @param  string  $returnValue Value to return
+     * @param  string $returnValue Value to return
      * @return string|null
      */
     public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
         if ($routeName === $this->container->settings['site']['currentRouteName']) {
+            return $returnValue;
+        }
+
+        return null;
+    }
+
+    /**
+     * Current Route Group
+     *
+     * If the supplied group route partial name matches the beginning of the current route, then returns the second parameter
+     * Route names within a group need to be named  Major-Minor-Action for match to work on Major.
+     * @param  string $routeName   Name of the route group to test
+     * @param  string $returnValue Value to return
+     * @return string|null
+     */
+    public function currentRouteGroup(string $routeGroup, string $returnValue = 'active'): ?string
+    {
+        $length = strlen($routeGroup);
+        if (substr($this->container->settings['site']['currentRouteName'], 0, $length) === $routeGroup) {
             return $returnValue;
         }
 

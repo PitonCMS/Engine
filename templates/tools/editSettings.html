@@ -7,17 +7,17 @@
 {# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
-<form class="contentWrapper" action="{{ pathFor('adminSaveSettings') }}" method="post" accept-charset="utf-8">
+<form class="contentWrapper" action="{{ pathFor('adminToolSettingSave') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="category" value="{{ page.category }}">
   {% endblock openForm %}
 
   {% block sidebar %}
-  {% include "@admin/tools/_toolsSidebar.html" %}
+  {# {% include "@admin/tools/_toolsSidebar.html" %} #}
 
   <div class="button-group sidebar-controls span">
     <!-- Control Buttons -->
-        <a class="btn btn-outline-warning" href="{{ pathFor('adminSettings', {'cat': page.category|default('site') }) }}">Cancel</a>
+        <a class="btn btn-outline-warning" href="{{ pathFor('adminToolSetting', {'cat': page.category|default('site') }) }}">Cancel</a>
         <button class="btn btn-primary" type="submit" name="button" value="save">Save</button>
   </div>
   {% endblock sidebar %}

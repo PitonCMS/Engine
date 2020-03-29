@@ -38,14 +38,14 @@
       csrfTokenName: "{{ site.csrf.name }}",
       csrfTokenValue: "{{ site.csrf.value }}",
       routes: {
-        adminNewElement: "{{ pathFor('adminNewElement') }}",
-        adminDeleteElement: "{{ pathFor('adminDeleteElement') }}",
-        adminSaveMessage: "{{ pathFor('adminSaveMessage') }}",
-        adminDeleteMessage: "{{ pathFor('adminDeleteMessage') }}",
-        adminSaveMedia: "{{ pathFor('adminSaveMedia') }}",
-        adminGetMedia: "{{ pathFor('adminGetMedia') }}",
-        adminDeleteMedia: "{{ pathFor('adminDeleteMedia') }}",
-        adminDeleteMediaCategory: "{{ pathFor('adminDeleteMediaCategory') }}",
+        adminPageElementNew: "{{ pathFor('adminPageElementNew') }}",
+        adminPageElementDelete: "{{ pathFor('adminPageElementDelete') }}",
+        adminMessageSave: "{{ pathFor('adminMessageSave') }}",
+        adminMessageDelete: "{{ pathFor('adminMessageDelete') }}",
+        adminMediaSave: "{{ pathFor('adminMediaSave') }}",
+        adminMediaGet: "{{ pathFor('adminMediaGet') }}",
+        adminMediaDelete: "{{ pathFor('adminMediaDelete') }}",
+        adminMediaCategoryDelete: "{{ pathFor('adminMediaCategoryDelete') }}",
       },
       {% block jsPitonConfig '' %}
     };

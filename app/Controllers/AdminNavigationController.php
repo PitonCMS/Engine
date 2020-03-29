@@ -111,6 +111,6 @@ class AdminNavigationController extends AdminBaseController
             $navItem['navId'] = $savedNav->id;
         }
 
-        return $this->redirect('adminNavigations', ['nav' => $navigator]);
+        return $this->redirect('adminNavigation', ['nav' => $navigator]);
     }
 }

@@ -230,7 +230,7 @@ HTML;
         }
 
         // Return to showing categories
-        return $this->redirect('adminEditMediaCategories');
+        return $this->redirect('adminMediaCategoryEdit');
     }
 
     /**

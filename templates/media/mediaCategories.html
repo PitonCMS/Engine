@@ -6,14 +6,14 @@
 {% block sectionId 'detailPage' %}
 
 {% block openForm %}
-  <form class="jsEditMediaCategory contentWrapper" action="{{ pathFor('adminSaveMediaCategories') }}" method="post" accept-charset="utf-8">
+  <form class="jsEditMediaCategory contentWrapper" action="{{ pathFor('adminMediaCategorySave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 
 {% block sidebar %}
-  {% include "@admin/media/_mediaSidebar.html" %}
+{#}  {% include "@admin/media/_mediaSidebar.html" %} #}
 
-  <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
+  <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminMediaCategoryEdit') }}">Cancel</a>
   <button type="submit" class="btn btn-sm btn-primary" id="jsSaveButtonInd" title="Save media categories" disabled>Save</button>
 {% endblock sidebar %}
 

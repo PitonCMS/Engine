@@ -1,14 +1,17 @@
+
+{# DELETE THIS FILE? #}
+
 <div class="sidebar-link">
-    <a class="{{ currentRoute('adminSettings') and inUrl('site') ? 'active' }}"
-        href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">
-        <i class="fas fa-wrench"></i> 
+    <a class="{{ currentRoute('adminToolSetting') and inUrl('site') ? 'active' }}"
+        href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">
+        <i class="fas fa-wrench"></i>
         <div class="sidebar-link__text">General</div>
     </a>
 </div>
 
 <div class="sidebar-link">
-    <a class="{{ currentRoute('adminSettings') and inUrl('contact') ? 'active' }}"
-        href="{{ pathFor('adminSettings', {'cat': 'contact'}) }}">
+    <a class="{{ currentRoute('adminToolSetting') and inUrl('contact') ? 'active' }}"
+        href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}">
         <i class="fas fa-inbox"></i>
         <div class="sidebar-link__text">Contact</div>
     </a>
@@ -16,8 +19,8 @@
 
 
 <div class="sidebar-link">
-    <a class="{{ currentRoute('adminSettings') and inUrl('social') ? 'active' }}"
-        href="{{ pathFor('adminSettings', {'cat': 'social'}) }}">
+    <a class="{{ currentRoute('adminToolSetting') and inUrl('social') ? 'active' }}"
+        href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}">
         <i class="fas fa-comment"></i>
         <div class="sidebar-link__text">Social</div>
     </a>
@@ -25,7 +28,7 @@
 
 
 <div class="sidebar-link">
-    <a class="{{ currentRoute('adminUsers') }}" href="{{ pathFor('adminUsers') }}">
+    <a class="{{ currentRoute('adminUser') }}" href="{{ pathFor('adminUser') }}">
         <i class="fas fa-user"></i>
         <div class="sidebar-link__text">Users</div>
     </a>
@@ -33,7 +36,7 @@
 
 
 <div class="sidebar-link">
-    <a class="{{ currentRoute('adminSitemap') }}" href="{{ pathFor('adminSitemap') }}">
+    <a class="{{ currentRoute('adminToolSitemap') }}" href="{{ pathFor('adminToolSitemap') }}">
         <i class="fas fa-sitemap"></i>
         <div class="sidebar-link__text">Sitemap</div>
     </a>

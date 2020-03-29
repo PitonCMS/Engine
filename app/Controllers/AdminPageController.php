@@ -38,7 +38,7 @@ class AdminPageController extends AdminBaseController
         $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Setup pagination
-        $pagination->setPagePath($this->container->router->pathFor('adminPages'));
+        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
@@ -70,7 +70,7 @@ class AdminPageController extends AdminBaseController
 
             // Setup pagination
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-            $pagination->setPagePath($this->container->router->pathFor('adminCollections', ['collectionSlug' => $args['collectionSlug']]));
+            $pagination->setPagePath($this->container->router->pathFor('adminCollection', ['collectionSlug' => $args['collectionSlug']]));
 
             // Get collection info
             $collection = $collectionMapper->findCollectionBySlug($args['collectionSlug']);
@@ -172,9 +172,9 @@ class AdminPageController extends AdminBaseController
 
         // Determine redirect path based on whether this is a collection page
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectRoute = 'adminCollections';
+            $redirectRoute = 'adminCollection';
         } else {
-            $redirectRoute = 'adminPages';
+            $redirectRoute = 'adminPage';
         }
 
         // Redirect back to show page
@@ -342,9 +342,9 @@ class AdminPageController extends AdminBaseController
 
         // Determine redirect path based on whether this was a collection page
         if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectRoute = 'adminCollections';
+            $redirectRoute = 'adminCollection';
         } else {
-            $redirectRoute = 'adminPages';
+            $redirectRoute = 'adminPage';
         }
 
         // Redirect back to show pages
@@ -472,7 +472,7 @@ class AdminPageController extends AdminBaseController
         $collectionMapper->save($collection);
 
         // Save collection and redirect to all collection pages
-        return $this->redirect('adminCollections');
+        return $this->redirect('adminCollection');
     }
 
     /**
@@ -502,6 +502,6 @@ class AdminPageController extends AdminBaseController
         $collectionMapper->delete($collection);
 
         // Redirect back to show pages
-        return $this->redirect('adminCollections');
+        return $this->redirect('adminCollection');
     }
 }

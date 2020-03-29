@@ -6,26 +6,18 @@
 {% block sectionId 'navigationPage' %}
 
 {% block openForm %}
-<form class="jsNavigatorForm contentWrapper" action="{{ pathFor('adminSaveNavigation') }}" method="post"
+<form class="jsNavigatorForm contentWrapper" action="{{ pathFor('adminNavigationSave') }}" method="post"
  accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <input type="hidden" name="navigator" value="{{ page.navigator }}">
  {% endblock openForm %}
 
  {% block sidebar %}
- {# Get list of defined navigators from navigation.json #}
- {% for navigator in page.navigators %}
- <div class="sidebar-link">
-  <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
-   <i class="fas fa-compass"></i>
-   <div class="sidebar-link__text">{{ navigator|capitalize }}</div>
-  </a>
- </div>
- {% endfor %}
-<hr>
- <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+
+ <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigation', {'nav': page.navigator}) }}">Cancel</a>
  <button type="submit" class="btn btn-sm btn-outline-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
   disabled>Save</button>
+
  {% endblock sidebar %}
 
  {% block content %}
@@ -80,7 +72,7 @@
   <option value="x">Add Page</option>
   {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
   <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
-  {% for p in getNavPages() %}
+  {% for p in getAllPages() %}
   <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
   {% endfor %}
  </select>
