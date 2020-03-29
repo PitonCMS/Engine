@@ -10,7 +10,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="pitonAdminNavbar">
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto jsAdminNavbar">
 
         <li class="nav-item">
           <a class="nav-link {{ currentRoute('adminPages') or (inUrl('page') and not inUrl('collection')) ? 'active' }}" href="{{ pathFor('adminPages') }}">Pages</a>
