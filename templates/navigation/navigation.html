@@ -16,14 +16,14 @@
  {# Get list of defined navigators from navigation.json #}
  {% for navigator in page.navigators %}
  <div class="sidebar-link">
-  <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
+  <a class="{{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigation', {'nav': navigator}) }}">
    <i class="fas fa-compass"></i>
    <div class="sidebar-link__text">{{ navigator|capitalize }}</div>
   </a>
  </div>
  {% endfor %}
 <hr>
- <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
+ <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigation', {'nav': page.navigator}) }}">Cancel</a>
  <button type="submit" class="btn btn-sm btn-outline-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
   disabled>Save</button>
  {% endblock sidebar %}

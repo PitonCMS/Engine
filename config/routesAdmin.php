@@ -116,7 +116,7 @@ $app->group('/admin', function () {
         // Show Navigations
         $this->get('[/{nav:[a-zA-Z]+}]', function ($args) {
             return (new AdminNavigationController($this))->showNavigator($args);
-        })->setName('adminNavigations');
+        })->setName('adminNavigation');
 
         // Save Navigation
         $this->post('/save', function ($args) {
