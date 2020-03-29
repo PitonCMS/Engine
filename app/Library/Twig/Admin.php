@@ -62,10 +62,12 @@ class Admin extends Base
             new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
             new TwigFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new TwigFunction('getCollections', [$this, 'getCollections']),
+            new TwigFunction('getPageTemplates', [$this, 'getPageTemplates']),
             new TwigFunction('getMediaCategories', [$this, 'getMediaCategories']),
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
-            new TwigFunction('getNavPages', [$this, 'getNavPages']),
+            new TwigFunction('getAllPages', [$this, 'getAllPages']),
+            new TwigFunction('getNavigators', [$this, 'getNavigators']),
         ]);
     }
 
@@ -131,6 +133,25 @@ class Admin extends Base
     }
 
     /**
+     * Get Page Templates
+     *
+     * Get list of page templates
+     * @param  void
+     * @return array|null
+     */
+    public function getPageTemplates(): ?array
+    {
+        if (isset($this->cache['collectionTemplates'])) {
+            return $this->cache['collectionTemplates'];
+        }
+
+        $definition = $this->container->jsonDefinitionHandler;
+
+        // Return and cache
+        return $this->cache['collectionTemplates'] = $definition->getPages();
+    }
+
+    /**
      * Get Media Categories
      *
      * Get all media category galleries
@@ -182,13 +203,13 @@ class Admin extends Base
     }
 
     /**
-     * Get Pages
+     * Get All Pages
      *
      * Gets a list of all pages, including unpublished
      * @param void
      * @return array
      */
-    public function getNavPages(): ?array
+    public function getAllPages(): ?array
     {
         // Get cached pages if available
         if (isset($this->cache['pages'])) {
@@ -198,5 +219,28 @@ class Admin extends Base
         // Otherwise fetch all pages
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         return $this->cache['pages'] = $pageMapper->findPages(true);
+    }
+
+    /**
+     * Get Navigators
+     *
+     * Get all navigators from navigation definition.
+     * @param void
+     * @return array|null
+     */
+    public function getNavigators(): ?array
+    {
+        // Get cached navigators if available
+        if (isset($this->cache['navigators'])) {
+            return $this->cache['navigators'];
+        }
+
+        $nav = ($this->container->jsonDefinitionHandler)->getNavigation();
+
+        if (is_object($nav)) {
+            return $this->cache['navigators'] = $nav->navigators;
+        }
+
+        return null;
     }
 }

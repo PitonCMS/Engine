@@ -13,12 +13,6 @@
 {% block headText 'Manage Collection Pages' %}
 {% block sectionId 'collections' %}
 
-{% block sidebar %}
-    <div class="">
-        <a href="{{ pathFor('adminCollectionEdit') }}" title="Create collection">Create Collection</a>
-    </div>
-{% endblock sidebar %}
-
 {% block content %}
   {% if page.type == 'collection' and page.collections %}
 

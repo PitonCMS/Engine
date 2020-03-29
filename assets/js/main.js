@@ -37,11 +37,6 @@ const setSaveButtonIndicator = (buttonId) => {
   }
 };
 
-// Admin BS navbar should open on hover, so clicks to to a parent page
-$('.jsAdminNavbar > li.dropdown > a.dropdown-toggle').on('click', function () {
-    location.href = this.href;
-});
-
 // --------------------------------------------------------
 // Media Page Management
 // --------------------------------------------------------

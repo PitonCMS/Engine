@@ -10,16 +10,6 @@
 {% block headText 'Manage Pages' %}
 {% block sectionId 'pages' %}
 
-{% block sidebar %}
-  {# Loop through all available templates #}
-  {% for template in page.templates %}
-    {# From _pageMacros. #}
-    {{ pageMacro.templateLink(template, 'adminPageEdit') }}
-  {% else %}
-    <h5>No Templates Found</h5>
-  {% endfor %}
-{% endblock sidebar %}
-
 {% block content %}
   {# If the request is for pages #}
   <h3>Pages</h3>

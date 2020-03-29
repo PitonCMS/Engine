@@ -5,6 +5,7 @@
 {% block headText 'Manage Messages' %}
 {% block sectionId 'summaryPage' %}
 
+{#
 {% block sidebar %}
 <div class="sidebar-link">
 	<a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
@@ -18,12 +19,8 @@
 		<div class="sidebar-link__text">Read Messages</div>
 	</a>
 </div>
-
-
-
-
-
 {% endblock sidebar %}
+#}
 
 {% block content %}
 {% if page.status == 'new' %}
