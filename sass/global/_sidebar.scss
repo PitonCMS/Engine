@@ -2,13 +2,13 @@
 
  .sidebar {
   // @include padding(65px null null null);
-  background: $primary-md-grey;
+  background: $primary-dark-grey;
   position: sticky;
   top: 0px;
   z-index: 5;
 
   @media screen and (min-width: 768px) {
-   min-height: calc(100vh - 1px);
+   min-height: calc(100vh - 63px);
    position: static; 
   }
 
