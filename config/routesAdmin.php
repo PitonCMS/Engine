@@ -57,7 +57,7 @@ $app->group('/admin', function () {
             // Fetch element form
             $this->post('/new', function ($args) {
                 return (new AdminPageController($this))->newElementForm();
-            })->add('csrfGuardHandler')->setName('adminNewElement');
+            })->add('csrfGuardHandler')->setName('adminPageElementNew');
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {

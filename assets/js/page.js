@@ -24,7 +24,7 @@ $('.jsAddElement').on('click', function () {
     postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
 
     $.ajax({
-        url: pitonConfig.routes.adminNewElement,
+        url: pitonConfig.routes.adminPageElementNew,
         method: "POST",
         data: postData,
         success: function (r) {
