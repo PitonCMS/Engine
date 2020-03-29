@@ -73,7 +73,7 @@ $app->group('/admin', function () {
         // CRUD collection
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editCollection($args);
-        })->setName('adminEditCollection');
+        })->setName('adminCollectionEdit');
 
         // Save collection
         $this->post('/save', function ($args) {

@@ -15,7 +15,7 @@
 
 {% block sidebar %}
     <div class="">
-        <a href="{{ pathFor('adminEditCollection') }}" title="Create collection">Create Collection</a>
+        <a href="{{ pathFor('adminCollectionEdit') }}" title="Create collection">Create Collection</a>
     </div>
 {% endblock sidebar %}
 
@@ -25,7 +25,7 @@
     {# Show the most recent 5 collection detail pages first #}
     {% for c in page.collections %}
       <h3>{{ c.collection_title }} Pages</h3>
-      <a href="{{ pathFor('adminEditCollection', {'id': c.id}) }}" title="Edit collection group">Edit {{ c.collection_title }}</a> |
+      <a href="{{ pathFor('adminCollectionEdit', {'id': c.id}) }}" title="Edit collection group">Edit {{ c.collection_title }}</a> |
       <a href="{{ pathFor('adminEditCollectionPage', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}" title="Add collection detail page">Add {{ c.collection_title }} Detail Page</a>
 
       <div class="list-items-wrapper">
@@ -53,7 +53,7 @@
 
     {# If the request is to see all pages in this collection detail set #}
     <h3>{{ page.collection_title }} Pages</h3>
-    <a href="{{ pathFor('adminEditCollection', {'id': page.collection_id}) }}" title="Edit collection group">Edit {{ page.collection_title }}</a> |
+    <a href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit {{ page.collection_title }}</a> |
     <a href="{{ pathFor('adminEditCollectionPage', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}" title="Add collection detail page">Add {{ page.collection_title }} Detail Page</a>
 
     <div class="list-items-wrapper">
