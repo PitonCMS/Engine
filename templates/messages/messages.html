@@ -6,14 +6,14 @@
 {% block sectionId 'summaryPage' %}
 
 {% block sidebar %}
-<div class="sidebar-link"> 
-	<a class="{{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
+<div class="sidebar-link">
+	<a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
 		<i class="fas fa-envelope"></i>
 		<div class="sidebar-link__text">New Messages</div>
 	</a>
 </div>
-<div class="sidebar-link"> 
-	<a class="{{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">
+<div class="sidebar-link">
+	<a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
 		<i class="fas fa-envelope-open-text"></i>
 		<div class="sidebar-link__text">Read Messages</div>
 	</a>

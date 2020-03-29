@@ -177,7 +177,7 @@ $app->group('/admin', function () {
         $this->get('[/[{status:new|read}]]', function ($args) {
             $args['status'] = $args['status'] ?? 'new';
             return (new AdminMessageController($this))->showMessages($args);
-        })->setName('adminMessages');
+        })->setName('adminMessage');
 
         // Save message status changes
         $this->post('/save', function ($args) {
