@@ -14,7 +14,7 @@
   {# Loop through all available templates #}
   {% for template in page.templates %}
     {# From _pageMacros. #}
-    {{ pageMacro.templateLink(template, 'adminEditPage') }}
+    {{ pageMacro.templateLink(template, 'adminPageEdit') }}
   {% else %}
     <h5>No Templates Found</h5>
   {% endfor %}
@@ -26,7 +26,7 @@
   <div class="list-items-wrapper">
     {% for p in page.pages %}
       {# From _pageMacros #}
-      {{ pageMacro.pageListItem(p, 'adminEditPage') }}
+      {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
     {% else %}
     <h5>No Pages Found</h5>
     {% endfor %}

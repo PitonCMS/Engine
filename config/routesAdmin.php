@@ -40,7 +40,7 @@ $app->group('/admin', function () {
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             $args['type'] = 'page';
             return (new AdminPageController($this))->editPage($args);
-        })->setName('adminEditPage');
+        })->setName('adminPageEdit');
 
         // Save Page for Update or Insert
         $this->post('/save', function ($args) {
