@@ -157,22 +157,30 @@
 
   <div class="page-list">
     <div class="page-list__title">
-      <span>{{ pageItem.title }}</span>
-      <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="{{ pageItem.meta_description|default('Missing Meta Description!') }}"></i>
+      <span title="{{ pageItem.title }}" >{{ pageItem.title }}</span>
     </div>
 
     <div class="page-list__body">
       {% if pageItem.getPublishedStatus() == 'draft' %}
-      <p><span class="text-secondary">Status: Draft</span> | URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> | Template:
-      <code>{{ pageItem.definition }}</code> | <span>Published on {{ pageItem.published_date|date }}</span> </p>
-      <!-- <span class="badge badge-secondary" title="Not published">Draft</span> -->
+      <p>
+       <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span> 
+       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+       <span>| Template: <code>{{ pageItem.definition }}</code> </span>
+      </p>
+    
       {% elseif pageItem.getPublishedStatus() == 'pending' %}
-      <p><span class="text-warning">Status: Pending</span> | URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> | Template:
-      <code>{{ pageItem.definition }}</code> | <span>Published on {{ pageItem.published_date|date }}</span> </p>
-      <!-- <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending</span> -->
+      <p> 
+       <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span> 
+       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+       <span>| Template: <code>{{ pageItem.definition }}</code></span> 
+      </p>
+      
       {% elseif pageItem.getPublishedStatus() == 'published' %}
-      <p><span  class="text-success">Status: Published</span> | URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> | Template:
-      <code>{{ pageItem.definition }}</code> | <span>Published on {{ pageItem.published_date|date }}</span> </p>
+      <p>
+       <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published {{ pageItem.published_date|date }}</span>
+       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+       <span>| Template: <code>{{ pageItem.definition }}</code></span>
+       </p>
 
       {% endif %}
     </div>

@@ -98,31 +98,30 @@ section,
   border-radius: $border-radius;
   box-shadow: $box-shadow;
   display: grid;
-  grid-template-columns: 200px 1fr auto;
+  grid-template-columns: 150px 1fr auto;
   gap: 1em;
-  justify-content: flex-start;
-  // align-items: center;
+  align-items: center;
+  // justify-content: flex-start;
 
   &__title {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+  }
 
-   display: flex;
-   justify-content: space-between;
 
-   span {
-    overflow: hidden;
-   }
-
+  &__body {
    i {
     color: $primary-dark-grey;
    }
-  }
-
-  &__body {
    p {
     @include margin(0);
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 1em;
+    align-items: center;
+    // justify-items: flex-start;
    }
   }
-
-  &__action {}
  }
 }
