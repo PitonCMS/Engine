@@ -65,7 +65,7 @@ $('.jsEditPageContainer').on('click', '.jsSelectMediaFile', function () {
 
     // Fetch available media into selector modal
     $.ajax({
-        url: pitonConfig.routes.adminGetMedia,
+        url: pitonConfig.routes.adminMediaGet,
         method: "GET",
         success: function (r) {
             $('#mediaModal').find('.modal-body').html(r.html).end().modal();
