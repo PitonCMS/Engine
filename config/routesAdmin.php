@@ -121,7 +121,7 @@ $app->group('/admin', function () {
         // Save Navigation
         $this->post('/save', function ($args) {
             return (new AdminNavigationController($this))->saveNavigation();
-        })->add('csrfGuardHandler')->setName('adminSaveNavigation');
+        })->add('csrfGuardHandler')->setName('adminNavigationSave');
     });
     // End Navigation
 
