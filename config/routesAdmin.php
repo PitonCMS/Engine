@@ -150,7 +150,7 @@ $app->group('/admin', function () {
         // Media delete
         $this->post('/delete', function ($args) {
             return (new AdminMediaController($this))->deleteMedia();
-        })->add('csrfGuardHandler')->setName('adminDeleteMedia');
+        })->add('csrfGuardHandler')->setName('adminMediaDelete');
 
         // Media categories
         $this->group('/category', function () {
