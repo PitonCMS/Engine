@@ -18,7 +18,7 @@
 {% block sectionId 'detailPage' %}
 
 {% block openForm %}
-  <form class="jsEditCollection contentWrapper" action="{{ pathFor('adminSaveCollection') }}" method="post" accept-charset="utf-8">
+  <form class="jsEditCollection contentWrapper" action="{{ pathFor('adminCollectionSave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 

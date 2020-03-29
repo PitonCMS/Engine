@@ -78,7 +78,7 @@ $app->group('/admin', function () {
         // Save collection
         $this->post('/save', function ($args) {
             return (new AdminPageController($this))->saveCollection();
-        })->add('csrfGuardHandler')->setName('adminSaveCollection');
+        })->add('csrfGuardHandler')->setName('adminCollectionSave');
 
         // Delete collection
         $this->post('/delete', function ($args) {
