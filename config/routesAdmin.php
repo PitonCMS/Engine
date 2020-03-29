@@ -45,7 +45,7 @@ $app->group('/admin', function () {
         // Save Page for Update or Insert
         $this->post('/save', function ($args) {
             return (new AdminPageController($this))->savePage();
-        })->add('csrfGuardHandler')->setName('adminSavePage');
+        })->add('csrfGuardHandler')->setName('adminPageSave');
 
         // Delete page
         $this->post('/delete', function ($args) {

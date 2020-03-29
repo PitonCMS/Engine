@@ -20,7 +20,7 @@
 
 {# Set correct form action route depending on whether this is for a page, or for a collection #}
 {% if (page.type == 'page') %}
-  {% set pageAction, pageDeleteAction, pageCancelLink = 'adminSavePage', 'adminDeletePage', 'adminPage' %}
+  {% set pageAction, pageDeleteAction, pageCancelLink = 'adminPageSave', 'adminDeletePage', 'adminPage' %}
 {% else %}
   {% set pageAction, pageDeleteAction, pageCancelLink = 'adminSaveCollectionPage', 'adminDeleteCollectionPage', 'adminCollections' %}
 {% endif %}
