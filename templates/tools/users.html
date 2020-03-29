@@ -44,7 +44,7 @@
         <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
       </div>
 
-      <button class="btn btn-outline-{% if user.active == 'Y' %}danger{% else %}success{% endif %} ml-2" formaction="{{ pathFor('adminChangeUserStatus', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
+      <button class="btn btn-outline-{% if user.active == 'Y' %}danger{% else %}success{% endif %} ml-2" formaction="{{ pathFor('adminUserStatusUpdate', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
         {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
       </button>
     </div>

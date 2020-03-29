@@ -237,7 +237,7 @@ $app->group('/admin', function () {
             // Change User Active Status
             $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
                 return (new AdminUserController($this))->userStatus($args);
-            })->add('csrfGuardHandler')->setName('adminChangeUserStatus');
+            })->add('csrfGuardHandler')->setName('adminUserStatusUpdate');
         });
         // End user routes
     });
