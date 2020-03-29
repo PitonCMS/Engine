@@ -17,14 +17,9 @@
             "type": "string"
         },
         "templateType": {
-            "description": "Template type. Defaults to 'page'.",
+            "description": "Template type: 'page' or 'collection', optional.",
             "type": "string",
-            "enum": ["page","collection"]
-        },
-        "collectionSlug": {
-            "description": "Collection URL slug",
-            "type": "string",
-            "pattern": "^[-a-zA-Z0-9]{1,100}$"
+            "enum": ["page","collection",""]
         },
         "hideSubTitle": {
             "description": "Hides sub-title input",
@@ -76,23 +71,6 @@
             "$ref": "settingsDefinitionSchema.json#/definition"
         }
     },
-    "anyOf": [
-        {
-            "properties": {
-                "templateType": {
-                    "enum": ["collection"]
-                }
-            },
-            "required": ["collectionSlug"]
-        },
-        {
-            "properties": {
-                "templateType": {
-                    "enum": ["page"]
-                }
-            }
-        }
-    ],
     "oneOf": [
         {
             "properties": {
@@ -108,5 +86,5 @@
             }
         }
     ],
-    "required": ["templateName","templateDescription","templateFile","templateType"]
+    "required": ["templateName","templateDescription","templateFile"]
 }

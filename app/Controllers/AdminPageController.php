@@ -34,33 +34,64 @@ class AdminPageController extends AdminBaseController
         $definition = $this->container->jsonDefinitionHandler;
         $pagination = $this->container->adminPagePagination;
 
-        // Fetch pages & templates
-        if (isset($args['type']) && $args['type'] === 'collection') {
-            $pagination->setPagePath($this->container->router->pathFor('adminCollections'));
-            $data['pages'] = $pageMapper->findCollectionPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
-            $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-            $data['templates'] = $definition->getCollections();
-            $data['type'] = 'collection';
+        // Get data
+        $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
-            // Get distinct list of collection names for section separators
-            $data['collectionNames'] = [];
-            foreach ($data['pages'] as $page) {
-                $data['collectionNames'][$page->collection_slug] = [
-                    'value' => $page->collection_slug,
-                    'name' => ucfirst($page->collection_slug)
-                ];
-            }
-        } else {
-            $pagination->setPagePath($this->container->router->pathFor('adminPages'));
-            $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        // Setup pagination
+        $pagination->setPagePath($this->container->router->pathFor('adminPages'));
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+        $this->container->view->addExtension($pagination);
+
+        // Get page templates
+        $data['templates'] = $definition->getPages();
+
+        return $this->render('pages/pages.html', $data);
+    }
+
+    /**
+     * Show Collection Pages
+     *
+     * Show all collection pages and templates
+     * @param array $args Route arguments
+     * @return Response
+     */
+    public function showCollectionPages($args): Response
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+        $pagination = $this->container->adminPagePagination;
+
+        // Get data
+        if (isset($args['collectionSlug'])) {
+            // If request is to see more pages of a specific collection group
+            $data['pages'] = $pageMapper->findCollectionPagesBySlug($args['collectionSlug'], true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+
+            // Setup pagination
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-            $data['templates'] = $definition->getPages();
-            $data['type'] = 'page';
+            $pagination->setPagePath($this->container->router->pathFor('adminCollections', ['collectionSlug' => $args['collectionSlug']]));
+
+            // Get collection info
+            $collection = $collectionMapper->findCollectionBySlug($args['collectionSlug']);
+            $data['collection_title'] = $collection->collection_title;
+            $data['collection_id'] = $collection->id;
+            $data['collection_slug'] = $collection->collection_slug;
+            $data['collection_definition'] = $collection->collection_definition;
+            $data['type'] = 'collectionAll';
+        } else {
+            // See top collection pages across all collections
+            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
+            $data['collections'] = $collectionMapper->find() ?? [];
+            $data['type'] = 'collection';
         }
 
         $this->container->view->addExtension($pagination);
 
-        return $this->render('pages/pages.html', $data);
+        // Get list of collection templates
+        $data['templates'] = $definition->getCollections();
+
+        return $this->render('pages/collectionPages.html', $data);
     }
 
     /**
@@ -76,6 +107,7 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
         // Fetch page, or create new page
@@ -86,16 +118,25 @@ class AdminPageController extends AdminBaseController
             $page->settings = $settingMapper->findPageSettings($page->id);
         } else {
             // Create new page, and get template from query string
-            $definionParam = $this->request->getQueryParam('definition');
+            $definitionParam = $this->request->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
-            if (null === $definionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definionParam)) {
-                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definionParam");
+            if (null === $definitionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definitionParam)) {
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definitionParam");
             }
 
             // New page object
             $page = $pageMapper->make();
-            $page->definition = $definionParam;
+            $page->definition = $definitionParam;
+
+            // Get collection details for collection pages
+            $collectionId = $this->request->getQueryParam('collectionId', null);
+            if (is_numeric($collectionId)) {
+                $collection = $collectionMapper->findById((int) $collectionId);
+                $page->collection_id = $collectionId;
+                $page->collection_title = $collection->collection_title;
+                $page->collection_slug = $collection->collection_slug;
+            }
         }
 
         // Get page definition
@@ -109,7 +150,10 @@ class AdminPageController extends AdminBaseController
         }
 
         // Set template type: collection|page
-        $page->type = ($page->json->templateType === 'collection') ? 'collection' : 'page';
+        if (!in_array($args['type'], ['page', 'collection'])) {
+            throw new Exception('PitonCMS: Expected page type of page or collection');
+        }
+        $page->type = $args['type'];
 
         return $this->render('pages/editPage.html', $page);
     }
@@ -127,7 +171,7 @@ class AdminPageController extends AdminBaseController
         $this->savePageElements($pageEntity->id);
 
         // Determine redirect path based on whether this is a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
             $redirectRoute = 'adminCollections';
         } else {
             $redirectRoute = 'adminPages';
@@ -167,7 +211,7 @@ class AdminPageController extends AdminBaseController
             $page = $pageMapper->make();
         }
 
-        $page->collection_slug = $this->request->getParsedBodyParam('collection_slug');
+        $page->collection_id = $this->request->getParsedBodyParam('collection_id');
         $page->definition = $this->request->getParsedBodyParam('definition');
         $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
@@ -256,7 +300,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->collection_slug = $this->request->getParsedBodyParam('element_collection_slug')[$key];
+            $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
             $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
@@ -297,7 +341,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Determine redirect path based on whether this was a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
             $redirectRoute = 'adminCollections';
         } else {
             $redirectRoute = 'adminPages';
@@ -330,8 +374,8 @@ class AdminPageController extends AdminBaseController
             $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
         }
 
-        $template = '{% import "@admin/pages/_editElementMacro.html" as form %}';
-        $template .= ' {{ form.elementForm(element, element.block_key, element.elementTypeOptions) }}';
+        $template = '{% import "@admin/pages/_pageMacros.html" as pageMacro %}';
+        $template .= ' {{ pageMacro.elementForm(element, element.block_key, element.elementTypeOptions) }}';
         $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
 
         // Set the response type
@@ -366,5 +410,98 @@ class AdminPageController extends AdminBaseController
         $r = $this->response->withHeader('Content-Type', 'application/json');
 
         return $r->write(json_encode(['status' => $status]));
+    }
+
+    /**
+     * Edit Collection Group
+     *
+     * Create, edit, or delete collection group
+     * @param array $args
+     * @return Response
+     */
+    public function editCollection($args): Response
+    {
+        // Get dependencies
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+
+        if (isset($args['id']) && is_numeric($args['id'])) {
+            // If a collection ID was provided, load that collection
+            $data['collection'] = $collectionMapper->findById((int) $args['id']);
+        } else {
+            // Create new collection object
+            $data['collection'] = $collectionMapper->make();
+        }
+
+        // Get available collection templates
+        $data['templates'] = $definition->getCollections();
+
+        return $this->render('pages/editCollection.html', $data);
+    }
+
+    /**
+     * Save Collection Group
+     *
+     * Create new collection, or update existing collection
+     * From $_POST array
+     * @param void
+     * @return Response
+     */
+    public function saveCollection(): Response
+    {
+        // Get dependencies
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $toolbox = $this->container->toolbox;
+
+        // Is there an ID?
+        $collectionId = empty($this->request->getParsedBodyParam('collection_id')) ? null : (int) $this->request->getParsedBodyParam('collection_id');
+
+        // Try to get the original collection group from database for update
+        if (null !== $collectionId) {
+            if (null === $collection = $collectionMapper->findById($collectionId)) {
+                throw new Exception("PitonCMS: saveCollection Collection $collectionId not found.");
+            }
+        } else {
+            $collection = $collectionMapper->make();
+        }
+
+        $collection->id = $collectionId;
+        $collection->collection_title = $this->request->getParsedBodyParam('collection_title');
+        $collection->collection_slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('collection_slug'));
+        $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
+        $collectionMapper->save($collection);
+
+        // Save collection and redirect to all collection pages
+        return $this->redirect('adminCollections');
+    }
+
+    /**
+     * Delete Collection Group
+     *
+     * Collections with assigned pages are restricted from being deleted
+     */
+    public function deleteCollection()
+    {
+        // Get dependencies
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+
+        // Get collection to delete
+        $collectionId = $this->request->getParsedBodyParam('collection_id');
+        $collection = $collectionMapper->findById((int) $collectionId);
+
+        // Integrity checks before deleting
+        if (empty($collection)) {
+            $collectionId = $collectionId ?? 'null';
+            throw new Exception("PitonCMS: Collection ID $collectionId not found for deletion");
+        }
+
+        if ($collection->page_count > 0) {
+            throw new Exception("PitonCMS: Cannot delete a Collection with pages assigned. First remove detail pages from this collection");
+        }
+
+        $collectionMapper->delete($collection);
+
+        // Redirect back to show pages
+        return $this->redirect('adminCollections');
     }
 }

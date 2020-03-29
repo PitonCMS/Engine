@@ -33,12 +33,12 @@ $app->group('/admin', function () {
     $this->group('/page', function () {
         // Show All Pages
         $this->get('[/]', function ($args) {
-            $args['type'] = 'page';
             return (new AdminPageController($this))->showPages($args);
         })->setName('adminPages');
 
         // Edit or add new page. Must provide ID or page layout argument
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+            $args['type'] = 'page';
             return (new AdminPageController($this))->editPage($args);
         })->setName('adminEditPage');
 
@@ -68,28 +68,46 @@ $app->group('/admin', function () {
     });
     // End page routes
 
-    // Collection routes, points to matching /page route
+    // Collection routes
     $this->group('/collection', function () {
-        // Show All Collection Pages
-        $this->get('[/]', function ($args) {
-            $args['type'] = 'collection';
-            return (new AdminPageController($this))->showPages($args);
-        })->setName('adminCollections');
-
-        // Edit or add new collection page. Must provide ID or page layout argument
+        // CRUD collection
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
-            return (new AdminPageController($this))->editPage($args);
-        })->setName('adminEditCollectionPage');
+            return (new AdminPageController($this))->editCollection($args);
+        })->setName('adminEditCollection');
 
-        // Save Collection page for Update or Insert
+        // Save collection
         $this->post('/save', function ($args) {
-            return (new AdminPageController($this))->savePage();
-        })->add('csrfGuardHandler')->setName('adminSaveCollectionPage');
+            return (new AdminPageController($this))->saveCollection();
+        })->add('csrfGuardHandler')->setName('adminSaveCollection');
 
-        // Delete collection page
+        // Delete collection
         $this->post('/delete', function ($args) {
-            return (new AdminPageController($this))->deletePage($args);
-        })->add('csrfGuardHandler')->setName('adminDeleteCollectionPage');
+            return (new AdminPageController($this))->deleteCollection();
+        })->add('csrfGuardHandler')->setName('adminDeleteCollection');
+
+        // Collection Pages
+        $this->group('/page', function () {
+            // Edit or add new collection page. Must provide ID or page layout argument
+            $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+                $args['type'] = 'collection';
+                return (new AdminPageController($this))->editPage($args);
+            })->setName('adminEditCollectionPage');
+
+            // Save collection page for Update or Insert
+            $this->post('/save', function ($args) {
+                return (new AdminPageController($this))->savePage();
+            })->add('csrfGuardHandler')->setName('adminSaveCollectionPage');
+
+            // Delete collection page
+            $this->post('/delete', function ($args) {
+                return (new AdminPageController($this))->deletePage($args);
+            })->add('csrfGuardHandler')->setName('adminDeleteCollectionPage');
+        });
+
+        // Show all collection pages, optionally by category
+        $this->get('[/{collectionSlug}]', function ($args) {
+            return (new AdminPageController($this))->showCollectionPages($args);
+        })->setName('adminCollections');
     });
     // End collection
 

@@ -225,8 +225,8 @@ class Definition
                 throw new Exception('PitonCMS: Page definition JSON exception ' . implode(', ', $this->getErrorMessages()));
             }
 
-            // Filter our unneeded templates
-            if ($definition->templateType !== $templateType) {
+            // Filter out unneeded templates
+            if (!empty($definition->templateType) && $definition->templateType !== $templateType) {
                 continue;
             }
 

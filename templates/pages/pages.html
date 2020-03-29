@@ -1,76 +1,36 @@
 {% extends '@admin/_adminBase.html' %}
+{% import '@admin/pages/_pageMacros.html' as pageMacro %}
 
-{% block htmlTitle %}
-{% if page.type == 'collection' %}Collections{% else %}Pages{% endif %}
-{% endblock htmlTitle %}
+{#
+  Show All Pages
 
-{% block headText %}
-{% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
-{% endblock headText %}
+  Shows all pages, status, and edit link, with pagination (if over config row limit)
+#}
+{% block htmlTitle 'Pages' %}
+{% block headText 'Manage Pages' %}
+{% block sectionId 'pages' %}
 
-{% block sectionId %}
-{% if page.type == 'collection' %}collections{% else %}pages{% endif %}
-{% endblock sectionId %}
-
-{# {% block sectionId {{ page.type }} %} #}
 {% block sidebar %}
-{# There needs to be an if/else statement to say either Page Templates or Add a new item to collection. #}
-<!-- <h6>Templates</h6> -->
-{% for template in page.templates %}
-
-<div class="sidebar-link">
-  <a href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}" title="{{ template.description }}">
-    <i class="fas fa-edit"></i>
-    <div class="sidebar-link__text"> {{ template.name }}</div>
-  </a>
-  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
-    data-content="{{ template.description }}"></i>
-
-</div>
-
-
-{% else %}
-<h5>No Page Definitions Found</h5>
-{% endfor %}
-
+  {# Loop through all available templates #}
+  {% for template in page.templates %}
+    {# From _pageMacros. #}
+    {{ pageMacro.templateLink(template, 'adminEditPage') }}
+  {% else %}
+    <h5>No Templates Found</h5>
+  {% endfor %}
 {% endblock sidebar %}
 
 {% block content %}
-
-{% if page.type == 'page' %}
-<h3>Pages</h3>
-<div class="list-items-wrapper">
-  {% for p in page.pages %}
-  {% include "@admin/pages/_pageCard.html" %}
-  {% else %}
-  <h5>No Pages Found</h5>
-  {% endfor %}
-</div>
-
-{% elseif page.type == 'collection' %}
-
-{% for c in page.collectionNames %}
-
-<h3>{{ c.name }}</h3>
-
-<div class="list-items-wrapper">
-  {% for p in page.pages %}
-  {% if p.collection_slug == c.value %}
-  {% include "@admin/pages/_pageCard.html" %}
-  {% endif %}
-  {% else %}
-  <h5>No Pages Found</h5>
-  {% endfor %}
-</div>
-
-
-<a class="muted-text" href="#">See All {{ c.name }}</a>
-<hr>
-
-{% endfor %}
-
-{% endif %}
-
- {{ pagination() }} 
+  {# If the request is for pages #}
+  <h3>Pages</h3>
+  <div class="list-items-wrapper">
+    {% for p in page.pages %}
+      {# From _pageMacros #}
+      {{ pageMacro.pageListItem(p, 'adminEditPage') }}
+    {% else %}
+    <h5>No Pages Found</h5>
+    {% endfor %}
+  </div>
+  {{ pagination() }}
 
 {% endblock content %}
