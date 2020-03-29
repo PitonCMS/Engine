@@ -198,7 +198,7 @@ $app->group('/admin', function () {
             // Show Settings
             $this->get('/{cat:site|contact|social}', function ($args) {
                 return (new AdminSettingController($this))->showSettings($args);
-            })->setName('adminSettings');
+            })->setName('adminToolSetting');
 
             // Save Settings
             $this->post('/save', function ($args) {
