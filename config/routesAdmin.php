@@ -140,7 +140,7 @@ $app->group('/admin', function () {
         // File upload
         $this->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadMedia();
-        })->add('csrfGuardHandler')->setName('adminFileUpload');
+        })->add('csrfGuardHandler')->setName('adminMediaUpload');
 
         // Media save
         $this->post('/save', function ($args) {
