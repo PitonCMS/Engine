@@ -187,7 +187,7 @@ $app->group('/admin', function () {
         // Delete message
         $this->post('/delete', function ($args) {
             return (new AdminMessageController($this))->delete();
-        })->add('csrfGuardHandler')->setName('adminDeleteMessage');
+        })->add('csrfGuardHandler')->setName('adminMessageDelete');
     });
     // End messages
 
