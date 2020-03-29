@@ -92,7 +92,7 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
 
     if (!isNaN(blockElementId)) {
         $.ajax({
-            url: pitonConfig.routes.adminDeleteElement,
+            url: pitonConfig.routes.adminPageElementDelete,
             method: "POST",
             data: postData,
             success: function (r) {

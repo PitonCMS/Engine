@@ -62,7 +62,7 @@ $app->group('/admin', function () {
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement();
-            })->add('csrfGuardHandler')->setName('adminDeleteElement');
+            })->add('csrfGuardHandler')->setName('adminPageElementDelete');
         });
         // End page elements
     });
