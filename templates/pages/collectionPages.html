@@ -41,7 +41,7 @@
           <h5>No Collection Pages Found</h5>
         {% endfor %}
         <hr>
-        <a class="muted-text" href="{{ pathFor('adminCollections', {'collectionSlug': c.collection_slug}) }}">See All {{ c.collection_title }} Pages</a>
+        <a class="muted-text" href="{{ pathFor('adminCollection', {'collectionSlug': c.collection_slug}) }}">See All {{ c.collection_title }} Pages</a>
       </div>
       <hr>
     {% else %}
