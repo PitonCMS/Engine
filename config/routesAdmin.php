@@ -50,7 +50,7 @@ $app->group('/admin', function () {
         // Delete page
         $this->post('/delete', function ($args) {
             return (new AdminPageController($this))->deletePage($args);
-        })->add('csrfGuardHandler')->setName('adminDeletePage');
+        })->add('csrfGuardHandler')->setName('adminPageDelete');
 
         // Page elements
         $this->group('/element', function () {
