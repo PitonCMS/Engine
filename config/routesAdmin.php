@@ -96,7 +96,7 @@ $app->group('/admin', function () {
             // Save collection page for Update or Insert
             $this->post('/save', function ($args) {
                 return (new AdminPageController($this))->savePage();
-            })->add('csrfGuardHandler')->setName('adminSaveCollectionPage');
+            })->add('csrfGuardHandler')->setName('adminCollectionPageSave');
 
             // Delete collection page
             $this->post('/delete', function ($args) {
