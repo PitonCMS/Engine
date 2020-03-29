@@ -166,7 +166,7 @@ $app->group('/admin', function () {
             // Delete media category
             $this->post('/delete', function ($args) {
                 return (new AdminMediaController($this))->deleteMediaCategory();
-            })->add('csrfGuardHandler')->setName('adminDeleteMediaCategory');
+            })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');
         });
     });
     // End media

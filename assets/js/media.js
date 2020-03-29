@@ -35,7 +35,7 @@ $('.jsEditMediaCategory').on('click', 'button[type=button]', function (e) {
     }
     postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
     $.ajax({
-        url: pitonConfig.routes.adminDeleteMediaCategory,
+        url: pitonConfig.routes.adminMediaCategoryDelete,
         method: "POST",
         data: postData,
         success: function (r) {
