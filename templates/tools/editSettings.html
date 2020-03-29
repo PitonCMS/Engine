@@ -24,6 +24,7 @@
 
   {% block content %}
   <div class="grid-wrapper">
+   <h2 class="span"> {{ page.category|capitalize }} Settings</h2>
     {% for setting in page.settings %}
     {{ settingForm.settingInput(setting) }}
     {% endfor %}
