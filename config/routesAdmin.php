@@ -203,7 +203,7 @@ $app->group('/admin', function () {
             // Save Settings
             $this->post('/save', function ($args) {
                 return (new AdminSettingController($this))->saveSettings();
-            })->add('csrfGuardHandler')->setName('adminSaveSettings');
+            })->add('csrfGuardHandler')->setName('adminToolSettingSave');
 
             // Show sitemap submit page
             $this->get('/sitemap', function ($args) {
