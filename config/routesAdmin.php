@@ -227,7 +227,7 @@ $app->group('/admin', function () {
             // Show Users
             $this->get('[/]', function ($args) {
                 return (new AdminUserController($this))->showUsers();
-            })->setName('adminUsers');
+            })->setName('adminUser');
 
             // Save Users
             $this->post('/save', function ($args) {
