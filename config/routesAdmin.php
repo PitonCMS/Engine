@@ -232,7 +232,7 @@ $app->group('/admin', function () {
             // Save Users
             $this->post('/save', function ($args) {
                 return (new AdminUserController($this))->saveUsers();
-            })->add('csrfGuardHandler')->setName('adminSaveUsers');
+            })->add('csrfGuardHandler')->setName('adminUserSave');
 
             // Change User Active Status
             $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
