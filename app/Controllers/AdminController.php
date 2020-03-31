@@ -161,6 +161,6 @@ class AdminController extends AdminBaseController
      */
     public function getHelpContent($args): Response
     {
-        return $this->render("help/{$args['file']}.html");
+        return $this->render("help/client/{$args['file']}.html");
     }
 }
