@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>PitonCMS Help Files Structure</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="pitoncms-help-files-structure">PitonCMS Help Files Structure</h1>
+<p>Help files consist of one markdown file for each link in the navbar, plus a general PitonCMS overview.</p>
+<p>The markdown files are each named after the page route name (see <code>engine/config/routesAdmin.php</code>).</p>
+<p>We are using 'Markdown All in One' by <a href="https://github.com/yzhang-gh/vscode-markdown">Yu Zhang for VS Code</a> to compile the markdown files into HMTL with a matching file name.</p>
+<ul>
+<li>There should be no need to directly edit the HTML help file, as it will be overwritten when the markdown is compiled</li>
+<li>This extension creates a complete HTML file with basic CSS assets from a CDN</li>
+<li>There is an extension option to <strong>Print File on Save</strong>, which auto compiles to HTML</li>
+</ul>
+<p>All help document links open open the _helpIndex.html, and the compiled HTML is loaded into an iframe on the page.</p>
+<p>After editing the markdown file, use the VS Code menu to print to HTML (or set extension to option to print on save).</p>
+<p>Note: Pages and Collections share a single help file.</p>
+<p>Help links have three segments:</p>
+<ul>
+<li><code>help</code> Site level help, no content loaded</li>
+<li><code>help/&lt;helpFile&gt;</code> Loads specific help content file</li>
+<li><code>help/&lt;helpFile&gt;/&lt;headingAnchor&gt;</code> Loads specific help content file and scrolls section into view</li>
+</ul>
+<p>Note: The <code>&lt;headingAnchor&gt;</code> may change if the markdown section heading changes, which means you have to find and update deep links to help content sections.</p>
+
+    </body>
+    </html>
