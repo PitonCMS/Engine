@@ -142,7 +142,7 @@ class AdminController extends AdminBaseController
     /**
      * Show Help Page
      *
-     * @param string $args
+     * @param array $args
      * @return Response
      */
     public function showHelp($args): Response
