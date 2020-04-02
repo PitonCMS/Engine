@@ -2,15 +2,17 @@
  width: 100%;
  padding-inline-start: 0;
  display: flex;
-  flex-flow: row wrap;
+ flex-flow: row wrap;
+align-items: flex-start;
 
  .navItem {
   width: 185px;
   @include padding(.5em);
   @include margin(null .5em 1em null);
-  border: solid 2px $primary-dark-grey;
+  border: solid 2px $clr-dark-grey;
   box-shadow: $box-shadow;
   border-radius: $border-radius;
+
   select {
    width: 100%;
   }
@@ -20,20 +22,27 @@
 .nav-child {
  @include margin(.5em null null);
  @include padding(.25em);
- background: $primary-md-grey;
+ background: $clr-medium-grey;
  padding-inline-start: 10px;
  border-radius: none;
- .navItem{
+
+ .navItem {
   width: 100%;
   box-shadow: none;
   border: none;
- @include padding(0);
- @include margin(0);
+  @include padding(0);
+  @include margin(0);
  }
 }
-.navigator-button-group{
+
+.navigator-button-group {
  @include margin(.25em null null);
 }
+
 .navigation-disabled {
  background: rgba(gold, .5);
+}
+
+li {
+ list-style: none;
 }

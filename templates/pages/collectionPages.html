@@ -14,13 +14,14 @@
 {% block sectionId 'collections' %}
 
 {% block content %}
-  {% if page.type == 'collection' and page.collections %}
+<div class="content-block">
+ {% if page.type == 'collection' and page.collections %}
 
     {# Show the most recent 5 collection detail pages first #}
     {% for c in page.collections %}
-      <h3>{{ c.collection_title }} Pages</h3>
-      <a href="{{ pathFor('adminCollectionEdit', {'id': c.id}) }}" title="Edit collection group">Edit {{ c.collection_title }}</a> |
-      <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}" title="Add collection detail page">Add {{ c.collection_title }} Detail Page</a>
+      <h3 class="section-title">{{ c.collection_title }} Pages <a class="text-small" href="{{ pathFor('adminCollectionEdit', {'id': c.id}) }}" title="Edit collection group">Edit {# {{ c.collection_title }} #}</a></h3>
+      
+      <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}" title="Add collection detail page"> <i class="fas fa-plus"></i> {{ c.collection_title }} page</a>
 
       <div class="list-items-wrapper">
         {% set loopCount = 1 %}
@@ -34,8 +35,8 @@
         {% else %}
           <h5>No Collection Pages Found</h5>
         {% endfor %}
-        <hr>
-        <a class="muted-text" href="{{ pathFor('adminCollection', {'collectionSlug': c.collection_slug}) }}">See All {{ c.collection_title }} Pages</a>
+  
+        <a class="" href="{{ pathFor('adminCollection', {'collectionSlug': c.collection_slug}) }}">All {{ c.collection_title }}</a>
       </div>
       <hr>
     {% else %}
@@ -46,8 +47,8 @@
   {% elseif page.type == 'collectionAll' %}
 
     {# If the request is to see all pages in this collection detail set #}
-    <h3>{{ page.collection_title }} Pages</h3>
-    <a href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit {{ page.collection_title }}</a> |
+    <h3 class="section-title">{{ page.collection_title }} Pages  <a class="text-small" href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit {# {{ page.collection_title }} #}</a></h3>
+    
     <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}" title="Add collection detail page">Add {{ page.collection_title }} Detail Page</a>
 
     <div class="list-items-wrapper">
@@ -61,4 +62,6 @@
     {{ pagination() }}
 
   {% endif %}
+</div>
+ 
 {% endblock content %}

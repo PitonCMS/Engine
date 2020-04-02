@@ -1,95 +1,108 @@
 {# Admin Navbar #}
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-    <span class="navbar-text d-md-block d-none">{{ headText }}</span>
+<nav class="yamm navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+ <div class="container-fluid">
+  <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
+  <span class="navbar-text d-md-block d-none">{{ headText }}</span>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar" aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
+   aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse" id="pitonAdminNavbar">
-      <ul class="navbar-nav ml-auto jsAdminNavbar">
+  <div class="collapse navbar-collapse" id="pitonAdminNavbar">
+   <ul class="navbar-nav ml-auto jsAdminNavbar">
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminPage') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Pages
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            <a class="dropdown-item" href="{{ pathFor('adminPage') }}" title="All pages">All Pages</a>
-            <div class="dropdown-divider"></div>
-            {% for pt in getPageTemplates() %}
-            <a class="dropdown-item" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}" title="New {{ pt.description }} page">New {{ pt.name }}</a>
-            {% endfor %}
-          </div>
-        </li>
+    <li class="nav-item dropdown yamm-fw">
+     <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminPage') }}" href="#" id="pageDropdown" role="button"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Content
+     </a>
+     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+      <div class="dropdown-menu__horizontal-menu-wrapper">
+       <div class="dropdown-menu__horizontal-item">
+        <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Pages</div>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ pathFor('adminPage') }}" title="All pages">All Pages</a>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminCollection') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Collections
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            <a class="dropdown-item" href="{{ pathFor('adminCollection') }}" title="Add new collection group">All Collection Pages</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ pathFor('adminCollectionEdit') }}" title="Add new collection group">New Collection</a>
-          </div>
-        </li>
+        {% for pt in getPageTemplates() %}
+        <a class="dropdown-item" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}"
+         title="New {{ pt.description }} page">New {{ pt.name }}</a>
+        {% endfor %}
+       </div>
+       <div class="dropdown-menu__horizontal-item">
+        <!-- <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminCollection') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Collections
+            </a> -->
+        <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Collections</div>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ pathFor('adminCollection') }}" title="Add new collection group">All Collection
+         Pages</a>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminNavigation') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Navigation
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            {% for n in getNavigators() %}
-            <a class="dropdown-item" href="{{ pathFor('adminNavigation', {'nav': n}) }}" title="Edit navigation">Edit {{ n|capitalize }}</a>
-            {% endfor %}
-          </div>
-        </li>
+        <a class="dropdown-item" href="{{ pathFor('adminCollectionEdit') }}" title="Add new collection group">New
+         Collection</a>
+       </div>
+       <div class="dropdown-menu__horizontal-item">
+        <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Navigation</div>
+        <div class="dropdown-divider"></div>
+        {% for n in getNavigators() %}
+        <a class="dropdown-item" href="{{ pathFor('adminNavigation', {'nav': n}) }}" title="Edit navigation">Edit
+         {{ n|capitalize }}</a>
+        {% endfor %}
+       </div>
+      </div>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminMedia') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Media
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            <a class="dropdown-item" href="{{ pathFor('adminMedia') }}">Edit Media</a>
-            <a class="dropdown-item" href="{{ pathFor('adminMediaCategoryEdit') }}">Edit Media Categories</a>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mediaUpload">Upload Media</a>
-          </div>
-        </li>
+     </div>
+    </li>
+    </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminMessage') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span> Messages
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">New Messages</a>
-            <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">Read Messages</a>
-          </div>
-        </li>
+    <li class="nav-item dropdown">
+     <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminMedia') }}" href="#" id="pageDropdown" role="button"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Media
+     </a>
+     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+      <a class="dropdown-item" href="{{ pathFor('adminMedia') }}">All Media</a>
+      <a class="dropdown-item" href="{{ pathFor('adminMediaCategoryEdit') }}">Media Categories</a>
+      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mediaUpload">Upload Media</a>
+     </div>
+    </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminTool') }}" href="#" id="pageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Tools
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pageDropdown">
-            <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">General</a>
-            <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}">Contact</a>
-            <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}">Social</a>
-            <a class="dropdown-item" href="{{ pathFor('adminUser') }}">Users</a>
-            <a class="dropdown-item" href="{{ pathFor('adminToolSitemap') }}">Sitemap</a>
-          </div>
-        </li>
+    <li class="nav-item dropdown">
+     <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminMessage') }}" href="#" id="pageDropdown"
+      role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span> Messages
+     </a>
+     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+      <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">New Messages</a>
+      <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">Read Messages</a>
+     </div>
+    </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRouteGroup('adminHelp') }}" href="{{ pathFor('adminHelp') }}" title="PitonCMS Help Documentation">Help</a>
-        </li>
+    <li class="nav-item dropdown">
+     <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminTool') }}" href="#" id="pageDropdown" role="button"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Tools
+     </a>
+     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+      <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">General</a>
+      <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}">Contact</a>
+      <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}">Social</a>
+      <a class="dropdown-item" href="{{ pathFor('adminUser') }}">Users</a>
+      <a class="dropdown-item" href="{{ pathFor('adminToolSitemap') }}">Sitemap</a>
+     </div>
+    </li>
 
-        <li class="nav-item">
-          <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
-        </li>
-      </ul>
-    </div>
+    <li class="nav-item">
+     <a class="nav-link {{ currentRouteGroup('adminHelp') }}" href="{{ pathFor('adminHelp') }}"
+      title="PitonCMS Help Documentation">Help</a>
+    </li>
+
+    <li class="nav-item">
+     <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
+    </li>
+   </ul>
   </div>
+ </div>
 
 </nav>

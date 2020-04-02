@@ -18,71 +18,77 @@
 {% block sectionId 'detailPage' %}
 
 {% block openForm %}
-  <form class="jsEditCollection contentWrapper" action="{{ pathFor('adminCollectionSave') }}" method="post" accept-charset="utf-8">
+  <form class="jsEditCollection" action="{{ pathFor('adminCollectionSave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 
 {% block sidebar %}
-  <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminCollection') }}">Cancel</a>
+<div class="sidebar-inner">
+ <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminCollection') }}">Cancel</a>
   <button type="submit" class="btn btn-sm btn-primary" id="jsSaveButtonInd" title="Save collection" disabled>Save</button>
   {% if page.collection.id %}
   <button class="btn btn-danger btn-sm jsDeleteConfirm" type="submit" name="delete_button" formaction="{{ pathFor('adminCollectionDelete') }}"
     {% if page.collection.page_count > 0 %}disabled title="You must remove all detail pages assigned to this collection before deleting"{% endif %}
     value="delete">Delete</button>
   {% endif %}
+</div>
+ 
 {% endblock sidebar %}
 
 {% block content %}
-  <h3>{% if page.collection.id %}Edit {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h3>
-  <div class="lead">Used by <a href="{{ pathFor('adminCollection', {'collectionSlug': page.collection.collection_slug}) }}">{{ page.collection.page_count }}</a> Pages</div>
-  <hr>
+<div class="content-block">
+ <h3 class="section-title">{% if page.collection.id %}Edit {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h3>
+ <div class="lead">Used by <a href="{{ pathFor('adminCollection', {'collectionSlug': page.collection.collection_slug}) }}">{{ page.collection.page_count }}</a> Pages</div>
+ <hr>
 
-  <div class="jsCollectionGroup">
-    <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
+ <div class="jsCollectionGroup">
+   <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
 
-    <div class="form-group">
-      <label>Collection Title</label>
-      <input type="text" class="form-control jsPageTitle" name="collection_title" value="{{ page.collection.collection_title }}" maxlength="60" placeholder="Collection title" required autocomplete="off">
-    </div>
+   <div class="form-group">
+     <label>Collection Title</label>
+     <input type="text" class="form-control jsPageTitle" name="collection_title" value="{{ page.collection.collection_title }}" maxlength="60" placeholder="Collection title" required autocomplete="off">
+   </div>
 
-    {#
-      When to Set or Update the Collection URL Slug
+   {#
+     When to Set or Update the Collection URL Slug
 
-      The collection URL slug is created from the collection title, but cleaned (replace &, -, and spaces with dashes, and to lower case).
-      Rules:
-      - A collection with 1 or more assigned pages (page_count > 0) should be locked
-      - Never change a locked collection slug. Allow unlock but warn the user
+     The collection URL slug is created from the collection title, but cleaned (replace &, -, and spaces with dashes, and to lower case).
+     Rules:
+     - A collection with 1 or more assigned pages (page_count > 0) should be locked
+     - Never change a locked collection slug. Allow unlock but warn the user
 
-      Set readonly and locked status as Twig variables to keep logic understandable.
-    #}
-    {% if page.collection.page_count > 0 %}
-      {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
-    {% else %}
-      {% set readonlyStatus, lockedStatus = '', 'unlock' %}
-    {% endif %}
-    <script> pitonConfig.pageSlugLocked = `{{ lockedStatus }}`</script>
-    <div class="form-group">
-      <label>Collection Slug <span class="text-danger">*</span></label>
-      <div class="input-group">
-        <input type="text" class="form-control jsUrlSlug" name="collection_slug" maxlength="100" placeholder="Collection URL slug"
-          value="{{ page.collection.collection_slug }}" required {{ readonlyStatus }} autocomplete="off">
-        <div class="input-group-append jsUrlSlugFaLockStatus">
-          <span
-            class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
-        </div>
-      </div>
-      <small class="form-text text-muted">Collection URL segment for collection. Warning, changing the collection URL slug after publishing collection detail pages may negatively impact links to your page.</small>
-    </div>
+     Set readonly and locked status as Twig variables to keep logic understandable.
+   #}
+   {% if page.collection.page_count > 0 %}
+     {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+   {% else %}
+     {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+   {% endif %}
+   <script> pitonConfig.pageSlugLocked = `{{ lockedStatus }}`</script>
+   <div class="form-group">
+     <label>Collection Slug <span class="text-danger">*</span></label>
+     <div class="input-group">
+       <input type="text" class="form-control jsUrlSlug" name="collection_slug" maxlength="100" placeholder="Collection URL slug"
+         value="{{ page.collection.collection_slug }}" required {{ readonlyStatus }} autocomplete="off">
+       <div class="input-group-append jsUrlSlugFaLockStatus">
+         <span
+           class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
+       </div>
+     </div>
+     <small class="form-text text-muted">Collection URL segment for collection. Warning, changing the collection URL slug after publishing collection detail pages may negatively impact links to your page.</small>
+   </div>
 
-    <div class="form-group">
-      <label>Collection Template</label>
-      <select class="form-control" name="collection_definition" {% if page.collection.page_count > 0 %}disabled{% endif %}>
-        {% for t in page.templates %}
-          <option value="{{ t.filename }}" {% if t.filename == page.collection.collection_definition %}selected{% endif %}>{{ t.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
+   <div class="form-group">
+     <label>Collection Template</label>
+     <select class="form-control" name="collection_definition" {% if page.collection.page_count > 0 %}disabled{% endif %}>
+       {% for t in page.templates %}
+         <option value="{{ t.filename }}" {% if t.filename == page.collection.collection_definition %}selected{% endif %}>{{ t.name }}</option>
+       {% endfor %}
+     </select>
+   </div>
+ </div>
+</div>
+
 
 {% endblock content %}
 

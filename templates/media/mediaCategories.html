@@ -6,19 +6,22 @@
 {% block sectionId 'detailPage' %}
 
 {% block openForm %}
-  <form class="jsEditMediaCategory contentWrapper" action="{{ pathFor('adminMediaCategorySave') }}" method="post" accept-charset="utf-8">
+  <form class="jsEditMediaCategory" action="{{ pathFor('adminMediaCategorySave') }}" method="post" accept-charset="utf-8">
     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 {% endblock openForm %}
 
 {% block sidebar %}
-{#}  {% include "@admin/media/_mediaSidebar.html" %} #}
+<div class="sidebar-inner">
+ {#}  {% include "@admin/media/_mediaSidebar.html" %} #}
 
-  <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminMediaCategoryEdit') }}">Cancel</a>
-  <button type="submit" class="btn btn-sm btn-primary" id="jsSaveButtonInd" title="Save media categories" disabled>Save</button>
+ <a class="btn btn-sm btn-outline-warning" href="{{ pathFor('adminMediaCategoryEdit') }}">Cancel</a>
+ <button type="submit" class="btn btn-sm btn-primary" id="jsSaveButtonInd" title="Save media categories" disabled>Save</button>
+</div>
+
 {% endblock sidebar %}
 
 {% block content %}
-  <h3>Media Categories</h3>
+  <h3 class="section-title">Media Categories</h3>
   <hr>
 
   {% for c in page.categories %}

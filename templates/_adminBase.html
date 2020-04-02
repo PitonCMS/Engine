@@ -62,16 +62,19 @@
     {# Open form block if wrapping sidebar and content #}
     {% block openForm '' %}
 
-    <aside class="sidebar">
-      <div class="sidebar-inner">
-        {% block sidebar '' %}
-      </div>
-    </aside>
 
-    <main role="main" class="{% block mainClass 'content' %}">
-      {% block content '' %}
-    </main>
+<div class="contentWrapper">
+ <main role="main" class="{% block mainClass 'content' %}">
+  {% block content '' %}
+</main>
+<aside class="sidebar">
 
+   {% block sidebar '' %}
+
+</aside>
+
+</div>
+   
     {% block closeForm %}
     {# Self closing form tag #}
     {{ block('openForm') != '' ? '</form>' }}

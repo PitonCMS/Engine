@@ -1,8 +1,23 @@
+.sidebar-inner {
+ max-width: 175px;
+ display: flex;
+ flex-flow: column nowrap;
+ text-align: center;
+position: sticky;
+top: 80px;
+
+ .button-group {
+  display: grid;
+  gap: .5em;
+  @include margin(null null 1em null);
+
+ }
+}
  /*  All Top / Left Sidebars */
 
  .sidebar {
   // @include padding(65px null null null);
-  background: $primary-dark-grey;
+  background: $clr-dark-grey;
   position: sticky;
   top: 0px;
   z-index: 5;
@@ -36,34 +51,30 @@
 @include margin(0);
 }
    .button-group {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
+ 
 
     @media screen and (min-width: 768px) {
-     flex-flow: column nowrap;
+    
     }
 
     .btn {
-     @include margin(null .75em null null);
+     // @include margin(null .75em null null);
 
      @media screen and (min-width: 768px) {
       width: 100%;
-      @include margin(1em 0 0 0);
+      // @include margin(1em 0 0 0);
      }
     }
    }
   }
 
   .sidebar-link {
-   background: $primary-color;
-   color: $primary-light;
+   background: $clr-primary;
+   color: $clr-text-light;
    @include margin(null 1.2em .5em null);
    @include padding(.25em .5em);
    border-radius: $border-radius;
-   border: solid 1px $primary-dark;
+   border: solid 1px $clr-bg-dark;
 
    // display: flex;
    // flex-flow: row nowrap;
@@ -77,15 +88,15 @@
    justify-content: center;
 
    &:hover {
-    background: $primary-dark;
-    color: $primary-light;
+    background: $clr-bg-dark;
+    color: $clr-text-light;
     text-decoration: none;
    }
 
    a {
     @include padding(null .5em null null);
     width: 100%;
-    color: $primary-light;
+    color: $clr-text-light;
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: .5em;
@@ -93,8 +104,8 @@
     align-items: center;
 
     &:hover {
-     background: $primary-dark;
-     color: $primary-light;
+     background: $clr-bg-dark;
+     color: $clr-text-light;
      text-decoration: none;
     }
    }
@@ -111,6 +122,6 @@
 
   .fa-info-circle:hover {
    cursor: pointer;
-   color: $primary-dark-grey;
+   color: $clr-dark-grey;
   }
  }

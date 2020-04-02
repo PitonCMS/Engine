@@ -6,34 +6,38 @@
 {% block sectionId 'navigationPage' %}
 
 {% block openForm %}
-<form class="jsNavigatorForm contentWrapper" action="{{ pathFor('adminNavigationSave') }}" method="post"
+<form class="jsNavigatorForm" action="{{ pathFor('adminNavigationSave') }}" method="post"
  accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <input type="hidden" name="navigator" value="{{ page.navigator }}">
  {% endblock openForm %}
 
  {% block sidebar %}
-
- <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigation', {'nav': page.navigator}) }}">Cancel</a>
- <button type="submit" class="btn btn-sm btn-outline-primary btn-sm" id="jsSaveNavButton" title="Save navigation"
-  disabled>Save</button>
-
+<div class="sidebar-inner">
+ <div class="sidebar-block button-group">
+  <a class="btn btn-sm btn-outline-warning btn-sm mb-2" href="{{ pathFor('adminNavigation', {'nav': page.navigator}) }}">Cancel</a>
+  <button type="submit" class="btn btn-sm btn-outline-primary btn-sm" id="jsSaveNavButton" title="Save navigation" disabled>Save</button>
+ </div>
+ 
+</div>
  {% endblock sidebar %}
 
  {% block content %}
- <h3>{{ page.navigator|capitalize }} Navigation</h3>
- <hr>
+ <div class="content-block">
+  <h3 class="section-title">{{ page.navigator|capitalize }} Navigation</h3>
 
- {% if page.navigator %}
- <div class="jsEditNavBlock">
-  <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
-   {{ navItem.selectPage(page.navigation, page.navigator) }}
-   <li>
-    <i class="fas fa-plus jsAddNavItem icon icon-green" title="Add New Navigation Link"></i>
-   </li>
-  </ul>
+  {% if page.navigator %}
+  <div class="jsEditNavBlock">
+   <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
+    {{ navItem.selectPage(page.navigation, page.navigator) }}
+    <li>
+     <i class="fas fa-plus jsAddNavItem icon icon-green" title="Add New Navigation Link"></i>
+    </li>
+   </ul>
+  </div>
+  {% endif %}
  </div>
- {% endif %}
+ 
  {% endblock content %}
 
  {% block closeForm %}

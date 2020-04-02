@@ -1,12 +1,39 @@
  /***** Theme Settings ******/
 
- $box-shadow: 0 2px 3px rgba(#333, 0.25);
- $border-radius: 5px;
+$black: #262626;
+$white: #ffffff;
+$blue: #336699;
+$red: #ff0000;
+$yellow: yellow;
+$orange: orange;
+$green: green;
+$light-grey: #f6f6f6;
+$medium-grey: #ebebeb;
+$dark-grey: #afafaf;
 
- $primary-color: #336699;
- $secondary-color: rgba($primary-color, 0.4);
- $primary-light: #ffffff;
- $primary-dark: #333;
- $primary-light-grey: #f6f6f6;
- $primary-md-grey: #ebebeb;
- $primary-dark-grey: #afafaf;
+$clr-primary: $blue;
+$clr-bg-dark: $black;
+$clr-bg-light: $white;
+$clr-text-dark: $black;
+$clr-text-light: $white;
+$clr-accent: $orange;
+$clr-light-grey: $light-grey;
+$clr-medium-grey: $medium-grey;
+$clr-dark-grey: $dark-grey;
+
+$box-shadow: 0 2px 2px rgba(0,0,0,.15);
+$border-radius: 7px;
+
+
+$break-point-xl: 1200px;
+$break-point-lg: 990px;
+$break-point-md: 768px;
+$break-point-sm: 576px;
+
+/*
+@media screen and (min-width: $break-point-sm){}
+@media screen and (min-width: $break-point-md){}
+@media screen and (min-width: $break-point-lg){}
+@media screen and (min-width: $break-point-xl){}
+
+*/

@@ -1,28 +1,33 @@
 #editPage,
 #collectionDetail {
  .card{
-  background: $primary-light;
+  background: $clr-bg-light;
  }
 .modal {
  .card-wrapper{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1em;
   .media{
    display: flex;
    flex-flow: column nowrap;
-   justify-content: center;
-   align-items: center;
-   text-align: center;
+   .mediaForm {
+    display: grid;
+    grid-template-columns: 150px;
+   }
    img{
     max-height: 100px;
     object-fit: contain;
+   }
+   p{
+    max-width: 150px;
    }
   }
 }
 }
  .block-title-wrapper:nth-child(1){
-  @include margin(1em null null);
+  // @include margin(1em null null);
+
  }
 
  .jsBlockParent {
@@ -51,7 +56,7 @@
  }
  .element-block {
   @include padding(1em);
-  background: $primary-md-grey;
+  background: $clr-light-grey;
   border-radius: $border-radius;
  }
  .block-element-wrapper {
@@ -59,12 +64,10 @@
  }
 }
 #pageContent{
- .block-title-wrapper:nth-child(1){
-  @include margin(0 null null);
- }
+
  .mediaInput{
-  width: 10%;
-  max-height: 300px;
+  width: 100%;
+ 
   overflow: hidden;
   img{
    object-fit: contain;

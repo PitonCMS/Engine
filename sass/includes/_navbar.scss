@@ -1,0 +1,14 @@
+.dropdown-menu {
+ &__horizontal-menu-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  left: 0;
+
+  @include padding(1em);
+  justify-content: center;
+ 
+  }
+  &__horizontal-item {
+   
+  }
+}

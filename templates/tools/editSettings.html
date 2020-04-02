@@ -7,28 +7,34 @@
 {# {% block mainClass 'contentTwoCol' %} #}
 
 {% block openForm %}
-<form class="contentWrapper" action="{{ pathFor('adminToolSettingSave') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-  <input type="hidden" name="category" value="{{ page.category }}">
-  {% endblock openForm %}
+<form action="{{ pathFor('adminToolSettingSave') }}" method="post" accept-charset="utf-8">
+ <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+ <input type="hidden" name="category" value="{{ page.category }}">
+ {% endblock openForm %}
 
-  {% block sidebar %}
-  {# {% include "@admin/tools/_toolsSidebar.html" %} #}
-
-  <div class="button-group sidebar-controls span">
-    <!-- Control Buttons -->
-        <a class="btn btn-outline-warning" href="{{ pathFor('adminToolSetting', {'cat': page.category|default('site') }) }}">Cancel</a>
-        <button class="btn btn-primary" type="submit" name="button" value="save">Save</button>
+ {% block sidebar %}
+ <div class="sidebar-inner">
+  <div class="sidebar-block button-group">
+   <!-- Control Buttons -->
+   <a class="btn btn-outline-warning" href="{{ pathFor('adminToolSetting', {'cat': page.category|default('site') }) }}">Cancel</a>
+   <button class="btn btn-outline-primary" type="submit" name="button" value="save">Save</button>
   </div>
-  {% endblock sidebar %}
+  {% include "@admin/tools/_toolsSidebar.html" %}
+ </div>
 
-  {% block content %}
+ {% endblock sidebar %}
+
+ {% block content %}
+ <div class="content-block">
+  <h3 class="section-title"> {{ page.category|capitalize }} Settings</h3>
   <div class="grid-wrapper">
-   <h2 class="span"> {{ page.category|capitalize }} Settings</h2>
-    {% for setting in page.settings %}
-    {{ settingForm.settingInput(setting) }}
-    {% endfor %}
+  
+   {% for setting in page.settings %}
+   {{ settingForm.settingInput(setting) }}
+   {% endfor %}
   </div>
 
+ </div>
 
-  {% endblock content %}
+
+ {% endblock content %}

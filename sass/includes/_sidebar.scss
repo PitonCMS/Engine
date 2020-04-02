@@ -1,0 +1,6 @@
+.sidebar-inner {
+ @include padding(1em);
+ display: flex;
+ flex-flow: column nowrap;
+
+}
