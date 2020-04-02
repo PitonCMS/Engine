@@ -1,38 +1,54 @@
 #editPage,
-#collectionDetail {
- .card{
-  background: $clr-bg-light;
- }
-.modal {
- .card-wrapper{
+#collectionDetail,
+#mediaCategoriesPage,
+#detailPage {
+ .form-group-wrapper {
+  background: $clr-light-grey;
+  @include padding(1em);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1em;
-  .media{
-   display: flex;
-   flex-flow: column nowrap;
-   .mediaForm {
-    display: grid;
-    grid-template-columns: 150px;
-   }
-   img{
-    max-height: 100px;
-    object-fit: contain;
-   }
-   p{
-    max-width: 150px;
+
+  .form-group {
+   @include padding(1em);
+   background: $clr-bg-light;
+   border: none;
+   border-radius: $border-radius;
+   box-shadow: $box-shadow;
+  }
+ }
+
+ .modal {
+  .card-wrapper {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+   gap: 1em;
+
+   .media {
+    display: flex;
+    flex-flow: column nowrap;
+
+    .mediaForm {
+     display: grid;
+     grid-template-columns: 150px;
+    }
+
+    img {
+     max-height: 100px;
+     object-fit: contain;
+    }
+
+    p {
+     max-width: 150px;
+    }
    }
   }
-}
-}
- .block-title-wrapper:nth-child(1){
-  // @include margin(1em null null);
-
  }
 
  .jsBlockParent {
   @include margin(0);
-  .btn{
+
+  .btn {
    @include margin(0);
   }
  }
@@ -42,36 +58,35 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1em;
-  @media screen and (min-width: 768px){
+
+  @media screen and (min-width: 768px) {
    grid-template-columns: 1fr 1fr;
   }
 
-  .form-group {
-   @include padding(.5em);
-   @include margin(0);
-   border-radius: $border-radius;
-   background: white;
-   box-shadow: $box-shadow;
-  }
+
  }
+
  .element-block {
   @include padding(1em);
   background: $clr-light-grey;
   border-radius: $border-radius;
  }
+
  .block-element-wrapper {
   @include margin(1em null null);
  }
 }
-#pageContent{
 
- .mediaInput{
+#pageContent {
+
+ .mediaInput {
   width: 100%;
- 
+
   overflow: hidden;
-  img{
+
+  img {
    object-fit: contain;
   }
- 
+
  }
-} 
+}

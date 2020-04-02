@@ -39,13 +39,11 @@
   <!-- Control Buttons -->
   <div class="sidebar-block button-group">
    {# Button to Publish Page Now #}
-   <a class="btn mb-0 btn-outline-success" href="">Publish</a>
-   <a class="btn mb-0 btn-outline-warning" href="{{ pathFor(pageCancelLink) }}">Cancel</a>
+   <button class="btn mb-0 btn-outline-success" type="submit" disabled>Publish</button>
+   <a      class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(pageCancelLink) }}">Cancel</a>
    <button class="btn mb-0 btn-outline-primary" type="submit">Save</button>
    {% if page.id %}
-   <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit"
-    formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
-    title="The home page cannot be deleted." {% endif %}>Delete</button>
+   <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
    {% endif %}
   </div>
   <hr>
@@ -172,7 +170,7 @@
              Selecting an image sets the media table ID in the page_media_id input
            #}
       {% if not page.json.hideFeaturedImage %}
-      <div class="form-group jsMediaInput">
+      <div class="form-group jsMediaInput span">
        <img src="{{ getMediaPath(page.media.filename, 'large') }}"
         class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
        <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
