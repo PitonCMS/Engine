@@ -27,7 +27,7 @@
 
         {% for pt in getPageTemplates() %}
         <a class="dropdown-item" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}"
-         title="New {{ pt.description }} page">New {{ pt.name }}</a>
+         title="Add {{ pt.description }} page">Add {{ pt.name }}</a>
         {% endfor %}
        </div>
        <div class="dropdown-menu__horizontal-item">
@@ -36,10 +36,9 @@
             </a> -->
         <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Collections</div>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ pathFor('adminCollection') }}" title="Add new collection group">All Collection
-         Pages</a>
+        <a class="dropdown-item" href="{{ pathFor('adminCollection') }}" title="All collections">All Collections</a>
 
-        <a class="dropdown-item" href="{{ pathFor('adminCollectionEdit') }}" title="Add new collection group">New
+        <a class="dropdown-item" href="{{ pathFor('adminCollectionEdit') }}" title="Add new collection group">Add
          Collection</a>
        </div>
        <div class="dropdown-menu__horizontal-item">
@@ -98,7 +97,7 @@
       title="PitonCMS Help Documentation">Help</a>
     </li>
 
- 
+
    </ul>
    <ul class="navbar-nav ml-auto">
 
@@ -106,7 +105,7 @@
      <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
     </li>
    </ul>
-  
+
   </div>
 
  </div>
