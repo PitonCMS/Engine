@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block headText %}
-{% if page.id %}Edit {% else %}Add {% endif %}
-{% if page.type == 'collection' %}Collection {% endif %}
+{% if page.id %}Editing {% else %}Add {% endif %}
+{# {% if page.type == 'collection' %}Collection {% endif %} #}
 {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
@@ -40,10 +40,12 @@
   <div class="sidebar-block button-group">
    {# Button to Publish Page Now #}
    <button class="btn mb-0 btn-outline-success" type="submit" disabled>Publish</button>
-   <a      class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(pageCancelLink) }}">Cancel</a>
+   <a class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(pageCancelLink) }}">Cancel</a>
    <button class="btn mb-0 btn-outline-primary" type="submit">Save</button>
    {% if page.id %}
-   <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit" formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete</button>
+   <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit"
+    formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
+    title="The home page cannot be deleted." {% endif %}>Delete</button>
    {% endif %}
   </div>
   <hr>
@@ -63,6 +65,13 @@
    {% elseif page.getPublishedStatus == 'published' %}
    <div class="text-success mb-3">Status: Published</div>
    {% endif %}
+   <hr>
+   {# Add Element Button #}
+   <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" data-block-key="{{ block.key }}"
+    data-element-type="{{ block.elementTypeDefault }}"
+    data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
+    data-element-count-limit="{{ block.elementCountLimit }}"
+    {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
   </div>
 
  </div>
@@ -90,7 +99,7 @@
   </ul>
 
   <div class="tab-content" id="tabs-tabContent">
- 
+
    <!-- Page Settings Tab -->
    <div class="tab-pane fade {% if not page.id %}show active{% endif %} content-block" id="pageSettings" role="tabpanel"
     aria-labelledby="pageSettings-tab">
@@ -98,24 +107,24 @@
      <h4 class="page-edit-title">Page Settings</h4>
     </div>
 
-     
-     {# Page Standard Fields #}
-     <div class="form-group-wrapper">
-      <div class="form-group">
-       <label>Title <span class="text-danger">*</span></label>
-       <input type="text" class="form-control jsPageTitle" name="title" maxlength="60" placeholder="Page title"
-        value="{{ page.title }}" required>
-      </div>
- 
-      {% if not page.json.hideSubTitle %}
-      <div class="form-group">
-       <label>Sub Title</label>
-       <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
-       <small class="form-text text-muted">Optional. Limit 150 characters.</small>
-      </div>
-      {% endif %}
- 
-      {#
+
+    {# Page Standard Fields #}
+    <div class="form-group-wrapper">
+     <div class="form-group">
+      <label>Title <span class="text-danger">*</span></label>
+      <input type="text" class="form-control jsPageTitle" name="title" maxlength="60" placeholder="Page title"
+       value="{{ page.title }}" required>
+     </div>
+
+     {% if not page.json.hideSubTitle %}
+     <div class="form-group">
+      <label>Sub Title</label>
+      <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
+      <small class="form-text text-muted">Optional. Limit 150 characters.</small>
+     </div>
+     {% endif %}
+
+     {#
              When to Set or Update the URL Slug
  
              The URL slug is created from the page title, but cleaned (replace &, -, and spaces with dashes, and to lower case).
@@ -127,63 +136,63 @@
  
              Set readonly and locked status as Twig variables to keep logic understandable.
            #}
-      {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
-      {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
-      {% else %}
-      {% set readonlyStatus, lockedStatus = '', 'unlock' %}
-      {% endif %}
-      <script>
-       pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
-      </script>
-      <div class="form-group">
-       <label>Slug <span class="text-danger">*</span></label>
-       <div class="input-group">
-        {% if page.collection_slug %}
-        <div class="input-group-prepend">
-         <span class="input-group-text">{{ page.collection_slug }}/</span>
-        </div>
-        {% endif %}
-        <input type="text" class="form-control jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
-         value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
-        <div class="input-group-append jsUrlSlugFaLockStatus">
-         <span class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
-        </div>
+     {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
+     {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+     {% else %}
+     {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+     {% endif %}
+     <script>
+      pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
+     </script>
+     <div class="form-group">
+      <label>Slug <span class="text-danger">*</span></label>
+      <div class="input-group">
+       {% if page.collection_slug %}
+       <div class="input-group-prepend">
+        <span class="input-group-text">{{ page.collection_slug }}/</span>
        </div>
-       <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-        changed. Warning, changing the URL slug after the page is published may negatively impact links to your
-        page.</small>
+       {% endif %}
+       <input type="text" class="form-control jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
+        value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
+       <div class="input-group-append jsUrlSlugFaLockStatus">
+        <span class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
+       </div>
       </div>
- 
-      <div class="form-group">
-       <label>Meta Description</label>
-       <input type="text" class="form-control" name="meta_description" maxlength="320"
-        placeholder="Description to appear in search results" value="{{ page.meta_description }}">
-       <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching
-        search
-        results.</small>
-      </div>
- 
-      {#
+      <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+       changed. Warning, changing the URL slug after the page is published may negatively impact links to your
+       page.</small>
+     </div>
+
+     <div class="form-group">
+      <label>Meta Description</label>
+      <input type="text" class="form-control" name="meta_description" maxlength="320"
+       placeholder="Description to appear in search results" value="{{ page.meta_description }}">
+      <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching
+       search
+       results.</small>
+     </div>
+
+     {#
              Page Header Featured Media Select Option
  
              Allows user to select a saved media file to link as featured image for this page.
              Selecting an image sets the media table ID in the page_media_id input
            #}
-      {% if not page.json.hideFeaturedImage %}
-      <div class="form-group jsMediaInput span">
-       <img src="{{ getMediaPath(page.media.filename, 'large') }}"
-        class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-       <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
-       <label>Featured Page Image</label>
-       <div class="input-group" style="padding-top: 1em">
-        <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
-        <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
-       </div>
+     {% if not page.json.hideFeaturedImage %}
+     <div class="form-group jsMediaInput span">
+      <img src="{{ getMediaPath(page.media.filename, 'large') }}"
+       class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
+      <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
+      <label>Featured Page Image</label>
+      <div class="input-group" style="padding-top: 1em">
+       <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
+       <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
       </div>
-      {% endif %}
      </div>
+     {% endif %}
     </div>
-    
+   </div>
+
    <!-- Custom Settings Tab -->
    <div class="tab-pane fade content-block" id="pageCustom" role="tabpanel" aria-labelledby="pageCustom-tab">
     {# Page Custom Settings #}
@@ -200,12 +209,12 @@
    </div>
 
    <!-- Content Tab -->
-   <div class="tab-pane fade {% if page.id %}show active{% endif %} content-block" id="pageContent" role="tabpanel"
+   <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="pageContent" role="tabpanel"
     aria-labelledby="content-tab">
     {# Page Blocks and Elements #}
-    <div class="block-element-wrapper">
+    <div class="">
      {% for block in page.json.blocks %}
-     <div class="element-block">
+     <div class="content-block">
       <div class="block-title-wrapper">
        <h4 class="page-edit-title">{{ block.name }}</h4>
       </div>
@@ -218,13 +227,6 @@
        {% set elementLength = elementLength + 1 %}
        {% endif %}
        {% endfor %}
-
-       {# Add Element Button #}
-       <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" data-block-key="{{ block.key }}"
-        data-element-type="{{ block.elementTypeDefault }}"
-        data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-        data-element-count-limit="{{ block.elementCountLimit }}"
-        {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
 
        {# Loop through all available elements loaded for this page. If a block key match is found, then print it #}
        {% for element in page.elements %}

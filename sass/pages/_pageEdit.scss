@@ -10,7 +10,8 @@
   gap: 1em;
 
   .form-group {
-   @include padding(1em);
+   @include padding(.5em);
+   @include margin(0);
    background: $clr-bg-light;
    border: none;
    border-radius: $border-radius;

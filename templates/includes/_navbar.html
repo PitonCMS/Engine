@@ -3,7 +3,7 @@
 <nav class="yamm navbar navbar-expand-md navbar-dark bg-dark fixed-top">
  <div class="container-fluid">
   <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-  <span class="navbar-text d-md-block d-none">{{ headText }}</span>
+  <div class="navbar-text d-md-block d-none">{{ headText }}</div>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar"
    aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,12 +13,12 @@
   <div class="collapse navbar-collapse" id="pitonAdminNavbar">
    <ul class="navbar-nav ml-auto jsAdminNavbar">
 
-    <li class="nav-item dropdown yamm-fw">
+    <li class="nav-item dropdown">
      <a class="nav-link dropdown-toggle {{ currentRouteGroup('adminPage') }}" href="#" id="pageDropdown" role="button"
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Content
      </a>
-     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+     <div class="dropdown-menu animate slideIn" aria-labelledby="pageDropdown">
       <div class="dropdown-menu__horizontal-menu-wrapper">
        <div class="dropdown-menu__horizontal-item">
         <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Pages</div>
@@ -61,7 +61,7 @@
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Media
      </a>
-     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+     <div class="dropdown-menu animate slideIn" aria-labelledby="pageDropdown">
       <a class="dropdown-item" href="{{ pathFor('adminMedia') }}">All Media</a>
       <a class="dropdown-item" href="{{ pathFor('adminMediaCategoryEdit') }}">Media Categories</a>
       <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mediaUpload">Upload Media</a>
@@ -73,7 +73,7 @@
       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span> Messages
      </a>
-     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+     <div class="dropdown-menu animate slideIn" aria-labelledby="pageDropdown">
       <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">New Messages</a>
       <a class="dropdown-item" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">Read Messages</a>
      </div>
@@ -84,7 +84,7 @@
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Tools
      </a>
-     <div class="dropdown-menu" aria-labelledby="pageDropdown">
+     <div class="dropdown-menu animate slideIn" aria-labelledby="pageDropdown">
       <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">General</a>
       <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}">Contact</a>
       <a class="dropdown-item" href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}">Social</a>
@@ -98,11 +98,17 @@
       title="PitonCMS Help Documentation">Help</a>
     </li>
 
+ 
+   </ul>
+   <ul class="navbar-nav ml-auto">
+
     <li class="nav-item">
      <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
     </li>
    </ul>
+  
   </div>
+
  </div>
 
 </nav>

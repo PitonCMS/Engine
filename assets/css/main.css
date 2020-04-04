@@ -10019,6 +10019,12 @@ body {
   grid-column: 1/-1;
 }
 
+/***** MDE Styles ********/
+/****** Use this to resize default height of textarea within editor *****/
+.CodeMirror, .CodeMirror-scroll {
+  min-height: 75px !important;
+}
+
 section {
   position: relative;
   height: 100%;
@@ -10048,13 +10054,16 @@ section {
 }
 
 /******* Components Included in All Pages *******/
+.dropdown-menu {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+}
 .dropdown-menu__horizontal-menu-wrapper {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   top: 0;
   left: 0;
   padding: 1em;
-  justify-content: flex-start;
+  justify-content: center;
 }
 .dropdown-menu .navbar-text {
   margin: 0;
@@ -10062,6 +10071,53 @@ section {
 }
 .dropdown-menu__horizontal-item {
   padding-bottom: 1em;
+}
+
+.dropdown-item:hover {
+  background: #336699;
+  color: #ffffff;
+}
+
+/* Change this breakpoint if you change the breakpoint of the navbar */
+@media (min-width: 992px) {
+  .animate {
+    animation-duration: 0.3s;
+    -webkit-animation-duration: 0.3s;
+    animation-fill-mode: both;
+    -webkit-animation-fill-mode: both;
+  }
+}
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes slideIn {
+  0% {
+    -webkit-transform: transform;
+    -webkit-opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -webkit-opacity: 1;
+  }
+  0% {
+    -webkit-transform: translateY(1rem);
+    -webkit-opacity: 0;
+  }
+}
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
 }
 
 /*  Right Sidebars */
@@ -10205,7 +10261,8 @@ section {
 #collectionDetail .form-group-wrapper .form-group,
 #mediaCategoriesPage .form-group-wrapper .form-group,
 #detailPage .form-group-wrapper .form-group {
-  padding: 1em;
+  padding: 0.5em;
+  margin: 0;
   background: #ffffff;
   border: none;
   border-radius: 7px;
@@ -10291,11 +10348,13 @@ section {
 }
 
 #pageContent .mediaInput {
-  width: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 2rem;
 }
 #pageContent .mediaInput img {
-  object-fit: contain;
+  max-width: 400px;
+  align-self: center;
 }
 
 div[id*=page-setting],
