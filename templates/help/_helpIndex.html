@@ -160,7 +160,7 @@
 
     {% if page.file %}
         {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
-        <iframe src="{{ pathFor('adminHelpContent', {'subject': page.subject, 'file': page.file}) }}{{ deepLink }}"></iframe>
+        <iframe id="helpIframe" src="{{ pathFor('adminHelpContent', {'subject': page.subject, 'file': page.file}) }}{{ deepLink }}"></iframe>
     {% endif %}
 {% endblock content %}
 
@@ -188,6 +188,15 @@
 
             $('iframe').attr('src', pitonConfig.routes.adminHelpContent + '/' + subject + '/' + file);
 
+        });
+
+        // Scroll outer page up after iframe loads content
+        $('#helpIframe').on('load', function () {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 {% endblock foot %}
