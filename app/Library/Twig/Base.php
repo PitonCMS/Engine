@@ -183,8 +183,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function currentRouteGroup(string $routeGroup, string $returnValue = 'active'): ?string
     {
-        $length = strlen($routeGroup);
-        if (substr($this->container->settings['site']['currentRouteName'], 0, $length) === $routeGroup) {
+        if (substr($this->container->settings['site']['currentRouteName'], 0, strlen($routeGroup)) === $routeGroup) {
             return $returnValue;
         }
 
