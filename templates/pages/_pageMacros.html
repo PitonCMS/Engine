@@ -76,7 +76,7 @@
   #}
   <div class="form-group jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
     <img src="{{ getMediaPath(element.media.filename, 'large') }}"
-    class="img-fluid {% if not element.media.filename %}d-none{% endif %}">
+    class="{% if not element.media.filename %}d-none{% endif %}">
     <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]"
     value="{{ element.media.id }}">
     <label>Media</label>
