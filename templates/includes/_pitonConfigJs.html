@@ -1,0 +1,26 @@
+{#
+    Piton Config JS Include
+
+    This creates a JS object in the base page layout with variables that are set at runtime.
+#}
+
+  <script>
+    let pitonConfig = {
+      dateFormat: "{{ site.settings.dateFormat }}",
+      weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
+      csrfTokenName: "{{ site.csrf.name }}",
+      csrfTokenValue: "{{ site.csrf.value }}",
+      routes: {
+        adminPageElementNew: "{{ pathFor('adminPageElementNew') }}",
+        adminPageElementDelete: "{{ pathFor('adminPageElementDelete') }}",
+        adminMessageSave: "{{ pathFor('adminMessageSave') }}",
+        adminMessageDelete: "{{ pathFor('adminMessageDelete') }}",
+        adminMediaSave: "{{ pathFor('adminMediaSave') }}",
+        adminMediaGet: "{{ pathFor('adminMediaGet') }}",
+        adminMediaDelete: "{{ pathFor('adminMediaDelete') }}",
+        adminMediaCategoryDelete: "{{ pathFor('adminMediaCategoryDelete') }}",
+        adminHelpContent: "{{ pathFor('adminHelpContent') }}",
+      },
+      {% block jsPitonConfig '' %}
+    };
+  </script>

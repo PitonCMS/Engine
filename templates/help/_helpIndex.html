@@ -1,78 +1,193 @@
 {% extends '@admin/_adminBase.html' %}
 
-{% block htmlTitle 'PitonCMS Help' %}
-{% block headText 'PitonCMS Help' %}
+{% block htmlTitle 'Help' %}
+{% block headText 'Help' %}
 {% block sectionId 'summaryPage' %}
 
 {% block sidebar %}
 
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">PitonCMS</div>
-    </a>
-</div>
+<div class="jsHelpAccordion">
 
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Pages</div>
-    </a>
-</div>
+    <div class="sidebar-link">
+        <a class="jsHelpAccordionSubject" href="#">
+            <i class="fas fa-file"></i>
+            <div class="sidebar-link__text">PitonCMS</div>
+        </a>
+    </div>
 
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Collections</div>
-    </a>
-</div>
+    {# The jQuery slideToggle() applies and removes the element style="display: none" #}
+    <div class="jsHelpAccordionCollapse" {% if page.subject != 'client' %}style="display: none;"{% endif %}>
 
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminNavigation'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Navigation</div>
-    </a>
-</div>
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Media</div>
-    </a>
-</div>
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminMessage'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Messages</div>
-    </a>
-</div>
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminHelp', {'file': 'adminToolSetting'}) }}">
-        <i class="fas fa-file"></i>
-        <div class="sidebar-link__text">Tools</div>
-    </a>
-</div>
-<div class="sidebar-link">
-    <a href="{{ pathFor('adminToolEngineRelease', {'release': site.settings.engine}) }}"><i
-            class="fas fa-file"></i>
-        <div class="sidebar-link__text">Versions</div>
-    </a>
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Overview</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Pages</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Collections</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminNavigation'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Navigation</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Media</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMessage'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Messages</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminToolSetting'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Tools</div>
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-link">
+        <a class="jsHelpAccordionSubject" href="#">
+            <i class="fas fa-file"></i>
+            <div class="sidebar-link__text">For Designers</div>
+        </a>
+    </div>
+
+    <div class="jsHelpAccordionCollapse" {% if page.subject != 'designer' %}style="display: none;"{% endif %}>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesignerHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Templates</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesignerHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Definitions</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesignerHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Settings</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="sidebar-link">
+        <a class="jsHelpAccordionSubject" href="#">
+            <i class="fas fa-file"></i>
+            <div class="sidebar-link__text">For Developers</div>
+        </a>
+    </div>
+
+    <div class="jsHelpAccordionCollapse" {% if page.subject != 'developer' %}style="display: none;"{% endif %}>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Extending</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Controllers</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Routes</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
+                <i class="fas fa-file"></i>
+                <div class="sidebar-link__text">Models</div>
+            </a>
+        </div>
+
+        <div class="sidebar-link ml-2">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperRelease'}) }}"><i
+                    class="fas fa-file"></i>
+                <div class="sidebar-link__text">Version</div>
+            </a>
+        </div>
+    </div>
 </div>
 
 {% endblock sidebar %}
 
 {% block content %}
-<style>
-    iframe {
-        border: none;
-        width: 100%;
-        height: 100%;
-    }
-</style>
+    <style>
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 
-{% if page.file %}
-{% set deepLink = (page.link) ? '#' ~ page.link : '' %}
-<iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}{{ deepLink }}"></iframe>
-{% else %}
-<h3>Select a Help Topic</h3>
-{% endif %}
+    {% if page.file %}
+        {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
+        <iframe src="{{ pathFor('adminHelpContent', {'subject': page.subject, 'file': page.file}) }}{{ deepLink }}"></iframe>
+    {% endif %}
 {% endblock content %}
+
+{% block foot %}
+    <script>
+        $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
+            e.preventDefault();
+            $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
+        });
+
+        $('.jsHelpAccordion').on('click', '.jsHelpFile', function(e) {
+            e.preventDefault();
+
+            // Determine help file requested from request path
+            let href = $(this).attr('href');
+            let file = href.substring(href.lastIndexOf('/') + 1);
+            let subject = 'client';
+
+            // Set subject directory from request
+            if (file.includes('Developer')) {
+                subject = 'developer';
+            } else if (file.includes('Designer')) {
+                subject = 'designer';
+            }
+
+            $('iframe').attr('src', pitonConfig.routes.adminHelpContent + '/' + subject + '/' + file);
+
+        });
+    </script>
+{% endblock foot %}

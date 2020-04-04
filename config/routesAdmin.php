@@ -214,11 +214,6 @@ $app->group('/admin', function () {
             $this->post('/sitemap/update', function ($args) {
                 return (new AdminController($this))->updateSitemap();
             })->add('csrfGuardHandler')->setName('adminToolSitemapUpdate');
-
-            // GitHub release notes
-            $this->get('/release/{release:\d+\.\d+\.\d+}', function ($args) {
-                return (new AdminController($this))->release($args);
-            })->setName('adminToolEngineRelease');
         });
         // End settings
 
@@ -243,16 +238,19 @@ $app->group('/admin', function () {
     });
     // End tools
 
-    // Help page
-    $this->get('/help[/{file}[/{link}]]', function ($args) {
-        $args['file'] = $args['file'] ?? 'adminHome';
-        return (new AdminController($this))->showHelp($args);
-    })->setName('adminHelp');
+    // Help content
+    $this->group('/help', function () {
+        // Help content file to load in iframe
+        $this->get('/content[/{subject}/{file}]', function ($args) {
+            return (new AdminController($this))->getHelpContent($args);
+        })->setName('adminHelpContent');
 
-    // Help get content
-    $this->get('/getHelpContent/{file}', function ($args) {
-        return (new AdminController($this))->getHelpContent($args);
-    })->setName('adminHelpContent');
+        // Help landing page
+        $this->get('[/{file}[/{link}]]', function ($args) {
+            $args['file'] = $args['file'] ?? 'adminHome';
+            return (new AdminController($this))->showHelp($args);
+        })->setName('adminHelp');
+    });
 
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
     $this->get('[/]', function () {
