@@ -1,0 +1,93 @@
+ // @media screen and (min-width: $break-point-sm) {}
+
+ // @media screen and (min-width: $break-point-md) {}
+
+ // @media screen and (min-width: $break-point-lg) {}
+
+ // @media screen and (min-width: $break-point-xl) {}
+
+ .list-items-wrapper {
+  display: grid;
+  @include padding(null 1em);
+
+  .page-list {
+   @include padding(.5em);
+   border-radius: $border-radius;
+   display: flex;
+   flex-flow: column nowrap;
+
+   @media screen and (min-width: $break-point-sm) {}
+
+   @media screen and (min-width: $break-point-md) {
+  
+    display: grid;
+    grid-template-columns: 150px 1fr max-content;
+    gap: 1em;
+   }
+
+   @media screen and (min-width: $break-point-lg) {
+    grid-template-columns: 200px 1fr max-content;
+    gap: 1em;
+   }
+
+   @media screen and (min-width: $break-point-xl) {}
+
+   &:nth-child(even) {
+    background-color: $clr-medium-grey;
+   }
+
+   &:not(:first-child) {
+
+
+    @media screen and (min-width: $break-point-sm) {}
+
+    @media screen and (min-width: $break-point-md) {}
+
+    @media screen and (min-width: $break-point-lg) {}
+
+    @media screen and (min-width: $break-point-xl) {}
+   }
+
+   &__title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+   }
+
+   &__body {
+    div {
+     display: flex;
+     flex-flow: column nowrap;
+     align-items: flex-start;
+
+     @media screen and (min-width: $break-point-sm) {}
+
+     @media screen and (min-width: $break-point-md) {
+      @include margin(0);
+      display: grid;
+      grid-template-columns: 150px repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1em;
+      justify-content: center;
+      align-items: flex-start;
+     }
+
+     @media screen and (min-width: $break-point-lg) {
+      grid-template-columns: 150px repeat(auto-fit, minmax(100px, 1fr));
+     }
+
+     @media screen and (min-width: $break-point-xl) {}
+    }
+   }
+
+  }
+ }
+ .nav-tabs {
+  @include padding(15px null null null);
+  position: sticky;
+  top: 60px;
+  background: $clr-bg-light;
+  z-index: 4;
+ }
+
+  

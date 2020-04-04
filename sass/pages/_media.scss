@@ -6,7 +6,7 @@
 
   .media {
    display: grid;
-   border: solid 1px $primary-dark-grey;
+   border: solid 1px $clr-dark-grey;
    border-radius: $border-radius;
    grid-template-columns: auto 1fr;
 
@@ -23,7 +23,7 @@
    .mediaFeatured {
     
     grid-area: mediaFeatured;
-    border-bottom: solid 1px $primary-dark-grey;
+    border-bottom: solid 1px $clr-dark-grey;
    }
 
    .mediaCategories {

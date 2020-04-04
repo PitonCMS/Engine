@@ -1,54 +1,15 @@
-/****************************************/
-/********* Release Notes Code Wrap ******/
-/****************************************/
+// Utilities
 
-pre {
- font-family: "Courier 10 Pitch", Courier, monospace;
- font-size: 95%;
- line-height: 140%;
- white-space: pre;
- white-space: pre-wrap;
- white-space: -moz-pre-wrap;
- white-space: -o-pre-wrap;
+.text-small {
+ font-size: .5em; 
 }
-
-code {
- font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
- font-size: 95%;
- line-height: 140%;
- white-space: pre;
- white-space: pre-wrap;
- white-space: -moz-pre-wrap;
- white-space: -o-pre-wrap;
- background: rgb(250, 248, 230);
-}
-
-/***** Lobotomized Owl ******/
-*+* {
- // @include margin(1em null null null);
- // border: solid 1px red;
-}
-
-/****** Grid Utilities *******/
 .span {
  grid-column: 1 / -1;
-}
-
-/******** Text Utilities ******/
-.text-small {
- font-size: .8rem;
- line-height: 1.2;
 }
 
 /***** MDE Styles ********/
 
 /****** Use this to resize default height of textarea within editor *****/
 .CodeMirror, .CodeMirror-scroll {
- min-height: 100px !important;
-}
-.img-50{
- width: 50%;
- height: auto;
- object-fit: cover;
- @include margin(0 auto);
+ min-height: 75px !important;
 }

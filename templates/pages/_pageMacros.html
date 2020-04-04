@@ -23,30 +23,30 @@
   {% endif %}
   {% endfor %}
 
-  <div class="jsElementParent" id="page-element-{{ arrayKey }}">
+  <div class="jsElementParent form-group-wrapper" id="page-element-{{ arrayKey }}">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
-  <div class="form-group input-group">
-    <div class="input-group-prepend">
-    <span class="input-group-text">Element Order</span>
-    </div>
+  <div class="form-group form-inline jsElementType span">
+   <label>Element Type&nbsp;<span class="text-danger">*</span>:&nbsp;</label>
+   {% for elem in elementTypes %}
+   {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
+   <div class="form-check form-check-inline">
+   <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]"
+     id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
+     {{ checked(element.definition == elem.filename) }} required>
+   <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}">{{ elem.elementName }}</label>
+   </div>
+   {% endif %}
+   {% endfor %}
+ </div>
+
+  <div class="form-group">
+  
+    <label>Element Order</label>
+   
     <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
     value="{{ element.element_sort|default('1') }}">
-  </div>
-
-  <div class="form-group form-inline jsElementType">
-    <label>Element Type&nbsp;<span class="text-danger">*</span>:&nbsp;</label>
-    {% for elem in elementTypes %}
-    {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
-    <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]"
-      id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
-      {{ checked(element.definition == elem.filename) }} required>
-    <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}">{{ elem.elementName }}</label>
-    </div>
-    {% endif %}
-    {% endfor %}
   </div>
 
   <div class="form-group">
@@ -59,6 +59,7 @@
     <label>Content</label>
     <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
   </div>
+
   <div
     class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
     <label>Embedded HTML</label>
@@ -75,11 +76,11 @@
   #}
   <div class="form-group jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
     <img src="{{ getMediaPath(element.media.filename, 'large') }}"
-    class="img-fluid {% if not element.media.filename %}d-none{% endif %}">
+    class="{% if not element.media.filename %}d-none{% endif %}">
     <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]"
     value="{{ element.media.id }}">
     <label>Media</label>
-    <div class="input-group" style="padding-top: 1em">
+    <div class="input-group">
     <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
     <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
     </div>
@@ -147,12 +148,13 @@
 {% endmacro templateLink %}
 
 {#
-  Page Liste Item Row
+  Page List Item Row
 
   For the summary display of either pages or collection detail pages
   @param pageItem Page object
   @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
+
 {% macro pageListItem(pageItem, linkName) %}
 
   <div class="page-list">
@@ -162,25 +164,27 @@
 
     <div class="page-list__body">
       {% if pageItem.getPublishedStatus() == 'draft' %}
-      <p>
-       <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span>| Template: <code>{{ pageItem.definition }}</code> </span>
-      </p>
+     <div>
+      <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span>
+      <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+      <span> Template: <code>{{ pageItem.definition }}</code> </span>
+     </div>
+      
+    
 
       {% elseif pageItem.getPublishedStatus() == 'pending' %}
-      <p>
+      <div>
        <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span>| Template: <code>{{ pageItem.definition }}</code></span>
-      </p>
+       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+       <span> Template: <code>{{ pageItem.definition }}</code></span>
+      </div>
 
       {% elseif pageItem.getPublishedStatus() == 'published' %}
-      <p>
+      <div>
        <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">| URL: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span>| Template: <code>{{ pageItem.definition }}</code></span>
-       </p>
+       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
+       <span> Template: <code>{{ pageItem.definition }}</code></span>
+       </div>
 
       {% endif %}
     </div>

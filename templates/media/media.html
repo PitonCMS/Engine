@@ -2,48 +2,54 @@
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
 {% block htmlTitle 'Manage Media' %}
-{% block headText 'Manage Media' %}
+{% block headText 'Media' %}
 {% block sectionId 'mediaPage' %}
 
 {% block sidebar %}
-{# {% include "@admin/media/_mediaSidebar.html" %} #}
-<!-- Button trigger modal -->
-{# <div class="button-group">
-  <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
-    Upload New Media
-  </button>
+<div class="sidebar-inner">
+ {# {% include "@admin/media/_mediaSidebar.html" %} #}
+ <!-- Button trigger modal -->
+ <div class="button-group">
+  <div class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
+   Upload New Media
+  </div>
+ </div>
 </div>
-#}
 {% endblock sidebar %}
 
 {% block content %}
-{{ mediaMacro.upload() }}
+<div class="content-block">
+ {{ mediaMacro.upload() }}
 
-<div class="form-inline mt-0">
-  <h3>Media</h3>
-  <hr>
+ <div class="section-title form-inline mt-0">
+  <h3>Media Library</h3>
   <select class="form-control ml-auto jsMediaCategorySelect">
-    <option value="0">All Media</option>
-    {% for c in getMediaCategories() %}
-    <option value="{{ c.id }}">{{ c.category }}</option>
-    {% endfor %}
+  
+   <option selected value="x">Filter...</option>
+   <option value="0">All Media</option>
+   {% for c in getMediaCategories() %}
+   <option value="{{ c.id }}">{{ c.category }}</option>
+   {% endfor %}
   </select>
 
-</div>
+ </div>
 
-<hr>
-<div class="media-wrapper">
+ <div class="media-wrapper">
   {% for media in page.media %}
   {{ mediaMacro.card(media, page.categories, true) }}
   {% else %}
   <strong>No Media Found</strong>
   {% endfor %}
+ </div>
 </div>
+
 {% endblock content %}
 
 {% block foot %}
 <script src="{{ basePath() }}/admin/js/media.js"></script>
 {# This fixes an issue with the BS file upload so that the selected filename shows in the input #}
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-<script>bsCustomFileInput.init()</script>
+<script>
+ bsCustomFileInput.init()
+</script>
 {% endblock foot %}

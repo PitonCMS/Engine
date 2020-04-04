@@ -2,47 +2,55 @@
 {% import _self as html %}
 
 {% block htmlTitle 'Messages' %}
-{% block headText 'Manage Messages' %}
+{% block headText 'Messages' %}
 {% block sectionId 'summaryPage' %}
 
-{#
+
 {% block sidebar %}
-<div class="sidebar-link">
-	<a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
-		<i class="fas fa-envelope"></i>
-		<div class="sidebar-link__text">New Messages</div>
-	</a>
+<div class="sidebar-inner">
+ <div class="sidebar-block">
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
+    <i class="fas fa-envelope"></i>
+    <div class="sidebar-link__text">New Messages</div>
+   </a>
+  </div>
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
+    <i class="fas fa-envelope-open-text"></i>
+    <div class="sidebar-link__text">Read Messages</div>
+   </a>
+  </div>
+ </div>
+ 
 </div>
-<div class="sidebar-link">
-	<a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
-		<i class="fas fa-envelope-open-text"></i>
-		<div class="sidebar-link__text">Read Messages</div>
-	</a>
-</div>
+
 {% endblock sidebar %}
-#}
 
 {% block content %}
-{% if page.status == 'new' %}
-{% for m in page.messages %}
-{% if m.isRead == 'N' %}
+<div class="content-block">
+ {% if page.status == 'new' %}
+ {% for m in page.messages %}
+ {% if m.isRead == 'N' %}
+ 
+ {{ html.message(m) }}
+ {% endif %}
+ {% else %}
+ <p>You have no unread messages.</p>
+ {% endfor %}
+ 
+ {% else %}
+ 
+ {% for m in page.messages %}
+ {% if m.isRead == 'Y' %}
+ {{ html.message(m) }}
+ {% endif %}
+ {% else %}
+ <p>You have no read messages.</p>
+ {% endfor %}
+ {% endif %}
+</div>
 
-{{ html.message(m) }}
-{% endif %}
-{% else %}
-<p>You have no unread messages.</p>
-{% endfor %}
-
-{% else %}
-
-{% for m in page.messages %}
-{% if m.isRead == 'Y' %}
-{{ html.message(m) }}
-{% endif %}
-{% else %}
-<p>You have no read messages.</p>
-{% endfor %}
-{% endif %}
 {% endblock content %}
 
 {% block foot %}
@@ -51,6 +59,8 @@
 
 
 {% macro message(m) %}
+<h3 class="section-title">{{ page.status|capitalize }} Messages</h3>
+
 <div class="jsMessageWrap">
 	<div class="message-wrapper">
 		<p>
@@ -64,12 +74,12 @@
 		<form class="" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
 			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 			<input type="hidden" name="id" value="{{ m.id }}">
-			<button class="btn btn-primary btn-sm" type="submit" name="button" value="toggle"
+			<button class="btn btn-outline-primary btn-sm" type="submit" name="button" value="toggle"
 				data-is-read="{{ m.isRead }}">Mark as
 				{% if m.isRead == 'Y' %}Unread{% else %}Read
 				{% endif %}
 			</button>
-			<button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit"
+			<button class="btn btn-outline-danger btn-sm" name="button" title="Delete message" type="submit"
 				data-is-read="{{ m.isRead }}" value="delete"
 				formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
 		</form>

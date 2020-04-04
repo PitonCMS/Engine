@@ -1,0 +1,74 @@
+/*  Right Sidebars */
+
+
+.sidebar-inner {
+ @include padding(1em);
+ width: 175px;
+ display: flex;
+ flex-flow: column nowrap;
+ text-align: center;
+ position: sticky;
+ top: 80px;
+ justify-content: space-between;
+
+ .button-group {
+  display: grid;
+  gap: .5em;
+  @include margin(null null 1em null);
+ }
+}
+
+
+
+
+.sidebar-link {
+ background: $clr-primary;
+ color: $clr-text-light;
+ @include margin(null 1.2em .5em null);
+ @include padding(.25em .5em);
+ border-radius: $border-radius;
+ border: solid 1px $clr-bg-dark;
+
+ display: grid;
+ grid-template-columns: auto max-content auto;
+
+ align-items: center;
+ justify-content: center;
+
+ &:hover {
+  background: $clr-bg-dark;
+  color: $clr-text-light;
+  text-decoration: none;
+ }
+
+ a {
+  @include padding(null .5em null null);
+  width: 100%;
+  color: $clr-text-light;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: .5em;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+   background: $clr-bg-dark;
+   color: $clr-text-light;
+   text-decoration: none;
+  }
+ }
+
+ @media screen and (min-width: 768px) {
+  @include margin(0 0 .5em 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+ }
+
+}
+
+.fa-info-circle:hover {
+ cursor: pointer;
+ color: $clr-dark-grey;
+}

@@ -1,127 +1,27 @@
-//  Layout
-
-section,
-.contentWrapper {
- width: 100vw;
- display: grid;
- grid-template-columns: 1fr;
-
- @media screen and (min-width: 768px) {
-  grid-template-columns: 200px 3fr;
- }
-
- .content {
-  position: relative;
-
-  @media screen and (min-width: 768px) {
-   // @include padding(65px null null);
-  }
-
-  .jsEditPageContainer {
-   position: relative;
-
-   .nav-tabs {
-    background: $primary-light;
-    @include padding(.5em null null .25em);
-    position: sticky;
-    top: 161px;
-    z-index: 5;
-
-    @media screen and (min-width: 768px) {
-
-     top: 57px;
-    }
-   }
-  }
-
-  .form-group-wrapper {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 1em;
-
-   .form-group {
-    background: $primary-light-grey;
-    @include padding(1em);
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-   }
-  }
-
-  .element-block {
-   @include margin(null null 1em null);
-  }
-
-  .block-content {
-   background: $primary-light-grey;
-   @include padding(1em);
-   border-radius: $border-radius;
-   box-shadow: $box-shadow;
-
-   .btn {
-    @include margin(null null 1em null);
-   }
-  }
- }
-
- .block-title-wrapper {
-  width: 100%;
-  display: flex;
- }
+section {
+ position: relative;
+height: 100%;
 }
 
-/* Card Grid Container */
-.grid-wrapper {
- @include padding(1em null null);
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
- gap: 1em;
+.contentWrapper {
+ display: flex;
+ position: relative;
+
 }
 
 .content {
- @include padding(1em);
- background: $primary-light-grey;
-
- .card {
-  box-shadow: $box-shadow;
-  border: none;
- }
+ flex: 1;
 }
 
-/* List Item Container */
-.list-items-wrapper {
+.sidebar {
+ background: $clr-light-grey;
+ position: relative;
+}
+.grid-wrapper {
+ background: $clr-light-grey;
+ border-radius: $border-radius;
+ @include padding(1em);
  display: grid;
-
- .page-list {
-  background: #efefef;
-  @include padding(.25em);
-  @include margin(0 0 .5em 0);
-  border-radius: $border-radius;
-  box-shadow: $box-shadow;
-  display: grid;
-  grid-template-columns: 150px 1fr auto;
-  gap: 1em;
-  align-items: center;
-  // justify-content: flex-start;
-
-  &__title {
-   white-space: nowrap;
-   overflow: hidden;
-   text-overflow: ellipsis;
-  }
-
-
-  &__body {
-   i {
-    color: $primary-dark-grey;
-   }
-   p {
-    @include margin(0);
-    display: grid;
-    grid-template-columns: 150px 1fr auto;
-    gap: 1em;
-    align-items: center;
-    // justify-items: flex-start;
-   }
-  }
- }
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 1em;
 }
