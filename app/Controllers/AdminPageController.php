@@ -113,7 +113,7 @@ class AdminPageController extends AdminBaseController
 
         // Fetch page, or create new page
         if (isset($args['id']) && is_numeric($args['id'])) {
-            // Load existing page from database
+            // Load existing page from database.
             $page = $pageMapper->findById((int) $args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($page->id);
             $page->settings = $dataStoreMapper->findPageSettings($page->id);
@@ -130,7 +130,7 @@ class AdminPageController extends AdminBaseController
             $page = $pageMapper->make();
             $page->definition = $definitionParam;
 
-            // Get collection details for collection pages
+            // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
             $collectionId = $this->request->getQueryParam('collectionId', null);
             if (is_numeric($collectionId)) {
                 $collection = $collectionMapper->findById((int) $collectionId);
@@ -143,6 +143,18 @@ class AdminPageController extends AdminBaseController
         // Get page definition
         if (null === $page->json = $definition->getPage($page->definition)) {
             $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
+        }
+
+        // If this is a new page (has no ID) then add a default element to each block
+        if (empty($page->id)) {
+            foreach ($page->json->blocks as $block) {
+                $newElement = $pageElementMapper->make();
+                $newElement->block_key = $block->key;
+                $newElement->element_sort = 1;
+                $newElement->definition = $block->elementTypeDefault;
+
+                $page->elements[] = $newElement;
+            }
         }
 
         // Merge saved page settings with settings from page JSON definition
@@ -378,8 +390,11 @@ class AdminPageController extends AdminBaseController
      * - elementTypeDefault
      * - elementSort
      * - elementTypeOptions | optional, comma separated list of approved element types
+     * @param void
+     * @uses $_POST
+     * @return Response
      */
-    public function newElementForm()
+    public function newElementForm(): ?Response
     {
         $parsedBody = $this->request->getParsedBody();
 
