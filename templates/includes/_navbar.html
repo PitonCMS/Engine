@@ -43,7 +43,7 @@
         <a class="dropdown-item" href="{{ pathFor('adminCollection') }}" title="All collections">All Collection Pages</a>
         {# See all detail pages in named collection #}
         {% for col in getCollections() %}
-        <a class="dropdown-item" href="{{ pathFor('adminCollection', {'collectionSlug': col.collection_slug}) }}" title="See all collection detail pages">All
+        <a class="dropdown-item" href="{{ pathFor('adminCollection', {'collectionSlug': col.collection_slug}) }}" title="See all {{ col.collection_title }} collection detail pages">All
           {{ col.collection_title }} Pages
         </a>
         {% endfor %}

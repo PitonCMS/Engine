@@ -206,3 +206,13 @@ let getMediaForMDE = function (editor) {
       ]
     });
   });
+
+// Listen for collection page select filter and reload page
+$('.jsCollectionPageFilter').on('change', function() {
+    let collectionSlug = $(this).val();
+    if (collectionSlug !== 'x') {
+        // Do not prepend / if requesting all pages
+        collectionSlug = (collectionSlug) ? '/' + collectionSlug : collectionSlug;
+        window.location = pitonConfig.routes.adminCollection + collectionSlug;
+    }
+});

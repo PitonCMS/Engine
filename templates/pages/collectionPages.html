@@ -11,15 +11,25 @@
 
 {% block content %}
   <div class="content-block">
-    <h3 class="section-title">{{ page.collection_title|default('All Collection') }}
-      Pages
-      {# Only include edit collection group link if viewing a specific named collection #}
-      {% if page.collection_id %}
-      <a class="text-small" href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit</a>
-      {% endif %}
-    </h3>
+    <div class="section-title form-inline mt-0">
+      <h3>
+        {{ page.collection_title|default('All Collection') }} Pages
+        {# Only include edit collection group link if viewing a specific named collection #}
+        {% if page.collection_id %}
+        <a class="text-small" href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit {{ page.collection_title }} collection group">Edit</a>
+        {% endif %}
+      </h3>
 
-    {# Only include add collection add detail page link if viewing a specific named collection #}
+      <select class="form-control ml-auto jsCollectionPageFilter">
+        <option value="x">Filter...</option>
+        <option value="">All Collection Pages</option>
+        {% for col in getCollections() %}
+        <option value="{{ col.collection_slug }}" {% if page.collection_id == col.id %}selected{% endif %}>{{ col.collection_title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {# Only include add collection detail page link if viewing a specific named collection #}
     {% if page.collection_id %}
     <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}" title="Add collection detail page">Add
       {{ page.collection_title }} Page
@@ -37,3 +47,7 @@
     {{ pagination() }}
   </div>
 {% endblock content %}
+
+{% block foot %}
+<script src="{{ basePath() }}/admin/js/page.js"></script>
+{% endblock foot %}

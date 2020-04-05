@@ -176,6 +176,11 @@
 
       {% endif %}
 
+      {# Display collection title if page is in a collection #}
+      {% if pageItem.collection_title %}
+      <span>{{ pageItem.collection_title }}</span>
+      {% endif %}
+
       <span> Template: <code>{{ pageItem.definition }}</code> </span>
      </div>
 
