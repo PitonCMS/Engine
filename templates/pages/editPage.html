@@ -77,10 +77,12 @@
     <a class="nav-link {% if not page.id %}active{% endif %}" id="pageSettings-tab" data-toggle="pill"
      href="#pageSettings" role="tab" aria-controls="pageSettings" aria-selected="true">Page Settings</a>
    </li>
+   {% if page.settings %}
    <li class="nav-item">
     <a class="nav-link" id="pageCustom-tab" data-toggle="pill" href="#pageCustom" role="tab" aria-controls="pageCustom"
      aria-selected="false">Custom Settings</a>
    </li>
+   {% endif %}
    <li class="nav-item">
     <a class="nav-link {% if page.id %}active{% endif %}" id="content-tab" data-toggle="pill" href="#pageContent"
      role="tab" aria-controls="content" aria-selected="false">Content</a>
@@ -183,9 +185,8 @@
    </div>
 
    <!-- Custom Settings Tab -->
+   {% if page.settings %}
    <div class="tab-pane fade content-block" id="pageCustom" role="tabpanel" aria-labelledby="pageCustom-tab">
-    {# Page Custom Settings #}
-    {% if page.settings %}
     <div class="block-title-wrapper">
      <h4 class="page-edit-title">Custom Page Settings</h4>
     </div>
@@ -194,8 +195,8 @@
      {{ settingForm.settingInput(setting) }}
      {% endfor %}
     </div>
-    {% endif %}
    </div>
+   {% endif %}
 
    <!-- Content Tab -->
    <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="pageContent" role="tabpanel"
