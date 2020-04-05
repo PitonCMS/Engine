@@ -60,12 +60,11 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $definition = $this->container->jsonDefinitionHandler;
         $pagination = $this->container->adminPagePagination;
 
         // Get data
         if (isset($args['collectionSlug'])) {
-            // If request is to see more pages of a specific collection group
+            // If request is to detail pages within a specific collection group
             $data['pages'] = $pageMapper->findCollectionPagesBySlug($args['collectionSlug'], true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
             // Setup pagination
@@ -78,18 +77,16 @@ class AdminPageController extends AdminBaseController
             $data['collection_id'] = $collection->id;
             $data['collection_slug'] = $collection->collection_slug;
             $data['collection_definition'] = $collection->collection_definition;
-            $data['type'] = 'collectionAll';
         } else {
-            // See top collection pages across all collections
+            // See all detail pages across all collections
             $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
-            $data['collections'] = $collectionMapper->find() ?? [];
-            $data['type'] = 'collection';
+
+            // Setup pagination
+            $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+            $pagination->setPagePath($this->container->router->pathFor('adminCollection'));
         }
 
         $this->container->view->addExtension($pagination);
-
-        // Get list of collection templates
-        $data['templates'] = $definition->getCollections();
 
         return $this->render('pages/collectionPages.html', $data);
     }

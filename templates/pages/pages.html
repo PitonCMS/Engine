@@ -12,18 +12,17 @@
 
 {% block content %}
 <div class="content-block">
- {# If the request is for pages #}
- <h3 class="section-title">Pages</h3>
- <div class="list-items-wrapper">
-   {% for p in page.pages %}
-     {# From _pageMacros #}
-     {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
-   {% else %}
-   <h5>No Pages Found</h5>
-   {% endfor %}
- </div>
- {{ pagination() }}
+  {# If the request is for pages #}
+  <h3 class="section-title">Pages</h3>
+  <div class="list-items-wrapper">
+    {% for p in page.pages %}
+    {# From _pageMacros #}
+    {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
+    {% else %}
+    <h5>No Pages Found</h5>
+    {% endfor %}
+  </div>
+  {{ pagination() }}
 </div>
- 
 
 {% endblock content %}

@@ -42,9 +42,9 @@
  </div>
 
   <div class="form-group">
-  
+
     <label>Element Order</label>
-   
+
     <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
     value="{{ element.element_sort|default('1') }}">
   </div>
@@ -152,7 +152,7 @@
 
   For the summary display of either pages or collection detail pages
   @param pageItem Page object
-  @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
+  @param linkName Expecting either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
 
 {% macro pageListItem(pageItem, linkName) %}
@@ -163,34 +163,26 @@
     </div>
 
     <div class="page-list__body">
-      {% if pageItem.getPublishedStatus() == 'draft' %}
+
      <div>
-      <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span>
-      <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-      <span> Template: <code>{{ pageItem.definition }}</code> </span>
-     </div>
-      
-    
+      {% if pageItem.getPublishedStatus() == 'draft' %}
+        <span class="badge badge-secondary" title="Not published">Draft</span>
 
       {% elseif pageItem.getPublishedStatus() == 'pending' %}
-      <div>
-       <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span> Template: <code>{{ pageItem.definition }}</code></span>
-      </div>
+        <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending</span>
 
       {% elseif pageItem.getPublishedStatus() == 'published' %}
-      <div>
-       <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span> Template: <code>{{ pageItem.definition }}</code></span>
-       </div>
+        <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published</span>
 
       {% endif %}
+
+      <span> Template: <code>{{ pageItem.definition }}</code> </span>
+     </div>
+
     </div>
 
     <div class="page-list__action">
-      <a class="" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">Edit Page</a>
+      <a class="" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">Edit</a>
     </div>
   </div>
 

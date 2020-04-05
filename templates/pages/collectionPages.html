@@ -2,74 +2,38 @@
 {% import '@admin/pages/_pageMacros.html' as pageMacro %}
 
 {#
-  Show All Collection Detail Pages
+  Show Collection Detail Pages
 
-  Shows two collection detail page displays:
-  - Loop through available collections with top 1..n collection detail pages,
-    with see more link, and add collection detail page
-  - All collection detail pages for a specific collection with pagination
 #}
 {% block htmlTitle 'Collection' %}
 {% block headText 'Collection Pages' %}
 {% block sectionId 'collections' %}
 
 {% block content %}
-<div class="content-block">
- {% if page.type == 'collection' and page.collections %}
+  <div class="content-block">
+    <h3 class="section-title">{{ page.collection_title|default('All Collection') }}
+      Pages
+      {# Only include edit collection group link if viewing a specific named collection #}
+      {% if page.collection_id %}
+      <a class="text-small" href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit</a>
+      {% endif %}
+    </h3>
 
- {# Show the most recent 5 collection detail pages first #}
- {% for c in page.collections %}
- <h3 class="section-title">{{ c.collection_title }} Pages <a class="text-small"
-   href="{{ pathFor('adminCollectionEdit', {'id': c.id}) }}" title="Edit collection group">Edit
-   {# {{ c.collection_title }} #}</a></h3>
+    {# Only include add collection add detail page link if viewing a specific named collection #}
+    {% if page.collection_id %}
+    <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}" title="Add collection detail page">Add
+      {{ page.collection_title }} Page
+    </a>
+    {% endif %}
 
- <a href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': c.collection_definition, 'collectionId': c.id}) }}"
-  title="Add collection detail page"> <i class="fas fa-plus"></i> {{ c.collection_title }} page</a>
-
- <div class="list-items-wrapper">
-  {% set loopCount = 1 %}
-  {% for p in page.pages %}
-  {# Change loopCount condition to number of desired items to display #}
-  {% if p.collection_id == c.id and loopCount <= 5 %}
-  {# From _pageMacros #}
-  {{ pageMacro.pageListItem(p, 'adminCollectionPageEdit') }}
-  {% set loopCount = loopCount + 1 %}
-  {% endif %}
-  {% else %}
-  <h5>No Collection Pages Found</h5>
-  {% endfor %}
-
-  <a class="" href="{{ pathFor('adminCollection', {'collectionSlug': c.collection_slug}) }}">All
-   {{ c.collection_title }}</a>
- </div>
- <hr>
- {% else %}
- <h5>No Collections Found</h5>
- {% endfor %}
- {# End page.collections loop #}
-
- {% elseif page.type == 'collectionAll' %}
-
- {# If the request is to see all pages in this collection detail set #}
- <h3 class="section-title">{{ page.collection_title }} Pages <a class="text-small"
-   href="{{ pathFor('adminCollectionEdit', {'id': page.collection_id}) }}" title="Edit collection group">Edit
-   {# {{ page.collection_title }} #}</a></h3>
-
- <a
-  href="{{ pathFor('adminCollectionPageEdit', {}, {'definition': page.collection_definition, 'collectionId': page.collection_id}) }}"
-  title="Add collection detail page">Add {{ page.collection_title }} Detail Page</a>
-
- <div class="list-items-wrapper">
-  {% for p in page.pages %}
-  {# From _pageMacros #}
-  {{ pageMacro.pageListItem(p, 'adminCollectionPageEdit') }}
-  {% else %}
-  <h5>No Pages Found</h5>
-  {% endfor %}
- </div>
- {{ pagination() }}
-
- {% endif %}
-</div>
-
+    <div class="list-items-wrapper">
+      {% for p in page.pages %}
+        {# From _pageMacros #}
+        {{ pageMacro.pageListItem(p, 'adminCollectionPageEdit') }}
+      {% else %}
+        <h5>No Pages Found</h5>
+      {% endfor %}
+    </div>
+    {{ pagination() }}
+  </div>
 {% endblock content %}
