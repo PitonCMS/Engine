@@ -31,7 +31,6 @@ class AdminPageController extends AdminBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $definition = $this->container->jsonDefinitionHandler;
         $pagination = $this->container->adminPagePagination;
 
         // Get data
@@ -42,16 +41,13 @@ class AdminPageController extends AdminBaseController
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
-        // Get page templates
-        $data['templates'] = $definition->getPages();
-
         return $this->render('pages/pages.html', $data);
     }
 
     /**
      * Show Collection Pages
      *
-     * Show all collection pages and templates
+     * Show all collection pages with optional collection slug filter
      * @param array $args Route arguments
      * @return Response
      */
@@ -114,7 +110,7 @@ class AdminPageController extends AdminBaseController
             $page->elements = $pageElementMapper->findElementsByPageId($page->id);
             $page->settings = $settingMapper->findPageSettings($page->id);
         } else {
-            // Create new page, and get template from query string
+            // Create new page, and get template definition from query string
             $definitionParam = $this->request->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
@@ -150,7 +146,18 @@ class AdminPageController extends AdminBaseController
         if (!in_array($args['type'], ['page', 'collection'])) {
             throw new Exception('PitonCMS: Expected page type of page or collection');
         }
-        $page->type = $args['type'];
+
+        // Set editPage routes based on whether we have a page or a collection detail
+        $page->route = [];
+        if ($args['type'] === 'page') {
+            $page->route['pageAction'] = 'adminPageSave';
+            $page->route['pageDelete'] = 'adminPageDelete';
+            $page->route['pageCancel'] = 'adminPage';
+        } else {
+            $page->route['pageAction'] = 'adminCollectionPageSave';
+            $page->route['pageDelete'] = 'adminCollectionPageDelete';
+            $page->route['pageCancel'] = 'adminCollection';
+        }
 
         return $this->render('pages/editPage.html', $page);
     }
