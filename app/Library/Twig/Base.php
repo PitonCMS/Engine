@@ -107,6 +107,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
+            new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
         ];
     }
 
@@ -307,5 +308,21 @@ class Base extends AbstractExtension implements GlobalsInterface
         ksort($sources);
 
         return implode(",\n", $sources);
+    }
+
+    /**
+     * Get Query String Parameter
+     *
+     * Returns the requested query parameter, or all query params if no argument is provided
+     * @param string|null $param
+     * @return mixed|null
+     */
+    public function getQueryParam(string $param = null)
+    {
+        if ($param) {
+            return $this->container->request->getQueryParam($param, null);
+        } else {
+            return $this->container->request->getQueryParams();
+        }
     }
 }

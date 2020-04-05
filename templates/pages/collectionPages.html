@@ -20,8 +20,10 @@
         {% endif %}
       </h3>
 
-      <select class="form-control ml-auto jsCollectionPageFilter">
-        <option value="x">Filter...</option>
+      {{ pageMacro.pageStatusFilter() }}
+
+      <select class="form-control ml-auto jsCollectionPageSlugFilter">
+        <option value="x">Filter&hellip;</option>
         <option value="">All Collection Pages</option>
         {% for col in getCollections() %}
         <option value="{{ col.collection_slug }}" {% if page.collection_id == col.id %}selected{% endif %}>{{ col.collection_title }}</option>

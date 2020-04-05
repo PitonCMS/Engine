@@ -12,8 +12,12 @@
 
 {% block content %}
 <div class="content-block">
-  {# If the request is for pages #}
-  <h3 class="section-title">Pages</h3>
+  <div class="section-title form-inline mt-0">
+    <h3>Pages</h3>
+
+    {{ pageMacro.pageStatusFilter() }}
+  </div>
+
   <div class="list-items-wrapper">
     {% for p in page.pages %}
     {# From _pageMacros #}
@@ -26,3 +30,7 @@
 </div>
 
 {% endblock content %}
+
+{% block foot %}
+<script src="{{ basePath() }}/admin/js/page.js"></script>
+{% endblock foot %}

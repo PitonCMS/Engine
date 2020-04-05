@@ -33,8 +33,11 @@ class AdminPageController extends AdminBaseController
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pagination = $this->container->adminPagePagination;
 
+        // Get filter if requested
+        $status = $this->request->getQueryParam('pageStatus', 'all');
+
         // Get data
-        $data['pages'] = $pageMapper->findPages(true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        $data['pages'] = $pageMapper->findPages($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Setup pagination
         $pagination->setPagePath($this->container->router->pathFor('adminPage'));
@@ -58,10 +61,13 @@ class AdminPageController extends AdminBaseController
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $pagination = $this->container->adminPagePagination;
 
+        // Get filter if requested
+        $status = $this->request->getQueryParam('pageStatus', 'all');
+
         // Get data
         if (isset($args['collectionSlug'])) {
             // If request is to detail pages within a specific collection group
-            $data['pages'] = $pageMapper->findCollectionPagesBySlug($args['collectionSlug'], true, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $data['pages'] = $pageMapper->findCollectionPagesBySlug($args['collectionSlug'], $status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
             // Setup pagination
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
@@ -75,7 +81,7 @@ class AdminPageController extends AdminBaseController
             $data['collection_definition'] = $collection->collection_definition;
         } else {
             // See all detail pages across all collections
-            $data['pages'] = $pageMapper->findCollectionPages(true) ?? [];
+            $data['pages'] = $pageMapper->findCollectionPages($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
             // Setup pagination
             $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
@@ -469,11 +475,16 @@ class AdminPageController extends AdminBaseController
         $collection->id = $collectionId;
         $collection->collection_title = $this->request->getParsedBodyParam('collection_title');
         $collection->collection_slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('collection_slug'));
-        $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
+
+        // The definition is provided only if no pages are assigned in the form
+        if ($this->request->getParsedBodyParam('collection_definition', null) !== null) {
+            $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
+        }
+
         $collectionMapper->save($collection);
 
-        // Save collection and redirect to all collection pages
-        return $this->redirect('adminCollection');
+        // Save collection and redirect to collection pages
+        return $this->redirect('adminCollection', ['collectionSlug' => $collection->collection_slug]);
     }
 
     /**

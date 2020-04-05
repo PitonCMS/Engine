@@ -218,7 +218,7 @@ class Admin extends Base
 
         // Otherwise fetch all pages
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        return $this->cache['pages'] = $pageMapper->findPages(true);
+        return $this->cache['pages'] = $pageMapper->findPages('all');
     }
 
     /**
