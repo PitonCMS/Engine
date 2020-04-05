@@ -174,15 +174,12 @@ class AdminPageController extends AdminBaseController
         $this->savePageSettings($pageEntity->id);
         $this->savePageElements($pageEntity->id);
 
-        // Determine redirect path based on whether this is a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectRoute = 'adminCollection';
+        // Determine redirect path based on whether this is a collection detail page
+        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
+            return $this->redirect('adminCollection', ['collectionSlug' => $this->request->getParsedBodyParam('collection_slug')]);
         } else {
-            $redirectRoute = 'adminPage';
+            return $this->redirect('adminPage');
         }
-
-        // Redirect back to show page
-        return $this->redirect($redirectRoute);
     }
 
     /**
