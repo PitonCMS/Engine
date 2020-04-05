@@ -27,10 +27,9 @@
  <div class="sidebar-inner">
   <!-- Control Buttons -->
   <div class="sidebar-block button-group">
-   {# Button to Publish Page Now #}
-   <button class="btn mb-0 btn-outline-success" type="submit" disabled>Publish</button>
+   <button class="btn mb-0 btn-outline-success" type="submit" name="publish_now" title="Save page and publish now">Publish</button>
    <a class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
-   <button class="btn mb-0 btn-outline-primary" type="submit">Save</button>
+   <button class="btn mb-0 btn-outline-primary" type="submit" title="Save page">Save</button>
    {% if page.id %}
    <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit"
     formaction="{{ pathFor(page.route.pageDelete) }}" {% if page.page_slug == 'home' %}disabled
