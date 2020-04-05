@@ -31,7 +31,7 @@ class FrontController extends FrontBaseController
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
         if (isset($args['slug2'])) {
@@ -51,7 +51,7 @@ class FrontController extends FrontBaseController
         $page->blocks = $this->buildElementsByBlock($pageElement->findElementsByPageId($page->id) ?? []);
 
         // Get page settings
-        $page->settings = $this->buildPageSettings($settingMapper->findPageSettings($page->id) ?? []);
+        $page->settings = $this->buildPageSettings($dataStoreMapper->findPageSettings($page->id) ?? []);
 
         return $this->render($page->template, $page);
     }

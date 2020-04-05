@@ -89,7 +89,7 @@ class LoadSiteSettings
         // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
         // Otherwise rethrow to let the application handler deal with whatever happened.
         try {
-            $settingMapper = ($this->dataMapper)('SettingMapper');
+            $dataStoreMapper = ($this->dataMapper)('DataStoreMapper');
         } catch (PDOException $th) {
             // SQLSTATE[42S02]
             if ($th->getCode() === '42S02') {
@@ -101,7 +101,7 @@ class LoadSiteSettings
             }
         }
 
-        $siteSettings = $settingMapper->findSiteSettings() ?? [];
+        $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
         // Create new multi-dimensional array
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');

@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   CONSTRAINT `page_element_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `setting` (
+CREATE TABLE IF NOT EXISTS `data_store` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
   `page_id` int DEFAULT NULL,
@@ -184,7 +184,7 @@ VALUES
   (1,1,'heroBlock','hero.json','hero.html',1,'Welcome to PitonCMS','A flexible content management system for your personal website.','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,1,now(),1,now()),
   (2,1,'contentBlock','text.json','text.html',1,'Where to Start?','Congratulations! You have successfully installed PitonCMS. \r\n\r\nTo start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  \r\n\r\n','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now());
 
-INSERT INTO `setting` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `data_store` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
 	('site', NULL, 'dateFormat', 'mm/dd/yyyy', 1, now(), 1, now()),
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),

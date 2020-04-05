@@ -105,7 +105,7 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
@@ -114,7 +114,7 @@ class AdminPageController extends AdminBaseController
             // Load existing page from database
             $page = $pageMapper->findById((int) $args['id']);
             $page->elements = $pageElementMapper->findElementsByPageId($page->id);
-            $page->settings = $settingMapper->findPageSettings($page->id);
+            $page->settings = $dataStoreMapper->findPageSettings($page->id);
         } else {
             // Create new page, and get template definition from query string
             $definitionParam = $this->request->getQueryParam('definition');
@@ -259,15 +259,15 @@ class AdminPageController extends AdminBaseController
         // Save any custom page settings
         if ($post = $this->request->getParsedBodyParam('setting')) {
             // Get dependencies
-            $settingMapper = ($this->container->dataMapper)('SettingMapper');
+            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
 
             foreach ($post as $row) {
-                $setting = $settingMapper->make();
+                $setting = $dataStoreMapper->make();
                 $setting->id = $row['id'];
 
                 // Check for a page setting delete
                 if (isset($row['delete'])) {
-                    $settingMapper->delete($setting);
+                    $dataStoreMapper->delete($setting);
                     continue;
                 }
 
@@ -275,7 +275,7 @@ class AdminPageController extends AdminBaseController
                 $setting->category = 'page';
                 $setting->setting_key = $row['setting_key'];
                 $setting->setting_value = $row['setting_value'];
-                $settingMapper->save($setting);
+                $dataStoreMapper->save($setting);
             }
         }
     }

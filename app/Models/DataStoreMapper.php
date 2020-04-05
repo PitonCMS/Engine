@@ -15,12 +15,14 @@ namespace Piton\Models;
 use Piton\ORM\DataMapperAbstract;
 
 /**
- * Piton Setting Mapper
+ * Piton Data Store Mapper
+ *
+ * Stores key-value pairs
  */
-class SettingMapper extends DataMapperAbstract
+class DataStoreMapper extends DataMapperAbstract
 {
     protected $inCategories = "('site','contact','social','piton')";
-    protected $table = 'setting';
+    protected $table = 'data_store';
     protected $modifiableColumns = ['category', 'page_id', 'setting_key', 'setting_value'];
 
     /**

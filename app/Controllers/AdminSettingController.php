@@ -30,12 +30,12 @@ class AdminSettingController extends AdminBaseController
     public function showSettings($args)
     {
         // Get dependencies
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
         // Get saved settings from database
         $category = $args['cat'] ?? null;
-        $savedSettings = $settingMapper->findSiteSettings($category) ?? [];
+        $savedSettings = $dataStoreMapper->findSiteSettings($category) ?? [];
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {
@@ -68,26 +68,26 @@ class AdminSettingController extends AdminBaseController
     public function saveSettings()
     {
         // Get dependencies
-        $settingMapper = ($this->container->dataMapper)('SettingMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
 
         // Get $_POST data array
         $post = $this->request->getParsedBody();
 
         // Save each setting
         foreach ($post['setting'] as $row) {
-            $setting = $settingMapper->make();
+            $setting = $dataStoreMapper->make();
             $setting->id = (int) $row['id'];
 
             // Check for a setting delete flag
             if (isset($row['delete'])) {
-                $settingMapper->delete($setting);
+                $dataStoreMapper->delete($setting);
                 continue;
             }
 
             $setting->category = $row['category'];
             $setting->setting_key = $row['setting_key'];
             $setting->setting_value = $row['setting_value'];
-            $settingMapper->save($setting);
+            $dataStoreMapper->save($setting);
         }
 
         // Redirect back to list of settings
