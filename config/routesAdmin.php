@@ -70,7 +70,7 @@ $app->group('/admin', function () {
 
     // Collection routes
     $this->group('/collection', function () {
-        // CRUD collection
+        // Edit collection
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editCollection($args);
         })->setName('adminCollectionEdit');
@@ -104,7 +104,7 @@ $app->group('/admin', function () {
             })->add('csrfGuardHandler')->setName('adminCollectionPageDelete');
         });
 
-        // Show all collection pages, optionally by category
+        // Show all collection pages, filtered optionally by category
         $this->get('[/{collectionSlug}]', function ($args) {
             return (new AdminPageController($this))->showCollectionPages($args);
         })->setName('adminCollection');

@@ -42,9 +42,9 @@
  </div>
 
   <div class="form-group">
-  
+
     <label>Element Order</label>
-   
+
     <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
     value="{{ element.element_sort|default('1') }}">
   </div>
@@ -152,9 +152,8 @@
 
   For the summary display of either pages or collection detail pages
   @param pageItem Page object
-  @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
+  @param linkName Expecting either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
-
 {% macro pageListItem(pageItem, linkName) %}
 
   <div class="page-list">
@@ -163,35 +162,48 @@
     </div>
 
     <div class="page-list__body">
-      {% if pageItem.getPublishedStatus() == 'draft' %}
+
      <div>
-      <span class="badge badge-secondary" title="Not published">Draft {{ pageItem.published_date|date }}</span>
-      <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-      <span> Template: <code>{{ pageItem.definition }}</code> </span>
-     </div>
-      
-    
+      {% if pageItem.getPublishedStatus() == 'draft' %}
+        <span class="badge badge-secondary" title="Not published">Draft</span>
 
       {% elseif pageItem.getPublishedStatus() == 'pending' %}
-      <div>
-       <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span> Template: <code>{{ pageItem.definition }}</code></span>
-      </div>
+        <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending</span>
 
       {% elseif pageItem.getPublishedStatus() == 'published' %}
-      <div>
-       <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published {{ pageItem.published_date|date }}</span>
-       <span class="page-list__url">Url: <code>{{ pageItem.collection_slug ? '/' ~ pageItem.collection_slug}}/{{ pageItem.page_slug }}</code> </span>
-       <span> Template: <code>{{ pageItem.definition }}</code></span>
-       </div>
+        <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published</span>
 
       {% endif %}
+
+      {# Display collection title if page is in a collection #}
+      {% if pageItem.collection_title %}
+      <span>{{ pageItem.collection_title }}</span>
+      {% endif %}
+
+      <span> Template: <code>{{ pageItem.definition }}</code> </span>
+     </div>
+
     </div>
 
     <div class="page-list__action">
-      <a class="" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">Edit Page</a>
+      <a class="" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">Edit</a>
     </div>
   </div>
 
 {% endmacro pageListItem %}
+
+{#
+  Page Status Filter
+
+  Returns select list of page status that trigger a page reload to filter results
+#}
+{% macro pageStatusFilter() %}
+  <select class="form-control ml-auto jsPageStatusFilter">
+    {% set param = getQueryParam('pageStatus') %}
+    <option value="x">Status&hellip;</option>
+    <option value="all" {% if param == 'all' %}selected{% endif %}>All Pages</option>
+    <option value="draft" {% if param == 'draft' %}selected{% endif %}>Draft</option>
+    <option value="pending" {% if param == 'pending' %}selected{% endif %}>Pending</option>
+    <option value="published" {% if param == 'published' %}selected{% endif %}>Published</option>
+  </select>
+{% endmacro %}

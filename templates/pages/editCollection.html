@@ -94,6 +94,7 @@
    <div class="form-group span">
     <label>Collection Template</label>
     <select class="form-control" name="collection_definition"
+     {# Only allow change of template if there are no pages assigned, set to readonly otherwise #}
      {% if page.collection.page_count > 0 %}disabled{% endif %}>
      {% for t in page.templates %}
      <option value="{{ t.filename }}" {% if t.filename == page.collection.collection_definition %}selected{% endif %}>

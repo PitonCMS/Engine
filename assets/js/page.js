@@ -206,3 +206,23 @@ let getMediaForMDE = function (editor) {
       ]
     });
   });
+
+// Listen for collection page select filter and reload page
+$('.jsCollectionPageSlugFilter').on('change', function() {
+    let collectionSlug = $(this).val();
+    if (collectionSlug !== 'x') {
+        // Do not prepend / if requesting all pages
+        collectionSlug = (collectionSlug) ? '/' + collectionSlug : collectionSlug;
+        window.location = pitonConfig.routes.adminCollection + collectionSlug;
+    }
+});
+
+// Listen for page status filter changes and reload page
+$('.jsPageStatusFilter').on('change', function() {
+    let filter = $(this).val();
+    if (filter !== 'x') {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('pageStatus', filter);
+        window.location.search = urlParams.toString();
+    }
+});

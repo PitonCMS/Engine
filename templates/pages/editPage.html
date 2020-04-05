@@ -2,34 +2,23 @@
 {% import "@admin/pages/_pageMacros.html" as pageMacro %}
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
 
-{# {% block mainClass 'contentTwoCol' %} #}
-
 {% block htmlTitle %}
 {% if page.id %}Edit {% else %}Add {% endif %} Page
 {% endblock %}
 
 {% block headText %}
 {% if page.id %}Editing {% else %}Add {% endif %}
-{# {% if page.type == 'collection' %}Collection {% endif %} #}
 {{ page.title|default(page.json.templateName) }}
 {% endblock %}
 
-{% block sectionId %}
-{% if page.type == 'collection' %}collectionDetail{% else %}editPage{% endif %}
-{% endblock sectionId %}
-
-{# Set correct form action route depending on whether this is for a page, or for a collection #}
-{% if (page.type == 'page') %}
-{% set pageAction, pageDeleteAction, pageCancelLink = 'adminPageSave', 'adminPageDelete', 'adminPage' %}
-{% else %}
-{% set pageAction, pageDeleteAction, pageCancelLink = 'adminCollectionPageSave', 'adminCollectionPageDelete', 'adminCollection' %}
-{% endif %}
+{% block sectionId 'editPage' %}
 
 {% block openForm %}
-<form action="{{  pathFor(pageAction) }}" method="post" accept-charset="utf-8">
+<form action="{{  pathFor(page.route.pageAction) }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <input type="hidden" name="page_id" value="{{ page.id }}">
  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+ <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
  <input type="hidden" name="definition" value="{{ page.definition }}">
  <input type="hidden" name="template" value="{{ page.json.templateFile }}">
  {% endblock openForm %}
@@ -40,11 +29,11 @@
   <div class="sidebar-block button-group">
    {# Button to Publish Page Now #}
    <button class="btn mb-0 btn-outline-success" type="submit" disabled>Publish</button>
-   <a class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(pageCancelLink) }}">Cancel</a>
+   <a class="btn mb-0 btn-outline-warning" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
    <button class="btn mb-0 btn-outline-primary" type="submit">Save</button>
    {% if page.id %}
    <button class="btn mb-0 btn-outline-danger jsDeleteConfirm" type="submit"
-    formaction="{{ pathFor(pageDeleteAction) }}" {% if page.page_slug == 'home' %}disabled
+    formaction="{{ pathFor(page.route.pageDelete) }}" {% if page.page_slug == 'home' %}disabled
     title="The home page cannot be deleted." {% endif %}>Delete</button>
    {% endif %}
   </div>
@@ -126,14 +115,14 @@
 
      {#
              When to Set or Update the URL Slug
- 
+
              The URL slug is created from the page title, but cleaned (replace &, -, and spaces with dashes, and to lower case).
              Rules:
              - Absolutely Never change or modify the 'home' page slug. Should always be readonly and locked
              - Never change a locked page slug. Allow unlock but warn the user
              - Published pages should always be readonly and locked
              - Unpublished pages should be unlocked and update page slug based on title
- 
+
              Set readonly and locked status as Twig variables to keep logic understandable.
            #}
      {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
@@ -174,7 +163,7 @@
 
      {#
              Page Header Featured Media Select Option
- 
+
              Allows user to select a saved media file to link as featured image for this page.
              Selecting an image sets the media table ID in the page_media_id input
            #}

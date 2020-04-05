@@ -58,19 +58,26 @@ class PageMapper extends DataMapperAbstract
      *
      * Gets all pages without elements
      * Does not include collection detail pages
-     * @param  bool $includeUnpublished Filter on published pages
+     * @param  string $status 'draft'|'pending'|'published'|'all'
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
-    public function findPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
+    public function findPages(string $status = 'published', int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect(true);
         $this->sql .= ' and p.collection_id is null';
 
-        if (!$includeUnpublished) {
+        if ($status === 'published') {
             $this->sql .= " and p.published_date <= '{$this->today}'";
+        } elseif ($status === 'pending') {
+            $this->sql .= " and p.published_date > '{$this->today}'";
+        } elseif ($status === 'draft') {
+            $this->sql .= " and p.published_date is null";
         }
+
+        // Sort pages by 1. Draft, 2. Pending, 3. Published
+        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
 
         if ($limit) {
             $this->sql .= ' limit ?';
@@ -124,14 +131,14 @@ class PageMapper extends DataMapperAbstract
      *
      * Finds all related collection detail pages
      * @param  string   $collectionSlug
-     * @param  bool     $includeUnpublished Include unpublished collection pages
+     * @param  string $status 'draft'|'pending'|'published'|'all'
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
     public function findCollectionPagesBySlug(
         string $collectionSlug,
-        bool $includeUnpublished = false,
+        string $status = 'published',
         int $limit = null,
         int $offset = null
     ): ?array {
@@ -139,11 +146,16 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= ' and c.collection_slug = ?';
         $this->bindValues[] = $collectionSlug;
 
-        if (!$includeUnpublished) {
+        if ($status === 'published') {
             $this->sql .= " and p.published_date <= '{$this->today}'";
+        } elseif ($status === 'pending') {
+            $this->sql .= " and p.published_date > '{$this->today}'";
+        } elseif ($status === 'draft') {
+            $this->sql .= " and p.published_date is null";
         }
 
-        $this->sql .= ' order by p.created_date desc';
+        // Sort pages by 1. Draft, 2. Pending, 3. Published
+        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
 
         if ($limit) {
             $this->sql .= ' limit ?';
@@ -163,14 +175,14 @@ class PageMapper extends DataMapperAbstract
      *
      * Finds all related collection detail pages
      * @param  int   $collectionId
-     * @param  bool  $includeUnpublished Include unpublished collection pages
+     * @param  string $status 'draft'|'pending'|'published'|'all'
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
     public function findCollectionPagesById(
         int $collectionId,
-        bool $includeUnpublished = false,
+        string $status = 'published',
         int $limit = null,
         int $offset = null
     ): ?array {
@@ -178,11 +190,16 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= ' and c.id = ?';
         $this->bindValues[] = $collectionId;
 
-        if (!$includeUnpublished) {
+        if ($status === 'published') {
             $this->sql .= " and p.published_date <= '{$this->today}'";
+        } elseif ($status === 'pending') {
+            $this->sql .= " and p.published_date > '{$this->today}'";
+        } elseif ($status === 'draft') {
+            $this->sql .= " and p.published_date is null";
         }
 
-        $this->sql .= ' order by p.created_date desc';
+        // Sort pages by 1. Draft, 2. Pending, 3. Published
+        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
 
         if ($limit) {
             $this->sql .= ' limit ?';
@@ -201,21 +218,26 @@ class PageMapper extends DataMapperAbstract
      * Find All Collection Detail Pages
      *
      * Finds all pages, does not include element data
-     * @param  bool  $includeUnpublished Filter on unpublished pages
+     * @param  string $status 'draft'|'pending'|'published'|'all'
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
-    public function findCollectionPages(bool $includeUnpublished = false, int $limit = null, int $offset = null): ?array
+    public function findCollectionPages(string $status = 'published', int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect(true);
         $this->sql .= ' and p.collection_id is not null';
 
-        if (!$includeUnpublished) {
-            $this->sql .= " and published_date <= '{$this->today}'";
+        if ($status === 'published') {
+            $this->sql .= " and p.published_date <= '{$this->today}'";
+        } elseif ($status === 'pending') {
+            $this->sql .= " and p.published_date > '{$this->today}'";
+        } elseif ($status === 'draft') {
+            $this->sql .= " and p.published_date is null";
         }
 
-        $this->sql .= ' order by p.created_date desc';
+        // Sort pages by 1. Draft, 2. Pending, 3. Published
+        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
