@@ -54,18 +54,38 @@
    <div class="text-success mb-3">Status: Published</div>
    {% endif %}
    <hr>
+
    {# Add Element Button #}
-   <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" data-block-key="{{ block.key }}"
-    data-element-type="{{ block.elementTypeDefault }}"
-    data-element-type-options="{{ block.elementTypeOptions|join(',') }}"
-    data-element-count-limit="{{ block.elementCountLimit }}"
-    {{ elementLength >= block.elementCountLimit|default(100) ? 'disabled' }}>Add Element</button>
+   {# First get count of elements within each block #}
+   {% set blockElementSize = 0 %}
+   {% for pageBlock in page.json.blocks %}
+    {# Now count matching elements in this block to get block element count #}
+    {% for blockElement in page.elements %}
+      {% if blockElement.block_key == pageBlock.key %}
+        {% set blockElementSize = blockElementSize + 1 %}
+      {% endif %}
+    {% endfor %}
+
+    <strong>{{ pageBlock.name }}</strong>
+    <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button"
+      data-block-key="{{ pageBlock.key }}"
+      data-element-type="{{ pageBlock.elementTypeDefault }}"
+      data-element-type-options="{{ pageBlock.elementTypeOptions|join(',') }}"
+      data-element-count-limit="{{ pageBlock.elementCountLimit }}"
+      data-element-count="{{ blockElementSize }}"
+      {% if blockElementSize >= pageBlock.elementCountLimit|default(100) %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
+      >Add Element</button>
+
+      {# Reset block element counter for next block loop #}
+      {% set blockElementSize = 0 %}
+    {% endfor %}
   </div>
 
  </div>
  {% endblock sidebar %}
 
  {% block content %}
+
  {# Media Modal Selector #}
  {% include "@admin/pages/_pageEditModal.html" %}
 
@@ -202,26 +222,18 @@
     aria-labelledby="content-tab">
     {# Page Blocks and Elements #}
     <div class="">
-     {% for block in page.json.blocks %}
+      {# Outer loop: All blocks defined in the JSON page definition file #}
+     {% for pageBlock in page.json.blocks %}
      <div class="content-block">
       <div class="block-title-wrapper">
-       <h4 class="page-edit-title">{{ block.name }}</h4>
+       <h4 class="page-edit-title">{{ pageBlock.name }}</h4>
       </div>
-      <div class="jsBlockParent">
-
-       {# Get count of elements in block to know if we need to disable the Add Element button #}
-       {% set elementLength = 0 %}
+      <div class="jsBlockParent" id="{{ pageBlock.key }}">
+       {# Inner loop: All loaded elements. If an element to block key match is found, then print the element #}
        {% for element in page.elements %}
-       {% if element.block_key == block.key %}
-       {% set elementLength = elementLength + 1 %}
-       {% endif %}
-       {% endfor %}
-
-       {# Loop through all available elements loaded for this page. If a block key match is found, then print it #}
-       {% for element in page.elements %}
-       {% if element.block_key == block.key %}
-       {{ pageMacro.elementForm(element, block.key, block.elementTypeOptions) }}
-       {% endif %}
+        {% if element.block_key == pageBlock.key %}
+          {{ pageMacro.elementForm(element, pageBlock.key, pageBlock.elementTypeOptions) }}
+        {% endif %}
        {% endfor %}
        {# End for page.elements loop #}
       </div>

@@ -11,11 +11,11 @@ $('.jsAddElement').on('click', function () {
                   <span class="sr-only">Loading...</span>Loading...`
     }
     $addButton.prop('disabled', true).html(buttonText.loading);
-    let $blockParent = $(this).parents('.jsBlockParent');
     let elementType = $(this).data('element-type');
     let blockKey = $(this).data('block-key');
     let elementTypeOptions = $(this).data('element-type-options');
     let elementLimit = $(this).data('element-count-limit') || 100;
+    let $blockParent = $('#' + blockKey);
     let postData = {
         blockKey: blockKey,
         elementType: elementType,
