@@ -72,7 +72,7 @@ class AdminController extends AdminBaseController
             $link .= ($page->page_slug === 'home') ? '' : $page->page_slug;
 
             $links[] = [
-                'link' => urlencode($link),
+                'link' => $link,
                 'date' => date('c', strtotime($page->updated_date))
             ];
         }
