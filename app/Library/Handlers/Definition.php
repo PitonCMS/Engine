@@ -180,11 +180,11 @@ class Definition
      *
      * Get all element definitions
      * @param  void
-     * @return mixed
+     * @return array
      */
-    public function getElements()
+    public function getElements(): array
     {
-        // Get all JSON files in directory
+        // Get all Element JSON files in directory
         $elements = [];
         foreach ($this->getDirectoryFiles($this->definition['elements']) as $file) {
             if (null === $definition = $this->decodeJson($this->definition['elements'] . $file['filename'], $this->validation['element'])) {
