@@ -47,11 +47,11 @@ class FrontController extends FrontBaseController
             return $this->notFound();
         }
 
-        // Get elements and assign to blocks
-        $page->blocks = $this->buildElementsByBlock($pageElement->findElementsByPageId($page->id) ?? []);
+        // Get and set block elements
+        $page->setBlockElements($pageElement->findElementsByPageId($page->id));
 
-        // Get page settings
-        $page->settings = $this->buildPageSettings($dataStoreMapper->findPageSettings($page->id) ?? []);
+        // Get and set page data key-value pairs
+        $page->setDataKeyValues($dataStoreMapper->findPageSettings($page->id));
 
         return $this->render($page->template, $page);
     }

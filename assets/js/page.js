@@ -11,10 +11,11 @@ $('.jsAddElement').on('click', function () {
                   <span class="sr-only">Loading...</span>Loading...`
     }
     $addButton.prop('disabled', true).html(buttonText.loading);
-    let elementType = $(this).data('element-type');
-    let blockKey = $(this).data('block-key');
-    let elementTypeOptions = $(this).data('element-type-options');
-    let elementLimit = $(this).data('element-count-limit') || 100;
+    let elementType = $(this).data('elementType');
+    let blockKey = $(this).data('blockKey');
+    let elementTypeOptions = $(this).data('elementTypeOptions');
+    let elementLimit = $(this).data('elementCountLimit') || 100;
+    let currentElementCount = $(this).data('elementCount');
     let $blockParent = $('#' + blockKey);
     let postData = {
         blockKey: blockKey,
@@ -28,10 +29,16 @@ $('.jsAddElement').on('click', function () {
         method: "POST",
         data: postData,
         success: function (r) {
-            let $newElement = $(r.html);
+            let $newElement = {};
+            if (r.status == "success") {
+                $newElement = $(r.html);
+            } else {
+                console.log('PitonCMS: Exception getting new element');
+                return;
+            }
 
             // Increment element sort value
-            let lastElementSortValue = $blockParent.find('.jsElementParent:last-child .jsElementSortValue').val();
+            let lastElementSortValue = $blockParent.find('.jsElementParent:last .jsElementSortValue').val();
 
             if (!isNaN(lastElementSortValue)) {
                 lastElementSortValue++;
@@ -49,17 +56,15 @@ $('.jsAddElement').on('click', function () {
             });
 
             // If number of elements matches or exceeds the limit, disable the button
-            if ($blockParent.children('.jsElementParent').length >= elementLimit) {
-                $addButton.prop('disabled', true);
+            $addButton.data('elementCount', ++currentElementCount);
+            if (currentElementCount >= elementLimit) {
+                $addButton.html(buttonText.addElement).prop('disabled', true).attr('title', 'Page block has the maximum number of elements allowed by design.');
+            } else {
+                $addButton.html(buttonText.addElement).prop('disabled', false).attr('title','');
             }
 
             // Scroll to new element and add to navigation
-            let newElementID = $newElement.attr('id');
-            window.location.hash = newElementID;
-            $addButton.html(buttonText.addElement).prop('disabled', false);
-            let $el = $('#page-edit-nav').find('.jsPageSubBlock-' + blockKey).append(
-                '<a class="nav-link small-sidebar-text" href="#' + newElementID + '">New</a>'
-            );
+            window.location.hash = $newElement.attr('id');
         }
     });
 });
@@ -70,20 +75,15 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
     if (!confirmPrompt('Are you sure you want to delete this element?')) {
         return false;
     }
-    let blockElementId = $(this).data('element-id');
+    let blockElementId = $(this).data('elementId');
     let $element = $(this).parents('.jsElementParent');
-    let $blockParent = $(this).parents('.jsBlockParent');
-    let elementLimit = $blockParent.find('.jsAddElement').data('element-count-limit') || 100;
+    let blockKey = $(this).parents('.jsBlockParent:first').attr('id');
+    let elementLimit = $('#' + blockKey).data('elementCountLimit') || 100;
+    let elementCount = $('#' + blockKey).data('elementCount') || 0;
     let removeElement = function () {
         $element.slideUp('normal', function () {
-            $('#page-edit-nav').find('a[href="#page-element-'+blockElementId+'"]').remove();
             $element.remove();
         });
-
-        // If element count is now within limits for this block, enable add element button
-        if ($blockParent.children('.jsElementParent').length >= elementLimit) {
-            $blockParent.find('.jsAddElement').prop('disabled', false);
-        }
     }
     let postData = {
         id: blockElementId
@@ -91,6 +91,7 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
     postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
 
     if (!isNaN(blockElementId)) {
+        // Physical delete
         $.ajax({
             url: pitonConfig.routes.adminPageElementDelete,
             method: "POST",
@@ -105,7 +106,14 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
             }
         });
     } else {
+        // Only element delete
         removeElement();
+    }
+
+    // Reset add element button if within count limit
+    $('#button-' + blockKey).data('elementCount', --elementCount);
+    if (elementCount < elementLimit) {
+        $('#button-' + blockKey).prop('disabled', false).attr('title', '');
     }
 });
 
