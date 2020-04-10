@@ -55,6 +55,9 @@ $('.jsAddElement').on('click', function () {
                 });
             });
 
+            // Hide no content message
+            $blockParent.find('.jsNoElementFlag').removeClass('d-block').addClass('d-none');
+
             // If number of elements matches or exceeds the limit, disable the button
             $addButton.data('elementCount', ++currentElementCount);
             if (currentElementCount >= elementLimit) {
@@ -79,7 +82,7 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
     let $element = $(this).parents('.jsElementParent');
     let blockKey = $(this).parents('.jsBlockParent:first').attr('id');
     let elementLimit = $('#' + blockKey).data('elementCountLimit') || 100;
-    let elementCount = $('#' + blockKey).data('elementCount') || 0;
+    let elementCount = $('#' + blockKey).data('elementCount') || 1;
     let removeElement = function () {
         $element.slideUp('normal', function () {
             $element.remove();
@@ -114,6 +117,11 @@ $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
     $('#button-' + blockKey).data('elementCount', --elementCount);
     if (elementCount < elementLimit) {
         $('#button-' + blockKey).prop('disabled', false).attr('title', '');
+    }
+
+    // Show no content message if elementCount is zero
+    if (elementCount === 0) {
+        $(this).parents('.jsBlockParent:first').find('.jsNoElementFlag').removeClass('d-none').addClass('d-block');
     }
 });
 

@@ -221,7 +221,10 @@
        {# Inner loop: All loaded block elements #}
        {% for element in page.blocks[blockDefinition.key] %}
           {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
+        {% else %}
+          {% set noElementFlag = true %}
        {% endfor %}
+       <p class="jsNoElementFlag {% if noElementFlag %}d-block{% else %}d-none{% endif %}">There is no content in this block.</p>
        {# End for page.blocks loop #}
       </div>
      </div>

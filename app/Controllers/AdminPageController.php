@@ -116,7 +116,7 @@ class AdminPageController extends AdminBaseController
             // Load existing page from database.
             $page = $pageMapper->findById((int) $args['id']);
             $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
-            $page->settings = $dataStoreMapper->findPageSettings($page->id);
+            $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
             // Create new page, and get template definition from query string
             $definitionParam = $this->request->getQueryParam('definition');
@@ -129,6 +129,7 @@ class AdminPageController extends AdminBaseController
             // New page object
             $page = $pageMapper->make();
             $page->definition = $definitionParam;
+            $settings = [];
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
             $collectionId = $this->request->getQueryParam('collectionId', null);
@@ -153,13 +154,13 @@ class AdminPageController extends AdminBaseController
                 $newElement->element_sort = 1;
                 $newElement->definition = $block->elementTypeDefault;
 
-                $page->elements[] = $newElement;
+                $page->setBlockElements([$newElement]);
             }
         }
 
         // Merge saved page settings with settings from page JSON definition
         if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettings($page->settings ?? [], $page->json->settings);
+            $page->settings = $this->mergeSettings($settings, $page->json->settings);
         }
 
         // Set template type: collection|page
