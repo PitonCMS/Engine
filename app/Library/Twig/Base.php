@@ -74,7 +74,6 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'pages' => $this->container['settings']['pages'] ?? null,
                 'settings' => $this->container['settings']['site'] ?? null,
                 'csrf' => [
                     'name' => $this->csrfTokenName,
