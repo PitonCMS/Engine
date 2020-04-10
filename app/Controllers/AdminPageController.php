@@ -115,7 +115,7 @@ class AdminPageController extends AdminBaseController
         if (isset($args['id']) && is_numeric($args['id'])) {
             // Load existing page from database.
             $page = $pageMapper->findById((int) $args['id']);
-            $page->elements = $pageElementMapper->findElementsByPageId($page->id);
+            $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
             $page->settings = $dataStoreMapper->findPageSettings($page->id);
         } else {
             // Create new page, and get template definition from query string
@@ -414,7 +414,7 @@ class AdminPageController extends AdminBaseController
         // Set the response type
         $r = $this->response->withHeader('Content-Type', 'application/json');
 
-        return $r->write(json_encode(["html" => $elementFormHtml]));
+        return $r->write(json_encode(["status" => "success", "html" => $elementFormHtml]));
     }
 
     /**

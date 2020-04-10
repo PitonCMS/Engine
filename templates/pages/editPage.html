@@ -56,28 +56,17 @@
    <hr>
 
    {# Add Element Button #}
-   {# First get count of elements within each block #}
-   {% set blockElementSize = 0 %}
-   {% for pageBlock in page.json.blocks %}
-    {# Now count matching elements in this block to get block element count #}
-    {% for blockElement in page.elements %}
-      {% if blockElement.block_key == pageBlock.key %}
-        {% set blockElementSize = blockElementSize + 1 %}
-      {% endif %}
-    {% endfor %}
-
-    <strong>{{ pageBlock.name }}</strong>
-    <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button"
-      data-block-key="{{ pageBlock.key }}"
-      data-element-type="{{ pageBlock.elementTypeDefault }}"
-      data-element-type-options="{{ pageBlock.elementTypeOptions|join(',') }}"
-      data-element-count-limit="{{ pageBlock.elementCountLimit }}"
-      data-element-count="{{ blockElementSize }}"
-      {% if blockElementSize >= pageBlock.elementCountLimit|default(100) %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
+   {% for blockDefinition in page.json.blocks %}
+   {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+    <strong>{{ blockDefinition.name }}</strong>
+    <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
+      data-block-key="{{ blockDefinition.key }}"
+      data-element-type="{{ blockDefinition.elementTypeDefault }}"
+      data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
+      data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+      data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+      {% if maxElements %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
       >Add Element</button>
-
-      {# Reset block element counter for next block loop #}
-      {% set blockElementSize = 0 %}
     {% endfor %}
   </div>
 
@@ -223,19 +212,17 @@
     {# Page Blocks and Elements #}
     <div class="">
       {# Outer loop: All blocks defined in the JSON page definition file #}
-     {% for pageBlock in page.json.blocks %}
+     {% for blockDefinition in page.json.blocks %}
      <div class="content-block">
       <div class="block-title-wrapper">
-       <h4 class="page-edit-title">{{ pageBlock.name }}</h4>
+       <h4 class="page-edit-title">{{ blockDefinition.name }}</h4>
       </div>
-      <div class="jsBlockParent" id="{{ pageBlock.key }}">
-       {# Inner loop: All loaded elements. If an element to block key match is found, then print the element #}
-       {% for element in page.elements %}
-        {% if element.block_key == pageBlock.key %}
-          {{ pageMacro.elementForm(element, pageBlock.key, pageBlock.elementTypeOptions) }}
-        {% endif %}
+      <div class="jsBlockParent" id="{{ blockDefinition.key }}">
+       {# Inner loop: All loaded block elements #}
+       {% for element in page.blocks[blockDefinition.key] %}
+          {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
        {% endfor %}
-       {# End for page.elements loop #}
+       {# End for page.blocks loop #}
       </div>
      </div>
      {% endfor %}
