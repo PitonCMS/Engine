@@ -2,7 +2,7 @@
 // Navigation management
 // --------------------------------------------------------
 
-// Listen for form input changes to update button status
+// Listen for form input changes to update save button status
 let navSaveIndFlag = false;
 const setNavSaveIndicator = () => {
   if (!navSaveIndFlag) {
@@ -65,4 +65,13 @@ $('.jsEditNavBlock').on('click', '.jsNavActive', function() {
     $navItem.removeClass('navigation-disabled bg-warning text-white');
   }
   setNavSaveIndicator();
+});
+
+// Make alt link text input required if dropdown
+$('.jsEditNavBlock').on('change', '.jsNavPageSelector', function() {
+  if ($(this).val() === '0') {
+    $(this).siblings('.jsNavTitleInput').find('input').prop('required', true);
+  } else {
+    $(this).siblings('.jsNavTitleInput').find('input').prop('required', false);
+  }
 });

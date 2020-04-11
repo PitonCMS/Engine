@@ -79,8 +79,9 @@
                     {% endfor %}
                 </select>
 
-                <div class="small">
-                    <input type="text" class="jsNavTitleInput" name="nav[{{ n.id }}][navTitle]" value="{{ n.navTitle }}" placeholder="Alt link text" autocomplete="off">
+                <div class="small jsNavTitleInput">
+                    <input type="text" name="nav[{{ n.id }}][navTitle]" value="{{ n.navTitle }}" {% if not n.page_id %}required{% endif %}
+                    placeholder="Alt link text" autocomplete="off">
                 </div>
 
                 <div class="navigator-button-group">
