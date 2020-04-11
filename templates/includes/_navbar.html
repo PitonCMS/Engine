@@ -28,11 +28,14 @@
        <div class="dropdown-menu__horizontal-item">
         <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Pages</div>
         <div class="dropdown-divider"></div>
+        
         <a class="dropdown-item" href="{{ pathFor('adminPage') }}" title="All pages">All Pages</a>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Templates ( <i class="fas fa-plus"></i> Page)</div>
         <div class="dropdown-divider"></div>
         {% for pt in getPageTemplates() %}
         <a class="dropdown-item" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}"
-         title="Add {{ pt.description }} page">Add {{ pt.name }}</a>
+         title="{{ pt.description }} page">{{ pt.name }}</a>
         {% endfor %}
        </div>
 

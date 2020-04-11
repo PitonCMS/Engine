@@ -9928,6 +9928,7 @@ h3 {
 }
 html, body {
   height: 100%;
+  background: #f6f6f6;
 }
 
 body {
@@ -10037,15 +10038,15 @@ section {
 
 .content {
   flex: 1;
+  background: #ffffff;
+  margin-left: 1em;
 }
 
 .sidebar {
-  background: #f6f6f6;
   position: relative;
 }
 
 .grid-wrapper {
-  background: #f6f6f6;
   border-radius: 7px;
   padding: 1em;
   display: grid;
