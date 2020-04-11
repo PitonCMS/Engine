@@ -40,7 +40,7 @@ class MediaMapper extends DataMapperAbstract
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' order by created_date desc';
+        $this->sql .= ' order by m.created_date desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -70,20 +70,8 @@ class MediaMapper extends DataMapperAbstract
             return null;
         }
 
-        $this->sql = <<<SQL
-select SQL_CALC_FOUND_ROWS
-    mc.category,
-    m.id,
-    m.filename,
-    m.width,
-    m.height,
-    m.feature,
-    m.caption
-from media_category mc
-join media_category_map mcp on mc.id = mcp.category_id
-join media m on mcp.media_id = m.id
-where mc.id = ?
-SQL;
+        $this->makeSelect();
+        $this->sql .= ' and mc.id = ? order by m.created_date desc';
         $this->bindValues[] = $catId;
 
         if ($limit) {
@@ -115,20 +103,8 @@ SQL;
             return $this->findAllMedia($limit, $offset);
         }
 
-        $this->sql = <<<SQL
-select SQL_CALC_FOUND_ROWS
-    mc.category,
-    m.id,
-    m.filename,
-    m.width,
-    m.height,
-    m.feature,
-    m.caption
-from media_category mc
-join media_category_map mcp on mc.id = mcp.category_id
-join media m on mcp.media_id = m.id
-where mc.category = ?
-SQL;
+        $this->makeSelect();
+        $this->sql .= ' and mc.category = ? order by m.created_date desc';
         $this->bindValues[] = $category;
 
         if ($limit) {
@@ -142,5 +118,34 @@ SQL;
         }
 
         return $this->find();
+    }
+
+    /**
+     * Make Default Media Select
+     *
+     * Make select statement
+     * Overrides and sets $this->sql.
+     * @param  bool $foundRows Set to true to get foundRows() after query
+     * @param  bool $outerJoin True = All media rows, False = only matching category rows
+     * @return void
+     */
+    protected function makeSelect(bool $foundRows = false, $outerJoin = true): void
+    {
+        $foundRows = ($foundRows) ? ' SQL_CALC_FOUND_ROWS ' : '';
+        $outer = ($outerJoin) ? 'left outer ' : '';
+        $this->sql = <<<SQL
+select $foundRows
+    mc.category,
+    m.id,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
+    m.caption
+from media m
+$outer join media_category_map mcm on m.id = mcm.media_id
+$outer join media_category mc on mc.id = mcm.category_id
+where 1=1
+SQL;
     }
 }

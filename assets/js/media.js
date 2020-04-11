@@ -96,3 +96,15 @@ $('.jsMediaUploadForm').on('submit', function (e) {
     <span class="sr-only">Loading...</span>Uploading and optimizing media...`;
     $(this).find('button').prop('disabled', true).html(processingText);
 });
+
+// Filter media on category
+$('.jsMediaCategorySelect').on('change', function () {
+    let mediaCategory = $(this).val();
+    if (mediaCategory === 'x') return;
+    if (mediaCategory === 'all') {
+        // Do not prepend / if requesting all media
+        window.location = pitonConfig.routes.adminMedia;
+    } else {
+        window.location = pitonConfig.routes.adminMedia + '/' + mediaCategory;
+    }
+});

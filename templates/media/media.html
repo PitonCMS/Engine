@@ -24,14 +24,11 @@
  <div class="section-title form-inline mt-0">
   <h3>Media Library</h3>
   <select class="form-control ml-auto jsMediaCategorySelect">
-  
-   <option selected value="x">Filter...</option>
-   <option value="0">All Media</option>
+   <option value="all" {% if page.category == 'all' %}selected{% endif %}>All Media</option>
    {% for c in getMediaCategories() %}
-   <option value="{{ c.id }}">{{ c.category }}</option>
+   <option value="{{ c.category }}" {% if page.category == c.category %}selected{% endif %}>{{ c.category }}</option>
    {% endfor %}
   </select>
-
  </div>
 
  <div class="media-wrapper">
@@ -41,6 +38,7 @@
   <strong>No Media Found</strong>
   {% endfor %}
  </div>
+ {{ pagination() }}
 </div>
 
 {% endblock content %}

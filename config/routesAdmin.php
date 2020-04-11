@@ -104,7 +104,7 @@ $app->group('/admin', function () {
             })->add('csrfGuardHandler')->setName('adminCollectionPageDelete');
         });
 
-        // Show all collection pages, filtered optionally by category
+        // Show all collection pages, filtered optionally by collection
         $this->get('[/{collectionSlug}]', function ($args) {
             return (new AdminPageController($this))->showCollectionPages($args);
         })->setName('adminCollection');
@@ -127,11 +127,6 @@ $app->group('/admin', function () {
 
     // Media
     $this->group('/media', function () {
-        // Show all media
-        $this->get('[/]', function ($args) {
-            return (new AdminMediaController($this))->showMedia();
-        })->setName('adminMedia');
-
         // Show all media in modal asynchronously
         $this->get('/get', function ($args) {
             return (new AdminMediaController($this))->getMedia($args);
@@ -168,6 +163,11 @@ $app->group('/admin', function () {
                 return (new AdminMediaController($this))->deleteMediaCategory();
             })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');
         });
+
+        // Show all media, optionally filtered by media category
+        $this->get('[/{category}]', function ($args) {
+            return (new AdminMediaController($this))->showMedia($args);
+        })->setName('adminMedia');
     });
     // End media
 
