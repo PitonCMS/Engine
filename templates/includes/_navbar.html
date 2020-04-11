@@ -66,7 +66,7 @@
         <div class="dropdown-item-text navbar-text text-dark font-weight-bold">Navigation</div>
         <div class="dropdown-divider"></div>
         {% for n in getNavigators() %}
-        <a class="dropdown-item" href="{{ pathFor('adminNavigation', {'nav': n}) }}" title="Edit navigation">Edit
+        <a class="dropdown-item" href="{{ pathFor('adminNavigation', {'navigator': n}) }}" title="Edit navigation">Edit
          {{ n|capitalize }}</a>
         {% endfor %}
        </div>
