@@ -114,7 +114,7 @@ $app->group('/admin', function () {
     // Navigation route
     $this->group('/navigation', function () {
         // Show Navigations
-        $this->get('[/{nav:[a-zA-Z]+}]', function ($args) {
+        $this->get('/{navigator:[a-zA-Z]+}', function ($args) {
             return (new AdminNavigationController($this))->showNavigator($args);
         })->setName('adminNavigation');
 

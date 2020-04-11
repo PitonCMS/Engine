@@ -24,32 +24,16 @@ class AdminNavigationController extends AdminBaseController
     /**
      * Show Navigator
      *
-     * @param  array $args Route parameter segment 'nav'
+     * @param  array $args
      * @return Response
      */
     public function showNavigator($args): Response
     {
-        // Get dependencies and initiate $data variable
+        // Get dependencies
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
-        $definition = $this->container->jsonDefinitionHandler;
-        $data = [];
 
-        // Get navigation definitions
-        if (null === $navSettings = $definition->getNavigation()) {
-            $this->setAlert('danger', 'Navigation JSON Definition Error', $definition->getErrorMessages());
-        }
-
-        $data['navigators'] = $navSettings->navigators;
-
-        // If no navigator was requested as a URL segment, load the first navigator from definitions, or falsy
-        $args['nav'] = $args['nav'] ?? $data['navigators'][0] ?? [];
-
-        // If a navigator was requested
-        if (isset($args['nav'])) {
-            $navigation = $navMapper->findNavHierarchy($args['nav'], null, false, false) ?? [];
-            $data['navigator'] = $args['nav'];
-            $data['navigation'] = $navigation;
-        }
+        $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
+        $data['navigator'] = $args['navigator'];
 
         return $this->render('navigation/navigation.html', $data);
     }
@@ -103,7 +87,7 @@ class AdminNavigationController extends AdminBaseController
             }
 
             $nav->sort = $sort;
-            // $nav->title = $navItem['navTitle'];
+            $nav->title = $navItem['navTitle'];
             $nav->active = $navItem['active'] ?: 'Y';
 
             // Save and assign inserted nav ID for child rows
@@ -111,6 +95,6 @@ class AdminNavigationController extends AdminBaseController
             $navItem['navId'] = $savedNav->id;
         }
 
-        return $this->redirect('adminNavigation', ['nav' => $navigator]);
+        return $this->redirect('adminNavigation', ['navigator' => $navigator]);
     }
 }

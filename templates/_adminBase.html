@@ -5,77 +5,77 @@
     - htmlTitle     HTML <title> text
     - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
     - head          Insert additional <head> HTLM elements
-    - headText      Page heading
+    - headText      Page heading to display in navbar
     - sectionId     HTML <section> tag ID
-    - openForm      HTLM Optional open <form> tag with hidden inputs, automatically closes closeform tag
+    - openForm      Optional open <form> tag with hidden inputs
     - sidebar       Sidebar content area
     - content       Main content area
-    - closeForm     HTML Optional close </form> tag (self closing)
+    - closeForm     Optional close </form> tag (self closing)
     - foot          Insert additional footer HTML elements after JS links
 #}
 <!doctype html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="PitonCMS">
-  <link rel="icon" href="">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="PitonCMS">
+		<link rel="icon" href="">
 
-  <title>
-    {% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}
-    PitonCMS Administration
-  </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
+		<title>
+      {# Concatenate htmlTitle, if provided in extending page #}
+			{% if block('htmlTitle') is defined %}
+				{{ block('htmlTitle') ~ ' - ' }}
+			{% endif %}
+			PitonCMS Administration
+		</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
 
-  {% include '@admin/includes/_pitonConfigJs.html' %}
-  {% block head '' %}
-</head>
+    {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
+		{% include '@admin/includes/_pitonConfigJs.html' %}
+		{% block head '' %}
+	</head>
 
-<body>
-  {% include "@admin/includes/_navbar.html" with {headText: block('headText') is defined ? block('headText')} %}
-  {% include "@admin/includes/_alert.html" %}
+	<body>
+    {# Load admin navigation. Twig blocks are not available in include files, so we have to pass in this block value explicitly if set. #}
+		{% include "@admin/includes/_navbar.html" with {headText: block('headText') is defined ? block('headText')} %}
+		{% include "@admin/includes/_alert.html" %}
 
-  <section id="{% block sectionId 'default' %}">
+		<section id="{% block sectionId 'default' %}">
 
-    {# Open form block if wrapping sidebar and content #}
-    {% block openForm '' %}
+			{# Open form block if wrapping sidebar and content within form #}
+			{% block openForm '' %}
 
+			<div class="contentWrapper">
+				<main role="main" class="{% block mainClass 'content' %}">
+					{% block content '' %}
+        </main>
 
-<div class="contentWrapper">
- <main role="main" class="{% block mainClass 'content' %}">
-  {% block content '' %}
-</main>
-<aside class="sidebar">
+				<aside class="sidebar">
+					{% block sidebar '' %}
+				</aside>
+      </div>
+      <!-- /.contentWrapper -->
 
-   {% block sidebar '' %}
+      {# Optional self closing form tag (if openForm is set), or define closeForm in layout. #}
+			{% block closeForm %}
+				{{ block('openForm') != '' ? '</form>' }}
+			{% endblock closeForm %}
 
-</aside>
+		</section>
 
-</div>
-   
-    {% block closeForm %}
-    {# Self closing form tag #}
-    {{ block('openForm') != '' ? '</form>' }}
-    {% endblock closeForm %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
+		<script src="{{ basePath() }}/admin/js/main.js"></script>
 
-  </section>
-
-
-  {# // <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> #}
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
-  <script src="{{ basePath() }}/admin/js/main.js"></script>
-
-  {% block foot '' %}
-</body>
-
+    {# Optional foot block element #}
+		{% block foot '' %}
+	</body>
 </html>
