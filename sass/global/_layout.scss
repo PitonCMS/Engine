@@ -6,19 +6,21 @@ height: 100%;
 .contentWrapper {
  display: flex;
  position: relative;
-
 }
 
 .content {
+
  flex: 1;
+ background: $clr-bg-light;
+ @include margin(null null null 1em);
 }
 
 .sidebar {
- background: $clr-light-grey;
+ // background: $clr-light-grey;
  position: relative;
 }
 .grid-wrapper {
- background: $clr-light-grey;
+ // background: $clr-light-grey;
  border-radius: $border-radius;
  @include padding(1em);
  display: grid;
