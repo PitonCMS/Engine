@@ -80,9 +80,9 @@ SQL;
         $level =  1;
 
         foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published, or navigation link not active
+            // Skip if page is not published (but not if a drop down), or navigation link not active
             if (
-                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
+                ($published && !is_null($row->page_id) && (is_null($row->published_date) || $row->published_date > $this->today)) ||
                 ($active && $row->active === 'N')
             ) {
                 continue;
