@@ -8,7 +8,7 @@
 
 
     {% if getAlert() %}
-    <div class="container alert-fixed">
+    <div class="container">
       <div class="alert alert-{{ getAlert('severity') }} alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">{{ getAlert('heading') }}</h4>
         {{ getAlert('message') }}
