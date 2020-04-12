@@ -13,14 +13,14 @@
     "require": {
         "php": ">=7.1",
         "pitoncms/session": "~2.1.2",
-        "pitoncms/orm": "^0.3",
-        "pitoncms/pagination": "^0.1",
-        "slim/slim": "~3.12",
+        "pitoncms/orm": "~0.3.5",
+        "pitoncms/pagination": "^0.2.0",
+        "slim/slim": "~3.12.3",
         "slim/twig-view": "~2.5.1",
         "monolog/monolog": "~1.25.3",
         "erusev/parsedown": "~1.7.4",
         "phpmailer/phpmailer": "~6.1.4",
-        "twbs/bootstrap": "^4.3",
+        "twbs/bootstrap": "~4.4.1",
         "tinify/tinify": "~1.5.2",
         "justinrainbow/json-schema": "~5.2.9"
         },
