@@ -222,17 +222,17 @@ $app->group('/admin', function () {
             // Show Users
             $this->get('[/]', function ($args) {
                 return (new AdminUserController($this))->showUsers();
-            })->setName('adminUser');
+            })->setName('adminToolUser');
 
             // Save Users
             $this->post('/save', function ($args) {
                 return (new AdminUserController($this))->saveUsers();
-            })->add('csrfGuardHandler')->setName('adminUserSave');
+            })->add('csrfGuardHandler')->setName('adminToolUserSave');
 
             // Change User Active Status
             $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
                 return (new AdminUserController($this))->userStatus($args);
-            })->add('csrfGuardHandler')->setName('adminUserStatusUpdate');
+            })->add('csrfGuardHandler')->setName('adminToolUserStatusUpdate');
         });
         // End user routes
     });

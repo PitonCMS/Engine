@@ -78,7 +78,7 @@ class AdminUserController extends AdminBaseController
         }
 
         // Redirect back to list of users
-        return $this->redirect('adminUser');
+        return $this->redirect('adminToolUser');
     }
 
     /**
@@ -107,6 +107,6 @@ class AdminUserController extends AdminBaseController
         }
 
         // Redirect back to list of users
-        return $this->redirect('adminUser');
+        return $this->redirect('adminToolUser');
     }
 }
