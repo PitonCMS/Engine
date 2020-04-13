@@ -1,56 +1,61 @@
 # PitonCMS Navigation
 
-With the **PitonCMS Navigation** manager, you can control which **Page** links appear and in what order in any navigator group links list. Your website designer will have predefined the navigator link groups, such as header, footer, sidebar, etc. However, you can then add or remove links to any Page in the navigation lists.
+With the **Content > Navigation** menu, you can control which page links appear and in what order in any navigator. Your website designer will have defined the navigator groups, such as main, footer, sidebar, etc.
 
-Note, **Collection** Pages will not appear in the navigator links. Instead, you will add an **Collection Element** to one of your Pages as the entry point to that Collection.
+The navigation manager allows you to:
+
+* Add a page to any navigator (but not collection detail pages)
+* Set the desired position of the link
+* Edit the link text (defaults to the page title)
+* Add a dropdown menu to a list of child links
+* Deactivate a link temporarily to remove it without deleting the link entry
+
+To edit a navigator, go to **Content > Navigation > Edit [Navigator Name]**.
+
+Here you can add, delete, rename, and deactivate or reactivate navigation links. Make your changes, and the press save.
+
+**Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
+
+![Navigation Page](/admin/img/help/pageNavigation.png)
+
+**Note**, **Collection Detail Pages** will not be available to add to the navigator. Instead, you will add a **Collection Summary Element** to one of your pages as the entry point to that collection group.
 
 ## Navigators
 
-The navigator groups on the left are defined by your website designer. To remove or add a new navigator group, contact the designer.
-
-To edit a navigator click on the name in the left sidebar.
+The navigators were defined by your website designer. To edit a navigator click on **Content > Navigation > Edit [Navigator Name]**
 
 ## Add Page Link
 
-A Page must first exist before it can be added to a navigator. To add and position a Page link:
+A Page must first exist before it can be added to a navigator. To add a page link:
 
-1. Select the **Navigator** to edit from the left sidebar.
-2. From the dropdown menu at the bottom of the editor, select the desired Page.
-   * Once selected, the page will appear at the bottom of the current navigation list.
-3. Use the arrows to move the page link to the desired position.
-4. By default, the link name is the page title. If desired, enter a link name in the *Navigation title* field (optional).
-5. Click the *Save Navigation* button.
+1. Select the navigator to edit.
+2. Click the green plus button.
+3. From the dropdown menu select the desired page.
+4. Optionally enter an alternate link text (required if selecting a Dropdown link).
+5. Click the save button in the sidebar.
 
-The link should now be visible.
+**Note**: You can add a link to an unpublished page. However, the navigation will not display the link in the navigation until that page is published.
 
 ## Dropdown Navigation Links
+To add a dropdown menu to a navigator,
 
-A page link can be moved under a parent link to create a dropdown menu effect (if your theme supports this). The parent link of the dropdown can be either a link to an actual **Page**, or a placeholder non-link.
-
-To add a dropdown menu navigation:
-
-1. Select the **Navigator** to edit from the left sidebar.
-2. Ensure you have the parent (top) dropdown menu link set.
-   * To use a non-link, select **[Dropdown]** from the Add Page list at the bottom, and then move that Dropdown placeholder into position.
-3. Select the first sub-page link from the Add Page list at the bottom of the editor.
-4. Using the arrows, move the sub-page to just under the parent link.
-5. Click the right arrow to indent the sub-page under the parent link.
-6. Repeat as necessary.
-7. Re-order the sub-pages using the up and down arrows as necessary.
-8. By default, the link name is the page title. If desired, enter a link name in the *Navigation title* field (optional).
-9. Click the *Save Navigation* button.
+1. Select the navigator to edit.
+2. Select **[Dropdown]** from the lis of pages. Enter an alternate link text (required).
+3. Click the green plus button under the dropdown link.
+4. Select the first sub-page from the page list.
+5. Repeat.
+6.  Click the save button in the sidebar.
 
 ## Disable Navigation Links
 
-You can temporarily disable a page navigation link or dropdown to hide that entry on the website.
+You can temporarily disable a navigation link or dropdown group to hide the link on your website.
 
 Note, although the deactivated navigation links will not appear on the website, if the target page is still *Published* visitors and search engines may still be able view that page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
 
 To disable a navigation link:
 
-1. Click the *Disable* icon to the left of the arrows. The selected link should turn amber.
-    * If the disabled link is the parent of a Dropdown, the entire dropdown list will be disabled.
-2. Click the *Save Navigation* button.
+1. Click the yellow deactivate icon. The selected link should turn amber (including any sub page links).
+2. Click the save button.
 
 To enable a navigation link:
 
@@ -70,3 +75,19 @@ To permanently delete a navigation link:
 2. Click the *Save Navigation* button.
 
 You cannot delete the navigation list itself, only your website designer can remove or add navigator groups. You can, however, remove all links from a navigator group.
+
+The navigation manager allows you to:
+
+* Add a page to any navigator (but not collection detail pages)
+* Set the desired position of the link
+* Edit the link text (defaults to the page title)
+* Add a dropdown menu to a list of child links
+* Deactivate a link temporarily to remove it without deleting the link entry
+
+To edit a navigator, go to **Content > Navigation > Edit [Navigator Name].
+
+Here you can add, delete, rename, and deactivate or reactivate navigation links. Make your changes, and the press save.
+
+**Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
+
+![Navigation Page](/admin/img/help/pageNavigation.png)

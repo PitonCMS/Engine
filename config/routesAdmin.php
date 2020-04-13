@@ -239,7 +239,7 @@ $app->group('/admin', function () {
     // End tools
 
     // Help content
-    $this->get('/help[/{file}]', function ($args) {
+    $this->get('/help[/{file}[/{link}]]', function ($args) {
         return (new AdminController($this))->showHelp($args);
     })->setName('adminHelp');
 

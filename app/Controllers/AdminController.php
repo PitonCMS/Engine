@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Slim\Http\Response;
+use DOMDocument;
 
 /**
  * Piton Admin Controller
@@ -99,6 +100,7 @@ class AdminController extends AdminBaseController
 
         // Check if help file exists, or default to adminHome
         $file = $args['file'] ?? 'adminHome';
+        $data['link'] = $args['link'] ?? null;
 
         // If requesting the release notes page from GitHub
         if ($file === 'adminHelpDeveloperRelease') {
@@ -116,7 +118,22 @@ class AdminController extends AdminBaseController
         $helpFile = ROOT_DIR . "vendor/pitoncms/engine/templates/help/{$data['subject']}/$file.md";
 
         if (file_exists($helpFile)) {
-            $data['helpContent'] = $markdown->text(file_get_contents($helpFile));
+            $helpContent = $markdown->text(file_get_contents($helpFile));
+
+            // Parse help file to modify headings
+            $document = new DOMDocument();
+            $document->loadHTML($helpContent);
+
+            // Get heading tags h1..h6 and set ID so we can deep link to content
+            foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $h) {
+                $nodes = $document->getElementsByTagName($h);
+                foreach ($nodes as $node) {
+                    $value = str_replace(' ', '-', strtolower($node->nodeValue));
+                    $node->setAttribute('id', $value);
+                }
+            }
+
+            $data['helpContent'] = $document->saveHTML();
         } else {
             $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$data['subject']}, File $file.");
             $data['helpContent'] = "<h1>Help File $file Does Not Exist</h1>";
