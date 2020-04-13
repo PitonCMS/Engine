@@ -239,18 +239,9 @@ $app->group('/admin', function () {
     // End tools
 
     // Help content
-    $this->group('/help', function () {
-        // Help content file to load in iframe
-        $this->get('/content[/{subject}/{file}]', function ($args) {
-            return (new AdminController($this))->getHelpContent($args);
-        })->setName('adminHelpContent');
-
-        // Help landing page
-        $this->get('[/{file}[/{link}]]', function ($args) {
-            $args['file'] = $args['file'] ?? 'adminHome';
-            return (new AdminController($this))->showHelp($args);
-        })->setName('adminHelp');
-    });
+    $this->get('/help[/{file}[/{link}]]', function ($args) {
+        return (new AdminController($this))->showHelp($args);
+    })->setName('adminHelp');
 
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
     $this->get('[/]', function () {

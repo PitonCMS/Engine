@@ -33,7 +33,7 @@
         </div>
 
         <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
+            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminCollection'}) }}">
                 <i class="fas fa-file"></i>
                 <div class="sidebar-link__text">Collections</div>
             </a>
@@ -86,20 +86,8 @@
             </a>
         </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesignerHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Definitions</div>
-            </a>
-        </div>
-
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesignerHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Settings</div>
-            </a>
-        </div>
     </div>
+
 
     <div class="sidebar-link">
         <a class="jsHelpAccordionSubject" href="#">
@@ -109,7 +97,7 @@
     </div>
 
     <div class="jsHelpAccordionCollapse" {% if page.subject != 'developer' %}style="display: none;"{% endif %}>
-
+    {#
         <div class="sidebar-link ml-2">
             <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
                 <i class="fas fa-file"></i>
@@ -117,26 +105,7 @@
             </a>
         </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Controllers</div>
-            </a>
-        </div>
-
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Routes</div>
-            </a>
-        </div>
-
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Models</div>
-            </a>
-        </div>
+        End Developer Help #}
 
         <div class="sidebar-link ml-2">
             <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperRelease'}) }}"><i
@@ -145,58 +114,40 @@
             </a>
         </div>
     </div>
+
 </div>
 
 {% endblock sidebar %}
 
 {% block content %}
     <style>
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
+        /* Hack - needs something better in CSS */
+        .help-content img {
+            width: 75%;
+        }
+        .help-content {
+            padding: 20px;
+        }
+        .help-content li {
+            list-style: inherit;
         }
     </style>
-
-    {% if page.file %}
-        {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
-        <iframe id="helpIframe" src="{{ pathFor('adminHelpContent', {'subject': page.subject, 'file': page.file}) }}{{ deepLink }}"></iframe>
-    {% endif %}
+    <div class="help-content">
+        {{ page.helpContent }}
+    </div>
 {% endblock content %}
 
 {% block foot %}
     <script>
+        // Toggle navigation accordion groups
         $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
             e.preventDefault();
             $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
         });
 
-        $('.jsHelpAccordion').on('click', '.jsHelpFile', function(e) {
-            e.preventDefault();
-
-            // Determine help file requested from request path
-            let href = $(this).attr('href');
-            let file = href.substring(href.lastIndexOf('/') + 1);
-            let subject = 'client';
-
-            // Set subject directory from request
-            if (file.includes('Developer')) {
-                subject = 'developer';
-            } else if (file.includes('Designer')) {
-                subject = 'designer';
-            }
-
-            $('iframe').attr('src', pitonConfig.routes.adminHelpContent + '/' + subject + '/' + file);
-
-        });
-
-        // Scroll outer page up after iframe loads content
-        $('#helpIframe').on('load', function () {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-        });
+        let inPageLink = {{ (page.link) ? '`' ~ page.link ~ '`' : 'false' }};
+        if (inPageLink) {
+            document.getElementById(inPageLink).scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        }
     </script>
 {% endblock foot %}

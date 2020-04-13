@@ -12,13 +12,15 @@ declare(strict_types=1);
 
 namespace Piton\Library\Utilities;
 
+use Parsedown;
+
 /**
  * Piton Markdown Parser
  *
  * Modified parser to render single image lines without the paragraph tags
  * https://gist.github.com/fxck/d65255218de3611df3cd
  */
-class MDParse extends \Parsedown
+class MDParse extends Parsedown
 {
     /**
      * Markdown image definition regex
