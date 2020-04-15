@@ -87,7 +87,7 @@ class PitonBuild
             $pdo = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
 
             // Insert engine version as key to avoid running install again
-            $updateEngineSetting = 'update `setting` set `setting_value` = ?, `updated_date` = ? where `category` = \'piton\' and `setting_key` = \'engine\';';
+            $updateEngineSetting = 'update `data_store` set `setting_value` = ?, `updated_date` = ? where `category` = \'piton\' and `setting_key` = \'engine\';';
             $settingValue[] = $engineVersion;
             $settingValue[] = date('Y-m-d H:i:s');
 
