@@ -9,10 +9,8 @@ height: 100%;
 }
 
 .content {
-
  flex: 1;
  background: $clr-bg-light;
- @include margin(null null null 1em);
 }
 
 .sidebar {
