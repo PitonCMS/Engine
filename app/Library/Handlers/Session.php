@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace Piton\Library\Handlers;
 
 use Piton\Session\SessionHandler;
-use Piton\Interfaces\SessionInterface;
+use Piton\Library\Interfaces\SessionInterface;
 
 /**
  * Piton Session Class
  *
- * To use a different session manager class, implement Piton\Interfaces\SessionInterface
+ * To use a different session manager class, implement Piton\Library\Interfaces\SessionInterface
  * and override the sessionHandler dependency in the container.
  */
 class Session extends SessionHandler implements SessionInterface

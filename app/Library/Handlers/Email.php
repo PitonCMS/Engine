@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Piton\Library\Handlers;
 
 use Psr\Log\LoggerInterface as Logger;
-use Piton\Interfaces\EmailInterface;
+use Piton\Library\Interfaces\EmailInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use ArrayAccess;
@@ -21,7 +21,7 @@ use ArrayAccess;
 /**
  * Piton Email Class
  *
- * To use a different email manager class, implement Piton\Interfaces\EmailInterface
+ * To use a different email manager class, implement Piton\Library\Interfaces\EmailInterface
  * and override the emailHandler dependency in the container.
  */
 class Email implements EmailInterface

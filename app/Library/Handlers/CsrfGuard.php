@@ -15,7 +15,7 @@ namespace Piton\Library\Handlers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface as Logger;
-use Piton\Interfaces\SessionInterface;
+use Piton\Library\Interfaces\SessionInterface;
 use Exception;
 
 /**
@@ -39,7 +39,7 @@ class CsrfGuard
 
     /**
      * Session Storage
-     * @var Piton\Interfaces\SessionInterface
+     * @var Piton\Library\Interfaces\SessionInterface
      */
     protected $session;
 

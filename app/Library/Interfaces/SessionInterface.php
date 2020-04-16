@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Piton\Interfaces;
+namespace Piton\Library\Interfaces;
 
 /**
  * Piton Session Implementation
