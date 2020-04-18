@@ -5,7 +5,7 @@ PitonCMS is an easy to use, powerful Content Management System for personal and 
 ## Login
 PitonCMS does not store confidential passwords. When your website was setup by your designer, your email address was added as a registered user. To login, simply go to your website and add "[/login](/login)" to the URL.
 
-Enter your email address and click **Request Login**. A login link will be sent to your personal email with a one-time use login token that takes you to PitonCMS administration pages. The link expires in 5 minutes, and cannot be reused.
+Enter your email address and click **Request Login**. A login link will be sent to you with a one-time use login token that takes you to PitonCMS administration pages. The link expires in 5 minutes, and cannot be reused.
 
 ## Quick Start
 
@@ -29,14 +29,14 @@ Most of the website content and navigation can be managed from the **Content** m
 #### Pages
 Pages have content accessible at a specific URL. Typically these hold *static* content such as Home, About, Location, and Collection Summary etc. and are part of the main website navigation.
 
-Pages and Collection Detail Pages are structured by **Templates** around designer defined page **Blocks** that represent broad areas of a page design, to which you can add one or more **Elements** that contain your page content and display media.
+Pages and Collection Detail Pages are structured by **Templates** around designer defined page **Blocks** that represent broad areas of a page design, to which you can add one or more **Elements** that contain your page content and media.
 
 There may also be designer defined **Custom Page Settings** in the page template, that store specific bits of information for the page.
 
 You can pre-publish pages by setting the publish date to a future date.
 
 #### Collection Pages
-Collections are groups of *related* pages such as blog posts, recipes, services etc. and consist of **Collection Detail Pages** (accessible at a specific URL), and **Collection Summaries** which is a group of links to the detail page.
+Collections are groups of *related* pages such as blog posts, recipes, services etc. and consist of **Collection Detail Pages**, and **Collection Summaries** which is a group of links to the detail page.
 
 You can have multiple collections on your website, such as separate collection groups for different recipe categories.
 
@@ -44,9 +44,9 @@ You can have multiple collections on your website, such as separate collection g
 You can define how static page links appear in your site's navigation, including the order of links, link text, and sub-menu links. Only *Pages* appear in navigation links, Collection Detail Pages are linked from a Collection Summary static page.
 
 ### Media
-Before you can display images and other media in your pages or collection detail pages, you need to upload the media file from the **Media** menu. You can upload any media image or PDF file type, but video and other large graphics should be hosted on a social video sharing platform such as [YouTube](https://youtube.com). You can then embed the video player HTML into your PitonCMS page.
+Before you can display images and other media in your pages or collection detail pages, you need to upload the media file from the **Media** menu. You can upload any media image or PDF file type, but video and other large graphics should be hosted on a video streaming platform such as [YouTube](https://youtube.com). You can then embed the video player HTML into your PitonCMS page.
 
-PitonCMS recommends getting a [Tinify](https://tinyjpg.com/) key to optimize media files. You can get a free key that supports 500 media operations a month (about 100 PitonCMS image uploads). Go to [Tiny Developer API](https://tinyjpg.com/developers) and enter your email address to receive a key that you save in Tools > General Site Settings.
+PitonCMS recommends getting a [Tinify](https://tinyjpg.com/) key to optimize media files. You can get a free key that supports 500 media operations a month (about 100 PitonCMS image uploads). Go to [Tiny Developer API](https://tinyjpg.com/developers) and enter your email address to receive a key that you save in **Tools > General** site settings.
 
 ### Messages
 If you have a contact form enabled, your contact messages are saved under the **Messages** menu.

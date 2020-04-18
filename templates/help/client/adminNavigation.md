@@ -18,7 +18,7 @@ Here you can add, delete, rename, and deactivate or reactivate navigation links.
 
 ![Navigation Page](/admin/img/help/pageNavigation.png)
 
-**Note**, **Collection Detail Pages** will not be available to add to the navigator. Instead, you will add a **Collection Summary Element** to one of your pages as the entry point to that collection group.
+**Note**, **Collection Detail Pages** are not available to add to the navigator. Instead, add a **Collection Summary Element** to one of your pages as the entry point to that collection group.
 
 ## Navigators
 
@@ -89,5 +89,3 @@ To edit a navigator, go to **Content > Navigation > Edit [Navigator Name].
 Here you can add, delete, rename, and deactivate or reactivate navigation links. Make your changes, and the press save.
 
 **Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
-
-![Navigation Page](/admin/img/help/pageNavigation.png)

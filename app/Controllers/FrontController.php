@@ -68,7 +68,7 @@ class FrontController extends FrontBaseController
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $email = $this->container->emailHandler;
 
-        // Check honepot and if clean, then submit message
+        // Check honepot and if clean, then save message
         if ('alt@example.com' === $this->request->getParsedBodyParam('alt-email')) {
             $message = $messageMapper->make();
             $message->name = $this->request->getParsedBodyParam('name');
@@ -77,15 +77,19 @@ class FrontController extends FrontBaseController
             $messageMapper->save($message);
 
             // Send message to workflow email
-            $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
-            $email->setTo($this->siteSettings['contactFormEmail'], '')
+            if ($this->siteSettings['contactFormEmail']) {
+                // Only send email if a contact form email setting is saved
+                $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
+                $email->setTo($this->siteSettings['contactFormEmail'], '')
                     ->setSubject("New Contact Message to $siteName")
                     ->setMessage("{$message->name}\n{$message->email}\n\n{$message->message}")
                     ->send();
+            }
         }
 
         // Set the response type and return
+        $responseText = $this->siteSettings['contactFormAcknowledgement'] ?? "Thank You";
         $r = $this->response->withHeader('Content-Type', 'application/json');
-        return $r->write(json_encode(["response" => $this->siteSettings['contactFormAcknowledgement']]));
+        return $r->write(json_encode(["status" => "success", "response" => $responseText]));
     }
 }

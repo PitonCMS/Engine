@@ -87,7 +87,10 @@
      <div class="dropdown-menu animate slideIn" aria-labelledby="pageDropdown">
       <a class="dropdown-item" href="{{ pathFor('adminMedia') }}">All Media</a>
       <a class="dropdown-item" href="{{ pathFor('adminMediaCategoryEdit') }}">Media Categories</a>
+      {% if currentRoute('adminMedia') %}
+      {# Only show upload option when on media page #}
       <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mediaUpload">Upload Media</a>
+      {% endif %}
      </div>
     </li>
 
