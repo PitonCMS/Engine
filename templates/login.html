@@ -15,25 +15,28 @@
 </head>
 
 <body>
-  <header>
-    <h1>PitonCMS</h1>
-  </header>
-  <div class="loginPage">
-    <form class="form-signin" action="{{ pathFor('adminRequestLoginToken') }}" method="post" accept-charset="utf-8">
+ {{ include ("includes/_navbar.html") }}
+<section>
+ <div class="container loginPage">
+  <h1>PitonCMS</h1>
+   <form class="form-signin contact-form" action="{{ pathFor('adminRequestLoginToken') }}" method="post" accept-charset="utf-8">
 
-      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
-      <h3 class="section-title">Please login</h3>
+     <h3 class="section-title span">Please login</h3>
 
-      <label for="inputEmail" class="sr-only">Email address</label>
+     <label for="inputEmail" class="sr-only">Email address</label>
 
-      <input type="email" id="inputEmail" class="form-control" name="email" maxlength="60"
-        placeholder="Enter registered email" required autofocus>
+     <input type="email" id="inputEmail" class="form-control contact-form__form-control" name="email" maxlength="60"
+       placeholder="Enter registered email" required autofocus>
 
-      <button class="btn btn-lg btn-primary" type="submit">Request Login</button>
+     <!-- <submit class="" type="submit">Request Login</button> -->
+      <input class="btn" type="submit" value="Request Login">
 
-    </form>
-  </div>
+   </form>
+ </div>
+</section>
+  
 
 </body>
 
