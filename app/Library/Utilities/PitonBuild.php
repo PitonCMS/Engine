@@ -96,7 +96,7 @@ class PitonBuild
             self::printOutput("Updated PitonCMS Engine version setting to $engineVersion.");
         } catch (Throwable $e) {
             if ($e->getCode() === 2002) {
-                self::printOutput("Database server must be running to update: {$e->getMessage()}.", 'error');
+                self::printOutput("Execute composer update inside docker container. Database server must be running to update: {$e->getMessage()}.", 'error');
             } else {
                 self::printOutput("Failed to update engine setting: {$e->getMessage()}.", 'error');
             }
