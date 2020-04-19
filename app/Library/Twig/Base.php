@@ -272,15 +272,22 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Media Source Set
      *
-     * Creates list of available image files with width in source set format
+     * Creates list of available image files in source set format
      * @param string $filename Media filename
+     * @param string $altText  Media caption to use as alt text
+     * @param string $sizes    Source set sizes string
      * @return string
      */
-    public function getMediaSrcSet(string $filename = null): ?string
+    public function getMediaSrcSet(string $filename = null, string $altText = null, string $sizes = null): ?string
     {
-        // If filename is empty, just return
+        // If filename is empty, just return nothing
         if (empty($filename)) {
             return null;
+        }
+
+        // Get cached img source set for this file if available
+        if (isset($this->cache['mediaSrcSet'][$filename])) {
+            return $this->cache['mediaSrcSet'][$filename];
         }
 
         // Get image directory and scan for all sizes
@@ -306,7 +313,14 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
         ksort($sources);
 
-        return implode(",\n", $sources);
+        $sourceSet = implode(",\n", $sources);
+        $sizes = $sizes ?? '(max-width: 767px) 100vw, (max-width: 899px) 50vw, 33vw';
+
+        // Create HTML source set string only if there is more than one media file
+        $sourceSetString = (iterator_count($files) > 1) ? "srcset=\"$sourceSet\"\nsizes=\"$sizes\"\n" : '';
+        $srcAttr = $this->getMediaPath($filename, 'xlarge');
+
+        return $this->cache['mediaSrcSet'][$filename] = "<img $sourceSetString src=\"$srcAttr\" alt=\"$altText\">\n";
     }
 
     /**

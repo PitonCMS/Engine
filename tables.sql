@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `email` varchar(100) NULL DEFAULT NULL,
   `message` varchar(1000) NULL DEFAULT NULL,
   `is_read` enum('Y', 'N') NOT NULL DEFAULT 'N',
+  `context` varchar(100) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
