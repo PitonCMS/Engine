@@ -24,7 +24,6 @@ class PageElementMapper extends DataMapperAbstract
         'page_id',
         'block_key',
         'template',
-        'definition',
         'element_sort',
         'title',
         'content_raw',
@@ -47,7 +46,12 @@ class PageElementMapper extends DataMapperAbstract
     {
         $this->sql = <<<SQL
 select  page_element.*,
-        media.id media_id, media.filename media_filename, media.width media_width, media.height media_height, media.feature media_feature, media.caption media_caption
+        media.id media_id,
+        media.filename media_filename,
+        media.width media_width,
+        media.height media_height,
+        media.feature media_feature,
+        media.caption media_caption
 from page_element
 left outer join media on media.id = page_element.media_id
 where page_element.page_id = ? order by block_key, element_sort

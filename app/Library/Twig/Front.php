@@ -86,12 +86,12 @@ class Front extends Base
     public function getElementHtml(?PitonEntity $element): ?string
     {
         // Ensure we have an element type
-        if (!isset($element->template) && empty($element->template)) {
+        if (empty($element->template)) {
             throw new Exception("PitonCMS: Missing page element template");
         }
 
         try {
-            return $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
+            return $this->container->view->fetch("elements/{$element->template}.html", ['element' => $element]);
         } catch (LoaderError $e) {
             // If template name is malformed, just return null to fail gracefully
             $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
