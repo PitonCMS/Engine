@@ -122,7 +122,7 @@ class AdminPageController extends AdminBaseController
             $definitionParam = $this->request->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
-            if (null === $definitionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definitionParam)) {
+            if (null === $definitionParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+\.json$/', $definitionParam)) {
                 throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definitionParam");
             }
 
