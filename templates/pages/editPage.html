@@ -8,7 +8,7 @@
 
 {% block headText %}
 {% if page.id %}Editing {% else %}Add {% endif %}
-{{ page.title|default(page.json.templateName) }}
+{{ page.title|default(page.definition.templateName) }}
 {% endblock %}
 
 {% block sectionId 'editPage' %}
@@ -19,8 +19,7 @@
  <input type="hidden" name="page_id" value="{{ page.id }}">
  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
  <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
- <input type="hidden" name="definition" value="{{ page.definition }}">
- <input type="hidden" name="template" value="{{ page.json.templateFile }}">
+ <input type="hidden" name="template" value="{{ page.template }}">
  {% endblock openForm %}
 
  {% block sidebar %}
@@ -52,25 +51,23 @@
    {% elseif page.getPublishedStatus == 'published' %}
    <div class="text-success mb-3">Status: Published</div>
    {% endif %}
-  </div>
-  
-<div class="sidebar-block">
- {# Add Element Button #}
- {% for blockDefinition in page.json.blocks %}
- {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-  <strong>{{ blockDefinition.name }}</strong>
-  <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
-    data-block-key="{{ blockDefinition.key }}"
-    data-element-type="{{ blockDefinition.elementTypeDefault }}"
-    data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
-    data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
-    data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
-    {% if maxElements %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
-    >Add Element</button>
-  {% endfor %}
-</div>
-  
 
+    <div class="sidebar-block">
+    {# Add Element Button #}
+    {% for blockDefinition in page.definition.blocks %}
+    {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+      <strong>{{ blockDefinition.name }}</strong>
+      <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
+        data-block-key="{{ blockDefinition.key }}"
+        data-element-type="{{ blockDefinition.elementTypeDefault }}"
+        data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
+        data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+        data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+        {% if maxElements %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
+        >Add Element</button>
+      {% endfor %}
+    </div>
+  </div>
 
  </div>
  {% endblock sidebar %}
@@ -117,7 +114,7 @@
        value="{{ page.title }}" required>
      </div>
 
-     {% if not page.json.hideSubTitle %}
+     {% if page.definition.showSubTitle|default(1) %}
      <div class="form-group">
       <label>Sub Title</label>
       <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
@@ -179,7 +176,7 @@
              Allows user to select a saved media file to link as featured image for this page.
              Selecting an image sets the media table ID in the page_media_id input
            #}
-     {% if not page.json.hideFeaturedImage %}
+     {% if page.definition.showFeaturedImage|default(1) %}
      <div class="form-group jsMediaInput span">
       <img src="{{ getMediaPath(page.media.filename, 'large') }}"
        class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
@@ -212,15 +209,15 @@
    <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="pageContent" role="tabpanel"
     aria-labelledby="content-tab">
     {# Page Blocks and Elements #}
-    <div class="">
+    <div>
       {# Outer loop: All blocks defined in the JSON page definition file #}
-     {% for blockDefinition in page.json.blocks %}
+     {% for blockDefinition in page.definition.blocks %}
      <div class="content-block">
       <div class="block-title-wrapper">
        <h4 class="page-edit-title">{{ blockDefinition.name }}</h4>
       </div>
       <div class="jsBlockParent" id="{{ blockDefinition.key }}">
-       {# Inner loop: All loaded block elements #}
+       {# Inner loop: All loaded elements by block key #}
        {% for element in page.blocks[blockDefinition.key] %}
           {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
         {% else %}
@@ -231,7 +228,7 @@
       </div>
      </div>
      {% endfor %}
-     {# End for page.json.blocks loop #}
+     {# End for page.definition.blocks loop #}
     </div>
    </div>
   </div>
@@ -252,7 +249,7 @@
    </nav>
    {% endif %}
 
-   {% for block in page.json.blocks %}
+   {% for block in page.definition.blocks %}
    <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
 
    <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">

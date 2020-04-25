@@ -53,7 +53,7 @@ class FrontController extends FrontBaseController
         // Get and set page data key-value pairs
         $page->setDataKeyValues($dataStoreMapper->findPageSettings($page->id));
 
-        return $this->render($page->template, $page);
+        return $this->render("{$page->template}.html", $page);
     }
 
     /**

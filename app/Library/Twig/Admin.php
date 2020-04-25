@@ -141,14 +141,14 @@ class Admin extends Base
      */
     public function getPageTemplates(): ?array
     {
-        if (isset($this->cache['collectionTemplates'])) {
-            return $this->cache['collectionTemplates'];
+        if (isset($this->cache['pageTemplates'])) {
+            return $this->cache['pageTemplates'];
         }
 
         $definition = $this->container->jsonDefinitionHandler;
 
         // Return and cache
-        return $this->cache['collectionTemplates'] = $definition->getPages();
+        return $this->cache['pageTemplates'] = $definition->getPages();
     }
 
     /**

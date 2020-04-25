@@ -25,7 +25,6 @@ class PageMapper extends DataMapperAbstract
     protected $modifiableColumns = [
         'collection_id',
         'page_slug',
-        'definition',
         'template',
         'title',
         'sub_title',

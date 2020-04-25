@@ -12,21 +12,17 @@
             "description": "Template description displayed in page editor",
             "type": "string"
         },
-        "templateFile": {
-            "description": "The template page HTML file.",
-            "type": "string"
-        },
         "templateType": {
             "description": "Template type: 'page' or 'collection', optional.",
             "type": "string",
             "enum": ["page","collection",""]
         },
-        "hideSubTitle": {
-            "description": "Hides sub-title input",
+        "showSubTitle": {
+            "description": "Show sub-title input, defaults to true",
             "type": "boolean"
         },
-        "hideFeaturedImage": {
-            "description": "Hides featured image input",
+        "showFeaturedImage": {
+            "description": "Show featured image input, defaults to true",
             "type": "boolean"
         },
         "blocks": {
@@ -86,5 +82,5 @@
             }
         }
     ],
-    "required": ["templateName","templateDescription","templateFile"]
+    "required": ["templateName","templateDescription"]
 }

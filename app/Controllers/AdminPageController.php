@@ -118,17 +118,17 @@ class AdminPageController extends AdminBaseController
             $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
             $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
-            // Create new page, and get template definition from query string
-            $definitionParam = $this->request->getQueryParam('definition');
+            // Create new page, and get template from query string
+            $templateParam = $this->request->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
-            if (null === $definitionParam || 1 !== preg_match('/^[a-zA-Z0-9]+\.json$/', $definitionParam)) {
-                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definitionParam");
+            if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
             }
 
             // New page object
             $page = $pageMapper->make();
-            $page->definition = $definitionParam;
+            $page->template = $templateParam;
             $settings = [];
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
@@ -142,25 +142,25 @@ class AdminPageController extends AdminBaseController
         }
 
         // Get page definition
-        if (null === $page->json = $definition->getPage($page->definition)) {
+        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
             $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
         }
 
         // If this is a new page (has no ID) then add a default element to each block
         if (empty($page->id)) {
-            foreach ($page->json->blocks as $block) {
+            foreach ($page->definition->blocks as $block) {
                 $newElement = $pageElementMapper->make();
                 $newElement->block_key = $block->key;
                 $newElement->element_sort = 1;
-                $newElement->definition = $block->elementTypeDefault;
+                $newElement->template = $block->elementTypeDefault;
 
                 $page->setBlockElements([$newElement]);
             }
         }
 
         // Merge saved page settings with settings from page JSON definition
-        if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettings($settings, $page->json->settings);
+        if (isset($page->definition->settings)) {
+            $page->settings = $this->mergeSettings($settings, $page->definition->settings);
         }
 
         // Set template type: collection|page
@@ -236,7 +236,6 @@ class AdminPageController extends AdminBaseController
         }
 
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
-        $page->definition = $this->request->getParsedBodyParam('definition');
         $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
@@ -316,7 +315,6 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $definition = $this->container->jsonDefinitionHandler;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
@@ -325,7 +323,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
             $pageElement->page_id = $pageId;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
-            $pageElement->definition = $this->request->getParsedBodyParam('element_type')[$key];
+            $pageElement->template = $this->request->getParsedBodyParam('element_template')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
@@ -335,13 +333,6 @@ class AdminPageController extends AdminBaseController
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
             $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
-
-            // Get the elementTemplateFile from element JSON file
-            if (null === $elementDefinition = $definition->getElement($pageElement->definition)) {
-                throw new Exception('PitonCMS: Element JSON Definition Error: ' . print_r($definition->getErrorMessages(), true));
-            }
-
-            $pageElement->template = $elementDefinition->elementTemplateFile;
 
             $pageElement = $pageElementMapper->save($pageElement);
         }
@@ -400,7 +391,7 @@ class AdminPageController extends AdminBaseController
         $parsedBody = $this->request->getParsedBody();
 
         $form['block_key'] = $parsedBody['blockKey'];
-        $form['definition'] = $parsedBody['elementType'];
+        $form['template'] = $parsedBody['elementType'];
         $form['element_sort'] = 1;
 
         // Only include element type options if the string is not empty

@@ -18,7 +18,7 @@
   {% set elementTypes = getElements() %}
   {% set enableInput = '' %}
   {% for e in elementTypes %}
-  {% if e.filename == element.definition %}
+  {% if e.filename == element.template %}
   {% set enableInput = e.enableInput %}
   {% endif %}
   {% endfor %}
@@ -27,18 +27,20 @@
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
-  <div class="form-group  jsElementType">
-   <div>Element Type&nbsp;<span class="text-danger">*</span>:&nbsp;</div>
- 
+  {# Element radio buttons #}
+  <div class="form-group jsElementType">
+   <div>Element Type<span class="text-danger">*</span>&nbsp;</div>
+
    {% for elem in elementTypes %}
-   {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
-   <div class="form-check form-check-inline">
-    
-     <input class="form-check-input" type="radio" name="element_type[{{ arrayKey }}]"
-     id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.definition == elem.filename) }} required>
-   <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}">{{ elem.elementName }}</label>
-   </div>
-   {% endif %}
+    {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
+    <div class="form-check form-check-inline">
+
+    <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]"
+      id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
+      {{ checked(element.template == elem.filename) }} required>
+    <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}" title="{{ elem.description }}">{{ elem.name }}</label>
+    </div>
+    {% endif %}
    {% endfor %}
 
  </div>
@@ -46,7 +48,6 @@
   <div class="form-group mb-0">
 
     <label>Element Order</label>
-
     <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
     value="{{ loopIndex }}">
   </div>
@@ -180,7 +181,7 @@
       <span>{{ pageItem.collection_title }}</span>
       {% endif %}
 
-      <span> Template: <code>{{ pageItem.definition }}</code> </span>
+      <span> Template: <code>{{ pageItem.template }}</code> </span>
      </div>
 
     </div>
