@@ -21,8 +21,8 @@
             "description": "Show sub-title input, defaults to true",
             "type": "boolean"
         },
-        "hideFeaturedImage": {
-            "description": "Hides featured image input",
+        "showFeaturedImage": {
+            "description": "Show featured image input, defaults to true",
             "type": "boolean"
         },
         "blocks": {

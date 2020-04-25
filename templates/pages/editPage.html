@@ -176,7 +176,7 @@
              Allows user to select a saved media file to link as featured image for this page.
              Selecting an image sets the media table ID in the page_media_id input
            #}
-     {% if not page.definition.hideFeaturedImage %}
+     {% if page.definition.showFeaturedImage|default(1) %}
      <div class="form-group jsMediaInput span">
       <img src="{{ getMediaPath(page.media.filename, 'large') }}"
        class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
