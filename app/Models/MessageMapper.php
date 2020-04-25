@@ -24,7 +24,8 @@ class MessageMapper extends DataMapperAbstract
         'name',
         'email',
         'message',
-        'is_read'
+        'is_read',
+        'context'
     ];
 
     /**
