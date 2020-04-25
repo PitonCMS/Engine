@@ -209,7 +209,7 @@
    <div class="tab-pane fade {% if page.id %}show active{% endif %}" id="pageContent" role="tabpanel"
     aria-labelledby="content-tab">
     {# Page Blocks and Elements #}
-    <div class="">
+    <div>
       {# Outer loop: All blocks defined in the JSON page definition file #}
      {% for blockDefinition in page.json.blocks %}
      <div class="content-block">
@@ -217,7 +217,7 @@
        <h4 class="page-edit-title">{{ blockDefinition.name }}</h4>
       </div>
       <div class="jsBlockParent" id="{{ blockDefinition.key }}">
-       {# Inner loop: All loaded block elements #}
+       {# Inner loop: All loaded elements by block key #}
        {% for element in page.blocks[blockDefinition.key] %}
           {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
         {% else %}

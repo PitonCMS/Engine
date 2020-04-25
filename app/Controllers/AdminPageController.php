@@ -152,7 +152,7 @@ class AdminPageController extends AdminBaseController
                 $newElement = $pageElementMapper->make();
                 $newElement->block_key = $block->key;
                 $newElement->element_sort = 1;
-                $newElement->definition = $block->elementTypeDefault;
+                $newElement->template = $block->elementTypeDefault;
 
                 $page->setBlockElements([$newElement]);
             }
@@ -315,7 +315,6 @@ class AdminPageController extends AdminBaseController
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
-        $definition = $this->container->jsonDefinitionHandler;
 
         // Save page elements by block
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
@@ -324,7 +323,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
             $pageElement->page_id = $pageId;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
-            $pageElement->definition = $this->request->getParsedBodyParam('element_type')[$key];
+            $pageElement->template = $this->request->getParsedBodyParam('element_template')[$key];
             $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
@@ -334,13 +333,6 @@ class AdminPageController extends AdminBaseController
             $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
             $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
             $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
-
-            // Get the elementTemplateFile from element JSON file
-            if (null === $elementDefinition = $definition->getElement($pageElement->definition)) {
-                throw new Exception('PitonCMS: Element JSON Definition Error: ' . print_r($definition->getErrorMessages(), true));
-            }
-
-            $pageElement->template = $elementDefinition->elementTemplateFile;
 
             $pageElement = $pageElementMapper->save($pageElement);
         }
@@ -399,7 +391,7 @@ class AdminPageController extends AdminBaseController
         $parsedBody = $this->request->getParsedBody();
 
         $form['block_key'] = $parsedBody['blockKey'];
-        $form['definition'] = $parsedBody['elementType'];
+        $form['template'] = $parsedBody['elementType'];
         $form['element_sort'] = 1;
 
         // Only include element type options if the string is not empty

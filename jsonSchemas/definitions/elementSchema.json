@@ -7,8 +7,8 @@
             "description": "Element name displayed in page editor",
             "type": "string"
         },
-        "elementTemplateFile": {
-            "description": "The template page HTML file. Relative path from templates/elements/",
+        "elementDescription": {
+            "description": "Element description displayed in radio title",
             "type": "string"
         },
         "enableInput": {
@@ -17,5 +17,5 @@
             "enum": ["collection","embedded","image","gallery"]
         }
     },
-    "required": ["elementName","elementTemplateFile"]
+    "required": ["elementName"]
 }

@@ -154,7 +154,7 @@ class Definition
     /**
      * Get All Elements
      *
-     * Get all element definitions
+     * Get all element JSON definitions
      * @param  void
      * @return array
      */
@@ -163,12 +163,18 @@ class Definition
         // Get all Element JSON files in directory
         $elements = [];
         foreach ($this->getDirectoryDefinitionFiles($this->definition['elements']) as $file) {
-            if (null === $definition = $this->decodeValidJson($this->definition['elements'] . $file['filename'], $this->validation['element'])) {
-                throw new Exception('PitonCMS: Element JSON definition error: ' . print_r($this->getErrorMessages(), true));
-            } else {
-                $definition->filename = $file['filename'];
-                $elements[] = $definition;
+            // Get definition file, but do not validate as we are only returning a list of available templates
+            if (null === $definition = $this->decodeValidJson($this->definition['elements'] . $file)) {
+                $this->errors[] = "PitonCMS: Unable to read element definition file: $file";
+                break;
             }
+
+            // Remove .json extension from filename but keep relative path
+            $elements[] = [
+                'filename' => mb_substr($file, 0, mb_stripos($file, '.json')),
+                'name' => $definition->elementName,
+                'description' => $definition->elementDescription ?? null,
+            ];
         }
 
         return $elements;
