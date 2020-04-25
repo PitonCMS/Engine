@@ -9992,6 +9992,10 @@ body {
   grid-column: 1/-1;
 }
 
+.span2-rows {
+  grid-row: span 2;
+}
+
 /***** MDE Styles ********/
 /****** Use this to resize default height of textarea within editor *****/
 .CodeMirror, .CodeMirror-scroll {
