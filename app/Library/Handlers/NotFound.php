@@ -73,7 +73,7 @@ class NotFound extends \Slim\Handlers\NotFound
         $path = $request->getUri()->getPath();
 
         // Set notFound template path context, frontend or admin
-        $this->templatePath = 'core/notFound.html';
+        $this->templatePath = 'system/notFound.html';
         if (explode('/', $path)[1] === 'admin') {
             $this->templatePath = '@admin/system/notFound.html';
         }
