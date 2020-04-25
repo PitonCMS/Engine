@@ -5,7 +5,11 @@ height: 100%;
 
 .contentWrapper {
  display: flex;
+ flex-flow: column-reverse nowrap;
  position: relative;
+ @media screen and (min-width: 768px){
+     flex-flow: row nowrap;
+ }
 }
 
 .content {
@@ -14,9 +18,10 @@ height: 100%;
 }
 
 .sidebar {
- // background: $clr-light-grey;
  position: relative;
 }
+
+
 .grid-wrapper {
  // background: $clr-light-grey;
  border-radius: $border-radius;

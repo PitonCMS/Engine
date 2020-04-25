@@ -10009,7 +10009,13 @@ section {
 
 .contentWrapper {
   display: flex;
+  flex-flow: column-reverse nowrap;
   position: relative;
+}
+@media screen and (min-width: 768px) {
+  .contentWrapper {
+    flex-flow: row nowrap;
+  }
 }
 
 .content {
