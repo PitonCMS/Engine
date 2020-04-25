@@ -114,7 +114,7 @@
        value="{{ page.title }}" required>
      </div>
 
-     {% if not page.definition.hideSubTitle %}
+     {% if page.definition.showSubTitle|default(1) %}
      <div class="form-group">
       <label>Sub Title</label>
       <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>

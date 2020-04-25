@@ -17,8 +17,8 @@
             "type": "string",
             "enum": ["page","collection",""]
         },
-        "hideSubTitle": {
-            "description": "Hides sub-title input",
+        "showSubTitle": {
+            "description": "Show sub-title input, defaults to true",
             "type": "boolean"
         },
         "hideFeaturedImage": {
