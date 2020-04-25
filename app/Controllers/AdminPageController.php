@@ -142,13 +142,13 @@ class AdminPageController extends AdminBaseController
         }
 
         // Get page definition
-        if (null === $page->json = $definition->getPage($page->template . '.json')) {
+        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
             $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
         }
 
         // If this is a new page (has no ID) then add a default element to each block
         if (empty($page->id)) {
-            foreach ($page->json->blocks as $block) {
+            foreach ($page->definition->blocks as $block) {
                 $newElement = $pageElementMapper->make();
                 $newElement->block_key = $block->key;
                 $newElement->element_sort = 1;
@@ -159,8 +159,8 @@ class AdminPageController extends AdminBaseController
         }
 
         // Merge saved page settings with settings from page JSON definition
-        if (isset($page->json->settings)) {
-            $page->settings = $this->mergeSettings($settings, $page->json->settings);
+        if (isset($page->definition->settings)) {
+            $page->settings = $this->mergeSettings($settings, $page->definition->settings);
         }
 
         // Set template type: collection|page

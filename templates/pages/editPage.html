@@ -8,7 +8,7 @@
 
 {% block headText %}
 {% if page.id %}Editing {% else %}Add {% endif %}
-{{ page.title|default(page.json.templateName) }}
+{{ page.title|default(page.definition.templateName) }}
 {% endblock %}
 
 {% block sectionId 'editPage' %}
@@ -55,7 +55,7 @@
    <hr>
 
    {# Add Element Button #}
-   {% for blockDefinition in page.json.blocks %}
+   {% for blockDefinition in page.definition.blocks %}
    {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
     <strong>{{ blockDefinition.name }}</strong>
     <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
@@ -114,7 +114,7 @@
        value="{{ page.title }}" required>
      </div>
 
-     {% if not page.json.hideSubTitle %}
+     {% if not page.definition.hideSubTitle %}
      <div class="form-group">
       <label>Sub Title</label>
       <textarea class="form-control" name="sub_title" placeholder="Page sub-title">{{ page.sub_title }}</textarea>
@@ -176,7 +176,7 @@
              Allows user to select a saved media file to link as featured image for this page.
              Selecting an image sets the media table ID in the page_media_id input
            #}
-     {% if not page.json.hideFeaturedImage %}
+     {% if not page.definition.hideFeaturedImage %}
      <div class="form-group jsMediaInput span">
       <img src="{{ getMediaPath(page.media.filename, 'large') }}"
        class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
@@ -211,7 +211,7 @@
     {# Page Blocks and Elements #}
     <div>
       {# Outer loop: All blocks defined in the JSON page definition file #}
-     {% for blockDefinition in page.json.blocks %}
+     {% for blockDefinition in page.definition.blocks %}
      <div class="content-block">
       <div class="block-title-wrapper">
        <h4 class="page-edit-title">{{ blockDefinition.name }}</h4>
@@ -228,7 +228,7 @@
       </div>
      </div>
      {% endfor %}
-     {# End for page.json.blocks loop #}
+     {# End for page.definition.blocks loop #}
     </div>
    </div>
   </div>
@@ -249,7 +249,7 @@
    </nav>
    {% endif %}
 
-   {% for block in page.json.blocks %}
+   {% for block in page.definition.blocks %}
    <a class="nav-link" href="#page-block-{{ block.key }}">{{ block.name }}</a>
 
    <nav class="nav flex-column jsPageSubBlock-{{ block.key }}">
