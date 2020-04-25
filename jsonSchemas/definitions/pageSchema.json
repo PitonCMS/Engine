@@ -12,10 +12,6 @@
             "description": "Template description displayed in page editor",
             "type": "string"
         },
-        "templateFile": {
-            "description": "The template page HTML file.",
-            "type": "string"
-        },
         "templateType": {
             "description": "Template type: 'page' or 'collection', optional.",
             "type": "string",
@@ -86,5 +82,5 @@
             }
         }
     ],
-    "required": ["templateName","templateDescription","templateFile"]
+    "required": ["templateName","templateDescription"]
 }

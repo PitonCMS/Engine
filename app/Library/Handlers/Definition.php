@@ -175,7 +175,7 @@ class Definition
     }
 
     /**
-     * Get Page or Collection Definitions
+     * Get Page or Collection Page Definitions
      *
      * Get available templates from JSON files. If no param is provided, then all templates are returned
      * @param  string $templateType page|collection
@@ -185,8 +185,8 @@ class Definition
     {
         $templates = [];
         foreach ($this->getDirectoryDefinitionFiles($this->definition['pages']) as $file) {
-            // Get definition file
-            if (null === $definition = $this->decodeValidJson($this->definition['pages'] . $file, $this->validation['page'])) {
+            // Get definition file, but do not validate as we are only returning a list of available templates
+            if (null === $definition = $this->decodeValidJson($this->definition['pages'] . $file)) {
                 $this->errors[] = "PitonCMS: Unable to read page definition file: $file";
                 break;
             }
@@ -196,8 +196,9 @@ class Definition
                 continue;
             }
 
+            // Remove .json extension from filename but keep relative path
             $templates[] = [
-                'filename' => $file,
+                'filename' => mb_substr($file, 0, mb_stripos($file, '.json')),
                 'name' => $definition->templateName,
                 'description' => $definition->templateDescription
             ];
@@ -243,30 +244,38 @@ class Definition
     /**
      * Decode and Validate JSON Definition
      *
+     * Validation is optional, if validation $schema is provided
      * Validation errors available from getErrorMessages()
      * @param string $json   Path to page JSON file to decode
      * @param string $schema Path to validation JSON Schema file
      * @return object
      */
-    protected function decodeValidJson(string $json, string $schema): ?object
+    protected function decodeValidJson(string $json, string $schema = null): ?object
     {
         // Get and decode JSON to be validated
         if (false === $contents = file_get_contents($json)) {
-            throw new Exception("PitonCMS Definition Exception: Unable to get file contents. $json");
+            $this->errors[] = "Unable to get file: $json";
+            return null;
         }
         $jsonDecodedInput = json_decode($contents, false, 512, JSON_THROW_ON_ERROR);
 
-        $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
-        if ($this->validator->isValid()) {
+        if ($schema) {
+            // Validate JSON
+            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+
+            if ($this->validator->isValid()) {
+                return $jsonDecodedInput;
+            }
+
+            // If not valid, record error messages and return null
+            foreach ($this->validator->getErrors() as $error) {
+                $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
+            }
+
+            return null;
+        } else {
             return $jsonDecodedInput;
         }
-
-        // If not valid, record error messages and return null
-        foreach ($this->validator->getErrors() as $error) {
-            $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
-        }
-
-        return null;
     }
 
     /**

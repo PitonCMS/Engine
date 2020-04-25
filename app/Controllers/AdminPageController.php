@@ -118,17 +118,17 @@ class AdminPageController extends AdminBaseController
             $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
             $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
-            // Create new page, and get template definition from query string
-            $definitionParam = $this->request->getQueryParam('definition');
+            // Create new page, and get template from query string
+            $templateParam = $this->request->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
-            if (null === $definitionParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+\.json$/', $definitionParam)) {
-                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $definitionParam");
+            if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
             }
 
             // New page object
             $page = $pageMapper->make();
-            $page->definition = $definitionParam;
+            $page->template = $templateParam;
             $settings = [];
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
@@ -142,7 +142,7 @@ class AdminPageController extends AdminBaseController
         }
 
         // Get page definition
-        if (null === $page->json = $definition->getPage($page->definition)) {
+        if (null === $page->json = $definition->getPage($page->template . '.json')) {
             $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
         }
 
@@ -236,7 +236,6 @@ class AdminPageController extends AdminBaseController
         }
 
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
-        $page->definition = $this->request->getParsedBodyParam('definition');
         $page->template = $this->request->getParsedBodyParam('template');
         $page->title = $this->request->getParsedBodyParam('title');
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
