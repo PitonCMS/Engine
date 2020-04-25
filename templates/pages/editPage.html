@@ -39,7 +39,6 @@
   <hr>
   <!-- Published Status Input & Notification -->
   <div class="sidebar-block status">
-
    <p class="mb-1">Publish date</p>
    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
     value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
@@ -53,22 +52,25 @@
    {% elseif page.getPublishedStatus == 'published' %}
    <div class="text-success mb-3">Status: Published</div>
    {% endif %}
-   <hr>
-
-   {# Add Element Button #}
-   {% for blockDefinition in page.json.blocks %}
-   {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-    <strong>{{ blockDefinition.name }}</strong>
-    <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
-      data-block-key="{{ blockDefinition.key }}"
-      data-element-type="{{ blockDefinition.elementTypeDefault }}"
-      data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
-      data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
-      data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
-      {% if maxElements %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
-      >Add Element</button>
-    {% endfor %}
   </div>
+  
+<div class="sidebar-block">
+ {# Add Element Button #}
+ {% for blockDefinition in page.json.blocks %}
+ {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+  <strong>{{ blockDefinition.name }}</strong>
+  <button class="btn btn-outline-success btn-sm mb-2 jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
+    data-block-key="{{ blockDefinition.key }}"
+    data-element-type="{{ blockDefinition.elementTypeDefault }}"
+    data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
+    data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+    data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+    {% if maxElements %}disabled title="Page block has the maximum number of elements allowed by design."{% endif %}
+    >Add Element</button>
+  {% endfor %}
+</div>
+  
+
 
  </div>
  {% endblock sidebar %}
