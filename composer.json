@@ -26,7 +26,8 @@
         },
     "autoload": {
         "psr-4": {
-            "Piton\\": "app/"
+            "Piton\\": "app/",
+            "Piton\\CLI\\": "cli/"
         }
     }
 }
