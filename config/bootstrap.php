@@ -48,17 +48,17 @@ return call_user_func(
             $config['displayErrorDetails'] = true;
         }
 
-        // This flag is needed to get the current route name in LoadSiteSettings
+        // This flag is needed in Slim 3 to get the current route name in LoadSiteSettings
         $config['determineRouteBeforeAppMiddleware'] = true;
 
-        // Create the Slim application and make container available
+        // Create the Slim application and make container available to dependencies
         $app = new Slim\App(['settings' => $config]);
         $container = $app->getContainer();
 
         // Load dependencies
         require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
-        // Load dependencies site override
+        // Load overriding dependencies
         if (file_exists(ROOT_DIR . 'config/dependencies.php')) {
             require ROOT_DIR . 'config/dependencies.php';
         }
@@ -69,13 +69,13 @@ return call_user_func(
         // Load admin routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
 
-        // Load custom static routes
+        // Load front end routes
+        require ROOT_DIR . 'vendor/pitoncms/engine/config/routes.php';
+
+        // Load custom front end routes
         if (file_exists(ROOT_DIR . 'config/routes.php')) {
             require ROOT_DIR . 'config/routes.php';
         }
-
-        // Load seeded public routes
-        require ROOT_DIR . 'vendor/pitoncms/engine/config/routes.php';
 
         return $app;
     }
