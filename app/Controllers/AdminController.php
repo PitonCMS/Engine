@@ -28,7 +28,7 @@ class AdminController extends AdminBaseController
      */
     public function home(): Response
     {
-        return $this->render('home.html', ['pitonEngineVersion' => $this->siteSettings['engine']]);
+        return $this->render('home.html');
     }
 
     /**
