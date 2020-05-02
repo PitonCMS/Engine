@@ -10,14 +10,15 @@
 
 declare(strict_types=1);
 
-use Pimple\Container;
+use Slim\Container as SlimContainer;
 use Piton\CLI\OptimizeMedia;
 
 /**
  * This script accepts PitonCMS command line requests
+ *
  * The first argument should be the request to execute, the rest are request arguments.
  * Example:
- * 	$ php cli.php updatesitemap arg1 arg2 arg3
+ * 	$ php cli.php request arg1 arg2 arg3
  */
 
  // Exit if not a Command Line Interface request
@@ -35,8 +36,9 @@ mb_http_output('UTF-8');
 // Define the application root directory
 define('ROOT_DIR', dirname(__DIR__, 4) . '/');
 
-// Load the Composer Autoloader
-require ROOT_DIR . 'vendor/autoload.php';
+// Load the Composer Autoloader and add Piton\CLI namespace
+$loader = require ROOT_DIR . 'vendor/autoload.php';
+$loader->addPsr4('Piton\\CLI\\', __DIR__);
 
 // Load default and local configuration settings
 require ROOT_DIR . 'config/config.default.php';
@@ -44,18 +46,19 @@ require ROOT_DIR . 'config/config.default.php';
 if (file_exists(ROOT_DIR . 'config/config.local.php')) {
     require ROOT_DIR . 'config/config.local.php';
 } else {
-    throw new \Exception("PitonCMS: No local configuration file found");
+    echo "PitonCMS: No local configuration file found";
+    exit(1);
 }
 
 // Create container
-$container = new Container();
+$container = new SlimContainer(['settings' => $config]);
 
-// Load normal dependencies
+// Load dependencies into container
 require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
 // Override some dependencies for the CLI environment
 $container['errorHandler'] = function ($c) {
-    print('error');
+    echo "Error in Piton cli/cli.php\n";
     exit(1);
 };
 
@@ -71,16 +74,13 @@ $container['sessionHandler'] = function ($c) {
     };
 };
 
-// Parse request
+// Parse CLI request and ignore the filename
 $argv = $GLOBALS['argv'];
 array_shift($argv);
 
 if ($argv[0] === 'optimizeMedia') {
-    echo "Running optimization...\n";
-
     $optimizer = new OptimizeMedia($container);
+    $optimizer->run();
 }
 
-
-echo "End\n";
 exit(0);
