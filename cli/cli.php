@@ -74,6 +74,12 @@ $container['sessionHandler'] = function ($c) {
     };
 };
 
+// Load saved site settings from data_store and merge into $container['settings']['site']
+$dataStoreMapper = ($container->dataMapper)('DataStoreMapper');
+$siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
+$settings = array_column($siteSettings, 'setting_value', 'setting_key');
+$container['settings']['site'] = array_merge($container['settings']['site'], $settings);
+
 // Parse CLI request and ignore the filename
 $argv = $GLOBALS['argv'];
 array_shift($argv);

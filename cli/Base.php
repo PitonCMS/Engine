@@ -27,6 +27,12 @@ class Base
     protected $container;
 
     /**
+     * Application Alert Messages
+     * @var array
+     */
+    protected $alert = [];
+
+    /**
      * Constructor
      *
      * @param ContainerInterface $container
@@ -34,6 +40,46 @@ class Base
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Destructor
+     *
+     * Saves any alert notices to appAlert in data_store, which will then be displayed to the user in next admin request
+     * @param void
+     * @return void
+     */
+    public function __destruct()
+    {
+        // Save any alerts
+        if (!empty($this->alert)) {
+            $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+
+            foreach ($this->alert as $notice) {
+                $dataMapper->setAppAlert($notice['severity'], $notice['heading'], $notice['message']);
+            }
+        }
+    }
+
+    /**
+     * Set Alert
+     *
+     * Set alert using appAlert data_store to display to next admin user request
+     * Severity levels are one of: 'primary','secondary','success','danger','warning','info'
+     * @param string        $severity Severity level color code
+     * @param string        $heading  Heading text
+     * @param string|array  $messge   Message or array of messages (Optional)
+     * @return void
+     * @throws Exception
+     */
+    public function setAlert(string $severity, string $heading, $message = null): void
+    {
+        // Alert message is displayed in the admin base template
+        $this->alert[] = [
+            'severity' => $severity,
+            'heading' => $heading,
+            'message' => (is_array($message)) ? $message : [$message]
+        ];
     }
 
     /**

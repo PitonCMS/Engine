@@ -173,7 +173,7 @@ SQL;
         $this->execute();
 
         // Now get rows marked for optimization
-        $this->sql = "select `id`, `filename`, `optimized` from `media` where `optimized` = ?";
+        $this->sql = "select `id`, `filename`, `optimized` from `media` where `optimized` = ?;";
         $this->bindValues[] = $key;
 
         return $this->find();
@@ -188,7 +188,7 @@ SQL;
      */
     public function optimizeKeyExists(string $key): bool
     {
-        $this->sql = "select `id` from `media` where `optimized` = '?';";
+        $this->sql = "select `id` from `media` where `optimized` = ?;";
         $this->bindValues[] = $key;
 
         return ($this->findRow()) ?? false;
