@@ -33,6 +33,7 @@ class MediaMapper extends DataMapperAbstract
     protected $optimizedStatus = [
         'new' => 'new',
         'complete' => 'complete',
+        'retry' => 'retry',
         'exclude' => 'exclude'
     ];
 
@@ -199,11 +200,13 @@ SQL;
      *
      * After optimizaion, set media row to completed
      * @param int $id Media ID
+     * @param string $status Status code from $this->optimizedStatus
      * @return void
      */
-    public function setOptimizedStatus(int $id): void
+    public function setOptimizedStatus(int $id, string $status): void
     {
-        $this->sql = "update `media` set `optimized` = '{$this->optimizedStatus['complete']}' where `id` = ?";
+        $this->sql = "update `media` set `optimized` = ? where `id` = ?";
+        $this->bindValues[] = $this->optimizedStatus[$status];
         $this->bindValues[] = $id;
 
         $this->execute();

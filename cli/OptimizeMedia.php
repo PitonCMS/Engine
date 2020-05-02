@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Piton\CLI;
 
-use Psr\Container\ContainerInterface;
-
 /**
  * Piton Optimize Media CLI
  *
@@ -30,18 +28,21 @@ class OptimizeMedia extends Base
     /**
      * Run Optimizer
      *
-     *
+     * @param void
+     * @param void
      */
     public function run()
     {
-        $this->print("running...");
+        $this->print("Optimizing media image files...");
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $this->container->logger->info("PitonCLI: Background process to optimized media started for key: {$this->key}");
 
-        // Although super unlikely, ensure the key is currently not in use by another process
+        // Although super unlikely, ensure the generated key is currently not in use by another process
         do {
             $this->key = ($this->container->filenameGenerator)();
         } while ($mediaMapper->optimizeKeyExists($this->key));
+
+        $this->print("Optimizing key: {$this->key}");
+        $this->container->logger->info("PitonCLI: Background process to optimized media started for key: {$this->key}");
 
         // Get query of media records that need optimizing
         $files = $mediaMapper->findNewMediaToOptimize($this->key);
@@ -52,37 +53,30 @@ class OptimizeMedia extends Base
             exit(0);
         }
 
-        // For each, optimize media
-        foreach ($files as $key => $file) {
-            if ($this->optimize($file->filename)) {
-                $this->print("updating status $file->id");
-                $output = $mediaMapper->setOptimizedStatus($file->id);
-                $this->print($output);
+        // For each file, optimize media
+        foreach ($files as $file) {
+            if ($this->makeMediaSet($file->filename)) {
+                // Update status on each record when complete
+                $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('complete'));
+            } else {
+                $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('retry'));
             }
         }
 
-        // - Update each record when complete
-
-        // End
-    }
-
-    protected function optimize($filename)
-    {
-        $this->print("Optimizing $filename ...");
-        sleep(5);
-        return true;
+        $this->setAlert('info', 'Finished Optimizing Media');
+        $this->print("Finished optimizing media.");
     }
 
     /**
      * Make Optimized Media Set
      *
      * @param  string $filename
-     * @return void
+     * @return bool
      */
-    protected function makeMediaSet(string $filename): void
+    protected function makeMediaSet(string $filename): bool
     {
         // Ensure there is a Tinify API key
-        if (!empty($this->siteSettings['tinifyApiKey'])) {
+        if (!empty($this->container->get('settings')['site']['tinifyApiKey'])) {
             $mediaHandler = $this->container->mediaHandler;
 
             $mediaHandler->setSource($filename);
@@ -90,6 +84,12 @@ class OptimizeMedia extends Base
             $mediaHandler->makeLarge();
             $mediaHandler->makeSmall();
             $mediaHandler->makeThumb();
+
+            return true;
+        } else {
+            $this->setAlert('danger', 'Unable to Optimize Media', 'No Tinify key was found.');
+
+            return false;
         }
     }
 }
