@@ -77,13 +77,9 @@
 {% endmacro checkbox %}
 
 {#
-    Media Upload Modal Include
+    Media Upload Modal
 
-    Really can be an include but easier as a modal as it references another media macro
-    Open modal with:
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#mediaUpload">
-        Upload New Media
-    </button>
+    Could be an include but easier as a macro as it requires another media macro
 #}
 {% macro upload() %}
 {% import _self as mediaMacro %}
@@ -92,15 +88,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="mediaUploadLabel">Upload Media Manager</h5>
+        <h5 class="modal-title" id="mediaUploadLabel">Upload Media</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
 
-        <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8"
-          enctype="multipart/form-data">
+        <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
           <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
           <div class="custom-file">
@@ -111,7 +106,7 @@
           <hr>
           <div class="form-group form-check">
             <input class="form-check-input" type="checkbox" id="feature" name="feature">
-            <label class="form-check-label" for="feature">Featured Media</label>
+            <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
           </div>
           <hr>
           {% for category in page.categories %}
@@ -120,32 +115,25 @@
           <hr>
           <div class="form-group">
             <label>Caption</label>
-            <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
+            <input type="text" class="form-control" name="caption" maxlength="100" autocomplete="off" placeholder="Media caption">
           </div>
+
+          {# Only display optimize checkbox if there is a Tinyfy key set in settings #}
+          {% if site.settings.tinifyApiKey %}
+          <hr>
+          <div class="form-group form-check">
+            <input class="form-check-input" type="checkbox" id="optimize" name="optimize">
+            <label class="form-check-label" for="optimize">Optimize Media</label>
+            <small class="form-text text-muted">
+              Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
+            </small>
+          </div>
+          {% endif %}
+
           <div class="form-group">
             <button class="btn btn-outline-primary" type="submit" name="button" value="save">Upload</button>
           </div>
         </form>
-
-        {% if not site.settings.tinifyApiKey %}
-        <div class="bg-warning">
-          <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
-             optimize your media files for the web. To use TinyJPG with PitonCMS, go to
-
-            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
-
-            Enter your name and email address to receive an API key. Save this key to <a
-              href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}">PitonCMS Tools > Site >
-              Tinify
-              API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
-          </p>
-        </div>
-        <hr>
-        {% endif %}
-
-        <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
-          gallery. Giving your picture a caption will provide alt text.</p>
-        <p>The upload and conversion process of your images may take extra time depending upon your internet speed.</p>
       </div>
     </div>
   </div>

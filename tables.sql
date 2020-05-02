@@ -33,11 +33,14 @@ CREATE TABLE IF NOT EXISTS `media` (
   `height` int NULL DEFAULT NULL,
   `feature` enum('Y', 'N') NOT NULL DEFAULT 'N',
   `caption` varchar(100) NULL DEFAULT NULL,
+  `mime_type` varchar(255) NULL DEFAULT NULL,
+  `optimized` varchar(50) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `optimized_idx` (`optimized`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category` (

@@ -172,21 +172,33 @@ HTML;
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
         if ($fileUpload->upload('media-file')) {
-            // Save media reference to database
+            // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
+            $doOptimize = false;
+            if (
+                $this->request->getParsedBodyParam('optimize', null) === 'on' &&
+                !empty($this->siteSettings['tinifyApiKey']) &&
+                in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
+            ) {
+                $doOptimize = true;
+            }
+
+            // Save media record to database
             $media = $mediaMapper->make();
             $media->filename = $fileUpload->getFilename();
             $media->caption = $this->request->getParsedBodyParam('caption');
             $media->width = ($fileUpload->width) ?: null;
             $media->height = ($fileUpload->height) ?: null;
             $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+            $media->mime_type = $fileUpload->mimeType;
+            $media->optimized = ($doOptimize) ? $mediaMapper->optimizedStatus['new'] : $mediaMapper->optimizedStatus['exclude'];
             $mediaMapper->save($media);
 
             // Save category assignments
-            $mediaCategoryMapper->saveMediaCategoryAssignments((int) $media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
 
-            // Make optimized images
-            if ($fileUpload->isCompressableImage()) {
-                $this->makeMediaSet($fileUpload->getFilename());
+            // Optimize media uploads
+            if ($doOptimize) {
+                $this->optimizeNewMedia();
             }
         } else {
             $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
@@ -299,22 +311,16 @@ HTML;
     }
 
     /**
-     * Make Optimized Media Set
+     * Optimize New Media Files
      *
-     * @param  string $filename
+     * Submits background process to optimize new media
+     * @param void
      * @return void
      */
-    protected function makeMediaSet(string $filename): void
+    protected function optimizeNewMedia()
     {
-        // Ensure there is a Tinify API key
-        if (!empty($this->siteSettings['tinifyApiKey'])) {
-            $mediaHandler = $this->container->mediaHandler;
-
-            $mediaHandler->setSource($filename);
-            $mediaHandler->makeXLarge();
-            $mediaHandler->makeLarge();
-            $mediaHandler->makeSmall();
-            $mediaHandler->makeThumb();
-        }
+        // Submit background process to continue to run after this request returns
+        $script = ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php';
+        exec("php $script optimizeMedia  > /dev/null &");
     }
 }
