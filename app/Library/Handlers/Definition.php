@@ -263,7 +263,8 @@ class Definition
             $this->errors[] = "Unable to get file: $json";
             return null;
         }
-        $jsonDecodedInput = json_decode($contents, false, 512, JSON_THROW_ON_ERROR);
+        // TODO Add JSON_THROW_ON_ERROR when on min PHP 7.3
+        $jsonDecodedInput = json_decode($contents, false);
 
         if ($schema) {
             // Validate JSON

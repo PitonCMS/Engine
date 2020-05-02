@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_uq` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -189,4 +189,5 @@ VALUES
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
+  ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now(),
   ('piton', NULL, 'engine', NULL, 1, now(), 1, now());

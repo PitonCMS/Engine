@@ -86,31 +86,33 @@ class Admin extends Base
     /**
      * Get Alert Messages
      *
-     * Get alert data. Returns null if no alert found.
-     * @param  array  $context Twig context, includes controller alert array
+     * Get flash and application alert notices to display.
+     * @param  array  $context Twig context, includes controller 'alert' array
      * @param  string $key     Alert keys: severity|heading|message
-     * @return array|string|null
+     * @return array|null
      */
-    public function getAlert(array $context, string $key = null)
+    public function getAlert(array $context): ?array
     {
         $session = $this->container->sessionHandler;
 
-        // Get alert notices from page context, or failing that then session flash data
+        // If AdminBaseController render() is called then alert data is provided to Twig context for this request
+        // or if AdminBaseController redirect() was called in last request then saved to flash session data
         $alert = $context['alert'] ?? $session->getFlashData('alert');
 
-        if ($key === null) {
-            return $alert;
-        }
+        // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
+        if (isset($this->container->settings['site']['appAlert'])) {
+            $appData = json_decode($this->container->settings['site']['appAlert'], true);
+            if (is_array($appData)) {
+                // Append to $alert array
+                $alert = array_merge($alert, $appData);
 
-        if (isset($alert[$key])) {
-            if ($key === 'message') {
-                return ($alert['message']) ? '<ul>' . implode('</li><li>', $alert['message']) . '</ul>' : null;
+                // Unset app alert data
+                $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+                $dataMapper->unsetAppAlert();
             }
-
-            return $alert[$key];
         }
 
-        return null;
+        return $alert;
     }
 
     /**
