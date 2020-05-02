@@ -208,4 +208,16 @@ SQL;
 
         $this->execute();
     }
+
+    /**
+     * Get Optimized Status Code
+     *
+     * Returns status code for use in record
+     * @param string $key
+     * @return string
+     */
+    public function getOptimizedCode(string $key): string
+    {
+        return $this->optimizedStatus[$key];
+    }
 }

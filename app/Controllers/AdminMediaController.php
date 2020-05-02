@@ -190,7 +190,7 @@ HTML;
             $media->height = ($fileUpload->height) ?: null;
             $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
             $media->mime_type = $fileUpload->mimeType;
-            $media->optimized = ($doOptimize) ? $mediaMapper->optimizedStatus['new'] : $mediaMapper->optimizedStatus['exclude'];
+            $media->optimized = ($doOptimize) ? $mediaMapper->getOptimizedCode('new') : $mediaMapper->getOptimizedCode('exclude');
             $mediaMapper->save($media);
 
             // Save category assignments
