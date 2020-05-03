@@ -27,6 +27,12 @@ class CLIBase
     protected $container;
 
     /**
+     * Process ID
+     * @var int
+     */
+    protected $pid;
+
+    /**
      * Application Alert Messages
      * @var array
      */
@@ -40,6 +46,7 @@ class CLIBase
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->pid = getmypid();
     }
 
     /**
@@ -72,7 +79,7 @@ class CLIBase
      * @return void
      * @throws Exception
      */
-    public function setAlert(string $severity, string $heading, $message = null): void
+    protected function setAlert(string $severity, string $heading, $message = null): void
     {
         // Alert message is displayed in the admin base template
         $this->alert[] = [
@@ -86,17 +93,30 @@ class CLIBase
      * Print Output
      *
      * Prints output with a trailing new line
-     * @param $input
+     * @param $message
      * @return void
      */
-    public function print($input)
+    protected function print($message)
     {
-        if (is_string($input)) {
-            echo $input;
-        } elseif (!is_string($input)) {
-            print_r($input);
+        echo $message, PHP_EOL;
+    }
+
+    /**
+     * Log Event
+     *
+     * Saves messages to log file
+     * Also sends to print() for debugging
+     * @param string $message
+     * @param string $severity PSR-3 Log level, defaults to 'info'
+     * @return void
+     */
+    protected function log(string $message, string $severity = 'info'): void
+    {
+        if (!is_string($message)) {
+            $message = print_r($message, true);
         }
 
-        echo "\n";
+        $this->container->logger->{$severity}("PitonCLI: PID: {$this->pid} $message");
+        $this->print($message);
     }
 }

@@ -16,6 +16,9 @@ use function Tinify\setKey as setTinifyKey;
 use function Tinify\validate as validateTinifyKey;
 use function Tinify\fromFile as setTinifySource;
 use Tinify\Source as TinifySource;
+use Tinify\AccountException as TinifyAccountException;
+use Tinify\ClientException as TinifyClientException;
+use Tinify\ServerException as TinifyServerException;
 use Tinify\Exception as TinifyException;
 use Exception;
 use Closure;
@@ -80,7 +83,7 @@ class Media
      * Error Messages
      * @var array
      */
-    public $error = [];
+    protected $error = [];
 
     /**
      * Constructor
@@ -98,7 +101,7 @@ class Media
             setTinifyKey($tinifyApiKey);
             validateTinifyKey();
         } catch (TinifyException $e) {
-            throw new Exception('PitonCMS: Invalid TinyJPG key submitted: ' . $e->getMessage());
+            $this->error[] = 'Invalid TinyJPG key submitted: ' . print_r($e->getMessage(), true);
         }
 
         $this->mediaPathClosure = $mediaPath;
@@ -246,5 +249,16 @@ class Media
     protected function getAbsoluteFilenameBySize(string $size = ''): string
     {
         return $this->mediaPath . ($this->mediaSizesClosure)($this->filename, $size);
+    }
+
+    /**
+     * Get Error Messages
+     *
+     * @param void
+     * @return array|null
+     */
+    public function getErrorMessages(): ?array
+    {
+        return empty($this->error) ? null : $this->error;
     }
 }

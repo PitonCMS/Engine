@@ -33,7 +33,7 @@ class OptimizeMedia extends CLIBase
      */
     public function run()
     {
-        $this->print("Optimizing media image files...");
+        $this->log("OptimizeMedia run() started");
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
         // Although super unlikely, ensure the generated key is currently not in use by another process
@@ -41,16 +41,14 @@ class OptimizeMedia extends CLIBase
             $this->key = ($this->container->filenameGenerator)();
         } while ($mediaMapper->optimizeKeyExists($this->key));
 
-        $pid = getmypid();
-        $this->print("Optimizing key: {$this->key}");
-        $this->container->logger->info("PitonCLI: Background process to optimized media started for key: {$this->key}, PID: $pid");
+        $this->log("Optimized media key: {$this->key}");
 
-        // Get query of media records that need optimizing
+        // Get media records that need optimizing
         $files = $mediaMapper->findNewMediaToOptimize($this->key);
 
         if (!$files) {
             // Nothing to optimize so exit
-            $this->print('No media to optimize');
+            $this->log("No media to optimize");
             exit(0);
         }
 
@@ -59,15 +57,15 @@ class OptimizeMedia extends CLIBase
             if ($this->makeMediaSet($file->filename)) {
                 // Update status on each record when complete
                 $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('complete'));
-                $this->print("Complete");
+                $this->log("Complete");
             } else {
                 $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('retry'));
-                $this->print("Failed - retry");
+                $this->log("Failed - retry");
             }
         }
 
         $this->setAlert('info', 'Finished Optimizing Media');
-        $this->print("Finished optimizing media.");
+        $this->log("Finished optimizing media.");
     }
 
     /**
@@ -78,30 +76,42 @@ class OptimizeMedia extends CLIBase
      */
     protected function makeMediaSet(string $filename): bool
     {
+        $this->log("Optimizing $filename");
+
         // Ensure there is a Tinify API key
         if (!empty($this->container->get('settings')['site']['tinifyApiKey'])) {
             $mediaHandler = $this->container->mediaHandler;
 
-            if (!$mediaHandler->setSource($filename)) {
-                $this->setAlert('danger', 'Unable to load source media to optimize');
+            // Check if there was an issue constructing the MediaHandler and setting the Tinify key
+            if ($mediaHandler->getErrorMessages()) {
+                $this->setAlert('danger', 'Failed to set Tinify key to optimize media. ' . implode(' | ', $mediaHandler->getErrorMessages()));
+                $this->log($mediaHandler->getErrorMessages());
                 return false;
             }
-            $this->print("Media source $filename set...");
+
+            // Set the file source
+            if (!$mediaHandler->setSource($filename)) {
+                $this->setAlert('danger', 'Unable to load source media to optimize. ' . implode(' | ', $mediaHandler->getErrorMessages()));
+                $this->log("Unable to set Tinify source");
+                return false;
+            }
+            $this->log("Media source $filename set...");
 
             $mediaHandler->makeXLarge();
-            $this->print("Finished XLarge...");
+            $this->log("Finished $filename XLarge...");
 
             $mediaHandler->makeLarge();
-            $this->print("Finished Large...");
+            $this->log("Finished $filename Large...");
 
             $mediaHandler->makeSmall();
-            $this->print("Finished Small...");
+            $this->log("Finished $filename Small...");
 
             $mediaHandler->makeThumb();
-            $this->print("Finished Thumb...");
+            $this->log("Finished $filename Thumb...");
 
             return true;
         } else {
+            $this->log("No Tinify key found");
             $this->setAlert('danger', 'Unable to Optimize Media', 'No Tinify key was found.');
 
             return false;
