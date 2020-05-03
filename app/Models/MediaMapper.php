@@ -26,8 +26,16 @@ class MediaMapper extends DataMapperAbstract
         'height',
         'feature',
         'caption',
+        'mime_type',
+        'optimized',
     ];
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Media';
+    protected $optimizedStatus = [
+        'new' => 'new',
+        'complete' => 'complete',
+        'retry' => 'retry',
+        'exclude' => 'exclude'
+    ];
 
     /**
      * Find All Media
@@ -141,11 +149,78 @@ select $foundRows
     m.width,
     m.height,
     m.feature,
-    m.caption
+    m.caption,
+    m.optimized,
+    m.mime_type
 from media m
 $outer join media_category_map mcm on m.id = mcm.media_id
 $outer join media_category mc on mc.id = mcm.category_id
 where 1=1
 SQL;
+    }
+
+    /**
+     * Get New Media to Optimize
+     *
+     * Get unoptimized 'new' media files to process
+     * @param  string $key
+     * @return array|null
+     */
+    public function findNewMediaToOptimize(string $key): ?array
+    {
+        // Set a key on 'new' rows
+        $this->sql = "update `media` set `optimized` = '$key' where `optimized` = ? and `mime_type` in ('image/png', 'image/jpeg');";
+        $this->bindValues[] = $this->optimizedStatus['new'];
+        $this->execute();
+
+        // Now get rows marked for optimization
+        $this->sql = "select `id`, `filename`, `optimized` from `media` where `optimized` = ?;";
+        $this->bindValues[] = $key;
+
+        return $this->find();
+    }
+
+    /**
+     * Optimized Key Exists
+     *
+     * Checks if the provided key is already in use - highly unlikely
+     * @param string $key Key to search for
+     * @return bool
+     */
+    public function optimizeKeyExists(string $key): bool
+    {
+        $this->sql = "select `id` from `media` where `optimized` = ?;";
+        $this->bindValues[] = $key;
+
+        return ($this->findRow()) ?? false;
+    }
+
+    /**
+     * Set Optimized Complete Status
+     *
+     * After optimizaion, set media row to completed
+     * @param int $id Media ID
+     * @param string $status Status code from $this->optimizedStatus
+     * @return void
+     */
+    public function setOptimizedStatus(int $id, string $status): void
+    {
+        $this->sql = "update `media` set `optimized` = ? where `id` = ?";
+        $this->bindValues[] = $this->optimizedStatus[$status];
+        $this->bindValues[] = $id;
+
+        $this->execute();
+    }
+
+    /**
+     * Get Optimized Status Code
+     *
+     * Returns status code for use in record
+     * @param string $key
+     * @return string
+     */
+    public function getOptimizedCode(string $key): string
+    {
+        return $this->optimizedStatus[$key];
     }
 }

@@ -1,19 +1,18 @@
 {% extends '@admin/_adminBase.html' %}
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
-{% block htmlTitle 'Manage Media' %}
+{% block htmlTitle 'Media' %}
 {% block headText 'Media' %}
 {% block sectionId 'mediaPage' %}
 
 {% block sidebar %}
 <div class="sidebar-inner">
- {# {% include "@admin/media/_mediaSidebar.html" %} #}
- <!-- Button trigger modal -->
- <div class="button-group">
-  <div class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
-   Upload New Media
-  </div>
- </div>
+{# Button to trigger upload modal #}
+    <div class="button-group">
+        <div class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
+        Upload New Media
+        </div>
+    </div>
 </div>
 {% endblock sidebar %}
 

@@ -63,8 +63,6 @@ class BaseController
         $this->request = $container->request;
         $this->response = $container->response;
         $this->siteSettings = $container->get('settings')['site'];
-        $session = $this->container->sessionHandler;
-        $this->alert = $session->getFlashData('alert');
     }
 
     /**
@@ -78,10 +76,11 @@ class BaseController
     {
         $twigView = $this->container->view;
 
-        // By making page data a Twig Global, we can access page data in block elements
-        // which are loaded by a Twig function
+        // By making page data a Twig Global, we can access page data in block elements which are loaded by a Twig function in the templates
         $twigEnvironment = $twigView->getEnvironment();
         $twigEnvironment->addGlobal('page', $data);
+
+        // Add application alert messages as a global to display in the template within this request
         $twigEnvironment->addGlobal('alert', $this->alert);
 
         return $twigView->render($this->response, $template);
@@ -96,7 +95,7 @@ class BaseController
      */
     protected function redirect(string $routeName, array $args = []): Response
     {
-        // Save any alert messages to session flash data
+        // Save any alert messages to session flash data for next request
         if (isset($this->alert)) {
             $session = $this->container->sessionHandler;
             $session->setFlashData('alert', $this->alert);

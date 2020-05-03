@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_uq` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -33,11 +33,14 @@ CREATE TABLE IF NOT EXISTS `media` (
   `height` int NULL DEFAULT NULL,
   `feature` enum('Y', 'N') NOT NULL DEFAULT 'N',
   `caption` varchar(100) NULL DEFAULT NULL,
+  `mime_type` varchar(255) NULL DEFAULT NULL,
+  `optimized` varchar(50) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `optimized_idx` (`optimized`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category` (
@@ -189,4 +192,5 @@ VALUES
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
+  ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now(),
   ('piton', NULL, 'engine', NULL, 1, now(), 1, now());
