@@ -15,10 +15,10 @@ namespace Piton\CLI;
 use Psr\Container\ContainerInterface;
 
 /**
- * Piton Base CLI Class
+ * Piton CLI Base Class
  *
  */
-class Base
+class CLIBase
 {
     /**
      * Container

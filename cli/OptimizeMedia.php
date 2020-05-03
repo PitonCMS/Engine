@@ -17,7 +17,7 @@ namespace Piton\CLI;
  *
  * Runs as background process on request, to optimize media files
  */
-class OptimizeMedia extends Base
+class OptimizeMedia extends CLIBase
 {
     /**
      * Optimize Key
