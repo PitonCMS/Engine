@@ -150,11 +150,11 @@ class Media
      *
      * Uses Tinify optimization
      * @param void
-     * @return void
+     * @return bool
      */
-    public function makeXLarge(): void
+    public function makeXLarge(): bool
     {
-        $this->tinifySource->toFile($this->getAbsoluteFilenameBySize('xlarge'));
+        return $this->resizeMedia($this->getAbsoluteFilenameBySize('xlarge'));
     }
 
     /**
@@ -162,9 +162,9 @@ class Media
      *
      * Uses Tinify optimization
      * @param void
-     * @return void
+     * @return bool
      */
-    public function makeLarge(): void
+    public function makeLarge(): bool
     {
         // If square, keep aspect and constrain to 2000 x 2000
         if ($this->width == $this->height) {
@@ -187,7 +187,7 @@ class Media
             ];
         }
 
-        $this->tinifySource->resize($resize)->toFile($this->getAbsoluteFilenameBySize('large'));
+        return $this->resizeMedia($this->getAbsoluteFilenameBySize('large'), $resize);
     }
 
     /**
@@ -195,9 +195,9 @@ class Media
      *
      * Uses Tinify optimization
      * @param void
-     * @return void
+     * @return bool
      */
-    public function makeSmall(): void
+    public function makeSmall(): bool
     {
         // If square, keep aspect and constrain to 1024 x 1024
         if ($this->width == $this->height) {
@@ -220,7 +220,7 @@ class Media
             ];
         }
 
-        $this->tinifySource->resize($resize)->toFile($this->getAbsoluteFilenameBySize('small'));
+        return $this->resizeMedia($this->getAbsoluteFilenameBySize('small'), $resize);
     }
 
     /**
@@ -228,15 +228,61 @@ class Media
      *
      * Uses Tinify optimization
      * @param void
-     * @return void
+     * @return bool
      */
-    public function makeThumb(): void
+    public function makeThumb(): bool
     {
-        $this->tinifySource->resize([
+        $resize = [
             'method' => 'thumb',
             'width' => 350,
             'height' => 265
-        ])->toFile($this->getAbsoluteFilenameBySize('thumb'));
+        ];
+
+        return $this->resizeMedia($this->getAbsoluteFilenameBySize('thumb'), $resize);
+    }
+
+    /**
+     * Tinify Resize
+     *
+     * Wraps Tinify methods in try catch block with messages
+     * @param string $newFilename
+     * @param array $resize
+     * @return bool
+     */
+    protected function resizeMedia(string $newFilename, array $resize = null): bool
+    {
+        try {
+            if ($resize) {
+                // New dimensions
+                $this->tinifySource->resize($resize)->toFile($newFilename);
+            } else {
+                // Keep dimenions but optimize
+                $this->tinifySource->toFile($newFilename);
+            }
+
+            // Success
+            return true;
+        } catch (TinifyAccountException $e) {
+            // Verify your API key and account limit.
+            $this->error[] = "There is an error with the Tinify account:  {$e->getMessage()}";
+            return false;
+        } catch (TinifyClientException $e) {
+            // Check your source image and request options.
+            $this->error[] = "There is an with the original media file:  {$e->getMessage()}";
+            return false;
+        } catch (TinifyServerException $e) {
+            // Temporary issue with the Tinify API.
+            $this->error[] = "There is an error with the Tinify server:  {$e->getMessage()}";
+            return false;
+        } catch (TinifyConnectionException $e) {
+            // A network connection error occurred.
+            $this->error[] = "There is an error with the Tinify connection:  {$e->getMessage()}";
+            return false;
+        } catch (Exception $e) {
+            // Something else went wrong, unrelated to the Tinify API.
+            $this->error[] = "Whoops! Something went wrong trying to optimize media:  {$e->getMessage()}";
+            return false;
+        }
     }
 
     /**
