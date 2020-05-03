@@ -41,8 +41,9 @@ class OptimizeMedia extends Base
             $this->key = ($this->container->filenameGenerator)();
         } while ($mediaMapper->optimizeKeyExists($this->key));
 
+        $pid = getmypid();
         $this->print("Optimizing key: {$this->key}");
-        $this->container->logger->info("PitonCLI: Background process to optimized media started for key: {$this->key}");
+        $this->container->logger->info("PitonCLI: Background process to optimized media started for key: {$this->key}, PID: $pid");
 
         // Get query of media records that need optimizing
         $files = $mediaMapper->findNewMediaToOptimize($this->key);
@@ -58,8 +59,10 @@ class OptimizeMedia extends Base
             if ($this->makeMediaSet($file->filename)) {
                 // Update status on each record when complete
                 $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('complete'));
+                $this->print("Complete");
             } else {
                 $mediaMapper->setOptimizedStatus($file->id, $mediaMapper->getOptimizedCode('retry'));
+                $this->print("Failed - retry");
             }
         }
 
@@ -79,11 +82,23 @@ class OptimizeMedia extends Base
         if (!empty($this->container->get('settings')['site']['tinifyApiKey'])) {
             $mediaHandler = $this->container->mediaHandler;
 
-            $mediaHandler->setSource($filename);
+            if (!$mediaHandler->setSource($filename)) {
+                $this->setAlert('danger', 'Unable to load source media to optimize');
+                return false;
+            }
+            $this->print("Media source $filename set...");
+
             $mediaHandler->makeXLarge();
+            $this->print("Finished XLarge...");
+
             $mediaHandler->makeLarge();
+            $this->print("Finished Large...");
+
             $mediaHandler->makeSmall();
+            $this->print("Finished Small...");
+
             $mediaHandler->makeThumb();
+            $this->print("Finished Thumb...");
 
             return true;
         } else {

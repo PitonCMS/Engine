@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,6 +12,11 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use function Tinify\setKey as setTinifyKey;
+use function Tinify\validate as validateTinifyKey;
+use function Tinify\fromFile as setTinifySource;
+use Tinify\Source as TinifySource;
+use Tinify\Exception as TinifyException;
 use Exception;
 use Closure;
 
@@ -72,6 +77,12 @@ class Media
     protected $mediaSizesClosure;
 
     /**
+     * Error Messages
+     * @var array
+     */
+    public $error = [];
+
+    /**
      * Constructor
      *
      * @param  closure $mediaPath    Function to derive media file Path
@@ -84,9 +95,9 @@ class Media
     {
         // Make sure there is a valid key
         try {
-            \Tinify\setKey($tinifyApiKey);
-            \Tinify\validate();
-        } catch (\Tinify\Exception $e) {
+            setTinifyKey($tinifyApiKey);
+            validateTinifyKey();
+        } catch (TinifyException $e) {
             throw new Exception('PitonCMS: Invalid TinyJPG key submitted: ' . $e->getMessage());
         }
 
@@ -98,19 +109,19 @@ class Media
      * Set Media Source
      *
      * @param string $soureMedia Source media filename
-     * @return void
-     * @throws Exception
+     * @return bool
      */
-    public function setSource(string $sourceMedia): void
+    public function setSource(string $sourceMedia): bool
     {
-        // Get path to file and keep as property
+        // Get path to file and assign as property
         $this->filename = $sourceMedia;
         $this->mediaPath = ROOT_DIR . 'public' . ($this->mediaPathClosure)($sourceMedia);
         $absoluteSourceMedia = $this->mediaPath . $sourceMedia;
 
         // Ensure source file exists
         if (!file_exists($absoluteSourceMedia)) {
-            throw new Exception('PitonCMS: Media Handler: Source file not found ' . $absoluteSourceMedia);
+            $this->error[] = "Source file not found $absoluteSourceMedia";
+            return false;
         }
 
         // Get dimensions and set orientation
@@ -121,7 +132,14 @@ class Media
             $this->orientation = ($aspectRatio > 1) ? 'landscape' : 'portrait';
         }
 
-        $this->tinifySource = \Tinify\fromFile($absoluteSourceMedia);
+        // Set and validate source
+        $this->tinifySource = setTinifySource($absoluteSourceMedia);
+        if (!$this->tinifySource instanceof TinifySource) {
+            $this->error[] = "Unable to set Tinify source file $sourceMedia.";
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -133,8 +151,6 @@ class Media
      */
     public function makeXLarge(): void
     {
-        $this->validateTinifySource();
-
         $this->tinifySource->toFile($this->getAbsoluteFilenameBySize('xlarge'));
     }
 
@@ -147,8 +163,6 @@ class Media
      */
     public function makeLarge(): void
     {
-        $this->validateTinifySource();
-
         // If square, keep aspect and constrain to 2000 x 2000
         if ($this->width == $this->height) {
             $resize = [
@@ -182,8 +196,6 @@ class Media
      */
     public function makeSmall(): void
     {
-        $this->validateTinifySource();
-
         // If square, keep aspect and constrain to 1024 x 1024
         if ($this->width == $this->height) {
             $resize = [
@@ -217,8 +229,6 @@ class Media
      */
     public function makeThumb(): void
     {
-        $this->validateTinifySource();
-
         $this->tinifySource->resize([
             'method' => 'thumb',
             'width' => 350,
@@ -236,19 +246,5 @@ class Media
     protected function getAbsoluteFilenameBySize(string $size = ''): string
     {
         return $this->mediaPath . ($this->mediaSizesClosure)($this->filename, $size);
-    }
-
-    /**
-     * Validate Tinify Source is Set
-     *
-     * @param void
-     * @return void
-     * @throws Exception
-     */
-    protected function validateTinifySource(): void
-    {
-        if (!$this->tinifySource instanceof \Tinify\Source) {
-            throw new Exception('PitonCMS: Media setSource() has not been set with a valid media file.');
-        }
     }
 }
