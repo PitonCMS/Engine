@@ -66,9 +66,9 @@ $('.jsMediaCard').on('click', 'button', function (e) {
     e.preventDefault();
     let $button = $(e.target);
     let $medium = $(e.target).parents('.jsMediaCard');
-    if ('delete' === $button.attr('value') && !confirmPrompt()) {
-        return false;
-    }
+    // if ('delete' === $button.attr('value') && !confirmPrompt()) {
+    //     return false;
+    // }
     // jQuery ignores the button value, so append that to post data
     let postData = $button.parents('form').serialize();
     $.ajax({
