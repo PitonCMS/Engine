@@ -120,7 +120,7 @@ class BaseController
     /**
      * Get Query Param
      *
-     * Returns htmlspecialchars() escaped query param
+     * Returns query param
      * Missing params and empty string values are returned as null
      * @param string $param
      * @param string $default
@@ -131,7 +131,7 @@ class BaseController
         $value = $this->request->getQueryParam($param);
 
         if (!empty($value)) {
-            return htmlspecialchars($value);
+            return $value;
         }
 
         return $default;
