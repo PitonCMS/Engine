@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Psr\Container\ContainerInterface;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Base Controller
@@ -115,5 +115,25 @@ class BaseController
     {
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
+    }
+
+    /**
+     * Get Query Param
+     *
+     * Returns htmlspecialchars() escaped query param
+     * Missing params and empty string values are returned as null
+     * @param string $param
+     * @param string $default
+     * @return string|null
+     */
+    protected function getQueryParam(string $param, string $default = null): ?string
+    {
+        $value = $this->request->getQueryParam($param);
+
+        if (!empty($value)) {
+            return htmlspecialchars($value);
+        }
+
+        return $default;
     }
 }

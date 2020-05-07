@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -36,7 +36,7 @@ class AdminPageController extends AdminBaseController
         $pagination = $this->container->adminPagePagination;
 
         // Get filter if requested
-        $status = $this->request->getQueryParam('pageStatus', 'all');
+        $status = $this->getQueryParam('pageStatus', 'all');
 
         // Get data
         $data['pages'] = $pageMapper->findPages($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
@@ -64,7 +64,7 @@ class AdminPageController extends AdminBaseController
         $pagination = $this->container->adminPagePagination;
 
         // Get filter if requested
-        $status = $this->request->getQueryParam('pageStatus', 'all');
+        $status = $this->getQueryParam('pageStatus', 'all');
 
         // Get data
         if (isset($args['collectionSlug'])) {
@@ -119,7 +119,7 @@ class AdminPageController extends AdminBaseController
             $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
             // Create new page, and get template from query string
-            $templateParam = $this->request->getQueryParam('definition');
+            $templateParam = $this->getQueryParam('definition');
 
             // Validate that we have a proper definition file name
             if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
@@ -132,7 +132,7 @@ class AdminPageController extends AdminBaseController
             $settings = [];
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-            $collectionId = $this->request->getQueryParam('collectionId', null);
+            $collectionId = $this->getQueryParam('collectionId');
             if (is_numeric($collectionId)) {
                 $collection = $collectionMapper->findById((int) $collectionId);
                 $page->collection_id = $collectionId;
