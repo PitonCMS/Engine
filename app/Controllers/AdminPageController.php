@@ -119,10 +119,15 @@ class AdminPageController extends AdminBaseController
             $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
             // Create new page, and get template from query string
-            $templateParam = htmlspecialchars($this->request->getQueryParam('definition'));
+            $templateParam = $this->request->getQueryParam('definition');
+
+            if ($templateParam) {
+                $templateParam = htmlspecialchars($templateParam);
+            }
 
             // Validate that we have a proper definition file name
             if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
                 throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
             }
 
@@ -132,7 +137,7 @@ class AdminPageController extends AdminBaseController
             $settings = [];
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-            $collectionId = htmlspecialchars($this->request->getQueryParam('collectionId'));
+            $collectionId = $this->request->getQueryParam('collectionId');
             if (is_numeric($collectionId)) {
                 $collection = $collectionMapper->findById((int) $collectionId);
                 $page->collection_id = $collectionId;

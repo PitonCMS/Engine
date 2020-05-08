@@ -174,6 +174,7 @@ class Definition
                 'filename' => mb_substr($file, 0, mb_stripos($file, '.json')),
                 'name' => $definition->elementName,
                 'description' => $definition->elementDescription ?? null,
+                'enableInput' => $definition->enableInput ?? null,
             ];
         }
 
