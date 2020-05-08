@@ -15,8 +15,10 @@
 {% macro elementForm(element, blockKey, elementTypeOptions, loopIndex = 1) %}
 
   {% set arrayKey = element.id ?? uniqueKey() %}
-  {% set elementTypes = getElements() %}
   {% set enableInput = '' %}
+
+  {# Check if the element definition needs a special input type enabled #}
+  {% set elementTypes = getElements() %}
   {% for e in elementTypes %}
   {% if e.filename == element.template %}
   {% set enableInput = e.enableInput %}

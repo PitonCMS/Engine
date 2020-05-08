@@ -105,7 +105,7 @@ $app->group('/admin', function () {
         });
 
         // Show all collection pages, filtered optionally by collection
-        $this->get('[/{collectionSlug}]', function ($args) {
+        $this->get('[/{collectionSlug:[a-zA-Z0-9-]+}]', function ($args) {
             return (new AdminPageController($this))->showCollectionPages($args);
         })->setName('adminCollection');
     });
@@ -114,7 +114,7 @@ $app->group('/admin', function () {
     // Navigation route
     $this->group('/navigation', function () {
         // Show Navigations
-        $this->get('/{navigator:[a-zA-Z]+}', function ($args) {
+        $this->get('/{navigator:[a-zA-Z0-9-]+}', function ($args) {
             return (new AdminNavigationController($this))->showNavigator($args);
         })->setName('adminNavigation');
 
@@ -165,7 +165,7 @@ $app->group('/admin', function () {
         });
 
         // Show all media, optionally filtered by media category
-        $this->get('[/{category}]', function ($args) {
+        $this->get('[/{category:[a-zA-Z0-9-]+}]', function ($args) {
             return (new AdminMediaController($this))->showMedia($args);
         })->setName('adminMedia');
     });
@@ -239,7 +239,7 @@ $app->group('/admin', function () {
     // End tools
 
     // Help content
-    $this->get('/help[/{file}[/{link}]]', function ($args) {
+    $this->get('/help[/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
         return (new AdminController($this))->showHelp($args);
     })->setName('adminHelp');
 
