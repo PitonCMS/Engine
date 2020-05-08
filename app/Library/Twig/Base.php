@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -326,16 +326,19 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Query String Parameter
      *
-     * Returns the requested query parameter, or all query params if no argument is provided
+     * Returns htmlspecialchars() escaped query param
+     * Missing params and empty string values are returned as null
      * @param string|null $param
-     * @return mixed|null
+     * @return string|null
      */
-    public function getQueryParam(string $param = null)
+    public function getQueryParam(string $param = null): ?string
     {
-        if ($param) {
-            return $this->container->request->getQueryParam($param, null);
-        } else {
-            return $this->container->request->getQueryParams();
+        $value = $this->container->request->getQueryParam($param);
+
+        if (!empty($value)) {
+            return htmlspecialchars($value);
         }
+
+        return null;
     }
 }

@@ -1,20 +1,21 @@
 {#
     Alert Dialog
 
-    Displays an alert message if set by the application.
-    The application will pass in the severity code to set the appropriate background colors:
+    Display alert messages if set by the application.
+    The message body is an array of errors, and the |join('<br>') prints as a string with line breaks
+    The application will provide the severity color code:
     primary, secondary, success, danger, warning, info
 #}
 
 
-    {% if getAlert() %}
+    {% for alert in getAlert() %}
     <div class="container">
-      <div class="alert alert-{{ getAlert('severity') }} alert-dismissible fade show" role="alert">
-        <h4 class="alert-heading">{{ getAlert('heading') }}</h4>
-        {{ getAlert('message') }}
+      <div class="alert alert-{{ alert.severity }} alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">{{ alert.heading }}</h4>
+        {{ alert.message|join('<br>') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     </div>
-    {% endif %}
+    {% endfor %}

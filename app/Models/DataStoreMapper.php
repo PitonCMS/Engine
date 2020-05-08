@@ -74,4 +74,49 @@ class DataStoreMapper extends DataMapperAbstract
 
         return $this->execute();
     }
+
+    /**
+     * Set Application Alert
+     *
+     * Saves Piton alert notices for display in application that are not saved to session flash data.
+     * Background scripts and processes should use this for messaging
+     * @param string        $severity Severity level color code
+     * @param string        $heading  Heading text
+     * @param string|array  $messge   Message or array of messages (Optional)
+     */
+    public function setAppAlert(string $severity, string $heading, $message = null): void
+    {
+        // Get any existing alert messages
+        $this->makeSelect();
+        $this->sql .= " and `category` = 'piton' and `setting_key` = 'appAlert';";
+        $data = $this->findRow();
+
+        // Decode to array
+        $alerts = is_string($data->setting_value) ? json_decode($data->setting_value, true) : [];
+
+        // Append new alert to array
+        $alerts[] = [
+            'severity' => $severity,
+            'heading' => $heading,
+            'message' => (is_array($message)) ? $message : [$message]
+        ];
+
+        // Save alert messages
+        $this->sql = "update {$this->table} set `setting_value` = ? where `category` = 'piton' and `setting_key` = 'appAlert';";
+        $this->bindValues[] = json_encode($alerts);
+        $this->execute();
+    }
+
+    /**
+     * Unset Application Alert
+     *
+     * Removes saved application alert notices
+     * @param void
+     * @return void
+     */
+    public function unsetAppAlert(): void
+    {
+        $this->sql = "update {$this->table} set `setting_value` = null where `category` = 'piton' and `setting_key` = 'appAlert';";
+        $this->execute();
+    }
 }

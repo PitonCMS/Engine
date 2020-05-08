@@ -135,7 +135,7 @@ class FileUpload
             $this->makeDirectoryPath();
             $this->uploadedFiles[$fileKey]->moveTo($this->getFilename(true));
 
-            // Set file size attributes if an image type
+            // Set file width and height attributes if an image type
             if (in_array($this->mimeType, $this->imageMimeTypes)) {
                 list($this->width, $this->height) = getimagesize($this->getFilename(true));
             }
@@ -147,18 +147,6 @@ class FileUpload
         $this->error = $this->uploadedFiles[$fileKey]->getError();
 
         return false;
-    }
-
-    /**
-     * Is Compressable Image
-     *
-     * Is the uploaded file a JPG or PNG that can be compressed by TinyJPG?
-     * @param void
-     * @return bool
-     */
-    public function isCompressableImage(): bool
-    {
-        return in_array($this->mimeType ?? '', ['image/png', 'image/jpeg']);
     }
 
     /**

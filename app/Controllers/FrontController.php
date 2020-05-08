@@ -74,6 +74,7 @@ class FrontController extends FrontBaseController
             $message->name = $this->request->getParsedBodyParam('name');
             $message->email = $this->request->getParsedBodyParam('email');
             $message->message = $this->request->getParsedBodyParam('message');
+            $message->context = $this->request->getParsedBodyParam('context', 'Unknown Page');
             $messageMapper->save($message);
 
             // Send message to workflow email
@@ -82,7 +83,7 @@ class FrontController extends FrontBaseController
                 $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
                 $email->setTo($this->siteSettings['contactFormEmail'], '')
                     ->setSubject("New Contact Message to $siteName")
-                    ->setMessage("{$message->name}\n{$message->email}\n\n{$message->message}")
+                    ->setMessage("{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}")
                     ->send();
             }
         }

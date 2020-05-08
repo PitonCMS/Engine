@@ -28,7 +28,7 @@ class AdminController extends AdminBaseController
      */
     public function home(): Response
     {
-        return $this->render('home.html', ['pitonEngineVersion' => $this->siteSettings['engine']]);
+        return $this->render('home.html');
     }
 
     /**
@@ -157,7 +157,7 @@ class AdminController extends AdminBaseController
 
         if (!function_exists('curl_init')) {
             // If curl is not installed display notice
-            $response = $this->container->response;
+            $response = $this->response;
             $response->write(sprintf(
                 "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>" .
                 "Piton Application Error</title><style>body{margin:0;padding:30px;font:14px / 1.5 Helvetica," .
