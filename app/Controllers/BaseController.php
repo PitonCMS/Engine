@@ -116,24 +116,4 @@ class BaseController
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
     }
-
-    /**
-     * Get Query Param
-     *
-     * Returns query param
-     * Missing params and empty string values are returned as null
-     * @param string $param
-     * @param string $default
-     * @return string|null
-     */
-    protected function getQueryParam(string $param, string $default = null): ?string
-    {
-        $value = $this->request->getQueryParam($param);
-
-        if (!empty($value)) {
-            return $value;
-        }
-
-        return $default;
-    }
 }
