@@ -16,6 +16,7 @@ use Piton\Models\Entities\PitonEntity;
 use Slim\Http\Response;
 use Exception;
 use DateTime;
+use Throwable;
 
 /**
  * Piton Admin Page Controller
@@ -29,7 +30,7 @@ class AdminPageController extends AdminBaseController
      * @param array $args Route arguments
      * @return Response
      */
-    public function showPages($args): Response
+    public function showPages(): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -46,6 +47,27 @@ class AdminPageController extends AdminBaseController
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
+        // Check if this request was XHR
+        if ($this->request->isXhr()) {
+            try {
+                // Render template
+                $template = "
+                    {% import \"@admin/pages/_pageMacros.html\" as pageMacro %}
+                    {% for p in page.pages %}
+                        {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
+                    {% endfor %}";
+
+                $status = "success";
+                $text = $this->container->view->fetchFromString($template, ['page' => $data]);
+            } catch (Throwable $th) {
+                $status = "error";
+                $text = "Exception getting data: {$th->getMessage()}";
+            }
+
+            return $this->xhrResponse($status, $text);
+        }
+
+        // Otherwise render whole page
         return $this->render('pages/pages.html', $data);
     }
 

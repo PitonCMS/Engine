@@ -15,6 +15,7 @@ namespace Piton\Controllers;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Slim\Http\Response;
+use Throwable;
 
 /**
  * Piton Media Controller
@@ -133,17 +134,20 @@ class AdminMediaController extends AdminBaseController
     /**
      * Get All Media
      *
-     * Gets all media asynchronously with HTML
-     * @param void
+     * XHR asynchronous response
+     * Gets all media rendered as HTML from template
+     * @param  void
      * @return Response
      */
     public function getMedia(): Response
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
-        $data = $mediaMapper->find();
+        try {
+            // Find media and render template
+            $data = $mediaMapper->find();
 
-        $template = <<<HTML
+            $template = <<<HTML
             {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
             <div class="card-wrapper">
             {% for media in page.media %}
@@ -152,11 +156,14 @@ class AdminMediaController extends AdminBaseController
             </div>
 HTML;
 
-        $mediaHtml = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting data: {$th->getMessage()}";
+        }
 
-        $response = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $response->write(json_encode(["html" => $mediaHtml]));
+        return $this->xhrResponse($status, $text);
     }
 
     /**

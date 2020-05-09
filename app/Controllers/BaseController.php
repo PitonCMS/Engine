@@ -116,4 +116,22 @@ class BaseController
         $notFound = $this->container->get('notFoundHandler');
         return $notFound($this->request, $this->response);
     }
+
+    /**
+     * XHR Response
+     *
+     * Returns asynchronous response as application/json
+     * @param  string $status  Status code "success"|"error"
+     * @param  string $text    Document to sent
+     * @return Response
+     */
+    protected function xhrResponse(string $status, string $text): Response
+    {
+        $response = $this->response->withHeader('Content-Type', 'application/json');
+
+        return $response->write(json_encode([
+            "status" => $status,
+            "text" => "$text",
+        ]));
+    }
 }
