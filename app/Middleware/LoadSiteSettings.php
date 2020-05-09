@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Middleware;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use ArrayAccess;
 use PDOException;
 
@@ -38,12 +40,11 @@ class LoadSiteSettings
     /**
      * Constructor
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
      * @param  closure
      * @param  ArrayAccess
      * @return void
      */
-    public function __construct($request, $dataMapper, ArrayAccess $appSettings)
+    public function __construct($dataMapper, ArrayAccess $appSettings)
     {
         $this->dataMapper = $dataMapper;
         $this->appSettings = $appSettings;
@@ -52,13 +53,12 @@ class LoadSiteSettings
     /**
      * Callable
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
-     * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
-     * @param  callable                                 $next     Next middleware
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param  Request  $request  PSR7 request
+     * @param  Response $response PSR7 response
+     * @param  callable $next     Next middleware
+     * @return Response
      */
-    public function __invoke($request, $response, $next)
+    public function __invoke($request, $response, $next): Response
     {
         $this->loadSettings();
 
