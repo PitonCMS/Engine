@@ -820,6 +820,11 @@ button:disabled,
   color: #eb7119;
 }
 
+.btn-block {
+  display: block;
+  width: auto;
+}
+
 .nav-toggle,
 .element-toggle {
   position: absolute !important;

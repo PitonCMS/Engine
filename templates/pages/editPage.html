@@ -79,24 +79,31 @@
    </script>
 
 <div class="element-block-wrapper">
+ {# Page Slug #}
+
  <div class="form-group-pageEdit">
   <label>Slug <span class="text-required">*</span></label>
-  
+
    {% if page.collection_slug %}
-   <div class="input-group-prepend">
+   <!-- <div class="input-group-prepend">
     <span class="input-group-text">{{ page.collection_slug }}/</span>
-   </div>
+   </div> -->
    {% endif %}
-   <input type="text" class="form-control jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
-    value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
-   <div class="input-group-append jsUrlSlugFaLockStatus">
-    <span class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
-   </div>
+
+    <div class="search-block">
+     <div class="search-icon jsUrlSlugFaLockStatus">
+      <i class="fas fa-{{ lockedStatus }}"></i>
+     </div>
+     <div class="search-input">
+      <input type="text" class="form-control jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
+       value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
+     </div>
+    </div>
   
-  <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-   changed. Warning, changing the URL slug after the page is published may negatively impact links to your
-   page.</small>
- </div>
+ <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+  changed. Warning, changing the URL slug after the page is published may negatively impact links to your
+  page.</small>
+</div>
 
  <div class="form-group-pageEdit">
   <label>Meta Description</label>
@@ -114,7 +121,7 @@
  #}
 
  {% if page.definition.showFeaturedImage|default(1) %}
- <hr>
+
  <div class="form-group-pageEdit jsMediaInput">
   <img src="{{ getMediaPath(page.media.filename, 'large') }}"
    class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
@@ -130,7 +137,7 @@
 
 <!-- Custom Settings Tab -->
  {% if page.settings %}
- <hr>
+
  <h4 class="page-edit-title">Custom Page Settings</h4>
  {% for setting in page.settings %}
  {{ settingForm.settingInput(setting) }}
@@ -138,6 +145,7 @@
  {% endif %}
 
 </div>
+
 </div>
  </div>
 
@@ -145,7 +153,7 @@
 
  <div class="btn-group">
   {% if page.id %}
-  <button class="btn btn-delete btn-sm jsDeleteConfirm" type="submit" formaction="{{ pathFor(page.route.pageDelete) }}"
+  <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit" formaction="{{ pathFor(page.route.pageDelete) }}"
    {% if page.page_slug == 'home' %}disabled title="The home page cannot be deleted." {% endif %}>Delete Page</button>
   {% endif %}
  </div>
