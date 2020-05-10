@@ -11,10 +11,43 @@
 {% block contentHeader %}
 <div class="breadcrumb"></div>
 <h3 class="section-title">Content</h3>
-<div class="btn-group">
+<div class="btn-group"></div>
 {% endblock contentHeader %}
 
 {% block content %}
+
+<!-- Media Filter -->
+<div class="filter-block">
+
+ <div class="search-block">
+  <div class="search-icon">
+   <i class="fas fa-search"></i>
+  </div>
+  <div class="search-input">
+   <input type="search" name="search" id="search" class="search" placeholder="Search Pages" autocomplete="false">
+  </div>
+ </div>
+
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+  <div class="form-group-block">
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="published" name="category" value="published">
+    <label for="published">Published</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="draft" name="category" value="draft">
+    <label for="draft">Draft</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="pending" name="category" value="pending">
+    <label for="pending">Pending</label>
+   </div>
+  </div>
+ </div>
+
+</div>
 
 {# Search / Filters #}
   <div class="page-list-item-filter">
