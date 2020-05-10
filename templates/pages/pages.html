@@ -6,30 +6,46 @@
 
   Shows all pages, status, and edit link, with pagination (if over config row limit)
 #}
-{% block htmlTitle 'Pages' %}
-{% block headText 'Pages' %}
-{% block sectionId 'pages' %}
+{% block htmlTitle 'Content' %}
+
+{% block contentHeader %}
+<div class="breadcrumb"></div>
+<h3 class="section-title">Content</h3>
+<div class="btn-group">
+{% endblock contentHeader %}
 
 {% block content %}
-<div class="content-block">
-  <div class="section-title form-inline mt-0">
-    <h3>Pages</h3>
 
-    {{ pageMacro.pageStatusFilter() }}
+{# Search / Filters #}
+  <div class="page-list-item-filter">
+     {{ pageMacro.pageStatusFilter() }}
   </div>
 
-  <div class="list-items-wrapper">
+ {# Page List Titles #}
+  <div class="page-list-item-header">
+   <div class="page-list-item__heading"></div>
+   <div class="page-list-item__heading">Title</div>
+   <div class="page-list-item__heading">Status</div>
+   <div class="page-list-item__heading">Template</div>
+   <div class="page-list-item__heading">Collection</div>
+  </div>
+
+  {# Page List  #}
+
     {% for p in page.pages %}
     {# From _pageMacros #}
     {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
     {% else %}
     <h5>No Pages Found</h5>
     {% endfor %}
-  </div>
+
   {{ pagination() }}
-</div>
+
 
 {% endblock content %}
+
+
+
 
 {% block foot %}
 <script src="{{ basePath() }}/admin/js/page.js"></script>

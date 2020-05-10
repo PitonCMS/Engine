@@ -1,41 +1,39 @@
 {% extends '@admin/_adminBase.html' %}
 
 {% block htmlTitle 'Sitemap' %}
-{% block headText 'Sitemap' %}
-{% block sectionId 'detailPage' %}
-{# {% block mainClass 'contentTwoCol' %} #}
 
-{% block openForm %}
-<form class="jsUserForm" action="{{ pathFor('adminToolSitemapUpdate') }}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-{% endblock openForm %}
-
-{% block sidebar %}
-<div class="sidebar-inner">
- <div class="sidebar-block button-group">
-  <!-- Control Buttons -->
-      <button class="btn btn-outline-primary" type="submit">Update Sitemap</button>
-</div>
-{% include "@admin/tools/_toolsSidebar.html" %}
-</div>
-{% endblock sidebar %}
-
-{% block content %}
-<div class="content-block">
- <div class="sitemap-wrapper">
-  <h3 class="section-title span">Sitemap</h3>
-   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
-
-   <div>
-       {% if page.sitemapXML %}
-           <a href="/sitemap.xml" target="_blank">Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
-           <pre>{{ page.sitemapXML|escape }}</pre>
-       {% else %}
-           No Sitemap Found - Click Update Sitemap
-       {% endif %}
+ {% block contentHeader %}
+ <form class="jsUserForm" action="{{ pathFor('adminToolSitemapUpdate') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <div class="content-header-inner">
+   <div class="breadcrumb"></div>
+   <h3 class="section-title">Sitemap</h3>
+   <div class="btn-group">
+    <!-- Control Buttons -->
+    <button class="btn btn-save btn-sm" type="submit">Update Sitemap</button>
    </div>
+  </div>
+
+ {% endblock contentHeader %}
+ 
+ {% block content %}
+ <div class="content-block-sitemap">
+  <div class="sitemap-wrapper">
+   <h3 class="section-title span">Sitemap</h3>
+   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new
+    content.</p>
+   <div>
+<hr>
+    {% if page.sitemapXML %}
+    <a href="/sitemap.xml" target="_blank">Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
+    <hr>
+    <pre>{{ page.sitemapXML|escape }}</pre>
+    {% else %}
+    No Sitemap Found - Click Update Sitemap
+    {% endif %}
+   </div>
+  </div>
  </div>
-</div>
 
-
-{% endblock content %}
+</form>
+ {% endblock content %}
