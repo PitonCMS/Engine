@@ -1,16 +1,36 @@
-.jsMessageWrap {
- @include margin(1em null);
- @include padding(1em);
- display: flex;
- flex-flow: column nowrap;
- justify-content: space-between;
- background: $clr-light-grey;
- border-radius: $border-radius;
- box-shadow: $box-shadow;
- .message-wrapper{
-  br {
-   display: block;
-   @include margin(.25em null);
-}
+.content-block-messages {
+
+ width: 100%;
+ display: grid;
+ gap: 1em;
+
+ .message-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  &-inner{
+   @include padding(1em);
+   background: $bg-accent;
+   border-radius: $border-radius;
+   box-shadow: $box-shadow-2;
+   display: grid;
+   grid-template-columns: 1fr auto;
+   gap: 1em;
+  }
+ }
+
+ .message-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  hr{
+   // @include padding(0);
+   @include margin(.25em 0);
+  }
+ }
+
+ .button-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
  }
 }

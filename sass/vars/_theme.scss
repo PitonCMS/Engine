@@ -1,39 +1,57 @@
- /***** Theme Settings ******/
+// color theme
+$black: hsl(0, 41%, 23%);
+$white: hsl(0, 0%, 100%);
+$off-white: hsl(210, 22%, 96%);
+$dark-grey: hsl(0, 0%, 25%);
+$dark-green: hsl(89, 52%, 24%);
+$dark-orange: hsl(25, 84%, 51%);
+$light-orange: hsl(36, 100%, 71%);
+$blue-light: rgba(90, 104, 196, .15);
 
-$black: #262626;
-$white: #ffffff;
-$blue: #336699;
-$red: #ff0000;
-$yellow: yellow;
-$orange: orange;
-$green: green;
-$light-grey: #f6f6f6;
-$medium-grey: #ebebeb;
-$dark-grey: #afafaf;
 
-$clr-primary: $blue;
-$clr-bg-dark: $black;
-$clr-bg-light: $white;
-$clr-text-dark: $black;
-$clr-text-light: $white;
-$clr-accent: $orange;
-$clr-light-grey: $light-grey;
-$clr-medium-grey: $medium-grey;
-$clr-dark-grey: $dark-grey;
+// Navigation Variables
+$breakpoint: 768px;
+$nav-height: 50px;
+$nav-width: 200px;
+$nav-font-color: $light-orange;
+$link-hover-color: $dark-orange;
 
-$box-shadow: 0 2px 2px rgba(0,0,0,.15);
 $border-radius: 7px;
+$container-max: 1000px;
+$box-shadow: 0 2px 2px rgba($black, .5);
+$box-shadow-1: 0px 0px 0px 1px rgba(63, 63, 68, .05), 0 1px 3px 0px rgba(63, 63, 68, .15);
+$box-shadow-2: 0px 0px 0px 1px rgba(63, 63, 68, .05), 0px 1px 3px 0px rgba(63, 63, 68, .15);
+
+// Text Colors
+
+$clr-h: $dark-orange;
+$clr-text: $dark-grey;
+$clr-accent: $dark-orange;
+
+$txt-light: $white;
+$txt-dark: $dark-grey;
+$txt-accent: $dark-orange;
+
+$text-warning: gold;
+$text-danger: red;
+$text-success: green;
+
+// Background Colors
+
+$bg-dark: $black;
+$bg-light: $white;
+$bg-accent: $off-white;
+$bg-blue: $blue-light;
 
 
-$break-point-xl: 1200px;
-$break-point-lg: 990px;
-$break-point-md: 768px;
-$break-point-sm: 576px;
-
-/*
-@media screen and (min-width: $break-point-sm){}
-@media screen and (min-width: $break-point-md){}
-@media screen and (min-width: $break-point-lg){}
-@media screen and (min-width: $break-point-xl){}
-
-*/
+// Default color Styles
+$badge-notify: $dark-green;
+$badge-warning: $dark-orange;
+$clr-border: $blue-light;
+$btn-blue: hsl(210, 50%, 40%);
+$btn-blue-hover: darken($btn-blue, 10%);
+$btn-blue-disabled: lighten($btn-blue, 20%);
+$btn-red: rgb(221, 44, 44);
+$btn-red-hover: darken($btn-red, 10%);
+$btn-green: rgb(20, 112, 20);
+$btn-green-hover: darken($btn-green, 10%);
