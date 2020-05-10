@@ -13,8 +13,6 @@
   display: flex;
   align-items: center;
   position: fixed;
-  // top: -3.5rem;
-  // left: 1rem;
   top: 0;
   left: 1rem;
   z-index: 999;
@@ -40,11 +38,11 @@
  }
 
  span::before {
-   top: 35px;
+   top: 33px;
  }
 
  span::after {
-   bottom: 35px;
+   bottom: 33px;
  }
 
 }
@@ -54,7 +52,7 @@
 
 .nav-toggle:checked~.nav-toggle-label span:before {
  transform: rotate(45deg);
- top: 26px;
+ top: 21px;
 }
 
 .nav-toggle:checked~.nav-toggle-label span:after {
