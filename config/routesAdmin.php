@@ -235,15 +235,15 @@ $app->group('/admin', function () {
                 return (new AdminUserController($this))->showUsers();
             })->setName('adminToolUser');
 
+            // Edit User
+            $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+                return (new AdminUserController($this))->editUser($args);
+            })->setName('adminToolUserEdit');
+
             // Save Users
             $this->post('/save', function ($args) {
-                return (new AdminUserController($this))->saveUsers();
+                return (new AdminUserController($this))->saveUser();
             })->add('csrfGuardHandler')->setName('adminToolUserSave');
-
-            // Change User Active Status
-            $this->post('/changeStatus/{id:[0-9]+}/{status:Y|N}', function ($args) {
-                return (new AdminUserController($this))->userStatus($args);
-            })->add('csrfGuardHandler')->setName('adminToolUserStatusUpdate');
         });
         // End user routes
     });
@@ -285,7 +285,7 @@ $app->get('/login', function ($args) {
 })->setName('adminLoginForm');
 
 // Accept and validate email, and send login token
-$app->post('/requestLoginToken/', function ($args) {
+$app->post('/requestLoginToken', function ($args) {
     return (new AdminAccessController($this))->requestLoginToken();
 })->add('csrfGuardHandler')->setName('adminRequestLoginToken');
 

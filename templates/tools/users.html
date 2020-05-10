@@ -1,22 +1,14 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as form %}
 
 {% block htmlTitle 'Users' %}
 
-{% block openForm %}
-  <form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-{% endblock openForm %}
-
 {% block contentHeader %}
-
   <div class="content-header-inner">
     <div class="breadcrumb"></div>
-    <h3 class="section-title">User Settings</h3>
+    <h3 class="section-title">Users</h3>
+
     <div class="btn-group">
-      <a class="btn btn-cancel btn-sm jsFormCancelButton" href="{{ pathFor('adminToolUser') }}">Discard</a>
-      <button type="button" class="btn btn-add btn-sm jsAddUserRow">Add User</button>
-      <button type="submit" name="button" class="btn btn-save btn-sm jsFormSaveButton">Save User(s)</button>
+      <a class="btn btn-add btn-sm" href="{{ pathFor('adminToolUserEdit') }}">Add User</a>
     </div>
   </div>
 
@@ -25,60 +17,67 @@
 {% block content %}
   <div class="content-block">
     {% if page.recommendRecoveryEmail %}
+    {# TODO Put this notice in a dismissable alert #}
       <div class="one-admin-notice span">
-
-        <p>You only have one Administrator email registered. You should consider adding a second Administrator recovery email
+        <p>You only have one Administrator email registered. You should consider adding a second Administrator as login recovery email
               address.</p>
-
       </div>
     {% endif %}
 
+    <div class="filter-block">
+
+      <div class="search-block">
+       <div class="search-icon">
+        <i class="fas fa-search"></i>
+       </div>
+       <div class="search-input">
+        <input type="search" name="search" id="search" class="search" placeholder="Search users" autocomplete="false">
+       </div>
+      </div>
+
+      <div class="btn-dropdown-block">
+       <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
+       </div>
+       <div class="form-group-block">
+        <div class="form-group">
+         <input type="radio" class="radio-hidden" id="users-all" name="userstatus" value="all">
+         <label for="users-all">All</label>
+        </div>
+        <div class="form-group">
+         <input type="radio" class="radio-hidden" id="users-active" name="userstatus" value="active">
+         <label for="users-active">Active</label>
+        </div>
+        <div class="form-group">
+         <input type="radio" class="radio-hidden" id="users-inactive" name="userstatus" value="inactive">
+         <label for="users-inactive">Inactive</label>
+        </div>
+       </div>
+      </div>
+
+     </div>
+
+
+     {# TODO Sort out the users table #}
+    {# User Table Headings #}
+    <div class="page-list-item-header">
+      <div class="page-list-item__heading">Name</div>
+      <div class="page-list-item__heading">Email</div>
+      <div class="page-list-item__heading">Active</div>
+      <div class="page-list-item__heading">Admin</div>
+    </div>
+
     {# Loop through saved users #}
     {% for user in page.users %}
-      {% set arrayKey = uniqueKey() %}
-      <div class="user-card jsUser">
-        <input type="hidden" name="user_id[{{ arrayKey }}]" value="{{ user.id }}">
-
-        <!-- User Name -->
-        <div class="form-check">
-          <label>First Name</label>
-          <input type="text" class="form-control" name="first_name[{{ arrayKey }}]" maxlength="60" value="{{ user.first_name }}"
-            autocomplete="off" required placeholder="First name">
-        </div>
-
-        <div class="form-check">
-          <label>Last Name</label>
-          <input type="text" class="form-control" name="last_name[{{ arrayKey }}]" maxlength="60" value="{{ user.last_name }}"
-            autocomplete="off" required placeholder="Last name">
-        </div>
-
-        <!-- Email Input -->
-        <div class="form-check">
-          <label>Email</label>
-          <input type="email" class="form-control" name="email[{{ arrayKey }}]" maxlength="255" value="{{ user.email }}"
-            autocomplete="off" required placeholder="Email">
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="admin[{{ arrayKey }}]" id="admin-{{ arrayKey }}"
-            {{ checked(user.role == 'A') }}>
-          <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
-        </div>
-
-        {# Deactivate user button #}
-        <button class="btn btn-{% if user.active == 'Y' %}active{% else %}inactive{% endif %}"
-          formaction="{{ pathFor('adminToolUserStatusUpdate', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
-          {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
-        </button>
-
-      </div>
+    <a class="page-list-item" href="{{ pathFor('adminToolUserEdit', {'id': user.id}) }}">
+      <div class="page-list-item__title">{{ user.first_name }} {{ user.last_name }}</div>
+      <div class="page-list-item__title"><a href="mailto:{{ user.email }}" target="_blank">{{ user.email }}</a></div>
+      <div class="page-list-item__title">{% if user.active == 'Y' %}Active{% endif %}</div>
+      <div class="page-list-item__title">{% if user.role == 'A' %}Admin{% endif %}</div>
+    </a>
     {% endfor %}
 
-  </div>
+  </div><!-- /.content-block -->
 {% endblock content %}
-
-{% block closeForm %}
-</form>
-{% endblock closeForm %}
 
 {% block foot %}
   <script src="{{ basePath() }}/admin/js/user.js"></script>

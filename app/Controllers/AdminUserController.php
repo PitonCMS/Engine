@@ -49,73 +49,64 @@ class AdminUserController extends AdminBaseController
     }
 
     /**
-     * Save Users
+     * Edit User
      *
-     * Save all users in page
-     * @param void
+     * @param  array $args
      * @return Response
      */
-    public function saveUsers(): Response
+    public function editUser($args): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $post = $this->request->getParsedBody();
 
-        // Save users
-        foreach ($post['email'] as $key => $row) {
-            if (!empty($post['email'][$key])) {
-                $user = $userMapper->make();
-                $user->id = $post['user_id'][$key];
-                $user->role = (isset($post['admin'][$key]) && $post['admin'][$key] === 'on') ? 'A' : null;
-                $user->email = strtolower(trim($post['email'][$key]));
-                $user->first_name = $post['first_name'][$key];
-                $user->last_name = $post['last_name'][$key];
-                try {
-                    $userMapper->save($user);
-                } catch (PDOException $e) {
-                    if ($e->getCode() === '23000') {
-                        // Duplicate entry error
-                        $this->setAlert('danger', 'Duplicate User', "The user {$post['email'][$key]} already exists.");
-                        break;
-                    }
-
-                    throw $e;
-                }
-            }
+        // Fetch user or make new user
+        if (isset($args['id'])) {
+            $data['user'] = $userMapper->findById((int) $args['id']);
+        } else {
+            $data['user'] = $userMapper->make();
         }
 
-        // Redirect back to list of users
-        return $this->redirect('adminToolUser');
+        return $this->render('tools/userEdit.html', $data);
     }
 
     /**
-     * Change User Status
+     * Save User
      *
-     * Sets user active status: Y|N
-     * @param array $args
+     * Save all users
+     * @param void
      * @return Response
      */
-    public function userStatus($args): Response
+    public function saveUser(): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $post = $this->request->getParsedBody();
+        $id = (int) $this->request->getParsedBodyParam('user_id');
 
-        // Find user to change status
-        foreach ($post['user_id'] as $key => $row) {
-            // Both arguments will be strings, so no need to cast one or the other
-            if ($row === $args['id']) {
-                $user = $userMapper->make();
-                $user->id = $post['user_id'][$key];
-                $user->active = $args['status'];
-                $userMapper->save($user);
+        // Save user
+        $user = $userMapper->make();
+        $user->id = $id;
+        $user->first_name = trim($this->request->getParsedBodyParam('first_name'));
+        $user->last_name = trim($this->request->getParsedBodyParam('last_name'));
+        $user->email = trim($this->request->getParsedBodyParam('email'));
 
-                // All done here
-                break;
+        $user->role = ($this->request->getParsedBodyParam('role')) ? 'A' : null;
+        $user->active = ($this->request->getParsedBodyParam('active')) ? 'Y' : 'N';
+
+        try {
+            // There might be a duplicate user email
+            $userMapper->save($user);
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
+                // Duplicate email_uq unique index error
+                $this->setAlert('danger', 'Duplicate Email', "The user email {$row['email']} already exists.");
+
+                return $this->redirect('adminToolUserEdit', ['id' => $id]);
             }
+
+            throw $e;
         }
 
-        // Redirect back to list of users
+        // Redirect to users
         return $this->redirect('adminToolUser');
     }
 }
