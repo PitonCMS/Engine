@@ -2,6 +2,36 @@
 // Page Management
 // --------------------------------------------------------
 
+/**
+ * Listen for page list status filter changes and reload
+ */
+const pageListFilter = document.querySelector('.jsPageStatusFilter');
+if (pageListFilter) {
+    // If this page has a status filter, get the container div reference
+    const pageList = document.querySelector('.list-items-wrapper');
+
+    pageListFilter.addEventListener("change", (f) => {
+        let filter  = pageListFilter.options[pageListFilter.selectedIndex].value;
+
+        if (filter !== 'x') {
+            // Remove existing page rows
+            while (pageList.firstChild) {
+                pageList.removeChild(pageList.lastChild);
+            }
+
+            // Get server data
+            getXHRPromise(pitonConfig.routes.adminPageGet, {'pageStatus': filter})
+                .then((data) => {
+                    pageList.insertAdjacentHTML('afterbegin', data);
+                }).catch(function (error) {
+                    console.log('Something went wrong', error);
+                });
+        }
+    });
+}
+
+
+/*
 // Add Page Block Element
 $('.jsAddElement').on('click', function () {
     let $addButton = $(this);
@@ -223,22 +253,4 @@ let getMediaForMDE = function (editor) {
     });
   });
 
-// Listen for collection page select filter and reload page
-$('.jsCollectionPageSlugFilter').on('change', function() {
-    let collectionSlug = $(this).val();
-    if (collectionSlug !== 'x') {
-        // Do not prepend / if requesting all pages
-        collectionSlug = (collectionSlug) ? '/' + collectionSlug : collectionSlug;
-        window.location = pitonConfig.routes.adminCollection + collectionSlug;
-    }
-});
-
-// Listen for page status filter changes and reload page
-$('.jsPageStatusFilter').on('change', function() {
-    let filter = $(this).val();
-    if (filter !== 'x') {
-        let urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('pageStatus', filter);
-        window.location.search = urlParams.toString();
-    }
-});
+/* */

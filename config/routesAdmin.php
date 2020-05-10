@@ -31,10 +31,10 @@ $app->group('/admin', function () {
 
     // Page route
     $this->group('/page', function () {
-        // Show All Pages
-        $this->get('[/]', function ($args) {
-            return (new AdminPageController($this))->showPages($args);
-        })->setName('adminPage');
+        // XHR: Get page list asynchronously
+        $this->get('/get', function ($args) {
+            return (new AdminPageController($this))->showPages();
+        })->setName('adminPageGet');
 
         // Edit or add new page. Must provide ID or page layout argument
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
@@ -64,6 +64,12 @@ $app->group('/admin', function () {
                 return (new AdminPageController($this))->deleteElement();
             })->add('csrfGuardHandler')->setName('adminPageElementDelete');
         });
+
+        // Show All Pages
+        $this->get('[/]', function ($args) {
+            return (new AdminPageController($this))->showPages($args);
+        })->setName('adminPage');
+
         // End page elements
     });
     // End page routes
@@ -127,7 +133,7 @@ $app->group('/admin', function () {
 
     // Media
     $this->group('/media', function () {
-        // Show all media in modal asynchronously
+        // XHR: Get media asynchronously
         $this->get('/get', function ($args) {
             return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminMediaGet');
