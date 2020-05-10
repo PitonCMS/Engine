@@ -20,7 +20,9 @@
  <li class="side-nav__link messages">
   <i class="fas fa-envelope"></i>
   <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}"> Messages</a>
+  {% if getUnreadMessageCount() %}
   <div class="badge badge-notify">{{ getUnreadMessageCount() }}</div>
+  {% endif %}
  </li>
 
  <li class="side-nav__link help">
