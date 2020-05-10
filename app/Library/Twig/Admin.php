@@ -68,6 +68,7 @@ class Admin extends Base
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
             new TwigFunction('getAllPages', [$this, 'getAllPages']),
             new TwigFunction('getNavigators', [$this, 'getNavigators']),
+            new TwigFunction('getSessionData', [$this, 'getSessionData']),
         ]);
     }
 
@@ -244,5 +245,18 @@ class Admin extends Base
         }
 
         return null;
+    }
+
+    /**
+     * Get Session Data
+     *
+     * Gets data from session handler
+     * @param string $key
+     * @param string $default
+     * @return mixed
+     */
+    public function getSessionData(string $key = null, string $default = null)
+    {
+        return $this->container->sessionHandler->getData($key, $default);
     }
 }

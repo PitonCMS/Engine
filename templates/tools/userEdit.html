@@ -1,0 +1,68 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block htmlTitle 'Edit User' %}
+
+{% block openForm %}
+  <form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% endblock openForm %}
+
+{% block contentHeader %}
+
+  <div class="content-header-inner">
+    <div class="breadcrumb"></div>
+    <h3 class="section-title">Edit User</h3>
+    <div class="btn-group">
+      <a class="btn btn-cancel btn-sm jsFormCancelButton" href="{{ pathFor('adminToolUserEdit', {'id': page.user.id}) }}">Discard</a>
+      <button type="submit" name="button" class="btn btn-save btn-sm jsFormSaveButton" value="save">Save</button>
+    </div>
+  </div>
+
+{% endblock contentHeader %}
+
+{% block content %}
+  <div class="content-block">
+
+      <div class="user-card">
+        <input type="hidden" name="user_id" value="{{ page.user.id }}">
+
+        <!-- User Name -->
+        <div class="form-check">
+          <label>First Name</label>
+          <input type="text" class="form-control" name="first_name" maxlength="60" value="{{ page.user.first_name }}"
+            autocomplete="off" required placeholder="First name">
+        </div>
+
+        <div class="form-check">
+          <label>Last Name</label>
+          <input type="text" class="form-control" name="last_name" maxlength="60" value="{{ page.user.last_name }}"
+            autocomplete="off" required placeholder="Last name">
+        </div>
+
+        <!-- Email Input -->
+        <div class="form-check">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" maxlength="255" value="{{ page.user.email }}"
+            autocomplete="off" required placeholder="Email">
+        </div>
+
+        <!-- Other Controls -->
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}"
+            {{ checked(page.user.role == 'A') }} >
+          <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
+            {{ checked(page.user.active == 'Y') }}>
+          <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
+        </div>
+
+      </div>
+  </div>
+{% endblock content %}
+
+{% block closeForm %}
+</form>
+{% endblock closeForm %}

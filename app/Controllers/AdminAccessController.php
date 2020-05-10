@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Access Controller
@@ -21,8 +21,8 @@ use Slim\Http\Response;
  * to be sent by email to the user's validated email account. The login flow is:
  *
  * 1 Render login page form, which accepts an email address
- * 2 Submit (POST) the email, and validate the email string to a list of known privileged users
- * 3 Generate a one-time use hash token, save to session data, and send token in query string to user's email account
+ * 2 Submit (POST) the email, and validate the email string against a list of known users
+ * 3 Generate a one-time use hash token, save the token to session data, and send token in query string to user's email account
  * 4 User opens email, and submits link with token
  * 5 The application validates the submitted token to the one in session data, and if not expired an authenticated
  *      session is started
@@ -64,42 +64,32 @@ class AdminAccessController extends AdminBaseController
     {
         // Get dependencies
         $session = $this->container->sessionHandler;
-        $email = $this->container->emailHandler;
+        $emailHandler = $this->container->emailHandler;
         $security = $this->container->accessHandler;
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $body = $this->request->getParsedBody();
+        $email = trim($this->request->getParsedBodyParam('email'));
 
-        // Fetch all users
-        $userList = $userMapper->findActiveUsers();
-
-        // Clean provided email
-        $providedEmail = strtolower(trim($body['email']));
-
-        $foundValidUser = false;
-        foreach ($userList as $user) {
-            if ($user->email === $providedEmail) {
-                $foundValidUser = $user;
-                break;
-            }
-        }
+        // Fetch users
+        $user = $userMapper->findActiveUserByEmail($email);
 
         // Did we find a match?
-        if (!$foundValidUser) {
+        if ($user === null) {
             // No, log and silently redirect to home
-            $this->container->logger->info('PitonCMS: Failed login attempt: ' . $body['email']);
+            $this->container->logger->info('PitonCMS: Failed login attempt: ' . $email);
 
             return $this->redirect('home');
         }
 
         // Belt and braces/suspenders double check
-        if ($foundValidUser->email === $providedEmail) {
+        if ($user->email === $email) {
             // Get and set token, and user ID
             $token = $security->generateLoginToken();
             $session->setData([
                 $this->loginTokenKey => $token,
                 $this->loginTokenExpiresKey => time() + 300,
-                'user_id' => $foundValidUser->id,
-                'email' => $foundValidUser->email
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'role' => $user->role,
             ]);
 
             // Get request details to create login link and email to user
@@ -107,7 +97,7 @@ class AdminAccessController extends AdminBaseController
             $link .= $this->container->router->pathFor('adminProcessLoginToken', ['token' => $token]);
 
             // Send message
-            $email->setTo($providedEmail, '')
+            $emailHandler->setTo($user->email, '')
                 ->setSubject('PitonCMS Login')
                 ->setMessage("Click to login\n\n $link")
                 ->send();
