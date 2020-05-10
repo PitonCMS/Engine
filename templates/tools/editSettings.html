@@ -2,39 +2,65 @@
 {% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
 
 {% block htmlTitle 'Edit Settings' %}
-{% block headText 'Site Settings' %}
-{% block sectionId 'detailPage' %}
-{# {% block mainClass 'contentTwoCol' %} #}
 
-{% block openForm %}
+{% block contentHeader %}
 <form action="{{ pathFor('adminToolSettingSave') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <input type="hidden" name="category" value="{{ page.category }}">
- {% endblock openForm %}
+ <div class="content-header-inner">
+<!-- Bread Crumbs  -->
+<div class="breadcrumb"></div>
 
- {% block sidebar %}
- <div class="sidebar-inner">
-  <div class="sidebar-block button-group">
-   <!-- Control Buttons -->
-   <a class="btn btn-outline-warning" href="{{ pathFor('adminToolSetting', {'cat': page.category|default('site') }) }}">Cancel</a>
-   <button class="btn btn-outline-primary" type="submit" name="button" value="save">Save</button>
-  </div>
-  {% include "@admin/tools/_toolsSidebar.html" %}
+<!-- Page Title -->
+<h3 class="section-title">{{ page.category|capitalize }} Settings</h3>
+
+<!-- Control Buttons -->
+<div class=" btn-group">
+ <a class="btn btn-cancel btn-sm" href="{{ pathFor('adminToolSetting', {'cat': page.category|default('site') }) }}">Cancel</a>
+ <button class="btn btn-save btn-sm" type="submit" name="button" value="save">Save</button>
+</div>
  </div>
-
- {% endblock sidebar %}
+ {% endblock contentHeader %}
 
  {% block content %}
- <div class="content-block">
-  <h3 class="section-title"> {{ page.category|capitalize }} Settings</h3>
-  <div class="grid-wrapper">
-  
-   {% for setting in page.settings %}
-   {{ settingForm.settingInput(setting) }}
-   {% endfor %}
-  </div>
 
+ <div class="content-cards">
+
+  <a href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}" class="content-card">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="title-text">General</h3>
+   <p>Update settings for various things.</p>
+  </a>
+
+  <a href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}" class="content-card">
+   <i class="fas fa-envelope card-icon"></i>
+   <h3 class="title-text">Contact</h3>
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing eat. Laboriosam, ad!</p>
+  </a>
+
+  <a href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}" class="content-card">
+   <i class="fas fa-people-arrows card-icon"></i>
+   <h3 class="title-text">Social</h3>
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing eat. Laboriosam, ad!</p>
+  </a>
+
+  <a href="{{ pathFor('adminToolUser') }}" class="content-card">
+   <i class="fas fa-users-cog card-icon"></i>
+   <h3 class="title-text">Users</h3>
+   <p>Manage users.</p>
+  </a>
+
+  <a href="{{ pathFor('adminToolSitemap') }}" class="content-card">
+   <i class="fas fa-map card-icon"></i>
+   <h3 class="title-text">Sitemap</h3>
+   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
+  </a>
  </div>
 
-
- {% endblock content %}
+ <div class="settings-block">
+  {% for setting in page.settings %}
+  {{ settingForm.settingInput(setting) }}
+  {% endfor %}
+ </div>
+</form>
+{% endblock content %}

@@ -2,51 +2,82 @@
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
 {% block htmlTitle 'Media' %}
-{% block headText 'Media' %}
-{% block sectionId 'mediaPage' %}
 
-{% block sidebar %}
-<div class="sidebar-inner">
-{# Button to trigger upload modal #}
-    <div class="button-group">
-        <div class="btn btn-link btn-sm" data-toggle="modal" data-target="#mediaUpload">
-        Upload New Media
-        </div>
-    </div>
+{% block contentHeader %}
+<div class="content-header-inner">
+<!-- Bread Crumbs -->
+<div class="breadcrumb"></div>
+
+<!-- Section Title -->
+<h3 class="section-title">All Media</h3>
+
+<!-- Controls -->
+<div class="btn-dropdown-block">
+ <div class="btn btn-add btn-sm"><span>Add&nbsp;&nbsp;&nbsp;</span> <span><i class="fas fa-chevron-down"></i></span>
+ </div>
+ <div class="form-group-block-add">
+  <div class="form-group" data-toggle="modal" data-target="#mediaUpload">
+   <input type="radio" class="radio-hidden" id="media" name="template" value="media">
+   <label for="media">Media</label>
+  </div>
+  <div class="form-group">
+   <input type="radio" class="radio-hidden" id="New Category" name="template" value="New Category">
+   <label for="New Category">New Category</label>
+  </div>
+ </div>
 </div>
-{% endblock sidebar %}
+
+</div>
+
+{% endblock contentHeader %}
 
 {% block content %}
-<div class="content-block">
- {{ mediaMacro.upload() }}
+{# {{ mediaMacro.upload() }} #}
 
- <div class="section-title form-inline mt-0">
-  <h3>Media Library</h3>
-  <select class="form-control ml-auto jsMediaCategorySelect">
-   <option value="all" {% if page.category == 'all' %}selected{% endif %}>All Media</option>
-   {% for c in getMediaCategories() %}
-   <option value="{{ c.category }}" {% if page.category == c.category %}selected{% endif %}>{{ c.category }}</option>
-   {% endfor %}
-  </select>
+<!-- Media Filter -->
+<div class="filter-block">
+
+ <div class="search-block">
+  <div class="search-icon">
+   <i class="fas fa-search"></i>
+  </div>
+  <div class="search-input">
+   <input type="search" name="search" id="search" class="search" placeholder="Search Media" autocomplete="false">
+  </div>
  </div>
 
- <div class="media-wrapper">
-  {% for media in page.media %}
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown btn-sm"><span>By Category</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+  <div class="form-group-block">
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="everything" name="category" value="everything">
+    <label for="everything">Everything</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="holiday" name="category" value="holiday">
+    <label for="holiday">Holiday</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="travel" name="category" value="travel">
+    <label for="travel">Travel</label>
+   </div>
+  </div>
+ </div>
+
+</div>
+
+{# Media List #}
+<div class="media-wrapper">
+ {% for media in page.media %}
   {{ mediaMacro.card(media, page.categories, true) }}
   {% else %}
   <strong>No Media Found</strong>
   {% endfor %}
- </div>
+
+
+</div>
+<div class="pagination">
  {{ pagination() }}
 </div>
-
 {% endblock content %}
-
-{% block foot %}
-<script src="{{ basePath() }}/admin/js/media.js"></script>
-{# This fixes an issue with the BS file upload so that the selected filename shows in the input #}
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-<script>
- bsCustomFileInput.init()
-</script>
-{% endblock foot %}

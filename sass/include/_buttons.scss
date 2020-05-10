@@ -1,0 +1,134 @@
+/* Button Styles */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+ appearance: none;
+ border: 0;
+ border-radius: var(--border-radius);
+ color: $action-color--contrast;
+ cursor: pointer;
+ display: inline-block;
+ font-family: var(--font-family-base);
+ font-size: 1rem;
+ -webkit-font-smoothing: antialiased;
+ font-weight: 600;
+ line-height: 1;
+ padding: var(--spacing--small) var(--spacing);
+ text-align: center;
+ text-decoration: none;
+ transition: background-color var(--duration) var(--timing);
+ user-select: none;
+ vertical-align: middle;
+ white-space: nowrap;
+
+ &:hover {
+  background-color: $action-color--alt;
+ }
+
+ &:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+ }
+
+ &:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+ }
+}
+
+// Default buttons
+.btn {
+ @include padding(1em);
+ width: 100%;
+ background: darkmagenta;
+ color: $txt-light;
+ border-radius: $border-radius;
+ text-align: center;
+
+ &:hover {
+  background: hue($clr-accent);
+  cursor: pointer;
+ }
+}
+
+.btn-sm {
+ @include padding(.5em .75em);
+ font-size: .875rem;
+}
+
+.btn-dropdown {
+ background: $bg-blue;
+ color: $txt-dark;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ border-radius: 0;
+ &:hover{
+  cursor: default;
+  background: $bg-blue !important;
+ }
+}
+
+.btn-add {
+ border-radius: 0;
+ background: $clr-accent;
+ color: $txt-light;
+ &:hover{
+  background: $clr-accent;
+  cursor: default;
+ }
+}
+
+.btn-publish {
+ background: $btn-green !important;
+
+ &:hover {
+  background: $btn-green-hover !important;
+ }
+}
+
+.btn-save {
+ background: $btn-blue !important;
+
+ &:hover {
+  background: $btn-blue-hover !important;
+ }
+
+ &-disabled {
+  background: $btn-blue-disabled !important;
+  cursor: not-allowed;
+  &:hover{
+   background: $btn-blue-disabled !important;
+   cursor: not-allowed;
+  }
+ }
+}
+.btn-new {
+ background: greenyellow !important;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.btn-delete {
+ background: $btn-red !important;
+
+ &:hover {
+  background: $btn-red-hover !important;
+ }
+}
+
+.btn-cancel {
+ @include margin(0);
+ @include padding(0);
+ text-align: center;
+ font-size: .875rem;
+ color: $nav-font-color;
+ background: transparent;
+
+ &:hover {
+  color: $link-hover-color;
+
+ }
+}

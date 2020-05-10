@@ -1,8 +1,14 @@
 {% extends '@admin/_adminBase.html' %}
 
 {% block htmlTitle 'Help' %}
-{% block headText 'Help' %}
-{% block sectionId 'summaryPage' %}
+{% block contentHeader %}
+<div class="content-header-inner">
+ <div class="breadcrumb"></div>
+ <h3 class="section-title">Support</h3>
+ <div class="btn-group"></div>
+</div>
+
+{% endblock contentHeader %}
 
 {% block sidebar %}
 
@@ -116,7 +122,6 @@
     </div>
 
 </div>
-
 {% endblock sidebar %}
 
 {% block content %}
@@ -132,8 +137,78 @@
             list-style: inherit;
         }
     </style>
+     <div class="page-list-item-filter">
+      <form>
+       <div class="search-block">
+        <div class="search-icon">
+         <i class="fas fa-search"></i>
+        </div>
+        <div class="search-input">
+         <input type="search" name="search" id="search" class="search" placeholder="Search Support" autocomplete="false">
+        </div>
+       </div>
+      </form>
+     </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">PitonCMS</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Overview</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Pages</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Collections</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Navigation</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Media</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Messages</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Settings</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+         </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">For Designers</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Templates</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+         
+       
+         </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">For Developers</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Version</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+    
+       
+         </div>
     <div class="help-content">
-        {{ page.helpContent }}
+        {# {{ page.helpContent }} #}
     </div>
 {% endblock content %}
 

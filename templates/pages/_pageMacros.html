@@ -1,197 +1,147 @@
-{#
-  Page and Collection Macros
+{#   Page and Collection Macros 
+     Contains Twig macros for reusable HTML with pages and collections administration #}
 
-  Contains Twig macros for reusable HTML with pages and collections administration
-#}
-
-{#
-  Edit Element Form
+{# Edit Element Form
 
   Returns one block element.
   @param arrayKey     Each block element gets a unique arrayKey set to keep those inputs all together on save.
   @param elementTypes List of available elements to select
   @param enableInput  Flag to enable optional input, textarea, or collection select for saved elements
 #}
+
 {% macro elementForm(element, blockKey, elementTypeOptions, loopIndex = 1) %}
 
-  {% set arrayKey = element.id ?? uniqueKey() %}
-  {% set enableInput = '' %}
+{% set arrayKey = element.id ?? uniqueKey() %}
+{% set enableInput = '' %}
 
-  {# Check if the element definition needs a special input type enabled #}
-  {% set elementTypes = getElements() %}
-  {% for e in elementTypes %}
-  {% if e.filename == element.template %}
-  {% set enableInput = e.enableInput %}
+{# Check if the element definition needs a special input type enabled #}
+{% set elementTypes = getElements() %}
+{% for e in elementTypes %}
+{% if e.filename == element.template %}
+{% set enableInput = e.enableInput %}
+{% endif %}
+{% endfor %}
+
+<div class="jsElementParent" id="page-element-{{ arrayKey }}">
+ 
+ <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
+ <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+
+ {# Element radio buttons #}
+ <div class="form-group-pageEdit jsElementType">
+  <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
+  <div class="radio-block-wrapper">
+  {% for elem in elementTypes %} 
+  {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
+   <div class="radio-block-item">
+   <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]" id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.template == elem.filename) }} required>
+   <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}" title="{{ elem.description }}">{{ elem.name }}</label>
+   </div>
   {% endif %}
   {% endfor %}
+ </div>
+ </div>
 
-  <div class="jsElementParent form-group-wrapper" id="page-element-{{ arrayKey }}">
-  <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
-  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+ <!-- Element Order -->
+ {# <div class="form-group-pageEdit">
+  <label>Element Order</label>
+  <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
+   value="{{ loopIndex }}">
+ </div> #}
 
-  {# Element radio buttons #}
-  <div class="form-group jsElementType">
-   <div>Element Type<span class="text-danger">*</span>&nbsp;</div>
+ <!-- Element Title -->
+ <div class="form-group-pageEdit">
+  <label>Element Title</label>
+  <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
+   placeholder="Element Title" autocomplete="off">
+ </div>
 
-   {% for elem in elementTypes %}
-    {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
-    <div class="form-check form-check-inline">
+ <!-- Element Content Area -->
+ <div class="form-group-pageEdit ">
+  <label>Element Content</label>
+  <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+ </div>
 
-    <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]"
-      id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}"
-      {{ checked(element.template == elem.filename) }} required>
-    <label class="form-check-label" for="{{ arrayKey }}-{{ elem.filename }}" title="{{ elem.description }}">{{ elem.name }}</label>
-    </div>
-    {% endif %}
-   {% endfor %}
+ <!-- Embedded HTML -->
+ <div class="form-group-pageEdit jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
+  <label>Embedded HTML</label>
+  <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
+  <small class="form-text text-muted">Enter embedded HTML.</small>
+ </div>
+
+   {# Media Select Option
+
+   Allows user to select a saved media file to link with this block element.
+   This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
+   Selecting an image sets the media table ID in the element_media_id input.
+   #}
+
+<div class="form-group-pageEdit jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
+
+<img src="{{ getMediaPath(element.media.filename, 'large') }}" class="{% if not element.media.filename %}d-none{% endif %}">
+
+<input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]" value="{{ element.media.id }}">
+<label>Media</label>
+
+<div class="input-group">
+ <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>&nbsp;
+ <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
+</div>
 
  </div>
 
-  <div class="form-group mb-0">
+ {# Collection Select #}
+<div
+class="form-group-pageEdit jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
+<label>Collection</label>
+<select class="form-control" name="element_collection_id[{{ arrayKey }}]"
+ {% if enableInput == 'collection' %}required{% endif %}>
+ <option value="">- None -</option>
+ {% for c in getCollections() %}
+ <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
+{{ c.collection_title }}
+ </option>
+ {% endfor %}
+</select>
+ </div>
 
-    <label>Element Order</label>
-    <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
-    value="{{ loopIndex }}">
-  </div>
+ {# Gallery Category Select #}
+<div class="form-group-pageEdit jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
+<label>Gallery</label>
+<select class="form-control" name="element_gallery_id[{{ arrayKey }}]"
+ {% if enableInput == 'gallery' %}required{% endif %}>
+ <option value="">- None -</option>
+ {% for c in getMediaCategories() %}
+ <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
+ {% endfor %}
+</select>
+ </div>
 
-  <div class="form-group span mb-0">
-    <label>Title</label>
-    <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
-    placeholder="Element Title" autocomplete="off">
-  </div>
-
-  <div class="form-group mb-0 span">
-    <label>Content</label>
-    <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
-  </div>
-
-  <div
-    class="form-group jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
-    <label>Embedded HTML</label>
-    <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
-    <small class="form-text text-muted">Enter embedded HTML.</small>
-  </div>
-
-  {#
-        Media Select Option
-
-        Allows user to select a saved media file to link with this block element.
-        This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
-        Selecting an image sets the media table ID in the element_media_id input.
-  #}
-  <div class="form-group jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
-    <img src="{{ getMediaPath(element.media.filename, 'large') }}"
-    class="{% if not element.media.filename %}d-none{% endif %}">
-    <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]"
-    value="{{ element.media.id }}">
-    <label>Media</label>
-    <div class="input-group">
-    <button class="btn btn-sm btn-outline-info jsSelectMediaFile" type="button">Select Media</button>&nbsp;
-    <button class="btn btn-sm btn-outline-danger jsMediaClear" type="button">Clear Media</button>
-    </div>
-  </div>
-
-  {#
-    Collection Select
-  #}
-  <div
-    class="form-group jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
-    <label>Collection</label>
-    <select class="form-control" name="element_collection_id[{{ arrayKey }}]"
-    {% if enableInput == 'collection' %}required{% endif %}>
-    <option value="">- None -</option>
-    {% for c in getCollections() %}
-    <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
-      {{ c.collection_title }}
-    </option>
-    {% endfor %}
-    </select>
-  </div>
-
-  {#
-    Gallery Category Select
-  #}
-  <div
-    class="form-group jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
-    <label>Gallery</label>
-    <select class="form-control" name="element_gallery_id[{{ arrayKey }}]"
-    {% if enableInput == 'gallery' %}required{% endif %}>
-    <option value="">- None -</option>
-    {% for c in getMediaCategories() %}
-    <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
-    {% endfor %}
-    </select>
-  </div>
-
-  <div class="span">
-    <button class="btn btn-outline-danger btn-sm jsDeleteBlockElement mt-0" type="button" data-element-id="{{ arrayKey }}"
-    title="Delete element.">Delete Element</button>
-  </div>
-  </div>
+ <div class="btn-group-bottom">
+  <button class="btn btn-delete btn-sm jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
+   title="Delete element.">Delete Element</button>
+   </div>
+</div>
 {% endmacro elementForm %}
 
-{#
-  Sidebar Template Links
+{# Page List Item Row
 
-  Displays a single template link
-  @param template Template object
-  @param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
-#}
-{% macro templateLink(template, linkName) %}
+For the summary display of either pages or collection detail pages
 
-  <div class="sidebar-link">
-    <a href="{{ pathFor(linkName, {}, {'definition': template.filename}) }}" title="{{ template.description }}">
-      <i class="fas fa-edit"></i>
-      <div class="sidebar-link__text">{{ template.name }}</div>
-    </a>
-    <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
-      data-content="{{ template.description }}"></i>
-  </div>
+@param pageItem Page object
+@param linkName Expecting either 'adminPageEdit' or 'adminCollectionPageEdit'
 
-{% endmacro templateLink %}
-
-{#
-  Page List Item Row
-
-  For the summary display of either pages or collection detail pages
-  @param pageItem Page object
-  @param linkName Expecting either 'adminPageEdit' or 'adminCollectionPageEdit'
 #}
 {% macro pageListItem(pageItem, linkName) %}
 
-  <div class="page-list">
-    <div class="page-list__title">
-      <span title="{{ pageItem.title }}" >{{ pageItem.title }}</span>
-    </div>
-
-    <div class="page-list__body">
-
-     <div>
-      {% if pageItem.getPublishedStatus() == 'draft' %}
-        <span class="badge badge-secondary" title="Not published">Draft</span>
-
-      {% elseif pageItem.getPublishedStatus() == 'pending' %}
-        <span class="badge badge-warning" title="Pending publish on {{ pageItem.published_date|date }}">Pending</span>
-
-      {% elseif pageItem.getPublishedStatus() == 'published' %}
-        <span class="badge badge-success" title="Published on {{ pageItem.published_date|date }}">Published</span>
-
-      {% endif %}
-
-      {# Display collection title if page is in a collection #}
-      {% if pageItem.collection_title %}
-      <span>{{ pageItem.collection_title }}</span>
-      {% endif %}
-
-      <span> Template: <code>{{ pageItem.template }}</code> </span>
-     </div>
-
-    </div>
-
-    <div class="page-list__action">
-      <a class="" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">Edit</a>
-    </div>
-  </div>
+<a class="page-list-item" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
+ <div class="page-list-item__media"><img src="https://unsplash.it/100/100" alt=""></div>
+ <div class="page-list-item__title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
+ <div class="page-list-item__status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}
+ </div>
+ <div class="page-list-item__template">Template: <code>{{ pageItem.template }}</code></div>
+ <div class="page-list-item__collect-template">{{ pageItem.collection_title }} </div>
+</a>
 
 {% endmacro pageListItem %}
 
@@ -201,12 +151,34 @@
   Returns select list of page status that trigger a page reload to filter results
 #}
 {% macro pageStatusFilter() %}
-  <select class="form-control ml-auto jsPageStatusFilter">
-    {% set param = getQueryParam('pageStatus') %}
-    <option value="x">Status&hellip;</option>
-    <option value="all" {% if param == 'all' %}selected{% endif %}>All Pages</option>
-    <option value="draft" {% if param == 'draft' %}selected{% endif %}>Draft</option>
-    <option value="pending" {% if param == 'pending' %}selected{% endif %}>Pending</option>
-    <option value="published" {% if param == 'published' %}selected{% endif %}>Published</option>
-  </select>
+<select class="form-control ml-auto jsPageStatusFilter">
+ {% set param = getQueryParam('pageStatus') %}
+ <option value="x">Status&hellip;</option>
+ <option value="all" {% if param == 'all' %}selected{% endif %}>All Pages</option>
+ <option value="draft" {% if param == 'draft' %}selected{% endif %}>Draft</option>
+ <option value="pending" {% if param == 'pending' %}selected{% endif %}>Pending</option>
+ <option value="published" {% if param == 'published' %}selected{% endif %}>Published</option>
+</select>
 {% endmacro %}
+
+{# Sidebar Template Links
+
+Displays a single template link
+
+@param template Template object
+@param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
+
+#}
+
+{% macro templateLink(template, linkName) %}
+
+<div class="sidebar-link">
+ <a href="{{ pathFor(linkName, {}, {'definition': template.filename}) }}" title="{{ template.description }}">
+<i class="fas fa-edit"></i>
+<div class="sidebar-link__text">{{ template.name }}</div>
+ </a>
+ <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
+data-content="{{ template.description }}"></i>
+</div>
+
+{% endmacro templateLink %}

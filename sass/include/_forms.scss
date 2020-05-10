@@ -1,0 +1,145 @@
+/* Change the white to any color ;) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+  outline: none;
+}
+input[type="text"],
+input[type="textarea"],
+.form-control {
+  line-height: 1.6;
+  text-transform: none;
+  letter-spacing: normal;
+  position: relative;
+  z-index: 20;
+  display: block;
+  // flex: 1 1;
+  width: 100%;
+  background: $bg-accent;
+  border: 0.1rem solid transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  appearance: none;
+}
+
+// Search input
+
+.search-block {
+  margin: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  border: solid 2px $bg-blue;
+  grid-column: 1 / -1;
+  @media screen and (min-width: $breakpoint) {
+    grid-column: 1;
+  }
+}
+.search {
+  box-sizing: border-box;
+  margin: 0;
+  border: none;
+  color: #808080;
+}
+.search-icon {
+  border: solid 1px black;
+
+  border: none;
+  padding: 7px;
+  color: #808080;
+
+  border-bottom-left-radius: 7px;
+  border-top-left-radius: 7px;
+}
+
+// Dropdown Hover Buttons
+
+.form-group-block,
+.form-group-block-add {
+  width: 100%;
+  background: $bg-accent;
+  box-shadow: $box-shadow-2;
+
+  transform-origin: top;
+  transform: scale(1, 0);
+  transition: transform 250ms ease-in-out 200ms;
+  z-index: 100;
+
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+.form-group-block-add {
+  width: 160px;
+}
+
+.btn-dropdown-block:hover > .form-group-block,
+.btn-dropdown-block:hover > .form-group-block-add {
+  cursor: pointer;
+  transform: scale(1);
+}
+
+.form-group {
+  padding: 1em;
+  width: 100%;
+}
+
+.form-group label {
+  width: 100%;
+  height: 100%;
+}
+
+.form-group label:hover,
+.form-group:hover {
+  cursor: pointer;
+  // background: $bg-blue;
+}
+
+.form-group-block {
+}
+
+.btn-dropdown-block:hover > .form-group-block {
+  cursor: pointer;
+  transform: scale(1);
+}
+
+label {
+  margin: 0;
+  padding: 0;
+}
+
+.form-group {
+  padding: 1em;
+  width: 100%;
+  &:hover {
+    background: $bg-blue;
+  }
+}
+
+.form-group label {
+  width: 100%;
+  height: 100%;
+  font-size: 0.875rem;
+}
+
+.form-group:hover {
+  cursor: pointer;
+  // background: $bg-blue;
+}
+
+// Hide Radio Buttons
+
+.radio-hidden, .element-toggle, .nav-toggle {
+  position: absolute;
+  top: -999px !important;
+  left: -999px !important;
+}
+
+input:focus {
+  outline: none;
+}

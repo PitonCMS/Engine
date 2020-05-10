@@ -1,0 +1,62 @@
+.sidebar {
+ .side-nav {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+
+  &__link {
+   height: $nav-height;
+   @include padding(null .5em);
+
+   display: grid;
+   grid-template-columns: 20px 1fr 20px;
+   align-items: center;
+   column-gap: .25em;
+
+   &:hover {
+    background-color: rgba($bg-blue, .12);
+   }
+
+   a {
+    @include padding(.5em);
+    line-height: 1.7rem;
+    opacity: 0;
+    transition: opacity 250ms ease-in-out 125ms;
+
+    @media screen and (min-width: $breakpoint) {
+     opacity: 1;
+    }
+
+    &:hover {
+     color: $clr-accent;
+    }
+   }
+  }
+
+  .active {
+   background-color: rgba($bg-blue, .5);
+
+   &:hover {
+    cursor: default;
+
+    a {
+     color: $clr-text;
+    }
+   }
+  }
+ }
+ .fas {
+  color: rgba($clr-text, .35);
+  @include margin(null 1rem null .25em);
+  font-size: 1rem;
+ }
+}
+
+.nav-toggle:checked~.sidebar {
+ display: block;
+ transform: scale(1, 1);
+}
+
+.nav-toggle:checked~.sidebar a {
+ opacity: 1;
+}

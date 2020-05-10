@@ -12,52 +12,67 @@
 {% import _self as mediaMacro %}
 
 <div class="media jsMediaCard">
-{# TODO: This <form> should really be inside the else statement but breaks layout #}
-  <form class="mediaForm" action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-    <input type="hidden" name="media_id" value="{{ media.id }}">
+ {# TODO: This <form> should really be inside the else statement but breaks layout #}
+ <form class="mediaForm" action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="media_id" value="{{ media.id }}">
 
-    {# Media Image Thumbnail for preview 100px wide #}
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
-      data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
-      data-media-id="{{ media.id }}">
 
-      {% if not editable %}
-      {# This is for displaying in the page media modal when selecting images #}
-      <p>{{ media.caption }}</p>
-      {% else %}
-      {# Show editable fields and controls #}
 
-      {# Media Caption Input #}
-      <div class="mediaCaption">
-        <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
-          placeholder="No caption">
-      </div>
+  {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
+  <div class="mediaPopup">
+   <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
+    data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
+    data-media-id="{{ media.id }}">
 
-      {# Featured Media? #}
-      <div class="mediaFeatured">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
-          {{ checked(media.feature) }}>
-        <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
-        </div>
-      </div>
+   <span class="mediaPopupImg">
+    <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}"
+     data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
+   </span>
+  </div>
 
-      {# Media Categories #}
-      <div class="mediaCategories">
-        {% for c in categories %}
-        {{ mediaMacro.checkbox(c, media.id) }}
-        {% endfor %}
-      </div>
+  {% if not editable %}
+  {# This is for displaying in the page media modal when selecting images #}
+  <p>{{ media.caption }}</p>
+  {% else %}
+  {# Show editable fields and controls #}
 
-      {# Media Controls #}
-      <div class="mediaControls">
-        <button class="btn btn-outline-primary btn-sm mt-2" type="submit" value="save">Save</button>
-        <button class="btn btn-outline-danger btn-sm mt-2" type="submit" formaction="{{ pathFor('adminMediaDelete') }}" value="delete">Delete</button>
-        <a class="btn btn-outline-warning btn-sm mt-2" href="/admin/media/">Cancel</a>
-      </div>
-    {% endif %}
-    </form>
+
+  <div class="mediaBlock">
+   {# Media Caption Input #}
+   <div class="mediaCaption">
+    <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
+     placeholder="No caption">
+   </div>
+
+   {# Featured Media? #}
+   <div class="mediaFeatured">
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
+      {{ checked(media.feature) }}>
+     <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
+    </div>
+   </div>
+  </div>
+
+  {# Media Categories #}
+  <div class="mediaCategories">
+   {% for c in categories %}
+   {{ mediaMacro.checkbox(c, media.id) }}
+   {% endfor %}
+  </div>
+
+  {# Media Controls #}
+  <div class="mediaControls">
+   <a class="btn btn-sm btn-cancel" href="/admin/media/">Cancel</a>
+   <button class="btn btn-sm btn-delete" type="submit" formaction="{{ pathFor('adminMediaDelete') }}"
+   value="delete">Delete</button>
+   <button class="btn btn-sm btn-save" type="submit" value="save">Save</button>
+
+   
+  </div>
+  {% endif %}
+ </form>
 </div>
 {% endmacro card %}
 
@@ -69,9 +84,9 @@
 {% macro checkbox(category, mediaId) %}
 {% if category %}
 <div class="form-group form-check form-check-inline">
-  <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]"
-    value="{{ category.id }}" {{ checked(category.media[mediaId]) }}>
-  <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
+ <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]"
+  value="{{ category.id }}" {{ checked(category.media[mediaId]) }}>
+ <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
 </div>
 {% endif %}
 {% endmacro checkbox %}
@@ -84,58 +99,60 @@
 {% macro upload() %}
 {% import _self as mediaMacro %}
 <div class="modal fade" id="mediaUpload" tabindex="-1" role="dialog" aria-labelledby="mediaUploadLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="mediaUploadLabel">Upload Media</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+ aria-hidden="true">
+ <div class="modal-dialog" role="document">
+  <div class="modal-content">
+   <div class="modal-header">
+    <h5 class="modal-title" id="mediaUploadLabel">Upload Media</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+     <span aria-hidden="true">&times;</span>
+    </button>
+   </div>
+   <div class="modal-body">
 
-        <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-          <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+    <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8"
+     enctype="multipart/form-data">
+     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
-            <label class="custom-file-label" for="mediaFile">Choose a file</label>
-          </div>
+     <div class="custom-file">
+      <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
+      <label class="custom-file-label" for="mediaFile">Choose a file</label>
+     </div>
 
-          <hr>
-          <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="feature" name="feature">
-            <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
-          </div>
-          <hr>
-          {% for category in page.categories %}
-          {{ mediaMacro.checkbox(category) }}
-          {% endfor %}
-          <hr>
-          <div class="form-group">
-            <label>Caption</label>
-            <input type="text" class="form-control" name="caption" maxlength="100" autocomplete="off" placeholder="Media caption">
-          </div>
+     <hr>
+     <div class="form-group form-check">
+      <input class="form-check-input" type="checkbox" id="feature" name="feature">
+      <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
+     </div>
+     <hr>
+     {% for category in page.categories %}
+     {{ mediaMacro.checkbox(category) }}
+     {% endfor %}
+     <hr>
+     <div class="form-group">
+      <label>Caption</label>
+      <input type="text" class="form-control" name="caption" maxlength="100" autocomplete="off"
+       placeholder="Media caption">
+     </div>
 
-          {# Only display optimize checkbox if there is a Tinyfy key set in settings #}
-          {% if site.settings.tinifyApiKey %}
-          <hr>
-          <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="optimize" name="optimize" checked>
-            <label class="form-check-label" for="optimize">Optimize Media</label>
-            <small class="form-text text-muted">
-              Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
-            </small>
-          </div>
-          {% endif %}
+     {# Only display optimize checkbox if there is a Tinyfy key set in settings #}
+     {% if site.settings.tinifyApiKey %}
+     <hr>
+     <div class="form-group form-check">
+      <input class="form-check-input" type="checkbox" id="optimize" name="optimize" checked>
+      <label class="form-check-label" for="optimize">Optimize Media</label>
+      <small class="form-text text-muted">
+       Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
+      </small>
+     </div>
+     {% endif %}
 
-          <div class="form-group">
-            <button class="btn btn-outline-primary" type="submit" name="button" value="save">Upload</button>
-          </div>
-        </form>
-      </div>
-    </div>
+     <div class="form-group">
+      <button class="btn btn-outline-primary" type="submit" name="button" value="save">Upload</button>
+     </div>
+    </form>
+   </div>
   </div>
+ </div>
 </div>
 {% endmacro upload %}
