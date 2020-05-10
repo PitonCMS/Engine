@@ -19,12 +19,12 @@
 <!-- Media Filter -->
 <div class="filter-block">
 
- <div class="search-block">
-  <div class="search-icon">
+ <div class="input-block">
+  <div class="input-block__icon">
    <i class="fas fa-search"></i>
   </div>
-  <div class="search-input">
-   <input type="search" name="search" id="search" class="search" placeholder="Search Pages" autocomplete="false">
+  <div class="input-block__input">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Pages" autocomplete="false">
   </div>
  </div>
 
@@ -32,6 +32,10 @@
   <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block">
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="allPages" name="category" value="allPages">
+    <label for="allPages">All Pages</label>
+   </div>
    <div class="form-group">
     <input type="radio" class="radio-hidden" id="published" name="category" value="published">
     <label for="published">Published</label>

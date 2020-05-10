@@ -84,25 +84,21 @@
  <div class="form-group-pageEdit">
   <label>Slug <span class="text-required">*</span></label>
 
-   {% if page.collection_slug %}
-   <!-- <div class="input-group-prepend">
-    <span class="input-group-text">{{ page.collection_slug }}/</span>
-   </div> -->
-   {% endif %}
+ 
 
-    <div class="search-block">
-     <div class="search-icon jsUrlSlugFaLockStatus">
+    <div class="input-block">
+     <div class="input-block__icon jsUrlSlugFaLockStatus">
       <i class="fas fa-{{ lockedStatus }}"></i>
      </div>
-     <div class="search-input">
-      <input type="text" class="form-control jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
-       value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
+     <div class="input-block__input">
+      <input type="text" class="input-block__search-input jsUrlSlug"  name="page_slug" maxlength="100" placeholder="URL slug"
+      {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
      </div>
     </div>
   
  <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
   changed. Warning, changing the URL slug after the page is published may negatively impact links to your
-  page.</small>
+  page.</small> 
 </div>
 
  <div class="form-group-pageEdit">

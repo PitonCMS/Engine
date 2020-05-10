@@ -34,32 +34,36 @@
 {% endblock sidebar %}
 
 {% block content %}
-<!-- Media Filter -->
+<!-- Message Filters -->
 <div class="filter-block">
- <div class="search-block">
-  <div class="search-icon">
+ <div class="input-block">
+  <div class="input-block__icon">
    <i class="fas fa-search"></i>
   </div>
-  <div class="search-input">
-   <input type="search" name="search" id="search" class="search" placeholder="Search Media" autocomplete="false">
+  <div class="input-block__input">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media" autocomplete="false">
   </div>
  </div>
 
  <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown btn-sm"><span>All</span> <span><i class="fas fa-chevron-down"></i></span>
+  <div class="btn btn-dropdown btn-sm"><span>Filter</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block">
    <div class="form-group">
-    <input type="radio" class="radio-hidden" id="everything" name="status" value="everything">
-    <label for="everything">Unread</label>
+    <input type="radio" class="radio-hidden" id="allMessages" name="status" value="allMessages">
+    <label for="allMessages">All</label>
    </div>
    <div class="form-group">
-    <input type="radio" class="radio-hidden" id="holiday" name="status" value="holiday">
-    <label for="holiday">Read</label>
+    <input type="radio" class="radio-hidden" id="unreadMessages" name="status" value="unreadMessages">
+    <label for="unreadMessages">Unread</label>
    </div>
    <div class="form-group">
-    <input type="radio" class="radio-hidden" id="travel" name="status" value="travel">
-    <label for="travel">Archive</label>
+    <input type="radio" class="radio-hidden" id="readMessages" name="status" value="readMessages">
+    <label for="readMessages">Read</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="archiveMessages" name="status" value="archiveMessages">
+    <label for="archiveMessages">Archive</label>
    </div>
   </div>
  </div>

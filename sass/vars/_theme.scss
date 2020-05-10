@@ -7,6 +7,8 @@ $dark-green: hsl(89, 52%, 24%);
 $dark-orange: hsl(25, 84%, 51%);
 $light-orange: hsl(36, 100%, 71%);
 $blue-light: rgba(90, 104, 196, .15);
+$red: hsl(9, 81%, 40%);
+$green: hsl(120, 69%, 23%);
 
 
 // Navigation Variables
@@ -33,7 +35,7 @@ $txt-dark: $dark-grey;
 $txt-accent: $dark-orange;
 
 $text-warning: gold;
-$text-danger: red;
+$text-danger: $red;
 $text-success: green;
 
 // Background Colors
@@ -51,7 +53,7 @@ $clr-border: $blue-light;
 $btn-blue: hsl(210, 50%, 40%);
 $btn-blue-hover: darken($btn-blue, 10%);
 $btn-blue-disabled: lighten($btn-blue, 20%);
-$btn-red: rgb(221, 44, 44);
+$btn-red: $red;
 $btn-red-hover: darken($btn-red, 10%);
-$btn-green: rgb(20, 112, 20);
+$btn-green: $green;
 $btn-green-hover: darken($btn-green, 10%);

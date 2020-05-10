@@ -10,6 +10,109 @@
 
 {% endblock contentHeader %}
 
+{% block content %}
+    <style>
+        /* Hack - needs something better in CSS */
+        .help-content img {
+            width: 75%;
+        }
+        .help-content {
+            padding: 20px;
+        }
+        .help-content li {
+            list-style: inherit;
+        }
+    </style>
+     <div class="page-list-item-filter">
+      <form>
+       <div class="input-block">
+        <div class="input-block__icon">
+         <i class="fas fa-search"></i>
+        </div>
+        <div class="input-block__input">
+         <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support" autocomplete="false">
+        </div>
+       </div>
+      </form>
+     </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">PitonCMS</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Overview</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Pages</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Collections</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Navigation</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Media</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Messages</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Settings</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+         </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">For Designers</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Templates</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+         
+       
+         </div>
+         <div class="content-cards">
+          <h2 class="content-cards__title span">For Developers</h2>
+          <a href="#" class="content-card">
+           <i class="fas fa-cog card-icon"></i>
+           <h3>Version</h3>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+          </a>
+    
+       
+         </div>
+    <div class="help-content">
+        {# {{ page.helpContent }} #}
+    </div>
+{% endblock content %}
+
+{% block foot %}
+    <script>
+        // Toggle navigation accordion groups
+        $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
+            e.preventDefault();
+            $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
+        });
+
+        let inPageLink = {{ (page.link) ? '`' ~ page.link ~ '`' : 'false' }};
+        if (inPageLink) {
+            document.getElementById(inPageLink).scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        }
+    </script>
+{% endblock foot %}
+
 {% block sidebar %}
 
 <div class="jsHelpAccordion">
@@ -123,106 +226,3 @@
 
 </div>
 {% endblock sidebar %}
-
-{% block content %}
-    <style>
-        /* Hack - needs something better in CSS */
-        .help-content img {
-            width: 75%;
-        }
-        .help-content {
-            padding: 20px;
-        }
-        .help-content li {
-            list-style: inherit;
-        }
-    </style>
-     <div class="page-list-item-filter">
-      <form>
-       <div class="search-block">
-        <div class="search-icon">
-         <i class="fas fa-search"></i>
-        </div>
-        <div class="search-input">
-         <input type="search" name="search" id="search" class="search" placeholder="Search Support" autocomplete="false">
-        </div>
-       </div>
-      </form>
-     </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">PitonCMS</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Overview</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Pages</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Collections</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Navigation</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Media</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Messages</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Settings</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-         </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">For Designers</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Templates</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-         
-       
-         </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">For Developers</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Version</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-    
-       
-         </div>
-    <div class="help-content">
-        {# {{ page.helpContent }} #}
-    </div>
-{% endblock content %}
-
-{% block foot %}
-    <script>
-        // Toggle navigation accordion groups
-        $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
-            e.preventDefault();
-            $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
-        });
-
-        let inPageLink = {{ (page.link) ? '`' ~ page.link ~ '`' : 'false' }};
-        if (inPageLink) {
-            document.getElementById(inPageLink).scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-        }
-    </script>
-{% endblock foot %}
