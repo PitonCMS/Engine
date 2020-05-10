@@ -122,34 +122,47 @@ class PitonBuild
         $lines[4] = ' * Define environment specific settings in this file.' . PHP_EOL;
         $lines[5] = ' * DO NOT commit to VCS!' . PHP_EOL;
 
+        // Set development configuration settings
         if ($lines) {
             foreach ($lines as &$line) {
+                // Production environment to false
                 if (strpos($line, 'site') !== false && strpos($line, 'production') !== false) {
                     $line = str_replace('true', 'false', $line);
                 }
 
+                // Change localhost to Docker Compose image db
                 if (strpos($line, 'database') !== false && strpos($line, 'host') !== false) {
                     $line = str_replace('localhost', 'db', $line);
                 }
 
+                // Change database name to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'dbname') !== false) {
                     $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
                 }
 
+                // Change database username to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'username') !== false) {
                     $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
                 }
 
+                // Change database password to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'password') !== false) {
                     $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
                 }
 
+                // Change session cookie name to project name
                 if (strpos($line, 'session') !== false && strpos($line, 'cookieName') !== false) {
                     $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
                 }
 
+                // Set session salt to unique hash
                 if (strpos($line, 'session') !== false && strpos($line, 'salt') !== false) {
                     $line = str_replace('\'\'', '\'' . $salt . '\'', $line);
+                }
+
+                // Set secure cookie to false
+                if (strpos($line, 'session') !== false && strpos($line, 'secureCookie') !== false) {
+                    $line = str_replace('true', 'false', $line);
                 }
             }
 
