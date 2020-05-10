@@ -64,12 +64,26 @@ document.querySelectorAll("button[value=save]").forEach(button => {
 });
 
 /**
- * XHR GET Request Promise
- * @param {string} url   Resource request URL
- * @param {mixed} params String or object
+ * Alert Message
+ *
+ * System notifications and alerts
+ * @param {string} severity
+ * @param {mixed} message
+ */
+const alertMessage = function(severity, message) {
+    if (typeof message === 'object') {
+        message = JSON.stringify(message);
+    }
+
+    alert(`Severity: ${severity} ${message}`);
+}
+
+/**
+ * GET XHR Promise Request
+ * @param {string} url    Resource URL
+ * @param {string} params Query string parameters
  */
 const getXHRPromise = function(url, params) {
-    let xhr = new XMLHttpRequest();
     let queryString;
 
     // Accept query string or build from object
@@ -79,47 +93,66 @@ const getXHRPromise = function(url, params) {
         queryString = Object.keys(params).map((k) => {
             return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
         }).join('&');
-  }
-
-  // Attach query string to URL
-  if (queryString) {
-      url += '?' + queryString;
-  }
-
-  return new Promise((resolve, reject) => {
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState !== XMLHttpRequest.DONE) return;
-
-      if (xhr.status === 200) {
-            // Successful server response
-            let response = JSON.parse(xhr.responseText);
-            if (response.status === "success") {
-                // Response content successful
-                resolve(response.text);
-            } else {
-                // Response content failed
-                // TODO show page alert
-                reject({
-                    status: "error",
-                    statusText: response.text
-                });
-            }
-        } else {
-            // Failed server response
-            // TODO show page alert
-            reject({
-                status: xhr.status,
-                statusText: xhr.statusText
-            });
-      }
     }
 
-    // Setup and send
-    xhr.open("GET", url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.send();
-  });
+    // Attach query string to URL
+    if (queryString) {
+        url += '?' + queryString;
+    }
+
+    return XHRPromise("GET", url);
+}
+
+/**
+ * POST XHR Promise Request
+ * @param {string} url  Resource URL
+ * @param {string} data FormData object or object key value pairs
+ */
+const postXHRPromise = function(url, data) {
+    return XHRPromise("POST", url,  data);
+}
+
+/**
+ * XHR Request Promise
+ * @param {string} method "GET"|"POST"
+ * @param {string} url    Resource request URL
+ * @param {mixed}  data   String or object
+ */
+const XHRPromise = function(method, url, data) {
+    let xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+            if (xhr.status === 200) {
+                    // Successful server response
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        // Response content successful
+                        resolve(response.text);
+                    } else {
+                        // Response content failed
+                        reject(alertMessage('danger', {
+                            status: "error",
+                            statusText: response.text
+                        }));
+                    }
+                } else {
+                    // Failed server response
+                    reject(alertMessage('danger', {
+                        status: "error",
+                        statusText: response.text
+                    }));
+            }
+        }
+
+        // Setup and send
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(data);
+    });
 }
 
 // // --------------------------------------------------------
