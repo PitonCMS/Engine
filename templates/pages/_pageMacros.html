@@ -118,7 +118,7 @@ class="form-group-pageEdit jsElementOption jsCollectionInput {% if enableInput =
  </div>
 
  <div class="btn-group-bottom">
-  <button class="btn btn-delete btn-sm jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
+  <button class="btn btn-delete btn-sm btn-block jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
    title="Delete element.">Delete Element</button>
    </div>
 </div>
@@ -135,7 +135,8 @@ For the summary display of either pages or collection detail pages
 {% macro pageListItem(pageItem, linkName) %}
 
 <a class="page-list-item" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
- <div class="page-list-item__media"><img src="https://unsplash.it/100/100" alt=""></div>
+ {# TODO: Image Media Thumb 100x100px if exists #}
+ <div class="page-list-item__media"><img src="" alt=""></div>
  <div class="page-list-item__title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
  <div class="page-list-item__status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}
  </div>

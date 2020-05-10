@@ -820,6 +820,11 @@ button:disabled,
   color: #eb7119;
 }
 
+.btn-block {
+  display: block;
+  width: auto;
+}
+
 .nav-toggle,
 .element-toggle {
   position: absolute !important;
@@ -859,10 +864,10 @@ button:disabled,
   transition: transform 125ms ease;
 }
 .nav-toggle-label span::before {
-  top: 35px;
+  top: 33px;
 }
 .nav-toggle-label span::after {
-  bottom: 35px;
+  bottom: 33px;
 }
 
 .nav-toggle:checked ~ .nav-toggle-label span {
@@ -871,7 +876,7 @@ button:disabled,
 
 .nav-toggle:checked ~ .nav-toggle-label span:before {
   transform: rotate(45deg);
-  top: 26px;
+  top: 21px;
 }
 
 .nav-toggle:checked ~ .nav-toggle-label span:after {
