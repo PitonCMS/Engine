@@ -24,7 +24,7 @@ class AdminSettingController extends AdminBaseController
 {
     /**
      * Show Settings Landing Page
-     * @param void
+     * @param  void
      * @return Response
      */
     public function showSettings(): Response
@@ -45,9 +45,13 @@ class AdminSettingController extends AdminBaseController
         $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
+        // Validate we have one of the defined categories
+        if (!in_array($args['cat'], ['site', 'social', 'contact'])) {
+            throw new Exception("PitonCMS: Unexpected value for category.");
+        }
+
         // Get saved settings from database
-        $category = $args['cat'];
-        $savedSettings = $dataStoreMapper->findSiteSettings($category) ?? [];
+        $savedSettings = $dataStoreMapper->findSiteSettings($args['cat']) ?? [];
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {
@@ -62,12 +66,12 @@ class AdminSettingController extends AdminBaseController
             $data['settings'] = $this->mergeSettings(
                 $savedSettings,
                 array_merge($seededSettings->settings, $customSettings->settings),
-                $category
+                $args['cat']
             );
         }
 
-        // Set category flag in page to help with redirects
-        $data['category'] = $category;
+        // Send category name to page to help with redirects
+        $data['category'] = $args['cat'];
 
         return $this->render('tools/editSettings.html', $data);
     }
@@ -84,11 +88,11 @@ class AdminSettingController extends AdminBaseController
         // Get dependencies
         $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
 
-        // Get $_POST data array
-        $post = $this->request->getParsedBody();
+        // Get setting data POST array
+        $settings = $this->request->getParsedBodyParam('setting');
 
         // Save each setting
-        foreach ($post['setting'] as $row) {
+        foreach ($settings as $row) {
             $setting = $dataStoreMapper->make();
             $setting->id = (int) $row['id'];
 
@@ -105,7 +109,6 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        $routeCategory = $post['category'];
-        return $this->redirect('adminToolSetting', ['cat' => $routeCategory]);
+        return $this->redirect('adminToolSetting');
     }
 }

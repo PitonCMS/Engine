@@ -2,73 +2,45 @@
 // Main JS
 // --------------------------------------------------------
 
-// $('.jsDatePicker').datepicker({
-//     format: pitonConfig.dateFormat,
-//     weekStart: pitonConfig.weekStart,
-//     todayHighlight: true,
-//     orientation: 'bottom',
-//     autoclose: true,
-//     clearBtn: true
-// });
-
 /**
  * Confirm Prompt
  *
- * Confirmation message
+ * Default message text is a delete prompt
  * @param {string} msg
  * @return {boolean}
  */
-const confirmPrompt = function (msg) {
+const confirmPrompt = function(msg) {
     let message = msg || 'Are you sure you want to delete?';
     return confirm(message);
 }
 
 /**
- * Bind delete confirm prompt to all elements with .jsDeleteConfirm
+ * Disable Form Controls
+ *
+ * @param {object} save   Save button element
+ * @param {object} cancel Cancel|Discard button element
  */
-document.querySelectorAll(".jsDeleteConfirm").forEach(del => {
-    del.addEventListener("click", (e) => {
-        if (!confirmPrompt()) e.preventDefault();
-    });
-});
+const disableFormControls =  function(save, cancel) {
+    if (!save.disabled) {
+        save.disabled = true;
+        save.classList.add("disabled");
+        cancel.classList.add("disabled");
+    }
+}
 
 /**
- * Confirm logout prompt
+ * Disable Form Controls
+ *
+ * @param {object} save   Save button element
+ * @param {object} cancel Cancel|Discard button element
  */
-// document.querySelector(".jsLogout").addEventListener("click", (e) => {
-//     if (!confirmPrompt("Are you sure you want to logout?")) {
-//         e.preventDefault();
-//     }
-// });
-
-/**
- * Listen for form input changes to update save and discard button status
- */
-document.querySelectorAll("form").forEach(form => {
-    let cancelLink = form.querySelector(".jsFormCancelButton");
-    let saveButton = form.querySelector(".jsFormSaveButton");
-
-    saveButton.disabled = true;
-    saveButton.classList.add("disabled");
-    cancelLink.classList.add("disabled");
-
-    // Listen for form changes to enable controls
-    form.querySelectorAll("input, textarea, select").forEach(el => {
-        el.addEventListener("input", () => {
-            if (saveButton.disabled) {
-                saveButton.disabled = false;
-                saveButton.classList.remove("disabled");
-                cancelLink.classList.remove("disabled");
-            }
-        });
-    });
-
-    // Cancel/Discard button should have confirm prompt before reloading
-    cancelLink.addEventListener("click", (e) => {
-        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
-        if (!userResponse) e.preventDefault();
-    });
-});
+const enableFormControls = function(save, cancel) {
+    if (save.disabled) {
+        save.disabled = false;
+        save.classList.remove("disabled");
+        cancel.classList.remove("disabled");
+    }
+}
 
 /**
  * Alert Message
@@ -133,24 +105,24 @@ const XHRPromise = function(method, url, data) {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
             if (xhr.status === 200) {
-                    // Successful server response
-                    let response = JSON.parse(xhr.responseText);
-                    if (response.status === "success") {
-                        // Response content successful
-                        resolve(response.text);
-                    } else {
-                        // Response content failed
-                        reject(alertMessage('danger', {
-                            status: "error",
-                            statusText: response.text
-                        }));
-                    }
+                // Successful server response
+                let response = JSON.parse(xhr.responseText);
+                if (response.status === "success") {
+                    // Response content successful
+                    resolve(response.text);
                 } else {
-                    // Failed server response
+                    // Response content failed
                     reject(alertMessage('danger', {
                         status: "error",
                         statusText: response.text
                     }));
+                }
+            } else {
+                // Failed server response
+                reject(alertMessage('danger', {
+                    status: "error",
+                    statusText: response.text
+                }));
             }
         }
 
@@ -161,6 +133,61 @@ const XHRPromise = function(method, url, data) {
         xhr.send(data);
     });
 }
+
+/**
+ * Bind delete confirm prompt to all elements with .jsDeleteConfirm
+ */
+document.querySelectorAll(".jsDeleteConfirm").forEach(del => {
+    del.addEventListener("click", (e) => {
+        if (!confirmPrompt()) e.preventDefault();
+    });
+});
+
+/**
+ * Confirm logout prompt
+ */
+// TODO waitig on logout button to be added
+// document.querySelector(".jsLogout").addEventListener("click", (e) => {
+//     if (!confirmPrompt("Are you sure you want to logout?")) {
+//         e.preventDefault();
+//     }
+// });
+
+/**
+ * Listen for form input changes to update save and discard button status
+ */
+document.querySelectorAll("form").forEach(form => {
+    let cancelLink = form.querySelector(".jsFormCancelButton");
+    let saveButton = form.querySelector(".jsFormSaveButton");
+    disableFormControls(saveButton, cancelLink);
+
+    // Listen for form changes to enable controls
+    form.querySelectorAll("input, textarea, select").forEach(el => {
+        el.addEventListener("input", () => {
+            enableFormControls(saveButton, cancelLink);
+        });
+    });
+
+    // Cancel/Discard button should have confirm prompt before reloading page
+    cancelLink.addEventListener("click", (e) => {
+        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
+        if (!userResponse) e.preventDefault();
+    });
+});
+
+
+
+
+// $('.jsDatePicker').datepicker({
+//     format: pitonConfig.dateFormat,
+//     weekStart: pitonConfig.weekStart,
+//     todayHighlight: true,
+//     orientation: 'bottom',
+//     autoclose: true,
+//     clearBtn: true
+// });
+
+
 
 // // --------------------------------------------------------
 // // Media Page Management
