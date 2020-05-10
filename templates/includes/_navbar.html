@@ -3,13 +3,13 @@
 <ul class="side-nav">
 
  <li class="side-nav__link home">
-  <i class="fas fa-home"></i> 
+  <i class="fas fa-home"></i>
   <a href="{{ pathFor('adminHome') }}"> Home</a>
  </li>
 
  <li class="side-nav__link pageContent {{ currentRouteGroup('adminPage') }}{{ currentRouteGroup('adminCollection') }}">
   <i class="fas fa-pencil-alt"> </i>
-  <a href="{{ pathFor('adminPage') }}"> Pages</a> 
+  <a href="{{ pathFor('adminPage') }}"> Pages</a>
  </li>
 
  <li class="side-nav__link media">
@@ -19,8 +19,8 @@
 
  <li class="side-nav__link messages">
   <i class="fas fa-envelope"></i>
-  <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}"> Messages</a> 
-  <div class="badge badge-notify">{{ getUnreadMessageCount() }}</div> 
+  <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}"> Messages</a>
+  <div class="badge badge-notify">{{ getUnreadMessageCount() }}</div>
  </li>
 
  <li class="side-nav__link help">
@@ -29,8 +29,8 @@
  </li>
 
  <li class="side-nav__link settings">
-  <i class="fas fa-cog"> </i>
-  <a href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}"> Settings</a>
+  <i class="fas fa-cog"></i>
+  <a href="{{ pathFor('adminToolSetting') }}"> Settings</a>
  </li>
 
 </ul>

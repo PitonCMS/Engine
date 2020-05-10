@@ -1,5 +1,7 @@
 {% extends '@admin/_adminBase.html' %}
 
+{% block htmlTitle 'Settings' %}
+
 {% block contentHeader %}
 <div class="content-header-inner">
  <div class="breadcrumb"></div>
@@ -12,23 +14,23 @@
 {% block content %}
 
 <div class="content-cards">
- 
- <a href="{{ pathFor('adminToolSetting', {'cat': 'site'}) }}" class="content-card">
+
+ <a href="{{ pathFor('adminToolSettingEdit', {'cat': 'site'}) }}" class="content-card">
     <i class="fas fa-cog card-icon"></i>
    <h3 class="title-text">General</h3>
-   <p>Update settings for various things.</p>
+   <p>Manage general site wide application settings.</p>
  </a>
 
- <a href="{{ pathFor('adminToolSetting', {'cat': 'contact'}) }}" class="content-card">
+ <a href="{{ pathFor('adminToolSettingEdit', {'cat': 'contact'}) }}" class="content-card">
    <i class="fas fa-envelope card-icon"></i>
    <h3 class="title-text">Contact</h3>
-   <p>Lorem ipsum dolor sit amet consectetur adipisicing eat. Laboriosam, ad!</p>
+   <p>Manage contact information when using a public contact message form.</p>
  </a>
 
- <a href="{{ pathFor('adminToolSetting', {'cat': 'social'}) }}" class="content-card">
+ <a href="{{ pathFor('adminToolSettingEdit', {'cat': 'social'}) }}" class="content-card">
    <i class="fas fa-people-arrows card-icon"></i>
    <h3 class="title-text">Social</h3>
-   <p>Lorem ipsum dolor sit amet consectetur adipisicing eat. Laboriosam, ad!</p>
+   <p>Manage social media links.</p>
  </a>
 
  <a href="{{ pathFor('adminToolUser') }}" class="content-card">
@@ -36,7 +38,7 @@
    <h3 class="title-text">Users</h3>
    <p>Manage users.</p>
  </a>
- 
+
  <a href="{{ pathFor('adminToolSitemap') }}" class="content-card">
    <i class="fas fa-map card-icon"></i>
    <h3 class="title-text">Sitemap</h3>

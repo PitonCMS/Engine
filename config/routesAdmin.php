@@ -201,12 +201,12 @@ $app->group('/admin', function () {
     $this->group('/tools', function () {
         // Settings
         $this->group('/settings', function () {
-            // Show Settings
-            $this->get('/{cat:site|contact|social}', function ($args) {
+            // Show settings landing page
+            $this->get('[/]', function ($args) {
                 return (new AdminSettingController($this))->showSettings($args);
             })->setName('adminToolSetting');
 
-            // Save Settings
+            // Save settings
             $this->post('/save', function ($args) {
                 return (new AdminSettingController($this))->saveSettings();
             })->add('csrfGuardHandler')->setName('adminToolSettingSave');
@@ -220,6 +220,11 @@ $app->group('/admin', function () {
             $this->post('/sitemap/update', function ($args) {
                 return (new AdminController($this))->updateSitemap();
             })->add('csrfGuardHandler')->setName('adminToolSitemapUpdate');
+
+            // Edit settings by category
+            $this->get('/{cat:site|contact|social}/edit', function ($args) {
+                return (new AdminSettingController($this))->editSettings($args);
+            })->setName('adminToolSettingEdit');
         });
         // End settings
 

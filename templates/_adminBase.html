@@ -8,11 +8,10 @@
     - htmlTitle     HTML <title> text
     - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
     - head          Insert additional <head> HTLM elements
-    - sectionId     HTML <section> tag ID
-    - openForm      Optional open <form> tag with hidden inputs
-    - sidebar       Sidebar content area
+    - openForm      To open <form> tag to wrap form around header and content
+    - contentHeader Content header and form controls
     - content       Main content area
-    - closeForm     Optional close </form> tag (self closing)
+    - closeForm     To close </form> tag
     - foot          Insert additional footer HTML elements after JS links
 #}
 
@@ -27,12 +26,13 @@
   {% if block('htmlTitle') is defined %}
     {{ block('htmlTitle') ~ ' - ' }}
   {% endif %}
-  PitonCMS Administration
+  PitonCMS
  </title>
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
   integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
- <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+ <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ site.settings.engine }}">
+
 
  {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
  {{ include('@admin/includes/_pitonConfigJs.html') }}
@@ -56,33 +56,35 @@
    {{ include("@admin/includes/_navbar.html") }}
   </aside>
 
-  <main role="main" class="{% block mainClass 'main-content' %}">
+  <main class="{% block mainClass 'main-content' %}">
+
+    {# Page level forms must wrap  contentHeader and content blocks #}
+    {% block openForm '' %}
 
    <!-- Content Header w/title & controls -->
-   <header class="content-header">
+   <div class="content-header">
     <div class="container">
      {% block contentHeader 'Content Header' %}
-    </div>
-   </header>
+    </div><!-- /.container -->
+  </div><!-- /.content-header -->
 
    <!-- Content Block -->
    <div class="content">
     <div class="container">
      {% block content 'Main Content' %}
-    </div>
-   </div>
+    </div><!-- /.container -->
+   </div><!-- /.content -->
+
+   {# Closing form if required #}
+   {% block closeForm '' %}
 
   </main>
-
-
- </div>
- <!-- /.contentWrapper -->
-
+ </div><!-- /.wrapper -->
 
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
- <script src="{{ basePath() }}/admin/js/main.js"></script>
+ <script src="{{ basePath() }}/admin/js/main.js?v={{ site.settings.engine }}"></script>
 
- {# Optional foot block element #}
+ {# Optional footer block element #}
  {% block foot '' %}
 </body>
 
