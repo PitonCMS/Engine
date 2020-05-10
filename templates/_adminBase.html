@@ -8,7 +8,6 @@
     - htmlTitle     HTML <title> text
     - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
     - head          Insert additional <head> HTLM elements
-    - headText      Page heading to display in navbar
     - sectionId     HTML <section> tag ID
     - openForm      Optional open <form> tag with hidden inputs
     - sidebar       Sidebar content area
@@ -26,7 +25,7 @@
  <title>
   {# Concatenate htmlTitle, if provided in extending page #}
   {% if block('htmlTitle') is defined %}
-  {{ block('htmlTitle') ~ ' - ' }}
+    {{ block('htmlTitle') ~ ' - ' }}
   {% endif %}
   PitonCMS Administration
  </title>
@@ -47,18 +46,18 @@
   </div>
  </header>
 
- {% include "@admin/includes/_alert.html" %}
+ {{ include("@admin/includes/_alert.html") }}
 
  <div class="wrapper">
   <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
   <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
   <aside class="sidebar">
-   {# Load admin navigation. Twig blocks are not available in include files, so we have to pass in this block value explicitly if set. #}
-   {% include "@admin/includes/_navbar.html" with {headText: block('headText') is defined ? block('headText')} %}
+   {# Load admin side navigation.#}
+   {{ include("@admin/includes/_navbar.html") }}
   </aside>
 
   <main role="main" class="{% block mainClass 'main-content' %}">
-   
+
    <!-- Content Header w/title & controls -->
    <header class="content-header">
     <div class="container">
