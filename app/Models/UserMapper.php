@@ -20,7 +20,7 @@ use Piton\ORM\DataMapperAbstract;
 class UserMapper extends DataMapperAbstract
 {
     protected $table = 'user';
-    protected $modifiableColumns = ['email', 'role','active'];
+    protected $modifiableColumns = ['first_name', 'last_name', 'email', 'role','active'];
 
     /**
      * Find All Users

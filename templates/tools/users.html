@@ -3,63 +3,83 @@
 
 {% block htmlTitle 'Users' %}
 
+{% block openForm %}
+  <form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
+    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% endblock openForm %}
 
 {% block contentHeader %}
-<form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
- <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
- <div class="content-header-inner">
-  <div class="breadcrumb"></div>
-  <h3 class="section-title">User Settings</h3>
-  <div class="btn-group">
-   <a class="btn btn-cancel btn-sm" href="{{ pathFor('adminToolUser') }}">Cancel</a>
-   <button type="button" class="btn btn-add btn-sm jsAddUserRow">Add User</button>
-   <button type="submit" name="button" class="btn btn-save btn-sm">Save User(s)</button>
+
+  <div class="content-header-inner">
+    <div class="breadcrumb"></div>
+    <h3 class="section-title">User Settings</h3>
+    <div class="btn-group">
+      <a class="btn btn-cancel btn-sm jsFormCancelButton" href="{{ pathFor('adminToolUser') }}">Discard</a>
+      <button type="button" class="btn btn-add btn-sm jsAddUserRow">Add User</button>
+      <button type="submit" name="button" class="btn btn-save btn-sm jsFormSaveButton">Save User(s)</button>
+    </div>
   </div>
- </div>
 
- {% endblock contentHeader %}
+{% endblock contentHeader %}
 
- {% block content %}
- <div class="content-block">
-  {% if page.recommendRecoveryEmail %}
-  <div class="one-admin-notice span">
+{% block content %}
+  <div class="content-block">
+    {% if page.recommendRecoveryEmail %}
+      <div class="one-admin-notice span">
 
-   <p>You only have one Administrator email registered. You should consider adding a second Administrator recovery email
-    address.</p>
+        <p>You only have one Administrator email registered. You should consider adding a second Administrator recovery email
+              address.</p>
+
+      </div>
+    {% endif %}
+
+    {# Loop through saved users #}
+    {% for user in page.users %}
+      {% set arrayKey = uniqueKey() %}
+      <div class="user-card jsUser">
+        <input type="hidden" name="user_id[{{ arrayKey }}]" value="{{ user.id }}">
+
+        <!-- User Name -->
+        <div class="form-check">
+          <label>First Name</label>
+          <input type="text" class="form-control" name="first_name[{{ arrayKey }}]" maxlength="60" value="{{ user.first_name }}"
+            autocomplete="off" required placeholder="First name">
+        </div>
+
+        <div class="form-check">
+          <label>Last Name</label>
+          <input type="text" class="form-control" name="last_name[{{ arrayKey }}]" maxlength="60" value="{{ user.last_name }}"
+            autocomplete="off" required placeholder="Last name">
+        </div>
+
+        <!-- Email Input -->
+        <div class="form-check">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email[{{ arrayKey }}]" maxlength="255" value="{{ user.email }}"
+            autocomplete="off" required placeholder="Email">
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="admin[{{ arrayKey }}]" id="admin-{{ arrayKey }}"
+            {{ checked(user.role == 'A') }}>
+          <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
+        </div>
+
+        {# Deactivate user button #}
+        <button class="btn btn-{% if user.active == 'Y' %}active{% else %}inactive{% endif %}"
+          formaction="{{ pathFor('adminToolUserStatusUpdate', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
+          {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
+        </button>
+
+      </div>
+    {% endfor %}
 
   </div>
-  {% endif %}
-
-
-
-  {% for user in page.users %}
-  {% set arrayKey = uniqueKey() %}
-  <div class="user-card jsUser">
-
-   <input type="hidden" name="user_id[{{ arrayKey }}]" value="{{ user.id }}">
-
-   <!-- Email Input -->
-   <input type="email" class="form-control" name="email[{{ arrayKey }}]" maxlength="255" value="{{ user.email }}"
-    autocomplete="off" {% if user.id %}required{% endif %} {% if user.active == 'N' %}readonly{% endif %}>
-
-   <div class="form-check">
-    <input class="form-check-input" type="checkbox" name="admin[{{ arrayKey }}]" id="admin-{{ arrayKey }}"
-     {{ checked(user.role == 'A') }}>
-    <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
-   </div>
-
-   <button class="btn btn-{% if user.active == 'Y' %}danger{% else %}success{% endif %}"
-    formaction="{{ pathFor('adminToolUserStatusUpdate', {'id': user.id, 'status': (user.active == 'N') ? 'Y' : 'N'}) }}">
-    {% if user.active == 'Y' %}Deactivate{% else %}Activate{% endif %}
-   </button>
-
-  </div>
-  {% endfor %}
-
- </div>
-</form>
 {% endblock content %}
 
+{% block closeForm %}
+</form>
+{% endblock closeForm %}
+
 {% block foot %}
-<script src="{{ basePath() }}/admin/js/user.js"></script>
+  <script src="{{ basePath() }}/admin/js/user.js"></script>
 {% endblock foot %}

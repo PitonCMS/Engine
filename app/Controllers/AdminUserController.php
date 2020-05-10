@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Psr\Http\Message\ResponseInterface as Response;
 use PDOException;
 
 /**
@@ -24,8 +25,10 @@ class AdminUserController extends AdminBaseController
     /**
      * Show All Users
      *
+     * @param void
+     * @return Response
      */
-    public function showUsers()
+    public function showUsers(): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
@@ -48,9 +51,11 @@ class AdminUserController extends AdminBaseController
     /**
      * Save Users
      *
-     * Save all email addresses, ignoring duplicates
+     * Save all users in page
+     * @param void
+     * @return Response
      */
-    public function saveUsers()
+    public function saveUsers(): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
@@ -63,6 +68,8 @@ class AdminUserController extends AdminBaseController
                 $user->id = $post['user_id'][$key];
                 $user->role = (isset($post['admin'][$key]) && $post['admin'][$key] === 'on') ? 'A' : null;
                 $user->email = strtolower(trim($post['email'][$key]));
+                $user->first_name = $post['first_name'][$key];
+                $user->last_name = $post['last_name'][$key];
                 try {
                     $userMapper->save($user);
                 } catch (PDOException $e) {
@@ -85,8 +92,10 @@ class AdminUserController extends AdminBaseController
      * Change User Status
      *
      * Sets user active status: Y|N
+     * @param array $args
+     * @return Response
      */
-    public function userStatus($args)
+    public function userStatus($args): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
