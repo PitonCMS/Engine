@@ -119,15 +119,20 @@ $app->group('/admin', function () {
 
     // Navigation route
     $this->group('/navigation', function () {
-        // Show Navigations
-        $this->get('/{navigator:[a-zA-Z0-9-]+}', function ($args) {
-            return (new AdminNavigationController($this))->showNavigator($args);
+        // Show Navigators
+        $this->get('[/]', function ($args) {
+            return (new AdminNavigationController($this))->showNavigators();
         })->setName('adminNavigation');
 
         // Save Navigation
         $this->post('/save', function ($args) {
             return (new AdminNavigationController($this))->saveNavigation();
         })->add('csrfGuardHandler')->setName('adminNavigationSave');
+
+        // Edit Navigator
+        $this->get('/edit/{navigator:[a-zA-Z0-9-]+}', function ($args) {
+            return (new AdminNavigationController($this))->editNavigator($args);
+        })->setName('adminNavigationEdit');
     });
     // End Navigation
 

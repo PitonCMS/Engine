@@ -22,12 +22,28 @@ use Slim\Http\Response;
 class AdminNavigationController extends AdminBaseController
 {
     /**
-     * Show Navigator
+     * Show Navigators
+     *
+     * @param  void
+     * @return Response
+     */
+    public function showNavigators(): Response
+    {
+        // Get dependencies
+        $navs = ($this->container->jsonDefinitionHandler)->getNavigation();
+
+        $navList = $navs->navigators ?? null;
+
+        return $this->render('navigation/navigation.html', ['navigators' => $navList]);
+    }
+
+    /**
+     * Edit Navigator
      *
      * @param  array $args
      * @return Response
      */
-    public function showNavigator($args): Response
+    public function editNavigator($args): Response
     {
         // Get dependencies
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
@@ -35,7 +51,7 @@ class AdminNavigationController extends AdminBaseController
         $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
         $data['navigator'] = $args['navigator'];
 
-        return $this->render('navigation/navigation.html', $data);
+        return $this->render('navigation/navigationEdit.html', $data);
     }
 
     /**

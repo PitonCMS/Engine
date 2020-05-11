@@ -1,0 +1,29 @@
+{% extends '@admin/_adminBase.html' %}
+
+{% block htmlTitle 'Navigation' %}
+
+{% block contentHeader %}
+<div class="content-header-inner">
+ <div class="breadcrumb"></div>
+ <h3 class="section-title">Navigation</h3>
+ <div class="btn-group"></div>
+</div>
+
+{% endblock contentHeader %}
+
+{% block content %}
+
+<div class="content-cards">
+  {% for nav in page.navigators %}
+
+  <a href="{{ pathFor('adminNavigationEdit', {'navigator': nav}) }}" class="content-card">
+      <i class="fas fa-cog card-icon"></i>
+    <h3 class="title-text">{{ nav|capitalize }}</h3>
+    <p>Edit {{ nav|capitalize }} navigator.</p>
+  </a>
+
+  {% else %}
+    <strong>No Navigators Found</strong>
+
+  {% endfor %}
+{% endblock content %}

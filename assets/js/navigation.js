@@ -2,6 +2,7 @@
 // Navigation management
 // --------------------------------------------------------
 
+/*
 // Listen for form input changes to update save button status
 let navSaveIndFlag = false;
 const setNavSaveIndicator = () => {
@@ -75,3 +76,4 @@ $('.jsEditNavBlock').on('change', '.jsNavPageSelector', function() {
     $(this).siblings('.jsNavTitleInput').find('input').prop('required', false);
   }
 });
+*/
