@@ -16,8 +16,9 @@ input[type="textarea"] {
   z-index: 20;
   display: block;
   width: 100%;
-  background: $bg-accent;
-  border: 0.1rem solid transparent;
+  background: $bg-light;
+  border-radius: $border-radius;
+  border: 0.1rem solid lightgrey;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;

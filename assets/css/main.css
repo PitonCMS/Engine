@@ -895,8 +895,9 @@ input[type=textarea] {
   z-index: 20;
   display: block;
   width: 100%;
-  background: #f3f5f7;
-  border: 0.1rem solid transparent;
+  background: white;
+  border-radius: 7px;
+  border: 0.1rem solid lightgrey;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
@@ -1190,18 +1191,11 @@ label {
 .social-block,
 .sitemap-block {
   padding: 1em;
-  background: rgba(90, 104, 196, 0.15);
+  background: #f3f5f7;
   border-radius: 7px;
   box-shadow: 0px 0px 0px 1px rgba(63, 63, 68, 0.05), 0px 1px 3px 0px rgba(63, 63, 68, 0.15);
   display: flex;
   flex-flow: column nowrap;
-}
-.user-card * + *,
-.contact-block * + *,
-.settings-block * + *,
-.social-block * + *,
-.sitemap-block * + * {
-  margin-top: 1em;
 }
 
 /* Users */
@@ -1239,6 +1233,28 @@ label {
 .add-user {
   justify-self: flex-start;
   align-self: flex-start;
+}
+
+.user-block-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1em;
+  align-items: center;
+}
+.user-block-wrapper input, .user-block-wrapper label {
+  margin: 0;
+}
+.user-block-wrapper .user-block-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+  align-items: center;
+}
+
+.user-block-name {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
 }
 
 /* Page Content Styles */
@@ -1325,8 +1341,9 @@ label {
 }
 
 .radio-block-item {
+  padding: 0;
+  margin: 0;
   display: flex;
-  flex-flow: row nowrap;
   align-items: center;
 }
 
