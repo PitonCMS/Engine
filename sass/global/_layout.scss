@@ -1,8 +1,9 @@
 /* Layout */
+
 /* Header, Logo, Hamburger Toggle */
 .top-header {
  @include padding(null 1em);
- background-color: $clr-text;
+ background-color: $bg-dark;
  height: $nav-height;
  color: $nav-font-color;
 
@@ -19,9 +20,12 @@
   line-height: $nav-height;
   display: flex;
   justify-content: flex-end;
+  letter-spacing: 1.4px;
+  justify-content: flex-start;
+  @include padding(0 0 0 4rem);
 
   @media screen and (min-width: $breakpoint) {
-   // justify-content: flex-start;
+   @include padding(0);
   }
 
   a {
@@ -40,11 +44,6 @@
  }
 }
 
-.container {
- width: 100%;
- max-width: $container-max;
- @include margin(0 auto);
-}
 .wrapper {
  min-height: 100%;
  @include padding(#{$nav-height} null null null);
@@ -88,7 +87,6 @@
   flex-grow: 999;
   display: flex;
   flex-flow: column nowrap;
-  // width: 100%;
   position: relative;
  }
 
@@ -103,48 +101,44 @@
   display: flex;
   align-items: center;
 
-  
   position: fixed;
   z-index: 100;
   top: $nav-height;
 
   @media screen and (min-width: $breakpoint) {
    width: calc(100vw - #{$nav-width});
-  
   }
 
   &-inner {
    display: flex;
    justify-content: flex-start;
    align-items: center;
-
   }
+
   .breadcrumb {
    font-weight: 300;
    font-size: 0.75rem;
- 
+
    a {
     color: $nav-font-color;
- 
+
     &:hover {
      color: $link-hover-color;
     }
    }
   }
-   // Section Title
- .section-title {
-  @include margin(0);
-  @include padding(0 0 0 1em);
-  font-weight: 900;
-  font-size: 2rem;
-  flex: 3;
- }
 
+  // Section Title
+  .section-title {
+   @include margin(0);
+   @include padding(0);
+   font-size: 2rem;
+   flex: 3;
+  }
  }
 
  // Content Header Control Buttons
  .btn-group {
-
   display: flex;
   justify-content: flex-end;
   flex: 1;
@@ -159,20 +153,12 @@
 }
 
 // Content Section Layout
+.container {
+ width: 100%;
+ max-width: $container-max;
+ @include margin(0 auto);
+}
+
 .content {
-
  @include padding(calc(#{$nav-height} + 2em) 1em 1em 1em);
-
-}
-
-.btn-dropdown-block {
- position: relative;
-}
-.dropdown-title{
- font-weight: 500;
- text-transform: uppercase;
-@include padding(null 1em);
-&:first-child{
- @include padding(1em null null null);
-}
 }

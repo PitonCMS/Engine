@@ -1,72 +1,55 @@
- /* Change the white to any color ;) */
+/*  FORMS  */
+
+/* Change the white to any color ;) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
-  box-shadow: 0 0 0 30px white inset !important;
-  outline: none;
-}
-input[type="text"],
-input[type="email"],
-input[type="textarea"] {
-  text-transform: none;
-  letter-spacing: normal;
-  position: relative;
-  z-index: 20;
-  display: block;
-  width: 100%;
-  background: $bg-light;
-  border-radius: $border-radius;
-  border: 0.1rem solid lightgrey;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  -webkit-appearance: none;
-  appearance: none;
-
-}
-
-input:focus {
+ -webkit-box-shadow: 0 0 0 30px white inset !important;
+ box-shadow: 0 0 0 30px white inset !important;
  outline: none;
 }
 
+
 // Filter Block 
 .filter-block {
- @include margin(null null 1em null);
+ // @include margin(null null 1em null);
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
  gap: .5em 1em;
  align-items: center
 }
 
-// Input Block with Icon
+// Input Block -- input with left icon
 .input-block {
- margin: 0;
+ height: 100%;
  width: 100%;
+ background: $bg-light;
  display: grid;
  grid-template-columns: auto 1fr;
  align-items: center;
- border: solid 2px $bg-blue;
+ border: solid 1px $bg-blue;
  grid-column: 1 / -1;
- @media screen and (min-width: $breakpoint) {
-   grid-column: 1;
- }
- &__icon{
-  border: solid 1px black;
 
-  border: none;
-  padding: 7px;
-  color: #808080;
- 
-  border-bottom-left-radius: 7px;
-  border-top-left-radius: 7px;
+ @media screen and (min-width: $breakpoint) {
+  grid-column: 1;
  }
- &__search-input{
-  box-sizing: border-box;
-  margin: 0;
+
+ &__icon {
+  border: solid 1px black;
   border: none;
-  color: #808080;
+  @include padding(null null null .75em);
+  color:rgba($border-grey, .75);
+
+ }
+
+ &__search-input {
+  @include padding(0 0 0 .5em);
+  @include margin(0);
+  border: none;
+  font-size: 1.25em;
+  color: $border-grey;
+  
  }
 }
 
@@ -74,7 +57,9 @@ input:focus {
 
 // Hide Radio Buttons
 
-.radio-hidden, .element-toggle, .nav-toggle {
+.radio-hidden,
+.element-toggle,
+.nav-toggle {
  position: absolute;
  top: -999px !important;
  left: -999px !important;
@@ -83,21 +68,28 @@ input:focus {
 // Dropdown Hover Buttons
 .form-group-block,
 .form-group-block-add {
-  width: 100%;
-  background: $bg-accent;
-  box-shadow: $box-shadow-2;
+ width: 100%;
+ background: $bg-accent;
+ box-shadow: $box-shadow-2;
 
-  transform-origin: top;
-  transform: scale(1, 0);
-  transition: transform 250ms ease-in-out 200ms;
-  z-index: 100;
+ transform-origin: top;
+ transform: scale(1, 0);
+ transition: transform 250ms ease-in-out 200ms;
+ z-index: 100;
 
-  position: absolute;
-  top: 100%;
-  right: 0;
+ position: absolute;
+ top: 100%;
+ right: 0;
 }
+
 .form-group-block-add {
-  width: 160px;
+ width: 160px;
+}
+
+.btn-dropdown-block:hover>.form-group-block,
+.btn-dropdown-block:hover>.form-group-block-add {
+ cursor: pointer;
+ transform: scale(1);
 }
 
 label {
@@ -105,17 +97,12 @@ label {
  padding: 0;
 }
 
-.btn-dropdown-block:hover > .form-group-block,
-.btn-dropdown-block:hover > .form-group-block-add {
-  cursor: pointer;
-  transform: scale(1);
-}
-
 .form-group {
-  padding: 1em;
-  width: 100%;
-  &:hover {
-   background: $bg-blue;
+ padding: 1em;
+ width: 100%;
+
+ &:hover {
+  background: $bg-blue;
  }
 }
 
@@ -127,7 +114,21 @@ label {
 
 .form-group label:hover,
 .form-group:hover {
-  cursor: pointer;
+ cursor: pointer;
 }
 
+/* Form blocks style */
 
+.form-group-pageEdit {
+ background: $bg-light;
+ // box-shadow: $box-shadow-2;
+ border-radius: $border-radius;
+ border: solid 1px rgba($border-grey, .25);
+ color: $txt-dark;
+ @include padding(1em);
+
+ input,
+ textarea {
+  background: $bg-accent !important;
+ }
+}

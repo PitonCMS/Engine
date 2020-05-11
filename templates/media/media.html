@@ -7,10 +7,8 @@
 <div class="content-header-inner">
 <!-- Bread Crumbs -->
 <div class="breadcrumb"></div>
-
 <!-- Section Title -->
 <h3 class="section-title">All Media</h3>
-
 <!-- Controls -->
 <div class="btn-dropdown-block">
  <div class="btn btn-add btn-sm"><span>Add&nbsp;&nbsp;&nbsp;</span> <span><i class="fas fa-chevron-down"></i></span>
@@ -26,9 +24,7 @@
   </div>
  </div>
 </div>
-
 </div>
-
 {% endblock contentHeader %}
 
 {% block content %}
@@ -36,7 +32,6 @@
 
 <!-- Media Filter -->
 <div class="filter-block">
-
  <div class="input-block">
   <div class="input-block__icon">
    <i class="fas fa-search"></i>
@@ -46,8 +41,10 @@
   </div>
  </div>
 
+ {# TODO Connect dropdown filter to available gallery/categories #}
+ 
  <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown btn-sm"><span>By Category</span> <span><i class="fas fa-chevron-down"></i></span>
+  <div class="btn btn-dropdown"><span>By Category</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block">
    <div class="form-group">
@@ -73,10 +70,10 @@
   {% else %}
   <strong>No Media Found</strong>
   {% endfor %}
-
-
 </div>
+
 <div class="pagination">
  {{ pagination() }}
 </div>
+
 {% endblock content %}

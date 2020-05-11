@@ -1,20 +1,22 @@
+// MEDIA
+
 .media-wrapper {
+ @include margin(1em null null null);
  display: grid;
  grid-template-columns: 1fr;
- gap: 1em;
+ gap: .5em;
 
  .media {
-  @include padding(.25em);
-  background: $bg-accent;
+  @include padding(.5em);
+  background: $bg-light;
   border-radius: $border-radius;
-  box-shadow: $box-shadow-1;
+  box-shadow: $box-shadow-2;
  }
 
  .mediaForm {
   display: grid;
   grid-template-columns: auto repeat(2, 1fr) auto;
   gap: 1rem;
-  // align-items: stretch;
   justify-content: center;
  }
 
@@ -41,7 +43,7 @@
   border-radius: $border-radius;
   @include margin(0);
   @include padding(0);
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow-2;
   object-fit: cover;
 
   /* Position the mediaPopup */

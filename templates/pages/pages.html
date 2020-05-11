@@ -18,7 +18,6 @@
 
 <!-- Media Filter -->
 <div class="filter-block">
-
  <div class="input-block">
   <div class="input-block__icon">
    <i class="fas fa-search"></i>
@@ -27,9 +26,8 @@
    <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Pages" autocomplete="false">
   </div>
  </div>
-
  <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
+  <div class="btn btn-dropdown "><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block">
    <div class="form-group">
@@ -50,21 +48,20 @@
    </div>
   </div>
  </div>
-
 </div>
 
 {# Search / Filters #}
-  <div class="page-list-item-filter">
+{#  <div class="list-item-page-filter">
      {{ pageMacro.pageStatusFilter() }}
-  </div>
+  </div> #}
 
  {# Page List Titles #}
-  <div class="page-list-item-header">
-   <div class="page-list-item__heading"></div>
-   <div class="page-list-item__heading">Title</div>
-   <div class="page-list-item__heading">Status</div>
-   <div class="page-list-item__heading">Template</div>
-   <div class="page-list-item__heading">Collection</div>
+  <div class="list-item-page-header">
+   <div class="list-item-page__heading"></div>
+   <div class="list-item-page__heading">Title</div>
+   <div class="list-item-page__heading">Status</div>
+   <div class="list-item-page__heading">Template</div>
+   <div class="list-item-page__heading">Collection</div>
   </div>
 
   {# Page List  #}

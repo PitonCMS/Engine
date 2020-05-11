@@ -1,3 +1,5 @@
+/* Default Styles */
+
 *,
 *::before,
 *::after {
@@ -11,8 +13,7 @@ html,
 body {
  width: 100%;
  height: 100%;
- background: $bg-light;
- background: $bg-light;
+ background: $bg-accent;
 }
 
 body {
@@ -20,7 +21,6 @@ body {
  line-height: 1.6;
 
 }
-
 
 /* Html Element Styles */
 
@@ -46,7 +46,6 @@ a {
   color: rgba($clr-text, .75);
  }
 }
-
 ::selection {
  background-color: $clr-accent;
  color: $txt-light;

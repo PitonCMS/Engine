@@ -134,14 +134,14 @@ For the summary display of either pages or collection detail pages
 #}
 {% macro pageListItem(pageItem, linkName) %}
 
-<a class="page-list-item" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
+<a class="list-item-page" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
  {# TODO: Image Media Thumb 100x100px if exists #}
- <div class="page-list-item__media"><img src="" alt=""></div>
- <div class="page-list-item__title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
- <div class="page-list-item__status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}
+ <div class="list-item-page__media"><img src="" alt=""></div>
+ <div class="list-item-page__title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
+ <div class="list-item-page__status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}
  </div>
- <div class="page-list-item__template">Template: <code>{{ pageItem.template }}</code></div>
- <div class="page-list-item__collect-template">{{ pageItem.collection_title }} </div>
+ <div class="list-item-page__template">Template: <code>{{ pageItem.template }}</code></div>
+ <div class="list-item-page__collect-template">{{ pageItem.collection_title }} </div>
 </a>
 
 {% endmacro pageListItem %}

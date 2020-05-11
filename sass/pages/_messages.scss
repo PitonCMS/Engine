@@ -1,5 +1,7 @@
-.content-block-messages {
+// MESSAGES
 
+.content-block-messages {
+@include margin(1em null null null);
  width: 100%;
  display: grid;
  gap: 1em;

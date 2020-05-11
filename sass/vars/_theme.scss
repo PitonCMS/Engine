@@ -1,5 +1,5 @@
 // color theme
-$black: hsl(0, 41%, 23%);
+$black: hsl(0, 0%, 21%);
 $white: hsl(0, 0%, 100%);
 $off-white: hsl(210, 22%, 96%);
 $dark-grey: hsl(0, 0%, 25%);
@@ -9,6 +9,7 @@ $light-orange: hsl(36, 100%, 71%);
 $blue-light: rgba(90, 104, 196, .15);
 $red: hsl(9, 81%, 40%);
 $green: hsl(120, 69%, 23%);
+$grey: #808080;
 
 
 // Navigation Variables
@@ -57,3 +58,5 @@ $btn-red: $red;
 $btn-red-hover: darken($btn-red, 10%);
 $btn-green: $green;
 $btn-green-hover: darken($btn-green, 10%);
+
+$border-grey: $grey;
