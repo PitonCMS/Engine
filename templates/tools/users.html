@@ -15,6 +15,40 @@
 {% endblock contentHeader %}
 
 {% block content %}
+<!-- User Filter -->
+<div class="filter-block">
+
+ <div class="input-block">
+  <div class="input-block__icon">
+   <i class="fas fa-search"></i>
+  </div>
+  <div class="input-block__input">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search users" autocomplete="false">
+  </div>
+ </div>
+
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+  <div class="form-group-block">
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="allPages" name="category" value="allPages">
+    <label for="allPages">All</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="published" name="category" value="published">
+    <label for="published">Active</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="draft" name="category" value="draft">
+    <label for="draft">Inactive</label>
+   </div>
+ 
+  </div>
+ </div>
+
+</div>
+<!-- Content Block-->
   <div class="content-block">
     {% if page.recommendRecoveryEmail %}
     {# TODO Put this notice in a dismissable alert #}
@@ -23,38 +57,6 @@
               address.</p>
       </div>
     {% endif %}
-
-    <div class="filter-block">
-
-      <div class="search-block">
-       <div class="search-icon">
-        <i class="fas fa-search"></i>
-       </div>
-       <div class="search-input">
-        <input type="search" name="search" id="search" class="search" placeholder="Search users" autocomplete="false">
-       </div>
-      </div>
-
-      <div class="btn-dropdown-block">
-       <div class="btn btn-dropdown btn-sm"><span>Status</span> <span><i class="fas fa-chevron-down"></i></span>
-       </div>
-       <div class="form-group-block">
-        <div class="form-group">
-         <input type="radio" class="radio-hidden" id="users-all" name="userstatus" value="all">
-         <label for="users-all">All</label>
-        </div>
-        <div class="form-group">
-         <input type="radio" class="radio-hidden" id="users-active" name="userstatus" value="active">
-         <label for="users-active">Active</label>
-        </div>
-        <div class="form-group">
-         <input type="radio" class="radio-hidden" id="users-inactive" name="userstatus" value="inactive">
-         <label for="users-inactive">Inactive</label>
-        </div>
-       </div>
-      </div>
-
-     </div>
 
 
      {# TODO Sort out the users table #}
