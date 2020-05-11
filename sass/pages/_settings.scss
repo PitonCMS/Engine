@@ -29,6 +29,7 @@
  }
 
 }
+
 .user-card,
 .contact-block,
 .settings-block,
@@ -44,6 +45,39 @@
  @include margin(1em null null null);
 }
 }
+
+/* Users */
+.user-list-item,
+.user-list-item-header {
+ @include padding(.5em);
+ display: grid;
+ grid-template-columns: repeat(2, 1fr) repeat(2, .5fr);
+ gap: 1em;
+ justify-content: center;
+ align-items: center;
+ border-top: solid 1px $clr-border;
+
+ &:hover {
+  background: $bg-blue; 
+ }
+
+ &__heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+ }
+
+ &:last-child {
+  border-bottom: solid 1px $clr-border;
+ }
+
+}
+.user-list-item-header {
+ height: 40px;
+ &:hover{
+  background: $bg-light;
+ }
+}
+
 .add-user {
  justify-self: flex-start;
  align-self: flex-start;

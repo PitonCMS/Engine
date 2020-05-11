@@ -105,7 +105,7 @@
 {% macro flag(status, key) %}
 {% if status == 'orphaned' %}
 <span class="badge badge-danger">Orphaned</span>
-<div class="form-check form-check-inline">
+<div class="form-check">
   <input class="form-check-input" name="setting[{{ key }}][delete]" type="checkbox" value="delete"
     title="Deletes on save">
   <label class="text-danger">Delete?</label>

@@ -8,15 +8,15 @@ input:-webkit-autofill:active {
   outline: none;
 }
 input[type="text"],
+input[type="email"],
 input[type="textarea"] {
-  // line-height: 1.6;
   text-transform: none;
   letter-spacing: normal;
   position: relative;
   z-index: 20;
   display: block;
   width: 100%;
-  background: $green;
+  background: $bg-accent;
   border: 0.1rem solid transparent;
   font-family: inherit;
   font-size: inherit;

@@ -21,7 +21,7 @@
 {% endblock contentHeader %}
 
 {% block content %}
-  <div class="content-block">
+
 
       <div class="user-card">
         <input type="hidden" name="user_id" value="{{ page.user.id }}">
@@ -47,20 +47,18 @@
         </div>
 
         <!-- Other Controls -->
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}"
-            {{ checked(page.user.role == 'A') }} >
+        <div class="radio-block-item" style="background: pink;">
+          <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}" {{ checked(page.user.role == 'A') }} >
           <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
         </div>
 
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
-            {{ checked(page.user.active == 'Y') }}>
+        <div class="radio-block-item" style="background: pink;">
+          <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}" {{ checked(page.user.active == 'Y') }}>
           <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
         </div>
 
       </div>
-  </div>
+
 {% endblock content %}
 
 {% block closeForm %}

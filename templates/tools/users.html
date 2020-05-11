@@ -3,14 +3,14 @@
 {% block htmlTitle 'Users' %}
 
 {% block contentHeader %}
-  <div class="content-header-inner">
-    <div class="breadcrumb"></div>
-    <h3 class="section-title">Users</h3>
+<div class="content-header-inner">
+ <div class="breadcrumb"></div>
+ <h3 class="section-title">Users</h3>
 
-    <div class="btn-group">
-      <a class="btn btn-add btn-sm" href="{{ pathFor('adminToolUserEdit') }}">Add User</a>
-    </div>
-  </div>
+ <div class="btn-group">
+  <a class="btn btn-add btn-sm" href="{{ pathFor('adminToolUserEdit') }}">Add User</a>
+ </div>
+</div>
 
 {% endblock contentHeader %}
 
@@ -23,7 +23,8 @@
    <i class="fas fa-search"></i>
   </div>
   <div class="input-block__input">
-   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search users" autocomplete="false">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search users"
+    autocomplete="false">
   </div>
  </div>
 
@@ -43,44 +44,42 @@
     <input type="radio" class="radio-hidden" id="draft" name="category" value="draft">
     <label for="draft">Inactive</label>
    </div>
- 
+
   </div>
  </div>
 
 </div>
-<!-- Content Block-->
-  <div class="content-block">
-    {% if page.recommendRecoveryEmail %}
-    {# TODO Put this notice in a dismissable alert #}
-      <div class="one-admin-notice span">
-        <p>You only have one Administrator email registered. You should consider adding a second Administrator as login recovery email
-              address.</p>
-      </div>
-    {% endif %}
+
+{% if page.recommendRecoveryEmail %}
+{# TODO Put this notice in a dismissable alert #}
+<div class="one-admin-notice span">
+ <p>You only have one Administrator email registered. You should consider adding a second Administrator as login
+  recovery email
+  address.</p>
+</div>
+{% endif %}
+
+{# User Table Headings #}
+<div class="user-list-item-header">
+ <div class="user-list-item__name">Name</div>
+ <div class="user-list-item__email">Email</div>
+ <div class="user-list-item__status">Status</div>
+ <div class="user-list-item__role">Role</div>
+</div>
+
+{# Loop through saved users #}
+{% for user in page.users %}
+<a class="user-list-item" href="{{ pathFor('adminToolUserEdit', {'id': user.id}) }}">
+ <div class="user-list-item__title">{{ user.first_name }} {{ user.last_name }}</div>
+ <div class="user-list-item__email">{{ user.email }}</div>
+ <div class="user-list-item__status">{% if user.active == 'Y' %}Active{% endif %}</div>
+ <div class="user-list-item__role">{% if user.role == 'A' %}Admin{% endif %}</div>
+</a>
+{% endfor %}
 
 
-     {# TODO Sort out the users table #}
-    {# User Table Headings #}
-    <div class="page-list-item-header">
-      <div class="page-list-item__heading">Name</div>
-      <div class="page-list-item__heading">Email</div>
-      <div class="page-list-item__heading">Active</div>
-      <div class="page-list-item__heading">Admin</div>
-    </div>
-
-    {# Loop through saved users #}
-    {% for user in page.users %}
-    <a class="page-list-item" href="{{ pathFor('adminToolUserEdit', {'id': user.id}) }}">
-      <div class="page-list-item__title">{{ user.first_name }} {{ user.last_name }}</div>
-      <div class="page-list-item__title"><a href="mailto:{{ user.email }}" target="_blank">{{ user.email }}</a></div>
-      <div class="page-list-item__title">{% if user.active == 'Y' %}Active{% endif %}</div>
-      <div class="page-list-item__title">{% if user.role == 'A' %}Admin{% endif %}</div>
-    </a>
-    {% endfor %}
-
-  </div><!-- /.content-block -->
 {% endblock content %}
 
 {% block foot %}
-  <script src="{{ basePath() }}/admin/js/user.js"></script>
+<script src="{{ basePath() }}/admin/js/user.js"></script>
 {% endblock foot %}

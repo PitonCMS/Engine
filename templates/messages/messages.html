@@ -12,26 +12,7 @@
 
 {% endblock contentHeader %}
 
-{% block sidebar %}
-<div class="sidebar-inner">
- <div class="sidebar-block">
-  <div class="sidebar-link">
-   <a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}"
-    href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
-    <i class="fas fa-envelope"></i>
-    <div class="sidebar-link__text">New Messages</div>
-   </a>
-  </div>
-  <div class="sidebar-link">
-   <a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}"
-    href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
-    <i class="fas fa-envelope-open-text"></i>
-    <div class="sidebar-link__text">Read Messages</div>
-   </a>
-  </div>
- </div>
-</div>
-{% endblock sidebar %}
+
 
 {% block content %}
 <!-- Message Filters -->
@@ -97,6 +78,26 @@
 <script src="{{ basePath() }}/admin/js/message.js"></script>
 {% endblock foot %}
 
+{% block sidebar %}
+<div class="sidebar-inner">
+ <div class="sidebar-block">
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}"
+    href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
+    <i class="fas fa-envelope"></i>
+    <div class="sidebar-link__text">New Messages</div>
+   </a>
+  </div>
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}"
+    href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
+    <i class="fas fa-envelope-open-text"></i>
+    <div class="sidebar-link__text">Read Messages</div>
+   </a>
+  </div>
+ </div>
+</div>
+{% endblock sidebar %}
 
 {% macro message(m) %}
 <div class="message-block jsMessageWrap">
@@ -108,7 +109,6 @@
   <span class="strong-text">Via:</span>&nbsp;&nbsp; {{ m.context|default('Unknown Page') }}</div>
    <hr>
    <div><p>{{ m.message|nl2br }}</p></div>
-   <hr>
   </div>
  
 
@@ -119,7 +119,7 @@
     <button class="btn btn-delete btn-sm" name="button" title="Delete message" type="submit"
     data-is-read="{{ m.isRead }}" value="delete" formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
 
-    <button class="btn btn-save btn-sm" type="submit" name="button" value="toggle"
+    <button class="btn btn-save btn-sm btn-block" type="submit" name="button" value="toggle"
      data-is-read="{{ m.isRead }}">Mark as
      {% if m.isRead == 'Y' %}Unread{% else %}Read
      {% endif %}
