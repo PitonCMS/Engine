@@ -26,7 +26,7 @@ class AdminPageController extends AdminBaseController
     /**
      * Show Pages
      *
-     * Show all pages and page templates
+     * Show all pages and collection pages
      * @param array $args Route arguments
      * @return Response
      */
@@ -114,7 +114,7 @@ class AdminPageController extends AdminBaseController
 
         $this->container->view->addExtension($pagination);
 
-        return $this->render('pages/collectionPages.html', $data);
+        // return $this->render('pages/collectionPages.html', $data);
     }
 
     /**

@@ -66,7 +66,6 @@ class Admin extends Base
             new TwigFunction('getMediaCategories', [$this, 'getMediaCategories']),
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
-            new TwigFunction('getAllPages', [$this, 'getAllPages']),
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
         ]);
     }
@@ -202,25 +201,6 @@ class Admin extends Base
         $count = $messageMapper->findUnreadCount();
 
         return ($count === 0) ? null : $count;
-    }
-
-    /**
-     * Get All Pages
-     *
-     * Gets a list of all pages, including unpublished
-     * @param void
-     * @return array
-     */
-    public function getAllPages(): ?array
-    {
-        // Get cached pages if available
-        if (isset($this->cache['pages'])) {
-            return $this->cache['pages'];
-        }
-
-        // Otherwise fetch all pages
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        return $this->cache['pages'] = $pageMapper->findPages('all');
     }
 
     /**

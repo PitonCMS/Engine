@@ -47,6 +47,9 @@ class AdminNavigationController extends AdminBaseController
     {
         // Get dependencies
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+
+        $data['pageList'] = $pageMapper->findPages('all');
 
         $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
         $data['navigator'] = $args['navigator'];

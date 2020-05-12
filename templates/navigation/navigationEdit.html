@@ -72,7 +72,7 @@
                     <option value="x">Add Page</option>
                     {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
                     <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
-                    {% for p in getAllPages() %}
+                    {% for p in page.pageList %}
                         <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
                     {% endfor %}
                 </select>
