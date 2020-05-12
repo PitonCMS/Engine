@@ -1,4 +1,27 @@
+
 /*  FORMS  */
+input[type="text"],
+input[type="email"],
+textarea {
+ text-transform: none;
+ letter-spacing: normal;
+ position: relative;
+ z-index: 20;
+ display: block;
+ width: 100%;
+ background: $bg-light;
+ border-radius: $border-radius;
+ border: 0.1rem solid lightgrey;
+ font-family: inherit;
+ font-size: inherit;
+ font-weight: inherit;
+ -webkit-appearance: none;
+ appearance: none;
+}
+
+input:focus {
+ outline: none;
+}
 
 /* Change the white to any color ;) */
 input:-webkit-autofill,
@@ -20,38 +43,7 @@ input:-webkit-autofill:active {
  align-items: center
 }
 
-// Input Block -- input with left icon
-.input-block {
- height: 100%;
- width: 100%;
- background: $bg-light;
- display: grid;
- grid-template-columns: auto 1fr;
- align-items: center;
- border: solid 1px $bg-blue;
- grid-column: 1 / -1;
 
- @media screen and (min-width: $breakpoint) {
-  grid-column: 1;
- }
-
- &__icon {
-  border: solid 1px black;
-  border: none;
-  @include padding(null null null .75em);
-  color:rgba($border-grey, .75);
-
- }
-
- &__search-input {
-  @include padding(0 0 0 .5em);
-  @include margin(0);
-  border: none;
-  font-size: 1.25em;
-  color: $border-grey;
-  
- }
-}
 
 // Button Dropdown Hover Block with Radio
 
@@ -121,14 +113,78 @@ label {
 
 .form-group-pageEdit {
  background: $bg-light;
- // box-shadow: $box-shadow-2;
+ box-shadow: $box-shadow-2;
  border-radius: $border-radius;
  border: solid 1px rgba($border-grey, .25);
  color: $txt-dark;
  @include padding(1em);
+ @include margin(null null 1em null);
 
  input,
  textarea {
   background: $bg-accent !important;
+ }
+}
+
+/* Radio Block */
+.radio-block-wrapper {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+ gap: 0 .5em;
+
+ .radio-block-item {
+  @include padding(0);
+  @include margin(0);
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  justify-content: center;
+
+  &__radio {
+   height: 75%;
+   width: 75%;
+  }
+
+  &__label {
+   font-weight: 400;
+  }
+ }
+}
+
+// Input Block -- input with left icon
+.input-block {
+ height: 100%;
+ width: 100%;
+ background: $bg-light !important;
+
+ display: grid;
+ grid-template-columns: auto 1fr;
+ align-items: center;
+ border: solid 1px $bg-blue;
+ grid-column: 1 / -1;
+
+ @media screen and (min-width: $breakpoint) {
+  grid-column: 1;
+ }
+
+ &__icon {
+  border: solid 1px black;
+  border: none;
+  @include padding(null .75em);
+  color: rgba($border-grey, .75);
+
+
+ }
+
+ &__search-input {
+  padding-right: .5em !important;
+  background: $bg-light !important;
+  @include margin(0);
+  border: none !important;
+  font-size: 1.25em;
+  color: $border-grey;
+
  }
 }

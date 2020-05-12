@@ -39,6 +39,7 @@ button,
 
 // Default buttons
 .btn {
+ display: block;
  @include padding(1em);
  width: 100%;
  background: darkmagenta;
@@ -141,4 +142,21 @@ button,
 /* Button Dropdown Block */
 .btn-dropdown-block {
  position: relative;
+ .check-block-item{
+  display: flex;
+ }
+}
+
+/* Button Group Page Edit */
+
+.btn-group-pageEdit {
+ @include padding(1em null null null);
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+ gap: 1em .5em;
+}
+
+/* Button Group Delete Page bottom of page*/
+.btn-group-bottom {
+ @include padding(4rem null null)
 }

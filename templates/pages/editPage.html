@@ -11,6 +11,30 @@
 {{ page.title|default(page.definition.templateName) }}
 {% endblock %}
 
+{% block contentHeader %}
+<form action="{{  pathFor(page.route.pageAction) }}" method="post" accept-charset="utf-8">
+ <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+ <input type="hidden" name="page_id" value="{{ page.id }}">
+ <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+ <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
+ <input type="hidden" name="template" value="{{ page.template }}">
+ <!-- Content Header Control Bar -->
+ <div class="content-header-inner">
+  <!-- Breadcrumbs -->
+  <div class="breadcrumb"></div>
+  <!-- Section Title -->
+  {# TODO Have Content Header Title reflect name of page being edited #}
+  <h3 class="section-title">NAME OF PAGE BEING EDITED HERE</h3>
+  <!-- Control Buttons -->
+  <div class="btn-group">
+   <a class="btn btn-cancel btn-sm" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
+   <button class="btn btn-save btn-sm" type="submit" title="Save page">Save</button>
+   <button class="btn btn-publish btn-sm" type="submit" name="publish_now" title="Save page and publish now">Publish
+    Now</button>
+  </div>
+ </div>
+ {% endblock contentHeader %}
+
 {% block content %}
 
 {# Media Modal Selector #}
@@ -24,13 +48,8 @@
   {% for blockDefinition in page.definition.blocks %}
 
   <div class="element-block-wrapper">
-   {# <input type="checkbox" name="element-toggle" class="element-toggle" id="element-toggle"> #}
-   {# <label for="element-toggle" class="element-toggle-label"> #}
-   {# <div class="page-edit-icon"><i class="fas fa-chevron-down"></i></div> #}
-   {# </label> #}
-   <div class="page-edit-title page-edit-title-wrapper">
-    <h4>{{ blockDefinition.name }}</h4>
-   </div>
+
+   <h4 class="page-edit-title page-edit-title-wrapper">{{ blockDefinition.name }}</h4>
 
    <div class="jsBlockParent page-edit-content-wrapper" id="{{ blockDefinition.key }}">
     {# Inner loop: All loaded elements by block key #}
@@ -69,18 +88,18 @@
     <label>Slug <span class="text-required">*</span></label>
 
 
-
-    <div class="input-block">
-     <div class="input-block__icon jsUrlSlugFaLockStatus">
-      <i class="fas fa-{{ lockedStatus }}"></i>
-     </div>
-     <div class="input-block__input">
-      <input type="text" class="input-block__search-input jsUrlSlug" name="page_slug" maxlength="100"
-       placeholder="URL slug"
-       {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}" required
-       {{ readonlyStatus }} autocomplete="off">
-     </div>
-    </div>
+<div class="filter-block">
+ <div class="input-block">
+  <div class="input-block__icon jsUrlSlugFaLockStatus">
+   <i class="fas fa-{{ lockedStatus }}"></i>
+  </div>
+  <div class="input-block__input">
+   <input type="text" class="input-block__search-input jsUrlSlug" name="page_slug" maxlength="100" placeholder="URL slug"
+    {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
+  </div>
+ </div>
+</div>
+ 
 
     <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
      changed. Warning, changing the URL slug after the page is published may negatively impact links to your
@@ -110,7 +129,7 @@
     <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
     <label>Featured Page Image</label>
 
-    <div class="btn-group">
+    <div class="btn-group-pageEdit">
      <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>&nbsp;
      <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
     </div>
@@ -133,7 +152,7 @@
 
 
 
-<div class="btn-group">
+<div class="btn-group-bottom">
  {% if page.id %}
  <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit"
   formaction="{{ pathFor(page.route.pageDelete) }}" {% if page.page_slug == 'home' %}disabled
@@ -195,26 +214,3 @@
  {% endfor %}
 </div>
 {% endblock sidebar %}
-
-{% block contentHeader %}
-<form action="{{  pathFor(page.route.pageAction) }}" method="post" accept-charset="utf-8">
- <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
- <input type="hidden" name="page_id" value="{{ page.id }}">
- <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
- <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
- <input type="hidden" name="template" value="{{ page.template }}">
- <!-- Content Header Control Bar -->
- <div class="content-header-inner">
-  <!-- Breadcrumbs -->
-  <div class="breadcrumb"></div>
-  <!-- Section Title -->
-  <h3 class="section-title">Add/Edit Page</h3>
-  <!-- Control Buttons -->
-  <div class="btn-group">
-   <a class="btn btn-cancel btn-sm" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
-   <button class="btn btn-save btn-sm" type="submit" title="Save page">Save</button>
-   <button class="btn btn-publish btn-sm" type="submit" name="publish_now" title="Save page and publish now">Publish
-    Now</button>
-  </div>
- </div>
- {% endblock contentHeader %}
