@@ -18,9 +18,14 @@
   {% for nav in page.navigators %}
 
   <a href="{{ pathFor('adminNavigationEdit', {'navigator': nav.key}) }}" class="content-card">
-      <i class="fas fa-cog card-icon"></i>
+   <div class="content-card__header">
+    <i class="fas fa-compass card-icon"></i>
     <h3 class="title-text">{{ nav.name }}</h3>
+   </div>
+   <div class="content-card__body">
     <p>{{ nav.description }}</p>
+   </div>
+  
   </a>
 
   {% else %}

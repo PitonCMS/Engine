@@ -35,6 +35,8 @@
  }
 }
 
+
+// Add/Edit Page Styles
 // Page/Collection Edit
 
 .page-edit-wrapper {
@@ -53,19 +55,6 @@
  grid-template-columns: 1fr;
  background: white;
  gap: 1em;
-}
-
-.form-group-pageEdit {
- background: $bg-accent;
- box-shadow: $box-shadow-2;
- border-radius: $border-radius;
- color: $txt-dark;
- @include padding(1em);
-
- input,
- textarea {
-  background: $bg-light !important;
- }
 }
 
 .page-edit__radioInput {
@@ -96,7 +85,6 @@
  justify-content: flex-start;
  align-items: center;
 }
-
 .element-block-wrapper {
  position: relative;
  @include margin(null null 2rem null);

@@ -1,0 +1,72 @@
+// CARDS
+.content-cards {
+
+
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+ gap: 1em;
+ &__title{
+  @include margin(0);
+  @include padding(2em null null null);
+  font-size: 1.5rem;
+  align-self: center;
+  }
+}
+
+.content-card {
+ @include padding(1em);
+ background: $bg-light;
+ border-radius: $border-radius;
+
+ &:hover {
+  background: $bg-blue;
+ }
+&__header{
+
+ display: grid;
+ grid-template-columns: 1rem 1fr;
+ gap: 0.25em 0.5em;
+  align-items: center;
+}
+&__body {
+ @include margin(.5rem null null null);
+ display: grid;
+ grid-template-columns: 1rem 1fr;
+ gap: 0.25em 0.5em;
+}
+&__title {
+ @include margin(0);
+ font-size: 1.4em;
+ align-self: center;
+ 
+}
+ p {
+  grid-column: 2 / -1;
+  font-size: 0.75rem;
+  color: rgba($clr-text, 0.75);
+ }
+
+ .card-icon {
+  @include padding(1px null null null);
+  color: rgba($clr-text, 0.5);
+  font-size: 1em;
+  // align-self: flex-start;
+  // justify-self: flex-start;
+  height: 100%;
+  width: 100%;
+ }
+
+}
+
+.user-card,
+.contact-block,
+.settings-block,
+.social-block,
+.sitemap-block {
+ @include padding(1em);
+
+
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 1em;
+}

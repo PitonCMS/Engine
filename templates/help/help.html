@@ -4,209 +4,279 @@
 {% block contentHeader %}
 <div class="content-header-inner">
  <div class="breadcrumb"></div>
- <h3 class="section-title">Support</h3>
+ <h3 class="content-card__title" class="section-title">Support</h3>
  <div class="btn-group"></div>
 </div>
 
 {% endblock contentHeader %}
 
 {% block content %}
-    <style>
-        /* Hack - needs something better in CSS */
-        .help-content img {
-            width: 75%;
-        }
-        .help-content {
-            padding: 20px;
-        }
-        .help-content li {
-            list-style: inherit;
-        }
-    </style>
-     <div class="page-list-item-filter">
-      <form>
-       <div class="input-block">
-        <div class="input-block__icon">
-         <i class="fas fa-search"></i>
-        </div>
-        <div class="input-block__input">
-         <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support" autocomplete="false">
-        </div>
-       </div>
-      </form>
-     </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">PitonCMS</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Overview</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Pages</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Collections</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Navigation</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Media</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Messages</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Settings</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-         </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">For Designers</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Templates</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-         
-       
-         </div>
-         <div class="content-cards">
-          <h2 class="content-cards__title span">For Developers</h2>
-          <a href="#" class="content-card">
-           <i class="fas fa-cog card-icon"></i>
-           <h3>Version</h3>
-           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-          </a>
-    
-       
-         </div>
-    <div class="help-content">
-        {# {{ page.helpContent }} #}
-    </div>
+<style>
+ /* Hack - needs something better in CSS */
+ .help-content img {
+  width: 75%;
+ }
+
+ .help-content {
+  padding: 20px;
+ }
+
+ .help-content li {
+  list-style: inherit;
+ }
+</style>
+<div class="page-list-item-filter">
+ <form>
+  <div class="input-block">
+   <div class="input-block__icon">
+    <i class="fas fa-search"></i>
+   </div>
+   <div class="input-block__input">
+    <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support"
+     autocomplete="false">
+   </div>
+  </div>
+ </form>
+</div>
+
+{# Overview #}
+<div class="content-cards">
+ <h2 class="content-cards__title span">PitonCMS</h2>
+
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Overview</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Pages</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Collections</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Navigation</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Media</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Messages</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Settings</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+</div>
+
+{# For Designers #}
+<div class="content-cards">
+ <h2 class="content-cards__title span">For Designers</h2>
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Templates</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+
+
+</div>
+{# For Developers #}
+<div class="content-cards">
+ <h2 class="content-cards__title span">For Developers</h2>
+
+ <a href="#" class="content-card">
+  <div class="content-card__header">
+   <i class="fas fa-cog card-icon"></i>
+   <h3 class="content-card__title">Version</h3>
+  </div>
+
+  <div class="content-card__body">
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+  </div>
+
+ </a>
+</div>
+
+<div class="help-content">
+ {# {{ page.helpContent }} #}
+</div>
 {% endblock content %}
 
 {% block foot %}
-    <script>
-        // Toggle navigation accordion groups
-        $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
-            e.preventDefault();
-            $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
-        });
+<script>
+ // Toggle navigation accordion groups
+ $('.jsHelpAccordion').on('click', '.jsHelpAccordionSubject', function (e) {
+  e.preventDefault();
+  $(this).parent('div').next('.jsHelpAccordionCollapse').slideToggle();
+ });
 
-        let inPageLink = {{ (page.link) ? '`' ~ page.link ~ '`' : 'false' }};
-        if (inPageLink) {
-            document.getElementById(inPageLink).scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-        }
-    </script>
+ let inPageLink = {
+  {
+   (page.link) ? '`'~page.link~'`': 'false'
+  }
+ };
+ if (inPageLink) {
+  document.getElementById(inPageLink).scrollIntoView({
+   behavior: 'smooth',
+   block: 'start',
+   inline: 'nearest'
+  });
+ }
+</script>
 {% endblock foot %}
 
 {% block sidebar %}
-
 <div class="jsHelpAccordion">
 
-    <div class="sidebar-link">
-        <a class="jsHelpAccordionSubject" href="#">
-            <i class="fas fa-file"></i>
-            <div class="sidebar-link__text">PitonCMS</div>
-        </a>
-    </div>
+ <div class="sidebar-link">
+  <a class="jsHelpAccordionSubject" href="#">
+   <i class="fas fa-file"></i>
+   <div class="sidebar-link__text">PitonCMS</div>
+  </a>
+ </div>
 
-    {# The jQuery slideToggle() applies and removes the element style="display: none" #}
-    <div class="jsHelpAccordionCollapse" {% if page.subject != 'client' %}style="display: none;"{% endif %}>
+ {# The jQuery slideToggle() applies and removes the element style="display: none" #}
+ <div class="jsHelpAccordionCollapse" {% if page.subject != 'client' %}style="display: none;" {% endif %}>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Overview</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Overview</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Pages</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminPage'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Pages</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminCollection'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Collections</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminCollection'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Collections</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminNavigation'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Navigation</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminNavigation'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Navigation</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Media</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Media</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMessage'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Messages</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminMessage'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Messages</div>
+   </a>
+  </div>
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminTool'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Tools</div>
-            </a>
-        </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminTool'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Tools</div>
+   </a>
+  </div>
 
-    </div>
-
-
-    <div class="sidebar-link">
-        <a class="jsHelpAccordionSubject" href="#">
-            <i class="fas fa-file"></i>
-            <div class="sidebar-link__text">For Designers</div>
-        </a>
-    </div>
-
-    <div class="jsHelpAccordionCollapse" {% if page.subject != 'designer' %}style="display: none;"{% endif %}>
-
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesigner'}) }}">
-                <i class="fas fa-file"></i>
-                <div class="sidebar-link__text">Templates</div>
-            </a>
-        </div>
-
-    </div>
+ </div>
 
 
-    <div class="sidebar-link">
-        <a class="jsHelpAccordionSubject" href="#">
-            <i class="fas fa-file"></i>
-            <div class="sidebar-link__text">For Developers</div>
-        </a>
-    </div>
+ <div class="sidebar-link">
+  <a class="jsHelpAccordionSubject" href="#">
+   <i class="fas fa-file"></i>
+   <div class="sidebar-link__text">For Designers</div>
+  </a>
+ </div>
 
-    <div class="jsHelpAccordionCollapse" {% if page.subject != 'developer' %}style="display: none;"{% endif %}>
-    {#
+ <div class="jsHelpAccordionCollapse" {% if page.subject != 'designer' %}style="display: none;" {% endif %}>
+
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDesigner'}) }}">
+    <i class="fas fa-file"></i>
+    <div class="sidebar-link__text">Templates</div>
+   </a>
+  </div>
+
+ </div>
+
+
+ <div class="sidebar-link">
+  <a class="jsHelpAccordionSubject" href="#">
+   <i class="fas fa-file"></i>
+   <div class="sidebar-link__text">For Developers</div>
+  </a>
+ </div>
+
+ <div class="jsHelpAccordionCollapse" {% if page.subject != 'developer' %}style="display: none;" {% endif %}>
+  {#
         <div class="sidebar-link ml-2">
             <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperHome'}) }}">
                 <i class="fas fa-file"></i>
@@ -216,13 +286,13 @@
 
         End Developer Help #}
 
-        <div class="sidebar-link ml-2">
-            <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperRelease'}) }}"><i
-                    class="fas fa-file"></i>
-                <div class="sidebar-link__text">Version</div>
-            </a>
-        </div>
-    </div>
+  <div class="sidebar-link ml-2">
+   <a class="jsHelpFile" href="{{ pathFor('adminHelp', {'file': 'adminHelpDeveloperRelease'}) }}"><i
+     class="fas fa-file"></i>
+    <div class="sidebar-link__text">Version</div>
+   </a>
+  </div>
+ </div>
 
 </div>
 {% endblock sidebar %}

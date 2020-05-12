@@ -26,21 +26,21 @@
 
  <div class="user-card">
   <input type="hidden" name="user_id" value="{{ page.user.id }}">
-<div class="user-block-name">
- <!-- User Name -->
- <div class="form-check">
-  <label>First Name</label>
-  <input type="text" class="form-control" name="first_name" maxlength="60" value="{{ page.user.first_name }}"
-   autocomplete="off" required placeholder="First name">
- </div>
+  <div class="user-block-name">
+   <!-- User Name -->
+   <div class="form-check">
+    <label>First Name</label>
+    <input type="text" class="form-control" name="first_name" maxlength="60" value="{{ page.user.first_name }}"
+     autocomplete="off" required placeholder="First name">
+   </div>
 
- <div class="form-check">
-  <label>Last Name</label>
-  <input type="text" class="form-control" name="last_name" maxlength="60" value="{{ page.user.last_name }}"
-   autocomplete="off" required placeholder="Last name">
- </div>
-</div>
- 
+   <div class="form-check">
+    <label>Last Name</label>
+    <input type="text" class="form-control" name="last_name" maxlength="60" value="{{ page.user.last_name }}"
+     autocomplete="off" required placeholder="Last name">
+   </div>
+  </div>
+
 
   <!-- Email Input -->
   <div class="form-check">
@@ -50,22 +50,23 @@
   </div>
 
   <!-- Other Controls -->
- 
- 
-   <div class="user-block-wrapper">
 
-    <div class="user-block-item">
-     <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}" {{ checked(page.user.role == 'A') }}>
-     <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
-    </div>
 
-    <div class="user-block-item">
-     <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
-      {{ checked(page.user.active == 'Y') }}>
-     <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
-    </div>
+  <div class="user-block-wrapper">
+
+   <div class="user-block-item">
+    <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}"
+     {{ checked(page.user.role == 'A') }}>
+    <label class="form-check-label" for="admin-{{ arrayKey }}">Administrator</label>
    </div>
- 
+
+   <div class="user-block-item">
+    <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
+     {{ checked(page.user.active == 'Y') }}>
+    <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
+   </div>
+  </div>
+
 
 
 

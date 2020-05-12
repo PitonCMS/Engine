@@ -118,6 +118,7 @@
   .breadcrumb {
    font-weight: 300;
    font-size: 0.75rem;
+   @include padding(null 1em null null);
 
    a {
     color: $nav-font-color;
