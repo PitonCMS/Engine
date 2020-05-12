@@ -72,6 +72,7 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
+     * TODO DEPRECATE
      * Show Collection Pages
      *
      * Show all collection pages with optional collection slug filter
@@ -465,6 +466,21 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
+     * Show Collection Groups
+     *
+     * @param void
+     * @return Response
+     */
+    public function showCollectionGroups()
+    {
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+
+        $collections = $collectionMapper->find();
+
+        return $this->render('pages/collections.html', ['collections' => $collections]);
+    }
+
+    /**
      * Edit Collection Group
      *
      * Create, edit, or delete collection group
@@ -488,7 +504,7 @@ class AdminPageController extends AdminBaseController
         // Get available collection templates
         $data['templates'] = $definition->getCollections();
 
-        return $this->render('pages/editCollection.html', $data);
+        return $this->render('pages/collectionGroupEdit.html', $data);
     }
 
     /**

@@ -111,8 +111,8 @@ $app->group('/admin', function () {
         });
 
         // Show all collection pages, filtered optionally by collection
-        $this->get('[/{collectionSlug:[a-zA-Z0-9-]+}]', function ($args) {
-            return (new AdminPageController($this))->showCollectionPages($args);
+        $this->get('[/]', function ($args) {
+            return (new AdminPageController($this))->showCollectionGroups();
         })->setName('adminCollection');
     });
     // End collection

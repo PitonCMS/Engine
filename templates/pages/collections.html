@@ -1,0 +1,106 @@
+{% extends '@admin/_adminBase.html' %}
+
+{#
+  Show All Collection Groups
+#}
+{% block htmlTitle 'Collections' %}
+
+{% block contentHeader %}
+<div class="content-header-inner">
+<div class="breadcrumb"></div>
+<h3 class="section-title">Collection Groups</h3>
+
+<div class="btn-group">
+  <div class="btn-dropdown-block">
+  <div class="btn btn-add btn-sm"><span>Add</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+  <div class="form-group-block-add">
+      <div class="form-group">
+        <a class="radio-hidden" href="{{ pathFor('adminCollectionPageEdit') }}">Collection Group</a>
+      </div>
+  </div>
+  </div>
+</div>
+</div>
+{% endblock contentHeader %}
+
+{% block content %}
+
+<!-- Media Filter -->
+<div class="filter-block">
+ <div class="input-block">
+  <div class="input-block__icon">
+   <i class="fas fa-search"></i>
+  </div>
+  <div class="input-block__input">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Pages"
+    autocomplete="false">
+  </div>
+ </div>
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown "><span>Status - Radio</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+  <div class="form-group-block">
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="allPages" name="category" value="allPages">
+    <label for="allPages">All Pages</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="published" name="category" value="published">
+    <label for="published">Published</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="draft" name="category" value="draft">
+    <label for="draft">Draft</label>
+   </div>
+   <div class="form-group">
+    <input type="radio" class="radio-hidden" id="pending" name="category" value="pending">
+    <label for="pending">Pending</label>
+   </div>
+  </div>
+ </div>
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown "><span>Template - Checkbox</span> <span><i class="fas fa-chevron-down"></i></span>
+  </div>
+
+  <div class="form-group-block">
+   <div class="form-group check-block-item">
+    <input type="checkbox" id="withHero" name="withHero" value="withHero">
+    <label for="withHero"> With Hero</label>
+   </div>
+   <div class="form-group check-block-item">
+    <input type="checkbox" id="withoutHero" name="withoutHero" value="withoutHero">
+    <label for="withoutHero"> Without Hero</label>
+   </div>
+   <div class="form-group check-block-item">
+    <input type="checkbox" id="services" name="services" value="services">
+    <label for="services"> Services</label>
+   </div>
+   <div class="form-group check-block-item">
+    <input type="checkbox" id="Recipes" name="Recipes" value="Boat">
+    <label for="Recipes"> Recipes</label>
+   </div>
+   </div>
+ </div>
+</div>
+
+{# List Titles #}
+<div class="list-item-page-header">
+ <div class="list-item-page__heading">Title</div>
+ <div class="list-item-page__heading">Template</div>
+</div>
+
+{% for col in page.collections %}
+<a class="list-item-page" href="{{ pathFor('adminCollectionEdit', {'id': col.id}) }}">
+    <div class="list-item-page__title">{{ col.collection_title }}</div>
+    <div class="list-item-page__template">Template: <code>{{ col.collection_definition }}</code></div>
+   </a>
+{% else %}
+<h5>No Collection Groups Found</h5>
+{% endfor %}
+
+{% endblock content %}
+
+{% block foot %}
+<script src="{{ basePath() }}/admin/js/page.js"></script>
+{% endblock foot %}

@@ -1,6 +1,8 @@
 {% extends '@admin/_adminBase.html' %}
 
-{% block htmlTitle 'Edit User' %}
+{% block htmlTitle %}
+{% if page.user.id %}Edit {% else %}Add {% endif %} User
+{% endblock htmlTitle}
 
 {% block openForm %}
 <form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
@@ -22,7 +24,6 @@
  {% endblock contentHeader %}
 
  {% block content %}
-
 
  <div class="user-card">
   <input type="hidden" name="user_id" value="{{ page.user.id }}">
