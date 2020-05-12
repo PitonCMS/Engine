@@ -43,6 +43,7 @@
 <div class="jsEditPageContainer page-edit-wrapper">
  <!-- Left Column Page Edit -->
  <div class="page-edit__leftCol">
+
   {# Page Blocks and Elements #}
   {# Outer loop: All blocks defined in the JSON page definition file #}
   {% for blockDefinition in page.definition.blocks %}
@@ -71,6 +72,12 @@
  <!-- right Column Page Edit -->
  <div class="page-edit__rightCol">
   <h4 class="page-edit-title">Page Settings</h4>
+  <div class="form-group-pageEdit">
+    <label>Title</label>
+    <input type="text" class="form-control" name="title" maxlength="60"
+     placeholder="Page title" value="{{ page.title }}">
+  </div>
+
   {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
   {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
   {% else %}
@@ -99,7 +106,7 @@
   </div>
  </div>
 </div>
- 
+
 
     <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
      changed. Warning, changing the URL slug after the page is published may negatively impact links to your

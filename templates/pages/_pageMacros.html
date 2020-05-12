@@ -1,4 +1,4 @@
-{#   Page and Collection Macros 
+{#   Page and Collection Macros
      Contains Twig macros for reusable HTML with pages and collections administration #}
 
 {# Edit Element Form
@@ -23,7 +23,7 @@
 {% endfor %}
 
 <div class="jsElementParent" id="page-element-{{ arrayKey }}">
- 
+
  <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
@@ -31,9 +31,9 @@
  <div class="form-group-pageEdit jsElementType">
 
   <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
-  
+
   <div class="radio-block-wrapper">
-  {% for elem in elementTypes %} 
+  {% for elem in elementTypes %}
   {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
    <div class="radio-block-item">
    <input class="radio-block-item__radio" type="radio" name="element_template[{{ arrayKey }}]" id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.template == elem.filename) }} required>
@@ -45,11 +45,7 @@
  </div>
 
  <!-- Element Order -->
- {# <div class="form-group-pageEdit">
-  <label>Element Order</label>
-  <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]"
-   value="{{ loopIndex }}">
- </div> #}
+  <input type="text" class="form-control d-none jsElementSortValue" name="element_sort[{{ arrayKey }}]" value="{{ loopIndex }}">
 
  <!-- Element Title -->
  <div class="form-group-pageEdit">
