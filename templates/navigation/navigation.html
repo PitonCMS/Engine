@@ -14,12 +14,13 @@
 {% block content %}
 
 <div class="content-cards">
+
   {% for nav in page.navigators %}
 
-  <a href="{{ pathFor('adminNavigationEdit', {'navigator': nav}) }}" class="content-card">
+  <a href="{{ pathFor('adminNavigationEdit', {'navigator': nav.key}) }}" class="content-card">
       <i class="fas fa-cog card-icon"></i>
-    <h3 class="title-text">{{ nav|capitalize }}</h3>
-    <p>Edit {{ nav|capitalize }} navigator.</p>
+    <h3 class="title-text">{{ nav.name }}</h3>
+    <p>{{ nav.description }}</p>
   </a>
 
   {% else %}

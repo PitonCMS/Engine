@@ -32,9 +32,9 @@ class AdminNavigationController extends AdminBaseController
         // Get dependencies
         $navs = ($this->container->jsonDefinitionHandler)->getNavigation();
 
-        $navList = $navs->navigators ?? null;
+        $navs = $navs->navigators ?? null;
 
-        return $this->render('navigation/navigation.html', ['navigators' => $navList]);
+        return $this->render('navigation/navigation.html', ['navigators' => $navs]);
     }
 
     /**
