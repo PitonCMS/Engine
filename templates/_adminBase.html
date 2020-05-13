@@ -46,9 +46,8 @@
   </div>
  </header>
 
- {{ include("@admin/includes/_alert.html") }}
-
  <div class="wrapper">
+   {# Hamburger #}
   <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
   <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
   <aside class="sidebar">
@@ -57,6 +56,8 @@
   </aside>
 
   <main class="{% block mainClass 'main-content' %}">
+
+    {{ include("@admin/includes/_alert.html") }}
 
     {# Page level forms must wrap  contentHeader and content blocks #}
     {% block openForm '' %}

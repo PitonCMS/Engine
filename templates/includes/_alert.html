@@ -9,11 +9,11 @@
 
 
     {% for alert in getAlert() %}
-    <div class="container">
-      <div class="alert alert-{{ alert.severity }} alert-dismissible fade show" role="alert">
+    <div class="container" style="position: relative; z-index: 1000; background: purple;margin: 1em;">
+      <div class="alert alert-{{ alert.severity }}" role="alert">
         <h4 class="alert-heading">{{ alert.heading }}</h4>
         {{ alert.message|join('<br>') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close jsDismissAlert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

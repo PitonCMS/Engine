@@ -175,6 +175,13 @@ document.querySelectorAll("form").forEach(form => {
     });
 });
 
+// Dismissable alert
+document.querySelectorAll(".jsDismissAlert").forEach(dismiss => {
+    let alertContainer = dismiss.closest('.container');
+    alertContainer.addEventListener("click", () => {
+        alertContainer.remove();
+    });
+});
 
 
 
