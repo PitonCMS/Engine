@@ -59,6 +59,7 @@ button,
 }
 
 .btn-dropdown {
+ @include padding(.5em null);
  background: $bg-blue;
  color: $txt-dark;
  display: flex;
@@ -139,13 +140,7 @@ button,
 }
 
 
-/* Button Dropdown Block */
-.btn-dropdown-block {
- position: relative;
- .check-block-item{
-  display: flex;
- }
-}
+
 
 /* Button Group Page Edit */
 

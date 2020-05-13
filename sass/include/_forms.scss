@@ -2,6 +2,7 @@
 input[type="text"],
 input[type="email"],
 textarea {
+ @include margin(0);
  text-transform: none;
  letter-spacing: normal;
  position: relative;
@@ -33,14 +34,7 @@ input:-webkit-autofill:active {
 }
 
 
-// Filter Block 
-.filter-block {
- // @include margin(null null 1em null);
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
- gap: .5em 1em;
- align-items: center
-}
+
 
 
 
@@ -136,65 +130,3 @@ label {
  }
 }
 
-/* Radio Block */
-.radio-block-wrapper {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
- gap: 0 .5em;
-
- .radio-block-item {
-  @include padding(0);
-  @include margin(0);
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  justify-content: center;
-
-  &__radio {
-   height: 75%;
-   width: 75%;
-  }
-
-  &__label {
-   font-weight: 400;
-  }
- }
-}
-
-// Input Block -- input with left icon
-.input-block {
- height: 100%;
- width: 100%;
- background: $bg-light !important;
-
- display: grid;
- grid-template-columns: auto 1fr;
- align-items: center;
- border: solid 1px $bg-blue;
- grid-column: 1 / -1;
-
- @media screen and (min-width: $breakpoint) {
-  grid-column: 1;
- }
-
- &__icon {
-  border: solid 1px black;
-  border: none;
-  @include padding(null .75em);
-  color: rgba($border-grey, .75);
-
-
- }
-
- &__search-input {
-  padding-right: .5em !important;
-  background: $bg-light !important;
-  @include margin(0);
-  border: none !important;
-  font-size: 1.25em;
-  color: $border-grey;
-
- }
-}

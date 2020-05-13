@@ -5,28 +5,26 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
-<!-- Bread Crumbs -->
-<div class="breadcrumb"></div>
-<!-- Section Title -->
-<h3 class="section-title">All Media</h3>
-<!-- Controls -->
-<div class="btn-group">
+ <!-- Bread Crumbs -->
+ <div class="breadcrumb"></div>
+ <!-- Section Title -->
+ <h3 class="section-title">All Media</h3>
+ <!-- Controls -->
+ <div class="btn-group">
   <div class="btn-dropdown-block">
-  <div class="btn btn-add btn-sm">
+   <div class="btn btn-add btn-sm">
     <span>Add</span> <span><i class="fas fa-chevron-down"></i></span>
-  </div>
-  <div class="form-group-block-add">
+   </div>
+   <div class="form-group-block-add">
     <div class="form-group">
-    <input type="radio" class="radio-hidden" id="media-upload" name="media-add-group" value="upload">
-    <label for="media-upload">Media</label>
+     <a href="#">Media</a>
     </div>
     <div class="form-group">
-    <input type="radio" class="radio-hidden" id="media-category" name="media-add-group" value="category">
-    <label for="media-category">Category</label>
+     <a href="#">Category</a>
     </div>
+   </div>
   </div>
-  </div>
-</div>
+ </div>
 </div>
 {% endblock contentHeader %}
 
@@ -40,7 +38,8 @@
    <i class="fas fa-search"></i>
   </div>
   <div class="input-block__input">
-   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media" autocomplete="false">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media"
+    autocomplete="false">
   </div>
  </div>
 
@@ -69,10 +68,10 @@
 {# Media List #}
 <div class="media-wrapper">
  {% for media in page.media %}
-  {{ mediaMacro.card(media, page.categories, true) }}
-  {% else %}
-  <strong>No Media Found</strong>
-  {% endfor %}
+ {{ mediaMacro.card(media, page.categories, true) }}
+ {% else %}
+ <strong>No Media Found</strong>
+ {% endfor %}
 </div>
 
 <div class="pagination">

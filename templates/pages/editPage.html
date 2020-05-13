@@ -23,7 +23,6 @@
   <!-- Breadcrumbs -->
   <div class="breadcrumb"></div>
   <!-- Section Title -->
-  {# TODO Have Content Header Title reflect name of page being edited #}
   <h3 class="section-title">{{ page.title }}</h3>
   <!-- Control Buttons -->
   <div class="btn-group">
@@ -43,17 +42,18 @@
  <div class="jsEditPageContainer page-edit-wrapper">
   <!-- Left Column Page Edit -->
   <div class="page-edit__leftCol">
-  
+
 
    {# Page Blocks and Elements #}
    {# Outer loop: All blocks defined in the JSON page definition file #}
    {% for blockDefinition in page.definition.blocks %}
    <h4 class="page-edit-title page-edit-title-wrapper">Page Title</h4>
    <div class="form-group-pageEdit">
-    <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}">
+    <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+     value="{{ page.title }}">
    </div>
    <div class="element-block-wrapper">
-  
+
     <h4 class="page-edit-title page-edit-title-wrapper">{{ blockDefinition.name }}</h4>
 
     <div class="jsBlockParent page-edit-content-wrapper" id="{{ blockDefinition.key }}">
@@ -76,12 +76,36 @@
   <!-- right Column Page Edit -->
   <div class="page-edit__rightCol">
    <h4 class="page-edit-title">Page Settings</h4>
+
+   <div class="form-group-pageEdit">
+    <p class="mb-1">Publish date</p>
+    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+     value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+ 
+    {% if page.getPublishedStatus == 'draft' %}
+    <div class="" title="Not published">Status: <span class="draft">Draft</span></div>
+ 
+    {% elseif page.getPublishedStatus == 'pending' %}
+    <div class="">Status: <span class="pending">Pending</span></div>
+ 
+    {% elseif page.getPublishedStatus == 'published' %}
+    <div class="">Status: <span class="published">Published</span></div>
+    {% endif %}
+
+
+
+
+   </div>
+
+   {# Add New Element Button  #}
    <div class="form-group-pageEdit">
 
     {% for blockDefinition in page.definition.blocks %}
     {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
 
     {# <strong>{{ blockDefinition.name }}</strong> #}
+    
+    {# TODO:  The Add Element button appears twice if using the withHero.html template. Should this be a dropdown button to add corresponding elements #}
     <button class="btn btn-add btn-sm jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
      data-block-key="{{ blockDefinition.key }}" data-element-type="{{ blockDefinition.elementTypeDefault }}"
      data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
@@ -93,7 +117,7 @@
 
    </div>
 
- 
+
    {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
    {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
    {% else %}
@@ -175,8 +199,6 @@
   </div>
  </div>
 
-
-
  <div class="btn-group-bottom">
   {% if page.id %}
   <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit"
@@ -216,13 +238,30 @@
 </nav>
 {% endblock sidebarLeft %}
 
+
+
+
+
+
+
+
+
+
+
 {% block foot %}
 <script src="{{ basePath() }}/admin/js/page.js"></script>
 {% endblock foot %}
 
 
-{% block sidebar %}
+
+
+
+
+
 {# Add Element Button #}
+
+{# {% block sidebar %}
+
 <div class="sidebar-block">
  {% for blockDefinition in page.definition.blocks %}
  {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
@@ -238,4 +277,4 @@
  </div>
  {% endfor %}
 </div>
-{% endblock sidebar %}
+{% endblock sidebar %} #}
