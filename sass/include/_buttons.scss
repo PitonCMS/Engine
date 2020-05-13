@@ -160,3 +160,10 @@ button,
 .btn-group-bottom {
  @include padding(4rem null null)
 }
+
+/* General Button Group */
+.btn-group {
+ *+*{
+  @include margin(null null null .5em);
+ }
+}

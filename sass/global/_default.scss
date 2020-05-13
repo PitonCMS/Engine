@@ -99,3 +99,7 @@ a {
 .text-required {
  color: $btn-red;
 }
+.alert{
+ display: relative;
+ z-index: 1000;
+}

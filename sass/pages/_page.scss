@@ -1,44 +1,68 @@
-/* Page Content & Edit Styles */ 
-
-.list-item-page-header,
-.list-item-page {
- @include padding(1em null);
- display: grid;
- grid-template-columns: 80px minmax(max-content, 1fr) 150px 1fr 1fr;
- gap: 2vw;
+/* Page Content & Edit Styles */
+.list-item-page-header {
+ @include padding(.5em null .25em);
+ @include margin(1em null null null);
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: space-between;
  align-items: center;
- border-top: solid 1px $clr-border;
+ border-bottom: solid 1px $clr-border;
+}
 
+.list-item-page {
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: space-between;
+ align-items: center;
+
+ border-bottom: solid 1px $clr-border;
  &:hover {
   background: $bg-blue;
  }
 
- &__heading {
-  font-size: 1.1rem;
+ *+* {
+  @include margin(null null null .5em);
+ 
  }
 
- &:last-child {
-  border-bottom: solid 1px $clr-border;
- }
-
- &__media {
+ .media {
+  max-height: 88px;
+  width: 88px;
   object-fit: cover;
-  @include padding(0.5em);
+  overflow: hidden;
  }
-}
-.list-item-page-header {
- @include padding(.5em null);
- @include margin(1em null null null);
 
- &:hover {
-  background: $bg-accent;
- }
+}
+.title{
+ flex: 1.5;
+}
+.status{
+ flex: 1;
+}
+.template {
+ flex: 1;
+}
+.collection{
+ flex: 1;
 }
 
-/* Page/Collection Add/Edit Styles */ 
+/* Page/Collection Add/Edit Styles */
 
 .page-edit-wrapper {
  display: grid;
  grid-template-columns: 2fr 1fr;
  gap: 1em;
+ position: relative;
+
+}
+.page-edit__leftCol {
+// flex: 999;
+}
+.page-edit__rightCol{
+
+ // flex: 1;
+ position: sticky;
+ top: 200px;
+ right: 0;
+width: 100%;
 }

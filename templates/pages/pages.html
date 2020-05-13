@@ -10,35 +10,34 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
-<div class="breadcrumb"></div>
-<h3 class="section-title">Content</h3>
+ <div class="breadcrumb"></div>
+ <h3 class="section-title">Content</h3>
 
-<div class="btn-group">
-  <div class="btn-dropdown-block">
+ <div class="btn-dropdown-block">
   <div class="btn btn-add btn-sm"><span>Add Page</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block-add">
-    {# List all templates with "templateType": "page" #}
-    {% for pt in getPageTemplates() %}
-      <div class="form-group">
-        <a class="radio-hidden" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
-      </div>
-    {% endfor %}
+   {# List all templates with "templateType": "page" #}
+   {% for pt in getPageTemplates() %}
+   <div class="form-group">
+    <label> <a class="" href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a></label>
+   </div>
+   {% endfor %}
 
-    {# List all saved collection groups #}
-    {% for ct in getCollections() %}
-      <div class="form-group">
-        <a class="radio-hidden" href="{{ pathFor('adminCollectionPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
-      </div>
-    {% endfor %}
+   {# List all saved collection groups #}
+   {% for ct in getCollections() %}
+   <div class="form-group">
+    <a class=""
+     href="{{ pathFor('adminCollectionPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
+   </div>
+   {% endfor %}
   </div>
-  </div>
-</div>
+ </div>
+
 </div>
 {% endblock contentHeader %}
 
 {% block content %}
-
 <!-- Media Filter -->
 <div class="filter-block">
  <div class="input-block">
@@ -93,7 +92,7 @@
     <input type="checkbox" id="Recipes" name="Recipes" value="Boat">
     <label for="Recipes"> Recipes</label>
    </div>
-   </div>
+  </div>
  </div>
 </div>
 
@@ -104,11 +103,11 @@
 
 {# Page List Titles #}
 <div class="list-item-page-header">
- <div class="list-item-page__heading"></div>
- <div class="list-item-page__heading">Title</div>
- <div class="list-item-page__heading">Status</div>
- <div class="list-item-page__heading">Template</div>
- <div class="list-item-page__heading">Collection</div>
+ <div class="list-item-page__heading media">Media</div>
+ <div class="list-item-page__heading title">Title</div>
+ <div class="list-item-page__heading status">Status</div>
+ <div class="list-item-page__heading template">Template</div>
+ <div class="list-item-page__heading collection">Collection</div>
 </div>
 
 {# Page List  #}
@@ -122,10 +121,7 @@
 
 {{ pagination() }}
 
-
 {% endblock content %}
-
-
 
 
 {% block foot %}

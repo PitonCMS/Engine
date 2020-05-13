@@ -146,10 +146,6 @@
 
   align-items: center;
   justify-self: flex-end;
-
-  *+* {
-   @include margin(null null null 1em);
-  }
  }
 }
 

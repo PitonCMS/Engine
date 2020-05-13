@@ -1,4 +1,3 @@
-
 /*  FORMS  */
 input[type="text"],
 input[type="email"],
@@ -58,8 +57,7 @@ input:-webkit-autofill:active {
 }
 
 // Dropdown Hover Buttons
-.form-group-block,
-.form-group-block-add {
+.form-group-block {
  width: 100%;
  background: $bg-accent;
  box-shadow: $box-shadow-2;
@@ -76,6 +74,18 @@ input:-webkit-autofill:active {
 
 .form-group-block-add {
  width: 160px;
+ background: $bg-accent;
+ box-shadow: $box-shadow-2;
+ text-align: right;
+
+ transform-origin: top;
+ transform: scale(1, 0);
+ transition: transform 250ms ease-in-out 200ms;
+ z-index: 100;
+
+ position: absolute;
+ top: 100%;
+ right: 0;
 }
 
 .btn-dropdown-block:hover>.form-group-block,
