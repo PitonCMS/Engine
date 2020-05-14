@@ -21,10 +21,11 @@ const confirmPrompt = function(msg) {
  * @param {object} cancel Cancel|Discard button element
  */
 const disableFormControls =  function(save, cancel) {
-    if (!save.disabled) {
+    if (save && !save.disabled) {
         save.disabled = true;
         save.classList.add("disabled");
-        cancel.classList.add("disabled");
+
+        if (cancel) cancel.classList.add("disabled");
     }
 }
 
@@ -35,10 +36,11 @@ const disableFormControls =  function(save, cancel) {
  * @param {object} cancel Cancel|Discard button element
  */
 const enableFormControls = function(save, cancel) {
-    if (save.disabled) {
+    if (save && save.disabled) {
         save.disabled = false;
         save.classList.remove("disabled");
-        cancel.classList.remove("disabled");
+
+        if (cancel) cancel.classList.remove("disabled");
     }
 }
 
@@ -159,20 +161,25 @@ document.querySelectorAll(".jsDeleteConfirm").forEach(del => {
 document.querySelectorAll("form").forEach(form => {
     let cancelLink = form.querySelector(".jsFormCancelButton");
     let saveButton = form.querySelector(".jsFormSaveButton");
-    disableFormControls(saveButton, cancelLink);
 
-    // Listen for form changes to enable controls
-    form.querySelectorAll("input, textarea, select").forEach(el => {
-        el.addEventListener("input", () => {
-            enableFormControls(saveButton, cancelLink);
+    if (saveButton) {
+        disableFormControls(saveButton, cancelLink);
+
+        // Listen for form changes to enable controls
+        form.querySelectorAll("input, textarea, select").forEach(el => {
+            el.addEventListener("input", () => {
+                enableFormControls(saveButton, cancelLink);
+            });
         });
-    });
 
-    // Cancel/Discard button should have confirm prompt before reloading page
-    cancelLink.addEventListener("click", (e) => {
-        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
-        if (!userResponse) e.preventDefault();
-    });
+        // Cancel/Discard button should have confirm prompt before reloading page
+        if (cancelLink) {
+            cancelLink.addEventListener("click", (e) => {
+                let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
+                if (!userResponse) e.preventDefault();
+            });
+        }
+    }
 });
 
 // Dismissable alert

@@ -26,9 +26,9 @@
   <h3 class="section-title">{{ page.title }}</h3>
   <!-- Control Buttons -->
   <div class="btn-group">
-   <a class="btn btn-cancel btn-sm" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
-   <button class="btn btn-save btn-sm" type="submit" title="Save page">Save</button>
-   <button class="btn btn-publish btn-sm" type="submit" name="publish_now" title="Save page and publish now">Publish
+   <a class="btn btn-cancel btn-sm jsFormCancelButton" type="cancel" href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
+   <button class="btn btn-save btn-sm jsFormSaveButton" type="submit" title="Save page">Save</button>
+   <button class="btn btn-publish btn-sm jsFormSaveButton" type="submit" name="publish_now" title="Save page and publish now">Publish
     Now</button>
   </div>
  </div>
@@ -81,13 +81,13 @@
     <p class="mb-1">Publish date</p>
     <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
- 
+
     {% if page.getPublishedStatus == 'draft' %}
     <div class="" title="Not published">Status: <span class="draft">Draft</span></div>
- 
+
     {% elseif page.getPublishedStatus == 'pending' %}
     <div class="">Status: <span class="pending">Pending</span></div>
- 
+
     {% elseif page.getPublishedStatus == 'published' %}
     <div class="">Status: <span class="published">Published</span></div>
     {% endif %}
@@ -104,7 +104,7 @@
     {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
 
     {# <strong>{{ blockDefinition.name }}</strong> #}
-    
+
     {# TODO:  The Add Element button appears twice if using the withHero.html template. Should this be a dropdown button to add corresponding elements #}
     <button class="btn btn-add btn-sm jsAddElement" type="button" id="button-{{ blockDefinition.key }}"
      data-block-key="{{ blockDefinition.key }}" data-element-type="{{ blockDefinition.elementTypeDefault }}"
