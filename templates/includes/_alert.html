@@ -9,13 +9,18 @@
 
 
     {% for alert in getAlert() %}
-    <div class="container" style="position: relative; z-index: 1000; background: purple;margin: 1em;">
+
       <div class="alert alert-{{ alert.severity }}" role="alert">
-        <h4 class="alert-heading">{{ alert.heading }}</h4>
-        {{ alert.message|join('<br>') }}
-        <button type="button" class="close jsDismissAlert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h4 class="alert__title text-{{ alert.severity }}">{{ alert.heading }}</h4>
+     <div class="alert__dismiss">
+      <button type="button" class="btn btn-save btn-sm d-block close jsDismissAlert" aria-label="Close">
+       <span aria-hidden="true"><i class="fas fa-times"></i></span>
+     </button>
+     </div>
+      
+        <div class="alert__message">
+         {{ alert.message|join('<br>') }}
+        </div>
       </div>
-    </div>
+
     {% endfor %}

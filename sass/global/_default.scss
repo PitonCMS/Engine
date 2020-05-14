@@ -100,7 +100,30 @@ a {
 .text-required {
  color: $btn-red;
 }
+.text-danger {
+ color: $btn-red !important;
+
+}
+.text-info {
+ color: $btn-green;
+}
 .alert{
  display: relative;
  z-index: 1000;
+ &__title {
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2rem;
+ }
+}
+
+.alert {
+ @include padding(1.5rem);
+ @include margin(65px 5vw 0);
+ border-radius: $border-radius; 
+ box-shadow: $box-shadow-2;
+ background: $bg-light !important;
+ display: grid;
+ grid-template-columns: 1fr auto;
+
 }
