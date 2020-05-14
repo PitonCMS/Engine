@@ -42,16 +42,15 @@
  <div class="jsEditPageContainer page-edit-wrapper">
   <!-- Left Column Page Edit -->
   <div class="page-edit__leftCol">
-
+    <h4 class="page-edit-title page-edit-title-wrapper">Page Title</h4>
+    <div class="form-group-pageEdit">
+     <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
+      value="{{ page.title }}">
+    </div>
 
    {# Page Blocks and Elements #}
    {# Outer loop: All blocks defined in the JSON page definition file #}
    {% for blockDefinition in page.definition.blocks %}
-   <h4 class="page-edit-title page-edit-title-wrapper">Page Title</h4>
-   <div class="form-group-pageEdit">
-    <input type="text" class="form-control" name="title" maxlength="60" placeholder="Page title"
-     value="{{ page.title }}">
-   </div>
    <div class="element-block-wrapper">
 
     <h4 class="page-edit-title page-edit-title-wrapper">{{ blockDefinition.name }}</h4>
