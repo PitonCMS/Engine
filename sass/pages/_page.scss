@@ -31,7 +31,7 @@
   max-height: 88px;
   width: 88px;
   object-fit: cover;
-  overflow: hidden;
+  // overflow: hidden;
  }
 
 }
@@ -62,15 +62,31 @@
 
 }
 
-.page-edit__leftCol {
- // flex: 999;
+.block-element{
+ @include margin(null null 1em null);
+display: grid;
+grid-template-columns: 1fr;
+
+ &__header{
+  background: $bg-blue;
+  @include padding(.5em);
+ margin: 0 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $nav-height;
+  h4 {
+   margin: 0;
+  }
+ }
+ &__content{
+  background: $bg-light;
+  @include padding(1em);
+  transform: scale(1,1);
+  // display: none; 
+  box-shadow: $box-shadow-1;
+ }
 }
 
-.page-edit__rightCol {
 
- // flex: 1;
- position: sticky;
- top: 200px;
- right: 0;
- width: 100%;
-}
+
