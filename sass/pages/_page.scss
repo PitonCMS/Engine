@@ -7,6 +7,11 @@
  justify-content: space-between;
  align-items: center;
  border-bottom: solid 1px $clr-border;
+ .media {
+  max-height: 88px;
+  width: 88px;
+  object-fit: cover;
+ }
 }
 
 .list-item-page {
@@ -31,7 +36,7 @@
   max-height: 88px;
   width: 88px;
   object-fit: cover;
-  // overflow: hidden;
+
  }
 
 }

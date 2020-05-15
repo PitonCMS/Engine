@@ -79,17 +79,20 @@ a {
 .published {
  color: green;
  text-transform: capitalize;
-
+ font-weight: bold;
 }
 
 .draft {
  color: grey;
  text-transform: capitalize;
+ font-weight: bold;
+ font-size: 1rem !important;
 }
 
 .pending {
  color: gold;
  text-transform: capitalize;
+ font-weight: bold;
 }
 .d-none{
  display: none !important;
@@ -102,10 +105,12 @@ a {
 }
 .text-danger {
  color: $btn-red !important;
+ font-weight: bold;
 
 }
 .text-info {
  color: $btn-green;
+ font-weight: bold;
 }
 .alert{
  display: relative;
