@@ -119,7 +119,7 @@ class="form-group-pageEdit jsElementOption jsCollectionInput {% if enableInput =
 
   <button class="btn btn-delete btn-sm btn-block jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
    title="Delete element.">Delete Element</button>
-   
+
 </div>
 {% endmacro elementForm %}
 
@@ -132,10 +132,14 @@ For the summary display of either pages or collection detail pages
 
 #}
 {% macro pageListItem(pageItem, linkName) %}
+ {% if pageItem.media_id %}
+  {% set thumbnailSource = getMediaPath(pageItem.media.filename, "thumb") %}
+ {% else %}
+  {% set thumbnailSource = "https://unsplash.it/100/100" %}
+ {% endif %}
 
 <a class="list-item-page" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
- {# TODO: Image Media Thumb 100x100px if exists #}
- <div class="list-item-page-item media"><img src="https://unsplash.it/100/100" alt=""></div>
+ <div class="list-item-page-item media"><img src="{{ thumbnailSource }}" alt=""></div>
  <div class="list-item-page-item title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
  <div class="list-item-page-item status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}</div>
  <div class="list-item-page-item template"><code>{{ pageItem.template }}</code></div>
