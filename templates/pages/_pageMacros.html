@@ -135,6 +135,7 @@ For the summary display of either pages or collection detail pages
 
 <a class="list-item-page" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
  {# TODO: Image Media Thumb 100x100px if exists #}
+
  <div class="list-item-page-item media"><img src="https://unsplash.it/100/100" alt=""></div>
  <div class="list-item-page-item title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
  <div class="list-item-page-item status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}</div>

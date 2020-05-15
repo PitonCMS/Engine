@@ -446,16 +446,20 @@ a:hover {
 .published {
   color: green;
   text-transform: capitalize;
+  font-weight: bold;
 }
 
 .draft {
   color: grey;
   text-transform: capitalize;
+  font-weight: bold;
+  font-size: 1rem !important;
 }
 
 .pending {
   color: gold;
   text-transform: capitalize;
+  font-weight: bold;
 }
 
 .d-none {
@@ -472,10 +476,12 @@ a:hover {
 
 .text-danger {
   color: #b92c13 !important;
+  font-weight: bold;
 }
 
 .text-info {
   color: #126312;
+  font-weight: bold;
 }
 
 .alert {
@@ -523,7 +529,7 @@ a:hover {
   justify-content: flex-start;
   padding: 0 0 0 4rem;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .top-header .logo {
     padding: 0;
   }
@@ -547,7 +553,7 @@ a:hover {
   flex-flow: row nowrap;
   position: relative;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .wrapper {
     padding-top: 50px;
     padding-left: 200px;
@@ -570,7 +576,7 @@ a:hover {
   transform-origin: left;
   transition: transform 250ms ease-in-out;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .wrapper .sidebar {
     transform: scale(1, 1);
     display: block;
@@ -597,7 +603,7 @@ a:hover {
   z-index: 100;
   top: 50px;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .wrapper .content-header {
     width: calc(100vw - 200px);
   }
@@ -665,7 +671,7 @@ a:hover {
   opacity: 0;
   transition: opacity 250ms ease-in-out 125ms;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .sidebar .side-nav__link a {
     opacity: 1;
   }
@@ -706,17 +712,34 @@ button,
   appearance: none;
   border: 0;
   border-radius: var(--border-radius);
+  color: #fff;
   cursor: pointer;
   display: inline-block;
+  font-family: var(--font-family-base);
   font-size: 1rem;
   -webkit-font-smoothing: antialiased;
   font-weight: 600;
   line-height: 1;
+  padding: var(--spacing--small) var(--spacing);
   text-align: center;
   text-decoration: none;
+  transition: background-color var(--duration) var(--timing);
   user-select: none;
   vertical-align: middle;
   white-space: nowrap;
+}
+button:hover,
+[type=button]:hover,
+[type=reset]:hover,
+[type=submit]:hover {
+  background-color: rgba(90, 104, 196, 0.15);
+}
+button:focus,
+[type=button]:focus,
+[type=reset]:focus,
+[type=submit]:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 button:disabled,
 [type=button]:disabled,
@@ -858,7 +881,7 @@ button:disabled,
   left: 1rem;
   z-index: 999;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .nav-toggle-label {
     display: none;
     z-index: 0;
@@ -1091,7 +1114,7 @@ label {
   border: solid 1px rgba(90, 104, 196, 0.15);
   grid-column: 1/-1;
 }
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 768px) {
   .input-block {
     grid-column: 1;
   }
@@ -1364,6 +1387,11 @@ label {
   justify-content: space-between;
   align-items: center;
   border-bottom: solid 1px rgba(90, 104, 196, 0.15);
+}
+.list-item-page-header .media {
+  max-height: 88px;
+  width: 88px;
+  object-fit: cover;
 }
 
 .list-item-page {
