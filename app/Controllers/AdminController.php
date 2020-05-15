@@ -28,9 +28,6 @@ class AdminController extends AdminBaseController
      */
     public function home(): Response
     {
-        // TODO REMOVE
-        $this->setAlert('danger', 'Alert Message', ['Detailed information...', 'More details...']);
-        $this->setAlert('info', 'Info Message', ['Detailed information...', 'More details...']);
         return $this->render('home.html');
     }
 

@@ -28,10 +28,13 @@
   {% endif %}
   PitonCMS
  </title>
+ {# Cache busting query string for asset files #}
+ {% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
+
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
   integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
- <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ site.settings.engine }}">
+ <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ pitonVersion }}">
 
 
  {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
@@ -83,7 +86,7 @@
  </div><!-- /.wrapper -->
 
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
- <script src="{{ basePath() }}/admin/js/main.js?v={{ site.settings.engine }}"></script>
+ <script src="{{ basePath() }}/admin/js/main.js?v={{ pitonVersion }}"></script>
 
  {# Optional footer block element #}
  {% block foot '' %}

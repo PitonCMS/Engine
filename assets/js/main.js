@@ -183,13 +183,11 @@ document.querySelectorAll("form").forEach(form => {
 });
 
 // Dismissable alert
-document.querySelectorAll(".jsDismissAlert").forEach(dismiss => {
-    let alertContainer = dismiss.closest('.container');
-    alertContainer.addEventListener("click", () => {
-        alertContainer.remove();
+document.querySelectorAll(`[data-dismiss="alert"]`).forEach(dismiss => {
+    dismiss.querySelector("button").addEventListener("click", () => {
+        dismiss.remove();
     });
 });
-
 
 
 // $('.jsDatePicker').datepicker({
