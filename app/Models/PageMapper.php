@@ -53,6 +53,66 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
+     * Find All Page Content
+     *
+     * Gets all pages and collection pages without elements
+     * @param  string $status 'draft'|'pending'|'published'|'all'
+     * @param  int  $limit
+     * @param  int  $offset
+     * @return array|null
+     */
+    public function findContent(string $status, int $limit = null, int $offset = null): ?array
+    {
+        $this->makeSelect(true);
+
+        if ($status === 'published') {
+            $this->sql .= " and p.published_date <= '{$this->today}'";
+        } elseif ($status === 'pending') {
+            $this->sql .= " and p.published_date > '{$this->today}'";
+        } elseif ($status === 'draft') {
+            $this->sql .= " and p.published_date is null";
+        }
+
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
+     * Find All Published Page Content
+     *
+     * Gets all pages and collection pages without elements
+     * @param  int  $limit
+     * @param  int  $offset
+     * @return array|null
+     */
+    public function findPublishedContent(int $limit = null, int $offset = null): ?array
+    {
+        $this->makeSelect(true);
+        $this->sql .= " and p.published_date <= '{$this->today}'";
+
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
      * Find All Pages
      *
      * Gets all pages without elements
