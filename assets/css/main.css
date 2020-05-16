@@ -514,12 +514,10 @@ a:hover {
   0% {
     opacity: 0;
     transform: scale(1, 0);
-    background: red;
   }
   100% {
     opacity: 1;
     transform: scale(1, 1);
-    background: blue;
   }
 }
 /* Layout */
