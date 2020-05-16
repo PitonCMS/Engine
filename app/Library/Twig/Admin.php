@@ -23,6 +23,31 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
+     * Breadcrump Hierarchy
+     * @var array
+     */
+    protected const Breadcrumbs = [
+        'adminHome' => [
+            'adminPage' => [
+                'adminPageEdit' => 'adminPageEdit'
+            ],
+            'adminMedia' => [
+                'adminMediaCategoryEdit' => true
+            ],
+            'adminNavigation' => [
+                'adminNavigationEdit' => 'adminNavigationEdit'
+            ],
+            'adminMessage' => 'adminMessage',
+            'adminToolSetting' => [
+                'adminToolSettingEdit' => true,
+                'adminToolSitemap' => true,
+                'adminToolUser' => true
+            ],
+            'adminHelp' => 'adminHelp'
+        ]
+    ];
+
+    /**
      * Register Global variables
      *
      * @param void
@@ -67,6 +92,7 @@ class Admin extends Base
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
+            // new TwigFunction('getBreadcrumb', [$this, 'getBreadcrumb']),
         ]);
     }
 
@@ -214,5 +240,19 @@ class Admin extends Base
     public function getSessionData(string $key = null, string $default = null)
     {
         return $this->container->sessionHandler->getData($key, $default);
+    }
+
+    /**
+     * Get Breadcrumb
+     *
+     * @param void
+     * @return array|null
+     */
+    public function getBreadcrumb(): ?array
+    {
+        // TODO
+        $currentRoute = $this->container['settings']['site']['currentRouteName'];
+
+        return [];
     }
 }
