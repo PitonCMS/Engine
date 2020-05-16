@@ -10,7 +10,7 @@
   @include padding(.5em);
   background: $bg-light;
   border-radius: $border-radius;
-  box-shadow: $box-shadow-2;
+  // box-shadow: $box-shadow-2;
  }
 
  .mediaForm {
@@ -43,7 +43,7 @@
   border-radius: $border-radius;
   @include margin(0);
   @include padding(0);
-  box-shadow: $box-shadow-2;
+  // box-shadow: $box-shadow-2;
   object-fit: cover;
 
   /* Position the mediaPopup */

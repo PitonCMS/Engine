@@ -12,7 +12,7 @@
  right: 0;
  width: 100%;
  z-index: 120;
- box-shadow: $box-shadow;
+ // box-shadow: $box-shadow;
 
  .logo {
   font-size: 2rem;
@@ -96,7 +96,7 @@
   background: $bg-accent;
   min-height: $nav-height;
   width: 100%;
-  box-shadow: $box-shadow-1;
+  // box-shadow: $box-shadow-1;
 
   display: flex;
   align-items: center;

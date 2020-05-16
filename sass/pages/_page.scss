@@ -7,6 +7,7 @@
  justify-content: space-between;
  align-items: center;
  border-bottom: solid 1px $clr-border;
+
  .media {
   max-height: 88px;
   width: 88px;
@@ -67,31 +68,71 @@
 
 }
 
-.block-element{
- @include margin(null null 1em null);
-display: grid;
-grid-template-columns: 1fr;
+.block-element-title {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+h4{
+ flex: 1;
+ flex-basis: 150px;
+@include margin(0);
+}
+ input {
+  background: $bg-accent;
+ 
+  
+ }
+}
 
- &__header{
-  background: $bg-blue;
+// Page Edit Blocks
+.block-element {
+ @include margin(null null 1em null);
+ display: grid;
+ grid-template-columns: 1fr;
+ cursor: pointer;
+
+ &__header {
+  background: $bg-dark;
   @include padding(.5em);
- margin: 0 !important;
+  margin: 0 !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: $nav-height;
+
+  position: sticky;
+  top: calc(#{$nav-height * 2});
+  z-index: 100;
+
+  &:hover {
+   cursor: pointer;
+  }
+
+  &:hover~.block-element__content {
+   transform: scale(1);
+   height: 50vh;
+   opacity: 1;
+  }
+
   h4 {
    margin: 0;
   }
  }
- &__content{
-  background: $bg-light;
-  @include padding(1em);
-  transform: scale(1,1);
-  // display: none; 
-  box-shadow: $box-shadow-1;
+
+ &__content {
+  transform: scale(1, 1);
+  transform-origin: top;
+  // height: 0;
+  // opacity: 0;
+  transition: all 250ms ease-in-out;
  }
+
+
 }
 
-
-
+.page-elementBlock {
+ background: $bg-light;
+ @include margin(null null 2em null);
+ @include padding(.5em .25em);
+ border-radius: $border-radius;
+}

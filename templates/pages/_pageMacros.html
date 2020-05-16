@@ -22,10 +22,28 @@
 {% endif %}
 {% endfor %}
 
-<div class="jsElementParent" id="page-element-{{ arrayKey }}">
+<div class="jsElementParent page-elementBlock" id="page-element-{{ arrayKey }}">
 
  <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+
+  <!-- Element Title -->
+  <div class="form-group-pageEdit form-group-pageEdit__title">
+   <div>
+    <!-- Element Order -->
+    <label>Order</label>
+    <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]" value="{{ loopIndex }}">
+   
+    </div>
+   <div>
+    <label>Element Title</label>
+    <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
+     placeholder="Element Title" autocomplete="off">
+   </div>
+
+
+
+  </div>
 
  {# Element radio buttons #}
  <div class="form-group-pageEdit jsElementType">
@@ -44,15 +62,7 @@
  </div>
  </div>
 
- <!-- Element Order -->
-  <input type="text" class="form-control d-none jsElementSortValue" name="element_sort[{{ arrayKey }}]" value="{{ loopIndex }}">
 
- <!-- Element Title -->
- <div class="form-group-pageEdit">
-  <label>Element Title</label>
-  <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
-   placeholder="Element Title" autocomplete="off">
- </div>
 
  <!-- Element Content Area -->
  <div class="form-group-pageEdit ">
@@ -135,7 +145,7 @@ For the summary display of either pages or collection detail pages
  {% if pageItem.media_id %}
   {% set thumbnailSource = getMediaPath(pageItem.media.filename, "thumb") %}
  {% else %}
-  {% set thumbnailSource = "https://unsplash.it/100/100" %}
+  {% set thumbnailSource = "/admin/img/noFeatureImg.jpg" %}
  {% endif %}
 
 <a class="list-item-page" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">

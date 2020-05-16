@@ -59,15 +59,14 @@
  {% block content %}
  {# Media Modal Selector #}
  {# {% include "@admin/pages/_pageEditModal.html" %} #}
- <div class="jsEditPageContainer page-edit-wrapper">
-  <div class="block-element span">
-   <div class="block-element__header">
-    <h4>Page Title</h4>
 
-   </div>
-   <div class="block-element__content">
+
+ <div class="jsEditPageContainer page-edit-wrapper">
+
+   {# Page Title #}
+  <div class="block-element-title span">
+    <h4>Page Title</h4>
     <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}">
-   </div>
   </div>
   <!-- Left Column Page Edit -->
   <div class="page-edit__leftCol">
@@ -79,7 +78,7 @@
      <h4>Custom Page Settings</h4>
      <i class="fas fa-chevron-down"></i>
     </div>
-    <div class="block-element__content">
+    <div class="block-element__content toggle-up">
      {% for setting in page.settings %}
      {{ settingForm.settingInput(setting) }}
      {% endfor %}
@@ -97,7 +96,7 @@
      <i class="fas fa-chevron-down"></i>
     </div>
     <div class="block-element__content">
-     <div class="jsBlockParent page-edit-content-wrapper" id="{{ blockDefinition.key }}">
+     <div class="jsBlockParent" id="{{ blockDefinition.key }}">
       {# Inner loop: All loaded elements by block key #}
 
       {% for element in page.blocks[blockDefinition.key] %}
