@@ -30,7 +30,7 @@ const disableFormControls =  function(save, cancel) {
 }
 
 /**
- * Disable Form Controls
+ * Enable Form Controls
  *
  * @param {object} save   Save button element
  * @param {object} cancel Cancel|Discard button element
@@ -57,6 +57,42 @@ const alertMessage = function(severity, message) {
     }
 
     alert(`Severity: ${severity} ${message}`);
+}
+
+/**
+ * Dismiss Inline Alert on Close Click
+ * @param {Event} event
+ */
+const dismissAlert = function(event) {
+    if (event.target.closest(`[data-dismiss="alert"]`)) {
+        event.target.closest("div.alert").remove();
+    }
+}
+
+/**
+ * Display Inline HTML Message Alert
+ * @param {string} severity Severity color code
+ * @param {string} heading  Message heading
+ * @param {mixed} message   Message list
+ */
+const alertInlineMessage = function(severity, heading, message) {
+    // Create element and insert alert HTML and update with alert data
+    let container = document.createElement("div");
+    container.innerHTML = pitonConfig.alertInlineHTML;
+    container.querySelector("div").classList.add("alert-" + severity);
+    container.querySelector("div").classList.remove("d-none");
+    container.querySelector("h4").innerHTML = heading;
+
+    // Stringify message
+    if (typeof message === 'object') {
+        message = message.join("<br>");
+    }
+    container.querySelector(".alert__message").innerHTML = message;
+
+    // Insert into main or body
+    let mainContainer = document.querySelector("main.main-content");
+    mainContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
+    window.scrollTo(0,0);
 }
 
 /**
@@ -114,17 +150,11 @@ const XHRPromise = function(method, url, data) {
                     resolve(response.text);
                 } else {
                     // Response content failed
-                    reject(alertMessage('danger', {
-                        status: "error",
-                        statusText: response.text
-                    }));
+                    reject(alertInlineMessage('danger', 'Error', {"text": response.text}));
                 }
             } else {
                 // Failed server response
-                reject(alertMessage('danger', {
-                    status: "error",
-                    statusText: response.text
-                }));
+                reject(alertInlineMessage('danger', 'Error', {"text": response.text}));
             }
         }
 
@@ -136,28 +166,14 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
-/**
- * Bind delete confirm prompt to all elements with .jsDeleteConfirm
- */
+ // Bind delete confirm prompt to all elements with .jsDeleteConfirm
 document.querySelectorAll(".jsDeleteConfirm").forEach(del => {
     del.addEventListener("click", (e) => {
         if (!confirmPrompt()) e.preventDefault();
     });
 });
 
-/**
- * Confirm logout prompt
- */
-// TODO waitig on logout button to be added
-// document.querySelector(".jsLogout").addEventListener("click", (e) => {
-//     if (!confirmPrompt("Are you sure you want to logout?")) {
-//         e.preventDefault();
-//     }
-// });
-
-/**
- * Listen for form input changes to update save and discard button status
- */
+// Listen for form input changes to update save and discard button status
 document.querySelectorAll("form").forEach(form => {
     let cancelLink = form.querySelector(".jsFormCancelButton");
     let saveButton = form.querySelector(".jsFormSaveButton");
@@ -182,13 +198,8 @@ document.querySelectorAll("form").forEach(form => {
     }
 });
 
-// Dismissable alert
-document.querySelectorAll(`[data-dismiss="alert"]`).forEach(dismiss => {
-    dismiss.querySelector("button").addEventListener("click", () => {
-        dismiss.remove();
-    });
-});
-
+// Binding click events to document
+document.addEventListener("click", dismissAlert);
 
 // $('.jsDatePicker').datepicker({
 //     format: pitonConfig.dateFormat,
