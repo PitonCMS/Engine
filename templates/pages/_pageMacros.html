@@ -33,7 +33,7 @@
     <!-- Element Order -->
     <label>Order</label>
     <input type="text" class="form-control jsElementSortValue" name="element_sort[{{ arrayKey }}]" value="{{ loopIndex }}">
-   
+
     </div>
    <div>
     <label>Element Title</label>
@@ -152,8 +152,8 @@ For the summary display of either pages or collection detail pages
  <div class="list-item-page-item media"><img src="{{ thumbnailSource }}" alt=""></div>
  <div class="list-item-page-item title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
  <div class="list-item-page-item status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}</div>
- <div class="list-item-page-item template"><code>{{ pageItem.template }}</code></div>
- <div class="list-item-page-item collection">{{ pageItem.collection_title| default('defaultTemplate') }} </div>
+ <div class="list-item-page-item template">{{ pageItem.template_name }}</div>
+ <div class="list-item-page-item collection">{{ pageItem.collection_title| default('Page') }} </div>
 </a>
 
 {% endmacro pageListItem %}

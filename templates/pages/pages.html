@@ -96,11 +96,6 @@
  </div>
 </div>
 
-{# Search / Filters #}
-{#  <div class="list-item-page-filter">
-     {{ pageMacro.pageStatusFilter() }}
-  </div> #}
-
 {# Page List Titles #}
 <div class="list-item-page-header">
  <div class="list-item-page__heading media">Media</div>
@@ -111,7 +106,6 @@
 </div>
 
 {# Page List  #}
-
 {% for p in page.pages %}
 {# From _pageMacros #}
 {{ pageMacro.pageListItem(p, 'adminPageEdit') }}

@@ -19,12 +19,12 @@ use DateTime;
 use Throwable;
 
 /**
- * Piton Admin Page Controller
+ * Piton Admin Page and Collection Controller
  */
 class AdminPageController extends AdminBaseController
 {
     /**
-     * Show Pages
+     * Show Pages and Collection Pages
      *
      * Show all pages and collection pages
      * @param array $args Route arguments
@@ -35,24 +35,39 @@ class AdminPageController extends AdminBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pagination = $this->container->adminPagePagination;
+        $definition = $this->container->jsonDefinitionHandler;
+        $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
         // Get filter if requested
         $status = htmlspecialchars($this->request->getQueryParam('pageStatus', 'all'));
 
+        // Validate filter string
+        if (!in_array($status, ['published', 'pending', 'draft', 'all'])) {
+            $this->setAlert('danger', 'Invalid Value', "The filter query $status is not valid.");
+        }
+
         // Get data
-        $data['pages'] = $pageMapper->findPages($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        $data['pages'] = $pageMapper->findContent($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Setup pagination
         $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
+        // Use filename as key for quick look up when adding template name into result set
+        $pageTemplates = array_combine(array_column($pageTemplates, 'filename'), $pageTemplates);
+
+        // Set template name in result set
+        foreach ($data['pages'] as &$page) {
+            $page->template_name = $pageTemplates[$page->template]['name'] ?? null;
+        }
+
         // Check if this request was XHR
         if ($this->request->isXhr()) {
             try {
                 // Render template
-                $template = "
-                    {% import \"@admin/pages/_pageMacros.html\" as pageMacro %}
+                $template =
+                    "{% import \"@admin/pages/_pageMacros.html\" as pageMacro %}
                     {% for p in page.pages %}
                         {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
                     {% endfor %}";
@@ -69,53 +84,6 @@ class AdminPageController extends AdminBaseController
 
         // Otherwise render whole page
         return $this->render('pages/pages.html', $data);
-    }
-
-    /**
-     * TODO DEPRECATE
-     * Show Collection Pages
-     *
-     * Show all collection pages with optional collection slug filter
-     * @param array $args Route arguments
-     * @return Response
-     */
-    public function showCollectionPages($args): Response
-    {
-        // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $pagination = $this->container->adminPagePagination;
-
-        // Get filter if requested
-        $status = htmlspecialchars($this->request->getQueryParam('pageStatus', 'all'));
-
-        // Get data
-        if (isset($args['collectionSlug'])) {
-            // If request is to detail pages within a specific collection group
-            $data['pages'] = $pageMapper->findCollectionPagesBySlug($args['collectionSlug'], $status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
-
-            // Setup pagination
-            $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-            $pagination->setPagePath($this->container->router->pathFor('adminCollection', ['collectionSlug' => $args['collectionSlug']]));
-
-            // Get collection info
-            $collection = $collectionMapper->findCollectionBySlug($args['collectionSlug']);
-            $data['collection_title'] = $collection->collection_title;
-            $data['collection_id'] = $collection->id;
-            $data['collection_slug'] = $collection->collection_slug;
-            $data['collection_definition'] = $collection->collection_definition;
-        } else {
-            // See all detail pages across all collections
-            $data['pages'] = $pageMapper->findCollectionPages($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
-
-            // Setup pagination
-            $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-            $pagination->setPagePath($this->container->router->pathFor('adminCollection'));
-        }
-
-        $this->container->view->addExtension($pagination);
-
-        // return $this->render('pages/collectionPages.html', $data);
     }
 
     /**
