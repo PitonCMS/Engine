@@ -17,19 +17,18 @@
  @include padding(1em);
  background: $bg-light;
  border-radius: $border-radius;
+ box-shadow: $box-shadow-2;
 
  &:hover {
   background: $bg-blue;
  }
 &__header{
-
  display: grid;
  grid-template-columns: 1rem 1fr;
  gap: 0.25em 0.5em;
   align-items: center;
 }
 &__body {
- @include margin(.5rem null null null);
  display: grid;
  grid-template-columns: 1rem 1fr;
  gap: 0.25em 0.5em;
@@ -41,21 +40,17 @@
  
 }
  p {
+  @include margin(0);
   grid-column: 2 / -1;
   font-size: 0.75rem;
   color: rgba($clr-text, 0.75);
  }
 
  .card-icon {
-  @include padding(1px null null null);
   color: rgba($clr-text, 0.5);
-  font-size: 1em;
-  // align-self: flex-start;
-  // justify-self: flex-start;
   height: 100%;
   width: 100%;
  }
-
 }
 
 .user-card,

@@ -60,7 +60,7 @@
 
 /* Page/Collection Add/Edit Styles */
 
-.page-edit-wrapper {
+.pageEdit__wrapper {
  display: grid;
  grid-template-columns: 2fr 1fr;
  gap: 1em;
@@ -68,7 +68,7 @@
 
 }
 
-.block-element-title {
+.pageEdit__pagetTitle {
  display: flex;
  justify-content: space-between;
  align-items: center;
@@ -85,13 +85,13 @@ h4{
 }
 
 // Page Edit Blocks
-.block-element {
+.pageEdit__sectionBlock {
  @include margin(null null 1em null);
  display: grid;
  grid-template-columns: 1fr;
  cursor: pointer;
 
- &__header {
+ &-header {
   background: $bg-dark;
   @include padding(.5em);
   margin: 0 !important;
@@ -104,30 +104,10 @@ h4{
   top: calc(#{$nav-height * 2});
   z-index: 100;
 
-  &:hover {
-   cursor: pointer;
-  }
-
-  &:hover~.block-element__content {
-   transform: scale(1);
-   height: 50vh;
-   opacity: 1;
-  }
-
   h4 {
    margin: 0;
   }
  }
-
- &__content {
-  transform: scale(1, 1);
-  transform-origin: top;
-  // height: 0;
-  // opacity: 0;
-  transition: all 250ms ease-in-out;
- }
-
-
 }
 
 .page-elementBlock {
@@ -135,4 +115,10 @@ h4{
  @include margin(null null 2em null);
  @include padding(.5em .25em);
  border-radius: $border-radius;
+}
+
+.form-block__elementWrapper {
+ background: $bg-light;
+
+ // padding: 1em;
 }

@@ -1019,7 +1019,7 @@ label {
 }
 
 /* Form blocks style */
-.form-group-pageEdit {
+.form-block {
   background: white;
   border-radius: 3px;
   border: solid 1px rgba(128, 128, 128, 0.25);
@@ -1027,11 +1027,11 @@ label {
   padding: 1em;
   margin-bottom: 1em;
 }
-.form-group-pageEdit input,
-.form-group-pageEdit textarea {
+.form-block input,
+.form-block textarea {
   background: #f3f5f7 !important;
 }
-.form-group-pageEdit__title {
+.form-block__title {
   background: rgba(90, 104, 196, 0.15);
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -1054,6 +1054,7 @@ label {
   padding: 1em;
   background: white;
   border-radius: 3px;
+  box-shadow: 0px 0px 0px 1px rgba(63, 63, 68, 0.05), 0px 1px 3px 0px rgba(63, 63, 68, 0.15);
 }
 .content-card:hover {
   background: rgba(90, 104, 196, 0.15);
@@ -1065,7 +1066,6 @@ label {
   align-items: center;
 }
 .content-card__body {
-  margin-top: 0.5rem;
   display: grid;
   grid-template-columns: 1rem 1fr;
   gap: 0.25em 0.5em;
@@ -1076,14 +1076,13 @@ label {
   align-self: center;
 }
 .content-card p {
+  margin: 0;
   grid-column: 2/-1;
   font-size: 0.75rem;
   color: rgba(64, 64, 64, 0.75);
 }
 .content-card .card-icon {
-  padding-top: 1px;
   color: rgba(64, 64, 64, 0.5);
-  font-size: 1em;
   height: 100%;
   width: 100%;
 }
@@ -1427,34 +1426,34 @@ label {
 }
 
 /* Page/Collection Add/Edit Styles */
-.page-edit-wrapper {
+.pageEdit__wrapper {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1em;
   position: relative;
 }
 
-.block-element-title {
+.pageEdit__pagetTitle {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.block-element-title h4 {
+.pageEdit__pagetTitle h4 {
   flex: 1;
   flex-basis: 150px;
   margin: 0;
 }
-.block-element-title input {
+.pageEdit__pagetTitle input {
   background: #f3f5f7;
 }
 
-.block-element {
+.pageEdit__sectionBlock {
   margin-bottom: 1em;
   display: grid;
   grid-template-columns: 1fr;
   cursor: pointer;
 }
-.block-element__header {
+.pageEdit__sectionBlock-header {
   background: #363636;
   padding: 0.5em;
   margin: 0 !important;
@@ -1466,21 +1465,8 @@ label {
   top: calc(100px);
   z-index: 100;
 }
-.block-element__header:hover {
-  cursor: pointer;
-}
-.block-element__header:hover ~ .block-element__content {
-  transform: scale(1);
-  height: 50vh;
-  opacity: 1;
-}
-.block-element__header h4 {
+.pageEdit__sectionBlock-header h4 {
   margin: 0;
-}
-.block-element__content {
-  transform: scale(1, 1);
-  transform-origin: top;
-  transition: all 250ms ease-in-out;
 }
 
 .page-elementBlock {
@@ -1488,6 +1474,10 @@ label {
   margin-bottom: 2em;
   padding: 0.5em 0.25em;
   border-radius: 3px;
+}
+
+.form-block__elementWrapper {
+  background: white;
 }
 
 /*# sourceMappingURL=main.css.map */

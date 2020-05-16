@@ -31,8 +31,7 @@
  {# Cache busting query string for asset files #}
  {% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
 
- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-  integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+ <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
  <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ pitonVersion }}">
 
