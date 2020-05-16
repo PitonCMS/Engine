@@ -54,7 +54,7 @@ input:-webkit-autofill:active {
 .form-group-block {
  width: 100%;
  background: $bg-accent;
- // box-shadow: $box-shadow-2;
+ box-shadow: $box-shadow-2;
 
  transform-origin: top;
  transform: scale(1, 0);

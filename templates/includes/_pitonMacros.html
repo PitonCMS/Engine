@@ -11,7 +11,6 @@
 {% macro alert(severity, heading, message) %}
     {% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
 
-    {# TODO Can the heading inherit the color from the alert-* outer class #}
     <div class="alert {{ severityClass }}" data-dismiss="alert" role="alert">
     <h4 class="alert__title">{{ heading }}</h4>
     <div class="alert__dismiss">
