@@ -1,0 +1,28 @@
+{# Piton Admin HTML Macros #}
+
+{#
+    Alert Dialog
+
+    Display alert messages
+    @param string  severity One of primary, secondary, success, danger, warning, info
+    @param string  heading  Alert heading text
+    @param array   messages Message list
+#}
+{% macro alert(severity, heading, message) %}
+    {% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
+
+    {# TODO Can the heading inherit the color from the alert-* outer class #}
+    <div class="alert {{ severityClass }}" data-dismiss="alert" role="alert">
+    <h4 class="alert__title">{{ heading }}</h4>
+    <div class="alert__dismiss">
+        <button type="button" class="btn btn-save btn-sm" aria-label="Close">
+        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+        </button>
+    </div>
+
+    <div class="alert__message">
+        {{ message|join('<br>') }}
+    </div>
+    </div>
+
+{% endmacro alert %}

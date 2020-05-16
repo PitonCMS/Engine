@@ -2,25 +2,11 @@
     Alert Dialog
 
     Display alert messages if set by the application.
-    The message body is an array of messages, and the |join('<br>') prints as a string with line breaks
-    The application will provide the severity color codes:
-    primary, secondary, success, danger, warning, info
 #}
-
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
 {% for alert in getAlert() %}
 
-<div class="alert alert-{{ alert.severity }}" data-dismiss="alert" role="alert">
-  <h4 class="alert__title text-{{ alert.severity }}">{{ alert.heading }}</h4>
-  <div class="alert__dismiss">
-    <button type="button" class="btn btn-save btn-sm" aria-label="Close">
-      <span aria-hidden="true"><i class="fas fa-times"></i></span>
-    </button>
-  </div>
-
-  <div class="alert__message">
-    {{ alert.message|join('<br>') }}
-  </div>
-</div>
+  {{ pitonMacro.alert(alert.severity, alert.heading, alert.message) }}
 
 {% endfor %}

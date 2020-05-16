@@ -3,6 +3,7 @@
 
     This creates a JS object in the base page layout with runtime variables.
 #}
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
   <script>
     const pitonConfig = {
@@ -23,6 +24,7 @@
         adminMediaCategoryDelete: "{{ pathFor('adminMediaCategoryDelete') }}",
         adminCollection: "{{ pathFor('adminCollection') }}",
       },
+      alertInlineHTML: `{{ pitonMacro.alert() }}`,
       {% block jsPitonConfig '' %}
     };
   </script>
