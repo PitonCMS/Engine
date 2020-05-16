@@ -1,22 +1,21 @@
 // Filter Block 
 .filter-block {
- // @include margin(null null 1em null);
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
- // gap: .5em 1em;
- align-items: center
+ align-items: center;
+ border-top: solid 1px $bg-blue;
+
 }
 
 // Input Block -- input with left icon
 .input-block {
- // height: 100%;
- width: 100%;
+ height: 100%;
  background: $bg-light !important;
 
  display: grid;
  grid-template-columns: auto 1fr;
  align-items: center;
- border: solid 1px $bg-blue;
+ border-bottom: solid 1px $bg-blue;
  grid-column: 1 / -1;
 
  @media screen and (min-width: $breakpoint) {
@@ -24,7 +23,7 @@
  }
 
  &__icon {
-  border: solid 1px black;
+
   border: none;
   @include padding(null .75em);
   color: rgba($border-grey, .75);
@@ -33,11 +32,11 @@
  }
 
  &__search-input {
-  padding-right: .5em !important;
-  background: $bg-light !important;
+  // padding-right: .5em !important;
+  // background: $bg-light !important;
   @include margin(0);
   border: none !important;
-  font-size: 1.25em;
+  font-size: 1rem;
   color: $border-grey;
 
  }
@@ -46,10 +45,14 @@
 /* Button Dropdown Block */
 .btn-dropdown-block {
  position: relative;
- // border-left: solid 5px $clr-border;
+ border-bottom: solid 1px $bg-blue;
+ border-left: solid 1px $bg-blue;
 
  .check-block-item {
   display: flex;
+ }
+ &:not(:last-of-type) {
+  border-right: solid 1px darken($bg-blue, 10%);
  }
 }
 

@@ -59,7 +59,7 @@ button,
 }
 
 .btn-dropdown {
- @include padding(.5em null);
+ @include padding(.37em null);
  background: $bg-blue;
  color: $txt-dark;
  display: flex;
@@ -70,6 +70,7 @@ button,
   cursor: default;
   background: $bg-blue !important;
  }
+
 }
 
 .btn-add {

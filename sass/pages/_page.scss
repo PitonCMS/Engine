@@ -34,10 +34,15 @@
  }
 
  .media {
-  max-height: 88px;
-  width: 88px;
-  object-fit: cover;
-
+  display: flex;
+  // justify-content: stretch;
+  align-items: center;
+  
+  img{
+   height: 88px;
+   width: 88px;
+   object-fit: cover;
+  }
  }
 
 }
