@@ -129,12 +129,12 @@ a {
  display: grid;
  grid-template-columns: 1fr auto;
  display: relative;
- z-index: 1000;
+ z-index: 50;
 
  transform: scale(1, 0);
  transform-origin: top;
 
- animation: fadeIn 500ms ease-in-out forwards;
+ animation: fadeIn 250ms ease-in-out forwards;
 
  &__title {
   font-weight: bold;
