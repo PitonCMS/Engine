@@ -28,7 +28,7 @@
  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
   <!-- Element Title -->
-  <div class="form-group-pageEdit form-group-pageEdit__title">
+  <div class="form-block form-block__title">
    <div>
     <!-- Element Order -->
     <label>Order</label>
@@ -45,87 +45,91 @@
 
   </div>
 
- {# Element radio buttons #}
- <div class="form-group-pageEdit jsElementType">
 
-  <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
 
-  <div class="radio-block-wrapper">
-  {% for elem in elementTypes %}
-  {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
-   <div class="radio-block-item">
-   <input class="radio-block-item__radio" type="radio" name="element_template[{{ arrayKey }}]" id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.template == elem.filename) }} required>
-   <label class="radio-block-item__label" for="{{ arrayKey }}-{{ elem.filename }}" title="{{ elem.description }}">{{ elem.name }}</label>
-   </div>
-  {% endif %}
+
+<div class="form-block__elementWrapper">
+ 
+  {# Element radio buttons #}
+  <div class="form-block jsElementType">
+ 
+   <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
+ 
+   <div class="radio-block-wrapper">
+   {% for elem in elementTypes %}
+   {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
+    <div class="radio-block-item">
+    <input class="radio-block-item__radio" type="radio" name="element_template[{{ arrayKey }}]" id="{{ arrayKey }}-{{ elem.filename }}" value="{{ elem.filename }}" data-enable-input="{{ elem.enableInput }}" {{ checked(element.template == elem.filename) }} required>
+    <label class="radio-block-item__label" for="{{ arrayKey }}-{{ elem.filename }}" title="{{ elem.description }}">{{ elem.name }}</label>
+    </div>
+   {% endif %}
+   {% endfor %}
+  </div>
+  </div>
+ 
+  <!-- Element Content Area -->
+  <div class="form-block ">
+   <label>Element Content</label>
+   <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+  </div>
+ 
+  <!-- Embedded HTML -->
+  <div class="form-block jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
+   <label>Embedded HTML</label>
+   <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
+   <small class="form-text text-muted">Enter embedded HTML.</small>
+  </div>
+ 
+    {# Media Select Option
+ 
+    Allows user to select a saved media file to link with this block element.
+    This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
+    Selecting an image sets the media table ID in the element_media_id input.
+    #}
+ 
+ <div class="form-block jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
+ 
+ <img src="{{ getMediaPath(element.media.filename, 'large') }}" class="{% if not element.media.filename %}d-none{% endif %}">
+ 
+ <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]" value="{{ element.media.id }}">
+ <label>Media</label>
+ 
+ <div class="btn-group-pageEdit">
+  <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
+  <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>
+ 
+ </div>
+ 
+  </div>
+ 
+  {# Collection Select #}
+ <div
+ class="form-block jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
+ <label>Collection</label>
+ <select class="form-control" name="element_collection_id[{{ arrayKey }}]"
+  {% if enableInput == 'collection' %}required{% endif %}>
+  <option value="">- None -</option>
+  {% for c in getCollections() %}
+  <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
+ {{ c.collection_title }}
+  </option>
   {% endfor %}
- </div>
- </div>
+ </select>
+  </div>
+ 
+  {# Gallery Category Select #}
+ <div class="form-block jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
+ <label>Gallery</label>
+ <select class="form-control" name="element_gallery_id[{{ arrayKey }}]"
+  {% if enableInput == 'gallery' %}required{% endif %}>
+  <option value="">- None -</option>
+  {% for c in getMediaCategories() %}
+  <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
+  {% endfor %}
+ </select>
+  </div>
 
-
-
- <!-- Element Content Area -->
- <div class="form-group-pageEdit ">
-  <label>Element Content</label>
-  <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
- </div>
-
- <!-- Embedded HTML -->
- <div class="form-group-pageEdit jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
-  <label>Embedded HTML</label>
-  <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
-  <small class="form-text text-muted">Enter embedded HTML.</small>
- </div>
-
-   {# Media Select Option
-
-   Allows user to select a saved media file to link with this block element.
-   This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
-   Selecting an image sets the media table ID in the element_media_id input.
-   #}
-
-<div class="form-group-pageEdit jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
-
-<img src="{{ getMediaPath(element.media.filename, 'large') }}" class="{% if not element.media.filename %}d-none{% endif %}">
-
-<input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]" value="{{ element.media.id }}">
-<label>Media</label>
-
-<div class="btn-group-pageEdit">
- <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
- <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>
-
-</div>
-
- </div>
-
- {# Collection Select #}
-<div
-class="form-group-pageEdit jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
-<label>Collection</label>
-<select class="form-control" name="element_collection_id[{{ arrayKey }}]"
- {% if enableInput == 'collection' %}required{% endif %}>
- <option value="">- None -</option>
- {% for c in getCollections() %}
- <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
-{{ c.collection_title }}
- </option>
- {% endfor %}
-</select>
- </div>
-
- {# Gallery Category Select #}
-<div class="form-group-pageEdit jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
-<label>Gallery</label>
-<select class="form-control" name="element_gallery_id[{{ arrayKey }}]"
- {% if enableInput == 'gallery' %}required{% endif %}>
- <option value="">- None -</option>
- {% for c in getMediaCategories() %}
- <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
- {% endfor %}
-</select>
- </div>
-
+ </div> 
 
   <button class="btn btn-delete btn-sm btn-block jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
    title="Delete element.">Delete Element</button>

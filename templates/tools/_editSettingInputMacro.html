@@ -20,7 +20,7 @@
 {% macro inputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-group-pageEdit jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
   <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
   <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
   <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
@@ -35,7 +35,7 @@
 {% macro mediaInputHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-group-pageEdit jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
+<div class="form-block jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
   
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
@@ -65,7 +65,7 @@
 {% macro selectHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-group-pageEdit jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
  
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
@@ -87,7 +87,7 @@
 {% macro textareaHtml(setting) %}
 {% import _self as status %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-group-pageEdit jsSettingParent" id="page-setting-{{ setting.setting_key }}">
+<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
 
     <label>{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
     <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">

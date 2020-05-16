@@ -61,24 +61,24 @@
  {# {% include "@admin/pages/_pageEditModal.html" %} #}
 
 
- <div class="jsEditPageContainer page-edit-wrapper">
+ <div class="jsEditPageContainer pageEdit__wrapper">
 
    {# Page Title #}
-  <div class="block-element-title span">
+  <div class="pageEdit__pagetTitle span">
     <h4>Page Title</h4>
     <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}">
   </div>
   <!-- Left Column Page Edit -->
-  <div class="page-edit__leftCol">
+  <div class="pageEdit__leftCol">
 
    <!-- Custom Settings Tab -->
    {% if page.settings %}
-   <div class="block-element">
-    <div class="block-element__header">
+   <div class="pageEdit__sectionBlock">
+    <div class="pageEdit__sectionBlock-header">
      <h4>Custom Page Settings</h4>
      <i class="fas fa-chevron-down"></i>
     </div>
-    <div class="block-element__content toggle-up">
+    <div class="pageEdit__sectionBlock-content ">
      {% for setting in page.settings %}
      {{ settingForm.settingInput(setting) }}
      {% endfor %}
@@ -90,13 +90,13 @@
    {# Outer loop: All blocks defined in the JSON page definition file #}
    {% for blockDefinition in page.definition.blocks %}
 
-   <div class="block-element">
-    <div class="block-element__header">
-     <h4 class="page-edit-title page-edit-title-wrapper">{{ blockDefinition.name }}</h4>
+   <div class="pageEdit__sectionBlock">
+    <div class="pageEdit__sectionBlock-header">
+     <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
      <i class="fas fa-chevron-down"></i>
     </div>
-    <div class="block-element__content">
-     <div class="jsBlockParent" id="{{ blockDefinition.key }}">
+    <div class="pageEdit__sectionBlock-content">
+     <div class="jsBlockParent pageElements__wrapper" id="{{ blockDefinition.key }}">
       {# Inner loop: All loaded elements by block key #}
 
       {% for element in page.blocks[blockDefinition.key] %}
@@ -114,11 +114,11 @@
    {# End for page.definition.blocks loop #}
   </div>
   <!-- right Column Page Edit -->
-  <div class"page-edit__rightCol">
+  <div class"pageEdit__rightCol">
 
    {# Publish Date Input #}
-   <h4 class="page-edit-title">Page Settings</h4>
-   <div class="form-group-pageEdit">
+   <h4 class="pageEdit__title">Page Settings</h4>
+   <div class="form-block">
     <p>Publish(ed) date</p>
     <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
@@ -144,7 +144,7 @@
     pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
    </script>
    <div class="element-block-wrapper">
-    <div class="form-group-pageEdit">
+    <div class="form-block">
      <label>Slug <span class="text-required">*</span></label>
      <div class="filter-block">
       <div class="input-block">
@@ -167,7 +167,7 @@
 
    {# Meta Description Input #}
    <div class="element-block-wrapper">
-    <div class="form-group-pageEdit">
+    <div class="form-block">
      <label>Meta Description</label>
      <textarea type="text" class="form-control" name="meta_description" maxlength="320"
       placeholder="Description to appear in search results" value="{{ page.meta_description }}"></textarea>
@@ -185,7 +185,7 @@
 
    {% if page.definition.showFeaturedImage|default(1) %}
 
-   <div class="form-group-pageEdit jsMediaInput">
+   <div class="form-block jsMediaInput">
     <img src="{{ getMediaPath(page.media.filename, 'large') }}"
      class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
     <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
