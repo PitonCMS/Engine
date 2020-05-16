@@ -2,7 +2,7 @@
 
 {% block htmlTitle %}
 {% if page.user.id %}Edit {% else %}Add {% endif %} User
-{% endblock htmlTitle}
+{% endblock htmlTitle %}
 
 {% block openForm %}
 <form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
