@@ -74,43 +74,24 @@ $app->group('/admin', function () {
     });
     // End page routes
 
-    // Collection routes
+    // Collection group routes
     $this->group('/collection', function () {
-        // Edit collection
+        // Edit group collection
         $this->get('/edit[/{id:[0-9]+}]', function ($args) {
             return (new AdminPageController($this))->editCollection($args);
         })->setName('adminCollectionEdit');
 
-        // Save collection
+        // Save collection group
         $this->post('/save', function ($args) {
             return (new AdminPageController($this))->saveCollection();
         })->add('csrfGuardHandler')->setName('adminCollectionSave');
 
-        // Delete collection
+        // Delete collection group
         $this->post('/delete', function ($args) {
             return (new AdminPageController($this))->deleteCollection();
         })->add('csrfGuardHandler')->setName('adminCollectionDelete');
 
-        // Collection Pages
-        $this->group('/page', function () {
-            // Edit or add new collection page. Must provide ID or page layout argument
-            $this->get('/edit[/{id:[0-9]+}]', function ($args) {
-                $args['type'] = 'collection';
-                return (new AdminPageController($this))->editPage($args);
-            })->setName('adminCollectionPageEdit');
-
-            // Save collection page for Update or Insert
-            $this->post('/save', function ($args) {
-                return (new AdminPageController($this))->savePage();
-            })->add('csrfGuardHandler')->setName('adminCollectionPageSave');
-
-            // Delete collection page
-            $this->post('/delete', function ($args) {
-                return (new AdminPageController($this))->deletePage($args);
-            })->add('csrfGuardHandler')->setName('adminCollectionPageDelete');
-        });
-
-        // Show all collection pages, filtered optionally by collection
+        // Show all collection groups, filtered optionally by collection
         $this->get('[/]', function ($args) {
             return (new AdminPageController($this))->showCollectionGroups();
         })->setName('adminCollection');

@@ -87,7 +87,7 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
-     * Edit Page
+     * Edit Page or Collection Page
      *
      * Create new page, or edit existing page
      * @param array $args
@@ -157,23 +157,6 @@ class AdminPageController extends AdminBaseController
         // Merge saved page settings with settings from page JSON definition
         if (isset($page->definition->settings)) {
             $page->settings = $this->mergeSettings($settings, $page->definition->settings);
-        }
-
-        // Set template type: collection|page
-        if (!in_array($args['type'], ['page', 'collection'])) {
-            throw new Exception('PitonCMS: Expected page type of page or collection');
-        }
-
-        // Set editPage routes based on whether we have a page or a collection detail
-        $page->route = [];
-        if ($args['type'] === 'page') {
-            $page->route['pageAction'] = 'adminPageSave';
-            $page->route['pageDelete'] = 'adminPageDelete';
-            $page->route['pageCancel'] = 'adminPage';
-        } else {
-            $page->route['pageAction'] = 'adminCollectionPageSave';
-            $page->route['pageDelete'] = 'adminCollectionPageDelete';
-            $page->route['pageCancel'] = 'adminCollection';
         }
 
         return $this->render('pages/pageEdit.html', $page);

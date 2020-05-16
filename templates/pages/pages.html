@@ -28,7 +28,7 @@
    {% for ct in getCollections() %}
    <div class="form-group">
     <a class=""
-     href="{{ pathFor('adminCollectionPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
+     href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
    </div>
    {% endfor %}
   </div>
@@ -108,7 +108,7 @@
 {# Page List  #}
 {% for p in page.pages %}
 {# From _pageMacros #}
-{{ pageMacro.pageListItem(p, 'adminPageEdit') }}
+{{ pageMacro.pageListItem(p) }}
 {% else %}
 <h5>No Pages Found</h5>
 {% endfor %}

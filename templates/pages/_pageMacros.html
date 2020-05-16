@@ -49,12 +49,12 @@
 
 
 <div class="form-block__elementWrapper">
- 
+
   {# Element radio buttons #}
   <div class="form-block jsElementType">
- 
+
    <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
- 
+
    <div class="radio-block-wrapper">
    {% for elem in elementTypes %}
    {% if (elementTypeOptions and elem.filename in elementTypeOptions) or (not elementTypeOptions) %}
@@ -66,42 +66,42 @@
    {% endfor %}
   </div>
   </div>
- 
+
   <!-- Element Content Area -->
   <div class="form-block ">
    <label>Element Content</label>
    <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
   </div>
- 
+
   <!-- Embedded HTML -->
   <div class="form-block jsElementOption jsEmbeddedInput {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}">
    <label>Embedded HTML</label>
    <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
    <small class="form-text text-muted">Enter embedded HTML.</small>
   </div>
- 
+
     {# Media Select Option
- 
+
     Allows user to select a saved media file to link with this block element.
     This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
     Selecting an image sets the media table ID in the element_media_id input.
     #}
- 
+
  <div class="form-block jsElementOption jsMediaInput mediaInput {% if not enableInput == 'image' %}d-none{% endif %}">
- 
+
  <img src="{{ getMediaPath(element.media.filename, 'large') }}" class="{% if not element.media.filename %}d-none{% endif %}">
- 
+
  <input type="hidden" class="form-control jsMediaInputField" name="element_media_id[{{ arrayKey }}]" value="{{ element.media.id }}">
  <label>Media</label>
- 
+
  <div class="btn-group-pageEdit">
   <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
   <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>
- 
+
  </div>
- 
+
   </div>
- 
+
   {# Collection Select #}
  <div
  class="form-block jsElementOption jsCollectionInput {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}">
@@ -116,7 +116,7 @@
   {% endfor %}
  </select>
   </div>
- 
+
   {# Gallery Category Select #}
  <div class="form-block jsElementOption jsGalleryInput {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}">
  <label>Gallery</label>
@@ -129,7 +129,7 @@
  </select>
   </div>
 
- </div> 
+ </div>
 
   <button class="btn btn-delete btn-sm btn-block jsDeleteBlockElement" type="button" data-element-id="{{ arrayKey }}"
    title="Delete element.">Delete Element</button>
@@ -142,22 +142,20 @@
 For the summary display of either pages or collection detail pages
 
 @param pageItem Page object
-@param linkName Expecting either 'adminPageEdit' or 'adminCollectionPageEdit'
-
 #}
-{% macro pageListItem(pageItem, linkName) %}
+{% macro pageListItem(pageItem) %}
  {% if pageItem.media_id %}
   {% set thumbnailSource = getMediaPath(pageItem.media.filename, "thumb") %}
  {% else %}
   {% set thumbnailSource = "/admin/img/noFeatureImg.jpg" %}
  {% endif %}
 
-<a class="list-item-page" href="{{ pathFor(linkName, {'id': pageItem.id}) }}">
+<a class="list-item-page" href="{{ pathFor('adminPageEdit', {'id': pageItem.id}) }}">
  <div class="list-item-page-item media"><img src="{{ thumbnailSource }}" alt=""></div>
  <div class="list-item-page-item title" title="{{ pageItem.title }}">{{ pageItem.title }}</div>
  <div class="list-item-page-item status {{ pageItem.getPublishedStatus() }}">{{ pageItem.getPublishedStatus()|capitalize }}</div>
  <div class="list-item-page-item template">{{ pageItem.template_name }}</div>
- <div class="list-item-page-item collection">{{ pageItem.collection_title| default('Page') }} </div>
+ <div class="list-item-page-item collection">{{ pageItem.collection_title|default('Page') }} </div>
 </a>
 
 {% endmacro pageListItem %}
@@ -177,25 +175,3 @@ For the summary display of either pages or collection detail pages
  <option value="published" {% if param == 'published' %}selected{% endif %}>Published</option>
 </select>
 {% endmacro %}
-
-{# Sidebar Template Links
-
-Displays a single template link
-
-@param template Template object
-@param linkName Either 'adminPageEdit' or 'adminCollectionPageEdit'
-
-#}
-
-{% macro templateLink(template, linkName) %}
-
-<div class="sidebar-link">
- <a href="{{ pathFor(linkName, {}, {'definition': template.filename}) }}" title="{{ template.description }}">
-<i class="fas fa-edit"></i>
-<div class="sidebar-link__text">{{ template.name }}</div>
- </a>
- <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
-data-content="{{ template.description }}"></i>
-</div>
-
-{% endmacro templateLink %}

@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block contentHeader %}
-<form action="{{  pathFor(page.route.pageAction) }}" method="post" accept-charset="utf-8">
+<form action="{{  pathFor('adminPageSave') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <input type="hidden" name="page_id" value="{{ page.id }}">
  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
@@ -48,7 +48,7 @@
   </div>
   <div class="btn-group">
     <a class="btn btn-cancel btn-sm jsFormCancelButton" type="cancel"
-    href="{{ pathFor(page.route.pageCancel) }}">Cancel</a>
+    href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Cancel</a>
    <button class="btn btn-publish btn-sm jsFormSaveButton" type="submit" name="publish_now"
     title="Save page and publish now">Publish Now</button>
    <button class="btn btn-save btn-sm jsFormSaveButton" type="submit" title="Save page">Save</button>
@@ -203,7 +203,7 @@
   <div class="btn-group-bottom">
    {% if page.id %}
    <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit"
-    formaction="{{ pathFor(page.route.pageDelete) }}" {% if page.page_slug == 'home' %}disabled
+    formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
     title="The home page cannot be deleted." {% endif %}>Delete Page</button>
    {% endif %}
   </div>
