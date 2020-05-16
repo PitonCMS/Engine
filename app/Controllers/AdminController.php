@@ -65,7 +65,7 @@ class AdminController extends AdminBaseController
         $sitemapHandler = $this->container->get('sitemapHandler');
 
         // Get all published content
-        $allContent = array_merge($pageMapper->findPages() ?? [], $pageMapper->findCollectionPages() ?? []);
+        $allContent = array_merge($pageMapper->findPublishedContent());
         $links = [];
 
         foreach ($allContent as $page) {
