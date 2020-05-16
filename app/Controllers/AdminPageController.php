@@ -176,7 +176,7 @@ class AdminPageController extends AdminBaseController
             $page->route['pageCancel'] = 'adminCollection';
         }
 
-        return $this->render('pages/editPage.html', $page);
+        return $this->render('pages/pageEdit.html', $page);
     }
 
     /**
