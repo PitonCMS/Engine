@@ -47,6 +47,7 @@ a {
   color: rgba($clr-text, .75);
  }
 }
+
 ::selection {
  background-color: $clr-accent;
  color: $txt-light;
@@ -94,41 +95,79 @@ a {
  text-transform: capitalize;
  font-weight: bold;
 }
-.d-none{
+
+.d-none {
  display: none !important;
 }
+
 .strong-text {
  font-weight: bold;
 }
+
 .text-required {
  color: $btn-red;
 }
+
 .text-danger {
  color: $btn-red !important;
  font-weight: bold;
 
 }
+
 .text-info {
  color: $btn-green;
  font-weight: bold;
 }
-.alert{
+
+.alert {
+ @include padding(1.5rem);
+ @include margin(calc(#{$nav-height * 2}) 5vw 0);
+ border-radius: $border-radius;
+ box-shadow: $box-shadow-2;
+ background: $bg-light !important;
+
+ display: grid;
+ grid-template-columns: 1fr auto;
  display: relative;
  z-index: 1000;
+
+ transform: scale(1, 0);
+ transform-origin: top;
+
+ animation: fadeIn 500ms ease-in-out forwards;
+
  &__title {
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2rem;
  }
+
+ &-danger {
+
+  h4 {
+   color: $btn-red;
+  }
+ }
+
+ &-info {
+
+  h4 {
+   color: $btn-green;
+  }
+ }
+
 }
 
-.alert {
- @include padding(1.5rem);
- @include margin(65px 5vw 0);
- border-radius: $border-radius; 
- // box-shadow: $box-shadow-2;
- background: $bg-light !important;
- display: grid;
- grid-template-columns: 1fr auto;
+@keyframes fadeIn {
+ 0% {
+  opacity: 0;
+  transform: scale(1, 0);
+  background: red;
+ }
 
+ 100% {
+  opacity: 1;
+  transform: scale(1, 1);
+  background: blue;
+ }
 }
