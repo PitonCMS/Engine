@@ -66,17 +66,29 @@ a {
 }
 
 .badge {
+ @include padding(.5em);
+ // @include margin(.5em);
  width: 100%;
  height: 50%;
- @include margin(null 13px null null);
- border-radius: 50%;
- background: $badge-notify;
- color: $txt-light;
+background: $bg-blue;
+ border-radius: $border-radius;
+
  display: flex;
  justify-content: center;
  align-items: center;
+ &-notify{
+  background: $badge-notify;
+  color: $txt-light;
+ }
+ &-success {
+  background: $badge-success;
+  color: $txt-light;
+ }
+ &-danger {
+  background: $badge-danger;
+  color: $txt-light;
+ }
 }
-
 .published {
  color: green;
  text-transform: capitalize;

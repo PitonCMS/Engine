@@ -432,15 +432,26 @@ a:hover {
 }
 
 .badge {
+  padding: 0.5em;
   width: 100%;
   height: 50%;
-  margin-right: 13px;
-  border-radius: 50%;
-  background: #3e5d1d;
-  color: white;
+  background: #dddeee;
+  border-radius: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.badge-notify {
+  background: #eb7119;
+  color: white;
+}
+.badge-success {
+  background: #3e5d1d;
+  color: white;
+}
+.badge-danger {
+  background: #b92c13;
+  color: white;
 }
 
 .published {
@@ -973,6 +984,43 @@ input:-webkit-autofill:active {
   outline: none;
 }
 
+select {
+  /* styling */
+  background-color: #f3f5f7;
+  border: thin solid #dddeee;
+  border-radius: 3px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+  /* reset */
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* arrows */
+select.minimal {
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+select.minimal:focus {
+  background-image: linear-gradient(45deg, green 50%, transparent 50%), linear-gradient(135deg, transparent 50%, green 50%), linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+  border-color: #363636;
+  outline: 0;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
 .radio-hidden,
 .element-toggle,
 .nav-toggle {
@@ -1055,6 +1103,26 @@ label {
   display: grid;
   grid-template-columns: min-content 1fr;
   gap: 1em;
+}
+
+.formBlock {
+  background: white;
+  border-radius: 3px;
+  border: solid 1px rgba(128, 128, 128, 0.25);
+  box-shadow: 0px 0px 0px 1px rgba(63, 63, 68, 0.05), 0px 1px 3px 0px rgba(63, 63, 68, 0.15);
+  color: #404040;
+  padding: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
+  display: grid;
+  grid-template-columns: minmax(85%, 50vw) max-content;
+  gap: 1em;
+}
+.formBlock .form-text, .formBlock .form-control {
+  grid-column: 1/-2 !important;
+}
+.formBlock .form-control {
+  background: #f3f5f7;
 }
 
 .content-cards {
@@ -1330,11 +1398,6 @@ label {
 .content-block .form-group__title-wrapper label {
   flex: 1;
 }
-.content-block .form-group__title-wrapper .badge {
-  flex: 0;
-  padding: 0.125em 0.25em;
-}
-
 /* Users */
 .user-list-item,
 .user-list-item-header {

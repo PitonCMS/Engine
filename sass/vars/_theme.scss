@@ -48,8 +48,10 @@ $bg-blue: $blue-light;
 
 
 // Default color Styles
-$badge-notify: $dark-green;
+$badge-notify: $dark-orange;
 $badge-warning: $dark-orange;
+$badge-success: $dark-green;
+$badge-danger: $red;
 $clr-border: $blue-light;
 $btn-blue: hsl(210, 50%, 40%);
 $btn-blue-hover: darken($btn-blue, 10%);

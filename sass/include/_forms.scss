@@ -18,7 +18,7 @@ textarea {
  -webkit-appearance: none;
  appearance: none;
 }
-
+ 
 input:focus {
  outline: none;
 }
@@ -31,12 +31,69 @@ input:-webkit-autofill:active {
  -webkit-box-shadow: 0 0 0 30px white inset !important;
  box-shadow: 0 0 0 30px white inset !important;
  outline: none;
+}  
+// Select Input Fields
+
+select {
+
+ /* styling */
+ background-color: $bg-accent;
+ border: thin solid $bg-blue;
+ border-radius: $border-radius;
+ display: inline-block;
+ font: inherit;
+ line-height: 1.5em;
+ @include padding(.5em 3.5em .5em 1em);
+
+ /* reset */
+  
+@include margin(0);
+ -webkit-appearance: none;
+ -moz-appearance: none;
 }
 
 
+/* arrows */
+
+select.minimal {
+ background-image:
+   linear-gradient(45deg, transparent 50%, gray 50%),
+   linear-gradient(135deg, gray 50%, transparent 50%),
+   linear-gradient(to right, #ccc, #ccc);
+ background-position:
+   calc(100% - 20px) calc(1em + 2px),
+   calc(100% - 15px) calc(1em + 2px),
+   calc(100% - 2.5em) 0.5em;
+ background-size:
+   5px 5px,
+   5px 5px,
+   1px 1.5em;
+ background-repeat: no-repeat;
+}
+
+select.minimal:focus {
+ background-image:
+   linear-gradient(45deg, green 50%, transparent 50%),
+   linear-gradient(135deg, transparent 50%, green 50%),
+   linear-gradient(to right, #ccc, #ccc);
+ background-position:
+   calc(100% - 15px) 1em,
+   calc(100% - 20px) 1em,
+   calc(100% - 2.5em) 0.5em;
+ background-size:
+   5px 5px,
+   5px 5px,
+   1px 1.5em;
+ background-repeat: no-repeat;
+ border-color: $bg-dark; 
+ outline: 0;
+}
 
 
-
+select:-moz-focusring {
+ color: transparent;
+ text-shadow: 0 0 0 #000;
+}
 
 // Button Dropdown Hover Block with Radio
 
@@ -115,7 +172,7 @@ label {
 
 /* Form blocks style */
 
-.form-block {
+ .form-block {
  background: $bg-light;
  border-radius: $border-radius;
  border: solid 1px rgba($border-grey, .25);
@@ -133,5 +190,25 @@ label {
   display: grid;
   grid-template-columns: min-content 1fr;
   gap: 1em;
+ }
+}
+.formBlock {
+ background: $bg-light;
+ border-radius: $border-radius;
+ border: solid 1px rgba($border-grey, .25);
+ box-shadow: $box-shadow-2;
+ color: $txt-dark;
+ @include padding(1em);
+ @include margin(null null 1em null);
+ @include padding(1em);
+ display: grid;
+ grid-template-columns: minmax(85%, 50vw) max-content;
+ gap: 1em;
+ .form-text, .form-control {
+ grid-column: 1 / -2 !important;
+ 
+ }
+ .form-control {
+  background: $bg-accent; 
  }
 }
