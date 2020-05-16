@@ -17,30 +17,24 @@ const confirmPrompt = function(msg) {
 /**
  * Disable Form Controls
  *
- * @param {object} save   Save button element
- * @param {object} cancel Cancel|Discard button element
+ * @param {object} control Control button element
  */
-const disableFormControls =  function(save, cancel) {
-    if (save && !save.disabled) {
-        save.disabled = true;
-        save.classList.add("disabled");
-
-        if (cancel) cancel.classList.add("disabled");
+const disableFormControls =  function(control) {
+    if (control && !control.disabled) {
+        control.disabled = true;
+        control.classList.add("disabled");
     }
 }
 
 /**
  * Enable Form Controls
  *
- * @param {object} save   Save button element
- * @param {object} cancel Cancel|Discard button element
+ * @param {object} control Control button element
  */
-const enableFormControls = function(save, cancel) {
-    if (save && save.disabled) {
-        save.disabled = false;
-        save.classList.remove("disabled");
-
-        if (cancel) cancel.classList.remove("disabled");
+const enableFormControls = function(control) {
+    if (control && control.disabled) {
+        control.disabled = false;
+        control.classList.remove("disabled");
     }
 }
 
@@ -60,7 +54,7 @@ const alertMessage = function(severity, message) {
 }
 
 /**
- * Dismiss Inline Alert on Close Click
+ * Dismiss Inline Alert
  * @param {Event} event
  */
 const dismissAlert = function(event) {
@@ -166,36 +160,40 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
- // Bind delete confirm prompt to all elements with .jsDeleteConfirm
-document.querySelectorAll(".jsDeleteConfirm").forEach(del => {
+ // Bind delete confirm prompt to all elements with data-delete="prompt"
+document.querySelectorAll(`[data-delete="prompt"]`).forEach(del => {
     del.addEventListener("click", (e) => {
         if (!confirmPrompt()) e.preventDefault();
     });
 });
 
-// Listen for form input changes to update save and discard button status
+// Disable save controls and listen for form input changes to re-enable controls
 document.querySelectorAll("form").forEach(form => {
-    let cancelLink = form.querySelector(".jsFormCancelButton");
-    let saveButton = form.querySelector(".jsFormSaveButton");
+    // Get buttons to disable,there may be more than one save button in a form
+    let saveButtons = form.querySelectorAll(`[data-form-button="save"]`);
 
-    if (saveButton) {
-        disableFormControls(saveButton, cancelLink);
+    if (saveButtons) {
+        saveButtons.forEach(control => {
+            disableFormControls(control);
+        });
 
         // Listen for form changes to enable controls
         form.querySelectorAll("input, textarea, select").forEach(el => {
             el.addEventListener("input", () => {
-                enableFormControls(saveButton, cancelLink);
+                saveButtons.forEach(control => {
+                    enableFormControls(control);
+                });
             });
         });
-
-        // Cancel/Discard button should have confirm prompt before reloading page
-        if (cancelLink) {
-            cancelLink.addEventListener("click", (e) => {
-                let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
-                if (!userResponse) e.preventDefault();
-            });
-        }
     }
+});
+
+// Bind click event to form cancel/discard buttons
+document.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
+    control.addEventListener("click", (e) => {
+        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
+        if (!userResponse) e.preventDefault();
+    });
 });
 
 // Binding click events to document

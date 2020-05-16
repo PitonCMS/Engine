@@ -6,36 +6,31 @@
 {% if page.id %}Edit {% else %}Add {% endif %} Page
 {% endblock %}
 
-
-
-{% block headText %}
-{% if page.id %}Editing {% else %}Add {% endif %}
-{{ page.title|default(page.definition.templateName) }}
-{% endblock %}
+{% block openForm %}
+<form action="{{  pathFor('adminPageSave') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="page_id" value="{{ page.id }}">
+  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+  <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
+  <input type="hidden" name="template" value="{{ page.template }}">
+{% endblock openForm %}
 
 {% block contentHeader %}
-<form action="{{  pathFor('adminPageSave') }}" method="post" accept-charset="utf-8">
- <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
- <input type="hidden" name="page_id" value="{{ page.id }}">
- <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
- <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
- <input type="hidden" name="template" value="{{ page.template }}">
- <!-- Content Header Control Bar -->
- <div class="content-header-inner">
-  <!-- Breadcrumbs -->
-  <div class="breadcrumb"></div>
-  <!-- Section Title -->
-  <h3 class="section-title">{{ page.title }}</h3>
+  <!-- Content Header Control Bar -->
+  <div class="content-header-inner">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb"></div>
+    <!-- Section Title -->
+    <h3 class="section-title">{{ page.title }}</h3>
 
-  <!-- Control Buttons -->
+    <!-- Control Buttons -->
+    {# Add New Element Button  #}
+    <div class="btn-dropdown-block">
+      <div class="btn btn-add btn-sm"><span>Add Content</span> <span><i class="fas fa-chevron-down"></i></span></div>
 
-  {# Add New Element Button  #}
-  <div class="btn-dropdown-block">
-   <div class="btn btn-add btn-sm"><span>Add Content</span> <span><i class="fas fa-chevron-down"></i></span></div>
-
-    {% for blockDefinition in page.definition.blocks %}
-    {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-   {#  <div class="form-group">
+      {% for blockDefinition in page.definition.blocks %}
+      {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+      {#  <div class="form-group">
      <div class="jsAddElement"id="button-{{ blockDefinition.key }}"
       data-block-key="{{ blockDefinition.key }}" data-element-type="{{ blockDefinition.elementTypeDefault }}"
       data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
@@ -44,172 +39,171 @@
       title="Page block has the maximum number of elements allowed by design." {% endif %}>Add Element</div>
     </div>
 #}
-   {% endfor %}
-  </div>
-  <div class="btn-group">
-    <a class="btn btn-cancel btn-sm jsFormCancelButton" type="cancel"
-    href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Cancel</a>
-   <button class="btn btn-publish btn-sm jsFormSaveButton" type="submit" name="publish_now"
-    title="Save page and publish now">Publish Now</button>
-   <button class="btn btn-save btn-sm jsFormSaveButton" type="submit" title="Save page">Save</button>
-  </div>
- </div>
- {% endblock contentHeader %}
-
- {% block content %}
- {# Media Modal Selector #}
- {# {% include "@admin/pages/_pageEditModal.html" %} #}
-
-
- <div class="jsEditPageContainer pageEdit__wrapper">
-
-   {# Page Title #}
-  <div class="pageEdit__pagetTitle span">
-    <h4>Page Title</h4>
-    <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}">
-  </div>
-  <!-- Left Column Page Edit -->
-  <div class="pageEdit__leftCol">
-
-   <!-- Custom Settings Tab -->
-   {% if page.settings %}
-   <div class="pageEdit__sectionBlock">
-    <div class="pageEdit__sectionBlock-header">
-     <h4>Custom Page Settings</h4>
-     <i class="fas fa-chevron-down"></i>
-    </div>
-    <div class="pageEdit__sectionBlock-content ">
-     {% for setting in page.settings %}
-     {{ settingForm.settingInput(setting) }}
-     {% endfor %}
-    </div>
-   </div>
-   {% endif %}
-
-   {# Page Blocks and Elements #}
-   {# Outer loop: All blocks defined in the JSON page definition file #}
-   {% for blockDefinition in page.definition.blocks %}
-
-   <div class="pageEdit__sectionBlock">
-    <div class="pageEdit__sectionBlock-header">
-     <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
-     <i class="fas fa-chevron-down"></i>
-    </div>
-    <div class="pageEdit__sectionBlock-content">
-     <div class="jsBlockParent pageElements__wrapper" id="{{ blockDefinition.key }}">
-      {# Inner loop: All loaded elements by block key #}
-
-      {% for element in page.blocks[blockDefinition.key] %}
-      {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
-      {% else %}
-      {% set noElementFlag = true %}
       {% endfor %}
-      <p class="jsNoElementFlag {% if noElementFlag %}d-block{% else %}d-none{% endif %}">There is no content in this
-       block.</p>
-      {# End for page.blocks loop #}
-     </div>
     </div>
-   </div>
-   {% endfor %}
-   {# End for page.definition.blocks loop #}
+
+    <div class="btn-group">
+      <a class="btn btn-cancel btn-sm" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
+      <button class="btn btn-publish btn-sm" data-form-button="save" type="submit" name="publish_now">Publish Now</button>
+      <button class="btn btn-save btn-sm" data-form-button="save" type="submit">Save</button>
+    </div>
   </div>
-  <!-- right Column Page Edit -->
-  <div class"pageEdit__rightCol">
+  {% endblock contentHeader %}
 
-   {# Publish Date Input #}
-   <h4 class="pageEdit__title">Page Settings</h4>
-   <div class="form-block">
-    <p>Publish(ed) date</p>
-    <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
-     value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+  {% block content %}
+  <div class="jsEditPageContainer pageEdit__wrapper">
 
-    {% if page.getPublishedStatus == 'draft' %}
-    <div class="" title="Not published">Status: <span class="draft">Draft</span></div>
+    {# Page Title #}
+    <div class="pageEdit__pagetTitle span">
+      <h4>Page Title</h4>
+      <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
+    </div>
+    <!-- Left Column Page Edit -->
+    <div class="pageEdit__leftCol">
 
-    {% elseif page.getPublishedStatus == 'pending' %}
-    <div class="">Status: <span class="pending">Pending</span></div>
-
-    {% elseif page.getPublishedStatus == 'published' %}
-    <div class="">Status: <span class="published">Published</span></div>
-    {% endif %}
-   </div>
-
-   {# Page Slug Input with locking icon #}
-   {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
-   {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
-   {% else %}
-   {% set readonlyStatus, lockedStatus = '', 'unlock' %}
-   {% endif %}
-   <script>
-    pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
-   </script>
-   <div class="element-block-wrapper">
-    <div class="form-block">
-     <label>Slug <span class="text-required">*</span></label>
-     <div class="filter-block">
-      <div class="input-block">
-       <div class="input-block__icon jsUrlSlugFaLockStatus">
-        <i class="fas fa-{{ lockedStatus }}"></i>
-       </div>
-       <div class="input-block__input">
-        <input type="text" class="input-block__search-input jsUrlSlug" name="page_slug" maxlength="100"
-         placeholder="URL slug"
-         {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}" required
-         {{ readonlyStatus }} autocomplete="off">
-       </div>
+      <!-- Custom Settings Tab -->
+      {% if page.settings %}
+      <div class="pageEdit__sectionBlock">
+        <div class="pageEdit__sectionBlock-header">
+          <h4>Custom Page Settings</h4>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="pageEdit__sectionBlock-content ">
+          {% for setting in page.settings %}
+          {{ settingForm.settingInput(setting) }}
+          {% endfor %}
+        </div>
       </div>
-     </div>
-     <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being changed.
-      Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
+      {% endif %}
+
+      {# Page Blocks and Elements #}
+      {# Outer loop: All blocks defined in the JSON page definition file #}
+      {% for blockDefinition in page.definition.blocks %}
+
+      <div class="pageEdit__sectionBlock">
+        <div class="pageEdit__sectionBlock-header">
+          <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="pageEdit__sectionBlock-content">
+          <div class="jsBlockParent pageElements__wrapper" id="{{ blockDefinition.key }}">
+            {# Inner loop: All loaded elements by block key #}
+
+            {% for element in page.blocks[blockDefinition.key] %}
+            {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
+            {% else %}
+            {% set noElementFlag = true %}
+            {% endfor %}
+            <p class="jsNoElementFlag {% if noElementFlag %}d-block{% else %}d-none{% endif %}">There is no content in
+              this
+              block.</p>
+            {# End for page.blocks loop #}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {# End for page.definition.blocks loop #}
     </div>
-   </div>
+    <!-- right Column Page Edit -->
+    <div class"pageEdit__rightCol">
+
+      {# Publish Date Input #}
+      <h4 class="pageEdit__title">Page Settings</h4>
+      <div class="form-block">
+        <p>Publish(ed) date</p>
+        <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+          value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+
+        {% if page.getPublishedStatus == 'draft' %}
+        <div class="" title="Not published">Status: <span class="draft">Draft</span></div>
+
+        {% elseif page.getPublishedStatus == 'pending' %}
+        <div class="">Status: <span class="pending">Pending</span></div>
+
+        {% elseif page.getPublishedStatus == 'published' %}
+        <div class="">Status: <span class="published">Published</span></div>
+        {% endif %}
+      </div>
+
+      {# Page Slug Input with locking icon #}
+      {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
+      {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+      {% else %}
+      {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+      {% endif %}
+      <script>
+        pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
+      </script>
+      <div class="element-block-wrapper">
+        <div class="form-block">
+          <label>Slug <span class="text-required">*</span></label>
+          <div class="filter-block">
+            <div class="input-block">
+              <div class="input-block__icon jsUrlSlugFaLockStatus">
+                <i class="fas fa-{{ lockedStatus }}"></i>
+              </div>
+              <div class="input-block__input">
+                <input type="text" class="input-block__search-input jsUrlSlug" name="page_slug" maxlength="100"
+                  placeholder="URL slug"
+                  {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}"
+                  required {{ readonlyStatus }} autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+            changed.
+            Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
+        </div>
+      </div>
 
 
-   {# Meta Description Input #}
-   <div class="element-block-wrapper">
-    <div class="form-block">
-     <label>Meta Description</label>
-     <textarea type="text" class="form-control" name="meta_description" maxlength="320"
-      placeholder="Description to appear in search results" value="{{ page.meta_description }}"></textarea>
-     <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
-      results.</small>
-    </div>
-   </div>
+      {# Meta Description Input #}
+      <div class="element-block-wrapper">
+        <div class="form-block">
+          <label>Meta Description</label>
+          <textarea type="text" class="form-control" name="meta_description" maxlength="320"
+            placeholder="Description to appear in search results" value="{{ page.meta_description }}"></textarea>
+          <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
+            results.</small>
+        </div>
+      </div>
 
 
-   {# Page Header Featured Media Select Option
+      {# Page Header Featured Media Select Option
 
  Allows user to select a saved media file to link as featured image for this page.
  Selecting an image sets the media table ID in the page_media_id input
  #}
 
-   {% if page.definition.showFeaturedImage|default(1) %}
+      {% if page.definition.showFeaturedImage|default(1) %}
 
-   <div class="form-block jsMediaInput">
-    <img src="{{ getMediaPath(page.media.filename, 'large') }}"
-     class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-    <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
-    <label>Featured Page Image</label>
+      <div class="form-block jsMediaInput">
+        <img src="{{ getMediaPath(page.media.filename, 'large') }}"
+          class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
+        <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
+        <label>Featured Page Image</label>
 
-    <div class="btn-group-pageEdit">
-     <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>&nbsp;
-     <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
+        <div class="btn-group-pageEdit">
+          <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>&nbsp;
+          <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
-   </div>
-   {% endif %}
-  </div>
 
-  {# Delete Page Button Element #}
-  <div class="btn-group-bottom">
-   {% if page.id %}
-   <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit"
-    formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
-    title="The home page cannot be deleted." {% endif %}>Delete Page</button>
-   {% endif %}
-  </div>
-</form>
+    {# Delete Page Button #}
+    <div class="btn-group-bottom">
+      {% if page.id %}
+      <button class="btn btn-delete btn-block" type="submit" data-delete="prompt"
+        formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
+        title="The home page cannot be deleted." {% endif %}>Delete Page</button>
+      {% endif %}
+    </div>
 {% endblock content %}
 
+{% block closeForm %}
+</form>
+{% endblock closeForm %}
 
 {% block foot %}
 <script src="{{ basePath() }}/admin/js/page.js"></script>
