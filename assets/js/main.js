@@ -180,10 +180,10 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
- // Bind delete confirm prompt to all elements with data-delete="prompt"
-document.querySelectorAll(`[data-delete="prompt"]`).forEach(del => {
+ // Bind delete confirm prompt to all elements with data-delete-prompt="*"
+document.querySelectorAll(`[data-delete-prompt]`).forEach(del => {
     del.addEventListener("click", (e) => {
-        if (!confirmPrompt()) e.preventDefault();
+        if (!confirmPrompt(del.dataset.deletePrompt)) e.preventDefault();
     });
 });
 
