@@ -15,18 +15,6 @@ const confirmPrompt = function(msg) {
 }
 
 /**
- * Disable Form Controls
- *
- * @param {object} control Control button element
- */
-const disableFormControls =  function(control) {
-    if (control && !control.disabled) {
-        control.disabled = true;
-        control.classList.add("disabled");
-    }
-}
-
-/**
  * Enable Form Controls
  *
  * @param {object} control Control button element
@@ -35,6 +23,18 @@ const enableFormControls = function(control) {
     if (control && control.disabled) {
         control.disabled = false;
         control.classList.remove("disabled");
+    }
+}
+
+/**
+ * Disable Form Controls
+ *
+ * @param {object} control Control button element
+ */
+const disableFormControls =  function(control) {
+    if (control && !control.disabled) {
+        control.disabled = true;
+        control.classList.add("disabled");
     }
 }
 
@@ -77,9 +77,19 @@ const alertMessage = function(severity, message) {
  * Dismiss Inline Alert
  * @param {Event} event
  */
-const dismissAlert = function(event) {
-    if (event.target.closest(`[data-dismiss="alert"]`)) {
+const dismissAlertInlineMessage = function(event) {
+    if (event.target.dataset.dismiss === "alert") {
         event.target.closest("div.alert").remove();
+    }
+}
+
+/**
+ * Before Delete Confirm Prompt
+ * @param {event} event
+ */
+const deleteConfirmPrompt = function(event) {
+    if (event.target.dataset.deletePrompt) {
+        if (!confirmPrompt(event.target.dataset.deletePrompt)) event.preventDefault();
     }
 }
 
@@ -140,7 +150,15 @@ const getXHRPromise = function(url, params) {
  * @param {string} data FormData object or object key value pairs
  */
 const postXHRPromise = function(url, data) {
-    return XHRPromise("POST", url,  data);
+    data = data || {};
+    data[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue
+
+    // Serialize data
+    postData = Object.keys(data).map((k) => {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+    }).join('&');
+
+    return XHRPromise("POST", url,  postData);
 }
 
 /**
@@ -180,13 +198,6 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
- // Bind delete confirm prompt to all elements with data-delete-prompt="*"
-document.querySelectorAll(`[data-delete-prompt]`).forEach(del => {
-    del.addEventListener("click", (e) => {
-        if (!confirmPrompt(del.dataset.deletePrompt)) e.preventDefault();
-    });
-});
-
 // Disable save controls and listen for form input changes to re-enable controls
 document.querySelectorAll("form").forEach(form => {
     // Get buttons to disable,there may be more than one save button in a form
@@ -217,7 +228,8 @@ document.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
 });
 
 // Binding click events to document
-document.addEventListener("click", dismissAlert);
+document.addEventListener("click", dismissAlertInlineMessage);
+document.addEventListener("click", deleteConfirmPrompt);
 
 // $('.jsDatePicker').datepicker({
 //     format: pitonConfig.dateFormat,

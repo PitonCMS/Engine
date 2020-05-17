@@ -123,10 +123,10 @@ class BaseController
      *
      * Returns asynchronous response as application/json
      * @param  string $status  Status code "success"|"error"
-     * @param  string $text    Document to sent
+     * @param  string|null $text    Document to sent
      * @return Response
      */
-    protected function xhrResponse(string $status, string $text): Response
+    protected function xhrResponse(string $status, ?string $text): Response
     {
         // Make sure $status is set to success or error
         if (!in_array($status, ['success', 'error'])) {
