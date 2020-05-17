@@ -2,9 +2,7 @@
 // Page Management
 // --------------------------------------------------------
 
-/**
- * Listen for page list status filter changes and reload
- */
+// Listen for page list status filter changes and reload
 const pageListFilter = document.querySelector('.jsPageStatusFilter');
 if (pageListFilter) {
     // If this page has a status filter, get the container div reference
@@ -29,6 +27,18 @@ if (pageListFilter) {
         }
     });
 }
+
+// Toggle block collapse
+document.querySelectorAll(`[data-collapse="toggle"]`).forEach(toggle => {
+    const collapseTarget = toggle.parentElement.querySelector(`[data-collapse="target"]`);
+    toggle.addEventListener("click", () => {
+        if (collapseTarget.classList.contains("collapsed")) {
+            collapseTarget.classList.remove("collapsed");
+        } else {
+            collapseTarget.classList.add("collapsed");
+        }
+    });
+});
 
 
 /*

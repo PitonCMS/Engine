@@ -26,20 +26,30 @@
     <!-- Control Buttons -->
     {# Add New Element Button  #}
     <div class="btn-dropdown-block">
-      <div class="btn btn-add btn-sm"><span>Add Content</span> <span><i class="fas fa-chevron-down"></i></span></div>
+      <div class="btn btn-add btn-sm">
+        <span>Add Element</span> <span><i class="fas fa-chevron-down"></i></span>
+      </div>
 
-      {% for blockDefinition in page.definition.blocks %}
-      {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-      {#  <div class="form-group">
-     <div class="jsAddElement"id="button-{{ blockDefinition.key }}"
-      data-block-key="{{ blockDefinition.key }}" data-element-type="{{ blockDefinition.elementTypeDefault }}"
-      data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
-      data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
-      data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}" {% if maxElements %}disabled
-      title="Page block has the maximum number of elements allowed by design." {% endif %}>Add Element</div>
-    </div>
-#}
-      {% endfor %}
+      <div class="form-group-block-add">
+        {# Loop through all blocks to create add element link #}
+        {% for blockDefinition in page.definition.blocks %}
+          {# Check if the block has the max elements allowed #}
+          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+          <div class="form-group">
+            <label>
+              <a href="#" class="{% if maxElements %}disabled{% endif %}"
+              data-add="element"
+              data-block-key="{{ blockDefinition.key }}"
+              data-element-type="{{ blockDefinition.elementTypeDefault }}"
+              data-element-type-options="{{ blockDefinition.elementTypeOptions|join(',') }}"
+              data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+              data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+              {% if maxElements %}title="Page block has the maximum number of elements allowed by design."{% endif %}
+              >{{ blockDefinition.name }}</a>
+            </label>
+          </div>
+        {% endfor %}
+      </div>
     </div>
 
     <div class="btn-group">
@@ -48,27 +58,27 @@
       <button class="btn btn-save btn-sm" data-form-button="save" type="submit">Save</button>
     </div>
   </div>
-  {% endblock contentHeader %}
+{% endblock contentHeader %}
 
-  {% block content %}
-  <div class="jsEditPageContainer pageEdit__wrapper">
-
+{% block content %}
+  <div class="pageEdit__wrapper">
     {# Page Title #}
     <div class="pageEdit__pagetTitle span">
       <h4>Page Title</h4>
       <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
     </div>
+
     <!-- Left Column Page Edit -->
     <div class="pageEdit__leftCol">
 
       <!-- Custom Settings Tab -->
       {% if page.settings %}
       <div class="pageEdit__sectionBlock">
-        <div class="pageEdit__sectionBlock-header">
+        <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
           <h4>Custom Page Settings</h4>
           <i class="fas fa-chevron-down"></i>
         </div>
-        <div class="pageEdit__sectionBlock-content ">
+        <div class="pageEdit__sectionBlock-content {% if page.id %}collapsed{% endif %}" data-collapse="target">
           {% for setting in page.settings %}
           {{ settingForm.settingInput(setting) }}
           {% endfor %}
@@ -79,33 +89,26 @@
       {# Page Blocks and Elements #}
       {# Outer loop: All blocks defined in the JSON page definition file #}
       {% for blockDefinition in page.definition.blocks %}
-
-      <div class="pageEdit__sectionBlock">
-        <div class="pageEdit__sectionBlock-header">
-          <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
-          <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="pageEdit__sectionBlock-content">
-          <div class="jsBlockParent pageElements__wrapper" id="{{ blockDefinition.key }}">
-            {# Inner loop: All loaded elements by block key #}
-
-            {% for element in page.blocks[blockDefinition.key] %}
-            {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
-            {% else %}
-            {% set noElementFlag = true %}
-            {% endfor %}
-            <p class="jsNoElementFlag {% if noElementFlag %}d-block{% else %}d-none{% endif %}">There is no content in
-              this
-              block.</p>
-            {# End for page.blocks loop #}
+        <div class="pageEdit__sectionBlock">
+          <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
+            <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="pageEdit__sectionBlock-content" data-collapse="target">
+            <div class="jsBlockParent pageElements__wrapper" id="{{ blockDefinition.key }}">
+              {# Inner loop: Elements inside block #}
+              {% for element in page.blocks[blockDefinition.key] %}
+                {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
+              {% endfor %}
+            </div>
           </div>
         </div>
-      </div>
       {% endfor %}
       {# End for page.definition.blocks loop #}
     </div>
+
     <!-- right Column Page Edit -->
-    <div class"pageEdit__rightCol">
+    <div class="pageEdit__rightCol">
 
       {# Publish Date Input #}
       <h4 class="pageEdit__title">Page Settings</h4>
@@ -161,8 +164,8 @@
       <div class="element-block-wrapper">
         <div class="form-block">
           <label>Meta Description</label>
-          <textarea type="text" class="form-control" name="meta_description" maxlength="320"
-            placeholder="Description to appear in search results" value="{{ page.meta_description }}"></textarea>
+          <textarea class="form-control" name="meta_description" maxlength="320"
+            placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
           <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
             results.</small>
         </div>
@@ -199,6 +202,7 @@
         title="The home page cannot be deleted." {% endif %}>Delete Page</button>
       {% endif %}
     </div>
+  </div>
 {% endblock content %}
 
 {% block closeForm %}
@@ -206,5 +210,6 @@
 {% endblock closeForm %}
 
 {% block foot %}
-<script src="{{ basePath() }}/admin/js/page.js"></script>
+{% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
+<script src="{{ basePath() }}/admin/js/page.js?v={{ pitonVersion }}"></script>
 {% endblock foot %}
