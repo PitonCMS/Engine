@@ -14,6 +14,7 @@ namespace Piton\Controllers;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
+use Exception;
 
 /**
  * Piton Base Controller
@@ -127,11 +128,16 @@ class BaseController
      */
     protected function xhrResponse(string $status, string $text): Response
     {
+        // Make sure $status is set to success or error
+        if (!in_array($status, ['success', 'error'])) {
+            throw new Exception("Invalid XHR Status Code");
+        }
+
         $response = $this->response->withHeader('Content-Type', 'application/json');
 
         return $response->write(json_encode([
             "status" => $status,
-            "text" => "$text",
+            "text" => $text,
         ]));
     }
 }

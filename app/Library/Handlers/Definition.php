@@ -260,10 +260,11 @@ class Definition
     protected function decodeValidJson(string $json, string $schema = null): ?object
     {
         // Get and decode JSON to be validated
-        if (false === $contents = file_get_contents($json)) {
+        if (!file_exists($json) || false === $contents = file_get_contents($json)) {
             $this->errors[] = "Unable to get file: $json";
             return null;
         }
+
         // TODO Add JSON_THROW_ON_ERROR when on min PHP 7.3
         $jsonDecodedInput = json_decode($contents, false);
 

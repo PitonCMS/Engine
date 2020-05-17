@@ -40,78 +40,57 @@ document.querySelectorAll(`[data-collapse="toggle"]`).forEach(toggle => {
     });
 });
 
-
-/*
 // Add Page Block Element
-$('.jsAddElement').on('click', function () {
-    let $addButton = $(this);
-    let buttonText = {
-        addElement: "Add Element",
-        loading: `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  <span class="sr-only">Loading...</span>Loading...`
-    }
-    $addButton.prop('disabled', true).html(buttonText.loading);
-    let elementType = $(this).data('elementType');
-    let blockKey = $(this).data('blockKey');
-    let elementTypeOptions = $(this).data('elementTypeOptions');
-    let elementLimit = $(this).data('elementCountLimit') || 100;
-    let currentElementCount = $(this).data('elementCount');
-    let $blockParent = $('#' + blockKey);
-    let postData = {
-        blockKey: blockKey,
-        elementType: elementType,
-        elementTypeOptions: elementTypeOptions
-    }
-    postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
+document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
+    addEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        let limit = parseInt(addEl.dataset.elementCountLimit) || 100;
+        let count = parseInt(addEl.dataset.elementCount) || 0;
 
-    $.ajax({
-        url: pitonConfig.routes.adminPageElementNew,
-        method: "POST",
-        data: postData,
-        success: function (r) {
-            let $newElement = {};
-            if (r.status == "success") {
-                $newElement = $(r.html);
-            } else {
-                console.log('PitonCMS: Exception getting new element');
-                return;
-            }
-
-            // Increment element sort value
-            let lastElementSortValue = $blockParent.find('.jsElementParent:last .jsElementSortValue').val();
-
-            if (!isNaN(lastElementSortValue)) {
-                lastElementSortValue++;
-            } else {
-                lastElementSortValue = 1;
-            }
-
-            $newElement.appendTo($blockParent);
-            $newElement.find('.jsElementSortValue').val(lastElementSortValue);
-            $newElement.find('.jsMDE').each(function () {
-                simplemde = new SimpleMDE({
-                    element: this,
-                    forceSync: true
-                });
-            });
-
-            // Hide no content message
-            $blockParent.find('.jsNoElementFlag').removeClass('d-block').addClass('d-none');
-
-            // If number of elements matches or exceeds the limit, disable the button
-            $addButton.data('elementCount', ++currentElementCount);
-            if (currentElementCount >= elementLimit) {
-                $addButton.html(buttonText.addElement).prop('disabled', true).attr('title', 'Page block has the maximum number of elements allowed by design.');
-            } else {
-                $addButton.html(buttonText.addElement).prop('disabled', false).attr('title','');
-            }
-
-            // Scroll to new element and add to navigation
-            window.location.hash = $newElement.attr('id');
+        // Check element limit
+        if (count >= limit) {
+            alertMessage('Info', 'This Block has the maximum number of Elements allowed by the design');
+            return;
         }
+
+        // Get new element
+        enableSpinner();
+
+        // Get query string and XHR Promise
+        let query = {
+            "pageTemplate": document.querySelector(`input[name="template"]`).value,
+            "blockKey": addEl.dataset.blockKey
+        }
+
+        getXHRPromise(pitonConfig.routes.adminPageElementGet, query)
+            .then(response => {
+                let container = document.createElement("div");
+                let targetBlock = document.getElementById("block-" + addEl.dataset.blockKey);
+                container.innerHTML = response;
+
+                // Set element order number and update count in add element
+                addEl.dataset.elementCount = ++count;
+
+                // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
+                container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
+                targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
+
+                // Get new block ID for window scroll
+                let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
+
+                return windowTarget;
+            })
+            .then(target => {
+                // TODO Smooth scroll leaving room for navs
+                window.location.hash = target;
+            })
+            .then(() => {
+                disableSpinner();
+            });
     });
 });
 
+/*
 // Delete page element
 $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
     e.preventDefault();

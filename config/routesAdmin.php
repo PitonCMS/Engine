@@ -54,10 +54,10 @@ $app->group('/admin', function () {
 
         // Page elements
         $this->group('/element', function () {
-            // Fetch element form
-            $this->post('/new', function ($args) {
-                return (new AdminPageController($this))->newElementForm();
-            })->add('csrfGuardHandler')->setName('adminPageElementNew');
+            // XHR: Get element
+            $this->get('/get', function ($args) {
+                return (new AdminPageController($this))->getElementForm();
+            })->setName('adminPageElementGet');
 
             // Delete ELement (XHR)
             $this->post('/delete', function ($args) {

@@ -353,39 +353,47 @@ class AdminPageController extends AdminBaseController
     }
 
     /**
-     * New Element Form
+     * Get New Element Form
      *
-     * Renders new element form with initial values, and returns via Ajax to browser.
-     * At a minimum, the element form is expecting these values:
-     * - blockKey
-     * - elementTypeDefault
-     * - elementSort
-     * - elementTypeOptions | optional, comma separated list of approved element types
+     * XHR Request
+     * Renders new element form with initial values and returns XHR request
      * @param void
-     * @uses $_POST
+     * @uses queryParam pageTemplate
+     * @uses queryParam blockKey
      * @return Response
      */
-    public function newElementForm(): ?Response
+    public function getElementForm(): Response
     {
-        $parsedBody = $this->request->getParsedBody();
+        // Get dependencies
+        $definition = $this->container->jsonDefinitionHandler;
+        $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
+        $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
 
-        $form['block_key'] = $parsedBody['blockKey'];
-        $form['template'] = $parsedBody['elementType'];
-        $form['element_sort'] = 1;
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            // Get page definition
+            if (null === $pageDefinition = $definition->getPage($pageTemplate . '.json')) {
+                throw new Exception('Page Definition Error', print_r($definition->getErrorMessages(), true));
+            }
 
-        // Only include element type options if the string is not empty
-        if (!empty($parsedBody['elementTypeOptions'])) {
-            $form['elementTypeOptions'] = explode(',', $parsedBody['elementTypeOptions']);
+            // Get defined blocks and use block key as array index
+            $blocks = array_combine(array_column($pageDefinition->blocks, 'key'), $pageDefinition->blocks);
+
+            $form['blockKey'] = $blockKey;
+            $form['elementTypeOptions'] = $blocks[$blockKey]->elementTypeOptions ?? null;
+
+            // Make string template
+            $template = '{% import "@admin/pages/_pageMacros.html" as pageMacro %}';
+            $template .= ' {{ pageMacro.elementForm(element, element.blockKey, element.elementTypeOptions) }}';
+
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template, ['element' => $form]);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting new element: ". $th->getMessage();
         }
 
-        $template = '{% import "@admin/pages/_pageMacros.html" as pageMacro %}';
-        $template .= ' {{ pageMacro.elementForm(element, element.block_key, element.elementTypeOptions) }}';
-        $elementFormHtml = $this->container->view->fetchFromString($template, ['element' => $form]);
-
-        // Set the response type
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $r->write(json_encode(["status" => "success", "html" => $elementFormHtml]));
+        return $this->xhrResponse($status, $text);
     }
 
     /**

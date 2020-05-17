@@ -4,11 +4,8 @@
 
 {#
   Media Card
-
-  Used in the media modal in the page editor.
-  Also used in the All Media manager with editable form fields.
 #}
-{% macro card(media, categories, editable = false) %}
+{% macro card(media, categories) %}
 {% import _self as mediaMacro %}
 
 <div class="media jsMediaCard">
@@ -30,13 +27,6 @@
      data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
    </span>
   </div>
-
-  {% if not editable %}
-  {# This is for displaying in the page media modal when selecting images #}
-  <p>{{ media.caption }}</p>
-  {% else %}
-  {# Show editable fields and controls #}
-
 
   <div class="mediaBlock">
    {# Media Caption Input #}
@@ -69,9 +59,8 @@
    value="delete">Delete</button>
    <button class="btn btn-sm btn-save" type="submit" value="save">Save</button>
 
-   
+
   </div>
-  {% endif %}
  </form>
 </div>
 {% endmacro card %}

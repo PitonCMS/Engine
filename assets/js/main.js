@@ -39,6 +39,26 @@ const enableFormControls = function(control) {
 }
 
 /**
+ * Enable Spinner Overlay
+ * @param {void}
+ */
+const enableSpinner = function() {
+    if (!document.querySelector("body").classList.contains("spinner")) {
+        document.querySelector("body").classList.add("spinner")
+    }
+}
+
+/**
+ * Disable Spinner Overlay
+ * @param {void}
+ */
+const disableSpinner = function() {
+    if (document.querySelector("body").classList.contains("spinner")) {
+        document.querySelector("body").classList.remove("spinner")
+    }
+}
+
+/**
  * Alert Message
  *
  * System notifications and alerts
@@ -50,7 +70,7 @@ const alertMessage = function(severity, message) {
         message = JSON.stringify(message);
     }
 
-    alert(`Severity: ${severity} ${message}`);
+    alert(`${severity}: ${message}`);
 }
 
 /**
@@ -143,12 +163,12 @@ const XHRPromise = function(method, url, data) {
                     // Response content successful
                     resolve(response.text);
                 } else {
-                    // Response content failed
-                    reject(alertInlineMessage('danger', 'Error', {"text": response.text}));
+                    // Response successful but application failed
+                    reject(alertInlineMessage('danger', 'Error', [response.text]));
                 }
             } else {
-                // Failed server response
-                reject(alertInlineMessage('danger', 'Error', {"text": response.text}));
+                // Failed server runtime response
+                reject(alertInlineMessage('danger', 'Error', [response.text]));
             }
         }
 

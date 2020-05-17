@@ -68,7 +68,7 @@
 {# Media List #}
 <div class="media-wrapper">
  {% for media in page.media %}
- {{ mediaMacro.card(media, page.categories, true) }}
+ {{ mediaMacro.card(media, page.categories) }}
  {% else %}
  <strong>No Media Found</strong>
  {% endfor %}
