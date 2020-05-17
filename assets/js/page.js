@@ -2,6 +2,14 @@
 // Page Management
 // --------------------------------------------------------
 
+/**
+ *
+ * @param {object} element
+ */
+const removeElement = function(element) {
+    element.remove();
+}
+
 // Listen for page list status filter changes and reload
 const pageListFilter = document.querySelector('.jsPageStatusFilter');
 if (pageListFilter) {
@@ -90,6 +98,41 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     });
 });
 
+// Listen for delete page element bubbling event
+const pageEditNode = document.querySelector(`[data-page-edit="1"]`);
+if (pageEditNode) {
+    pageEditNode.addEventListener("click", (e) => {
+        if (e.target.dataset.elementDelete) {
+            // Confirm delete
+            if (!confirmPrompt("Are you sure you want to permanently delete this element?")) return;
+
+            // Get element ID and element
+            let elementId = parseInt(e.target.dataset.elementId);
+            let element = e.target.closest(`[data-element="parent"]`);
+
+            if (isNaN(elementId)) {
+                // Element has not been saved, just remove from DOM
+                removeElement(element);
+            } else {
+                // Element has been saved, do a hard delete
+                let data = {
+                    "elementId": elementId
+                }
+
+                // delete element
+                enableSpinner();
+
+                postXHRPromise(pitonConfig.routes.adminPageElementDelete, data)
+                    .then(() => {
+                        removeElement(element);
+                    })
+                    .then(() => {
+                        disableSpinner();
+                    });
+            }
+        }
+    });
+}
 /*
 // Delete page element
 $('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {

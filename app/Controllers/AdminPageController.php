@@ -341,15 +341,8 @@ class AdminPageController extends AdminBaseController
             $pageMapper->delete($page);
         }
 
-        // Determine redirect path based on whether this was a collection page
-        if (!empty($this->request->getParsedBodyParam('collection_id'))) {
-            $redirectRoute = 'adminCollection';
-        } else {
-            $redirectRoute = 'adminPage';
-        }
-
         // Redirect back to show pages
-        return $this->redirect($redirectRoute);
+        return $this->redirect('adminPage');
     }
 
     /**
@@ -362,15 +355,16 @@ class AdminPageController extends AdminBaseController
      * @uses queryParam blockKey
      * @return Response
      */
-    public function getElementForm(): Response
+    public function getElement(): Response
     {
         // Get dependencies
         $definition = $this->container->jsonDefinitionHandler;
-        $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
-        $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
 
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
+            $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
+            $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
+
             // Get page definition
             if (null === $pageDefinition = $definition->getPage($pageTemplate . '.json')) {
                 throw new Exception('Page Definition Error', print_r($definition->getErrorMessages(), true));
@@ -399,29 +393,39 @@ class AdminPageController extends AdminBaseController
     /**
      * Delete Element
      *
-     * XHR request
+     * XHR Request
+     * Deletes element returns XHR request
+     * @param void
+     * @uses POST
+     * @uses elementId Element ID
+     * @return Response
      */
     public function deleteElement()
     {
         // Get dependencies
         $pageElement = ($this->container->dataMapper)('PageElementMapper');
 
-        // Check that we received an ID
-        if ($this->request->getParsedBodyParam('id')) {
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            // Check that we received an ID
+            $id = htmlspecialchars($this->request->getParsedBodyParam('elementId', 'x'));
+            if (!is_numeric($id)) {
+                throw new Exception("Invalid element ID");
+            }
+
             // Delete block element
             $blockElement = $pageElement->make();
-            $blockElement->id = (int) $this->request->getParsedBodyParam('id');
+            $blockElement->id = (int) $id;
             $pageElement->delete($blockElement);
 
             $status = 'success';
-        } else {
-            $status = 'error';
+            $text = null;
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting new element: ". $th->getMessage();
         }
 
-        // Set the response type
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-
-        return $r->write(json_encode(['status' => $status]));
+        return $this->xhrResponse($status, $text);
     }
 
     /**

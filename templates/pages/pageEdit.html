@@ -58,7 +58,7 @@
 {% endblock contentHeader %}
 
 {% block content %}
-  <div class="pageEdit__wrapper">
+  <div class="pageEdit__wrapper" data-page-edit="1">
     {# Page Title #}
     <div class="pageEdit__pagetTitle span">
       <h4>Page Title</h4>
@@ -194,7 +194,7 @@
     {# Delete Page Button #}
     <div class="btn-group-bottom">
       {% if page.id %}
-      <button class="btn btn-delete btn-block" type="submit" data-delete="prompt"
+      <button class="btn btn-delete btn-block" type="submit" data-delete-prompt="Are you sure you want to permanently delete this page?"
         formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
         title="The home page cannot be deleted." {% endif %}>Delete Page</button>
       {% endif %}
