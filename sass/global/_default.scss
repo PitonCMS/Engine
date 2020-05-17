@@ -182,3 +182,14 @@ background: $bg-blue;
 
  }
 }
+
+.collapsed {
+display: none;
+
+animation: collapse 250ms ease-in-out forwards;
+
+}
+@keyframes collapse {
+ 0%   { opacity: 0; }
+ 100% { opacity: .25; }
+}

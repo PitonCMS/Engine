@@ -488,7 +488,6 @@ a:hover {
 }
 .collapsed {
   display: none;
-  opacity: 0;
   animation: collapse 250ms ease-in-out forwards;
 }
 
@@ -497,7 +496,7 @@ a:hover {
     opacity: 0;
   }
   100% {
-    opacity: 1;
+    opacity: 0.25;
   }
 }
 /* Layout */
@@ -642,6 +641,12 @@ a:hover {
   padding: calc(50px + 2em) 1em 1em;
 }
 
+.pageEdit__rightCol {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+}
+
 .sidebar .side-nav {
   height: 100%;
   display: flex;
@@ -706,7 +711,6 @@ button,
 [type=submit] {
   appearance: none;
   border: 0;
-  border-radius: var(--border-radius);
   color: #fff;
   cursor: pointer;
   display: inline-block;
@@ -826,15 +830,14 @@ button:disabled,
 }
 
 .btn-cancel {
-  margin: 0;
   padding: 0;
   text-align: center;
   font-size: 0.875rem;
-  color: #ffc46b;
+  color: #eb7119;
   background: transparent;
 }
 .btn-cancel:hover {
-  color: #eb7119;
+  color: #ffc46b;
 }
 
 .btn-block {
@@ -853,11 +856,13 @@ button:disabled,
 /* Button Group Delete Page bottom of page*/
 .btn-group-bottom {
   padding-top: 4rem;
+  margin-top: auto;
+  align-self: flex-end;
 }
 
 /* General Button Group */
 .btn-group {
-  margin-left: 1em;
+  margin-left: 1rem;
 }
 
 .nav-toggle,
@@ -1073,6 +1078,10 @@ label {
   display: grid;
   grid-template-columns: min-content 1fr;
   gap: 1em;
+}
+.form-block__title:hover {
+  cursor: pointer;
+  background: #babdde;
 }
 
 .formBlock {
@@ -1513,7 +1522,7 @@ label {
   cursor: pointer;
 }
 .pageEdit__sectionBlock-header {
-  background: #363636;
+  background: #dddeee;
   padding: 0.5em;
   margin: 0 !important;
   display: flex;
@@ -1530,7 +1539,6 @@ label {
 
 .page-elementBlock {
   background: white;
-  margin-bottom: 2em;
   padding: 0.5em 0.25em;
   border-radius: 3px;
 }

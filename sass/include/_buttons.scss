@@ -5,7 +5,7 @@ button,
 [type="submit"] {
  appearance: none;
  border: 0;
- border-radius: var(--border-radius);
+ // border-radius: var(--border-radius);
  color: $action-color--contrast;
  cursor: pointer;
  display: inline-block;
@@ -38,7 +38,7 @@ button,
 }
 
 // Default buttons
-.btn {
+.btn {@include margin(null null null 1em);
  display: block;
  @include padding(1em);
  width: 100%;
@@ -123,16 +123,17 @@ button,
 }
 
 .btn-cancel {
- @include margin(0);
+ // @include margin(0);
  @include padding(0);
  text-align: center;
  font-size: .875rem;
- color: $nav-font-color;
+ color: $link-hover-color;
+ 
  background: transparent;
 
  &:hover {
-  color: $link-hover-color;
-
+ 
+  color: $nav-font-color;
  }
 }
 .btn-block {
@@ -154,12 +155,13 @@ button,
 
 /* Button Group Delete Page bottom of page*/
 .btn-group-bottom {
- @include padding(4rem null null)
+ @include padding(4rem null null null);
+ @include margin(auto null null null);
+ align-self: flex-end;
 }
 
 /* General Button Group */
 .btn-group {
- *+*{
-  @include margin(null null null .5em);
- }
-}
+@include margin(null null null 1rem);
+
+} 

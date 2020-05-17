@@ -146,6 +146,8 @@
 
   align-items: center;
   justify-self: flex-end;
+
+
  }
 }
 
@@ -158,4 +160,10 @@
 
 .content {
  @include padding(calc(#{$nav-height} + 2em) 1em 1em 1em);
+}
+
+.pageEdit__rightCol {
+ display: flex;
+ flex-flow: column nowrap;
+ height: 100%;
 }
