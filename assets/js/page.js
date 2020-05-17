@@ -98,17 +98,19 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     });
 });
 
-// Listen for delete page element bubbling event
+// Get Page Edit
 const pageEditNode = document.querySelector(`[data-page-edit="1"]`);
+
+// Delete element
 if (pageEditNode) {
-    pageEditNode.addEventListener("click", (e) => {
-        if (e.target.dataset.elementDelete) {
+    pageEditNode.addEventListener("click", (event) => {
+        if (event.target.dataset.elementDelete) {
             // Confirm delete
             if (!confirmPrompt("Are you sure you want to permanently delete this element?")) return;
 
             // Get element ID and element
-            let elementId = parseInt(e.target.dataset.elementId);
-            let element = e.target.closest(`[data-element="parent"]`);
+            let elementId = parseInt(event.target.dataset.elementId);
+            let element = event.target.closest(`[data-element="parent"]`);
 
             if (isNaN(elementId)) {
                 // Element has not been saved, just remove from DOM
@@ -133,86 +135,34 @@ if (pageEditNode) {
         }
     });
 }
-/*
-// Delete page element
-$('.jsBlockParent').on('click', '.jsDeleteBlockElement', function (e) {
-    e.preventDefault();
-    if (!confirmPrompt('Are you sure you want to delete this element?')) {
-        return false;
-    }
-    let blockElementId = $(this).data('elementId');
-    let $element = $(this).parents('.jsElementParent');
-    let blockKey = $(this).parents('.jsBlockParent:first').attr('id');
-    let elementLimit = $('#' + blockKey).data('elementCountLimit') || 100;
-    let elementCount = $('#' + blockKey).data('elementCount') || 1;
-    let removeElement = function () {
-        $element.slideUp('normal', function () {
-            $element.remove();
-        });
-    }
-    let postData = {
-        id: blockElementId
-    }
-    postData[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue;
 
-    if (!isNaN(blockElementId)) {
-        // Physical delete
-        $.ajax({
-            url: pitonConfig.routes.adminPageElementDelete,
-            method: "POST",
-            data: postData,
-            success: function (r) {
-                if (r.status === 'success') {
-                    removeElement();
+// Enable additional inputs on elements when selected
+if (pageEditNode) {
+    pageEditNode.addEventListener("click", (event) => {
+        if (event.target.dataset.elementEnableInput) {
+            let elementParent = event.target.closest(`[data-element="parent"]`);
+            let requiredOption = event.target.dataset.elementEnableInput;
+
+            // Hide, enable all special inputs
+            elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
+                option.classList.add("d-none");
+                option.classList.remove("d-block");
+            });
+
+            // Enable desired option
+            elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
+                if (option.dataset.elementInputOption === requiredOption) {
+                    option.classList.remove("d-none");
+                    option.classList.add("d-block");
                 }
-            },
-            error: function (r) {
-                console.log('PitonCMS: There was an error deleting this element. Contact your administrator.')
-            }
-        });
-    } else {
-        // Only element delete
-        removeElement();
-    }
+            });
 
-    // Reset add element button if within count limit
-    $('#button-' + blockKey).data('elementCount', --elementCount);
-    if (elementCount < elementLimit) {
-        $('#button-' + blockKey).prop('disabled', false).attr('title', '');
-    }
+            console.log(requiredOption)
+        }
+    });
+}
 
-    // Show no content message if elementCount is zero
-    if (elementCount === 0) {
-        $(this).parents('.jsBlockParent:first').find('.jsNoElementFlag').removeClass('d-none').addClass('d-block');
-    }
-});
-
-// Toggle element selector
-$('.jsBlockParent').on('click', '.jsElementType input[type="radio"]', function () {
-    let selectedTypeOption = $(this).data('enable-input');
-    let $elementParent = $(this).parents('.jsElementParent');
-    $elementParent
-        .find('.jsElementOption.d-block').toggleClass('d-block d-none')
-        .find('select').prop('required', false);
-
-    if (selectedTypeOption === 'image' || selectedTypeOption === 'hero') {
-        $(this).parents('.jsElementType').siblings('.jsMediaInput').toggleClass('d-none d-block');
-        return;
-    }
-    if (selectedTypeOption === 'embedded') {
-        $(this).parents('.jsElementType').siblings('.jsEmbeddedInput').toggleClass('d-none d-block');
-        return;
-    }
-    if (selectedTypeOption === 'collection') {
-        $(this).parents('.jsElementType').siblings('.jsCollectionInput').toggleClass('d-none d-block').find('select').prop('required', true);
-        return;
-    }
-    if (selectedTypeOption === 'gallery') {
-        $(this).parents('.jsElementType').siblings('.jsGalleryInput').toggleClass('d-none d-block').find('select').prop('required', true);
-        return;
-    }
-});
-
+/*
 // Clean Page URL slug from title
 let $pageSlug = $('.jsUrlSlug');
 $('.jsPageTitle').on('change', function () {
@@ -237,11 +187,6 @@ $('.jsUrlSlugFaLockStatus').on('click', function () {
         $pageSlug.attr('readonly', false);
         $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
     }
-});
-
-// Listen for changes to the edit collection form
-$('.jsCollectionGroup').on('input', function () {
-    setSaveButtonIndicator();
 });
 
 // Bind Markdown Editor to Textareas

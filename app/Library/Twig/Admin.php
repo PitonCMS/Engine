@@ -211,7 +211,10 @@ class Admin extends Base
 
         // Get dependencies
         $definition = $this->container->jsonDefinitionHandler;
-        return $this->cache['elements'] = $definition->getElements();
+        $elements = $definition->getElements();
+        $elements = array_combine(array_column($elements, 'filename'), $elements);
+
+        return $this->cache['elements'] = $elements;
     }
 
     /**
