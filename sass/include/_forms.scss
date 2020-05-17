@@ -190,6 +190,10 @@ label {
   display: grid;
   grid-template-columns: min-content 1fr;
   gap: 1em;
+  &:hover {
+   cursor: pointer;
+   background: darken($bg-blue, 10%);
+  }
  }
 }
 .formBlock {

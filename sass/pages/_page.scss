@@ -97,7 +97,7 @@ h4{
  cursor: pointer;
 
  &-header {
-  background: $bg-dark;
+  background: $bg-blue;
   @include padding(.5em);
   margin: 0 !important;
   display: flex;
@@ -117,7 +117,7 @@ h4{
 
 .page-elementBlock {
  background: $bg-light;
- @include margin(null null 2em null);
+ // @include margin(null null 2em null);
  @include padding(.5em .25em);
  border-radius: $border-radius;
 }
