@@ -19,7 +19,7 @@
 
  <div class="content-header-inner">
   <div class="breadcrumb"></div>
-  <h3 class="section-title">Edit Collection</h3>
+  <h1 class="section-title">Edit Collection</h1>
   <div class="btn-group">
    <a class="btn btn-cancel btn-sm jsFormCancelButton"
     href="{{ pathFor('adminCollection', {'id': page.collection.id}) }}">Discard</a>
@@ -32,8 +32,8 @@
 
  {% block content %}
  <div class="content-block">
-  <h3 class="section-title">{% if page.collection.id %}Edit
-   {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h3>
+  <h1 class="section-title">{% if page.collection.id %}Edit
+   {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h1>
   <div class="lead">Used by <a
     href="{{ pathFor('adminCollection', {'collectionSlug': page.collection.collection_slug}) }}">{{ page.collection.page_count }}</a>
    Pages</div>
