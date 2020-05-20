@@ -59,7 +59,7 @@
 
 {% block content %}
   <div class="pageEdit__wrapper" data-page-edit="1">
-   
+
 
     <!-- Left Column Page Edit -->
     <div class="pageEdit__leftCol">
@@ -209,6 +209,6 @@
 {% endblock closeForm %}
 
 {% block foot %}
-{% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
-<script src="{{ basePath() }}/admin/js/page.js?v={{ pitonVersion }}"></script>
+  {% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
+  <script src="{{ basePath() }}/admin/js/pageEdit.js?v={{ pitonVersion }}"></script>
 {% endblock foot %}
