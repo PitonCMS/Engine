@@ -15,11 +15,11 @@ const confirmPrompt = function(msg) {
 }
 
 /**
- * Enable Form Controls
+ * Enable Form Control
  *
  * @param {object} control Control button element
  */
-const enableFormControls = function(control) {
+const enableFormControl = function(control) {
     if (control && control.disabled) {
         control.disabled = false;
         control.classList.remove("disabled");
@@ -27,11 +27,11 @@ const enableFormControls = function(control) {
 }
 
 /**
- * Disable Form Controls
+ * Disable Form Control
  *
  * @param {object} control Control button element
  */
-const disableFormControls =  function(control) {
+const disableFormControl =  function(control) {
     if (control && !control.disabled) {
         control.disabled = true;
         control.classList.add("disabled");
@@ -80,16 +80,6 @@ const alertMessage = function(severity, message) {
 const dismissAlertInlineMessage = function(event) {
     if (event.target.dataset.dismiss === "alert") {
         event.target.closest("div.alert").remove();
-    }
-}
-
-/**
- * Before Delete Confirm Prompt
- * @param {event} event
- */
-const deleteConfirmPrompt = function(event) {
-    if (event.target.dataset.deletePrompt) {
-        if (!confirmPrompt(event.target.dataset.deletePrompt)) event.preventDefault();
     }
 }
 
@@ -202,38 +192,49 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
-// Disable save controls and listen for form input changes to re-enable controls
+// Form Control Events
 document.querySelectorAll("form").forEach(form => {
-    // Get buttons to disable,there may be more than one save button in a form
+    // Disable form controls and listen for form input changes to re-enable controls
+    // There may be more than one save button in a form
     let saveButtons = form.querySelectorAll(`[data-form-button="save"]`);
-
     if (saveButtons) {
         saveButtons.forEach(control => {
-            disableFormControls(control);
+            disableFormControl(control);
         });
 
-        // Listen for form changes to enable controls
-        form.querySelectorAll("input, textarea, select").forEach(el => {
-            el.addEventListener("input", () => {
-                saveButtons.forEach(control => {
-                    enableFormControls(control);
-                });
+        // Listen for form changes to reenable controls
+        form.addEventListener("input", () => {
+            saveButtons.forEach(control => {
+                enableFormControl(control);
             });
         });
+
     }
+
+    // Confirm discard of changes
+    let cancelButton = form.querySelector(`[data-form-button="cancel"]`);
+    if (cancelButton) {
+        cancelButton.addEventListener("click", (e) => {
+            let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
+            if (!userResponse) e.preventDefault();
+        });
+    }
+
+    // Confirm delete
+    let deleteButton = form.querySelector(`[data-delete-prompt]`);
+    if (deleteButton) {
+        deleteButton.addEventListener("click", (e) => {
+            if (!confirmPrompt(e.target.dataset.deletePrompt)) e.preventDefault();
+        });
+    }
+
 });
 
-// Bind click event to form cancel/discard buttons
-document.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
-    control.addEventListener("click", (e) => {
-        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
-        if (!userResponse) e.preventDefault();
-    });
-});
+
 
 // Binding click events to document
 document.addEventListener("click", dismissAlertInlineMessage);
-document.addEventListener("click", deleteConfirmPrompt);
+
 
 // $('.jsDatePicker').datepicker({
 //     format: pitonConfig.dateFormat,
