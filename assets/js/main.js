@@ -174,19 +174,23 @@ const XHRPromise = function(method, url, data) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
-            if (xhr.status === 200) {
-                // Successful server response
-                let response = JSON.parse(xhr.responseText);
-                if (response.status === "success") {
-                    // Response content successful
-                    resolve(response.text);
+            try {
+                if (xhr.status === 200) {
+                    // Successful server response
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        // Response content successful
+                        resolve(response.text);
+                    } else {
+                        // Response successful but application failed
+                        reject(alertInlineMessage('danger', 'Error', [response.text]));
+                    }
                 } else {
-                    // Response successful but application failed
+                    // Failed server runtime response
                     reject(alertInlineMessage('danger', 'Error', [response.text]));
                 }
-            } else {
-                // Failed server runtime response
-                reject(alertInlineMessage('danger', 'Error', [response.text]));
+            } catch (error) {
+                reject(alertInlineMessage('danger', 'Error', [error]));
             }
         }
 
