@@ -209,6 +209,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  {% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
   <script src="{{ basePath() }}/admin/js/pageEdit.js?v={{ pitonVersion }}"></script>
 {% endblock foot %}

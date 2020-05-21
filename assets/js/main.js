@@ -194,8 +194,7 @@ const XHRPromise = function(method, url, data) {
 
 // Form Control Events
 document.querySelectorAll("form").forEach(form => {
-    // Disable form controls and listen for form input changes to re-enable controls
-    // There may be more than one save button in a form
+    // Disable form controls and listen for form input changes to re-enable save controls
     let saveButtons = form.querySelectorAll(`[data-form-button="save"]`);
     if (saveButtons) {
         saveButtons.forEach(control => {
@@ -212,22 +211,19 @@ document.querySelectorAll("form").forEach(form => {
     }
 
     // Confirm discard of changes
-    let cancelButton = form.querySelector(`[data-form-button="cancel"]`);
-    if (cancelButton) {
-        cancelButton.addEventListener("click", (e) => {
+    form.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
+        control.addEventListener("click", (e) => {
             let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
             if (!userResponse) e.preventDefault();
         });
-    }
+    });
 
     // Confirm delete
-    let deleteButton = form.querySelector(`[data-delete-prompt]`);
-    if (deleteButton) {
-        deleteButton.addEventListener("click", (e) => {
+    form.querySelectorAll(`[data-delete-prompt]`).forEach(control => {
+        control.addEventListener("click", (e) => {
             if (!confirmPrompt(e.target.dataset.deletePrompt)) e.preventDefault();
         });
-    }
-
+    });
 });
 
 
