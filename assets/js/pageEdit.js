@@ -10,6 +10,26 @@ const removeElement = function(element) {
     element.remove();
 }
 
+
+const mdEditor = function(element) {
+    return new SimpleMDE({
+        element: element,
+        forceSync: true,
+        promptURLs: true,
+        toolbar: [
+          "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
+          "horizontal-rule", "table", "|", "link",
+        //   {
+        //     name: "image",
+        //     // action: getMediaForMDE,
+        //     className: "fa fa-picture-o",
+        //     title: "Media"
+        //   },
+          "guide"
+        ]
+      });
+}
+
 // Toggle block collapse
 document.querySelectorAll(`[data-collapse="toggle"]`).forEach(toggle => {
     const collapseTarget = toggle.parentElement.querySelector(`[data-collapse="target"]`);
@@ -55,6 +75,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
                 // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
                 container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
+                mdEditor(container.querySelector(`textarea[data-mde="1"]`));
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
                 // Get new block ID for window scroll
@@ -127,6 +148,13 @@ if (pageEditNode) {
 
             });
         }
+    });
+}
+
+// Bind Markdown Editor to selected textareas
+if (pageEditNode) {
+    pageEditNode.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
+        mdEditor(editor);
     });
 }
 
