@@ -72,31 +72,29 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     });
 });
 
-// Get Page Edit
+// Get Page Edit block
 const pageEditNode = document.querySelector(`[data-page-edit="1"]`);
 
 // Delete element
 if (pageEditNode) {
     pageEditNode.addEventListener("click", (event) => {
-        if (event.target.dataset.elementDelete) {
+        if (event.target.dataset.deleteElementPrompt) {
             // Confirm delete
-            if (!confirmPrompt("Are you sure you want to permanently delete this element?")) return;
+            if (!confirmPrompt(event.target.dataset.deleteElementPrompt)) return;
 
             // Get element ID and element
             let elementId = parseInt(event.target.dataset.elementId);
             let element = event.target.closest(`[data-element="parent"]`);
 
             if (isNaN(elementId)) {
-                // Element has not been saved, just remove from DOM
+                // Element has not been saved to DB, just remove from DOM
                 removeElement(element);
             } else {
                 // Element has been saved, do a hard delete
+                enableSpinner();
                 let data = {
                     "elementId": elementId
                 }
-
-                // delete element
-                enableSpinner();
 
                 postXHRPromise(pitonConfig.routes.adminPageElementDelete, data)
                     .then(() => {
@@ -117,21 +115,17 @@ if (pageEditNode) {
             let elementParent = event.target.closest(`[data-element="parent"]`);
             let requiredOption = event.target.dataset.elementEnableInput;
 
-            // Hide, enable all special inputs
+            // Get special inputs and set visible or hide class
             elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
-                option.classList.add("d-none");
-                option.classList.remove("d-block");
-            });
-
-            // Enable desired option
-            elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
-                if (option.dataset.elementInputOption === requiredOption) {
+                if (requiredOption === option.dataset.elementInputOption) {
                     option.classList.remove("d-none");
                     option.classList.add("d-block");
+                } else {
+                    option.classList.add("d-none");
+                    option.classList.remove("d-block");
                 }
-            });
 
-            console.log(requiredOption)
+            });
         }
     });
 }
