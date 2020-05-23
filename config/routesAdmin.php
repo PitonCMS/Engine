@@ -156,9 +156,9 @@ $app->group('/admin', function () {
             })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');
         });
 
-        // Show all media, optionally filtered by media category
-        $this->get('[/{category:[a-zA-Z0-9-]+}]', function ($args) {
-            return (new AdminMediaController($this))->showMedia($args);
+        // Show all media
+        $this->get('[/]', function ($args) {
+            return (new AdminMediaController($this))->showMedia();
         })->setName('adminMedia');
     });
     // End media
