@@ -51,11 +51,11 @@ class AdminMediaController extends AdminBaseController
         $this->container->view->addExtension($pagination);
 
         $data['category'] = $args['category'] ?? 'all';
-        $data['categories'] = $mediaCategoryMapper->findCategories() ?? [];
+        $data['assignedCategories'] = $mediaCategoryMapper->findCategories() ?? [];
         $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments() ?? [];
 
         // Identify any media ID's assigned to each category
-        foreach ($data['categories'] as &$cat) {
+        foreach ($data['assignedCategories'] as &$cat) {
             $cat->media = [];
             foreach ($categoryAssignments as $map) {
                 if ($cat->id === $map->category_id) {
@@ -135,7 +135,7 @@ class AdminMediaController extends AdminBaseController
      * Get All Media
      *
      * XHR asynchronous response
-     * Gets all media rendered as HTML from template
+     * Gets filtered media rendered as HTML from template
      * @param  void
      * @return Response
      */
@@ -147,14 +147,11 @@ class AdminMediaController extends AdminBaseController
             // Find media and render template
             $data = $mediaMapper->find();
 
-            $template = <<<HTML
-            {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
-            <div class="card-wrapper">
+            $template = "
+            {% import \"@admin/media/_mediaMacros.html\" as mediaMacro %}
             {% for media in page.media %}
               {{ mediaMacro.card(media) }}
-            {% endfor %}
-            </div>
-HTML;
+            {% endfor %}";
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);

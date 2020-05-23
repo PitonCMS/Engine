@@ -1,0 +1,14 @@
+{# Media List #}
+{% import "@admin/media/_mediaMacros.html" as mediaMacro %}
+
+{# Media List #}
+<div class="media-wrapper">
+
+  <!-- Media File List -->
+  {% for media in page.media %}
+    {{ mediaMacro.editMedia(media, page.assignedCategories) }}
+  {% else %}
+    <strong>No Media Found</strong>
+  {% endfor %}
+
+</div>

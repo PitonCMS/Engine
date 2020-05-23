@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS `media` (
   `updated_by` int NOT NULL DEFAULT 1,
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `optimized_idx` (`optimized`)
+  KEY `optimized_idx` (`optimized`),
+  KEY `caption_idx` (`caption`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category` (

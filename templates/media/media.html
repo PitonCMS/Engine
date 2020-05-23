@@ -1,6 +1,4 @@
 {% extends '@admin/_adminBase.html' %}
-{% import "@admin/media/_mediaMacros.html" as mediaMacro %}
-{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
 {% block htmlTitle 'Media' %}
 
@@ -30,28 +28,9 @@
 {% endblock contentHeader %}
 
 {% block content %}
-{# {{ mediaMacro.upload() }} #}
 
-<!-- Media Filter -->
-<div class="filter-block">
+{{ include("@admin/media/_mediaSearchControls.html") }}
 
-  {{ pitonMacro.filterSearch() }}
-
-  {{ pitonMacro.filterControl('radio', 'Category', getMediaCategories()) }}
-
-</div>
-
-{# Media List #}
-<div class="media-wrapper">
- {% for media in page.media %}
- {{ mediaMacro.editMedia(media, page.categories) }}
- {% else %}
- <strong>No Media Found</strong>
- {% endfor %}
-</div>
-
-<div class="pagination">
- {{ pagination() }}
-</div>
+{{ include("@admin/media/_mediaList.html") }}
 
 {% endblock content %}

@@ -5,7 +5,7 @@
 {#
   Edit Media
 #}
-{% macro editMedia(media, categories) %}
+{% macro editMedia(media, assignedCategories) %}
 {% import _self as mediaMacro %}
 
 <div class="media">
@@ -44,7 +44,7 @@
 
   {# Media Categories #}
   <div class="mediaCategories">
-   {% for c in categories %}
+   {% for c in assignedCategories %}
    {{ mediaMacro.checkbox(c, media.id) }}
    {% endfor %}
   </div>
