@@ -1,39 +1,36 @@
 // --------------------------------------------------------
-// Page Management
+// Page Edit JS
 // --------------------------------------------------------
 
 /**
- *
+ * Remove Element
  * @param {object} element
  */
 const removeElement = function(element) {
     element.remove();
 }
 
-// Listen for page list status filter changes and reload
-const pageListFilter = document.querySelector('.jsPageStatusFilter');
-if (pageListFilter) {
-    // If this page has a status filter, get the container div reference
-    const pageList = document.querySelector('.list-items-wrapper');
-
-    pageListFilter.addEventListener("change", (f) => {
-        let filter  = pageListFilter.options[pageListFilter.selectedIndex].value;
-
-        if (filter !== 'x') {
-            // Remove existing page rows
-            while (pageList.firstChild) {
-                pageList.removeChild(pageList.lastChild);
-            }
-
-            // Get server data
-            getXHRPromise(pitonConfig.routes.adminPageGet, {'pageStatus': filter})
-                .then((data) => {
-                    pageList.insertAdjacentHTML('afterbegin', data);
-                }).catch(function (error) {
-                    console.log('Something went wrong', error);
-                });
-        }
-    });
+/**
+ * Markdown Editor
+ * @param {object} element
+ */
+const mdEditor = function(element) {
+    return new SimpleMDE({
+        element: element,
+        forceSync: true,
+        promptURLs: true,
+        toolbar: [
+          "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
+          "horizontal-rule", "table", "|", "link",
+        //   {
+        //     name: "image",
+        //     // action: getMediaForMDE,
+        //     className: "fa fa-picture-o",
+        //     title: "Media"
+        //   },
+          "guide"
+        ]
+      });
 }
 
 // Toggle block collapse
@@ -81,6 +78,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
                 // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
                 container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
+                mdEditor(container.querySelector(`textarea[data-mde="1"]`));
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
                 // Get new block ID for window scroll
@@ -98,31 +96,29 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     });
 });
 
-// Get Page Edit
+// Get Page Edit block
 const pageEditNode = document.querySelector(`[data-page-edit="1"]`);
 
 // Delete element
 if (pageEditNode) {
     pageEditNode.addEventListener("click", (event) => {
-        if (event.target.dataset.elementDelete) {
+        if (event.target.dataset.deleteElementPrompt) {
             // Confirm delete
-            if (!confirmPrompt("Are you sure you want to permanently delete this element?")) return;
+            if (!confirmPrompt(event.target.dataset.deleteElementPrompt)) return;
 
             // Get element ID and element
             let elementId = parseInt(event.target.dataset.elementId);
             let element = event.target.closest(`[data-element="parent"]`);
 
             if (isNaN(elementId)) {
-                // Element has not been saved, just remove from DOM
+                // Element has not been saved to DB, just remove from DOM
                 removeElement(element);
             } else {
                 // Element has been saved, do a hard delete
+                enableSpinner();
                 let data = {
                     "elementId": elementId
                 }
-
-                // delete element
-                enableSpinner();
 
                 postXHRPromise(pitonConfig.routes.adminPageElementDelete, data)
                     .then(() => {
@@ -143,22 +139,25 @@ if (pageEditNode) {
             let elementParent = event.target.closest(`[data-element="parent"]`);
             let requiredOption = event.target.dataset.elementEnableInput;
 
-            // Hide, enable all special inputs
+            // Get special inputs and set visible or hide class
             elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
-                option.classList.add("d-none");
-                option.classList.remove("d-block");
-            });
-
-            // Enable desired option
-            elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
-                if (option.dataset.elementInputOption === requiredOption) {
+                if (requiredOption === option.dataset.elementInputOption) {
                     option.classList.remove("d-none");
                     option.classList.add("d-block");
+                } else {
+                    option.classList.add("d-none");
+                    option.classList.remove("d-block");
                 }
-            });
 
-            console.log(requiredOption)
+            });
         }
+    });
+}
+
+// Bind Markdown Editor to selected textareas
+if (pageEditNode) {
+    pageEditNode.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
+        mdEditor(editor);
     });
 }
 

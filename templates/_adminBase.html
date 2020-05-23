@@ -2,9 +2,9 @@
 <html lang="en">
 
 {#
-    Piton Administration Base Layout
+    Piton Administration Base Layout Template
 
-    Available blocks in base layout:
+    Available blocks to extend:
     - htmlTitle     HTML <title> text
     - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
     - head          Insert additional <head> HTLM elements
@@ -28,13 +28,10 @@
   {% endif %}
   PitonCMS
  </title>
- {# Cache busting query string for asset files #}
- {% set pitonVersion = (site.settings.production) ? site.settings.engine : "now"|date("U") %}
 
  <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
- <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ pitonVersion }}">
-
+ <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css?v={{ site.settings.assetVersion }}">
 
  {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
  {{ include('@admin/includes/_pitonConfigJs.html') }}
@@ -42,6 +39,9 @@
 </head>
 
 <body>
+  {# Load modal #}
+  {{ include("@admin/includes/_modal.html") }}
+
  <header class="top-header">
   <div class="logo">
    <a href="{{ pathFor('adminHome') }}">Piton<span>CMS</span></a>
@@ -59,6 +59,7 @@
 
   <main class="main-content">
 
+    {# Load any alerts #}
     {{ include("@admin/includes/_alert.html") }}
 
     {# Page level forms must wrap  contentHeader and content blocks #}
@@ -85,7 +86,7 @@
  </div><!-- /.wrapper -->
 
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
- <script src="{{ basePath() }}/admin/js/main.js?v={{ pitonVersion }}"></script>
+ <script src="{{ basePath() }}/admin/js/main.js?v={{ site.settings.assetVersion }}"></script>
 
  {# Optional footer block element #}
  {% block foot '' %}

@@ -15,11 +15,11 @@ const confirmPrompt = function(msg) {
 }
 
 /**
- * Enable Form Controls
+ * Enable Form Control
  *
  * @param {object} control Control button element
  */
-const enableFormControls = function(control) {
+const enableFormControl = function(control) {
     if (control && control.disabled) {
         control.disabled = false;
         control.classList.remove("disabled");
@@ -27,11 +27,11 @@ const enableFormControls = function(control) {
 }
 
 /**
- * Disable Form Controls
+ * Disable Form Control
  *
  * @param {object} control Control button element
  */
-const disableFormControls =  function(control) {
+const disableFormControl =  function(control) {
     if (control && !control.disabled) {
         control.disabled = true;
         control.classList.add("disabled");
@@ -80,16 +80,6 @@ const alertMessage = function(severity, message) {
 const dismissAlertInlineMessage = function(event) {
     if (event.target.dataset.dismiss === "alert") {
         event.target.closest("div.alert").remove();
-    }
-}
-
-/**
- * Before Delete Confirm Prompt
- * @param {event} event
- */
-const deleteConfirmPrompt = function(event) {
-    if (event.target.dataset.deletePrompt) {
-        if (!confirmPrompt(event.target.dataset.deletePrompt)) event.preventDefault();
     }
 }
 
@@ -174,19 +164,23 @@ const XHRPromise = function(method, url, data) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
-            if (xhr.status === 200) {
-                // Successful server response
-                let response = JSON.parse(xhr.responseText);
-                if (response.status === "success") {
-                    // Response content successful
-                    resolve(response.text);
+            try {
+                if (xhr.status === 200) {
+                    // Successful server response
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        // Response content successful
+                        resolve(response.text);
+                    } else {
+                        // Response successful but application failed
+                        reject(alertInlineMessage('danger', 'Error', [response.text]));
+                    }
                 } else {
-                    // Response successful but application failed
+                    // Failed server runtime response
                     reject(alertInlineMessage('danger', 'Error', [response.text]));
                 }
-            } else {
-                // Failed server runtime response
-                reject(alertInlineMessage('danger', 'Error', [response.text]));
+            } catch (error) {
+                reject(alertInlineMessage('danger', 'Error', [error]));
             }
         }
 
@@ -198,38 +192,45 @@ const XHRPromise = function(method, url, data) {
     });
 }
 
-// Disable save controls and listen for form input changes to re-enable controls
+// Form Control Events
 document.querySelectorAll("form").forEach(form => {
-    // Get buttons to disable,there may be more than one save button in a form
+    // Disable form controls and listen for form input changes to re-enable save controls
     let saveButtons = form.querySelectorAll(`[data-form-button="save"]`);
-
     if (saveButtons) {
         saveButtons.forEach(control => {
-            disableFormControls(control);
+            disableFormControl(control);
         });
 
-        // Listen for form changes to enable controls
-        form.querySelectorAll("input, textarea, select").forEach(el => {
-            el.addEventListener("input", () => {
-                saveButtons.forEach(control => {
-                    enableFormControls(control);
-                });
+        // Listen for form changes to reenable controls
+        form.addEventListener("input", () => {
+            saveButtons.forEach(control => {
+                enableFormControl(control);
             });
         });
-    }
-});
 
-// Bind click event to form cancel/discard buttons
-document.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
-    control.addEventListener("click", (e) => {
-        let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
-        if (!userResponse) e.preventDefault();
+    }
+
+    // Confirm discard of changes
+    form.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
+        control.addEventListener("click", (e) => {
+            let userResponse = confirmPrompt("Click Ok to discard your changes, or cancel continue editing?");
+            if (!userResponse) e.preventDefault();
+        });
+    });
+
+    // Confirm delete
+    form.querySelectorAll(`[data-delete-prompt]`).forEach(control => {
+        control.addEventListener("click", (e) => {
+            if (!confirmPrompt(e.target.dataset.deletePrompt)) e.preventDefault();
+        });
     });
 });
 
+
+
 // Binding click events to document
 document.addEventListener("click", dismissAlertInlineMessage);
-document.addEventListener("click", deleteConfirmPrompt);
+
 
 // $('.jsDatePicker').datepicker({
 //     format: pitonConfig.dateFormat,

@@ -58,7 +58,7 @@
     <!-- Element Content Area -->
     <div class="form-block ">
       <label>Element Content</label>
-      <textarea class="form-control jsMDE" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+      <textarea class="form-control" data-mde="1" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
     </div>
 
     <!-- Embedded HTML -->
@@ -85,8 +85,8 @@
       <label>Media</label>
 
       <div class="btn-group-pageEdit">
-        <button class="btn  btn-delete" type="button">Clear Media</button>
-        <button class="btn  btn-save" type="button">Select Media</button>
+        <button class="btn btn-sm btn-delete" type="button">Clear Media</button>
+        <button class="btn btn-sm btn-save" type="button">Select Media</button>
       </div>
 
     </div>
@@ -112,14 +112,14 @@
       <label>Gallery</label>
       <select class="form-control" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
-        {% for c in getMediaCategories() %}
-        <option value="{{ c.id }}" {% if c.id == element.gallery_id %}selected{% endif %}>{{ c.category }}</option>
+        {% for id, cat in getMediaCategories() %}
+        <option value="{{ id }}" {% if id == element.gallery_id %}selected{% endif %}>{{ cat }}</option>
         {% endfor %}
       </select>
     </div>
 
-  <button class="btn btn-delete  btn-block" type="button"
-    data-element-delete="1"
+  <button class="btn btn-delete btn-sm btn-block" type="button"
+    data-delete-element-prompt="Are you sure you want to permanently delete this element?"
     data-element-id="{{ element.id }}"
     title="Delete element">Delete Element</button>
 

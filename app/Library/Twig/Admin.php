@@ -181,19 +181,23 @@ class Admin extends Base
     /**
      * Get Media Categories
      *
-     * Get all media category galleries
+     * Get all media categories
      * @param  void
      * @return array|null
      */
     public function getMediaCategories(): ?array
     {
-        if (isset($this->cache['galleries'])) {
-            return $this->cache['galleries'];
+        if (isset($this->cache['mediaCategories'])) {
+            return $this->cache['mediaCategories'];
         }
 
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        return $this->cache['galleries'] = $mediaCategoryMapper->findCategories();
+        // Get all media categories and create key: value pair array
+        $categories = $mediaCategoryMapper->findCategories() ?? [];
+        $categories = array_combine(array_column($categories, 'id'), array_column($categories, 'category'));
+
+        return $this->cache['mediaCategories'] = $categories;
     }
 
     /**
