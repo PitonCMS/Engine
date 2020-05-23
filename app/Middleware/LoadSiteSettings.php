@@ -106,7 +106,8 @@ class LoadSiteSettings
         // Create new multi-dimensional array
         $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
 
-        // Load some config file settings into settings array
+        // Load additional settings from server config file into settings array
         $this->settings['production'] = $this->appSettings['site']['production'];
+        $this->settings['assetVersion'] = ($this->settings['production']) ? $this->settings['engine'] : date('U');
     }
 }

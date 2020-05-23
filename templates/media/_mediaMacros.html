@@ -3,18 +3,15 @@
 #}
 
 {#
-  Media Card
+  Edit Media
 #}
-{% macro card(media, categories) %}
+{% macro editMedia(media, categories) %}
 {% import _self as mediaMacro %}
 
-<div class="media jsMediaCard">
- {# TODO: This <form> should really be inside the else statement but breaks layout #}
+<div class="media">
  <form class="mediaForm" action="{{ pathFor('adminMediaSave') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="media_id" value="{{ media.id }}">
-
-
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
   <div class="mediaPopup">
@@ -35,12 +32,12 @@
      placeholder="No caption">
    </div>
 
-   {# Featured Media? #}
+   {# Featured Media #}
    <div class="mediaFeatured">
     <div class="form-check">
      <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
       {{ checked(media.feature) }}>
-     <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
+     <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
     </div>
    </div>
   </div>
@@ -58,12 +55,10 @@
    <button class="btn btn-sm btn-delete" type="submit" formaction="{{ pathFor('adminMediaDelete') }}"
    value="delete">Delete</button>
    <button class="btn btn-sm btn-save" type="submit" value="save">Save</button>
-
-
   </div>
  </form>
 </div>
-{% endmacro card %}
+{% endmacro editMedia %}
 
 {#
   Media Category Checkboxes
@@ -79,6 +74,34 @@
 </div>
 {% endif %}
 {% endmacro checkbox %}
+
+{#
+  Media List Item
+#}
+{% macro mediaListItem(media) %}
+
+<div class="media">
+
+   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
+   <div class="mediaPopup">
+    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
+     data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
+
+    <span class="mediaPopupImg">
+     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}"
+      data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
+    </span>
+   </div>
+
+   <div class="mediaBlock">
+    <div class="mediaCaption">
+      <p>{{ media.caption }}</p>
+    </div>
+   </div>
+
+ </div><!-- /.media -->
+
+{% endmacro mediaListItem %}
 
 {#
     Media Upload Modal

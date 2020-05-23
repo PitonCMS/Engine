@@ -10,7 +10,10 @@ const removeElement = function(element) {
     element.remove();
 }
 
-
+/**
+ * Markdown Editor
+ * @param {object} element
+ */
 const mdEditor = function(element) {
     return new SimpleMDE({
         element: element,
