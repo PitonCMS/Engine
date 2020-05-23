@@ -1,7 +1,6 @@
 // CARDS
 .content-cards {
 
-
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
  gap: 1em;
@@ -15,12 +14,12 @@
 
 .content-card {
  @include padding(1em);
- background: $bg-light;
+ background: $bg-white;
  border-radius: $border-radius;
- box-shadow: $box-shadow-2;
+ box-shadow: $box-shadow-1;
 
  &:hover {
-  background: $bg-blue;
+  background: $bg-grey;
  }
 &__header{
  display: grid;
@@ -43,11 +42,12 @@
   @include margin(0);
   grid-column: 2 / -1;
   font-size: 0.75rem;
-  color: rgba($clr-text, 0.75);
+  color: rgba($text-dark, 0.75);
  }
 
  .card-icon {
-  color: rgba($clr-text, 0.5);
+  @include padding(.25em null null null);
+  color: rgba($text-dark, 0.35);
   height: 100%;
   width: 100%;
  }

@@ -2,6 +2,12 @@
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
+{#
+  Show All Media
+
+  Shows all media in a list
+#}
+
 {% block htmlTitle 'Media' %}
 
 {% block contentHeader %}
@@ -9,14 +15,13 @@
  <!-- Bread Crumbs -->
  <div class="breadcrumb"></div>
  <!-- Section Title -->
- <h3 class="section-title">All Media</h3>
+ <h1 class="section-title">All Media</h1>
  <!-- Controls -->
- <div class="btn-group">
   <div class="btn-dropdown-block">
-   <div class="btn btn-add btn-sm">
-    <span>Add</span> <span><i class="fas fa-chevron-down"></i></span>
+   <div class="btn btn-dropdown">
+    <span>Add Media</span> <span><i class="fas fa-chevron-down"></i></span>
    </div>
-   <div class="form-group-block-add">
+   <div class="form-group-block">
     <div class="form-group">
      <a href="#">Media</a>
     </div>
@@ -25,7 +30,7 @@
     </div>
    </div>
   </div>
- </div>
+
 </div>
 {% endblock contentHeader %}
 

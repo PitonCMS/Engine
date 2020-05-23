@@ -7,11 +7,12 @@
  gap: 2rem;
 
  .form-group {
-  @include padding(1rem);
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
+  background: purple;
+  // @include padding(1rem);
+  // display: flex;
+  // flex-flow: column nowrap;
+  // justify-content: flex-start;
+  // align-items: flex-start;
   // box-shadow: $box-shadow-1;
 
   &__title-wrapper {
@@ -24,8 +25,8 @@
    }
 
    .badge {
-    // flex: 0;
-    // padding: 0.125em 0.25em;
+    flex: 0;
+    padding: 0.125em 0.25em;
    }
   }
  }
@@ -35,15 +36,17 @@
 .user-list-item,
 .user-list-item-header {
  @include padding(.5em);
+ background: $bg-white;
  display: grid;
  grid-template-columns: repeat(2, 1fr) repeat(2, .5fr);
  gap: 1em;
  justify-content: center;
  align-items: center;
- border-top: solid 1px $clr-border;
+ border-top: solid 1px $border;
+
 
  &:hover {
-  background: $bg-blue; 
+  background: $bg-grey; 
  }
 
  &__heading {
@@ -52,14 +55,17 @@
  }
 
  &:last-child {
-  border-bottom: solid 1px $clr-border;
+  border-bottom: solid 1px $border;
  }
 
 }
 .user-list-item-header {
- height: 40px;
+ height: 2.2rem;
+ font-weight: bold;
+ border: none;
  &:hover{
   background: $bg-light;
+
  }
 }
 
