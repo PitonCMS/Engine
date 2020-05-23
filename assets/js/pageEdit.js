@@ -14,7 +14,7 @@ const removeElement = function(element) {
  * Markdown Editor
  * @param {object} element
  */
-const mdEditor = function(element) {
+const initMarkdownEditor = function(element) {
     return new SimpleMDE({
         element: element,
         forceSync: true,
@@ -78,8 +78,11 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
                 // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
                 container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
-                mdEditor(container.querySelector(`textarea[data-mde="1"]`));
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
+
+                // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
+                let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-mde="1"]`);
+                initMarkdownEditor(newEditor);
 
                 // Get new block ID for window scroll
                 let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
@@ -154,10 +157,10 @@ if (pageEditNode) {
     });
 }
 
-// Bind Markdown Editor to selected textareas
+// Bind Markdown Editor to selected textareas on page load
 if (pageEditNode) {
     pageEditNode.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
-        mdEditor(editor);
+        initMarkdownEditor(editor);
     });
 }
 

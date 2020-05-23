@@ -64,11 +64,11 @@
 }
 </style>
 
-{# Modal background #}
+{# Modal background loads first #}
 <div id="modal" class="modal d-none">
 
-    {# Modal content #}
-    <div class="modal-content">
+    {# Modal content loads second #}
+    <div class="modal-content d-none">
         <div class="modal-header">
           <span class="close">&times;</span>
           {# Heading gets inserted here #}
@@ -78,10 +78,10 @@
         {# Content gets inserted here #}
         <div class="modal-body"></div>
 
-        {# By default not showing modal footer, but can be enabled in JS by removing d-none #}
+        {# By default not showing modal footer buttons unless needed #}
         <div class="modal-footer d-none">
-            <a class="btn btn-cancel btn-sm" href="#">Dismiss</a>
-            <button class="btn btn-save btn-sm" type="button" name="modal-save">Save</button>
+            <a class="btn btn-cancel" href="#">Dismiss</a>
+            <button class="btn btn-save" type="button" name="modal-save">Save</button>
         </div>
       </div>
 
