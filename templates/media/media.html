@@ -1,5 +1,6 @@
 {% extends '@admin/_adminBase.html' %}
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
 {% block htmlTitle 'Media' %}
 
@@ -33,36 +34,11 @@
 
 <!-- Media Filter -->
 <div class="filter-block">
- <div class="input-block">
-  <div class="input-block__icon">
-   <i class="fas fa-search"></i>
-  </div>
-  <div class="input-block__input">
-   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media"
-    autocomplete="false">
-  </div>
- </div>
 
- {# TODO Connect dropdown filter to available gallery/categories #}
+  {{ pitonMacro.filterSearch() }}
 
- <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown"><span>By Category</span> <span><i class="fas fa-chevron-down"></i></span>
-  </div>
-  <div class="form-group-block">
-   <div class="form-group check-block-item">
-    <input type="radio" class="" id="everything" name="category" value="everything">
-    <label for="everything">Everything</label>
-   </div>
-   <div class="form-group check-block-item">
-    <input type="radio" class="" id="holiday" name="category" value="holiday">
-    <label for="holiday">Holiday</label>
-   </div>
-   <div class="form-group check-block-item">
-    <input type="radio" class="" id="travel" name="category" value="travel">
-    <label for="travel">Travel</label>
-   </div>
-  </div>
- </div>
+  {{ pitonMacro.filterControl('radio', 'Category', getMediaCategories()) }}
+
 </div>
 
 {# Media List #}

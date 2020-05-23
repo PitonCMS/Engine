@@ -9,19 +9,67 @@
     @param array   messages Message list
 #}
 {% macro alert(severity, heading, message) %}
-    {% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
+{% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
 
-    <div class="alert {{ severityClass }}" role="alert">
+<div class="alert {{ severityClass }}" role="alert">
     <h4 class="alert__title">{{ heading }}</h4>
     <div class="alert__dismiss">
         <button type="button" class="btn btn-save btn-sm" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            <span aria-hidden="true"><i class="fas fa-times"></i></span>
         </button>
     </div>
 
     <div class="alert__message">
         {{ message|join('<br>') }}
     </div>
-    </div>
+</div>
 
 {% endmacro alert %}
+
+{#
+    Filter Search
+
+    Filter search input
+#}
+{% macro filterSearch() %}
+
+<div class="input-block">
+    <div class="input-block__icon">
+        <i class="fas fa-search"></i>
+    </div>
+    <div class="input-block__input">
+        <input type="search" name="search" class="input-block__search-input" placeholder="Search..."
+            autocomplete="false">
+    </div>
+</div>
+
+{% endmacro filterSearch %}
+
+{#
+    Filter Control
+
+    Create filter control for either radio or checkbox
+    @param string type  Either 'radio' or 'checkbox'
+    @param string label Display label on control
+    @param array  options List of key: value options
+#}
+{% macro filterControl(type, label, options) %}
+
+<div class="btn-dropdown-block">
+    <div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
+    </div>
+    <div class="form-group-block">
+
+        {% for key, value in options %}
+        {% set forKey = uniqueKey() %}
+        <div class="form-group check-block-item">
+            <input type="{{ type }}" id="{{ forKey }}" name="{{ key }}" value="{{ value }}">
+            <label for="{{ forKey }}">{{ value|capitalize }}</label>
+        </div>
+        {% endfor %}
+
+    </div>
+    {# TODO Add "Clear" and "Apply" buttons at bottom #}
+</div>
+
+{% endmacro filterControl %}
