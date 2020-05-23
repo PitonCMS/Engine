@@ -1,5 +1,5 @@
+// Nav Sidebar
 
-// NAV
 .sidebar {
  .side-nav {
   height: 100%;
@@ -7,7 +7,6 @@
   flex-flow: column nowrap;
 
   &__link {
-   height: $nav-height;
    @include padding(null .5em);
 
    display: grid;
@@ -16,12 +15,14 @@
    column-gap: .25em;
 
    &:hover {
-    background-color: $bg-blue !important;
+    background: $bg-grey;
+    color: $text-accent;
    }
 
    a {
-    @include padding(.5em);
-    line-height: 1.7rem;
+    height: $nav-height;
+    display: flex;
+    align-items: center;
     opacity: 0;
     transition: opacity 250ms ease-in-out 125ms;
 
@@ -30,31 +31,23 @@
     }
 
     &:hover {
-     color: $clr-accent;
+     color: $text-accent;
     }
    }
-  }
 
-  .active {
-   background-color: rgba($bg-blue, .5);
-
-   &:hover {
-    cursor: default;
-    background-color: rgba($bg-blue, .5) !important;
-
+   .active {
     a {
-     color: $clr-text;
+     background: blue !important;
     }
+
    }
   }
  }
  .fas {
-  color: rgba($clr-text, .35);
-  @include margin(null 1rem null .25em);
-  font-size: 1rem;
+  color: rgba($text-dark, .35);
+  font-size: .9rem;
  }
 }
-
 .nav-toggle:checked~.sidebar {
  display: block;
  transform: scale(1, 1);

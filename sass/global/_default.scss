@@ -13,15 +13,17 @@ html,
 body {
  width: 100%;
  height: 100%;
- background: $bg-accent;
+ background: $bg-light;
 }
 
 body {
- font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+ /* See typography.scss for font family */
  line-height: 1.6;
-
 }
-
+img {
+ width: 100%;
+ display: block;
+}
 /* Html Element Styles */
 
 h1,
@@ -30,36 +32,30 @@ h3,
 h4,
 h5,
 h6 {
- color: $clr-h;
- line-height: 1;
- font-weight: 600;
+ color: $clr-accent;
+ line-height: 1.1;
+ font-weight: 700;
 }
 
 a {
  text-decoration: none;
- color: $clr-text;
+ color: $text-dark;
 
  &:focus {
   outline: none;
  }
 
  &:hover {
-  color: rgba($clr-text, .75);
+  color: rgba($text-dark, .75);
  }
 }
 
 ::selection {
  background-color: $clr-accent;
- color: $txt-light;
+ color: $text-light;
 }
 
 /* Utility Classes */
-.nav-divider {
- width: 100%;
- height: 1px;
- background: rgba($clr-text, .25);
- @include margin(.25em null);
-}
 
 .span {
  grid-column: 1 / -1;
@@ -70,42 +66,43 @@ a {
  // @include margin(.5em);
  width: 100%;
  height: 50%;
-background: $bg-blue;
  border-radius: $border-radius;
 
  display: flex;
  justify-content: center;
  align-items: center;
- &-notify{
-  background: $badge-notify;
-  color: $txt-light;
+
+ &-notify {
+  background: $clr-notify;
+  color: $text-light;
  }
+
  &-success {
-  background: $badge-success;
-  color: $txt-light;
+  background: $clr-success;
+  color: $text-light;
  }
+
  &-danger {
-  background: $badge-danger;
-  color: $txt-light;
+  background: $clr-danger;
+  color: $text-light;
  }
 }
+
 .published {
- color: green;
+ color: $clr-success;
  text-transform: capitalize;
- font-weight: bold;
+
 }
 
 .draft {
- color: grey;
+ color:  $clr-draft;
  text-transform: capitalize;
- font-weight: bold;
- font-size: 1rem !important;
 }
 
 .pending {
- color: gold;
+ color: $clr-warning;
  text-transform: capitalize;
- font-weight: bold;
+
 }
 
 .d-none {
@@ -117,17 +114,17 @@ background: $bg-blue;
 }
 
 .text-required {
- color: $btn-red;
+ color: $clr-danger;
 }
 
 .text-danger {
- color: $btn-red !important;
+ color: $clr-danger !important;
  font-weight: bold;
 
 }
 
 .text-info {
- color: $btn-green;
+ color: $clr-notify;
  font-weight: bold;
 }
 
@@ -135,7 +132,7 @@ background: $bg-blue;
  @include padding(1.5rem);
  @include margin(calc(#{$nav-height * 2}) 5vw 0);
  border-radius: $border-radius;
- box-shadow: $box-shadow-2;
+ box-shadow: $box-shadow-1;
  background: $bg-light !important;
 
  display: grid;
@@ -151,20 +148,19 @@ background: $bg-blue;
  &__title {
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 2rem;
  }
 
  &-danger {
 
   h4 {
-   color: $btn-red;
+   color: $clr-danger;
   }
  }
 
  &-info {
 
   h4 {
-   color: $btn-green;
+   color: $clr-success;
   }
  }
 }
@@ -184,12 +180,18 @@ background: $bg-blue;
 }
 
 .collapsed {
-display: none;
+ display: none;
 
-animation: collapse 250ms ease-in-out forwards;
+ animation: collapse 250ms ease-in-out forwards;
 
 }
+
 @keyframes collapse {
- 0%   { opacity: 0; }
- 100% { opacity: .25; }
+ 0% {
+  opacity: 0;
+ }
+
+ 100% {
+  opacity: .25;
+ }
 }

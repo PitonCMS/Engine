@@ -6,7 +6,8 @@
  flex-flow: row nowrap;
  justify-content: space-between;
  align-items: center;
- border-bottom: solid 1px $clr-border;
+ border-bottom: solid 1px $border;
+
 
  .media {
   max-height: 88px;
@@ -16,16 +17,16 @@
 }
 
 .list-item-page {
- background: $bg-light;
+ background: $bg-white;
+ border-bottom: solid 1px $border;
+
  display: flex;
  flex-flow: row nowrap;
  justify-content: space-between;
  align-items: center;
 
- border-bottom: solid 1px $clr-border;
-
  &:hover {
-  background: $bg-blue;
+  background: $bg-grey;
  }
 
  *+* {
@@ -35,12 +36,12 @@
 
  .media {
   display: flex;
-  // justify-content: stretch;
   align-items: center;
-  
-  img{
-   height: 88px;
-   width: 88px;
+
+  img {
+   @include margin(.5em null);
+   height: 60px;
+   width: 80px;
    object-fit: cover;
   }
  }
@@ -77,15 +78,16 @@
  display: flex;
  justify-content: space-between;
  align-items: center;
-h4{
- flex: 1;
- flex-basis: 150px;
-@include margin(0);
-}
+
+ h4 {
+  flex: 1;
+  flex-basis: 150px;
+  @include margin(0);
+ }
+
  input {
   background: $bg-accent;
- 
-  
+
  }
 }
 
@@ -97,7 +99,7 @@ h4{
  cursor: pointer;
 
  &-header {
-  background: $bg-blue;
+   background: $bg-grey;
   @include padding(.5em);
   margin: 0 !important;
   display: flex;
@@ -107,7 +109,7 @@ h4{
 
   position: sticky;
   top: calc(#{$nav-height * 2});
-  z-index: 100;
+  z-index: 50;
 
   h4 {
    margin: 0;
@@ -116,14 +118,14 @@ h4{
 }
 
 .page-elementBlock {
- background: $bg-light;
- // @include margin(null null 2em null);
+  background: $bg-light;
+ @include margin(null null .5em null);
  @include padding(.5em .25em);
  border-radius: $border-radius;
 }
 
 .form-block__elementWrapper {
- background: $bg-light;
+  background: $bg-white;
 
- // padding: 1em;
+ padding: 1em;
 }
