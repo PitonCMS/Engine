@@ -12,24 +12,24 @@
 {% block contentHeader %}
 <div class="content-header-inner">
  <div class="breadcrumb"></div>
- <h3 class="section-title">Content</h3>
+ <h1 class="section-title">Content</h1>
 
  <div class="btn-dropdown-block">
-  <div class="btn btn-add btn-sm">
-    <span>Add Page</span> <span><i class="fas fa-chevron-down"></i></span>
+  <div class="btn btn-dropdown">
+    <span>Add Page</span> <i class="fas fa-chevron-down"></i>
   </div>
-  <div class="form-group-block-add">
+  <div class="form-group-block">
    {# List all templates with "templateType": "page" #}
    {% for pt in getPageTemplates() %}
    <div class="form-group">
-    <label><a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a></label>
+    <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
    </div>
    {% endfor %}
 
    {# List all saved collection groups #}
    {% for ct in getCollections() %}
    <div class="form-group">
-    <label><a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a></label>
+    <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
    </div>
    {% endfor %}
   </div>
