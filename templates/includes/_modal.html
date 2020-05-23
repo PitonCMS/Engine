@@ -44,10 +44,10 @@
   /* color: white; */
 }
 
-@keyframes animatetop {
+/* @keyframes animatetop {
   from {top: -300px; opacity: 0}
   to {top: 0; opacity: 1}
-}
+} */
 
 .close {
   color: #aaa;
@@ -71,15 +71,17 @@
     <div class="modal-content">
         <div class="modal-header">
           <span class="close">&times;</span>
-          <h2>Default Header</h2>
+          {# Heading gets inserted here #}
+          <h2></h2>
         </div>
-        <div class="modal-body">
-          <p>Default Content</p>
-        </div>
+
+        {# Content gets inserted here #}
+        <div class="modal-body"></div>
+
         {# By default not showing modal footer, but can be enabled in JS by removing d-none #}
         <div class="modal-footer d-none">
             <a class="btn btn-cancel btn-sm" href="#">Dismiss</a>
-            <button class="btn btn-save btn-sm" type="button">Save</button>
+            <button class="btn btn-save btn-sm" type="button" name="modal-save">Save</button>
         </div>
       </div>
 
