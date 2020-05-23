@@ -744,8 +744,18 @@ a:hover {
 .sidebar .side-nav__link a:hover {
   color: #eb7119;
 }
-.sidebar .side-nav__link .active a {
-  background: blue !important;
+.sidebar .active {
+  background: #c1c9d2 !important;
+}
+.sidebar .active:hover {
+  background: inherit;
+}
+.sidebar .active a {
+  color: #212f78;
+}
+.sidebar .active a:hover {
+  color: #212f78;
+  cursor: default;
 }
 .sidebar .fas {
   color: rgba(54, 54, 54, 0.35);

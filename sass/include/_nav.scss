@@ -35,19 +35,33 @@
     }
    }
 
-   .active {
-    a {
-     background: blue !important;
-    }
 
+  }
+
+ }
+
+ .active {
+  background: darken($bg-grey, 10%) !important;
+  &:hover{
+   background: inherit;
+  }
+
+  a {
+   color: $text-secondary;
+
+   &:hover {
+    color: $text-secondary;
+    cursor: default;
    }
   }
  }
+
  .fas {
   color: rgba($text-dark, .35);
   font-size: .9rem;
  }
 }
+
 .nav-toggle:checked~.sidebar {
  display: block;
  transform: scale(1, 1);
