@@ -8,21 +8,20 @@
 
  .media {
   @include padding(.5em);
-  background: $bg-light;
+  background: $bg-white;
   border-radius: $border-radius;
-  // box-shadow: $box-shadow-2;
+  box-shadow: $box-shadow-1;
  }
 
- .mediaForm {
+ .mediaForm {;
   display: grid;
   grid-template-columns: auto repeat(2, 1fr) auto;
   gap: 1rem;
-  justify-content: center;
  }
 
  .mediaImageThumb {
   width: 80px;
-  height: 80px;
+  height: 60px;
   object-fit: cover;
   border-radius: $border-radius;
   align-self: center;
@@ -43,12 +42,13 @@
   border-radius: $border-radius;
   @include margin(0);
   @include padding(0);
-  // box-shadow: $box-shadow-2;
+  box-shadow: $box-shadow-1;
   object-fit: cover;
 
   /* Position the mediaPopup */
   position: absolute;
   z-index: 100;
+  top: 0;
   left: 110%;
 
   /* Set transition */
@@ -73,7 +73,7 @@
   input {
    @include margin(0);
    background: $bg-light;
-   border: solid 2px $bg-blue;
+   border: solid 2px $border;
    border-radius: $border-radius;
   }
  }
@@ -100,13 +100,19 @@
  }
 
  .mediaControls {
-  display: flex;
-  flex-flow: column wrap;
-  border-left: solid 1px $bg-blue;
-  @include padding(.25em);
+display: grid;
+grid-template-columns: 1fr;
+gap: .5em;
+  // display: flex;
+  // flex-flow: column wrap;
+  // border-left: solid 1px $border;
+  // @include padding(.25em);
 
+.btn{
+ margin-left: 1px !important;
+}
   *+* {
-   @include margin(.25em null null null);
+   // @include margin(.25em null null null);
   }
  }
 }

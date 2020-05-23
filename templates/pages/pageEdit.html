@@ -21,39 +21,41 @@
     <!-- Breadcrumbs -->
     <div class="breadcrumb"></div>
     <!-- Section Title -->
-    <h3 class="section-title">{{ page.title }}</h3>
-
-    <!-- Control Buttons -->
-    {# Add New Element Button  #}
-    <div class="btn-dropdown-block">
-      <div class="btn btn-add btn-sm">
-        <span>Add Element</span> <span><i class="fas fa-chevron-down"></i></span>
-      </div>
-
-      <div class="form-group-block-add">
-        {# Loop through all blocks to create add element link #}
-        {% for blockDefinition in page.definition.blocks %}
-          {# Check if the block has the max elements allowed #}
-          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-          <div class="form-group">
-            <label>
-              <a name="#" class="{% if maxElements %}disabled{% endif %}"
-              data-element="add"
-              data-block-key="{{ blockDefinition.key }}"
-              data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
-              data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
-              >{{ blockDefinition.name }}</a>
-            </label>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
+    <h1 class="section-title">{{ page.title }}</h1>
 
     <div class="btn-group">
-      <a class="btn btn-cancel btn-sm" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
-      <button class="btn btn-publish btn-sm" data-form-button="save" type="submit" name="publish_now">Publish Now</button>
-      <button class="btn btn-save btn-sm" data-form-button="save" type="submit">Save</button>
+      <a class="btn btn-cancel " data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
+      <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now">Publish Now</button>
+      <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
+
     </div>
+             <!-- Control Buttons -->
+    {# Add New Element Button  #}
+    <div class="btn-dropdown-block" >
+     <div class="btn btn-dropdown">
+       <span>Add Element</span> 
+       <i class="fas fa-chevron-down"></i>
+     </div>
+
+     <div class="form-group-block">
+       {# Loop through all blocks to create add element link #}
+       {% for blockDefinition in page.definition.blocks %}
+         {# Check if the block has the max elements allowed #}
+         {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+         <div class="form-group">
+         
+             <a name="#" class="{% if maxElements %}disabled{% endif %} form-group-link"
+             data-element="add"
+             data-block-key="{{ blockDefinition.key }}"
+             data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+             data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+             >{{ blockDefinition.name }}</a>
+      
+         </div>
+       {% endfor %}
+     </div>
+
+   </div>
   </div>
 {% endblock contentHeader %}
 
@@ -185,8 +187,8 @@
         <label>Featured Page Image</label>
 
         <div class="btn-group-pageEdit">
-          <button class="btn btn-sm btn-save jsSelectMediaFile" type="button">Select Media</button>&nbsp;
-          <button class="btn btn-sm btn-delete jsMediaClear" type="button">Clear Media</button>
+          <button class="btn  btn-save jsSelectMediaFile" type="button">Select Media</button>
+          <button class="btn  btn-delete jsMediaClear" type="button">Clear Media</button>
         </div>
       </div>
       {% endif %}

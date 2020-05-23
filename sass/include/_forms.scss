@@ -11,14 +11,14 @@ textarea {
  width: 100%;
  background: $bg-light;
  border-radius: $border-radius;
- border: 0.1rem solid lightgrey;
+ border: 0.1rem solid $border;
  font-family: inherit;
  font-size: inherit;
  font-weight: inherit;
  -webkit-appearance: none;
  appearance: none;
 }
- 
+
 input:focus {
  outline: none;
 }
@@ -31,14 +31,13 @@ input:-webkit-autofill:active {
  -webkit-box-shadow: 0 0 0 30px white inset !important;
  box-shadow: 0 0 0 30px white inset !important;
  outline: none;
-}  
+}
+
 // Select Input Fields
-
 select {
-
  /* styling */
  background-color: $bg-accent;
- border: thin solid $bg-blue;
+ border: thin solid $border;
  border-radius: $border-radius;
  display: inline-block;
  font: inherit;
@@ -46,8 +45,8 @@ select {
  @include padding(.5em 3.5em .5em 1em);
 
  /* reset */
-  
-@include margin(0);
+
+ @include margin(0);
  -webkit-appearance: none;
  -moz-appearance: none;
 }
@@ -57,35 +56,35 @@ select {
 
 select.minimal {
  background-image:
-   linear-gradient(45deg, transparent 50%, gray 50%),
-   linear-gradient(135deg, gray 50%, transparent 50%),
-   linear-gradient(to right, #ccc, #ccc);
+  linear-gradient(45deg, transparent 50%, gray 50%),
+  linear-gradient(135deg, gray 50%, transparent 50%),
+  linear-gradient(to right, #ccc, #ccc);
  background-position:
-   calc(100% - 20px) calc(1em + 2px),
-   calc(100% - 15px) calc(1em + 2px),
-   calc(100% - 2.5em) 0.5em;
+  calc(100% - 20px) calc(1em + 2px),
+  calc(100% - 15px) calc(1em + 2px),
+  calc(100% - 2.5em) 0.5em;
  background-size:
-   5px 5px,
-   5px 5px,
-   1px 1.5em;
+  5px 5px,
+  5px 5px,
+  1px 1.5em;
  background-repeat: no-repeat;
 }
 
 select.minimal:focus {
  background-image:
-   linear-gradient(45deg, green 50%, transparent 50%),
-   linear-gradient(135deg, transparent 50%, green 50%),
-   linear-gradient(to right, #ccc, #ccc);
+  linear-gradient(45deg, green 50%, transparent 50%),
+  linear-gradient(135deg, transparent 50%, green 50%),
+  linear-gradient(to right, #ccc, #ccc);
  background-position:
-   calc(100% - 15px) 1em,
-   calc(100% - 20px) 1em,
-   calc(100% - 2.5em) 0.5em;
+  calc(100% - 15px) 1em,
+  calc(100% - 20px) 1em,
+  calc(100% - 2.5em) 0.5em;
  background-size:
-   5px 5px,
-   5px 5px,
-   1px 1.5em;
+  5px 5px,
+  5px 5px,
+  1px 1.5em;
  background-repeat: no-repeat;
- border-color: $bg-dark; 
+ border-color: $border;
  outline: 0;
 }
 
@@ -107,112 +106,59 @@ select:-moz-focusring {
  left: -999px !important;
 }
 
-// Dropdown Hover Buttons
-.form-group-block {
- width: 100%;
- background: $bg-accent;
- box-shadow: $box-shadow-2;
-
- transform-origin: top;
- transform: scale(1, 0);
- transition: transform 250ms ease-in-out 200ms;
- z-index: 100;
-
- position: absolute;
- top: 100%;
- right: 0;
-}
-
-.form-group-block-add {
- width: 160px;
- background: $bg-accent;
- // box-shadow: $box-shadow-2;
- text-align: right;
-
- transform-origin: top;
- transform: scale(1, 0);
- transition: transform 250ms ease-in-out 200ms;
- z-index: 100;
-
- position: absolute;
- top: 100%;
- right: 0;
-}
-
-.btn-dropdown-block:hover>.form-group-block,
-.btn-dropdown-block:hover>.form-group-block-add {
- cursor: pointer;
- transform: scale(1);
-}
-
 label {
  margin: 0;
  padding: 0;
 }
 
-.form-group {
- padding: 1em;
- width: 100%;
-
- &:hover {
-  background: $bg-blue;
- }
-}
-
-.form-group label {
- width: 100%;
- height: 100%;
- font-size: 0.875rem;
-}
-
-.form-group label:hover,
-.form-group:hover {
- cursor: pointer;
-}
-
 /* Form blocks style */
 
- .form-block {
- background: $bg-light;
+.form-block {
+ // background: $bg-light;
  border-radius: $border-radius;
- border: solid 1px rgba($border-grey, .25);
- color: $txt-dark;
+ border: solid 1px $border;
+ color: $text-dark;
  @include padding(1em);
  @include margin(null null 1em null);
 
  input,
  textarea {
-  background: $bg-accent !important;
+  background: $bg-light !important;
  }
 
  &__title {
-  background: $bg-blue;
+  background: $bg-grey;
   display: grid;
   grid-template-columns: min-content 1fr;
   gap: 1em;
+
   &:hover {
    cursor: pointer;
-   background: darken($bg-blue, 10%);
+   background: darken($bg-grey, 10%);
   }
  }
 }
+
 .formBlock {
- background: $bg-light;
+ background: $bg-white;
  border-radius: $border-radius;
- border: solid 1px rgba($border-grey, .25);
- box-shadow: $box-shadow-2;
- color: $txt-dark;
+ border: solid 1px $border;
+ box-shadow: $box-shadow-1;
+ color: $text-dark;
  @include padding(1em);
  @include margin(null null 1em null);
  @include padding(1em);
  display: grid;
  grid-template-columns: minmax(85%, 50vw) max-content;
  gap: 1em;
- .form-text, .form-control {
- grid-column: 1 / -2 !important;
- 
- }
+
+ .form-text,
  .form-control {
-  background: $bg-accent; 
+  grid-column: 1 / -2 !important;
+
+ }
+
+ .form-control {
+  background: $bg-light;
  }
 }

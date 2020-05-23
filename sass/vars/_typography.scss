@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;900&family=Scada:wght@400;700&display=swap');
+
+body {
+ font-family: 'Roboto', sans-serif;
+}
+h1, h2, h3, h4,h5,h6 {
+ font-family: 'Scada', sans-serif;
+}
+
 
 // These values are the minimum and maximum viewport sizes to apply the font scaling
 $min_width: 768;
@@ -20,4 +29,27 @@ $max_font: 16;
    :root { 
      font-size: #{$max_font}px;
    }
+}
+
+// responsive headings
+
+h1 {
+ font-size: 2.8rem;
+
+}
+h2 {
+ font-size: 2.4rem;
+
+}
+h3 {
+ font-size: 2rem;
+
+}
+h4 {
+ font-size: 1.6rem;
+
+}
+h5 {
+ font-size: 1.2rem;
+
 }

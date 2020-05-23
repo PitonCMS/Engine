@@ -18,9 +18,11 @@
   top: 0;
   left: 1rem;
   z-index: 999;
+
   @media screen and (min-width: $breakpoint) {
    display: none;
    z-index: 0;
+
  }
  span,
  span::before,
@@ -28,7 +30,8 @@
    width: 2rem;
    height: 4px;
    border-radius: $border-radius;
-   background: $nav-font-color;
+   background: $text-accent;
+
  }
 
  span::before,
