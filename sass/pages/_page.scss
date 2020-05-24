@@ -132,10 +132,18 @@
  padding: 1em;
 }
 .new-element{
- background: pink !important;
- transform: translateY(300px);
- z-index: 2000;
- &::before{
 
- }
+ animation: fadeBackground 1.5s ease-in-out forwards;
+}
+@keyframes fadeBackground {
+0% {
+ opacity: 0;
+
+ background: rgba($bg-accent, .5);
+}
+
+100% {
+ opacity: 1;
+ background: $bg-light;
+}
 }

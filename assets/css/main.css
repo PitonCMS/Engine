@@ -243,6 +243,10 @@ select:focus {
   text-decoration: none;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   width: 100%;
@@ -1607,9 +1611,18 @@ label {
 }
 
 .new-element {
-  background: pink !important;
-  transform: translateY(300px);
-  z-index: 2000;
+  animation: fadeBackground 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeBackground {
+  0% {
+    opacity: 0;
+    background: rgba(55, 130, 195, 0.5);
+  }
+  100% {
+    opacity: 1;
+    background: #f3f5f7;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */
