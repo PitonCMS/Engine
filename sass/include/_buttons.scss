@@ -1,48 +1,23 @@
-/**
- * 1. Change the font styles in all browsers.
- * 2. Remove the margin in Firefox and Safari.
- */
-
 button,
 input,
 optgroup,
 select,
 textarea {
  font-family: inherit;
- /* 1 */
  font-size: 100%;
- /* 1 */
  line-height: 1.15;
- /* 1 */
  margin: 0;
- /* 2 */
 }
-
-/**
-  * Show the overflow in IE.
-  * 1. Show the overflow in Edge.
-  */
 
 button,
 input {
- /* 1 */
  overflow: visible;
 }
 
-/**
-  * Remove the inheritance of text transform in Edge, Firefox, and IE.
-  * 1. Remove the inheritance of text transform in Firefox.
-  */
-
 button,
 select {
- /* 1 */
  text-transform: none;
 }
-
-/**
-  * Correct the inability to style clickable types in iOS and Safari.
-  */
 
 button,
 [type="button"],
@@ -89,13 +64,13 @@ button:active {
 .btn {
  @include margin(null null null 1em);
  @include padding(.5em .75em);
+ line-height: 1;
  font-size: .875rem;
-
- // display: block;
  width: 100%;
  background: darkmagenta;
  color: $text-light;
  border-radius: $border-radius;
+ justify-content: center;
  text-align: center;
  box-shadow: $box-shadow-1;
 
@@ -103,16 +78,34 @@ button:active {
   background: hue(darkmagenta);
   cursor: pointer;
  }
+
  &:disabled {
   opacity: .5;
-  &:hover{
+
+  &:hover {
    cursor: not-allowed;
   }
  }
+ &:first-child{
+@include margin(null null null 0);
+ }
 }
 
+.btn-cancel {
+ color: $clr-notify;
+ border: solid 1px $border;
+ border-radius: $border-radius;
+ background: transparent;
+ justify-self: center;
 
+ display: flex;
+ justify-content: center;
+ align-items: center;
 
+ &:hover {
+  color: $btn-cancel-hover;
+ }
+}
 .btn-publish {
  background: $btn-green !important;
 
@@ -150,25 +143,7 @@ button:active {
  }
 }
 
-.btn-cancel {
- text-align: center;
- font-size: .875rem;
- color: $clr-notify;
- border: solid 1px $border;
- border-radius: $border-radius;
- background: transparent;
- justify-self: center;
 
- display: flex;
- justify-content: center;
- align-items: center;
-
-
-
- &:hover {
-  color: $btn-cancel-hover;
- }
-}
 
 .btn-block {
  display: block;

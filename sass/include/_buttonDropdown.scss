@@ -5,9 +5,8 @@
 }
 
 .btn-dropdown {
- // @include padding(1rem null);
  background: $bg-grey;
- color: $text-dark;
+ color: $text-secondary;
  display: flex;
  justify-content: space-between;
  align-items: center;
@@ -35,7 +34,7 @@
 
  position: absolute;
  top: 100%;
- left: 1rem;
+ left: 0rem;
  z-index: 100;
 
  &:hover {

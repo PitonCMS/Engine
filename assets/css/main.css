@@ -565,6 +565,7 @@ a:hover {
   height: 50px;
   display: flex;
   flex: 1;
+  align-items: center;
 }
 
 .container {
@@ -591,6 +592,7 @@ a:hover {
 .sidebar .side-nav__link {
   padding-right: 0.5em;
   padding-left: 0.5em;
+  height: 50px;
   display: grid;
   grid-template-columns: 20px 1fr 20px;
   align-items: center;
@@ -641,48 +643,27 @@ a:hover {
   opacity: 1;
 }
 
-/**
- * 1. Change the font styles in all browsers.
- * 2. Remove the margin in Firefox and Safari.
- */
 button,
 input,
 optgroup,
 select,
 textarea {
   font-family: inherit;
-  /* 1 */
   font-size: 100%;
-  /* 1 */
   line-height: 1.15;
-  /* 1 */
   margin: 0;
-  /* 2 */
 }
 
-/**
-  * Show the overflow in IE.
-  * 1. Show the overflow in Edge.
-  */
 button,
 input {
-  /* 1 */
   overflow: visible;
 }
 
-/**
-  * Remove the inheritance of text transform in Edge, Firefox, and IE.
-  * 1. Remove the inheritance of text transform in Firefox.
-  */
 button,
 select {
-  /* 1 */
   text-transform: none;
 }
 
-/**
-  * Correct the inability to style clickable types in iOS and Safari.
-  */
 button,
 [type=button],
 [type=reset],
@@ -726,11 +707,13 @@ button:active {
 .btn {
   margin-left: 1em;
   padding: 0.5em 0.75em;
+  line-height: 1;
   font-size: 0.875rem;
   width: 100%;
   background: darkmagenta;
   color: white;
   border-radius: 0.25rem;
+  justify-content: center;
   text-align: center;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
 }
@@ -743,6 +726,23 @@ button:active {
 }
 .btn:disabled:hover {
   cursor: not-allowed;
+}
+.btn:first-child {
+  margin-left: 0;
+}
+
+.btn-cancel {
+  color: #eb7119;
+  border: solid 1px #dee3e7;
+  border-radius: 0.25rem;
+  background: transparent;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-cancel:hover {
+  color: #c05a11;
 }
 
 .btn-publish {
@@ -775,22 +775,6 @@ button:active {
 }
 .btn-delete:hover {
   background: #be281e !important;
-}
-
-.btn-cancel {
-  text-align: center;
-  font-size: 0.875rem;
-  color: #eb7119;
-  border: solid 1px #dee3e7;
-  border-radius: 0.25rem;
-  background: transparent;
-  justify-self: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.btn-cancel:hover {
-  color: #c05a11;
 }
 
 .btn-block {
@@ -826,7 +810,7 @@ button:active {
 
 .btn-dropdown {
   background: #dee3e7;
-  color: #363636;
+  color: #212f78;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -848,7 +832,7 @@ button:active {
   transition: transform 250ms ease-in-out 200ms;
   position: absolute;
   top: 100%;
-  left: 1rem;
+  left: 0rem;
   z-index: 100;
 }
 .form-group-block:hover {

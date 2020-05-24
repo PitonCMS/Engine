@@ -8,6 +8,7 @@
 
   &__link {
    @include padding(null .5em);
+   height: $nav-height;
 
    display: grid;
    grid-template-columns: 20px 1fr 20px;
