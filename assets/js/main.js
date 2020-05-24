@@ -227,54 +227,63 @@ document.querySelectorAll("form").forEach(form => {
 });
 
 
-// // Get base modal in all pages
-// const modal = document.getElementById("modal");
+// // Get base modal available in all pages
+const modal = document.getElementById("modal");
 
-// /**
-//  * Show Modal (Background)
-//  */
-// const showModal = function() {
-//     modal.classList.remove("d-none");
-// }
+/**
+ * Show Modal (Background)
+ */
+const showModal = function() {
+    modal.classList.remove("d-none");
+}
 
-// /**
-//  * Hide Modal and Clear Contents
-//  */
-// const hideModal = function() {
-//     modal.classList.add("d-none");
-//     modal.querySelector(".modal-content").classList.add("d-none");
-//     modal.querySelector(".modal-header > h2").innerHTML = "";
-//     modal.querySelector(".modal-body").innerHTML = "";
-// }
+/**
+ * Hide Modal and Clear Contents
+ */
+const hideModal = function() {
+    modal.classList.add("d-none");
+    modal.querySelector(".modal-content").classList.add("d-none");
+    modal.querySelector(".modal-header > h2").innerHTML = "";
+    modal.querySelector(".modal-body").innerHTML = "";
+}
 
-// const loadModalContent = function(heading, content, buttons) {
-//     modal.querySelector(".modal-header > h2").innerHTML = heading;
-//     modal.querySelector(".modal-body").innerHTML = content;
-//     modal.querySelector(".modal-content").classList.remove("d-none");
-// }
+/**
+ * Load Modal Content and Display
+ * @param {string} heading
+ * @param {string} content
+ * @param {object} buttons
+ */
+const loadModalContent = function(heading, content, buttons) {
+    modal.querySelector(".modal-header > h2").innerHTML = heading;
+    modal.querySelector(".modal-body").innerHTML = content;
+    modal.querySelector(".modal-content").classList.remove("d-none");
+}
 
-// // Bind close modal events
-// modal.querySelector(".close").addEventListener("click", () => {
-//     hideModal();
-// });
-// window.addEventListener("click", (event) => {
-//     if (event.target === modal) {
-//         hideModal();
-//     }
-// });
+// Bind close modal events
+modal.querySelector(".close").addEventListener("click", () => {
+    hideModal();
+});
+window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+        hideModal();
+    }
+});
 
-// // Open media select modal
-// let openMediaModal = document.querySelector(`[data-open-modal="mediaSelect"]`);
-// if (openMediaModal) {
-//     openMediaModal.addEventListener("click", (e) => {
-//         // Get media to load in modal
-//         showModal();
-//         getXHRPromise(pitonConfig.routes.adminMediaGet)
-//             .then(data => {
-//                 loadModalContent("Select Media", data);
-//             });
-//     });
-// }
+// Media select modals
+// const mediaSelect = document.querySelectorAll(`[data-media-select="1"]`);
+
+
+let openMediaModal = document.querySelector(`[data-modal-open="media-select"]`);
+if (openMediaModal) {
+    openMediaModal.addEventListener("click", (e) => {
+        showModal();
+        // Get media to load in modal
+        getXHRPromise(pitonConfig.routes.adminMediaGet)
+            .then(data => {
+                loadModalContent("Select Media", data);
+            });
+    });
+}
 
 // Binding click events to document
 document.addEventListener("click", dismissAlertInlineMessage);
