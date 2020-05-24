@@ -43,8 +43,8 @@ const disableFormControl =  function(control) {
  * @param {void}
  */
 const enableSpinner = function() {
-    if (!document.querySelector("body").classList.contains("spinner")) {
-        document.querySelector("body").classList.add("spinner")
+    if (document.querySelector("body > .spinner").classList.contains("d-none")) {
+        document.querySelector("body > .spinner").classList.remove("d-none")
     }
 }
 
@@ -53,8 +53,8 @@ const enableSpinner = function() {
  * @param {void}
  */
 const disableSpinner = function() {
-    if (document.querySelector("body").classList.contains("spinner")) {
-        document.querySelector("body").classList.remove("spinner")
+    if (!document.querySelector("body > .spinner").classList.contains("d-none")) {
+        document.querySelector("body > .spinner").classList.add("d-none")
     }
 }
 
