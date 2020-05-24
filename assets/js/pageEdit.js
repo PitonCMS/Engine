@@ -92,7 +92,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
             })
             .then(target => {
                 // TODO Smooth scroll leaving room for navs
-                window.location.hash = target;
+                // window.location.hash = target;
             })
             .then(() => {
                 disableSpinner();
