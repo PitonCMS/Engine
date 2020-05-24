@@ -33,7 +33,7 @@
     {# Add New Element Button  #}
     <div class="btn-dropdown-block" >
      <div class="btn btn-dropdown">
-       <span>Add Element</span> 
+       <span>Add Element</span>
        <i class="fas fa-chevron-down"></i>
      </div>
 
@@ -43,14 +43,14 @@
          {# Check if the block has the max elements allowed #}
          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
          <div class="form-group">
-         
+
              <a name="#" class="{% if maxElements %}disabled{% endif %} form-group-link"
              data-element="add"
              data-block-key="{{ blockDefinition.key }}"
              data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
              data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
              >{{ blockDefinition.name }}</a>
-      
+
          </div>
        {% endfor %}
      </div>
@@ -71,7 +71,7 @@
   <div class="form-block__elementWrapper">
    <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
    <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
- 
+
   </div>
  </div>
       <!-- Custom Settings Tab -->
@@ -162,7 +162,6 @@
         </div>
       </div>
 
-
       {# Meta Description Input #}
       <div class="element-block-wrapper">
         <div class="form-block">
@@ -174,27 +173,21 @@
         </div>
       </div>
 
-
-      {# Page Header Featured Media Select Option
-
- Allows user to select a saved media file to link as featured image for this page.
- Selecting an image sets the media table ID in the page_media_id input
- #}
-
+      {# Page Featured Media Select #}
       {% if page.definition.showFeaturedImage|default(1) %}
-
-      <div class="form-block jsMediaInput">
+      <div class="form-block" data-media-select="1">
         <img src="{{ getMediaPath(page.media.filename, 'large') }}"
           class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-        <input type="hidden" class="form-control jsMediaInputField" name="page_media_id" value="{{ page.media_id }}">
+        <input type="hidden" class="form-control" name="page_media_id" value="{{ page.media_id }}">
         <label>Featured Page Image</label>
 
         <div class="btn-group-pageEdit">
-          <button class="btn  btn-save jsSelectMediaFile" type="button">Select Media</button>
-          <button class="btn  btn-delete jsMediaClear" type="button">Clear Media</button>
+          <button class="btn  btn-save" type="button" data-modal-open="media-select">Select Media</button>
+          <button class="btn  btn-delete" type="button" data-clear-media="1">Clear Media</button>
         </div>
       </div>
       {% endif %}
+
         {# Delete Page Button #}
         <div class="btn-group-bottom">
          {% if page.id %}
