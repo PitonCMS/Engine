@@ -67,8 +67,9 @@
 /* Page/Collection Add/Edit Styles */
 
 .pageEdit__wrapper {
+ @include margin(1rem null null null);
  display: grid;
- grid-template-columns: 2fr 1fr;
+ grid-template-columns: 2fr .75fr;
  gap: 1em;
  position: relative;
 
@@ -93,8 +94,10 @@
 
 // Page Edit Blocks
 .pageEdit__sectionBlock {
+ background: $bg-white;
+ // @include padding(.5em);
  @include margin(null null 1em null);
- display: grid;
+ display: grid; 
  grid-template-columns: 1fr;
  cursor: pointer;
 
@@ -111,9 +114,10 @@
   top: calc(#{$nav-height * 2});
   z-index: 50;
 
-  h4 {
-   margin: 0;
-  }
+
+ }
+ &-title{
+  @include padding(null null .25em null);
  }
 }
 

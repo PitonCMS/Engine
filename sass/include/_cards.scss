@@ -1,6 +1,6 @@
 // CARDS
 .content-cards {
-
+ @include margin(1em);
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
  gap: 1em;
@@ -13,6 +13,7 @@
 }
 
 .content-card {
+
  @include padding(1em);
  background: $bg-white;
  border-radius: $border-radius;

@@ -68,14 +68,17 @@
 
  {# Page Title #}
  <div class="pageEdit__sectionBlock">
-  <h4>Page Title</h4>
-  <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
-</div>
+  <div class="form-block__elementWrapper">
+   <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
+   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
+ 
+  </div>
+ </div>
       <!-- Custom Settings Tab -->
       {% if page.settings %}
       <div class="pageEdit__sectionBlock">
         <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
-          <h4>Custom Page Settings</h4>
+          <h3 class="pageEdit__title pageEdit__title-wrapper">Custom Page Settings</h3>
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="pageEdit__sectionBlock-content {% if page.id %}collapsed{% endif %}" data-collapse="target">
@@ -91,7 +94,7 @@
       {% for blockDefinition in page.definition.blocks %}
         <div class="pageEdit__sectionBlock">
           <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
-            <h4 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h4>
+            <h3 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h3>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="pageEdit__sectionBlock-content" data-collapse="target">

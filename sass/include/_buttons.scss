@@ -97,6 +97,7 @@ button:active {
  color: $text-light;
  border-radius: $border-radius;
  text-align: center;
+ box-shadow: $box-shadow-1;
 
  &:hover {
   background: hue(darkmagenta);
@@ -148,12 +149,19 @@ button:active {
 }
 
 .btn-cancel {
- @include padding(0);
  text-align: center;
  font-size: .875rem;
  color: $clr-notify;
-
+ border: solid 1px $border;
+ border-radius: $border-radius;
  background: transparent;
+ justify-self: center;
+ 
+ display: flex;
+ justify-content: center;
+ align-items: center;
+
+
 
  &:hover {
   color: $btn-cancel-hover;
@@ -172,11 +180,12 @@ button:active {
 
 .btn-group-pageEdit {
  @include padding(1em null null null);
-width: 100%;
+ width: 100%;
  display: grid;
  grid-template-columns: 1fr 1fr;
  gap: 1em;
- button{
+
+ button {
   @include margin(0);
 
  }
