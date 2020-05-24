@@ -34,15 +34,9 @@ class AdminMediaController extends AdminBaseController
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $pagination = $this->container->adminMediaPagination;
 
         // Get all media
-        $data['media'] = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
-        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
-
-        // Setup pagination
-        $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
-        $this->container->view->addExtension($pagination);
+        $data['media'] = $mediaMapper->findAllMedia() ?? [];
 
         $data['assignedCategories'] = $mediaCategoryMapper->findCategories() ?? [];
         $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments() ?? [];
@@ -58,6 +52,37 @@ class AdminMediaController extends AdminBaseController
         }
 
         return $this->render('media/media.html', $data);
+    }
+
+    /**
+     * Get Media
+     *
+     * XHR asynchronous request
+     * Gets filtered media rendered as HTML from template
+     * @param  void
+     * @return Response
+     */
+    public function getMedia(): Response
+    {
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+
+        try {
+            // Find media and render template
+            $data = $mediaMapper->find();
+
+            $template = "
+                {{ include(\"@admin/media/_mediaSearchControls.html\") }}
+                {{ include(\"@admin/media/_mediaList.html\") }}
+            ";
+
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting data: {$th->getMessage()}";
+        }
+
+        return $this->xhrResponse($status, $text);
     }
 
     /**
@@ -122,38 +147,6 @@ class AdminMediaController extends AdminBaseController
         }
 
         return $this->redirect('adminMedia');
-    }
-
-    /**
-     * Get All Media
-     *
-     * XHR asynchronous response
-     * Gets filtered media rendered as HTML from template
-     * @param  void
-     * @return Response
-     */
-    public function getMedia(): Response
-    {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-
-        try {
-            // Find media and render template
-            $data = $mediaMapper->find();
-
-            $template = "
-            {% import \"@admin/media/_mediaMacros.html\" as mediaMacro %}
-            {% for media in page.media %}
-              {{ mediaMacro.card(media) }}
-            {% endfor %}";
-
-            $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
-        } catch (Throwable $th) {
-            $status = "error";
-            $text = "Exception getting data: {$th->getMessage()}";
-        }
-
-        return $this->xhrResponse($status, $text);
     }
 
     /**
