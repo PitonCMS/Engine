@@ -80,16 +80,14 @@
 #}
 {% macro mediaListItem(media) %}
 
-<div class="media">
+<div class="media" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}" data-media-path="{{ getMediaPath(media.filename, 'small') }}">
 
    {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
    <div class="mediaPopup">
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
-     data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
+    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}">
 
     <span class="mediaPopupImg">
-     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}"
-      data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
+     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}">
     </span>
    </div>
 

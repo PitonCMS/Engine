@@ -22,7 +22,7 @@ const confirmPrompt = function(msg) {
 const enableFormControl = function(control) {
     if (control && control.disabled) {
         control.disabled = false;
-        control.classList.remove("disabled");
+        // control.classList.remove("disabled");
     }
 }
 
@@ -34,7 +34,7 @@ const enableFormControl = function(control) {
 const disableFormControl =  function(control) {
     if (control && !control.disabled) {
         control.disabled = true;
-        control.classList.add("disabled");
+        // control.classList.add("disabled");
     }
 }
 
@@ -238,16 +238,6 @@ const showModal = function() {
 }
 
 /**
- * Hide Modal and Clear Contents
- */
-const hideModal = function() {
-    modal.classList.add("d-none");
-    modal.querySelector(".modal-content").classList.add("d-none");
-    modal.querySelector(".modal-header > h2").innerHTML = "";
-    modal.querySelector(".modal-body").innerHTML = "";
-}
-
-/**
  * Load Modal Content and Display
  * @param {string} heading
  * @param {string} content
@@ -257,6 +247,16 @@ const loadModalContent = function(heading, content, buttons) {
     modal.querySelector(".modal-header > h2").innerHTML = heading;
     modal.querySelector(".modal-body").innerHTML = content;
     modal.querySelector(".modal-content").classList.remove("d-none");
+}
+
+/**
+ * Hide Modal and Clear Contents
+ */
+const hideModal = function() {
+    modal.classList.add("d-none");
+    modal.querySelector(".modal-content").classList.add("d-none");
+    modal.querySelector(".modal-header > h2").innerHTML = "";
+    modal.querySelector(".modal-body").innerHTML = "";
 }
 
 // Bind close modal events
@@ -269,25 +269,58 @@ window.addEventListener("click", (event) => {
     }
 });
 
-// Media select modals
-// const mediaSelect = document.querySelectorAll(`[data-media-select="1"]`);
+/**
+ * Opens Modal with Media Images for Select
+ * @param {Element} elementTarget Media target
+ */
+const openMediaModal = function(elementTarget) {
+    showModal();
+    getXHRPromise(pitonConfig.routes.adminMediaGet)
+        .then(data => {
+            loadModalContent("Select Media", data);
+        });
 
+    // Add click listener to set media ID on select and dismiss
+    modal.querySelector('.modal-body').addEventListener("click", (e) => {
+        if (e.target.closest(".media")) {
+            // Get media data and set in form
+            let data = {
+                "id": e.target.closest(".media").dataset.mediaId,
+                "caption": e.target.closest(".media").dataset.mediaCaption,
+                "filename": e.target.closest(".media").dataset.mediaPath
+            }
 
-let openMediaModal = document.querySelector(`[data-modal-open="media-select"]`);
-if (openMediaModal) {
-    openMediaModal.addEventListener("click", (e) => {
-        showModal();
-        // Get media to load in modal
-        getXHRPromise(pitonConfig.routes.adminMediaGet)
-            .then(data => {
-                loadModalContent("Select Media", data);
-            });
+            // Set ID, filename and relative path, an caption in target element
+            elementTarget.querySelector(`input[name="page_media_id"]`).value = data.id;
+            elementTarget.querySelector(`img`).src = data.filename;
+            elementTarget.querySelector(`img`).alt = data.caption;
+            elementTarget.querySelector(`img`).title = data.caption;
+            elementTarget.querySelector(`img`).classList.remove("d-none");
+
+            hideModal();
+        }
     });
+}
+
+// Media select modal
+const mediaSelector = function(event) {
+    if (event.target.dataset.mediaModal) {
+        // Launch media modal with target element
+        openMediaModal(event.target.closest(`[data-media-select="1"]`));
+    } else if (event.target.dataset.mediaClear) {
+        // Clear media from form
+        let mediaElement = event.target.closest(`[data-media-select="1"]`);
+        mediaElement.querySelector(`input[name="page_media_id"]`).value = "";
+        mediaElement.querySelector(`img`).src = "";
+        mediaElement.querySelector(`img`).alt = "";
+        mediaElement.querySelector(`img`).title = "";
+        mediaElement.querySelector(`img`).classList.add("d-none");
+    }
 }
 
 // Binding click events to document
 document.addEventListener("click", dismissAlertInlineMessage);
-
+document.addEventListener("click", mediaSelector);
 
 // $('.jsDatePicker').datepicker({
 //     format: pitonConfig.dateFormat,
