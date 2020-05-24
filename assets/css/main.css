@@ -567,6 +567,8 @@ a:hover {
   flex: 1;
   margin-top: 1em;
   margin-bottom: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .container {
@@ -1209,44 +1211,71 @@ label {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: black;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
   position: relative;
-  background-color: #fefefe;
-  margin: 15% auto;
-  /* padding: 0; */
-  /* border: 1px solid #888; */
+  background-color: #f3f5f7;
+  margin: 2rem auto;
+  padding: 0;
+  border: 1px solid #dee3e7;
   width: 80%;
-  /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   animation-name: animatetop;
   animation-duration: 0.4s;
 }
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #dddeee;
-  /* color: white; */
+  background-color: #dee3e7;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
 }
 
 .modal-body {
-  padding: 2px 16px;
+  padding: 0.25rem 1rem;
+}
+.modal-body .media-wrapper {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1em;
+}
+.modal-body .media {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.modal-body .mediaBlock {
+  margin-top: auto;
+  padding-top: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1;
 }
 
 .modal-footer {
-  padding: 2px 16px;
-  background-color: #dddeee;
-  /* color: white; */
+  padding: 0.25rem 1rem;
+  background-color: #dee3e7;
+  color: white;
 }
 
-/* @keyframes animatetop {
-  from {top: -300px; opacity: 0}
-  to {top: 0; opacity: 1}
-} */
+@keyframes animatetop {
+  from {
+    top: -100%;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
 .close {
-  color: #aaa;
+  color: #737a82;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -1254,7 +1283,7 @@ label {
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: rgba(115, 122, 130, 0.5);
   text-decoration: none;
   cursor: pointer;
 }
