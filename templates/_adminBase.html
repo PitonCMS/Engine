@@ -39,14 +39,18 @@
 </head>
 
 <body>
+ {# Load Spinner #}
+ <div class="spinner d-none"></div>
   {# Load modal #}
-  {{ include("@admin/includes/_modal.html") }}
+ {{ include("@admin/includes/_modal.html") }} 
 
- <header class="top-header">
-  <div class="logo">
-   <a href="{{ pathFor('adminHome') }}">Piton<span>CMS</span></a>
-  </div>
- </header>
+
+  <header class="top-header">
+   <div class="logo">
+    <a href="{{ pathFor('adminHome') }}">Piton<span>CMS</span></a>
+   </div>
+  </header>
+
 
  <div class="wrapper">
    {# Hamburger #}

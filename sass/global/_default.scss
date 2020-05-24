@@ -20,10 +20,12 @@ body {
  /* See typography.scss for font family */
  line-height: 1.6;
 }
+
 img {
  width: 100%;
  display: block;
 }
+
 /* Html Element Styles */
 
 h1,
@@ -95,7 +97,7 @@ a {
 }
 
 .draft {
- color:  $clr-draft;
+ color: $clr-draft;
  text-transform: capitalize;
 }
 
@@ -193,5 +195,46 @@ a {
 
  100% {
   opacity: .25;
+ }
+}
+
+/* Spinner Class */ 
+.spinner {
+ position: relative;
+ height: 100%;
+ width: 100%;
+ z-index: 1001;
+ background: rgba($bg-dark, .5);
+
+ &::before {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  content: '\f2f1';
+  font-size: 3rem;
+  color: $text-light;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  animation: rotate 2.5s linear infinite;
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+
+ }
+}
+@keyframes rotate {
+ 0% {
+  transform: rotate(0deg);
+ }
+ 100% {
+  transform: rotate(360deg);
  }
 }
