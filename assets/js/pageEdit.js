@@ -78,6 +78,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
                 // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
                 container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
+                container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
                 // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it

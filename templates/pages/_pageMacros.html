@@ -75,7 +75,7 @@
     Selecting an image sets the media table ID in the element_media_id input.
     #}
     <div class="form-block mediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}"
-      data-element-input-option="image">
+      data-element-input-option="image" data-media-select="1">
 
       <img src="{{ getMediaPath(element.media.filename, 'large') }}"
         class="{% if not element.media.filename %}d-none{% endif %}">
@@ -85,8 +85,8 @@
       <label>Media</label>
 
       <div class="btn-group-pageEdit">
-        <button class="btn btn-delete" type="button">Clear Media</button>
-        <button class="btn btn-save" type="button">Select Media</button>
+        <button class="btn btn-save" type="button" data-media-modal="1">Select Media</button>
+        <button class="btn btn-delete" type="button" data-media-clear="1">Clear Media</button>
       </div>
 
     </div>

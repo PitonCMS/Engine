@@ -22,7 +22,6 @@ const confirmPrompt = function(msg) {
 const enableFormControl = function(control) {
     if (control && control.disabled) {
         control.disabled = false;
-        // control.classList.remove("disabled");
     }
 }
 
@@ -34,7 +33,6 @@ const enableFormControl = function(control) {
 const disableFormControl =  function(control) {
     if (control && !control.disabled) {
         control.disabled = true;
-        // control.classList.add("disabled");
     }
 }
 
@@ -291,7 +289,7 @@ const openMediaModal = function(elementTarget) {
             }
 
             // Set ID, filename and relative path, an caption in target element
-            elementTarget.querySelector(`input[name="page_media_id"]`).value = data.id;
+            elementTarget.querySelector(`input[name*="media_id"]`).value = data.id;
             elementTarget.querySelector(`img`).src = data.filename;
             elementTarget.querySelector(`img`).alt = data.caption;
             elementTarget.querySelector(`img`).title = data.caption;
