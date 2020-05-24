@@ -308,7 +308,7 @@ const mediaSelector = function(event) {
     } else if (event.target.dataset.mediaClear) {
         // Clear media from form
         let mediaElement = event.target.closest(`[data-media-select="1"]`);
-        mediaElement.querySelector(`input[name="page_media_id"]`).value = "";
+        mediaElement.querySelector(`input[name*="media_id"]`).value = "";
         mediaElement.querySelector(`img`).src = "";
         mediaElement.querySelector(`img`).alt = "";
         mediaElement.querySelector(`img`).title = "";
