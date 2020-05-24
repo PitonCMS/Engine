@@ -94,8 +94,6 @@
 
 // Page Edit Blocks
 .pageEdit__sectionBlock {
- background: $bg-white;
- // @include padding(.5em);
  @include margin(null null 1em null);
  display: grid; 
  grid-template-columns: 1fr;
@@ -132,4 +130,12 @@
   background: $bg-white;
 
  padding: 1em;
+}
+.new-element{
+ background: pink !important;
+ transform: translateY(300px);
+ z-index: 2000;
+ &::before{
+
+ }
 }

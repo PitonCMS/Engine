@@ -103,6 +103,12 @@ button:active {
   background: hue(darkmagenta);
   cursor: pointer;
  }
+ &:disabled {
+  opacity: .5;
+  &:hover{
+   cursor: not-allowed;
+  }
+ }
 }
 
 
@@ -113,6 +119,11 @@ button:active {
  &:hover {
   background: $btn-green-hover !important;
  }
+
+ .disabled {
+  background: $btn-green-disabled !important;
+  cursor: not-allowed;
+ }
 }
 
 .btn-save {
@@ -121,17 +132,8 @@ button:active {
  &:hover {
   background: $btn-blue-hover !important;
  }
-
- &-disabled {
-  background: $btn-blue-disabled !important;
-  cursor: not-allowed;
-
-  &:hover {
-   background: $btn-blue-disabled !important;
-   cursor: not-allowed;
-  }
- }
 }
+
 
 .btn-new {
  background: rgb(109, 110, 107) !important;
@@ -156,7 +158,7 @@ button:active {
  border-radius: $border-radius;
  background: transparent;
  justify-self: center;
- 
+
  display: flex;
  justify-content: center;
  align-items: center;
@@ -187,7 +189,6 @@ button:active {
 
  button {
   @include margin(0);
-
  }
 }
 

@@ -421,7 +421,7 @@ a:hover {
   content: "";
   color: white;
   font-size: 3rem;
-  animation: rotate 2.5s linear infinite;
+  animation: rotate 1.5s linear infinite;
 }
 
 @keyframes rotate {
@@ -561,10 +561,6 @@ a:hover {
   height: 50px;
   display: flex;
   flex: 1;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
 }
 
 .container {
@@ -626,7 +622,6 @@ a:hover {
 }
 .sidebar .active a:hover {
   color: #eb7119;
-  cursor: default;
 }
 .sidebar .fas {
   color: rgba(54, 54, 54, 0.35);
@@ -739,6 +734,12 @@ button:active {
   background: 300deg;
   cursor: pointer;
 }
+.btn:disabled {
+  opacity: 0.5;
+}
+.btn:disabled:hover {
+  cursor: not-allowed;
+}
 
 .btn-publish {
   background: green !important;
@@ -746,20 +747,16 @@ button:active {
 .btn-publish:hover {
   background: #004d00 !important;
 }
+.btn-publish .disabled {
+  background: #00b300 !important;
+  cursor: not-allowed;
+}
 
 .btn-save {
   background: #3782c3 !important;
 }
 .btn-save:hover {
   background: #2c679b !important;
-}
-.btn-save-disabled {
-  background: #84b3dc !important;
-  cursor: not-allowed;
-}
-.btn-save-disabled:hover {
-  background: #84b3dc !important;
-  cursor: not-allowed;
 }
 
 .btn-new {
@@ -1576,7 +1573,6 @@ label {
 }
 
 .pageEdit__sectionBlock {
-  background: white;
   margin-bottom: 1em;
   display: grid;
   grid-template-columns: 1fr;
@@ -1608,6 +1604,12 @@ label {
 .form-block__elementWrapper {
   background: white;
   padding: 1em;
+}
+
+.new-element {
+  background: pink !important;
+  transform: translateY(300px);
+  z-index: 2000;
 }
 
 /*# sourceMappingURL=main.css.map */
