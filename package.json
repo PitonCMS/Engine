@@ -1,0 +1,23 @@
+{
+  "name": "engine",
+  "version": "1.0.0",
+  "description": "This project contains the core PitonCMS Engine files that drive the CMS.",
+  "main": "./assets/js/main.js",
+  "scripts": {
+    "build": "parcel build ./assets/js/*.js -d ./assets/js/dist --no-source-maps --cache-dir ./../../../cache/parcel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PitonCMS/Engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PitonCMS/Engine/issues"
+  },
+  "homepage": "https://github.com/PitonCMS/Engine#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}

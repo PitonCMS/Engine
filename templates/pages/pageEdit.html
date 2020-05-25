@@ -207,5 +207,9 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  <script src="{{ basePath() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
+{% if site.settings.production %}
+<script src="{{ baseUrl() }}/admin/js/dist/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
+{% else %}
+<script src="{{ baseUrl() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}" type="module"></script>
+{% endif %}
 {% endblock foot %}

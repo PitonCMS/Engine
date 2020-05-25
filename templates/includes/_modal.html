@@ -4,12 +4,12 @@
 <div id="modal" class="modal d-none">
 
     {# Modal content loads second #}
-    <div class="modal-content d-none">
+    <div class="modal-content d-none" data-modal="1">
         <div class="modal-header">
-        
+
           {# Heading gets inserted here #}
           <h2 class="pageEdit__title pageEdit__title-wrapper"></h2>
-          <span class="close"><i class="fas fa-times"></i></span>
+          <i class="fas fa-times" aria-hidden="true" data-dismiss="modal"></i>
         </div>
 
         {# Content gets inserted here #}

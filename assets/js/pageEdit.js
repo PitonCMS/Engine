@@ -2,13 +2,8 @@
 // Page Edit JS
 // --------------------------------------------------------
 
-/**
- * Remove Element
- * @param {object} element
- */
-const removeElement = function(element) {
-    element.remove();
-}
+import { enableSpinner, disableSpinner } from './modules/spinner.js';
+import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 
 /**
  * Markdown Editor
@@ -96,6 +91,8 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
             })
             .then(() => {
                 disableSpinner();
+            }).catch(() => {
+                disableSpinner();
             });
     });
 });
@@ -116,7 +113,7 @@ if (pageEditNode) {
 
             if (isNaN(elementId)) {
                 // Element has not been saved to DB, just remove from DOM
-                removeElement(element);
+                element.remove();
             } else {
                 // Element has been saved, do a hard delete
                 enableSpinner();
@@ -126,7 +123,7 @@ if (pageEditNode) {
 
                 postXHRPromise(pitonConfig.routes.adminPageElementDelete, data)
                     .then(() => {
-                        removeElement(element);
+                        element.remove();
                     })
                     .then(() => {
                         disableSpinner();
