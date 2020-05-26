@@ -1,22 +1,22 @@
 {# Piton Modal #}
 
 {# Modal background loads first #}
-<div id="modal" class="modal d-none">
+<div id="modal" class="modal d-none" data-modal="modal">
 
     {# Modal content loads second #}
-    <div class="modal-content d-none" data-modal="1">
+    <div class="modal-content d-none" data-modal="container">
         <div class="modal-header">
 
           {# Heading gets inserted here #}
-          <h2 class="pageEdit__title pageEdit__title-wrapper"></h2>
+          <h2 class="pageEdit__title pageEdit__title-wrapper" data-modal="heading"></h2>
           <i class="fas fa-times" aria-hidden="true" data-dismiss="modal"></i>
         </div>
 
         {# Content gets inserted here #}
-        <div class="modal-body"></div>
+        <div class="modal-body" data-modal="content"></div>
 
         {# By default not showing modal footer buttons unless needed #}
-        <div class="modal-footer d-none">
+        <div class="modal-footer d-none" data-modal="controls">
             <a class="btn btn-cancel" href="#">Dismiss</a>
             <button class="btn btn-save" type="button" name="modal-save">Save</button>
         </div>

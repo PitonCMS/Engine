@@ -80,7 +80,7 @@
 #}
 {% macro mediaListItem(media) %}
 
-<div class="media" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}" data-media-path="{{ getMediaPath(media.filename, 'small') }}">
+<div class="media" data-media="1" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}" data-media-path="{{ getMediaPath(media.filename, 'small') }}">
 
    {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
    <div class="mediaPopup">

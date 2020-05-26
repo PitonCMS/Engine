@@ -25,7 +25,7 @@ const alertInlineMessage = function(severity, heading, message) {
     if (typeof message === 'object') {
         message = message.join("<br>");
     }
-    container.querySelector(`[data-alert="message"]`).innerHTML = message;
+    container.querySelector(`[data-alert="content"]`).innerHTML = message;
 
     // Insert into main or body
     let mainContainer = document.querySelector("main.main-content");

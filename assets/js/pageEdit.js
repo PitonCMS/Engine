@@ -4,6 +4,7 @@
 
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
+import { mediaSelect } from './modules/mediaModal.js';
 
 /**
  * Markdown Editor
@@ -28,18 +29,6 @@ const initMarkdownEditor = function(element) {
       });
 }
 
-// Toggle block collapse
-document.querySelectorAll(`[data-collapse="toggle"]`).forEach(toggle => {
-    const collapseTarget = toggle.parentElement.querySelector(`[data-collapse="target"]`);
-    toggle.addEventListener("click", () => {
-        if (collapseTarget.classList.contains("collapsed")) {
-            collapseTarget.classList.remove("collapsed");
-        } else {
-            collapseTarget.classList.add("collapsed");
-        }
-    });
-});
-
 // Add Page Block Element
 document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     addEl.addEventListener("click", (e) => {
@@ -49,7 +38,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
         // Check element limit
         if (count >= limit) {
-            alertMessage('Info', 'This Block has the maximum number of Elements allowed by the design');
+            alert('This Block has the maximum number of Elements allowed by the design');
             return;
         }
 
@@ -105,7 +94,7 @@ if (pageEditNode) {
     pageEditNode.addEventListener("click", (event) => {
         if (event.target.dataset.deleteElementPrompt) {
             // Confirm delete
-            if (!confirmPrompt(event.target.dataset.deleteElementPrompt)) return;
+            if (!confirm(event.target.dataset.deleteElementPrompt)) return;
 
             // Get element ID and element
             let elementId = parseInt(event.target.dataset.elementId);
@@ -161,6 +150,9 @@ if (pageEditNode) {
         initMarkdownEditor(editor);
     });
 }
+
+// Load media select modal
+document.addEventListener("click", mediaSelect);
 
 /*
 // Clean Page URL slug from title

@@ -22,7 +22,7 @@ let removeMessage = ($message, sign) => {
 $('.jsMessageWrap').on('click', 'button', function (e) {
     e.preventDefault();
     let request = $(e.target).attr('value');
-    if ('delete' === request && !confirmPrompt()) {
+    if ('delete' === request && !confirm()) {
         return false;
     }
     let isRead = $(e.target).data('isRead');
