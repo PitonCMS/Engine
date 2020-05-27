@@ -19,15 +19,15 @@ const showModal = function() {
 
 /**
  * Load Modal Content and Display
- * @param {string} heading
- * @param {string} content
+ * @param {string} header
+ * @param {string} body
  * @param {object} buttons
  */
-const showModalContent = function(heading, content, buttons) {
-    modal.querySelector(`[data-modal="heading"]`).innerHTML = heading;
-    modal.querySelector(`[data-modal="content"]`).innerHTML = content;
+const showModalContent = function(header, body, buttons) {
+    modal.querySelector(`[data-modal="header"]`).innerHTML = header;
+    modal.querySelector(`[data-modal="body"]`).innerHTML = body;
     modal.classList.remove("d-none");
-    modal.querySelector(`[data-modal="container"]`).classList.remove("d-none");
+    modal.querySelector(`[data-modal="content"]`).classList.remove("d-none");
 }
 
 /**
@@ -36,8 +36,8 @@ const showModalContent = function(heading, content, buttons) {
 const hideModal = function() {
     modal.classList.add("d-none");
     modal.querySelector(`[data-modal="content"]`).classList.add("d-none");
-    modal.querySelector(`[data-modal="heading"]`).innerHTML = "";
-    modal.querySelector(`[data-modal="container"]`).innerHTML = "";
+    modal.querySelector(`[data-modal="header"]`).innerHTML = "";
+    modal.querySelector(`[data-modal="body"]`).innerHTML = "";
 }
 
 // Bind close modal events
