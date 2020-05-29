@@ -11,15 +11,13 @@
 {% macro alert(severity, heading, message) %}
 {% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
 
-<div class="alert {{ severityClass }}" role="alert">
-    <h4 class="alert__title">{{ heading }}</h4>
-    <div class="alert__dismiss">
-        <button type="button" class="btn btn-save" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true"><i class="fas fa-times"></i></span>
-        </button>
+<div class="modal-content {{ severityClass }}" role="alert" data-alert="container">
+    <div class="modal-header">
+        <h4 class="pageEdit__title pageEdit__title-wrapper" data-alert="heading">{{ heading }}</h4>
+        <i class="fas fa-times" aria-hidden="true" data-dismiss="alert"></i>
     </div>
 
-    <div class="alert__message">
+    <div class="modal-body" data-alert="content">
         {{ message|join('<br>') }}
     </div>
 </div>

@@ -182,8 +182,8 @@
         <label>Featured Page Image</label>
 
         <div class="btn-group-pageEdit">
-          <button class="btn  btn-save" type="button" data-media-modal="1">Select Media</button>
           <button class="btn  btn-delete" type="button" data-media-clear="1">Clear Media</button>
+          <button class="btn  btn-save" type="button" data-media-modal="1">Select Media</button>
         </div>
       </div>
       {% endif %}
@@ -207,5 +207,9 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  <script src="{{ basePath() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
+{% if site.settings.production %}
+<script src="{{ baseUrl() }}/admin/js/dist/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
+{% else %}
+<script src="{{ baseUrl() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}" type="module"></script>
+{% endif %}
 {% endblock foot %}

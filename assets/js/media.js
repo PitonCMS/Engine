@@ -18,7 +18,7 @@ $('.jsEditMediaCategory').on('click', '.jsAddMediaCategory', function () {
 // Delete category from media categories form
 $('.jsEditMediaCategory').on('click', 'button[type=button]', function (e) {
     e.preventDefault();
-    if (!confirmPrompt()) {
+    if (!confirm()) {
         return false;
     }
     let $category = $(e.target).parent('.jsMediaCategory');
@@ -66,7 +66,7 @@ $('.jsMediaCard').on('click', 'button', function (e) {
     e.preventDefault();
     let $button = $(e.target);
     let $medium = $(e.target).parents('.jsMediaCard');
-    // if ('delete' === $button.attr('value') && !confirmPrompt()) {
+    // if ('delete' === $button.attr('value') && !confirm()) {
     //     return false;
     // }
     // jQuery ignores the button value, so append that to post data
