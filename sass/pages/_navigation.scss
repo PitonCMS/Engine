@@ -1,0 +1,145 @@
+.nav-wrapper {
+ font-size: 1.1em;
+ display: flex;
+
+ &__sidebar {
+
+  @include padding(null 1em null null);
+  flex: .75;
+  display: flex;
+  flex-flow: column nowrap;
+
+  .form-group-inline {
+   grid-column: 1 / -1;
+   display: flex;
+
+   align-items: center;
+  }
+
+ 
+
+  .checkbox-block__title {
+   @include margin(1rem null .5rem);
+   font-size: 1.1rem;
+   @include padding(0);
+   color: $text-secondary;
+   font-weight: 300;
+   line-height: 1;
+  }
+
+  label {
+   font-weight: 300;
+   font-style: italic;
+  }
+ }
+
+ &__main {
+  align-content: flex-start;
+  flex: 3;
+  display: grid;
+  grid-template-columns: 2rem 1fr max-content;
+
+  >* {
+   @include margin(null null .5rem null);
+  }
+ }
+
+ .nav-item {
+  width: 100%;
+  grid-column: 1 / -1;
+  line-height: $nav-height;
+  border: solid 1px darken($border, 10%);
+
+  &__inner {
+   @include padding(1rem null);
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 1rem;
+
+   .form-group {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+
+   }
+  }
+
+  &__header {
+   background: $bg-grey;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   height: 100%;
+   height: $nav-height;
+   line-height: $nav-height;
+  }
+
+  &__content {
+   @include padding(null 1em);
+   color: $clr-dark-grey;
+   font-weight: 300;
+
+  }
+
+  &__title {
+   @include padding(null 1em null .75em);
+   flex: 1;
+   color: $text-secondary;
+   font-size: 1.3rem;
+   height: 100%;
+   display: flex;
+   align-items: center;
+
+   &:hover {
+    cursor: move;
+   }
+  }
+
+  &__type {
+   @include padding(null 1rem);
+  }
+
+  &__toggle {
+   font-size: .875rem;
+   @include padding(1rem 1em 1em 1em);
+   border-left: solid 1px darken($border, 10%);
+
+   &:hover {
+    cursor: pointer;
+    color: $text-accent-hover;
+   }
+  }
+
+  label {
+   font-weight: 300;
+   font-style: italic;
+  }
+ }
+
+ .sub-nav-item {
+  grid-column: 2 / -1;
+ }
+
+ .btn-group-navigation {
+  @include padding(0);
+  @include margin(null null 1rem null);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-column: -2 / -1;
+  gap: 1em;
+  align-items: center;
+
+  *+* {
+   @include margin(0);
+  }
+ }
+
+ .btn-group-nav-sidebar {
+  @include padding(5rem 4rem null null);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+ }
+
+}
