@@ -2,9 +2,11 @@
 
 .sidebar {
  .side-nav {
+  @include padding($nav-height null null .75rem);
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
+  
 
   &__link {
    @include padding(null .5em);

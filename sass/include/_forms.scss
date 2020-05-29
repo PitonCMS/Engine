@@ -36,7 +36,7 @@ input:-webkit-autofill:active {
 // Select Input Fields
 select {
  /* styling */
- background-color: $bg-accent;
+ // background-color: $bg-accent;
  border: thin solid $border;
  border-radius: $border-radius;
  display: inline-block;
@@ -160,5 +160,13 @@ label {
 
  .form-control {
   background: $bg-light;
+ }
+}
+.checkbox-block{
+ display: grid;
+ grid-template-columns: auto 1fr;
+ align-items: center;
+ label{
+  font-weight: 300;
  }
 }
