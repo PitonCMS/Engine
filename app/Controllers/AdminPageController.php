@@ -467,7 +467,7 @@ class AdminPageController extends AdminBaseController
         // Get available collection templates
         $data['templates'] = $definition->getCollections();
 
-        return $this->render('pages/collectionGroupEdit.html', $data);
+        return $this->render('pages/collectionEdit.html', $data);
     }
 
     /**
