@@ -2,6 +2,11 @@ import { getModal, showModal, showModalContent, hideModal } from './modal.js';
 import { getXHRPromise } from './xhrPromise.js';
 
 /**
+ * Event to dispatch pseudo "input" event on hidden inputs
+ */
+const inputEvent = new Event("input", {"bubbles": true});
+
+/**
  * Opens Modal with Media Images for Select
  * @param {Element} elementTarget Media target
  */
@@ -23,11 +28,17 @@ const openMediaModal = function(elementTarget) {
             }
 
             // Set ID, filename and relative path, an caption in target element
-            elementTarget.querySelector(`input[name*="media_id"]`).value = data.id;
-            elementTarget.querySelector("img").src = data.filename;
-            elementTarget.querySelector("img").alt = data.caption;
-            elementTarget.querySelector("img").title = data.caption;
-            elementTarget.querySelector("img").classList.remove("d-none");
+            let targetInput = elementTarget.querySelector(`input[name*="media_id"]`);
+            let targetImg = elementTarget.querySelector("img");
+
+            targetInput.value = data.id;
+            targetImg.src = data.filename;
+            targetImg.alt = data.caption;
+            targetImg.title = data.caption;
+            targetImg.classList.remove("d-none");
+
+            // Dispatch input event on hidden field
+            targetInput.dispatchEvent(inputEvent);
 
             hideModal();
         }
@@ -41,12 +52,17 @@ const mediaSelect = function(event) {
         openMediaModal(event.target.closest(`[data-media-select="1"]`));
     } else if (event.target.dataset.mediaClear) {
         // Clear media from form
-        let mediaElement = event.target.closest(`[data-media-select="1"]`);
-        mediaElement.querySelector(`input[name*="media_id"]`).value = "";
-        mediaElement.querySelector("img").src = "";
-        mediaElement.querySelector("img").alt = "";
-        mediaElement.querySelector("img").title = "";
-        mediaElement.querySelector("img").classList.add("d-none");
+        let targetInput = event.target.closest(`[data-media-select="1"]`).querySelector(`input[name*="media_id"]`);
+        let targetImg = event.target.closest(`[data-media-select="1"]`).querySelector("img");
+
+        targetInput.value = "";
+        targetImg.src = "";
+        targetImg.alt = "";
+        targetImg.title = "";
+        targetImg.classList.add("d-none");
+
+        // Dispatch event on hidden field
+        targetInput.dispatchEvent(inputEvent);
     }
 }
 

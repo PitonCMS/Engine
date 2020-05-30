@@ -25,8 +25,8 @@
 
     <div class="btn-group">
       <a class="btn btn-cancel" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
-      <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now">Publish</button>
-      <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
+      <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
+      <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
     </div>
 
     <!-- Control Buttons -->
@@ -133,9 +133,9 @@
 
       {# Page Slug Input with locking icon #}
       {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
-      {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+        {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
       {% else %}
-      {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+        {% set readonlyStatus, lockedStatus = '', 'unlock' %}
       {% endif %}
       <div class="element-block-wrapper">
         <div class="form-block">
@@ -203,5 +203,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  {{ getJsFileSource('pageEdit') }}
+  {{ getJsFileSource('pageEdit', true) }}
 {% endblock foot %}

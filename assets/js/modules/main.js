@@ -16,7 +16,7 @@ document.querySelectorAll("form").forEach(form => {
         });
 
         // Listen for form changes to reenable controls
-        form.addEventListener("input", (i) => {
+        form.addEventListener("input", (e) => {
             saveButtons.forEach(control => {
                 enableFormControl(control);
             });
