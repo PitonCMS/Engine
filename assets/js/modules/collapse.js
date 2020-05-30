@@ -7,7 +7,6 @@ const collapseToggle = function(event) {
         let collapseTarget = event.target.closest(`[data-collapse="parent"]`).querySelector(`[data-collapse="target"]`);
 
         if (collapseTarget) {
-            console.log(collapseTarget)
             collapseTarget.classList.toggle("collapsed");
         }
     }
