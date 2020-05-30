@@ -6,6 +6,7 @@ import './modules/main.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { mediaSelect } from './modules/mediaModal.js';
+import { setCleanSlug, unlockSlug } from './modules/url.js';
 
 /**
  * Set Element Title
@@ -164,36 +165,21 @@ if (pageEditNode) {
     });
 }
 
-// Bind page edit event listeners
+// Bind set page slug from page title
+document.querySelector(`[data-url-slug="source"]`).addEventListener("input", (e) => {
+    setCleanSlug(e.target.value);
+});
+
+// Bind warning on unlocking page slug
+document.querySelector(`[data-url-slug-lock="1"]`).addEventListener("click", (e) => {
+    unlockSlug(e);
+});
+
+// Bind page edit listeners for events that bubble
 document.addEventListener("click", mediaSelect);
-document.querySelector(`[data-page-edit="1"]`).addEventListener("change", setElementTitleText);
+document.addEventListener("change", setElementTitleText);
 
 /*
-// Clean Page URL slug from title
-let $pageSlug = $('.jsUrlSlug');
-$('.jsPageTitle').on('change', function () {
-    if ($pageSlug.val() === 'home') return;
-    if (pitonConfig.pageSlugLocked !== 'lock') {
-    let slug = this.value;
-        slug = slug.replace(/&/g, 'and');
-        slug = slug.replace(`'`, '');
-        slug = slug.toLowerCase();
-        slug = slug.replace(/[^a-z0-9]+/gi, '-');
-        slug = slug.replace(/-+$/gi, '');
-        $pageSlug.val(slug);
-    }
-});
-
-// Unlock Page URL slug on request
-$('.jsUrlSlugFaLockStatus').on('click', function () {
-    // Ignore if home page
-    if ($pageSlug.val() === 'home') return;
-    if (pitonConfig.pageSlugLocked === 'lock' && confirmPrompt('Are you sure you want to change the URL Slug? This can impact links and search engines.')) {
-        pitonConfig.pageSlugLocked = 'unlock';
-        $pageSlug.attr('readonly', false);
-        $(this).find('i.fas').toggleClass('fa-lock fa-unlock');
-    }
-});
 
 // Bind Markdown Editor to Textareas
 let getMediaForMDE = function (editor) {

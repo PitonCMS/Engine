@@ -69,11 +69,12 @@
  <div class="pageEdit__sectionBlock">
   <div class="form-block__elementWrapper">
    <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
-   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off" required>
+   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
+    data-url-slug="source" autocomplete="off" required>
 
   </div>
  </div>
-      <!-- Custom Settings Tab -->
+      {# Custom Settings Tab #}
       {% if page.settings %}
       <div class="toggle-block" data-collapse="parent">
         <div class="toggle-block__header">
@@ -89,8 +90,8 @@
       {% endif %}
 
       {# Page Blocks and Elements #}
-      {# Outer loop: All blocks defined in the JSON page definition file #}
       {% for blockDefinition in page.definition.blocks %}
+        {# Outer loop: All blocks defined in the JSON page definition file #}
         <div class="toggle-block" data-collapse="parent">
           <div class="toggle-block__header">
             <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
@@ -98,15 +99,15 @@
           </div>
           <div class="toggle-block__content" data-collapse="target">
             <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}">
-              {# Inner loop: Elements inside block #}
               {% for element in page.blocks[blockDefinition.key] %}
+                {# Inner loop: Elements inside block #}
                 {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
               {% endfor %}
             </div>
           </div>
         </div>
       {% endfor %}
-      {# End for page.definition.blocks loop #}
+      {# End Blocks and Elements Loops #}
     </div>
 
     <!-- right Column Page Edit -->
@@ -116,17 +117,17 @@
       <h4 class="pageEdit__title">Page Settings</h4>
       <div class="form-block">
         <p>Publish(ed) date</p>
-        <input type="text" class="form-control jsDatePicker" name="published_date" placeholder="Publish date"
+        <input type="text" class="form-control" name="published_date" placeholder="Publish date"
           value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
         {% if page.getPublishedStatus == 'draft' %}
-        <div class="" title="Not published">Status: <span class="draft">Draft</span></div>
+        <div>Status: <span class="draft">Draft</span></div>
 
         {% elseif page.getPublishedStatus == 'pending' %}
-        <div class="">Status: <span class="pending">Pending</span></div>
+        <div>Status: <span class="pending">Pending</span></div>
 
         {% elseif page.getPublishedStatus == 'published' %}
-        <div class="">Status: <span class="published">Published</span></div>
+        <div>Status: <span class="published">Published</span></div>
         {% endif %}
       </div>
 
@@ -136,21 +137,17 @@
       {% else %}
       {% set readonlyStatus, lockedStatus = '', 'unlock' %}
       {% endif %}
-      <script>
-        pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
-      </script>
       <div class="element-block-wrapper">
         <div class="form-block">
-          <label>Slug <span class="text-required">*</span></label>
+          <label>Page Slug <span class="text-required">*</span></label>
           <div class="filter-block">
             <div class="input-block">
-              <div class="input-block__icon jsUrlSlugFaLockStatus">
-                <i class="fas fa-{{ lockedStatus }}"></i>
+              <div class="input-block__icon ">
+                <i class="fas fa-{{ lockedStatus }}" data-url-slug-lock="1"></i>
               </div>
               <div class="input-block__input">
-                <input type="text" class="input-block__search-input jsUrlSlug" name="page_slug" maxlength="100"
-                  placeholder="URL slug"
-                  {% if page.collection_slug %}{{ page.collection_slug }}/{% endif %}value="{{ page.page_slug }}"
+                <input type="text" class="input-block__search-input" name="page_slug" maxlength="100"
+                  placeholder="Page URL slug" data-url-slug="target" data-url-slug-status="{{ lockedStatus }}" value="{{ page.page_slug }}"
                   required {{ readonlyStatus }} autocomplete="off">
               </div>
             </div>
