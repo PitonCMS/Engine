@@ -8,6 +8,17 @@ import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { mediaSelect } from './modules/mediaModal.js';
 
 /**
+ * Set Element Title
+ */
+const setElementTitleText = function(event) {
+    if (event.target.matches(`input[name^="element_title"]`)) {
+        let title = event.target.value;
+        let elementTitle = event.target.closest(`[data-element="parent"]`).querySelector(".secondary-title");
+        elementTitle.innerHTML = title;
+    }
+}
+
+/**
  * Markdown Editor
  * @param {object} element
  */
@@ -153,8 +164,9 @@ if (pageEditNode) {
     });
 }
 
-// Load media select modal
+// Bind page edit event listeners
 document.addEventListener("click", mediaSelect);
+document.querySelector(`[data-page-edit="1"]`).addEventListener("change", setElementTitleText);
 
 /*
 // Clean Page URL slug from title
