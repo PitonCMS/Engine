@@ -147,7 +147,6 @@ class AdminPageController extends AdminBaseController
             foreach ($page->definition->blocks as $block) {
                 $newElement = $pageElementMapper->make();
                 $newElement->block_key = $block->key;
-                $newElement->element_sort = 1;
                 $newElement->template = $block->elementTypeDefault;
 
                 $page->setBlockElements([$newElement]);
@@ -296,6 +295,7 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Save page elements by block
+        $index = 1;
         foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
             // Save element
             $pageElement = $pageElementMapper->make();
@@ -303,7 +303,7 @@ class AdminPageController extends AdminBaseController
             $pageElement->page_id = $pageId;
             $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
             $pageElement->template = $this->request->getParsedBodyParam('element_template')[$key];
-            $pageElement->element_sort = $this->request->getParsedBodyParam('element_sort')[$key];
+            $pageElement->element_sort = $index++;
             $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
             $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
             $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);

@@ -21,16 +21,11 @@
 
   <!-- Element Title -->
   <div class="toggle-block__header toggle-block__header-secondary">
-   <h4 class="toggle-block__title secondary-title">{{ loopIndex }}. {{ element.title }}</h4>
+   <h4 class="toggle-block__title secondary-title">{{ element.title }}</h4>
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
   <div class="form-block__elementWrapper" data-collapse="target">
-   <div class="form-block d-none">
-    <!-- Element Order -->
-    <label>Order</label>
-    <input type="text" class="form-control" name="element_sort[{{ arrayKey }}]" value="{{ loopIndex }}">
-  </div>
   <div class="form-block">
     <label>Element Title</label>
     <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"

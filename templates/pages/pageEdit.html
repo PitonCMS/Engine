@@ -69,7 +69,7 @@
  <div class="pageEdit__sectionBlock">
   <div class="form-block__elementWrapper">
    <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
-   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off">
+   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}" autocomplete="off" required>
 
   </div>
  </div>
@@ -206,5 +206,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  {{ getJsFileSource('pageEdit') }}
+  {{ getJsFileSource('pageEdit', true) }}
 {% endblock foot %}

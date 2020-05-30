@@ -79,7 +79,7 @@ const postXHRPromise = function(url, data) {
     data[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue
 
     // Serialize data
-    postData = Object.keys(data).map((k) => {
+    let postData = Object.keys(data).map((k) => {
         return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
     }).join('&');
 

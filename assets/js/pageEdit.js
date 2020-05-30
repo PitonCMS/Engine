@@ -58,11 +58,9 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
                 let targetBlock = document.getElementById("block-" + addEl.dataset.blockKey);
                 container.innerHTML = response;
 
-                // Set element order number and update count in add element
+                // Set element order number and update count in add element data-element-count
                 addEl.dataset.elementCount = ++count;
 
-                // Setting .value = addEl.dataset.elementCount in this fragment updates the DOM, but not the HTML
-                container.querySelector(`input[name^="element_sort"]`).setAttribute('value', addEl.dataset.elementCount);
                 container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
@@ -116,6 +114,9 @@ if (pageEditNode) {
                         element.remove();
                     })
                     .then(() => {
+                        disableSpinner();
+                    }).catch((data) => {
+                        console.log("Failed to delete element: ", data);
                         disableSpinner();
                     });
             }
