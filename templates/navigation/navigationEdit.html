@@ -9,8 +9,10 @@
  <div class="breadcrumb"></div>
  <h1 class="section-title">{{ page.navigator|capitalize }} Navigation</h1>
  <div class="btn-group">
-  <button class="btn btn-save d-block">Save Menu</button>
- </div>
+  <a class="btn btn-cancel" data-form-button="cancel">Discard</a>
+  <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
+
+</div>
 </div>
 {% endblock contentHeader %}
 
@@ -68,8 +70,13 @@
  
     <h4 class="checkbox-block__title">Placeholder</h4>
     <div class="form-group">
-     <label class="navTitle" for="placeholderUrl"></label>
-     <input type="text" name="placeholderUrl" placeholder="Nav Title">
+     <label class="navTitle" for="placeholderName">Title</label>
+     <input type="text" name="placeholderName" placeholder="Nav Title">
+    </div>
+  
+    <div class="form-group">
+     <label class="navTitle" for="placeholderUrl">URL</label>
+     <input type="text" name="placeholderUrl" placeholder="Nav URL or Slug">
     </div>
   
  
@@ -82,16 +89,16 @@
   {# MAIN CONTENT #}
   <div class="nav-wrapper__main">
    {# NAV ITEM #}
-   <div class="nav-item">
-    <div class="nav-item__header" data-collapse="toggle">
-     <h3 class="nav-item__title">Home <span class="small-text"></span></h3>
-     <div class="small-text nav-item__type">page</div>
-     <i class="fas fa-chevron-down nav-item__toggle"></i>
+   <div class="toggle-block">
+    <div class="toggle-block__header" data-collapse="toggle">
+     <h3 class="toggle-block__title secondary-title">Home <span class="small-text"></span></h3>
+     <div class="small-text toggle-block__type">page</div>
+     <i class="fas fa-chevron-down toggle-block__toggle"></i>
     </div>
 
-    <div class="nav-item__content collapsed" data-collapse="target">
+    <div class="toggle-block__content collapsed" data-collapse="target">
      
-     <div class="nav-item__inner">
+     <div class="toggle-block__inner">
       <div class="form-group">
        <label for="navTitle">Navigation Label</label>
        <input type="text" name="navTitle" placeholder="Navigation Label">
@@ -115,14 +122,14 @@
    </div>
 
    {# NAV ITEM #}
-   <div class="nav-item">
-    <div class="nav-item__header" data-collapse="toggle">
-     <h3 class="nav-item__title">Recipes <span class="small-text"></span></h3>
-     <div class="small-text nav-item__type">page</div>
-     <i class="fas fa-chevron-down nav-item__toggle"></i>
+   <div class="toggle-block">
+    <div class="toggle-block__header" data-collapse="toggle">
+     <h3 class="toggle-block__title secondary-title">Recipes <span class="small-text"></span></h3>
+     <div class="small-text toggle-block__type">page</div>
+     <i class="fas fa-chevron-down toggle-block__toggle"></i>
     </div>
-    <div class="nav-item__content collapsed" data-collapse="target">
-     <div class="nav-item__inner">
+    <div class="toggle-block__content collapsed" data-collapse="target">
+     <div class="toggle-block__inner">
       <div class="form-group">
        <label for="navTitle">Navigation Label</label>
        <input type="text" name="navTitle" placeholder="Navigation Label">
@@ -145,15 +152,15 @@
    </div>
  
    {# NAV SUB-ITEM #}
-   <div class="nav-item sub-nav-item">
-    <div class="nav-item__header" data-collapse="toggle">
-     <h3 class="nav-item__title">Holiday <span class="small-text"> &nbsp;&nbsp;sub-nav</span></h3>
-     <div class="small-text nav-item__type">collection</div>
-     <i class="fas fa-chevron-down nav-item__toggle"></i>
+   <div class="toggle-block sub-toggle-block">
+    <div class="toggle-block__header" data-collapse="toggle">
+     <h3 class="toggle-block__title secondary-title">Holiday <span class="small-text"> &nbsp;&nbsp;sub-nav</span></h3>
+     <div class="small-text toggle-block__type">collection</div>
+     <i class="fas fa-chevron-down toggle-block__toggle"></i>
     </div>
  
-    <div class="nav-item__content collapsed" data-collapse="target">
-     <div class="nav-item__inner">
+    <div class="toggle-block__content collapsed" data-collapse="target">
+     <div class="toggle-block__inner">
       <div class="form-group">
        <label for="navTitle">Navigation Label</label>
        <input type="text" name="navTitle" placeholder="Navigation Label">
@@ -176,14 +183,14 @@
    </div>
 
    {# NAV ITEM #}
-   <div class="nav-item">
-    <div class="nav-item__header" data-collapse="toggle">
-     <h3 class="nav-item__title">Contact <span class="small-text"></span></h3>
-     <div class="small-text nav-item__type">page</div>
-     <i class="fas fa-chevron-down nav-item__toggle"></i>
+   <div class="toggle-block">
+    <div class="toggle-block__header" data-collapse="toggle">
+     <h3 class="toggle-block__title secondary-title">Contact <span class="small-text"></span></h3>
+     <div class="small-text toggle-block__type">page</div>
+     <i class="fas fa-chevron-down toggle-block__toggle"></i>
     </div>
-    <div class="nav-item__content collapsed" data-collapse="target">
-     <div class="nav-item__inner">
+    <div class="toggle-block__content collapsed" data-collapse="target">
+     <div class="toggle-block__inner">
       <div class="form-group">
        <label for="navTitle">Navigation Label</label>
        <input type="text" name="navTitle" placeholder="Navigation Label">
