@@ -75,10 +75,10 @@
  </div>
       <!-- Custom Settings Tab -->
       {% if page.settings %}
-      <div class="toggle-block">
-        <div class="toggle-block__header" data-collapse="toggle">
+      <div class="toggle-block" data-collapse="parent">
+        <div class="toggle-block__header">
           <h3 class="toggle-block__title">Custom Page Settings</h3>
-          <i class="fas fa-chevron-down toggle-block__toggle"></i>
+          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
         </div>
         <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse="target">
           {% for setting in page.settings %}
