@@ -2,6 +2,7 @@
 // Page Edit JS
 // --------------------------------------------------------
 
+import './modules/main.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { mediaSelect } from './modules/mediaModal.js';

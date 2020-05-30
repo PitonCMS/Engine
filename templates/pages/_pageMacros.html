@@ -15,14 +15,14 @@
 {% set elementTypes = getElements() %}
 {% set enableInput = elementTypes[element.template].enableInput %}
 
-<div class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent">
+<div class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 
   <!-- Element Title -->
-  <div class="toggle-block__header toggle-block__header-secondary" data-collapse="toggle">
+  <div class="toggle-block__header toggle-block__header-secondary">
    <h4 class="toggle-block__title secondary-title">{{ loopIndex }}. {{ element.title }}</h4>
-   <i class="fas fa-chevron-down toggle-block__toggle"></i>
+   <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
   <div class="form-block__elementWrapper" data-collapse="target">

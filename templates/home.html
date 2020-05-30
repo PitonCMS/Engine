@@ -13,5 +13,8 @@
 <p class="lead">Current project: <code>{{ site.settings.projectDir }}</code></p>
 <p class="lead">PitonCMS Engine Version: <code>{{ site.settings.engine }}</code></p>
 
-
 {% endblock content %}
+
+{% block foot %}
+  {{ getJsFileSource('main') }}
+{% endblock foot %}

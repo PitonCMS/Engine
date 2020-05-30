@@ -90,13 +90,8 @@
  </div><!-- /.wrapper -->
 
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
- {% if site.settings.production %}
- <script src="{{ baseUrl() }}/admin/js/dist/main.js?v={{ site.settings.assetVersion }}"></script>
- {% else %}
- <script src="{{ baseUrl() }}/admin/js/main.js?v={{ site.settings.assetVersion }}" type="module"></script>
- {% endif %}
 
- {# Optional footer block element #}
+ {# Footer block element #}
  {% block foot '' %}
 </body>
 

@@ -27,9 +27,9 @@
       <a class="btn btn-cancel" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
       <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now">Publish</button>
       <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
-
     </div>
-             <!-- Control Buttons -->
+
+    <!-- Control Buttons -->
     {# Add New Element Button  #}
     <div class="btn-dropdown-block" >
      <div class="btn btn-dropdown">
@@ -62,7 +62,6 @@
 {% block content %}
   <div class="pageEdit__wrapper" data-page-edit="1">
 
-
     <!-- Left Column Page Edit -->
     <div class="pageEdit__leftCol">
 
@@ -92,10 +91,10 @@
       {# Page Blocks and Elements #}
       {# Outer loop: All blocks defined in the JSON page definition file #}
       {% for blockDefinition in page.definition.blocks %}
-        <div class="toggle-block">
-          <div class="toggle-block__header" data-collapse="toggle">
+        <div class="toggle-block" data-collapse="parent">
+          <div class="toggle-block__header">
             <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
-            <i class="fas fa-chevron-down toggle-block__toggle"></i>
+            <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
           </div>
           <div class="toggle-block__content" data-collapse="target">
             <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}">
@@ -207,9 +206,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-{% if site.settings.production %}
-<script src="{{ baseUrl() }}/admin/js/dist/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
-{% else %}
-<script src="{{ baseUrl() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}" type="module"></script>
-{% endif %}
+  {{ getJsFileSource('pageEdit') }}
 {% endblock foot %}

@@ -1,6 +1,7 @@
 // --------------------------------------------------------
 // Navigation management
 // --------------------------------------------------------
+import './modules/main.js';
 
 /*
 // Listen for form input changes to update save button status

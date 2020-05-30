@@ -92,6 +92,7 @@ class Admin extends Base
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
+            new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
             // new TwigFunction('getBreadcrumb', [$this, 'getBreadcrumb']),
         ]);
     }
@@ -261,5 +262,26 @@ class Admin extends Base
         $currentRoute = $this->container['settings']['site']['currentRouteName'];
 
         return [];
+    }
+
+    /**
+     * Get JS File Source
+     *
+     * Returns <script> tag with link to JS source
+     * Uses compiled JS in /dist, unless requested to be type=module for development
+     * @param string $file JS file to load without the extension
+     * @param bool   $module Flag to return type=module
+     */
+    public function getJsFileSource(string $file, bool $module = false)
+    {
+        if ($this->container['settings']['site']['production'] || !$module) {
+            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['site']['assetVersion'];
+        } else {
+            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['site']['assetVersion'];
+        }
+
+        $moduleType = ($module) ? 'type="module"' : '';
+
+        return "<script src=\"$source\" $moduleType></script>";
     }
 }
