@@ -13,7 +13,7 @@
 {% block openForm %}
 <form class="jsEditCollection" action="{{ pathFor('adminCollectionSave') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
- {% endblock openForm %}
+{% endblock openForm %}
 
  {% block contentHeader %}
 
@@ -43,7 +43,7 @@
    <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
    <div class="form-group">
     <label>Collection Title</label>
-    <input type="text" class="form-control jsPageTitle" name="collection_title"
+    <input type="text" class="form-control" name="collection_title"
      value="{{ page.collection.collection_title }}" maxlength="60" placeholder="Collection title" required
      autocomplete="off">
    </div>
@@ -110,3 +110,7 @@
  {% block closeForm %}
 </form>
 {% endblock closeForm %}
+
+{% block foot %}
+  {{ getJsFileSource('collectionEdit') }}
+{% endblock foot %}
