@@ -36,8 +36,6 @@
  &__main {
   align-content: flex-start;
   flex: 3;
-  display: grid;
-  grid-template-columns: 2rem 1fr max-content;
 
   >* {
    @include margin(null null .5rem null);
@@ -50,7 +48,8 @@
   line-height: $nav-height;
   border: solid 1px darken($border, 10%);
 
-  &__inner {
+  .toggle-block__inner {
+   background: pink;
    @include padding(1rem null);
    display: grid;
    grid-template-columns: 1fr;

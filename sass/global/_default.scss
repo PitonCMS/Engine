@@ -279,12 +279,25 @@ a {
  &__toggle{
   font-size: .875rem;
  @include padding(1rem .5em 1em 1em);
+ @include margin(null null null .75em);
  border-left: solid 1px darken($border, 10%);
 
  &:hover {
   cursor: pointer;
   color: $text-accent-hover;
  }
+ }
+ &__inner{
+  @include padding(1rem );
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 1rem;
+
+   .form-group {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+
+   }
  }
 }
 
