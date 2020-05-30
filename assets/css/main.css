@@ -594,11 +594,14 @@ a:hover {
 }
 
 .sidebar .side-nav {
-  padding-top: 50px;
-  padding-left: 0.75rem;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
+}
+@media screen and (min-width: 768px) {
+  .sidebar .side-nav {
+    padding-top: 50px;
+  }
 }
 .sidebar .side-nav__link {
   padding-right: 0.5em;
@@ -863,8 +866,7 @@ button:active {
   font-size: 0.875rem;
 }
 .form-group-block .form-group:hover {
-  background: #3782c3;
-  color: white;
+  background: #dee3e7;
 }
 .form-group-block .form-group a {
   display: flex;
@@ -874,7 +876,7 @@ button:active {
   height: 100%;
 }
 .form-group-block .form-group a:hover {
-  color: white;
+  color: #ef8e48;
 }
 
 /* dropdown trigger */
@@ -1367,6 +1369,9 @@ label {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+.media-wrapper .form-check-label {
+  font-weight: 300;
 }
 .media-wrapper .mediaControls {
   display: grid;

@@ -81,6 +81,8 @@
   .form-check {
    display: flex;
    align-items: center;
+
+
   }
  }
 
@@ -96,7 +98,11 @@
    display: flex;
    justify-content: flex-start;
    align-items: center;
+
   }
+ }
+ .form-check-label{
+  font-weight: 300;
  }
 
  .mediaControls {

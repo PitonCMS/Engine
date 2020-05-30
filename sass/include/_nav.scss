@@ -2,10 +2,13 @@
 
 .sidebar {
  .side-nav {
-  @include padding($nav-height null null .75rem);
+
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
+  @media screen and (min-width: $breakpoint){
+   @include padding($nav-height null null null);
+  }
   
 
   &__link {

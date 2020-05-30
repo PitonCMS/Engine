@@ -58,8 +58,7 @@
   font-size: 0.875rem;
 
   &:hover {
-   background: $bg-accent;
-   color: $text-light;
+   background: $bg-grey;
   }
 
   a {
@@ -70,7 +69,7 @@
    height: 100%;
 
    &:hover {
-    color: $text-light;
+    color: $text-accent-hover;
    }
   }
  }
