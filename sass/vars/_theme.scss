@@ -3,6 +3,7 @@ $clr-dark: hsl(0, 0%, 21%);
 $clr-light: hsl(0, 0%, 100%);
 $clr-light-grey: hsl(210, 22%, 96%);
 $clr-light-grey-1: hsl(213, 16%, 89%);
+$clr-light-grey-2: hsl(210, 11%, 93%);
 $clr-dark-grey: hsl(210, 6%, 48%);
 $clr-blue: rgb(55, 130, 195);
 $clr-dark-blue: hsl(230, 57%, 30%);
@@ -30,6 +31,7 @@ $bg-dark: $clr-dark;
 $bg-light: $clr-light-grey;
 $bg-white: $clr-light;
 $bg-grey: $clr-light-grey-1;
+$bg-grey-light: $clr-light-grey-2;
 $bg-accent: $clr-blue;
 
 // Default color Styles

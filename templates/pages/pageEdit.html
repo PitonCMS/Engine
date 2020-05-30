@@ -21,7 +21,7 @@
     <!-- Breadcrumbs -->
     <div class="breadcrumb"></div>
     <!-- Section Title -->
-    <h1 class="section-title">{{ page.title }}</h1>
+    <h1 class="section-title">Editing: {{ page.title }}</h1>
 
     <div class="btn-group">
       <a class="btn btn-cancel" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
@@ -76,12 +76,12 @@
  </div>
       <!-- Custom Settings Tab -->
       {% if page.settings %}
-      <div class="pageEdit__sectionBlock">
-        <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
-          <h3 class="pageEdit__title pageEdit__title-wrapper">Custom Page Settings</h3>
-          <i class="fas fa-chevron-down"></i>
+      <div class="toggle-block">
+        <div class="toggle-block__header" data-collapse="toggle">
+          <h3 class="toggle-block__title">Custom Page Settings</h3>
+          <i class="fas fa-chevron-down toggle-block__toggle"></i>
         </div>
-        <div class="pageEdit__sectionBlock-content {% if page.id %}collapsed{% endif %}" data-collapse="target">
+        <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse="target">
           {% for setting in page.settings %}
           {{ settingMacro.settingInput(setting) }}
           {% endfor %}
@@ -92,12 +92,12 @@
       {# Page Blocks and Elements #}
       {# Outer loop: All blocks defined in the JSON page definition file #}
       {% for blockDefinition in page.definition.blocks %}
-        <div class="pageEdit__sectionBlock">
-          <div class="pageEdit__sectionBlock-header" data-collapse="toggle">
-            <h3 class="pageEdit__title pageEdit__title-wrapper">{{ blockDefinition.name }}</h3>
-            <i class="fas fa-chevron-down"></i>
+        <div class="toggle-block">
+          <div class="toggle-block__header" data-collapse="toggle">
+            <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
+            <i class="fas fa-chevron-down toggle-block__toggle"></i>
           </div>
-          <div class="pageEdit__sectionBlock-content" data-collapse="target">
+          <div class="toggle-block__content" data-collapse="target">
             <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}">
               {# Inner loop: Elements inside block #}
               {% for element in page.blocks[blockDefinition.key] %}

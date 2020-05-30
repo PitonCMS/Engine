@@ -97,7 +97,7 @@
  @include margin(null null 1em null);
  display: grid; 
  grid-template-columns: 1fr;
- cursor: pointer;
+ // cursor: pointer;
 
  &-header {
    background: $bg-grey;

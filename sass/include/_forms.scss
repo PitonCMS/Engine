@@ -127,14 +127,16 @@ label {
  }
 
  &__title {
+  @include margin(0);
+  @include padding(0);
   background: $bg-grey;
   display: grid;
-  grid-template-columns: min-content 1fr;
+  grid-template-columns: 1fr auto;
   gap: 1em;
 
   &:hover {
-   cursor: pointer;
-   background: darken($bg-grey, 10%);
+   cursor: move;
+   // background: darken($bg-grey, 10%);
   }
  }
 }

@@ -446,6 +446,73 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+.toggle-block {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.toggle-block__header {
+  background: #dee3e7;
+  padding: 0.5em;
+  margin: 0 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  position: sticky;
+  top: calc(100px);
+  z-index: 50;
+}
+.toggle-block__header-secondary {
+  background: #ebedef;
+  border: solid 1px #dee3e7;
+}
+.toggle-block__title {
+  padding-top: 0.5em;
+  padding-right: 1em;
+  padding-bottom: 0.5em;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.toggle-block__title:hover {
+  cursor: default;
+}
+.toggle-block__toggle {
+  font-size: 0.875rem;
+  padding: 1rem 0.5em 1em 1em;
+  border-left: solid 1px #c1c9d2;
+}
+.toggle-block__toggle:hover {
+  cursor: pointer;
+  color: #ef8e48;
+}
+
+.secondary-title {
+  padding: 0.5em 1em 0.5em 0.75em;
+  flex: 1;
+  color: #212f78;
+  font-size: 1.2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.secondary-title:hover {
+  cursor: move;
+}
+
+.heading-toggle {
+  font-size: 0.875rem;
+  padding: 1rem 1em 1em;
+  border-left: solid 1px #c1c9d2;
+}
+.heading-toggle:hover {
+  cursor: pointer;
+  color: #ef8e48;
+}
+
 /* Layout */
 /* Header, Logo, Hamburger Toggle */
 .top-header {
@@ -1042,14 +1109,15 @@ label {
   background: #f3f5f7 !important;
 }
 .form-block__title {
+  margin: 0;
+  padding: 0;
   background: #dee3e7;
   display: grid;
-  grid-template-columns: min-content 1fr;
+  grid-template-columns: 1fr auto;
   gap: 1em;
 }
 .form-block__title:hover {
-  cursor: pointer;
-  background: #c1c9d2;
+  cursor: move;
 }
 
 .formBlock {
@@ -1588,7 +1656,6 @@ label {
   margin-bottom: 1em;
   display: grid;
   grid-template-columns: 1fr;
-  cursor: pointer;
 }
 .pageEdit__sectionBlock-header {
   background: #dee3e7;
