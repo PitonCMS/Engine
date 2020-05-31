@@ -157,7 +157,7 @@ class Email implements EmailInterface
         $this->mailer->Host = $this->settings['email']['smtpHost'];
         $this->mailer->Port = $this->settings['email']['smtpPort'];
         $this->mailer->SMTPAuth = true;
-        $this->mailer->SMTPSecure = 'ssl';
+        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $this->mailer->Username = $this->settings['email']['smtpUser'];
         $this->mailer->Password = $this->settings['email']['smtpPass'];
     }
