@@ -9,19 +9,23 @@
  width: 100%;
  height: 100%;
  overflow: auto;
- background-color: rgba(0, 0, 0, 0.4);
+ background-color: rgba($clr-dark, 0.5);
+ display: flex;
+ justify-content: center;
+ align-items: center;
 }
 
 .modal-content {
  position: relative;
  background-color: $bg-light;
-@include margin(2rem auto);
-@include padding(0);
+// @include margin(2rem auto);
+// @include padding(0);
  border: 1px solid $border;
- width: 80%;
+ width: 60%;
+ height: 60%;
  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); 
  animation-name: animatetop;
- animation-duration: 0.4s
+ animation-duration: 125ms
 }
 
 .modal-header {
@@ -32,7 +36,14 @@
  grid-template-columns: 1fr auto;
  align-items: center;
 }
-
+.modal-dismiss{
+ color: $text-dark;
+ font-size: 1.3rem;
+ &:hover{
+  cursor: pointer;
+  color: $text-accent;
+ }
+}
 .modal-body {
  @include padding(.25rem 1rem);
  .media-wrapper {
@@ -48,9 +59,7 @@
   align-items: center;
   justify-content: center;
  }
- .mediaPopupImg {
-  // display: none;
- }
+
  .mediaBlock {
   @include margin(auto null null null);
   @include padding(1rem null null null);
