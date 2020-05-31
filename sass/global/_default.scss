@@ -324,3 +324,6 @@ a {
   color: $text-accent-hover;
  }
 }
+.sub-toggle-block {
+ @include padding(null null null 2rem);
+}
