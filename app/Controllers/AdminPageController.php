@@ -109,23 +109,23 @@ class AdminPageController extends AdminBaseController
             $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
             $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
         } else {
-            // Create new page, and get template from query string
-            $templateParam = $this->request->getQueryParam('definition');
-
-            if ($templateParam) {
-                $templateParam = htmlspecialchars($templateParam);
-            }
-
-            // Validate that we have a proper definition file name
-            if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
-                // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
-                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
-            }
-
             // New page object
             $page = $pageMapper->make();
-            $page->template = $templateParam;
             $settings = [];
+
+            // Create new page, and get template from query string
+            $templateParam = $this->request->getQueryParam('definition');
+            if ($templateParam) {
+                $templateParam = htmlspecialchars($templateParam);
+
+                // Validate that we have a proper definition file name
+                if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                    // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
+                    throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
+                }
+
+                $page->template = $templateParam;
+            }
 
             // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
             $collectionId = $this->request->getQueryParam('collectionId');
@@ -134,6 +134,7 @@ class AdminPageController extends AdminBaseController
                 $page->collection_id = $collectionId;
                 $page->collection_title = $collection->collection_title;
                 $page->collection_slug = $collection->collection_slug;
+                $page->template = $collection->collection_definition;
             }
         }
 
