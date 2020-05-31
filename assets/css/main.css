@@ -1078,14 +1078,14 @@ select {
 
 /* arrows */
 select.minimal {
-  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(45deg, transparent 50%, green 50%), linear-gradient(135deg, green 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
   background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
 }
 
 select.minimal:focus {
-  background-image: linear-gradient(45deg, green 50%, transparent 50%), linear-gradient(135deg, transparent 50%, green 50%), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(45deg, #eb7119 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #eb7119 50%), linear-gradient(to right, #ccc, #ccc);
   background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em;
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
@@ -1151,9 +1151,6 @@ label {
 .formBlock .form-text,
 .formBlock .form-control {
   grid-column: 1/-2 !important;
-}
-.formBlock .form-control {
-  background: #f3f5f7;
 }
 
 .checkbox-block {
@@ -1266,24 +1263,26 @@ label {
 .radio-block-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 0 0.5em;
+  gap: 0.5em;
 }
 .radio-block-wrapper .radio-block-item {
   padding: 0;
-  margin: 0;
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 20px 1fr;
+  gap: 0.25em;
   align-items: center;
   justify-content: center;
 }
 .radio-block-wrapper .radio-block-item__radio {
-  height: 75%;
-  width: 75%;
+  height: 100%;
+  width: 100%;
+  margin-right: 2rem;
 }
 .radio-block-wrapper .radio-block-item__label {
   font-weight: 400;
+  font-size: 1.1em;
 }
 
 /* Modal background */
@@ -1589,7 +1588,8 @@ label {
 .list-item-page-header {
   padding-top: 0.5em;
   padding-bottom: 0.25em;
-  margin-top: 1em;
+  margin-top: 0.5em;
+  margin-left: 0.25em;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -1621,8 +1621,7 @@ label {
   align-items: center;
 }
 .list-item-page .media img {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin: 0.25em 0.5em;
   height: 60px;
   width: 80px;
   object-fit: cover;

@@ -1,7 +1,7 @@
 /* Page Content & Edit Styles */
 .list-item-page-header {
  @include padding(.5em null .25em);
- @include margin(1em null null null);
+ @include margin(.5em null null .25em);
  display: flex;
  flex-flow: row nowrap;
  justify-content: space-between;
@@ -39,7 +39,7 @@
   align-items: center;
 
   img {
-   @include margin(.5em null);
+   @include margin(.25em .5em);
    height: 60px;
    width: 80px;
    object-fit: cover;

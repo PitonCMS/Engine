@@ -41,25 +41,28 @@ border-bottom: solid .01em $border;
 .radio-block-wrapper {
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
- gap: 0 .5em;
+ gap: .5em;
 
  .radio-block-item {
   @include padding(0);
-  @include margin(0);
+  // @include margin(.25em null);
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 20px 1fr;
+  gap: .25em;
   align-items: center;
   justify-content: center;
 
   &__radio {
-   height: 75%;
-   width: 75%;
+   height: 100%;
+   width: 100%;
+   @include margin(null 2rem null null);
   }
 
   &__label {
    font-weight: 400;
+   font-size: 1.1em;
   }
  }
 }
