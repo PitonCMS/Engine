@@ -35,16 +35,16 @@
     <div class="form-block">
 
       <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
-      <div class="radio-block-wrapper">
+      <div class="form-check-wrapper">
         {% for el in elementTypes %}
         {% if (elementTypeOptions and el.filename in elementTypeOptions) or (not elementTypeOptions) %}
-        <div class="radio-block-item">
-          <input class="radio-block-item__radio" type="radio" name="element_template[{{ arrayKey }}]"
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]"
             id="{{ arrayKey }}-{{ el.filename }}" value="{{ el.filename }}"
             data-element-enable-input="{{ el.enableInput|default(1) }}"
             {{ checked(element.template == el.filename) }} required>
 
-            <label class="radio-block-item__label" for="{{ arrayKey }}-{{ el.filename }}"
+            <label class="form-check-label" for="{{ arrayKey }}-{{ el.filename }}"
             title="{{ el.description }}">{{ el.name }}</label>
         </div>
         {% endif %}

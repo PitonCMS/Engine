@@ -116,12 +116,13 @@
 
 {% if status == 'orphaned' %}
 <span class="badge badge-danger">Orphaned</span>
-
-<div class="form-check">
- <input class="form-check-input" name="setting[{{ key }}][delete]" type="checkbox" value="delete"
-  title="Deletes on save">
- <label class="text-danger">Delete?</label>
+<div class="form-check-wrapper">
+ <div class="form-check">
+  <input class="form-check-input" type="checkbox" name="setting[{{ key }}][delete]" value="delete" title="Deletes on save">
+  <label class="form-check-label text-danger">Delete?</label>
+ </div>
 </div>
+
 
 {% elseif status == 'new' %}
 <span class="badge badge-success">New</span>

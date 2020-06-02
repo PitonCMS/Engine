@@ -7,12 +7,13 @@
 {% block contentHeader %}
 <div class="content-header-inner">
  <div class="breadcrumb"></div>
- <h1 class="section-title">{{ page.navigator|capitalize }} Navigation</h1>
+ <h1 class="section-title">Nav Structure: {{ page.navigator|capitalize }}</h1>
+
  <div class="btn-group">
   <a class="btn btn-cancel" data-form-button="cancel">Discard</a>
   <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
 
-</div>
+ </div>
 </div>
 {% endblock contentHeader %}
 
@@ -24,62 +25,46 @@
 
 
  {% block content %}
- <h2 class="page-title span">Nav Structure</h2>
+
  <div class="nav-wrapper">
   {# SIDEBAR #}
   <div class="nav-wrapper__sidebar">
 
-    <h4 class="checkbox-block__title">Pages</h4>
-    <div class="checkbox-block">
-    <div class="form-group-inline">
-      <input type="checkbox" id="home" name="home" value="1">
-      <label for="home">Home</label>
+   <div class="form-check-wrapper checkbox-block">
+    <h3 class="checkbox-block__title span">Pages</h3>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="home" name="home" value="1">
+     <label class="form-check-label" for="home">Home</label>
     </div>
- 
-    <div class="form-group-inline">
-      <input type="checkbox" id="about" name="about" value="2">
-      <label for="about">About Us</label>
+
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="about" name="about" value="2">
+     <label class="form-check-label" for="about">About Us</label>
     </div>
- 
-  <div class="form-group-inline">
-      <input type="checkbox" id="contact" name="contact" value="3">
-      <label for="contact">Contact</label>
-  </div>
- 
-<div class="form-group-inline">
-      <input type="checkbox" id="services" name="services" value="4">
-      <label for="services">Home</label>
-</div>
- 
+
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="contact" name="contact" value="3">
+     <label class="form-check-label" for="contact">Contact</label>
     </div>
- 
-    <h4 class="checkbox-block__title">Collections</h4>
-    <div class="checkbox-block">
- 
-  <div class="form-group-inline">
-      <input type="checkbox" id="recipes" name="recipes" value="5">
-      <label for="recipes">Recipes</label>
-  </div>
- 
-<div class="form-group-inline">
-      <input type="checkbox" id="holiday" name="holiday" value="6">
-      <label for="holiday">Holiday</label>
-</div>
- 
+
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="services" name="services" value="4">
+     <label class="form-check-label" for="services">Services</label>
     </div>
- 
-    <h4 class="checkbox-block__title">Placeholder</h4>
-    <div class="form-group">
-     <label class="navTitle" for="placeholderName">Title</label>
-     <input type="text" name="placeholderName" placeholder="Nav Title">
-    </div>
-  
-    <div class="form-group">
-     <label class="navTitle" for="placeholderUrl">URL</label>
-     <input type="text" name="placeholderUrl" placeholder="Nav URL or Slug">
-    </div>
-  
- 
+
+   </div>
+
+   <h3 class="checkbox-block__title span">Placeholder</h3>
+   <div class="form-group nav-wrapper__form-group">
+    <label class="navTitle" for="placeholderName">Title</label>
+    <input type="text" name="placeholderName" placeholder="Nav Title">
+   </div>
+   <div class="form-group nav-wrapper__form-group">
+    <label class="navTitle" for="placeholderUrl">URL</label>
+    <input type="text" name="placeholderUrl" placeholder="Nav URL or Slug">
+   </div>
+
+
    <div class="btn-group-nav-sidebar">
     <button class="btn btn-save">Add</button>
    </div>
@@ -97,13 +82,13 @@
     </div>
 
     <div class="toggle-block__content collapsed" data-collapse="target">
-     
+
      <div class="toggle-block__inner">
       <div class="form-group">
        <label for="navTitle">Navigation Label</label>
        <input type="text" name="navTitle" placeholder="Navigation Label">
       </div>
-     
+
       <div class="form-group">
        <div class="">Original Label</div>
        <p>Original label name</p>
@@ -115,9 +100,9 @@
       </div>
 
      </div>
- 
- 
- 
+
+
+
     </div>
    </div>
 
@@ -137,20 +122,20 @@
       <div class="form-group">
        <label>Original Label</label>
        <p>Original label name</p>
- 
+
       </div>
       <div class="btn-group-navigation">
        <button class="btn btn-delete d-block">Remove</button>
        <div class="btn btn-cancel d-block">Discard</div>
- 
+
       </div>
      </div>
- 
- 
- 
+
+
+
     </div>
    </div>
- 
+
    {# NAV SUB-ITEM #}
    <div class="toggle-block sub-toggle-block">
     <div class="toggle-block__header" data-collapse="toggle">
@@ -158,7 +143,7 @@
      <div class="small-text toggle-block__type">collection</div>
      <i class="fas fa-chevron-down toggle-block__toggle"></i>
     </div>
- 
+
     <div class="toggle-block__content collapsed" data-collapse="target">
      <div class="toggle-block__inner">
       <div class="form-group">
@@ -168,17 +153,17 @@
       <div class="form-group">
        <label>Original Label</label>
        <p>Original label name</p>
- 
+
       </div>
       <div class="btn-group-navigation">
        <button class="btn btn-delete d-block">Remove</button>
        <div class="btn btn-cancel d-block">Discard</div>
- 
+
       </div>
      </div>
- 
- 
- 
+
+
+
     </div>
    </div>
 
@@ -198,20 +183,20 @@
       <div class="form-group">
        <label>Original Label</label>
        <p>Original label name</p>
- 
+
       </div>
       <div class="btn-group-navigation">
        <button class="btn btn-delete d-block">Remove</button>
        <div class="btn btn-cancel d-block">Discard</div>
- 
+
       </div>
      </div>
- 
- 
- 
+
+
+
     </div>
    </div>
-   
+
   </div>
   {# END MAIN CONTENT #}
  </div>
@@ -220,7 +205,7 @@
 
 
 
-{#  OLD CODE #}
+ {#  OLD CODE #}
  {# <div class="jsEditNavBlock">
   <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
       {{ navItem.selectNavPage(page.navigation, page.navigator) }}
@@ -229,7 +214,7 @@
       </li>
   </ul>
 </div> #}
-{# END OLD CODE #}
+ {# END OLD CODE #}
 
  {% endblock content %}
 

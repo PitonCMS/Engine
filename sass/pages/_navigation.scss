@@ -1,9 +1,10 @@
+/* Navigation Structure */ 
 .nav-wrapper {
- font-size: 1.1em;
+ @include margin(1rem null null null);
+ font-size: 1em;
  display: flex;
 
  &__sidebar {
-
   @include padding(null 1em null null);
   flex: .75;
   display: flex;
@@ -15,29 +16,33 @@
 
    align-items: center;
   }
+.checkbox-block {
+ grid-template-columns: 1fr;
+ gap: 0;
+ &__title {
+  @include margin(1rem null .5rem);
+  font-size: 1.4rem;
+  @include padding(0);
+  color: $text-secondary;
+  font-weight: 300;
+  line-height: 1;
+ }
+}
 
- 
-
-  .checkbox-block__title {
-   @include margin(1rem null .5rem);
-   font-size: 1.1rem;
-   @include padding(0);
-   color: $text-secondary;
-   font-weight: 300;
-   line-height: 1;
-  }
-
-  label {
-   font-weight: 300;
-   font-style: italic;
+ }
+ &__form-group {
+  @include margin(0 null .5rem null);
+  label{
+   font-weight: 600;
+   display: none;
   }
  }
 
  &__main {
   align-content: flex-start;
   flex: 3;
-
   >* {
+border: solid 1px $border;
    @include margin(null null .5rem null);
   }
  }
