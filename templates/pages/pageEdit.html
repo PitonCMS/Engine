@@ -98,6 +98,7 @@
             <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
           </div>
           <div class="toggle-block__content" data-collapse="target">
+            {# Element order is draggable. On drag empty div's with class drag-drop are inserted around all elements as drop zone targets #}
             <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
               {% for element in page.blocks[blockDefinition.key] %}
                 {# Inner loop: Elements inside block #}
