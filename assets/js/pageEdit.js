@@ -7,6 +7,7 @@ import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { mediaSelect } from './modules/mediaModal.js';
 import { setCleanSlug, unlockSlug } from './modules/url.js';
+import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler } from './modules/drag.js';
 
 /**
  * Set Element Title
@@ -178,6 +179,16 @@ document.querySelector(`[data-url-slug-lock="1"]`).addEventListener("click", (e)
 // Bind page edit listeners for events that bubble
 document.addEventListener("click", mediaSelect);
 document.addEventListener("change", setElementTitleText);
+
+// Draggable page elements
+document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
+    zone.addEventListener("dragstart", dragStartHandler);
+    zone.addEventListener("dragenter", dragEnterHandler);
+    zone.addEventListener("dragover", dragOverHandler);
+    zone.addEventListener("dragleave", dragLeaveHandler);
+    zone.addEventListener("drop", dragDropHandler);
+    zone.addEventListener("dragend", dragEndHandler);
+});
 
 /*
 

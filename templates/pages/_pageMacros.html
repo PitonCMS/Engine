@@ -15,7 +15,7 @@
 {% set elementTypes = getElements() %}
 {% set enableInput = elementTypes[element.template].enableInput %}
 
-<div class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
+<div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
 

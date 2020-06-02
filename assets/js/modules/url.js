@@ -27,7 +27,7 @@ const unlockSlug = function(event) {
 
     const message = 'Are you sure you want to change the URL Slug? This can impact links and search engine results.';
 
-    if (event.target.classList.contains("fa-lock")) {
+    if (event.target.classList && event.target.classList.contains("fa-lock")) {
         if (!confirm(message)) return;
 
         // Continue to unlock and enable input

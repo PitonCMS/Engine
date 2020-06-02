@@ -98,7 +98,7 @@
             <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
           </div>
           <div class="toggle-block__content" data-collapse="target">
-            <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}">
+            <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
               {% for element in page.blocks[blockDefinition.key] %}
                 {# Inner loop: Elements inside block #}
                 {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
@@ -203,5 +203,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  {{ getJsFileSource('pageEdit', true) }}
+  {{ getJsFileSource('pageEdit') }}
 {% endblock foot %}
