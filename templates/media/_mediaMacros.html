@@ -67,7 +67,7 @@
 #}
 {% macro checkbox(category, mediaId) %}
 {% if category %}
-<div class="form-group form-check form-check-inline">
+<div class="form-check">
  <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]"
   value="{{ category.id }}" {{ checked(category.media[mediaId]) }}>
  <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
@@ -128,12 +128,14 @@
       <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
       <label class="custom-file-label" for="mediaFile">Choose a file</label>
      </div>
-
      <hr>
-     <div class="form-group form-check">
-      <input class="form-check-input" type="checkbox" id="feature" name="feature">
-      <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
+     <div class="form-check-wrapper">
+      <div class="form-check">
+       <input class="form-check-input" type="checkbox" id="feature" name="feature">
+       <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
+      </div>
      </div>
+
      <hr>
      {% for category in page.categories %}
      {{ mediaMacro.checkbox(category) }}
@@ -148,13 +150,16 @@
      {# Only display optimize checkbox if there is a Tinyfy key set in settings #}
      {% if site.settings.tinifyApiKey %}
      <hr>
-     <div class="form-group form-check">
-      <input class="form-check-input" type="checkbox" id="optimize" name="optimize" checked>
-      <label class="form-check-label" for="optimize">Optimize Media</label>
-      <small class="form-text text-muted">
-       Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
-      </small>
+     <div class="form-check-wrapper">
+      <div class="form-check">
+       <input class="form-check-input" type="checkbox" id="optimize" name="optimize" checked>
+       <label class="form-check-check-label" for="optimize">Optimize Media</label>
+       <small class="form-check-text text-muted">
+        Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
+       </small>
+      </div>
      </div>
+    
      {% endif %}
 
      <div class="form-group">

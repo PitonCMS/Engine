@@ -1,43 +1,35 @@
 {#  Admin Navbar #}
 
 <ul class="side-nav">
-
  <li class="side-nav__link home">
-  <i class="fas fa-home"></i>
-  <a href="{{ pathFor('adminHome') }}">Home</a>
+  <a href="{{ pathFor('adminHome') }}"><i class="side-nav__icon fas fa-home"></i> Home</a>
  </li>
 
  <li class="side-nav__link pageContent {{ currentRouteGroup('adminPage') }}{{ currentRouteGroup('adminCollection') }}">
-  <i class="fas fa-pencil-alt"> </i>
-  <a href="{{ pathFor('adminPage') }}">Pages</a>
+  <a href="{{ pathFor('adminPage') }}"><i class="side-nav__icon fas fa-pencil-alt"></i> Pages</a>
  </li>
 
  <li class="side-nav__link media">
-  <i class="fas fa-images"> </i>
-  <a href="{{ pathFor('adminMedia') }}">Media</a>
+  <a href="{{ pathFor('adminMedia') }}"><i class="side-nav__icon fas fa-images"></i> Media</a>
  </li>
 
- <li class="side-nav__link navigation">
-    <i class="fas fa-compass"> </i>
-    <a href="{{ pathFor('adminNavigation') }}">Navigation</a>
+ <li class="side-nav__link navigation"> 
+    <a href="{{ pathFor('adminNavigation') }}"><i class="side-nav__icon fas fa-compass"></i> Navigation</a>
    </li>
 
  <li class="side-nav__link help">
-  <i class="fas fa-question"></i>
-  <a href="{{ pathFor('adminHelp') }}">Help</a>
+  <a href="{{ pathFor('adminHelp') }}">  <i class="side-nav__icon fas fa-question"></i> Help</a>
  </li>
 
  <li class="side-nav__link messages">
-  <i class="fas fa-envelope"></i>
-  <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}">Mailbox</a>
+  <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}">  <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
   {% if getUnreadMessageCount() %}
   <div class="badge badge-notify">{{ getUnreadMessageCount() }}</div>
   {% endif %}
  </li>
 
  <li class="side-nav__link settings">
-  <i class="fas fa-cog"></i>
-  <a href="{{ pathFor('adminToolSetting') }}">Settings</a>
+  <a href="{{ pathFor('adminToolSetting') }}"><i class="side-nav__icon fas fa-cog"></i> Settings</a>
  </li>
 
 </ul>

@@ -1,19 +1,17 @@
-// SETTINGS
-
-.content-block {
+.settings-block {
  @include margin(1rem);
  display: grid;
- grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
- gap: 2rem;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 1rem;
 
- .form-group {
-  // background: purple;
-  // @include padding(1rem);
-  // display: flex;
-  // flex-flow: column nowrap;
-  // justify-content: flex-start;
-  // align-items: flex-start;
-  // box-shadow: $box-shadow-1;
+ .formBlock {
+  @include padding(1rem);
+  background: $bg-white;
+  display: grid;
+  align-items: flex-start;
+  justify-content: stretch;
+
+  box-shadow: $box-shadow-1;
 
   &__title-wrapper {
    display: flex;
@@ -92,7 +90,6 @@
  }
 }
 .user-block-name {
-
  display: grid;
  grid-template-columns: repeat(2, 1fr);
  gap: 1em; 

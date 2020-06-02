@@ -1,5 +1,4 @@
 /* Default Styles */
-
 *,
 *::before,
 *::after {
@@ -27,7 +26,6 @@ img {
  width: 100%;
  display: block;
 }
-
 /* Html Element Styles */
 
 h1,
@@ -65,9 +63,9 @@ a {
  grid-column: 1 / -1;
 }
 
+/* Badges */
 .badge {
  @include padding(.5em);
- // @include margin(.5em);
  width: 100%;
  height: 50%;
  border-radius: $border-radius;
@@ -91,7 +89,7 @@ a {
   color: $text-light;
  }
 }
-
+/* Text Styles */ 
 .published {
  color: $clr-success;
  text-transform: capitalize;
@@ -113,13 +111,6 @@ a {
  font-weight: 300;
  font-style: italic;
 }
-.d-block {
- display: block;
-}
-.d-none {
- display: none !important;
-}
-
 .strong-text {
  font-weight: bold;
 }
@@ -138,7 +129,15 @@ a {
  color: $clr-notify;
  font-weight: bold;
 }
+/* Display */ 
+.d-block {
+ display: block;
+}
+.d-none {
+ display: none !important;
+}
 
+/* Alerts */ 
 .alert {
  @include padding(1.5rem);
  @include margin(calc(#{$nav-height * 2}) 5vw 0);
@@ -189,24 +188,21 @@ a {
 
  }
 }
+/* Not sure this is used */ 
+// .collapsed {
+//  display: none;
+//  animation: collapse 250ms ease-in-out forwards;
+// }
 
-.collapsed {
- display: none;
+// @keyframes collapse {
+//  0% {
+//   opacity: 0;
+//  }
 
- animation: collapse 250ms ease-in-out forwards;
-
-}
-
-@keyframes collapse {
- 0% {
-  opacity: 0;
- }
-
- 100% {
-  opacity: .25;
- }
-}
-
+//  100% {
+//   opacity: .25;
+//  }
+// }
 /* Spinner Class */ 
 .spinner {
  background: rgba($bg-dark, .5) !important;
@@ -240,90 +236,4 @@ a {
  100% {
   transform: rotate(360deg);
  }
-}
-// Page Edit Blocks
-.toggle-block {
- @include margin(1em null);
- display: grid; 
- grid-template-columns: 1fr;
-
-
- &__header {
-   background: $bg-grey;
-  @include padding(.5em);
-  margin: 0 !important;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: $nav-height;
-
-  position: sticky;
-  top: calc(#{$nav-height * 2});
-  z-index: 50;
-
-&-secondary{
- background: $bg-grey-light;
- border: solid 1px $border;
-}
- }
- &__title{
-  @include padding(.5em 1em .5em null);
- flex: 1;
- height: 100%;
- display: flex;
- align-items: center;
- &:hover{
-  cursor: default;
- }
- }
- &__toggle{
-  font-size: .875rem;
- @include padding(1rem .5em 1em 1em);
- @include margin(null null null .75em);
- border-left: solid 1px darken($border, 10%);
-
- &:hover {
-  cursor: pointer;
-  color: $text-accent-hover;
- }
- }
- &__inner{
-  @include padding(1rem );
-   display: grid;
-   grid-template-columns: 1fr;
-   gap: 1rem;
-
-   .form-group {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-
-   }
- }
-}
-
-.secondary-title{
- @include padding(.5em 1em .5em .75em);
- flex: 1;
- color: $text-secondary;
- font-size: 1.2rem;
- height: 100%;
- display: flex;
- align-items: center;
- &:hover{
-  cursor: move;
- }
-
-}
-.heading-toggle {
- font-size: .875rem;
- @include padding(1rem 1em 1em 1em);
- border-left: solid 1px darken($border, 10%);
-
- &:hover {
-  cursor: pointer;
-  color: $text-accent-hover;
- }
-}
-.sub-toggle-block {
- @include padding(null null null 2rem);
 }
