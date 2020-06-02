@@ -1,6 +1,5 @@
 /* Layout */
-
-/* Header, Logo, Hamburger Toggle */
+/* Header, Logo */
 .top-header {
  @include padding(null 1em);
  background-color: $bg-dark;
@@ -43,6 +42,7 @@
  }
 }
 
+/* Full sidebar/content wrapper to create columns */
 .wrapper {
  min-height: 100%;
  @include padding(#{$nav-height} null null null);
@@ -88,63 +88,55 @@
   flex-flow: column nowrap;
   position: relative;
  }
+}
 
- // Content Header Styles
- .content-header {
-  @include padding(0 1em);
-  background: $bg-light;
-  min-height: $nav-height;
-  width: 100%;
-  box-shadow: $box-shadow-1;
+// Content Header Styles
+.content-header {
+ @include padding(0 1em);
+ background: $bg-light;
+ min-height: $nav-height;
+ width: 100%;
+ box-shadow: $box-shadow-1;
 
+ display: flex;
+ align-items: center;
+
+ position: fixed;
+ z-index: 100;
+ top: $nav-height;
+
+ @media screen and (min-width: $breakpoint) {
+  width: calc(100vw - #{$nav-width});
+ }
+
+ &-inner {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+ }
 
-  position: fixed;
-  z-index: 100;
-  top: $nav-height;
+ .breadcrumb {
+  font-weight: 300;
+  font-size: 0.75rem;
+  @include padding(null 1em null null);
 
-  @media screen and (min-width: $breakpoint) {
-   width: calc(100vw - #{$nav-width});
-  }
+  a {
+   color: $text-accent;
 
-  &-inner {
-   display: flex;
-   justify-content: flex-start;
-   align-items: center;
-  }
-
-  .breadcrumb {
-   font-weight: 300;
-   font-size: 0.75rem;
-   @include padding(null 1em null null);
-
-   a {
-    color: $text-accent;
-
-    &:hover {
-     color: $text-accent-hover;
-    }
+   &:hover {
+    color: $text-accent-hover;
    }
   }
-
-  // Section Title
-  .section-title {
-   @include margin(0);
-   @include padding(0);
-   flex: 1;
-  }
  }
 
- // Content Header Control Buttons
- .btn-group {
-  height: $nav-height;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+/* Section Title */ 
+ .section-title {
+  @include margin(0);
+  @include padding(0);
+  flex: 1;
  }
-
 }
+
 // Content Section Layout
 .container {
  width: 100%;

@@ -3,7 +3,6 @@
  position: relative;
  @include margin(null 1em);
 }
-
 .btn-dropdown {
  background: $bg-grey;
  color: $text-secondary;
@@ -20,7 +19,6 @@
   cursor: default;
  }
 }
-
 // Dropdown buttons w/hover
 
 .form-group-block {
@@ -48,7 +46,6 @@
   label {
    @include margin(null null null .5em);
   }
-
  }
 
  .form-group {

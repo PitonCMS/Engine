@@ -1,11 +1,13 @@
-// Filter Block 
+/* Filter Block - Search, filter by something */
 .filter-block {
  width: 100%;
- @include padding(.5em);
+ @include padding(.5em null);
+ border-bottom: solid 1px $border;
+
  display: grid;
- grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ grid-template-columns: minmax(300px, 1fr) repeat(auto-fill, minmax(250px, 1fr));
+ gap: 1em;
  align-items: center;
-border-bottom: solid .01em $border;
 }
 
 // Input Block -- input with left icon
@@ -17,7 +19,12 @@ border-bottom: solid .01em $border;
  grid-template-columns: auto 1fr;
  align-items: center;
  grid-column: 1 / -1;
-
+ flex: 1;
+&:hover,
+&:focus-within {
+ outline: solid;
+ outline-color: lighten($bg-accent, 40%); 
+}
  @media screen and (min-width: $breakpoint) {
   grid-column: 1;
  }
@@ -34,35 +41,8 @@ border-bottom: solid .01em $border;
   border: none !important;
   font-size: 1rem;
   color: $text-accent;
- }
-}
-
-/* Radio Block */
-.radio-block-wrapper {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
- gap: .5em;
-
- .radio-block-item {
-  @include padding(0);
-  // @include margin(.25em null);
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: .25em;
-  align-items: center;
-  justify-content: center;
-
-  &__radio {
-   height: 100%;
-   width: 100%;
-   @include margin(null 2rem null null);
-  }
-
-  &__label {
-   font-weight: 400;
-   font-size: 1.1em;
+  &:focus{
+   outline: none;
   }
  }
 }
