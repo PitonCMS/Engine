@@ -1,6 +1,11 @@
 // Reference to element to be moved
 let movedElement;
 
+/**
+ * Event to dispatch pseudo "input" event
+ */
+const inputEvent = new Event("input", {"bubbles": true});
+
 // Empty drop zone divs to inject in DOM around draggable elements
 const dropZone = document.createElement("div");
 dropZone.classList.add("drag-drop");
@@ -78,6 +83,7 @@ const dragDropHandler = function(event) {
 
     if (movedElement !== event.target && event.target.classList && event.target.classList.contains('drag-drop')) {
         this.insertBefore(movedElement, event.target.nextSibling)
+        this.dispatchEvent(inputEvent);
     }
 }
 
