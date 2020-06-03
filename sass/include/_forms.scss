@@ -337,3 +337,35 @@ label {
   font-weight: 300;
  }
 }
+
+
+/* Form Checkbox & Radio block styles */
+.form-check-wrapper {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+ gap: 1em;
+
+ .form-check {
+  @include padding(0);
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: .25em;
+  align-items: center;
+  justify-content: center;
+
+  &-label {
+   @include margin(0);
+   @include padding(0);
+   font-weight: 400;
+   font-size: 1.1em;
+  }
+ }
+}
+/* Form Group Blocks */ 
+.form-group {
+ @include margin(1rem null);
+ label{
+  @include padding(0);
+  @include margin(0);
+ }
+} 
