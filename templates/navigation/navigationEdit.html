@@ -3,210 +3,102 @@
 
 {% block htmlTitle 'Edit Navigation' %}
 
+{% block openForm %}
+<form class="jsNavigatorForm" action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="navigator" value="{{ page.navigator }}">
+{% endblock openForm %}
 
 {% block contentHeader %}
 <div class="content-header-inner">
- <div class="breadcrumb"></div>
- <h1 class="section-title">Nav Structure: {{ page.navigator|capitalize }}</h1>
+  <div class="breadcrumb"></div>
+  <h1 class="section-title">Nav Structure: {{ page.currentNavigator.name }}</h1>
 
- <div class="btn-group">
-  <a class="btn btn-cancel" data-form-button="cancel">Discard</a>
-  <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
-
- </div>
+  <div class="btn-group">
+    <a class="btn btn-cancel" data-form-button="cancel">Discard</a>
+    <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
+  </div>
 </div>
 {% endblock contentHeader %}
 
-{% block openForm %}
-<form class="jsNavigatorForm" action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
- <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
- <input type="hidden" name="navigator" value="{{ page.navigator }}">
- {% endblock openForm %}
+{% block content %}
+  <div class="nav-wrapper">
+    {# SIDEBAR #}
+    <div class="nav-wrapper__sidebar">
 
+      <div class="form-check-wrapper checkbox-block">
+        <h3 class="checkbox-block__title span">Pages</h3>
 
- {% block content %}
+        {% for p in page.pages %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="page-{{ p.id }}" value="1">
+          <label class="form-check-label" for="page-{{ p.id }}">{{ p.title }}</label>
+        </div>
+        {% endfor %}
 
- <div class="nav-wrapper">
-  {# SIDEBAR #}
-  <div class="nav-wrapper__sidebar">
+      </div>
 
-   <div class="form-check-wrapper checkbox-block">
-    <h3 class="checkbox-block__title span">Pages</h3>
-    <div class="form-check">
-     <input class="form-check-input" type="checkbox" id="home" name="home" value="1">
-     <label class="form-check-label" for="home">Home</label>
+      <h3 class="checkbox-block__title span">Placeholder</h3>
+      <div class="form-group nav-wrapper__form-group">
+        <label class="navTitle" for="placeholderName">Title</label>
+        <input type="text" placeholder="Nav title">
+      </div>
+      <div class="form-group nav-wrapper__form-group">
+        <label class="navTitle" for="placeholderUrl">URL</label>
+        <input type="text" placeholder="Nav URL or slug">
+      </div>
+
+      <div class="btn-group-nav-sidebar">
+        <button class="btn btn-save" type="button">Add</button>
+      </div>
     </div>
+    {# END SIDEBAR #}
 
-    <div class="form-check">
-     <input class="form-check-input" type="checkbox" id="about" name="about" value="2">
-     <label class="form-check-label" for="about">About Us</label>
+    {# MAIN CONTENT #}
+    <div class="nav-wrapper__main">
+
+      {# NAV ITEMS #}
+      {% for n in page.navigation %}
+      <div class="toggle-block" data-collapse="parent">
+        <div class="toggle-block__header" data-collapse="toggle">
+          <h3 class="toggle-block__title secondary-title">Home <span class="small-text"></span></h3>
+          <div class="small-text toggle-block__type">page</div>
+          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+        </div>
+
+        <div class="toggle-block__content collapsed" data-collapse="target">
+
+          <div class="toggle-block__inner">
+            <div class="form-group">
+              <label for="navTitle">Navigation Label</label>
+              <input type="text" name="navTitle" placeholder="Navigation Label">
+            </div>
+
+            <div class="form-group">
+              <div class="">Original Label</div>
+              <p>Original label name</p>
+            </div>
+
+            <div class="btn-group-navigation">
+              <button class="btn btn-delete d-block">Remove</button>
+              <div class="btn btn-cancel d-block">Discard</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
     </div>
-
-    <div class="form-check">
-     <input class="form-check-input" type="checkbox" id="contact" name="contact" value="3">
-     <label class="form-check-label" for="contact">Contact</label>
-    </div>
-
-    <div class="form-check">
-     <input class="form-check-input" type="checkbox" id="services" name="services" value="4">
-     <label class="form-check-label" for="services">Services</label>
-    </div>
-
-   </div>
-
-   <h3 class="checkbox-block__title span">Placeholder</h3>
-   <div class="form-group nav-wrapper__form-group">
-    <label class="navTitle" for="placeholderName">Title</label>
-    <input type="text" name="placeholderName" placeholder="Nav Title">
-   </div>
-   <div class="form-group nav-wrapper__form-group">
-    <label class="navTitle" for="placeholderUrl">URL</label>
-    <input type="text" name="placeholderUrl" placeholder="Nav URL or Slug">
-   </div>
-
-
-   <div class="btn-group-nav-sidebar">
-    <button class="btn btn-save">Add</button>
-   </div>
+    {# END MAIN CONTENT #}
   </div>
-  {# END SIDEBAR #}
-
-  {# MAIN CONTENT #}
-  <div class="nav-wrapper__main">
-   {# NAV ITEM #}
-   <div class="toggle-block">
-    <div class="toggle-block__header" data-collapse="toggle">
-     <h3 class="toggle-block__title secondary-title">Home <span class="small-text"></span></h3>
-     <div class="small-text toggle-block__type">page</div>
-     <i class="fas fa-chevron-down toggle-block__toggle"></i>
-    </div>
-
-    <div class="toggle-block__content collapsed" data-collapse="target">
-
-     <div class="toggle-block__inner">
-      <div class="form-group">
-       <label for="navTitle">Navigation Label</label>
-       <input type="text" name="navTitle" placeholder="Navigation Label">
-      </div>
-
-      <div class="form-group">
-       <div class="">Original Label</div>
-       <p>Original label name</p>
-      </div>
-
-      <div class="btn-group-navigation">
-       <button class="btn btn-delete d-block">Remove</button>
-       <div class="btn btn-cancel d-block">Discard</div>
-      </div>
-
-     </div>
-
-
-
-    </div>
-   </div>
-
-   {# NAV ITEM #}
-   <div class="toggle-block">
-    <div class="toggle-block__header" data-collapse="toggle">
-     <h3 class="toggle-block__title secondary-title">Recipes <span class="small-text"></span></h3>
-     <div class="small-text toggle-block__type">page</div>
-     <i class="fas fa-chevron-down toggle-block__toggle"></i>
-    </div>
-    <div class="toggle-block__content collapsed" data-collapse="target">
-     <div class="toggle-block__inner">
-      <div class="form-group">
-       <label for="navTitle">Navigation Label</label>
-       <input type="text" name="navTitle" placeholder="Navigation Label">
-      </div>
-      <div class="form-group">
-       <label>Original Label</label>
-       <p>Original label name</p>
-
-      </div>
-      <div class="btn-group-navigation">
-       <button class="btn btn-delete d-block">Remove</button>
-       <div class="btn btn-cancel d-block">Discard</div>
-
-      </div>
-     </div>
-
-
-
-    </div>
-   </div>
-
-   {# NAV SUB-ITEM #}
-   <div class="toggle-block sub-toggle-block">
-    <div class="toggle-block__header" data-collapse="toggle">
-     <h3 class="toggle-block__title secondary-title">Holiday <span class="small-text"> &nbsp;&nbsp;sub-nav</span></h3>
-     <div class="small-text toggle-block__type">collection</div>
-     <i class="fas fa-chevron-down toggle-block__toggle"></i>
-    </div>
-
-    <div class="toggle-block__content collapsed" data-collapse="target">
-     <div class="toggle-block__inner">
-      <div class="form-group">
-       <label for="navTitle">Navigation Label</label>
-       <input type="text" name="navTitle" placeholder="Navigation Label">
-      </div>
-      <div class="form-group">
-       <label>Original Label</label>
-       <p>Original label name</p>
-
-      </div>
-      <div class="btn-group-navigation">
-       <button class="btn btn-delete d-block">Remove</button>
-       <div class="btn btn-cancel d-block">Discard</div>
-
-      </div>
-     </div>
-
-
-
-    </div>
-   </div>
-
-   {# NAV ITEM #}
-   <div class="toggle-block">
-    <div class="toggle-block__header" data-collapse="toggle">
-     <h3 class="toggle-block__title secondary-title">Contact <span class="small-text"></span></h3>
-     <div class="small-text toggle-block__type">page</div>
-     <i class="fas fa-chevron-down toggle-block__toggle"></i>
-    </div>
-    <div class="toggle-block__content collapsed" data-collapse="target">
-     <div class="toggle-block__inner">
-      <div class="form-group">
-       <label for="navTitle">Navigation Label</label>
-       <input type="text" name="navTitle" placeholder="Navigation Label">
-      </div>
-      <div class="form-group">
-       <label>Original Label</label>
-       <p>Original label name</p>
-
-      </div>
-      <div class="btn-group-navigation">
-       <button class="btn btn-delete d-block">Remove</button>
-       <div class="btn btn-cancel d-block">Discard</div>
-
-      </div>
-     </div>
-
-
-
-    </div>
-   </div>
-
-  </div>
-  {# END MAIN CONTENT #}
- </div>
- {# END NAVIGATION EDIT WRAPPER #}
+  {# END NAVIGATION EDIT WRAPPER #}
 
 
 
 
- {#  OLD CODE #}
- {# <div class="jsEditNavBlock">
+  {#  OLD CODE #}
+  {# <div class="jsEditNavBlock">
   <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
       {{ navItem.selectNavPage(page.navigation, page.navigator) }}
       <li>
@@ -214,23 +106,23 @@
       </li>
   </ul>
 </div> #}
- {# END OLD CODE #}
+  {# END OLD CODE #}
 
- {% endblock content %}
+{% endblock content %}
 
- {% block closeForm %}
+{% block closeForm %}
 </form>
-
 {# Spare hidden nav page select list to clone and add to navigation, keep outside of form #}
 <ul class="d-none" id="jsPageSelect">
- {{ navItem.selectNavPage([{'navigator': page.navigator}], page.navigator) }}
+  {{ navItem.selectNavPage([{'navigator': page.navigator}], page.navigator) }}
 </ul>
 {% endblock closeForm %}
 
 {% block foot %}
-<script src="{{ basePath() }}/admin/js/navigation.js"></script>
-<script src="{{ basePath() }}/admin/js/pageEdit.js?v={{ site.settings.assetVersion }}"></script>
+{{ getJsFileSource('navigation') }}
 {% endblock foot %}
+
+
 
 {% macro selectNavPage(nav, navigator) %}
 {% import _self as navItem %}
@@ -239,40 +131,40 @@
 {% if n.navigator == navigator %}
 
 <li class="jsNavItem navItem {% if n.active == 'N' %}navigation-disabled{% endif %}">
- <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
- <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
- <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
- <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
+  <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
+  <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
+  <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
+  <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
 
- <select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
-  <option value="x">Add Page</option>
-  {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
-  <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
-  {% for p in page.pageList %}
-  <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
-  {% endfor %}
- </select>
+  <select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
+    <option value="x">Add Page</option>
+    {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
+    <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
+    {% for p in page.pageList %}
+    <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
+    {% endfor %}
+  </select>
 
- <div class="small jsNavTitleInput">
-  <input type="text" name="nav[{{ n.id }}][navTitle]" value="{{ n.navTitle }}" {% if not n.page_id %}required{% endif %}
-   placeholder="Alt link text" autocomplete="off">
- </div>
+  <div class="small jsNavTitleInput">
+    <input type="text" name="nav[{{ n.id }}][navTitle]" value="{{ n.navTitle }}"
+      {% if not n.page_id %}required{% endif %} placeholder="Alt link text" autocomplete="off">
+  </div>
 
- <div class="navigator-button-group">
-  <i class="fas fa-times jsNavDelete icon icon-red" title="Delete Navigation Link"></i>
-  <i class="fas fa-exclamation jsNavActive icon icon-yellow" title="Disable Navigation Link"></i>
- </div>
+  <div class="navigator-button-group">
+    <i class="fas fa-times jsNavDelete icon icon-red" title="Delete Navigation Link"></i>
+    <i class="fas fa-exclamation jsNavActive icon icon-yellow" title="Disable Navigation Link"></i>
+  </div>
 
- <ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}" data-level="{{ n.level }}">
-  {% if n.childNav %}
-  {{ navItem.selectNavPage(n.childNav, navigator) }}
-  {% endif %}
-  {% if n.level < 2 %}
-  <li>
-   <i class="fas fa-plus jsAddNavItem add-sub-page icon icon-green" title="Add Sub Navigation Link"></i>
-  </li>
-  {% endif %}
- </ul>
+  <ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}" data-level="{{ n.level }}">
+    {% if n.childNav %}
+    {{ navItem.selectNavPage(n.childNav, navigator) }}
+    {% endif %}
+    {% if n.level < 2 %}
+    <li>
+      <i class="fas fa-plus jsAddNavItem add-sub-page icon icon-green" title="Add Sub Navigation Link"></i>
+    </li>
+    {% endif %}
+  </ul>
 </li>
 
 {% endif %}

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Slim\Http\Response;
+use Exception;
 
 /**
  * Piton Navigation Controller
@@ -49,10 +50,16 @@ class AdminNavigationController extends AdminBaseController
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        $data['pageList'] = $pageMapper->findPages('all');
+        if (null === $navivation = ($this->container->jsonDefinitionHandler)->getNavigation()) {
+            throw new Exception("Invalid navigator definition");
+        }
 
+        $navs = $navivation->navigators;
+        $navs = array_combine(array_column($navs, 'key'), $navs);
+
+        $data['pages'] = $pageMapper->findPages();
         $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
-        $data['navigator'] = $args['navigator'];
+        $data['currentNavigator'] = $navs[$args['navigator']];
 
         return $this->render('navigation/navigationEdit.html', $data);
     }

@@ -167,3 +167,173 @@ label {
   font-weight: 300;
  }
 }
+/* FORMS */ 
+/*  FORMS  */
+input[type="text"],
+input[type="email"],
+textarea {
+ @include margin(0);
+ text-transform: none;
+ letter-spacing: normal;
+ position: relative;
+ z-index: 20;
+ display: block;
+ width: 100%;
+ background: $bg-light;
+ border-radius: $border-radius;
+ border: 0.1rem solid $border;
+ font-family: inherit;
+ font-size: inherit;
+ font-weight: inherit;
+ -webkit-appearance: none;
+ appearance: none;
+}
+
+input:focus {
+ outline: none;
+}
+
+/* Change the white to any color ;) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+ -webkit-box-shadow: 0 0 0 30px white inset !important;
+ box-shadow: 0 0 0 30px white inset !important;
+ outline: none;
+}
+
+// Select Input Fields
+select {
+ /* styling */
+ border: thin solid $border;
+ border-radius: $border-radius;
+ display: inline-block;
+ font: inherit;
+ line-height: 1.5em;
+ @include padding(.5em 3.5em .5em 1em);
+
+ /* reset */
+
+ @include margin(0);
+ -webkit-appearance: none;
+ -moz-appearance: none;
+}
+
+
+/* arrows */
+
+select.minimal {
+ background-image:
+  linear-gradient(45deg, transparent 50%, #{$clr-success} 50%),
+  linear-gradient(135deg, #{$clr-success} 50%, transparent 50%),
+  linear-gradient(to right, #ccc, #ccc);
+ background-position:
+  calc(100% - 20px) calc(1em + 2px),
+  calc(100% - 15px) calc(1em + 2px),
+  calc(100% - 2.5em) 0.5em;
+ background-size:
+  5px 5px,
+  5px 5px,
+  1px 1.5em;
+ background-repeat: no-repeat;
+}
+
+select.minimal:focus {
+ background-image:
+  linear-gradient(45deg, #{$clr-accent} 50%, transparent 50%),
+  linear-gradient(135deg, transparent 50%, #{$clr-accent} 50%),
+  linear-gradient(to right, #ccc, #ccc);
+ background-position:
+  calc(100% - 15px) 1em,
+  calc(100% - 20px) 1em,
+  calc(100% - 2.5em) 0.5em;
+ background-size:
+  5px 5px,
+  5px 5px,
+  1px 1.5em;
+ background-repeat: no-repeat;
+ border-color: $border;
+ outline: 0;
+}
+
+
+select:-moz-focusring {
+ color: transparent;
+ text-shadow: 0 0 0 #000;
+}
+
+// Button Dropdown Hover Block with Radio
+
+// Hide Radio Buttons
+
+.radio-hidden,
+.element-toggle,
+.nav-toggle {
+ position: absolute;
+ top: -999px !important;
+ left: -999px !important;
+}
+
+label {
+ margin: 0;
+ padding: 0;
+}
+
+/* Form blocks style */
+
+.form-block {
+ // background: $bg-light;
+ border-radius: $border-radius;
+ border: solid 1px $border;
+ color: $text-dark;
+ @include padding(1em);
+ @include margin(null null 1em null);
+
+ input,
+ textarea {
+  background: $bg-light !important;
+ }
+
+ &__title {
+  @include margin(0);
+  @include padding(0);
+  background: $bg-grey;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1em;
+
+  &:hover {
+   cursor: move;
+   // background: darken($bg-grey, 10%);
+  }
+ }
+}
+
+.formBlock {
+ background: $bg-white;
+ border-radius: $border-radius;
+ border: solid 1px $border;
+ box-shadow: $box-shadow-1;
+ color: $text-dark;
+ @include padding(1em);
+ @include margin(null null 1em null);
+ @include padding(1em);
+ display: grid;
+ grid-template-columns: minmax(85%, 50vw) max-content;
+ gap: 1em;
+
+ .form-text,
+ .form-control {
+  grid-column: 1 / -2 !important;
+
+ }
+}
+.checkbox-block{
+ display: grid;
+ grid-template-columns: auto 1fr;
+ align-items: center;
+ label{
+  font-weight: 300;
+ }
+}

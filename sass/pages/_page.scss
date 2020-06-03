@@ -147,3 +147,152 @@
  background: $bg-light;
 }
 }
+/* Page Content & Edit Styles */
+.list-item-page-header {
+ @include padding(.5em null .25em);
+ @include margin(.5em null null .25em);
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: space-between;
+ align-items: center;
+ border-bottom: solid 1px $border;
+
+
+ .media {
+  max-height: 88px;
+  width: 88px;
+  object-fit: cover;
+ }
+}
+
+.list-item-page {
+ background: $bg-white;
+ border-bottom: solid 1px $border;
+
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: space-between;
+ align-items: center;
+
+ &:hover {
+  background: $bg-grey;
+ }
+
+ *+* {
+  @include margin(null null null .5em);
+
+ }
+
+ .media {
+  display: flex;
+  align-items: center;
+
+  img {
+   @include margin(.25em .5em);
+   height: 60px;
+   width: 80px;
+   object-fit: cover;
+  }
+ }
+
+}
+
+.title {
+ flex: 1.5;
+}
+
+.status {
+ flex: 1;
+}
+
+.template {
+ flex: 1;
+}
+
+.collection {
+ flex: 1;
+}
+
+/* Page/Collection Add/Edit Styles */
+
+.pageEdit__wrapper {
+ @include margin(1rem null null null);
+ display: grid;
+ grid-template-columns: 2fr .75fr;
+ gap: 1em;
+ position: relative;
+
+}
+
+.pageEdit__pagetTitle {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+
+ h4 {
+  flex: 1;
+  flex-basis: 150px;
+  @include margin(0);
+ }
+
+ input {
+  background: $bg-accent;
+
+ }
+}
+
+// Page Edit Blocks
+.pageEdit__sectionBlock {
+ @include margin(null null 1em null);
+ display: grid; 
+ grid-template-columns: 1fr;
+ // cursor: pointer;
+
+ &-header {
+   background: $bg-grey;
+  @include padding(.5em);
+  margin: 0 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $nav-height;
+
+  position: sticky;
+  top: calc(#{$nav-height * 2});
+  z-index: 50;
+
+
+ }
+ &-title{
+  @include padding(null null .25em null);
+ }
+}
+
+.page-elementBlock {
+  background: $bg-light;
+ @include margin(null null .5em null);
+ @include padding(.5em .25em);
+ border-radius: $border-radius;
+}
+
+.form-block__elementWrapper {
+  background: $bg-white;
+
+ padding: 1em;
+}
+.new-element{
+
+ animation: fadeBackground 1.5s ease-in-out forwards;
+}
+@keyframes fadeBackground {
+0% {
+ opacity: 0;
+
+ background: rgba($bg-accent, .5);
+}
+
+100% {
+ opacity: 1;
+ background: $bg-light;
+}
+}
