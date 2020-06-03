@@ -135,8 +135,7 @@ class PageMapper extends DataMapperAbstract
             $this->sql .= " and p.published_date is null";
         }
 
-        // Sort pages by 1. Draft, 2. Pending, 3. Published
-        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
+        $this->sql .= ' order by p.title';
 
         if ($limit) {
             $this->sql .= ' limit ?';
