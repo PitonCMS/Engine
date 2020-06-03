@@ -53,19 +53,18 @@ border: solid 1px $border;
   line-height: $nav-height;
   border: solid 1px darken($border, 10%);
 
-  .toggle-block__inner {
-   background: pink;
-   @include padding(1rem null);
-   display: grid;
-   grid-template-columns: 1fr;
-   gap: 1rem;
+  // .toggle-block__inner {
+  //  @include padding(1rem null);
+  //  display: grid;
+  //  grid-template-columns: 1fr;
+  //  gap: 1rem;
 
-   .form-group {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
+  //  .form-group {
+  //   display: grid;
+  //   grid-template-columns: 1fr 4fr;
 
-   }
-  }
+  //  }
+  // }
 
   &__header {
    background: $bg-grey;
