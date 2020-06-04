@@ -1,7 +1,6 @@
 /* Button Dropdown Block */
 .btn-dropdown-block {
  position: relative;
- @include margin(null 1em);
 }
 .btn-dropdown {
  background: $bg-grey;
@@ -22,7 +21,6 @@
 // Dropdown buttons w/hover
 
 .form-group-block {
- // border: solid 10px red;
  width: 100%;
  background: $bg-light;
  box-shadow: $box-shadow-1;
