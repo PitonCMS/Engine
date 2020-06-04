@@ -148,8 +148,3 @@
  @include padding(calc(#{$nav-height} + 1em) 1em 1em 1em);
 }
 
-.pageEdit__rightCol {
- display: flex;
- flex-flow: column nowrap;
- height: 100%;
-}

@@ -58,6 +58,9 @@
     <div class="nav-wrapper__main">
 
       {# NAV ITEMS #}
+      {# TODO use the class sub-toggle-block for sub-navigation items.
+       (class="toggle-block sub-toggle-block")  #}
+
       {% for n in page.navigation %}
       <div class="toggle-block" data-collapse="parent">
         <div class="toggle-block__header" data-collapse="toggle">
@@ -66,7 +69,7 @@
           <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
         </div>
 
-        <div class="toggle-block__content collapsed" data-collapse="target">
+        <div class="toggle-block__content  collapsed" data-collapse="target">
 
           <div class="toggle-block__inner">
             <div class="form-group">
@@ -76,7 +79,7 @@
 
             <div class="form-group">
               <div class="">Original Label</div>
-              <p>Original label name</p>
+              <p>{ Original label name here }</p>
             </div>
 
             <div class="btn-group-navigation">

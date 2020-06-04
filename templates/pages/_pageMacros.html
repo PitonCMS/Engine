@@ -25,7 +25,7 @@
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
-  <div class="form-block__elementWrapper" data-collapse="target">
+  <div class="form-block__elementWrapper collapsed" data-collapse="target">
   <div class="form-block">
     <label>Element Title</label>
     <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
@@ -136,7 +136,7 @@ For the summary display of either pages or collection detail pages
 {% if pageItem.media_id %}
 {% set thumbnailSource = getMediaPath(pageItem.media.filename, "thumb") %}
 {% else %}
-{% set thumbnailSource = "/admin/img/noFeatureImg.jpg" %}
+{% set thumbnailSource = "/admin/img/noFeatureImg.png" %}
 {% endif %}
 
 <a class="list-item-page" href="{{ pathFor('adminPageEdit', {'id': pageItem.id}) }}">

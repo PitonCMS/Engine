@@ -117,8 +117,8 @@ gap: .5em;
 .btn{
  margin-left: 1px !important;
 }
-  *+* {
-   // @include margin(.25em null null null);
-  }
+  // *+* {
+  //  @include margin(.25em null null null);
+  // }
  }
 }

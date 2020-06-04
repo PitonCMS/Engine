@@ -8,201 +8,201 @@
 
 {% block openForm %}
 <form action="{{  pathFor('adminPageSave') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-  <input type="hidden" name="page_id" value="{{ page.id }}">
-  <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
-  <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
-  <input type="hidden" name="template" value="{{ page.template }}">
-{% endblock openForm %}
+ <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+ <input type="hidden" name="page_id" value="{{ page.id }}">
+ <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
+ <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
+ <input type="hidden" name="template" value="{{ page.template }}">
+ {% endblock openForm %}
 
-{% block contentHeader %}
-  <!-- Content Header Control Bar -->
-  <div class="content-header-inner">
-    <!-- Breadcrumbs -->
-    <div class="breadcrumb"></div>
-    <!-- Section Title -->
-    <h1 class="section-title">Editing: {{ page.title }}</h1>
+ {% block contentHeader %}
+ <!-- Content Header Control Bar -->
+ <div class="content-header-inner">
+  <!-- Breadcrumbs -->
+  <div class="breadcrumb"></div>
+  <!-- Section Title -->
+  <h1 class="section-title">Editing: {{ page.title }}</h1>
 
-    <div class="btn-group">
-      <a class="btn btn-cancel" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
-      <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
-      <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
-    </div>
-
-    <!-- Control Buttons -->
-    {# Add New Element Button  #}
-    <div class="btn-dropdown-block" >
-     <div class="btn btn-dropdown">
-       <span>Add Element</span>
-       <i class="fas fa-chevron-down"></i>
-     </div>
-
-     <div class="form-group-block">
-       {# Loop through all blocks to create add element link #}
-       {% for blockDefinition in page.definition.blocks %}
-         {# Check if the block has the max elements allowed #}
-         {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
-         <div class="form-group">
-
-             <a name="#" class="{% if maxElements %}disabled{% endif %} form-group-link"
-             data-element="add"
-             data-block-key="{{ blockDefinition.key }}"
-             data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
-             data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
-             >{{ blockDefinition.name }}</a>
-
-         </div>
-       {% endfor %}
-     </div>
-
-   </div>
+  <div class="btn-group">
+   <a class="btn btn-cancel" data-form-button="cancel"
+    href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
+   <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
+   <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
   </div>
-{% endblock contentHeader %}
 
-{% block content %}
-  <div class="pageEdit__wrapper" data-page-edit="1">
+  <!-- Control Buttons -->
+  {# Add New Element Button  #}
+  <div class="btn-dropdown-block">
+   <div class="btn btn-dropdown">
+    <span>Add Element</span>
+    <i class="fas fa-chevron-down"></i>
+   </div>
 
-    <!-- Left Column Page Edit -->
-    <div class="pageEdit__leftCol">
+   <div class="form-group-block">
+    {# Loop through all blocks to create add element link #}
+    {% for blockDefinition in page.definition.blocks %}
+    {# Check if the block has the max elements allowed #}
+    {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit|default(100)) %}
+    <div class="form-group">
 
- {# Page Title #}
- <div class="pageEdit__sectionBlock">
-  <div class="form-block__elementWrapper">
-   <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
-   <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
-    data-url-slug="source" autocomplete="off" required>
+     <a name="#" class="{% if maxElements %}disabled{% endif %} form-group-link" data-element="add"
+      data-block-key="{{ blockDefinition.key }}" data-element-count-limit="{{ blockDefinition.elementCountLimit }}"
+      data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}">{{ blockDefinition.name }}</a>
+
+    </div>
+    {% endfor %}
+   </div>
 
   </div>
  </div>
-      {# Custom Settings Tab #}
-      {% if page.settings %}
-      <div class="toggle-block" data-collapse="parent">
-        <div class="toggle-block__header">
-          <h3 class="toggle-block__title">Custom Page Settings</h3>
-          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
-        </div>
-        <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse="target">
-          {% for setting in page.settings %}
-          {{ settingMacro.settingInput(setting) }}
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
+ {% endblock contentHeader %}
 
-      {# Page Blocks and Elements #}
-      {% for blockDefinition in page.definition.blocks %}
-        {# Outer loop: All blocks defined in the JSON page definition file #}
-        <div class="toggle-block" data-collapse="parent">
-          <div class="toggle-block__header">
-            <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
-            <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
-          </div>
-          <div class="toggle-block__content" data-collapse="target">
-            {# Element order is draggable. On drag empty div's with class drag-drop are inserted around all elements as drop zone targets #}
-            <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
-              {% for element in page.blocks[blockDefinition.key] %}
-                {# Inner loop: Elements inside block #}
-                {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-      {# End Blocks and Elements Loops #}
+ {% block content %}
+ <div class="pageEdit__wrapper" data-page-edit="1">
+
+  <!-- Left Column Page Edit -->
+  <div class="pageEdit__leftCol">
+
+   {# Page Title #}
+   <div class="pageEdit__sectionBlock">
+    <div class="form-block__elementWrapper">
+     <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
+     <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
+      data-url-slug="source" autocomplete="off" required>
+
     </div>
+   </div>
 
-    <!-- right Column Page Edit -->
-    <div class="pageEdit__rightCol">
+   {# Custom Settings Tab #}
+   {% if page.settings %}
+   <div class="toggle-block" data-collapse="parent">
+    <div class="toggle-block__header">
+     <h3 class="toggle-block__title">Custom Page Settings</h3>
+     <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+    </div>
+    <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse="target">
+     {% for setting in page.settings %}
+     {{ settingMacro.settingInput(setting) }}
+     {% endfor %}
+    </div>
+   </div>
+   {% endif %}
 
-      {# Publish Date Input #}
-      <h4 class="pageEdit__title">Page Settings</h4>
-      <div class="form-block">
-        <p>Publish(ed) date</p>
-        <input type="text" class="form-control" name="published_date" placeholder="Publish date"
-          value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
-
-        {% if page.getPublishedStatus == 'draft' %}
-        <div>Status: <span class="draft">Draft</span></div>
-
-        {% elseif page.getPublishedStatus == 'pending' %}
-        <div>Status: <span class="pending">Pending</span></div>
-
-        {% elseif page.getPublishedStatus == 'published' %}
-        <div>Status: <span class="published">Published</span></div>
-        {% endif %}
-      </div>
-
-      {# Page Slug Input with locking icon #}
-      {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
-        {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
-      {% else %}
-        {% set readonlyStatus, lockedStatus = '', 'unlock' %}
-      {% endif %}
-      <div class="element-block-wrapper">
-        <div class="form-block">
-          <label>Page Slug <span class="text-required">*</span></label>
-          <div class="filter-block">
-            <div class="input-block">
-              <div class="input-block__icon ">
-                <i class="fas fa-{{ lockedStatus }}" data-url-slug-lock="1"></i>
-              </div>
-              <div class="input-block__input">
-                <input type="text" class="input-block__search-input" name="page_slug" maxlength="100"
-                  placeholder="Page URL slug" data-url-slug="target" data-url-slug-status="{{ lockedStatus }}" value="{{ page.page_slug }}"
-                  required {{ readonlyStatus }} autocomplete="off">
-              </div>
-            </div>
-          </div>
-          <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-            changed.
-            Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
-        </div>
-      </div>
-
-      {# Meta Description Input #}
-      <div class="element-block-wrapper">
-        <div class="form-block">
-          <label>Meta Description</label>
-          <textarea class="form-control" name="meta_description" maxlength="320"
-            placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
-          <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
-            results.</small>
-        </div>
-      </div>
-
-      {# Page Featured Media Select #}
-      {% if page.definition.showFeaturedImage|default(1) %}
-      <div class="form-block" data-media-select="1">
-        <img src="{{ getMediaPath(page.media.filename, 'large') }}"
-          class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-        <input type="hidden" class="form-control" name="page_media_id" value="{{ page.media_id }}">
-        <label>Featured Page Image</label>
-
-        <div class="btn-group-pageEdit">
-          <button class="btn  btn-delete" type="button" data-media-clear="1">Clear Media</button>
-          <button class="btn  btn-save" type="button" data-media-modal="1">Select Media</button>
-        </div>
-      </div>
-      {% endif %}
-
-        {# Delete Page Button #}
-        <div class="btn-group-bottom">
-         {% if page.id %}
-         <button class="btn btn-delete btn-block" type="submit" data-delete-prompt="Are you sure you want to permanently delete this page?"
-           formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
-           title="The home page cannot be deleted." {% endif %}>Delete Page</button>
-         {% endif %}
-       </div>
+   {# Page Blocks and Elements #}
+   {% for blockDefinition in page.definition.blocks %}
+   {# Outer loop: All blocks defined in the JSON page definition file #}
+   <div class="toggle-block" data-collapse="parent">
+    <div class="toggle-block__header">
+     <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
+     <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+    </div>
+    <div class="toggle-block__content collapsed" data-collapse="target">
+     {# Element order is draggable. On drag empty div's with class drag-drop are inserted around all elements as drop zone targets #}
+     <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
+      {% for element in page.blocks[blockDefinition.key] %}
+      {# Inner loop: Elements inside block #}
+      {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
+      {% endfor %}
      </div>
-
-
+    </div>
+   </div>
+   {% endfor %}
+   {# End Blocks and Elements Loops #}
   </div>
-{% endblock content %}
 
-{% block closeForm %}
+  <!-- right Column Page Edit -->
+  <div class="pageEdit__rightCol">
+
+   {# Publish Date Input #}
+   <h4 class="pageEdit__title">Page Settings</h4>
+   <div class="form-block">
+    <p>Publish(ed) date</p>
+    <input type="text" class="form-control" name="published_date" placeholder="Publish date"
+     value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+
+    {% if page.getPublishedStatus == 'draft' %}
+    <div>Status: <span class="draft">Draft</span></div>
+
+    {% elseif page.getPublishedStatus == 'pending' %}
+    <div>Status: <span class="pending">Pending</span></div>
+
+    {% elseif page.getPublishedStatus == 'published' %}
+    <div>Status: <span class="published">Published</span></div>
+    {% endif %}
+   </div>
+
+   {# Page Slug Input with locking icon #}
+   {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
+   {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+   {% else %}
+   {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+   {% endif %}
+   <div class="element-block-wrapper">
+    <div class="form-block">
+     <label>Page Slug <span class="text-required">*</span></label>
+     <div class="filter-block">
+      <div class="input-block">
+       <div class="input-block__icon ">
+        <i class="fas fa-{{ lockedStatus }}" data-url-slug-lock="1"></i>
+       </div>
+       <div class="input-block__input">
+        <input type="text" class="input-block__search-input" name="page_slug" maxlength="100"
+         placeholder="Page URL slug" data-url-slug="target" data-url-slug-status="{{ lockedStatus }}"
+         value="{{ page.page_slug }}" required {{ readonlyStatus }} autocomplete="off">
+       </div>
+      </div>
+     </div>
+     <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
+      changed.
+      Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
+    </div>
+   </div>
+
+   {# Meta Description Input #}
+   <div class="element-block-wrapper">
+    <div class="form-block">
+     <label>Meta Description</label>
+     <textarea class="form-control" name="meta_description" maxlength="320"
+      placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
+     <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
+      results.</small>
+    </div>
+   </div>
+
+   {# Page Featured Media Select #}
+   {% if page.definition.showFeaturedImage|default(1) %}
+   <div class="form-block" data-media-select="1">
+    <img src="{{ getMediaPath(page.media.filename, 'large') }}"
+     class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
+    <input type="hidden" class="form-control" name="page_media_id" value="{{ page.media_id }}">
+    <label>Featured Page Image</label>
+
+    <div class="btn-group-pageEdit">
+     <button class="btn  btn-delete" type="button" data-media-clear="1">Clear Media</button>
+     <button class="btn  btn-save" type="button" data-media-modal="1">Select Media</button>
+    </div>
+   </div>
+   {% endif %}
+
+   {# Delete Page Button #}
+   <div class="btn-group-bottom">
+    {% if page.id %}
+    <button class="btn btn-delete btn-block" type="submit"
+     data-delete-prompt="Are you sure you want to permanently delete this page?"
+     formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
+     title="The home page cannot be deleted." {% endif %}>Delete Page</button>
+    {% endif %}
+   </div>
+  </div>
+
+
+ </div>
+ {% endblock content %}
+
+ {% block closeForm %}
 </form>
 {% endblock closeForm %}
 
 {% block foot %}
-  {{ getJsFileSource('pageEdit') }}
+{{ getJsFileSource('pageEdit') }}
 {% endblock foot %}
