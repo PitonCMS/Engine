@@ -60,6 +60,7 @@ button:active {
  transform: scale(0.99);
 }
 
+
 // Default buttons
 .btn {
  @include margin(null null null 1em);
@@ -102,6 +103,17 @@ button:active {
   color: $btn-cancel-hover;
  }
 }
+.btn-apply {
+ color: $btn-apply;
+ background: transparent;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+
+ &:hover {
+  color: $btn-apply-hover;
+ }
+}
 .btn-publish {
  background: $btn-green !important;
 
@@ -123,6 +135,7 @@ button:active {
   color: $clr-light;
  }
 }
+
 
 
 .btn-new {

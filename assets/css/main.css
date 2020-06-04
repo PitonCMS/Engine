@@ -834,6 +834,17 @@ button:active {
   color: #c05a11;
 }
 
+.btn-apply {
+  color: #737a82;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-apply:hover {
+  color: #5b6167;
+}
+
 .btn-publish {
   background: green !important;
 }
@@ -1377,6 +1388,7 @@ select:-moz-focusring {
 .media-wrapper .mediaFeatured .form-check {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 .media-wrapper .mediaCategories {
   display: grid;

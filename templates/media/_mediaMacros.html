@@ -37,7 +37,7 @@
     <div class="form-check">
      <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
       {{ checked(media.feature) }}>
-     <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
+     <label class="form-check-label" for="feature-{{ media.id }}">Featured Media?</label>
     </div>
    </div>
   </div>
@@ -51,7 +51,6 @@
 
   {# Media Controls #}
   <div class="mediaControls">
-   <a class="btn btn-cancel" href="/admin/media/">Cancel</a>
    <button class="btn btn-delete" type="submit" formaction="{{ pathFor('adminMediaDelete') }}"
    value="delete">Delete</button>
    <button class="btn btn-save" type="submit" value="save">Save</button>
