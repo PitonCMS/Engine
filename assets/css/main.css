@@ -797,8 +797,8 @@ button:active {
 }
 
 .btn {
+  margin-left: 1em;
   padding: 0.5em 0.75em;
-  border: solid thin #dee3e7;
   line-height: 1;
   font-size: 0.875rem;
   width: 100%;
@@ -819,6 +819,10 @@ button:active {
 .btn:disabled:hover {
   cursor: not-allowed;
 }
+.btn:first-child {
+  margin-left: 0;
+}
+
 .btn-cancel {
   color: #eb7119;
   background: transparent;
@@ -846,6 +850,7 @@ button:active {
 }
 .btn-save:hover {
   background: #2c679b !important;
+  color: white;
 }
 
 .btn-new {
@@ -869,13 +874,23 @@ button:active {
 
 /* Button Block Groupings */
 .btn-group {
-  height: 50px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: space-between;
 }
 
 /* Button Group Page Edit */
+.btn-group-pageEdit {
+  padding-top: 1em;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+.btn-group-pageEdit button {
+  margin: 0;
+}
+
 /* Button Group Delete Page bottom of page*/
 /* Button Dropdown Block */
 .btn-dropdown-block {
@@ -903,6 +918,7 @@ button:active {
   width: 100%;
   background: #f3f5f7;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
+  grid-template-columns: 1fr !important;
   transform-origin: top;
   transform: scale(1, 0);
   transition: transform 250ms ease-in-out 200ms;

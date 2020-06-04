@@ -22,9 +22,11 @@
 // Dropdown buttons w/hover
 
 .form-group-block {
+ // border: solid 10px red;
  width: 100%;
  background: $bg-light;
  box-shadow: $box-shadow-1;
+ grid-template-columns: 1fr !important;
 
  transform-origin: top;
  transform: scale(1, 0);

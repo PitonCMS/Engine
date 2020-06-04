@@ -64,7 +64,6 @@ button:active {
 .btn {
  @include margin(null null null 1em);
  @include padding(.5em .75em);
- border: solid thin $border;
  line-height: 1;
  font-size: .875rem;
  width: 100%;
@@ -121,6 +120,7 @@ button:active {
 
  &:hover {
   background: $btn-blue-hover !important;
+  color: $clr-light;
  }
 }
 
@@ -144,13 +144,15 @@ button:active {
  width: auto;
 }
 /* Button Block Groupings */ 
- // Content Header Control Buttons
+
+// Content Header Control Buttons
  .btn-group {
-  height: $nav-height;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+   align-items: center;
+  justify-content: space-between;
+  // border: solid 5px red;
  }
+
 /* Button Group Page Edit */
 
 .btn-group-pageEdit {
@@ -166,8 +168,8 @@ button:active {
 }
 
 /* Button Group Delete Page bottom of page*/
-.btn-group-bottom {
- @include padding(4rem null null null);
- @include margin(auto null null null);
- align-self: flex-end;
-}
+// .btn-group-bottom {
+//  @include padding(4rem null null null);
+//  @include margin(auto null null null);
+//  align-self: flex-end;
+// }
