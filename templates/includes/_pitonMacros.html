@@ -61,14 +61,14 @@
         {% for key, value in options %}
         {% set forKey = uniqueKey() %}
         <div class="form-check">
-            <input class="form-check-input" type="{{ type }}" id="{{ forKey }}" name="{{ key }}" value="{{ value }}">
+            <input class="form-check-input" type="{{ type }}" id="{{ forKey }}" name="filter" value="{{ value }}">
             <label class="form-check-label" for="{{ forKey }}">{{ value|capitalize }}</label>
         </div>
         {% endfor %}
-
+        <button type="button">Apply</button>
     </div>
     {# TODO Add "Clear" and "Apply" buttons at bottom #}
-    {# TODO Wolf a radio button needs all of the items within a group to have the same 'name'. A different 'name' is necessary for a checkbox. 
+    {# TODO Wolf a radio button needs all of the items within a group to have the same 'name'. A different 'name' is necessary for a checkbox.
        Maybe radios can default to a name of 'filter'. #}
 </div>
 
