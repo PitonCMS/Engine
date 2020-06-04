@@ -4,31 +4,23 @@
  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
  gap: 1rem;
 
- .formBlock {
-  @include padding(1rem);
-  background: $bg-white;
-  display: grid;
-  align-items: flex-start;
-  justify-content: stretch;
-
-  box-shadow: $box-shadow-1;
-
-  &__title-wrapper {
+ .form-block {
+  position: relative;
+  &__title{
    display: flex;
-   width: 100%;
-   justify-content: flex-start;
-
-   label {
-    flex: 1;
-   }
-
-   .badge {
-    flex: 0;
-    padding: 0.125em 0.25em;
-   }
+   justify-content: space-between;
   }
+    .badge { 
+    // border: solid 10px purple;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
+    // flex: 0; 
+    width: 20px; 
+    flex: 0;
+   }
  }
-}
+ }
 
 /* Users */
 .user-list-item,

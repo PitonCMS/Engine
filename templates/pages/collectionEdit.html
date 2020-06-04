@@ -43,7 +43,7 @@
    <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
    <div class="form-group">
     <label>Collection Title</label>
-    <input type="text" class="form-control" name="collection_title"
+    <input type="text"  name="collection_title"
      value="{{ page.collection.collection_title }}" maxlength="60" placeholder="Collection title" required
      autocomplete="off">
    </div>
@@ -84,7 +84,7 @@
    </div>
    <div class="form-group span">
     <label>Collection Template</label>
-    <select class="form-control" name="collection_definition"
+    <select  name="collection_definition"
      {# Only allow change of template if there are no pages assigned, set to readonly otherwise #}
      {% if page.collection.page_count > 0 %}disabled{% endif %}>
      {% for t in page.templates %}

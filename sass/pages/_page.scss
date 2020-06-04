@@ -67,30 +67,11 @@ color: $text-secondary;
 
 }
 
-.pageEdit__pagetTitle {
- display: flex;
- justify-content: space-between;
- align-items: center;
-
- h4 {
-  flex: 1;
-  flex-basis: 150px;
-  @include margin(0 0 1em 0);
- }
-
- input {
-  background: $bg-accent;
-
- }
-}
-
 // Page Edit Blocks
 .pageEdit__title{
- @include margin(.5em 0);
+ @include margin(0 0 .5em 0);
+
  }
-
-
-
 .pageEdit__sectionBlock {
  @include margin(null null 1em null);
  display: grid; 
@@ -114,6 +95,7 @@ color: $text-secondary;
  }
  &-title{
   @include padding(null null .25em null);
+
  }
 }
 

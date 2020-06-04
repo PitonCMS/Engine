@@ -64,7 +64,7 @@
   <div class="pageEdit__leftCol">
 
    {# Page Title #}
-   <div class="pageEdit__sectionBlock">
+   <div class="">
     <div class="form-block__elementWrapper">
      <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
      <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
@@ -117,7 +117,7 @@
    <h4 class="pageEdit__title">Page Settings</h4>
    <div class="form-block">
     <p>Publish(ed) date</p>
-    <input type="text" class="form-control" name="published_date" placeholder="Publish date"
+    <input type="text"  name="published_date" placeholder="Publish date"
      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
     {% if page.getPublishedStatus == 'draft' %}
@@ -162,7 +162,7 @@
    <div class="element-block-wrapper">
     <div class="form-block">
      <label>Meta Description</label>
-     <textarea class="form-control" name="meta_description" maxlength="320"
+     <textarea  name="meta_description" maxlength="320"
       placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
      <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
       results.</small>
@@ -174,7 +174,7 @@
    <div class="form-block" data-media-select="1">
     <img src="{{ getMediaPath(page.media.filename, 'large') }}"
      class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-    <input type="hidden" class="form-control" name="page_media_id" value="{{ page.media_id }}">
+    <input type="hidden"  name="page_media_id" value="{{ page.media_id }}">
     <label>Featured Page Image</label>
 
     <div class="btn-group-pageEdit">

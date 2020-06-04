@@ -1,4 +1,4 @@
-/* Navigation Structure */ 
+/* Navigation Structure */
 .nav-wrapper {
  @include margin(1rem null null null);
  font-size: 1em;
@@ -16,23 +16,27 @@
 
    align-items: center;
   }
-.checkbox-block {
- grid-template-columns: 1fr;
- gap: 0;
- &__title {
-  @include margin(1rem null .5rem);
-  font-size: 1.4rem;
-  @include padding(0);
-  color: $text-secondary;
-  font-weight: 300;
-  line-height: 1;
- }
-}
+
+  .checkbox-block {
+   grid-template-columns: 1fr;
+   gap: 0;
+
+   &__title {
+    @include margin(1rem null .5rem);
+    font-size: 1.4rem;
+    @include padding(0);
+    color: $text-secondary;
+    font-weight: 300;
+    line-height: 1;
+   }
+  }
 
  }
+
  &__form-group {
   @include margin(0 null .5rem null);
-  label{
+
+  label {
    font-weight: 600;
    display: none;
   }
@@ -41,8 +45,9 @@
  &__main {
   align-content: flex-start;
   flex: 3;
+
   >* {
-border: solid 1px $border;
+   border: solid 1px $border;
    @include margin(null null .5rem null);
   }
  }
@@ -64,7 +69,7 @@ border: solid 1px $border;
   //   grid-template-columns: 1fr 4fr;
 
   //  }
-  // }
+
 
   &__header {
    background: $bg-grey;
@@ -130,10 +135,6 @@ border: solid 1px $border;
   grid-column: -2 / -1;
   gap: 1em;
   align-items: center;
-
-  // *+* {
-  //  @include margin(0);
-  // }
  }
 
  .btn-group-nav-sidebar {
@@ -142,7 +143,6 @@ border: solid 1px $border;
   justify-content: center;
   align-items: center;
   width: 100%;
-
  }
 
 }

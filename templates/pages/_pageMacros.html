@@ -27,14 +27,13 @@
 
   <div class="form-block__elementWrapper collapsed" data-collapse="target">
   <div class="form-block">
-    <label>Element Title</label>
-    <input type="text" class="form-control" name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
+    <label class="form-block__title">Element Title</label>
+    <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
       placeholder="Element Title" autocomplete="off">
   </div>
     {# Element radio buttons #}
     <div class="form-block">
-
-      <label>Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
+      <label class="form-block__title">Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
       <div class="form-check-wrapper">
         {% for el in elementTypes %}
         {% if (elementTypeOptions and el.filename in elementTypeOptions) or (not elementTypeOptions) %}
@@ -54,14 +53,14 @@
 
     <!-- Element Content Area -->
     <div class="form-block ">
-      <label>Element Content</label>
-      <textarea class="form-control" data-mde="1" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+      <label class="form-block__title">Element Content</label>
+      <textarea  data-mde="1" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
     </div>
 
     <!-- Embedded HTML -->
     <div class="form-block {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}" data-element-input-option="embedded">
-      <label>Embedded HTML</label>
-      <textarea class="form-control" rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
+      <label class="form-block__title">Embedded HTML</label>
+      <textarea  rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
@@ -77,9 +76,9 @@
       <img src="{{ getMediaPath(element.media.filename, 'large') }}"
         class="{% if not element.media.filename %}d-none{% endif %}">
 
-      <input type="hidden" class="form-control" name="element_media_id[{{ arrayKey }}]"
+      <input type="hidden"  name="element_media_id[{{ arrayKey }}]"
         value="{{ element.media.id }}">
-      <label>Media</label>
+      <label class="form-block__title">Media</label>
 
       <div class="btn-group-pageEdit">
         <button class="btn btn-delete" type="button" data-media-clear="1">Clear Media</button>
@@ -91,8 +90,8 @@
     {# Collection Select #}
     <div class="form-block {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}"
       data-element-input-option="collection">
-      <label>Collection</label>
-      <select class="form-control" name="element_collection_id[{{ arrayKey }}]"
+      <label class="form-block__title">Collection</label>
+      <select class="minimal" name="element_collection_id[{{ arrayKey }}]"
         {% if enableInput == 'collection' %}required{% endif %}>
         <option value="">- None -</option>
         {% for c in getCollections() %}
@@ -106,8 +105,8 @@
     {# Gallery Category Select #}
     <div class="form-block {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}"
     data-element-input-option="gallery">
-      <label>Gallery</label>
-      <select class="form-control" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
+      <label class="form-block__title">Gallery</label>
+      <select class="minimal" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
         {% for id, cat in getMediaCategories() %}
         <option value="{{ id }}" {% if id == element.gallery_id %}selected{% endif %}>{{ cat }}</option>
