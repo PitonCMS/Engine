@@ -25,7 +25,7 @@
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
-  <div class="form-block__elementWrapper collapsed" data-collapse="target">
+  <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse="target">
   <div class="form-block">
     <label class="form-block__title">Element Title</label>
     <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
