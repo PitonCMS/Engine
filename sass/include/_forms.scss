@@ -18,11 +18,17 @@ input:-webkit-autofill:active {
  box-shadow: $box-shadow-1;
  border: solid 1px $border;
  color: $text-secondary;
+ position: relative;
 
- &__title {  
-  &:hover {
-   cursor: move;
-  }
+ .badge { 
+  font-size: .875rem;
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  flex: 0; 
+  width: 40px; 
+  height: 23px;
+  flex: 0;
  }
 }
 

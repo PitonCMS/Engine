@@ -1042,9 +1042,17 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
   border: solid 1px #dee3e7;
   color: #212f78;
+  position: relative;
 }
-.form-block__title:hover {
-  cursor: move;
+.form-block .badge {
+  font-size: 0.875rem;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  flex: 0;
+  width: 40px;
+  height: 23px;
+  flex: 0;
 }
 
 /* used on Navigation Structure Page */
@@ -1440,21 +1448,7 @@ select:-moz-focusring {
   gap: 1rem;
 }
 .settings-block .form-block {
-  position: relative;
-}
-.settings-block .form-block__title {
-  display: flex;
-  justify-content: space-between;
-}
-.settings-block .form-block .badge {
-  font-size: 0.875rem;
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  flex: 0;
-  width: 40px;
-  height: 23px;
-  flex: 0;
+  margin: 0;
 }
 
 /* Users */
