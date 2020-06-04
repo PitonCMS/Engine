@@ -12,11 +12,14 @@
   }
     .badge { 
     // border: solid 10px purple;
-    // position: absolute;
-    // top: 0;
-    // right: 0;
-    // flex: 0; 
-    width: 20px; 
+    font-size: .875rem;
+    // font-weight: 300;
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    flex: 0; 
+    width: 40px; 
+    height: 23px;
     flex: 0;
    }
  }

@@ -1447,7 +1447,13 @@ select:-moz-focusring {
   justify-content: space-between;
 }
 .settings-block .form-block .badge {
-  width: 20px;
+  font-size: 0.875rem;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  flex: 0;
+  width: 40px;
+  height: 23px;
   flex: 0;
 }
 
