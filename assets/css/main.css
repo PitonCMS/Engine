@@ -1576,6 +1576,13 @@ select:-moz-focusring {
   background: #eaedf0;
 }
 
+.sitemap-link {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: solid 1px #dee3e7;
+}
+
 /* Page Listing */
 .list-item-page-header {
   padding-top: 0.5em;

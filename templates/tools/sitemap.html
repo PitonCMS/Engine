@@ -19,14 +19,14 @@
  {% block content %}
  <div class="content-block-sitemap">
   <div class="sitemap-wrapper">
+   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
 
-   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new
-    content.</p>
-   <div>
-    <hr>
+   <div class="sitemap">
     {% if page.sitemapXML %}
-    <a href="/sitemap.xml" target="_blank">Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
-    <hr>
+    <div class="sitemap-link">
+     <a href="/sitemap.xml" target="_blank"><i class="fas fa-external-link-alt"></i> Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
+    </div>
+ 
     <pre>{{ page.sitemapXML|escape }}</pre>
     {% else %}
     No Sitemap Found - Click Update Sitemap
