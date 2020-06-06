@@ -25,5 +25,5 @@ if (pageListFilter) {
                     console.log('Something went wrong', error);
                 });
         }
-    });
+    }, false);
 }

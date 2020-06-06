@@ -95,7 +95,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
             }).catch(() => {
                 disableSpinner();
             });
-    });
+    }, false);
 });
 
 // Get Page Edit block
@@ -134,7 +134,7 @@ if (pageEditNode) {
                     });
             }
         }
-    });
+    }, false);
 }
 
 // Enable additional inputs on elements when selected
@@ -156,7 +156,7 @@ if (pageEditNode) {
 
             });
         }
-    });
+    }, false);
 }
 
 // Bind Markdown Editor to selected textareas on page load
@@ -169,25 +169,25 @@ if (pageEditNode) {
 // Bind set page slug from page title
 document.querySelector(`[data-url-slug="source"]`).addEventListener("input", (e) => {
     setCleanSlug(e.target.value);
-});
+}, false);
 
 // Bind warning on unlocking page slug
 document.querySelector(`[data-url-slug-lock="1"]`).addEventListener("click", (e) => {
     unlockSlug(e);
-});
+}, false);
 
 // Bind page edit listeners for events that bubble
-document.addEventListener("click", mediaSelect);
-document.addEventListener("change", setElementTitleText);
+document.addEventListener("click", mediaSelect, false);
+document.addEventListener("change", setElementTitleText, false);
 
 // Draggable page elements
 document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
-    zone.addEventListener("dragstart", dragStartHandler);
-    zone.addEventListener("dragenter", dragEnterHandler);
-    zone.addEventListener("dragover", dragOverHandler);
-    zone.addEventListener("dragleave", dragLeaveHandler);
-    zone.addEventListener("drop", dragDropHandler);
-    zone.addEventListener("dragend", dragEndHandler);
+    zone.addEventListener("dragstart", dragStartHandler, false);
+    zone.addEventListener("dragenter", dragEnterHandler, false);
+    zone.addEventListener("dragover", dragOverHandler, false);
+    zone.addEventListener("dragleave", dragLeaveHandler, false);
+    zone.addEventListener("drop", dragDropHandler, false);
+    zone.addEventListener("dragend", dragEndHandler, false);
 });
 
 /*

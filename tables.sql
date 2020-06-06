@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `sort` smallint NULL DEFAULT 1,
   `page_id` int NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
-  `active` enum('Y', 'N') NOT NULL DEFAULT 'Y',
+  `url` varchar(2000) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,

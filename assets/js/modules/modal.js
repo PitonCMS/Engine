@@ -43,11 +43,12 @@ const hideModal = function() {
 // Bind close modal events
 modal.querySelector(`[data-dismiss="modal"]`).addEventListener("click", () => {
     hideModal();
-});
+}, false);
+
 window.addEventListener("click", (event) => {
     if (event.target === modal) {
         hideModal();
     }
-});
+}, false);
 
 export { getModal, showModal, showModalContent, hideModal };

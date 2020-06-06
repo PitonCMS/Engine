@@ -31,11 +31,10 @@ class AdminNavigationController extends AdminBaseController
     public function showNavigators(): Response
     {
         // Get dependencies
-        $navs = ($this->container->jsonDefinitionHandler)->getNavigation();
+        $navigators = ($this->container->jsonDefinitionHandler)->getNavigation();
+        $navigators = $navigators->navigators ?? null;
 
-        $navs = $navs->navigators ?? null;
-
-        return $this->render('navigation/navigation.html', ['navigators' => $navs]);
+        return $this->render('navigation/navigation.html', ['navigators' => $navigators]);
     }
 
     /**
@@ -59,7 +58,7 @@ class AdminNavigationController extends AdminBaseController
 
         $data['pages'] = $pageMapper->findPages();
         $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
-        $data['currentNavigator'] = $navs[$args['navigator']];
+        $data['navDefinition'] = $navs[$args['navigator']];
 
         return $this->render('navigation/navigationEdit.html', $data);
     }
@@ -76,45 +75,23 @@ class AdminNavigationController extends AdminBaseController
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
         // Get POST data
-        $navPost = $this->request->getParsedBodyParam('nav');
+        $navigation = $this->request->getParsedBodyParam('nav');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
         // Save each nav item
-        $sort = 0;
-        foreach ($navPost as &$navItem) {
-            // Check whether to just delete
-            if (isset($navItem['delete']) && $navItem['delete'] === 'on') {
-                if (is_numeric($navItem['navId'])) {
-                    // This has been saved to the database, so do a physical delete
-                    $navigationMapper->deleteByNavId((int) $navItem['navId']);
-                }
-                // Simply skip processing row if not saved to database
-                continue;
-            }
-
-            // If the page ID is 'x' then skip, nothing to save
-            if ($navItem['pageId'] === 'x') {
-                continue;
-            }
-
-            $sort++;
+        $index = 0;
+        foreach ($navigation as &$navItem) {
+            $index++;
             $nav = $navigationMapper->make();
             $nav->id = (is_numeric($navItem['navId'])) ? (int) $navItem['navId'] : null;
             $nav->navigator = $navigator;
 
             // Page ID 0 is for placeholder nav links, which are not joined to page table
-            $nav->page_id = (is_numeric($navItem['pageId']) && $navItem['pageId'] !== '0') ? (int) $navItem['pageId'] : null;
-
-            // Get parent nav ID if set
-            // If parent ID is not numeric (new pages use a '0+x'), then get parent nav link by navPost array key, and use that nav ID
+            $nav->page_id = (is_numeric($navItem['pageId'])) ? (int) $navItem['pageId'] : null;
             $nav->parent_id = null;
-            if (!empty($navItem['parentId']) && $navItem['parentId'] !== '0') {
-                $nav->parent_id = is_numeric($navItem['parentId']) ? (int) $navItem['parentId'] : $navPost[$navItem['parentId']]['navId'];
-            }
-
-            $nav->sort = $sort;
-            $nav->title = $navItem['navTitle'];
-            $nav->active = $navItem['active'] ?: 'Y';
+            $nav->sort = $index;
+            $nav->title = trim($navItem['navTitle']) ?? null;
+            $nav->url = $navItem['url'] ?? null;
 
             // Save and assign inserted nav ID for child rows
             $savedNav = $navigationMapper->save($nav);
