@@ -1253,7 +1253,9 @@ select:-moz-focusring {
 
 /* Modal Content */
 .modal-content {
+  padding-bottom: 1rem;
   max-width: 100%;
+  max-height: 70%;
   position: relative;
   background-color: #f3f5f7;
   border: 1px solid #dee3e7;
@@ -1288,31 +1290,32 @@ select:-moz-focusring {
   padding-left: 1rem;
 }
 .modal-body .media-wrapper {
-  padding: 0.25em;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5em;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
 }
-.modal-body .media {
+.modal-body .media-wrapper .media {
+  height: 100%;
+  padding: 0.25rem;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
 }
-.modal-body .mediaBlock {
-  margin-top: auto;
-  padding-top: 1rem;
-  text-align: center;
-  font-size: 0.875rem;
-  line-height: 1;
-}
-.modal-body .mediaImage {
+.modal-body .media-wrapper .mediaImage {
   cursor: pointer;
 }
-.modal-body .mediaImagePopup {
+.modal-body .media-wrapper .mediaThumb {
+  width: 100%;
+}
+.modal-body .media-wrapper .mediaImagePopup {
   display: none;
+}
+.modal-body .mediaBlock {
+  padding: 0.25em;
 }
 .modal-body .mediaCaption {
   width: 100%;
+  font-size: 0.75rem;
+  color: #737a82;
+}
+.modal-body .mediaCaption p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1334,20 +1337,6 @@ select:-moz-focusring {
     opacity: 1;
   }
 }
-.close {
-  color: #737a82;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: rgba(115, 122, 130, 0.5);
-  text-decoration: none;
-  cursor: pointer;
-}
-
 .media-wrapper {
   margin-top: 1em;
   display: grid;
@@ -1368,11 +1357,9 @@ select:-moz-focusring {
 }
 .media-wrapper .mediaThumb {
   width: 80px;
+  height: auto;
   object-fit: cover;
   border-radius: 0.25rem;
-}
-.media-wrapper .mediaImage {
-  position: relative;
 }
 .media-wrapper .mediaImage .mediaImagePopup {
   visibility: hidden;
@@ -1391,6 +1378,9 @@ select:-moz-focusring {
   /* Set transition */
   opacity: 0;
   transition: opacity 350ms ease-in-out 250ms;
+}
+.media-wrapper .mediaImage {
+  align-self: center;
 }
 .media-wrapper .mediaImage:hover .mediaImagePopup {
   visibility: visible;
