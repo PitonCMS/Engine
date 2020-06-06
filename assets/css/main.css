@@ -282,10 +282,10 @@ h6 {
 
 a {
   text-decoration: none;
-  color: #eb7119;
+  color: #212f78;
 }
-a:hover {
-  color: #ef8e48;
+a:hover, afocus {
+  color: #5f72d3;
 }
 
 ::selection {
@@ -1479,6 +1479,12 @@ select:-moz-focusring {
 }
 .settings-block .form-block {
   margin: 0;
+}
+.settings-block .form-group {
+  padding: 1rem;
+  background: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
 }
 
 /* Users */

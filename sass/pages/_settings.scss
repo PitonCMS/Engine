@@ -6,6 +6,13 @@
  .form-block {
   @include margin(0);
  }
+ .form-group{
+ @include padding(1rem);
+  background: $bg-white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow-1;
+
+ }
  }
 
 /* Users */

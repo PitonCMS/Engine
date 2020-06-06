@@ -41,23 +41,16 @@ h6 {
 
 a {
  text-decoration: none;
- color: $text-accent;
+ color: $text-secondary;
 
- &:focus {
-  // outline: none;
- }
-
- &:hover {
-  color: $text-accent-hover;
+ &:hover, &focus {
+  color: lighten($text-secondary,30%);
  }
 }
 
 ::selection {
  background-color: $clr-accent;
  color: $text-light;
-}
-:focus {
- // outline: solid 1px $text-secondary !important;
 }
 
 /* Utility Classes */
