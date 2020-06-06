@@ -13,29 +13,32 @@
 {% block openForm %}
 <form class="jsEditCollection" action="{{ pathFor('adminCollectionSave') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-{% endblock openForm %}
+ {% endblock openForm %}
 
  {% block contentHeader %}
 
  <div class="content-header-inner">
   <div class="breadcrumb"></div>
-  <h1 class="section-title">{% if page.collection.id %}Edit {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h1>
+  <h1 class="section-title">{% if page.collection.id %}Edit
+   {{ page.collection.collection_title }}{% else %}Add{% endif %} Collection</h1>
   <div class="btn-group">
-   <a class="btn btn-cancel  jsFormCancelButton" href="{{ pathFor('adminCollection', {'id': page.collection.id}) }}">Discard</a>
+   <a class="btn btn-cancel  jsFormCancelButton"
+    href="{{ pathFor('adminCollection', {'id': page.collection.id}) }}">Discard</a>
    <button type="submit" name="button" class="btn btn-save jsFormSaveButton" value="save">Save</button>
   </div>
  </div>
  {% endblock contentHeader %}
 
  {% block content %}
-  <div class="jsCollectionGroup settings-block">
-   <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
-   <div class="form-group">
-    <label>Collection Title</label>
-    <input type="text"  name="collection_title" value="{{ page.collection.collection_title }}" maxlength="60" placeholder="Collection title" required autocomplete="off">
-   </div>
+ <div class="jsCollectionGroup settings-block">
+  <input type="hidden" name="collection_id" value="{{ page.collection.id }}">
+  <div class="form-group">
+   <label>Collection Title</label>
+   <input type="text" name="collection_title" value="{{ page.collection.collection_title }}" maxlength="60"
+    placeholder="Collection title" required autocomplete="off">
+  </div>
 
-   {#
+  {#
      When to Set or Update the Collection URL Slug
 
      The collection URL slug is created from the collection title, but cleaned (replace &, -, and spaces with dashes, and to lower case).
@@ -46,57 +49,71 @@
      Set readonly and locked status as Twig variables to keep logic understandable.
    #}
 
-   {% if page.collection.page_count > 0 %}
-   {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
-   {% else %}
-   {% set readonlyStatus, lockedStatus = '', 'unlock' %}
-   {% endif %}
+  {% if page.collection.page_count > 0 %}
+  {% set readonlyStatus, lockedStatus = 'readonly', 'lock' %}
+  {% else %}
+  {% set readonlyStatus, lockedStatus = '', 'unlock' %}
+  {% endif %}
 
-   <script>
-    pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
-   </script>
+  <script>
+   pitonConfig.pageSlugLocked = `{{ lockedStatus }}`
+  </script>
 
-   <div class="form-group">
-    <label>Collection Slug <span class="text-danger">*</span></label>
-    <div class="input-group">
-     <input type="text" class="form-control jsUrlSlug" name="collection_slug" maxlength="100"
-      placeholder="Collection URL slug" value="{{ page.collection.collection_slug }}" required {{ readonlyStatus }}
-      autocomplete="off">
-     <div class="input-group-append jsUrlSlugFaLockStatus">
-      <span class="input-group-text"><i class="fas fa-{{ lockedStatus }}"></i></span>
+  <div class="form-group">
+   <label>Collection Slug <span class="text-required">*</span></label>
+   <div class="filter-block">
+    <div class="input-block">
+     <div class="input-block__icon ">
+      <i class="fas fa-{{ lockedStatus }}" data-url-slug-lock="1"></i>
+     </div>
+     <div class="input-block__input">
+      <input type="text" class="input-block__search-input" name="page_slug" maxlength="100" placeholder="Page URL slug"
+       data-url-slug="target" data-url-slug-status="{{ lockedStatus }}" value="{{ page.page_slug }}" required
+       {{ readonlyStatus }} autocomplete="off">
      </div>
     </div>
-    <small class="form-text text-muted">Collection URL segment for collection. Warning, changing the collection URL
-     slug
-     after publishing collection detail pages may negatively impact links to your page.</small>
    </div>
-   <div class="form-group">
-    <label>Collection Template</label>
-    <select  name="collection_definition" class="minimal"
-     {# Only allow change of template if there are no pages assigned, set to readonly otherwise #}
-     {% if page.collection.page_count > 0 %}disabled{% endif %}>
-     {% for t in page.templates %}
-     <option value="{{ t.filename }}" {% if t.filename == page.collection.collection_definition %}selected{% endif %}>
-      {{ t.name }}</option>
-     {% endfor %}
-    </select>
-   </div>
-   <div class="form-group span">
-    {% if page.collection.id %}
-    <p>This template is used by <a href="{{ pathFor('adminCollection', {'collectionSlug': page.collection.collection_slug}) }}">{{ page.collection.page_count }}</a> page{% if page.collection.page_count == 0 %}s{% endif %}. View pages <a href="#">here</a></p>
-    {% endif %}
-   </div>
+   <small class="form-text text-muted">Collection URL segment for collection. Warning, changing the collection URL slug
+    after publishing collection detail pages may negatively impact links to your page.</small>
   </div>
 
-  
-  <div class="btn-group-bottom">
-    {% if page.collection.id %}
-    <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit" formaction="{{ pathFor('adminCollectionDelete') }}" value="delete" {% if page.collection.page_count > 0 %}
-      disabled title="You must remove all detail pages assigned to this collection before deleting"
-     {% endif %}
-     >Delete Collection</button>
-    {% endif %}
-   </div>
+
+
+
+
+
+  <div class="form-group">
+   <label>Collection Template</label>
+   <select name="collection_definition" class="minimal"
+    {# Only allow change of template if there are no pages assigned, set to readonly otherwise #}
+    {% if page.collection.page_count > 0 %}disabled{% endif %}>
+    {% for t in page.templates %}
+    <option value="{{ t.filename }}" {% if t.filename == page.collection.collection_definition %}selected{% endif %}>
+     {{ t.name }}</option>
+    {% endfor %}
+   </select>
+  </div>
+  {% if page.collection.id %}
+  <div class="form-group span">
+
+   <p>This template is used by <a
+     href="{{ pathFor('adminCollection', {'collectionSlug': page.collection.collection_slug}) }}">{{ page.collection.page_count }}</a>
+    page{% if page.collection.page_count == 0 %}s{% endif %}.
+    {% if page.collection.page_count >= 1 %}View pages <a href="#">here</a>{% endif %}</p>
+
+  </div>
+  {% endif %}
+ </div>
+
+
+ <div class="btn-group-bottom">
+  {% if page.collection.id %}
+  <button class="btn btn-delete btn-block jsDeleteConfirm" type="submit"
+   formaction="{{ pathFor('adminCollectionDelete') }}" value="delete" {% if page.collection.page_count > 0 %} disabled
+   title="You must remove all detail pages assigned to this collection before deleting" {% endif %}>Delete
+   Collection</button>
+  {% endif %}
+ </div>
 
  {% endblock content %}
 
@@ -105,5 +122,5 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  {{ getJsFileSource('collectionEdit') }}
+{{ getJsFileSource('collectionEdit') }}
 {% endblock foot %}

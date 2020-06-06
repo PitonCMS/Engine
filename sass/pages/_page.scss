@@ -1,20 +1,23 @@
-/* Page Listing */ 
+/* Page Listing */
 
 // wrapper for page list header
-.list-item-page-header{
+.list-item-page-header {
  @include padding(.5em null .25em);
  display: flex;
  flex-flow: row nowrap;
  justify-content: space-between;
  align-items: center;
  border-bottom: solid 1px $border;
- .media{
+
+ .media {
   width: 92px;
  }
 }
+
 .list-item-page__heading {
-color: $text-secondary;
+ color: $text-secondary;
 }
+
 .list-item-page {
  background: $bg-white;
  border-bottom: solid 1px $border;
@@ -23,6 +26,7 @@ color: $text-secondary;
  flex-flow: row nowrap;
  justify-content: space-between;
  align-items: center;
+
  &:hover {
   background: $bg-grey;
  }
@@ -30,7 +34,8 @@ color: $text-secondary;
  .media {
   display: flex;
   align-items: center;
-  img{
+
+  img {
    @include margin(.25em 8px);
    height: 60px;
    width: 80px;
@@ -38,6 +43,7 @@ color: $text-secondary;
   }
  }
 }
+
 .title {
  flex: 1.5;
 }
@@ -58,28 +64,24 @@ color: $text-secondary;
 
 .pageEdit__wrapper {
  @include margin(1rem null null null);
- // display: grid;
- // grid-template-columns: 2fr .75fr;
- // grid-template-columns: 3fr .5fr;
- // gap: 1em;
  display: flex;
  position: relative;
-
 }
 
 // Page Edit Blocks
-.pageEdit__title{
+.pageEdit__title {
  @include margin(0 0 .5em 0);
 
- }
+}
+
 .pageEdit__sectionBlock {
  @include margin(null null 1em null);
- display: grid; 
+ display: grid;
  grid-template-columns: 1fr;
  // cursor: pointer;
 
  &-header {
-   background: $bg-grey;
+  background: $bg-grey;
   @include padding(.5em);
   margin: 0 !important;
   display: flex;
@@ -90,46 +92,48 @@ color: $text-secondary;
   position: sticky;
   top: calc(#{$nav-height * 2});
   z-index: 50;
-
-
  }
- &-title{
-  @include padding(null null .25em null);
 
+ &-title {
+  @include padding(null null .25em null);
  }
 }
 
 .page-elementBlock {
-  background: $bg-light;
+ background: $bg-light;
  @include margin(null null .5em null);
  @include padding(.5em .25em);
  border-radius: $border-radius;
 }
 
 .form-block__elementWrapper {
-  background: $bg-white;
+ background: $bg-white;
 
  padding: 1em;
 }
-.new-element{
+
+.new-element {
 
  animation: fadeBackground 1.5s ease-in-out forwards;
 }
+
 @keyframes fadeBackground {
-0% {
- opacity: 0;
+ 0% {
+  opacity: 0;
 
- background: rgba($bg-accent, .5);
+  background: rgba($bg-accent, .5);
+ }
+
+ 100% {
+  opacity: 1;
+  background: $bg-light;
+ }
 }
 
-100% {
- opacity: 1;
- background: $bg-light;
-}
-}
 .pageEdit__leftCol {
  flex: 5;
 }
+
 .pageEdit__rightCol {
  // width: 25vw;
  // max-width: 400px;

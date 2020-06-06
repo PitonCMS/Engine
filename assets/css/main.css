@@ -1549,6 +1549,33 @@ select:-moz-focusring {
   gap: 1em;
 }
 
+/* Collection Groups */
+.list-item-collections__header,
+.list-item-collections {
+  padding: 1rem 0.5rem 0.5rem;
+  border-bottom: solid 1px #dee3e7;
+  background: #dee3e7;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+.list-item-collections__header-title,
+.list-item-collections-title {
+  flex: 1;
+}
+.list-item-collections__header-template,
+.list-item-collections-template {
+  flex: 1;
+}
+
+.list-item-collections {
+  background: white;
+  padding: 0.5em;
+}
+.list-item-collections:hover {
+  background: #eaedf0;
+}
+
 /* Page Listing */
 .list-item-page-header {
   padding-top: 0.5em;
