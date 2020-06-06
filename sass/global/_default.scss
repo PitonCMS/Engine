@@ -41,14 +41,10 @@ h6 {
 
 a {
  text-decoration: none;
- color: $text-dark;
+ color: $text-secondary;
 
- &:focus {
-  outline: none;
- }
-
- &:hover {
-  color: rgba($text-dark, .75);
+ &:hover, &focus {
+  color: lighten($text-secondary,30%);
  }
 }
 

@@ -282,13 +282,10 @@ h6 {
 
 a {
   text-decoration: none;
-  color: #363636;
+  color: #212f78;
 }
-a:focus {
-  outline: none;
-}
-a:hover {
-  color: rgba(54, 54, 54, 0.75);
+a:hover, afocus {
+  color: #5f72d3;
 }
 
 ::selection {
@@ -717,6 +714,7 @@ a:hover {
 }
 .sidebar .side-nav__link a {
   height: 50px;
+  color: #363636;
   display: flex;
   align-items: center;
   opacity: 0;
@@ -1063,7 +1061,6 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
   box-shadow: 0 0 0 30px white inset !important;
-  outline: none;
 }
 
 /* Form blocks style */
@@ -1151,11 +1148,10 @@ select.minimal:focus {
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
   border-color: #dee3e7;
-  outline: 0;
 }
 
 select:-moz-focusring {
-  color: transparent;
+  color: 0;
   text-shadow: 0 0 0 #000;
 }
 
@@ -1483,6 +1479,12 @@ select:-moz-focusring {
 }
 .settings-block .form-block {
   margin: 0;
+}
+.settings-block .form-group {
+  padding: 1rem;
+  background: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
 }
 
 /* Users */
