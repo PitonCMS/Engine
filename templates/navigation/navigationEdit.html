@@ -80,7 +80,7 @@
     {# END SIDEBAR #}
 
     {# MAIN CONTENT #}
-    <div class="nav-wrapper__main" data-navigation="container">
+    <div class="nav-wrapper__main" data-navigation="container" data-draggable="children">
 
       {# NAV ITEMS #}
       {# TODO use the class sub-toggle-block for sub-navigation items.
@@ -121,7 +121,7 @@
 {% macro navElement(navigation) %}
 {% import _self as navMacro %}
 
-<div class="toggle-block" data-collapse="parent">
+<div class="toggle-block" draggable="true" data-collapse="parent">
   <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">

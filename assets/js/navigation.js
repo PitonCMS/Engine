@@ -2,6 +2,7 @@
 // Navigation
 // --------------------------------------------------------
 import './modules/main.js';
+import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler } from './modules/drag.js';
 
 const navItems = [];
 const navPages = document.querySelectorAll(`[data-add-nav="page"] input`);
@@ -116,3 +117,13 @@ const addPlaceholderNav = function() {
 document.querySelector(`[data-add-nav="pageButton"]`).addEventListener("click", addPageNav, false);
 document.querySelector(`[data-add-nav="collectionButton"]`).addEventListener("click", addCollectionNav, false);
 document.querySelector(`[data-add-nav="placeholderButton"]`).addEventListener("click", addPlaceholderNav, false);
+
+// Draggable navigation elements
+document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
+  zone.addEventListener("dragstart", dragStartHandler, false);
+  zone.addEventListener("dragenter", dragEnterHandler, false);
+  zone.addEventListener("dragover", dragOverHandler, false);
+  zone.addEventListener("dragleave", dragLeaveHandler, false);
+  zone.addEventListener("drop", dragDropHandler, false);
+  zone.addEventListener("dragend", dragEndHandler, false);
+});
