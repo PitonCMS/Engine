@@ -12,14 +12,14 @@
 {% set severityClass = (severity) ? 'alert-' ~ severity : '' %}
 
 <div class="modal-content {{ severityClass }}" role="alert" data-alert="container">
-    <div class="modal-header">
-        <h4 class="pageEdit__title pageEdit__title-wrapper" data-alert="heading">{{ heading }}</h4>
-        <i class="fas fa-times" aria-hidden="true" data-dismiss="alert"></i>
-    </div>
+ <div class="modal-header">
+  <h4 class="pageEdit__title pageEdit__title-wrapper" data-alert="heading">{{ heading }}</h4>
+  <i class="fas fa-times" aria-hidden="true" data-dismiss="alert"></i>
+ </div>
 
-    <div class="modal-body" data-alert="content">
-        {{ message|join('<br>') }}
-    </div>
+ <div class="modal-body" data-alert="content">
+  {{ message|join('<br>') }}
+ </div>
 </div>
 
 {% endmacro alert %}
@@ -32,13 +32,12 @@
 {% macro filterSearch() %}
 
 <div class="input-block">
-    <div class="input-block__icon">
-        <i class="fas fa-search"></i>
-    </div>
-    <div class="input-block__input">
-        <input type="search" name="search" class="input-block__search-input" placeholder="Search..."
-            autocomplete="false">
-    </div>
+ <div class="input-block__icon">
+  <i class="fas fa-search"></i>
+ </div>
+ <div class="input-block__input">
+  <input type="search" name="search" class="input-block__search-input" placeholder="Search..." autocomplete="false">
+ </div>
 </div>
 
 {% endmacro filterSearch %}
@@ -54,24 +53,24 @@
 {% macro filterControl(type, label, options) %}
 
 <div class="btn-dropdown-block">
-    <div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
-    </div>
-    <div class="form-check-wrapper form-group-block">
+ <div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
+ </div>
+ <div class="form-check-wrapper form-group-block">
 
-        {% for key, value in options %}
-        {% set forKey = uniqueKey() %}
-        <div class="form-check">
-            <input class="form-check-input" type="{{ type }}" id="{{ forKey }}" name="filter" value="{{ value }}">
-            <label class="form-check-label" for="{{ forKey }}">{{ value|capitalize }}</label>
-        </div>
-        {% endfor %}
-        <div class="btn-group">
-         <div class="btn btn-apply">Apply</div>
-        </div>
-       
-    </div>
-    {# TODO Add "Clear" and "Apply" buttons at bottom #}
-    {# TODO Wolf a radio button needs all of the items within a group to have the same 'name'. A different 'name' is necessary for a checkbox.
+  {% for key, value in options %}
+  {% set forKey = uniqueKey() %}
+  <div class="form-check">
+   <input class="form-check-input" type="{{ type }}" id="{{ forKey }}" name="filter" value="{{ value }}">
+   <label class="form-check-label" for="{{ forKey }}">{{ value|capitalize }}</label>
+  </div>
+  {% endfor %}
+  <div class="btn-group-filter">
+   <div class="btn btn-cancel">Clear</div>
+   <div class="btn btn-apply">Apply</div>
+  </div>
+ </div>
+ {# TODO Add "Clear" and "Apply" buttons at bottom #}
+ {# TODO Wolf a radio button needs all of the items within a group to have the same 'name'. A different 'name' is necessary for a checkbox.
        Maybe radios can default to a name of 'filter'. #}
 </div>
 

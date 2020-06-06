@@ -852,17 +852,6 @@ button:active {
   color: #c05a11;
 }
 
-.btn-apply {
-  color: #737a82;
-  background: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.btn-apply:hover {
-  color: #5b6167;
-}
-
 .btn-publish {
   background: green !important;
 }
@@ -874,10 +863,10 @@ button:active {
   cursor: not-allowed;
 }
 
-.btn-save {
+.btn-save, .btn-apply {
   background: #3782c3 !important;
 }
-.btn-save:hover {
+.btn-save:hover, .btn-apply:hover {
   background: #2c679b !important;
   color: white;
 }
@@ -927,6 +916,7 @@ button:active {
 
 /* Button Dropdown Block */
 .btn-dropdown-block {
+  margin-left: 1rem;
   position: relative;
 }
 
@@ -995,6 +985,11 @@ button:active {
   transform: scale(1);
 }
 
+.btn-group-filter {
+  padding: 1rem 0.5rem;
+  width: 100%;
+  display: flex;
+}
 .nav-toggle,
 .element-toggle {
   position: absolute !important;
