@@ -90,7 +90,7 @@ class AdminNavigationController extends AdminBaseController
 
             // Page ID 0 is for placeholder nav links, which are not joined to page table
             $nav->page_id = (is_numeric($navItem['pageId'])) ? (int) $navItem['pageId'] : null;
-            $nav->parent_id = null;
+            $nav->parent_id = (is_numeric($navItem['parentId'])) ? (int) $navItem['parentId'] : null;
             $nav->sort = $index;
             $nav->title = trim($navItem['navTitle']) ?? null;
             $nav->url = $navItem['url'] ?? null;

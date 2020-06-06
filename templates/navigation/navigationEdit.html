@@ -82,10 +82,6 @@
     {# MAIN CONTENT #}
     <div class="nav-wrapper__main" data-navigation="container" data-draggable="children">
 
-      {# NAV ITEMS #}
-      {# TODO use the class sub-toggle-block for sub-navigation items.
-       (class="toggle-block sub-toggle-block")  #}
-
        {# For each navigation item, get navigation element from macro at the bottom of this page #}
       {% for nav in page.navigation %}
       {{ navMacro.navElement(nav) }}
@@ -121,7 +117,7 @@
 {% macro navElement(navigation) %}
 {% import _self as navMacro %}
 
-<div class="toggle-block" draggable="true" data-collapse="parent">
+<div class="toggle-block {% if navigation.parent_id %}sub-toggle-block{% endif %}" draggable="true" data-collapse="parent">
   <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">
@@ -165,9 +161,25 @@
 
      {# NAV SUB-ITEM #}
     {% if navigation.childNav %}
-    {{ navMacro.navElement(navigation.childNav) }}
+    {{ navMacro.navChildren(navigation.childNav) }}
     {% endif %}
 
 </div>
 
 {% endmacro navElement %}
+
+
+{#
+  Navigation Children Macro
+
+  Loops through childNav array and prints navElement for each
+  @param array childNav
+#}
+{% macro navChildren(childNav) %}
+{% import _self as navMacro %}
+
+  {% for child in childNav %}
+  {{ navMacro.navElement(child) }}
+  {% endfor %}
+
+{% endmacro navChildren %}
