@@ -5,6 +5,7 @@ import './modules/main.js';
 
 const navItems = [];
 const navPages = document.querySelectorAll(`[data-add-nav="page"] input`);
+const navCollections = document.querySelectorAll(`[data-add-nav="collection"] input`);
 const navPlaceholder = document.querySelectorAll(`[data-add-nav="placeholder"] input`);
 const navElement = document.querySelector(`[data-navigation-element="1"] > div`);
 const navContainer = document.querySelector(`[data-navigation="container"]`);
@@ -37,6 +38,13 @@ const appendNavElements = function() {
       newNav.querySelector(`input[name$="\[url\]"]`).value = nav.url;
       newNav.querySelector(`input[name$="\[url\]"]`).parentElement.classList.remove("d-none");
 
+    } else if (nav.collectionId) {
+      newNav.querySelector(`input[name$="\[collectionId\]"]`).value = nav.collectionId;
+      newNav.querySelector(`[data-nav="title"]`).innerHTML = nav.collectionTitle;
+      newNav.querySelector(`[data-nav="type"]`).innerHTML = "collection";
+      newNav.querySelector(`[data-nav="collectionTitle"]`).innerHTML = nav.collectionTitle;
+      newNav.querySelector(`[data-nav="collectionTitle"]`).parentElement.classList.remove("d-none");
+
     }
 
     navContainer.appendChild(newNav);
@@ -55,6 +63,26 @@ const addPageNav = function() {
       let navItem = {
         "pageId": element.dataset.pageId,
         "pageTitle": element.dataset.pageTitle
+      }
+
+      element.checked = false;
+      navItems.push(navItem);
+    }
+
+  });
+
+  appendNavElements();
+}
+
+/**
+ * Add Collection Navigation
+ */
+const addCollectionNav = function() {
+  navCollections.forEach(element => {
+    if (element.checked) {
+      let navItem = {
+        "collectionId": element.dataset.collectionId,
+        "collectionTitle": element.dataset.collectionTitle
       }
 
       element.checked = false;
@@ -86,4 +114,5 @@ const addPlaceholderNav = function() {
 
 // Bind events
 document.querySelector(`[data-add-nav="pageButton"]`).addEventListener("click", addPageNav, false);
+document.querySelector(`[data-add-nav="collectionButton"]`).addEventListener("click", addCollectionNav, false);
 document.querySelector(`[data-add-nav="placeholderButton"]`).addEventListener("click", addPlaceholderNav, false);

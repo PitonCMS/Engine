@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `parent_id` int NULL DEFAULT NULL,
   `sort` smallint NULL DEFAULT 1,
   `page_id` int NULL DEFAULT NULL,
+  `collection_id` int NULL DEFAULT NULL,
   `title` varchar(60) NULL DEFAULT NULL,
   `url` varchar(2000) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,

@@ -20,7 +20,7 @@ use Piton\ORM\DataMapperAbstract;
 class NavigationMapper extends DataMapperAbstract
 {
     protected $table = 'navigation';
-    protected $modifiableColumns = ['navigator','parent_id','sort','page_id','title', 'url'];
+    protected $modifiableColumns = ['navigator','parent_id','sort','page_id', 'collection_id', 'title', 'url'];
 
     /**
      * All Navigation Data Rows
@@ -45,10 +45,12 @@ class NavigationMapper extends DataMapperAbstract
     {
         $this->sql =<<<SQL
 select
-    n.id, n.navigator, n.parent_id, n.sort, n.page_id,
-    p.title page_title, n.title nav_title, p.published_date, p.page_slug, n.url
+    n.id, n.navigator, n.parent_id, n.sort, n.page_id, n.collection_id, n.title nav_title, n.url,
+    c.collection_title, c.collection_slug,
+    p.title page_title, p.published_date, p.page_slug
 from navigation n
 left join page p on n.page_id = p.id and p.collection_id is null
+left join collection c on n.collection_id = c.id
 where n.navigator = ?
 order by n.sort
 SQL;
@@ -93,7 +95,7 @@ SQL;
                 }
 
                 // Set nav title, default to page title
-                $row->title = $row->nav_title ?? $row->page_title;
+                $row->title = $row->nav_title ?? $row->page_title ?? $row->collection_title;
 
                 // Asign to navigator array
                 $this->newNav[] = &$row;
@@ -137,7 +139,7 @@ SQL;
                 }
 
                 // Set nav title, default to page title
-                $row->title = $row->nav_title ?? $row->page_title;
+                $row->title = $row->nav_title ?? $row->page_title ?? $row->collection_title;
 
                 // If parent row already has child array, then assign child to parent, othwerwise create childNav array
                 isset($parent->childNav) ?: $parent->childNav = [];

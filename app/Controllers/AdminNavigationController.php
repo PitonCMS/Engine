@@ -48,6 +48,7 @@ class AdminNavigationController extends AdminBaseController
         // Get dependencies
         $navMapper = ($this->container->dataMapper)('NavigationMapper');
         $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $collectioMapper = ($this->container->dataMapper)('CollectionMapper');
 
         if (null === $navivation = ($this->container->jsonDefinitionHandler)->getNavigation()) {
             throw new Exception("Invalid navigator definition");
@@ -57,7 +58,8 @@ class AdminNavigationController extends AdminBaseController
         $navs = array_combine(array_column($navs, 'key'), $navs);
 
         $data['pages'] = $pageMapper->findPages();
-        $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false, false) ?? [];
+        $data['collections'] = $collectioMapper->find();
+        $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false) ?? [];
         $data['navDefinition'] = $navs[$args['navigator']];
 
         return $this->render('navigation/navigationEdit.html', $data);
@@ -92,6 +94,7 @@ class AdminNavigationController extends AdminBaseController
             $nav->sort = $index;
             $nav->title = trim($navItem['navTitle']) ?? null;
             $nav->url = $navItem['url'] ?? null;
+            $nav->collection_id = $navItem['collectionId'] ?? null;
 
             // Save and assign inserted nav ID for child rows
             $savedNav = $navigationMapper->save($nav);

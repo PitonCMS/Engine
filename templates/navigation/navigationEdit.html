@@ -27,6 +27,7 @@
     {# SIDEBAR #}
     <div class="nav-wrapper__sidebar">
 
+      {# Add Page #}
       <div class="form-check-wrapper checkbox-block" data-add-nav="page">
         <h3 class="checkbox-block__title span">Pages</h3>
 
@@ -38,10 +39,27 @@
         {% endfor %}
 
         <div class="btn-group-nav-sidebar">
-          <button class="btn btn-save" type="button" data-add-nav="pageButton">Add</button>
+          <button class="btn btn-save" type="button" data-add-nav="pageButton">Add Page</button>
         </div>
       </div>
 
+      {# Add Collection #}
+      <div class="form-check-wrapper checkbox-block" data-add-nav="collection">
+        <h3 class="checkbox-block__title span">Collections</h3>
+
+        {% for c in page.collections %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="collection-{{ c.id }}" data-collection-id="{{ c.id }}" data-collection-title="{{ c.collection_title }}">
+          <label class="form-check-label" for="collection-{{ c.id }}">{{ c.collection_title }}</label>
+        </div>
+        {% endfor %}
+
+        <div class="btn-group-nav-sidebar">
+          <button class="btn btn-save" type="button" data-add-nav="collectionButton">Add Collection</button>
+        </div>
+      </div>
+
+      {# Add Placeholder #}
       <div data-add-nav="placeholder">
         <h3 class="checkbox-block__title span">Placeholder</h3>
         <div class="form-group nav-wrapper__form-group">
@@ -54,7 +72,7 @@
         </div>
 
         <div class="btn-group-nav-sidebar">
-          <button class="btn btn-save" type="button" data-add-nav="placeholderButton">Add</button>
+          <button class="btn btn-save" type="button" data-add-nav="placeholderButton">Add Placeholder</button>
         </div>
       </div>
 
@@ -107,10 +125,11 @@
   <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">
+  <input type="hidden" name="nav[{{ navigation.id }}][collectionId]" value="{{ navigation.collection_id }}">
 
   <div class="toggle-block__header">
-    <h3 class="toggle-block__title secondary-title" data-nav="title">{{ navigation.nav_title|default(navigation.page_title) }}</h3>
-    <div class="small-text toggle-block__type" data-nav="type">{% if navigation.page_id %}page{% else %}placeholder{% endif %}</div>
+    <h3 class="toggle-block__title secondary-title" data-nav="title">{{ navigation.title }}</h3>
+    <div class="small-text toggle-block__type" data-nav="type">{% if navigation.page_id %}page{% elseif navigation.collection_id %}collection{% else %}placeholder{% endif %}</div>
     <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
@@ -130,6 +149,11 @@
       <div class="form-group {% if not navigation.page_title %}d-none{% endif %}">
         <div>Page Title</div>
         <p data-nav="pageTitle">{{ navigation.page_title }}</p>
+      </div>
+
+      <div class="form-group {% if not navigation.collection_id %}d-none{% endif %}">
+        <div>Collection</div>
+        <p data-nav="collectionTitle">{{ navigation.collection_title }}</p>
       </div>
 
       <div class="btn-group-navigation">
