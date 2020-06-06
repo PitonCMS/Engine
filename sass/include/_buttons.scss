@@ -181,8 +181,6 @@ button:active {
 }
 
 /* Button Group Delete Page bottom of page*/
-// .btn-group-bottom {
-//  @include padding(4rem null null null);
-//  @include margin(auto null null null);
-//  align-self: flex-end;
-// }
+.btn-group-bottom {
+ @include padding(1rem null null null);
+}

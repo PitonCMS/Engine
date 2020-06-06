@@ -923,6 +923,10 @@ button:active {
 }
 
 /* Button Group Delete Page bottom of page*/
+.btn-group-bottom {
+  padding-top: 1rem;
+}
+
 /* Button Dropdown Block */
 .btn-dropdown-block {
   position: relative;
