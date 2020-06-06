@@ -42,7 +42,7 @@ const openMediaModal = function(elementTarget) {
 
             hideModal();
         }
-    });
+    }, false);
 }
 
 // Media select modal

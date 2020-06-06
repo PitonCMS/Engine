@@ -20,7 +20,7 @@ use Piton\ORM\DataMapperAbstract;
 class NavigationMapper extends DataMapperAbstract
 {
     protected $table = 'navigation';
-    protected $modifiableColumns = ['navigator','parent_id','sort','page_id','title','active'];
+    protected $modifiableColumns = ['navigator','parent_id','sort','page_id','title', 'url'];
 
     /**
      * All Navigation Data Rows
@@ -46,7 +46,7 @@ class NavigationMapper extends DataMapperAbstract
         $this->sql =<<<SQL
 select
     n.id, n.navigator, n.parent_id, n.sort, n.page_id,
-    p.title page_title, n.title nav_title, n.active, p.published_date, p.page_slug
+    p.title page_title, n.title nav_title, p.published_date, p.page_slug, n.url
 from navigation n
 left join page p on n.page_id = p.id and p.collection_id is null
 where n.navigator = ?
@@ -64,14 +64,12 @@ SQL;
      * @param  string $navigator    Navigator name
      * @param  string $currentRoute Current route path to match and set active flag
      * @param  bool   $published    Filter on published pages
-     * @param  bool   $active       Filter on active links
      * @return array|null
      */
     public function findNavHierarchy(
         string $navigator,
         string $currentRoute = null,
-        bool $published = true,
-        bool $active = true
+        bool $published = true
     ): ?array {
         // Get navigator rows
         $this->allNavRows = $this->findNavigation($navigator) ?? [];
@@ -80,11 +78,8 @@ SQL;
         $level =  1;
 
         foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published (but not if a drop down), or navigation link not active
-            if (
-                ($published && !is_null($row->page_id) && (is_null($row->published_date) || $row->published_date > $this->today)) ||
-                ($active && $row->active === 'N')
-            ) {
+            // Skip if page is not published
+            if ($published && !is_null($row->page_id) && (is_null($row->published_date) || $row->published_date > $this->today)) {
                 continue;
             }
 
@@ -104,7 +99,7 @@ SQL;
                 $this->newNav[] = &$row;
 
                 // Add any nav children
-                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
+                $this->addChildNavItem($row, $level, $currentRoute, $published);
             }
         }
 
@@ -119,21 +114,17 @@ SQL;
      * @param integer $level        Recursion depth of parent
      * @param  string $currentRoute Current route path to match and set active flag
      * @param  bool   $published    Filter on published pages
-     * @param  bool   $active       Filter on active links
      * @return void
      */
-    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published, bool $active): void
+    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published): void
     {
         // Recursive depth indicator
         $level++;
 
         // Go through all nav rows and append child of $parent
         foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published, or navigation link not active
-            if (
-                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
-                ($active && $row->active === 'N')
-            ) {
+            // Skip if page is not published
+            if ($published && (is_null($row->published_date) || $row->published_date > $this->today)) {
                 continue;
             }
 
@@ -153,7 +144,7 @@ SQL;
                 $parent->childNav[] = &$row;
 
                 // Find any children
-                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
+                $this->addChildNavItem($row, $level, $currentRoute, $published);
             }
         }
     }

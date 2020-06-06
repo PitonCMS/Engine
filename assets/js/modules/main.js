@@ -20,7 +20,7 @@ document.querySelectorAll("form").forEach(form => {
             saveButtons.forEach(control => {
                 enableFormControl(control);
             });
-        });
+        }, false);
     }
 
     // Confirm discard of changes
@@ -28,17 +28,17 @@ document.querySelectorAll("form").forEach(form => {
         control.addEventListener("click", (e) => {
             let userResponse = confirm("Click Ok to discard your changes, or cancel continue editing?");
             if (!userResponse) e.preventDefault();
-        });
+        }, false);
     });
 
     // Confirm delete
     form.querySelectorAll(`[data-delete-prompt]`).forEach(control => {
         control.addEventListener("click", (e) => {
             if (!confirm(e.target.dataset.deletePrompt)) e.preventDefault();
-        });
+        }, false);
     });
 });
 
 // Binding click events to document
-document.addEventListener("click", dismissAlertInlineMessage);
-document.addEventListener("click", collapseToggle);
+document.addEventListener("click", dismissAlertInlineMessage, false);
+document.addEventListener("click", collapseToggle, false);

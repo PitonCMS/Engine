@@ -1,21 +1,21 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as navItem %}
+{% import _self as navMacro %}
 
 {% block htmlTitle 'Edit Navigation' %}
 
 {% block openForm %}
 <form class="jsNavigatorForm" action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-  <input type="hidden" name="navigator" value="{{ page.navigator }}">
+  <input type="hidden" name="navigator" value="{{ page.navDefinition.key }}">
 {% endblock openForm %}
 
 {% block contentHeader %}
 <div class="content-header-inner">
   <div class="breadcrumb"></div>
-  <h1 class="section-title">Nav Structure: {{ page.currentNavigator.name }}</h1>
+  <h1 class="section-title">Nav Structure: {{ page.navDefinition.name }}</h1>
 
   <div class="btn-group">
-    <a class="btn btn-cancel" data-form-button="cancel">Discard</a>
+    <a href="{{ pathFor('adminNavigationEdit', {'navigator': page.navDefinition.key}) }}" class="btn btn-cancel" data-form-button="cancel">Discard</a>
     <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
   </div>
 </div>
@@ -23,73 +23,54 @@
 
 {% block content %}
   <div class="nav-wrapper">
+
     {# SIDEBAR #}
     <div class="nav-wrapper__sidebar">
 
-      <div class="form-check-wrapper checkbox-block">
+      <div class="form-check-wrapper checkbox-block" data-add-nav="page">
         <h3 class="checkbox-block__title span">Pages</h3>
 
         {% for p in page.pages %}
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="page-{{ p.id }}" value="1">
+          <input class="form-check-input" type="checkbox" id="page-{{ p.id }}" data-page-id="{{ p.id }}" data-page-title="{{ p.title }}">
           <label class="form-check-label" for="page-{{ p.id }}">{{ p.title }}</label>
         </div>
         {% endfor %}
 
+        <div class="btn-group-nav-sidebar">
+          <button class="btn btn-save" type="button" data-add-nav="pageButton">Add</button>
+        </div>
       </div>
 
-      <h3 class="checkbox-block__title span">Placeholder</h3>
-      <div class="form-group nav-wrapper__form-group">
-        <label class="navTitle" for="placeholderName">Title</label>
-        <input type="text" placeholder="Nav title">
-      </div>
-      <div class="form-group nav-wrapper__form-group">
-        <label class="navTitle" for="placeholderUrl">URL</label>
-        <input type="text" placeholder="Nav URL or slug">
+      <div data-add-nav="placeholder">
+        <h3 class="checkbox-block__title span">Placeholder</h3>
+        <div class="form-group nav-wrapper__form-group">
+          <label class="navTitle" for="placeholderName">Title</label>
+          <input type="text" placeholder="Nav title">
+        </div>
+        <div class="form-group nav-wrapper__form-group">
+          <label class="navTitle" for="placeholderUrl">URL</label>
+          <input type="text" placeholder="Nav URL or slug">
+        </div>
+
+        <div class="btn-group-nav-sidebar">
+          <button class="btn btn-save" type="button" data-add-nav="placeholderButton">Add</button>
+        </div>
       </div>
 
-      <div class="btn-group-nav-sidebar">
-        <button class="btn btn-save" type="button">Add</button>
-      </div>
     </div>
     {# END SIDEBAR #}
 
     {# MAIN CONTENT #}
-    <div class="nav-wrapper__main">
+    <div class="nav-wrapper__main" data-navigation="container">
 
       {# NAV ITEMS #}
       {# TODO use the class sub-toggle-block for sub-navigation items.
        (class="toggle-block sub-toggle-block")  #}
 
-      {% for n in page.navigation %}
-      <div class="toggle-block" data-collapse="parent">
-        <div class="toggle-block__header" data-collapse="toggle">
-          <h3 class="toggle-block__title secondary-title">Home <span class="small-text"></span></h3>
-          <div class="small-text toggle-block__type">page</div>
-          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
-        </div>
-
-        <div class="toggle-block__content  collapsed" data-collapse="target">
-
-          <div class="toggle-block__inner">
-            <div class="form-group">
-              <label for="navTitle">Navigation Label</label>
-              <input type="text" name="navTitle" placeholder="Navigation Label">
-            </div>
-
-            <div class="form-group">
-              <div class="">Original Label</div>
-              <p>{ Original label name here }</p>
-            </div>
-
-            <div class="btn-group-navigation">
-              <button class="btn btn-delete d-block">Remove</button>
-              <div class="btn btn-cancel d-block">Discard</div>
-            </div>
-
-          </div>
-        </div>
-      </div>
+       {# For each navigation item, get navigation element from macro at the bottom of this page #}
+      {% for nav in page.navigation %}
+      {{ navMacro.navElement(nav) }}
       {% endfor %}
 
     </div>
@@ -97,82 +78,72 @@
   </div>
   {# END NAVIGATION EDIT WRAPPER #}
 
-
-
-
-  {#  OLD CODE #}
-  {# <div class="jsEditNavBlock">
-  <ul class="jsNavParent nav-parent" data-parent-id="0" data-level="0">
-      {{ navItem.selectNavPage(page.navigation, page.navigator) }}
-      <li>
-          <i class="fas fa-plus jsAddNavItem icon icon-green" title="Add New Navigation Link"></i>
-      </li>
-  </ul>
-</div> #}
-  {# END OLD CODE #}
-
 {% endblock content %}
 
 {% block closeForm %}
 </form>
-{# Spare hidden nav page select list to clone and add to navigation, keep outside of form #}
-<ul class="d-none" id="jsPageSelect">
-  {{ navItem.selectNavPage([{'navigator': page.navigator}], page.navigator) }}
-</ul>
+
+{# Spare hidden nav to clone and add to navigation. Keep outside of form #}
+<div class="d-none" data-navigation-element="1">
+  {{ navMacro.navElement() }}
+</div>
 {% endblock closeForm %}
 
 {% block foot %}
-{{ getJsFileSource('navigation') }}
+{{ getJsFileSource('navigation', true) }}
 {% endblock foot %}
 
 
 
-{% macro selectNavPage(nav, navigator) %}
-{% import _self as navItem %}
+{#
+  Navigation Element Macro
 
-{% for n in nav %}
-{% if n.navigator == navigator %}
+  @param Object navigation
+#}
+{% macro navElement(navigation) %}
+{% import _self as navMacro %}
 
-<li class="jsNavItem navItem {% if n.active == 'N' %}navigation-disabled{% endif %}">
-  <input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
-  <input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
-  <input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
-  <input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active|default('Y') }}">
+<div class="toggle-block" data-collapse="parent">
+  <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
+  <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
+  <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">
 
-  <select class="jsNavPageSelector" name="nav[{{ n.id }}][pageId]">
-    <option value="x">Add Page</option>
-    {# If this is a previously saved dropdown placeholder (nav ID exists and page ID is null) then mark as selected #}
-    <option value="0" {% if n.id is not empty and n.page_id is empty %} selected {% endif %}>[Dropdown]</option>
-    {% for p in page.pageList %}
-    <option value="{{ p.id }}" {% if n.page_id == p.id %} selected {% endif %}>{{ p.title }}</option>
-    {% endfor %}
-  </select>
-
-  <div class="small jsNavTitleInput">
-    <input type="text" name="nav[{{ n.id }}][navTitle]" value="{{ n.navTitle }}"
-      {% if not n.page_id %}required{% endif %} placeholder="Alt link text" autocomplete="off">
+  <div class="toggle-block__header">
+    <h3 class="toggle-block__title secondary-title" data-nav="title">{{ navigation.nav_title|default(navigation.page_title) }}</h3>
+    <div class="small-text toggle-block__type" data-nav="type">{% if navigation.page_id %}page{% else %}placeholder{% endif %}</div>
+    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
-  <div class="navigator-button-group">
-    <i class="fas fa-times jsNavDelete icon icon-red" title="Delete Navigation Link"></i>
-    <i class="fas fa-exclamation jsNavActive icon icon-yellow" title="Disable Navigation Link"></i>
+  <div class="toggle-block__content {% if navigation.id %}collapsed{% endif %}" data-collapse="target">
+
+    <div class="toggle-block__inner">
+      <div class="form-group">
+        <label>Navigation Label</label>
+        <input type="text" name="nav[{{ navigation.id }}][navTitle]" value="{{ navigation.nav_title }}" placeholder="Navigation label">
+      </div>
+
+      <div class="form-group {% if not navigation.url %}d-none{% endif %}">
+        <label>URL</label>
+        <input type="text" name="nav[{{ navigation.id }}][url]" value="{{ navigation.url }}" placeholder="Url or slug">
+      </div>
+
+      <div class="form-group {% if not navigation.page_title %}d-none{% endif %}">
+        <div>Page Title</div>
+        <p data-nav="pageTitle">{{ navigation.page_title }}</p>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button class="btn btn-delete" type="button">Remove</button>
+      </div>
+
+    </div>
   </div>
 
-  <ul class="jsNavParent nav-child" data-parent-id="{{ n.id }}" data-level="{{ n.level }}">
-    {% if n.childNav %}
-    {{ navItem.selectNavPage(n.childNav, navigator) }}
+     {# NAV SUB-ITEM #}
+    {% if navigation.childNav %}
+    {{ navMacro.navElement(navigation.childNav) }}
     {% endif %}
-    {% if n.level < 2 %}
-    <li>
-      <i class="fas fa-plus jsAddNavItem add-sub-page icon icon-green" title="Add Sub Navigation Link"></i>
-    </li>
-    {% endif %}
-  </ul>
-</li>
 
-{% endif %}
-{% endfor %}
-{# TODO How to handle alt title?
-    <input type="text" class="form-control jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Rename Navigation" {% if not n.page_id %} required {% endif %}>
-    #}
-{% endmacro selectNavPage %}
+</div>
+
+{% endmacro navElement %}
