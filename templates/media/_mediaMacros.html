@@ -14,13 +14,13 @@
   <input type="hidden" name="media_id" value="{{ media.id }}">
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-  <div class="mediaPopup">
-   <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}"
+  <div class="mediaImage">
+   <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}"
     data-source="{{ getMediaPath(media.filename, 'large') }}" data-caption="{{ media.caption }}"
     data-media-id="{{ media.id }}">
 
-   <span class="mediaPopupImg">
-    <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}"
+   <span class="mediaImagePopup">
+    <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}"
      data-caption="{{ media.caption }}" data-media-id="{{ media.id }}">
    </span>
   </div>
@@ -82,11 +82,11 @@
 <div class="media" data-media="1" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}" data-media-path="{{ getMediaPath(media.filename, 'small') }}">
 
    {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-   <div class="mediaPopup">
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaImageThumb" alt="{{ media.caption }}">
+   <div class="mediaImage">
+    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}">
 
-    <span class="mediaPopupImg">
-     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaImageThumbPopup" alt="{{ media.caption }}">
+    <span class="mediaImagePopup">
+     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}">
     </span>
    </div>
 
@@ -118,9 +118,9 @@
     </button>
    </div>
    <div class="modal-body">
-
     <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8"
      enctype="multipart/form-data">
+     
      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
      <div class="custom-file">

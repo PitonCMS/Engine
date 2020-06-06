@@ -62,6 +62,9 @@ a {
 .span {
  grid-column: 1 / -1;
 }
+.fas:hover {
+ cursor: pointer;
+}
 
 /* Badges */
 .badge {
@@ -243,7 +246,6 @@ a {
  display: grid; 
  grid-template-columns: 1fr;
 
-
  &__header {
    background: $bg-grey;
   @include padding(.5em);
@@ -255,12 +257,16 @@ a {
 
   position: sticky;
   top: calc(#{$nav-height * 2});
-  z-index: 50;
+  z-index: 60;
 
 &-secondary{
  background: $bg-grey-light;
  border: solid 1px $border;
 }
+ }
+ &__content{
+  position: relative;
+  z-index: 59;
  }
  &__title{
   @include padding(.5em 1em .5em null);

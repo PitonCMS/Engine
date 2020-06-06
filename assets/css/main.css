@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 h1 {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
 }
 
 h2 {
@@ -40,6 +40,10 @@ h4 {
 
 h5 {
   font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
 }
 
 :root {
@@ -297,6 +301,10 @@ a:hover {
   grid-column: 1/-1;
 }
 
+.fas:hover {
+  cursor: pointer;
+}
+
 /* Badges */
 .badge {
   padding: 0.5em;
@@ -466,11 +474,15 @@ a:hover {
   height: 50px;
   position: sticky;
   top: calc(100px);
-  z-index: 50;
+  z-index: 60;
 }
 .toggle-block__header-secondary {
   background: #ebedef;
   border: solid 1px #dee3e7;
+}
+.toggle-block__content {
+  position: relative;
+  z-index: 59;
 }
 .toggle-block__title {
   padding-top: 0.5em;
@@ -1225,7 +1237,7 @@ select:-moz-focusring {
 
 /* Modal background */
 .modal {
-  /* display: none; */
+  padding-top: calc(50px * 1.5);
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -1236,26 +1248,28 @@ select:-moz-focusring {
   background-color: rgba(54, 54, 54, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
+/* Modal Content */
 .modal-content {
+  max-width: 100%;
   position: relative;
   background-color: #f3f5f7;
   border: 1px solid #dee3e7;
-  width: 60%;
-  height: 60%;
+  border-radius: 0.25rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   animation-name: animatetop;
   animation-duration: 125ms;
 }
 
 .modal-header {
-  padding: 2px 16px;
+  height: 50px;
+  padding-right: 1rem;
+  padding-left: 1rem;
   background-color: #dee3e7;
-  color: white;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -1269,18 +1283,19 @@ select:-moz-focusring {
 }
 
 .modal-body {
-  padding: 0.25rem 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5em;
+  padding-left: 1rem;
 }
 .modal-body .media-wrapper {
-  padding: 1em;
+  padding: 0.25em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 1em;
+  gap: 0.5em;
 }
 .modal-body .media {
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
   justify-content: center;
 }
 .modal-body .mediaBlock {
@@ -1289,6 +1304,18 @@ select:-moz-focusring {
   text-align: center;
   font-size: 0.875rem;
   line-height: 1;
+}
+.modal-body .mediaImage {
+  cursor: pointer;
+}
+.modal-body .mediaImagePopup {
+  display: none;
+}
+.modal-body .mediaCaption {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .modal-footer {
@@ -1328,29 +1355,26 @@ select:-moz-focusring {
   gap: 0.5em;
 }
 .media-wrapper .media {
-  padding: 0.5em;
+  padding: 0.25em;
   background: white;
   border-radius: 0.25rem;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
+  height: 90px;
 }
 .media-wrapper .mediaForm {
   display: grid;
-  grid-template-columns: auto repeat(2, 1fr) auto;
+  grid-template-columns: auto 0.5fr 1fr auto;
   gap: 1rem;
 }
-.media-wrapper .mediaImageThumb {
+.media-wrapper .mediaThumb {
   width: 80px;
-  height: 60px;
   object-fit: cover;
   border-radius: 0.25rem;
-  align-self: center;
-  justify-self: center;
 }
-.media-wrapper .mediaPopup {
+.media-wrapper .mediaImage {
   position: relative;
-  align-self: center;
 }
-.media-wrapper .mediaPopup .mediaPopupImg {
+.media-wrapper .mediaImage .mediaImagePopup {
   visibility: hidden;
   width: 25vw;
   height: 100%;
@@ -1359,7 +1383,7 @@ select:-moz-focusring {
   padding: 0;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
   object-fit: cover;
-  /* Position the mediaPopup */
+  /* Position the mediaImage */
   position: absolute;
   z-index: 100;
   top: 0;
@@ -1368,7 +1392,7 @@ select:-moz-focusring {
   opacity: 0;
   transition: opacity 350ms ease-in-out 250ms;
 }
-.media-wrapper .mediaPopup:hover .mediaPopupImg {
+.media-wrapper .mediaImage:hover .mediaImagePopup {
   visibility: visible;
   cursor: pointer;
   opacity: 1;
@@ -1405,13 +1429,11 @@ select:-moz-focusring {
 .media-wrapper .form-check-label {
   font-weight: 300;
 }
-.media-wrapper .mediaControls {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5em;
+.media-wrapper .mediaControls > .btn:not(:first-of-type) {
+  margin-top: 0.5em;
 }
 .media-wrapper .mediaControls .btn {
-  margin-left: 1px !important;
+  margin-left: 0 !important;
 }
 
 .content-block-messages {

@@ -1,7 +1,7 @@
- 
+  
 /* Modal background */
 .modal {
- /* display: none; */
+ @include padding(calc(#{$nav-height} * 1.5) null null null);
  position: fixed;
  z-index: 1000;
  left: 0;
@@ -12,28 +12,27 @@
  background-color: rgba($clr-dark, 0.5);
  display: flex;
  justify-content: center;
- align-items: center;
+ align-items: flex-start;
 }
 
+/* Modal Content */ 
 .modal-content {
+ max-width: 100%;
  position: relative;
  background-color: $bg-light;
-// @include margin(2rem auto);
-// @include padding(0);
  border: 1px solid $border;
- width: 60%;
- height: 60%;
+ border-radius: $border-radius;
  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); 
  animation-name: animatetop;
  animation-duration: 125ms
 }
 
 .modal-header {
- padding: 2px 16px;
+ height: $nav-height;
+ @include padding(null 1rem);
  background-color: $bg-grey;
- color: $text-light;
- display: grid;
- grid-template-columns: 1fr auto;
+ display:flex;
+ justify-content: space-between;
  align-items: center;
 }
 .modal-dismiss{
@@ -45,18 +44,18 @@
  }
 }
 .modal-body {
- @include padding(.25rem 1rem);
+ @include padding(null 1rem .5em);
  .media-wrapper {
-  @include padding(1em);
+  @include padding(.25em);
  
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 1em;
+  gap: .5em;
  }
  .media {
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
+
   justify-content: center;
  }
 
@@ -66,6 +65,18 @@
   text-align: center;
   font-size: .875rem;
   line-height: 1;
+ }
+ .mediaImage {
+  cursor: pointer;
+ }
+ .mediaImagePopup {
+  display: none;
+ }
+ .mediaCaption {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
  }
 }
 
