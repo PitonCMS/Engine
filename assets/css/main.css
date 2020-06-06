@@ -1494,6 +1494,10 @@ select:-moz-focusring {
   align-items: center;
   border-top: solid 1px #dee3e7;
 }
+.user-list-item__title,
+.user-list-item-header__title {
+  font-weight: 600;
+}
 .user-list-item:hover,
 .user-list-item-header:hover {
   background: #dee3e7;

@@ -27,7 +27,9 @@
  align-items: center;
  border-top: solid 1px $border;
 
-
+&__title{
+ font-weight: 600;
+}
  &:hover {
   background: $bg-grey; 
  }
