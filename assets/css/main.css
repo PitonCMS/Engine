@@ -558,6 +558,9 @@ a:hover {
   width: 100%;
   z-index: 201;
   box-shadow: 0 2px 2px rgba(54, 54, 54, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .top-header .logo {
   font-size: 2rem;
@@ -583,6 +586,11 @@ a:hover {
 }
 .top-header .logo a span {
   text-transform: lowercase;
+}
+.top-header .btn-dropdown {
+  height: 50px;
+  background: inherit;
+  color: inherit;
 }
 
 /* Full sidebar/content wrapper to create columns */
