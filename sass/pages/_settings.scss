@@ -79,3 +79,29 @@
  grid-template-columns: repeat(2, 1fr);
  gap: 1em; 
 }
+
+/* Collection Groups */ 
+.list-item-collections__header,
+.list-item-collections {
+ @include padding(1rem .5rem .5rem);
+ border-bottom: solid 1px $border;
+ background: $bg-grey;
+ display: flex;
+ flex-flow: row nowrap;
+ align-items: center;
+ &-title {
+  flex: 1;
+
+ }
+ &-template {
+  flex: 1;
+
+ }
+}
+.list-item-collections {
+ background: $bg-white;
+ @include padding(.5em);
+ &:hover{
+  background: lighten($bg-grey, 4%);
+ }
+}

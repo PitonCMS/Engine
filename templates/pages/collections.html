@@ -46,15 +46,15 @@
 </div>
 
 {# List Titles #}
-<div class="list-item-page-header">
- <div class="list-item-page__heading">Title</div>
- <div class="list-item-page__heading">Template</div>
+<div class="list-item-collections__header">
+ <div class="list-item-collections__header-title">Title</div>
+ <div class="list-item-collections__header-template">Template</div>
 </div>
 
 {% for col in page.collections %}
-<a class="list-item-page" href="{{ pathFor('adminCollectionEdit', {'id': col.id}) }}">
-    <div class="list-item-page__title">{{ col.collection_title }}</div>
-    <div class="list-item-page__template">Template: <code>{{ col.collection_definition }}</code></div>
+<a class="list-item-collections" href="{{ pathFor('adminCollectionEdit', {'id': col.id}) }}">
+    <div class="list-item-collections-title">{{ col.collection_title }}</div>
+    <div class="list-item-collections-template">Template: <code>{{ col.collection_definition }}</code></div>
    </a>
 {% else %}
 <h5>No Collection Groups Found</h5>
