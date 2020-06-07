@@ -1565,6 +1565,7 @@ select:-moz-focusring {
 
 .list-item-collections__header {
   color: #212f78;
+  padding-left: 0.5em;
 }
 
 .list-item-collections {
@@ -1586,6 +1587,7 @@ select:-moz-focusring {
 .list-item-page-header {
   padding-top: 0.5em;
   padding-bottom: 0.25em;
+  padding-left: 0.5em;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

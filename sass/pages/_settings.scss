@@ -93,6 +93,7 @@
 
 .list-item-collections__header {
  color: $text-secondary;
+ @include padding(null null null .5em);
 }
 
 .list-item-collections {
