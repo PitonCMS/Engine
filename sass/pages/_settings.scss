@@ -27,7 +27,9 @@
  align-items: center;
  border-top: solid 1px $border;
 
-
+&__title{
+ font-weight: 600;
+}
  &:hover {
   background: $bg-grey; 
  }
@@ -104,4 +106,9 @@
  &:hover{
   background: lighten($bg-grey, 4%);
  }
+}
+.sitemap-link {
+@include margin(1rem null);
+@include padding(null null 1rem null);
+border-bottom: solid 1px $border;
 }

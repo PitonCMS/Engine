@@ -1,5 +1,6 @@
 /* Button Dropdown Block */
 .btn-dropdown-block {
+ @include margin(null null null 1rem);
  position: relative;
 }
 .btn-dropdown {
@@ -77,4 +78,14 @@
 .btn-dropdown-block:hover>.form-group-block-add {
  cursor: pointer;
  transform: scale(1);
+}
+
+.btn-group-filter {
+ @include padding(1rem .5rem);
+
+ width: 100%;
+display: flex;
+ .btn {
+
+ }
 }
