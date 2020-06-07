@@ -1,45 +1,82 @@
 // MESSAGES
 
-.content-block-messages {
- @include margin(1em null null null);
- width: 100%;
- display: grid;
- gap: 1em;
-
- .message-block {
-  display: grid;
-  grid-template-columns: 1fr;
-  width: 100%;
-
-  &-inner {
-
-   background: $bg-white;
-   border-radius: $border-radius;
-   box-shadow: $box-shadow-1;
-   display: grid;
-   grid-template-columns: 1fr auto;
-   gap: 1em;
-   .btn {
-    @include margin(0);
-   }
-  }
- }
-
+.message-block {
+ @include padding(.75rem null);
  .message-wrapper {
-  @include padding(.5em 1em);
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow-1;
+ }
 
-  hr {
-   @include margin(.25em 0);
+ .message-header {
+  @include padding(null 1rem);
+  line-height: $nav-height;
+  display: grid;
+  grid-template-columns: 1fr max-content max-content;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: $bg-grey;
+ }
+
+ .message-content {
+  @include padding(.5rem 1rem);
+  p{
+  color: $text-grey;
   }
  }
 
- .button-wrapper {
-  @include padding(.5em 1em);
-
-  .btn:last-child {
-   @include margin(1em null null null);
-  }
+ .btn-group {
+  @include padding(1rem null);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
  }
 }
+
+// .content-block-messages {
+//  @include margin(1em null null null);
+//  width: 100%;
+//  display: grid;
+//  gap: 1em;
+
+//  .message-block {
+//   display: grid;
+//   grid-template-columns: 1fr;
+//   width: 100%;
+
+//   &-inner {
+
+//    background: $bg-white;
+//    border-radius: $border-radius;
+//    box-shadow: $box-shadow-1;
+//    display: grid;
+//    grid-template-columns: 1fr auto;
+//    gap: 1em;
+//    .btn {
+//     @include margin(0);
+//    }
+//   }
+//  }
+
+//  .message-wrapper {
+//   @include padding(.5em 1em);
+//   display: grid;
+//   grid-template-columns: 1fr;
+
+//   hr {
+//    @include margin(.25em 0);
+//   }
+//  }
+
+//  .button-wrapper {
+//   @include padding(.5em 1em);
+
+//   .btn:last-child {
+//    @include margin(1em null null null);
+//   }
+//  }
+// }

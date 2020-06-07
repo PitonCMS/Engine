@@ -4,6 +4,7 @@ $clr-light: hsl(0, 0%, 100%);
 $clr-light-grey: hsl(210, 22%, 96%);
 $clr-light-grey-1: hsl(213, 16%, 89%);
 $clr-light-grey-2: hsl(210, 11%, 93%);
+$clr-dark-grey-1: hsl(214, 20%, 32%);
 $clr-dark-grey: hsl(210, 6%, 48%);
 $clr-blue: rgb(55, 130, 195);
 $clr-dark-blue: hsl(230, 57%, 30%);
@@ -37,6 +38,7 @@ $bg-accent: $clr-blue;
 // Default color Styles
 $text-light: $clr-light;
 $text-dark: $clr-dark;
+$text-grey: $clr-dark-grey-1;
 $text-accent: $clr-dark-orange;
 $text-accent-hover: lighten($text-accent, 10%);
 $text-secondary: $clr-dark-blue;
