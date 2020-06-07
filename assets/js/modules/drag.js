@@ -21,13 +21,6 @@ const getMovedElement = function() {
 }
 
 /**
- * Return Drop Input Event
- */
-const getDropInputEvent = function() {
-    return inputEvent;
-}
-
-/**
  * Drag Start Handler
  * @param {Event} event
  */
@@ -109,7 +102,6 @@ const dragDropHandler = function(event) {
 
     if (movedElement !== event.target && event.target.matches(".drag-drop")) {
         event.target.parentElement.insertBefore(movedElement, event.target.nextSibling)
-        movedElement.dispatchEvent(inputEvent);
     }
 }
 
@@ -122,6 +114,9 @@ const dragEndHandler = function(event) {
     document.querySelectorAll(".drag-drop").forEach(zone => {
         zone.remove();
     });
+
+    // Initiatve input event
+    movedElement.dispatchEvent(inputEvent);
 }
 
-export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler, getMovedElement, getDropInputEvent };
+export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler, getMovedElement };

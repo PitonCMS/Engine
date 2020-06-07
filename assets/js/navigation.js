@@ -2,7 +2,7 @@
 // Navigation
 // --------------------------------------------------------
 import './modules/main.js';
-import { getMovedElement, dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragEndHandler } from './modules/drag.js';
+import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragEndHandler, getMovedElement } from './modules/drag.js';
 
 const navItems = [];
 const navPages = document.querySelectorAll(`[data-add-nav="page"] input`);
@@ -50,6 +50,7 @@ const appendNavElements = function() {
     }
 
     navContainer.appendChild(newNav);
+    newNav.dispatchEvent(new Event("input", {"bubbles": true}));
   });
 
   // Reset
@@ -139,12 +140,12 @@ const dragDropHandler = function(event) {
       event.target.parentElement.insertBefore(movedElement, event.target.nextSibling);
     }
 
-    // If the element has a parentId and the current parent HAS changed, move to last child of new parent
+    // If the element parentId and does not match the new  parent ID, move to last child of new parent
     if (movedElementParentId !== newParent.dataset.navId) {
       movedElement.querySelector(`input[name$="\[parentId\]"]`).value = newParent.dataset.navId;
 
       // Add / remove class
-      if (newParent.dataset.navId === "0") {
+      if (newParent.dataset.navId === "") {
         movedElement.classList.remove("sub-toggle-block");
       } else {
         movedElement.classList.add("sub-toggle-block");
@@ -168,4 +169,11 @@ document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
   zone.addEventListener("dragleave", dragLeaveHandler, false);
   zone.addEventListener("drop", dragDropHandler, false);
   zone.addEventListener("dragend", dragEndHandler, false);
+});
+
+// Prevent nav source from triggering form control enable
+document.querySelectorAll(`[data-add-nav="page"], [data-add-nav="collection"], [data-add-nav="placeholder"]`).forEach(element => {
+  element.addEventListener("input", (event) => {
+    event.stopPropagation();
+  });
 });
