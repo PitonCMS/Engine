@@ -146,7 +146,7 @@ class AdminNavigationController extends AdminBaseController
                     }
                     $navItem = $navigationMapper->make();
                     $navItem->id = (int) $nav;
-                    // $navigationMapper->delete($navItem);
+                    $navigationMapper->delete($navItem);
                 }
             }
         } catch (Throwable $th) {

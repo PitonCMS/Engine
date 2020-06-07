@@ -75,7 +75,7 @@ const getXHRPromise = function(url, params) {
  * @param {string} data FormData object or object key value pairs
  */
 const postXHRPromise = function(url, data) {
-    data = data || {};
+    data = data ?? {};
     data[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue
 
     // Serialize data
