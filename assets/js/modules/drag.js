@@ -14,6 +14,20 @@ dropZone.classList.add("drag-drop");
 dropZone.style.cssText = dragZone;
 
 /**
+ * Return Moved Element
+ */
+const getMovedElement = function() {
+    return movedElement;
+}
+
+/**
+ * Return Drop Input Event
+ */
+const getDropInputEvent = function() {
+    return inputEvent;
+}
+
+/**
  * Drag Start Handler
  * @param {Event} event
  */
@@ -24,17 +38,18 @@ const dragStartHandler = function(event) {
     event.dataTransfer.setData("text/plain", null);
     event.dataTransfer.dropEffect = "move";
 
-    // Add drop zone divs between each child
+    // Insert drop zone divs around each draggable element
     // setTimeout() hack: https://stackoverflow.com/a/34698388/452133
     // To allow DOM manipulation in dragstart
     setTimeout(() => {
-        Array.from(this.children).forEach(element => {
-            this.insertBefore(dropZone.cloneNode(), element);
+        document.querySelectorAll(`[draggable="true"]`).forEach(element => {
+            element.parentElement.insertBefore(dropZone.cloneNode(), element);
+
+            if (element.parentElement.lastElementChild === element) {
+                element.parentElement.appendChild(dropZone.cloneNode());
+            }
         });
-
-        this.appendChild(dropZone);
     }, 0);
-
 }
 
 /**
@@ -46,8 +61,8 @@ const dragEnterHandler = function(event) {
     event.stopPropagation();
     event.dataTransfer.dropEffect = "move";
 
-    if (event.target.classList && event.target.classList.contains('drag-drop')) {
-        event.target.classList.add('drag-hover');
+    if (event.target.matches(".drag-drop")) {
+        event.target.classList.add("drag-hover");
         event.target.style.cssText = dragHover;
     }
 }
@@ -71,8 +86,8 @@ const dragLeaveHandler = function(event) {
     event.stopPropagation();
     event.dataTransfer.dropEffect = "move";
 
-    if (event.target.classList && event.target.classList.contains('drag-drop')) {
-        event.target.classList.remove('drag-hover');
+    if (event.target.matches(".drag-drop")) {
+        event.target.classList.remove("drag-hover");
         event.target.style.cssText = dragZone;
     }
 }
@@ -85,9 +100,9 @@ const dragDropHandler = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (movedElement !== event.target && event.target.classList && event.target.classList.contains('drag-drop')) {
-        this.insertBefore(movedElement, event.target.nextSibling)
-        this.dispatchEvent(inputEvent);
+    if (movedElement !== event.target && event.target.matches(".drag-drop")) {
+        event.target.parentElement.insertBefore(movedElement, event.target.nextSibling)
+        movedElement.dispatchEvent(inputEvent);
     }
 }
 
@@ -97,9 +112,9 @@ const dragDropHandler = function(event) {
  */
 const dragEndHandler = function(event) {
     // Cleanup drop zones
-    this.querySelectorAll(".drag-drop").forEach(zone => {
+    document.querySelectorAll(".drag-drop").forEach(zone => {
         zone.remove();
     });
 }
 
-export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler };
+export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler, getMovedElement, getDropInputEvent };
