@@ -114,6 +114,11 @@ $app->group('/admin', function () {
         $this->get('/edit/{navigator:[a-zA-Z0-9-]+}', function ($args) {
             return (new AdminNavigationController($this))->editNavigator($args);
         })->setName('adminNavigationEdit');
+
+        // XHR: Delete navigation
+        $this->post('/delete', function ($args) {
+            return (new AdminNavigationController($this))->deleteNavigator();
+        })->add('csrfGuardHandler')->setName('adminNavigationDelete');
     });
     // End Navigation
 

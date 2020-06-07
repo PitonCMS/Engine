@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   KEY `page_id_idx` (`page_id`),
   KEY `parent_id_idx` (`parent_id`),
   CONSTRAINT `navigation_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `navigation_parent_id_fk` FOREIGN KEY (`parent_id`) REFERENCES `navigation` (`id`) ON DELETE CASCADE
+  CONSTRAINT `navigation_parent_id_fk` FOREIGN KEY (`parent_id`) REFERENCES `navigation` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `page_element` (

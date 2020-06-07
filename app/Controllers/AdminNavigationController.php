@@ -14,6 +14,7 @@ namespace Piton\Controllers;
 
 use Slim\Http\Response;
 use Exception;
+use Throwable;
 
 /**
  * Piton Navigation Controller
@@ -115,5 +116,44 @@ class AdminNavigationController extends AdminBaseController
         }
 
         return $this->redirect('adminNavigation', ['navigator' => $navigator]);
+    }
+
+    /**
+     * Delete Navigation
+     *
+     * XHR Request
+     * @param void
+     * @return Response
+     * @uses POST
+     */
+    public function deleteNavigator()
+    {
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+            $navIds = $this->request->getParsedBodyParam("navIds");
+            $navigationIds = json_decode($navIds);
+            $status = "success";
+            $text = "";
+
+            // Go through array and delete
+            if (is_array($navigationIds)) {
+                foreach ($navigationIds as $nav) {
+                    // Check that we have an int or skip
+                    if (!is_int($nav)) {
+                        $text .= "Unable to delete: $nav\n";
+                        continue;
+                    }
+                    $navItem = $navigationMapper->make();
+                    $navItem->id = (int) $nav;
+                    // $navigationMapper->delete($navItem);
+                }
+            }
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting new element: ". $th->getMessage();
+        }
+
+        return $this->xhrResponse($status, $text);
     }
 }
