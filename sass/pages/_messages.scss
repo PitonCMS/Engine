@@ -6,29 +6,31 @@
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  border-radius: $border-radius;
   box-shadow: $box-shadow-1;
  }
 
  .message-header {
-  @include padding(null 1rem);
-  line-height: $nav-height;
+  @include padding(.5em 1rem .25em);
+  color: $text-secondary;
+  border-bottom: solid 1px $border;
+
   display: grid;
   grid-template-columns: 1fr max-content max-content;
   gap: 1rem;
   justify-content: flex-start;
-  align-items: flex-start;
-  background: $bg-grey;
+  align-items: center;
  }
 
  .message-content {
   @include padding(.5rem 1rem);
+  background: $bg-white;
   p{
   color: $text-grey;
   }
  }
 
  .btn-group {
+  background: $bg-white;
   @include padding(1rem null);
   display: flex;
   justify-content: flex-start;
@@ -36,47 +38,3 @@
   width: 100%;
  }
 }
-
-// .content-block-messages {
-//  @include margin(1em null null null);
-//  width: 100%;
-//  display: grid;
-//  gap: 1em;
-
-//  .message-block {
-//   display: grid;
-//   grid-template-columns: 1fr;
-//   width: 100%;
-
-//   &-inner {
-
-//    background: $bg-white;
-//    border-radius: $border-radius;
-//    box-shadow: $box-shadow-1;
-//    display: grid;
-//    grid-template-columns: 1fr auto;
-//    gap: 1em;
-//    .btn {
-//     @include margin(0);
-//    }
-//   }
-//  }
-
-//  .message-wrapper {
-//   @include padding(.5em 1em);
-//   display: grid;
-//   grid-template-columns: 1fr;
-
-//   hr {
-//    @include margin(.25em 0);
-//   }
-//  }
-
-//  .button-wrapper {
-//   @include padding(.5em 1em);
-
-//   .btn:last-child {
-//    @include margin(1em null null null);
-//   }
-//  }
-// }

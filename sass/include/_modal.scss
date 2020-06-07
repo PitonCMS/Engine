@@ -53,6 +53,7 @@
    // Styles for Media Select Modal
    .media-wrapper {
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+
     .media {
      height: 100%;
      @include padding(.25rem);
@@ -62,11 +63,13 @@
 
     .mediaImage {
      cursor: pointer;
-    
+
     }
-.mediaThumb{
- width: 100%;
-}
+
+    .mediaThumb {
+     width: 100%;
+    }
+
     .mediaImagePopup {
      display: none;
     }
@@ -81,7 +84,8 @@
     width: 100%;
     font-size: .75rem;
     color: $clr-dark-grey;
-    p{
+
+    p {
      white-space: nowrap;
      overflow: hidden;
      text-overflow: ellipsis;

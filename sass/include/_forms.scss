@@ -85,7 +85,10 @@ select, input[type="text"], input[type="email"], textarea {
  -webkit-appearance: none;
  -moz-appearance: none;
 }
-
+input[type="text"], input[type="email"], textarea{
+ @include padding(.5em);
+ color: $text-grey;
+}
 select.minimal {
  background-image: linear-gradient(45deg, transparent 50%, #{$clr-success} 50%),
  linear-gradient(135deg, #{$clr-success} 50%, transparent 50%),
