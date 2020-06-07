@@ -80,7 +80,7 @@ class AdminNavigationController extends AdminBaseController
         $navigation = $this->request->getParsedBodyParam('nav');
         $navigator = $this->request->getParsedBodyParam('navigator');
 
-        // Save each nav item
+        // Save each nav item. Array elements are updated by reference so new nav items get an ID assigned after insert to use parent ID's
         $index = 0;
         foreach ($navigation as &$navItem) {
             $index++;
@@ -91,6 +91,19 @@ class AdminNavigationController extends AdminBaseController
             // Page ID 0 is for placeholder nav links, which are not joined to page table
             $nav->page_id = (is_numeric($navItem['pageId'])) ? (int) $navItem['pageId'] : null;
             $nav->parent_id = (is_numeric($navItem['parentId'])) ? (int) $navItem['parentId'] : null;
+
+            // Set parent nav ID
+            if (is_numeric($navItem['parentId'])) {
+                // If a numeric parentId was set coerce and assign
+                $nav->parent_id = (int) $navItem['parentId'];
+            } elseif (!empty($navItem['parentId'])) {
+                // If parent ID is not numeric (new pages use a '0x' array key), then get parent's ID from post array
+                $nav->parent_id = (int) $navigation[$navItem['parentId']]['navId'];
+            } else {
+                // Otherwise set to null
+                $nav->parent_id = null;
+            }
+
             $nav->sort = $index;
             $nav->title = trim($navItem['navTitle']) ?? null;
             $nav->url = $navItem['url'] ?? null;

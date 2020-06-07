@@ -80,7 +80,7 @@
     {# END SIDEBAR #}
 
     {# MAIN CONTENT #}
-    <div class="nav-wrapper__main" data-navigation-container="1" data-navigation="parent" data-nav-id="0" data-draggable="children">
+    <div class="nav-wrapper__main" data-navigation-container="1" data-navigation="parent" data-nav-id="" data-draggable="children">
 
        {# For each navigation item, get navigation element from macro at the bottom of this page #}
       {% for nav in page.navigation %}
@@ -117,9 +117,9 @@
 {% macro navElement(navigation) %}
 {% import _self as navMacro %}
 
-<div class="toggle-block {% if navigation.parent_id %}sub-toggle-block{% endif %}" draggable="true" data-collapse="parent" data-navigation="parent" data-nav-id="{{ navigation.id }}" data-nav-level="{{ navigation.level }}">
+<div class="toggle-block {% if navigation.parent_id %}sub-toggle-block{% endif %}" draggable="true" data-collapse="parent" data-navigation="parent" data-nav-id="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
-  <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id|default(0) }}">
+  <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][collectionId]" value="{{ navigation.collection_id }}">
 
