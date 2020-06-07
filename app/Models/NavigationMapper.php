@@ -77,7 +77,7 @@ SQL;
         $this->allNavRows = $this->findNavigation($navigator) ?? [];
 
         // Recursive depth indicator
-        $level =  1;
+        $level =  0;
 
         foreach ($this->allNavRows as &$row) {
             // Skip if page is not published

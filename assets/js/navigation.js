@@ -2,14 +2,14 @@
 // Navigation
 // --------------------------------------------------------
 import './modules/main.js';
-import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler } from './modules/drag.js';
+import { getMovedElement, dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragEndHandler } from './modules/drag.js';
 
 const navItems = [];
 const navPages = document.querySelectorAll(`[data-add-nav="page"] input`);
 const navCollections = document.querySelectorAll(`[data-add-nav="collection"] input`);
 const navPlaceholder = document.querySelectorAll(`[data-add-nav="placeholder"] input`);
-const navElement = document.querySelector(`[data-navigation-element="1"] > div`);
-const navContainer = document.querySelector(`[data-navigation="container"]`);
+const navElement = document.querySelector(`[data-navigation="spare"] > div`);
+const navContainer = document.querySelector(`[data-navigation-container="1"]`);
 let navItemKey = 0;
 
 /**
@@ -23,6 +23,7 @@ const appendNavElements = function() {
     newNav.querySelectorAll(`input[name^=nav]`).forEach(input => {
       input.name = input.name.replace(/(.+?\[)(\].+)/, "$1" + arrayKey + "$2");
     });
+    newNav.dataset.navId = arrayKey;
 
     // Set data
     if (nav.pageId) {
@@ -111,6 +112,47 @@ const addPlaceholderNav = function() {
   }
 
   appendNavElements();
+}
+
+/**
+ * Insert Child Drop Zone
+ */
+
+/**
+ * OVERRIDE Drag Drop Handler
+ * Overrides drag.js to support child navigation drops
+ * @param {Event} event
+ */
+const dragDropHandler = function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  let movedElement = getMovedElement();
+
+  // Nothing to do if dropping on self
+  if (movedElement !== event.target && event.target.matches(".drag-drop")) {
+    let movedElementParentId = movedElement.querySelector(`input[name$="\[parentId\]"]`).value;
+    let newParent = event.target.parentElement.closest(`[data-navigation="parent"]`);
+
+    // If the element parentId matches the current parent ID (element sorted within current level), just drop in new order
+    if (movedElementParentId === newParent.dataset.navId) {
+      event.target.parentElement.insertBefore(movedElement, event.target.nextSibling);
+    }
+
+    // If the element has a parentId and the current parent HAS changed, move to last child of new parent
+    if (movedElementParentId !== newParent.dataset.navId) {
+      movedElement.querySelector(`input[name$="\[parentId\]"]`).value = newParent.dataset.navId;
+
+      // Add / remove class
+      if (newParent.dataset.navId === "0") {
+        movedElement.classList.remove("sub-toggle-block");
+      } else {
+        movedElement.classList.add("sub-toggle-block");
+      }
+
+      event.target.parentElement.insertBefore(movedElement, event.target.nextSibling);
+    }
+  }
 }
 
 // Bind events

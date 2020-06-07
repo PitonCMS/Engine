@@ -43,11 +43,18 @@ const dragStartHandler = function(event) {
     // To allow DOM manipulation in dragstart
     setTimeout(() => {
         document.querySelectorAll(`[draggable="true"]`).forEach(element => {
+            // Insert drop zone before all draggable elements
             element.parentElement.insertBefore(dropZone.cloneNode(), element);
 
+            // Insert drop zone after last child
             if (element.parentElement.lastElementChild === element) {
                 element.parentElement.appendChild(dropZone.cloneNode());
             }
+        });
+
+        // Optional "other" drop targets
+        document.querySelectorAll(`[data-drop-zone="1"]`).forEach(element => {
+            element.parentElement.insertBefore(dropZone.cloneNode(), element);
         });
     }, 0);
 }
