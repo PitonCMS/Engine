@@ -16,7 +16,9 @@
 
    align-items: center;
   }
-
+.form-check{
+ @include padding(0);
+}
   .checkbox-block {
    grid-template-columns: 1fr;
    gap: 0;
@@ -38,7 +40,11 @@
 
   label {
    font-weight: 600;
+   background: $bg-white;
    display: none;
+  }
+  input{
+   background: $bg-white;
   }
  }
 
@@ -138,11 +144,10 @@
  }
 
  .btn-group-nav-sidebar {
-  @include padding(5rem 4rem null null);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
- }
+  @include margin(1rem null);
+     display: flex;
+     width: 100%;
+    }
+  
 
 }

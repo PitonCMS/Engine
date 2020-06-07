@@ -10,7 +10,8 @@
 {% block contentHeader %}
 <div class="content-header-inner">
  <div class="breadcrumb"></div>
- <h1 class="section-title">Messages</h1>
+ {# TODO under section-title add title to match the type of filter? Like Messages - Unread or Message Read #}
+ <h1 class="section-title">Messages - All </h1>
  <div class="btn-group"></div>
 </div>
 
@@ -22,35 +23,36 @@
 <!-- Message Filters -->
 <div class="filter-block">
  <div class="input-block">
- <div class="input-block__icon">
-  <i class="fas fa-search"></i>
- </div>
- <div class="input-block__input">
-  <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media" autocomplete="false">
- </div>
+  <div class="input-block__icon">
+   <i class="fas fa-search"></i>
+  </div>
+  <div class="input-block__input">
+   <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media"
+    autocomplete="false">
+  </div>
  </div>
 
  <div class="btn-dropdown-block ">
- <div class="btn btn-dropdown "><span>Filter</span> <span><i class="fas fa-chevron-down"></i></span>
- </div>
- <div class="form-check-wrapper form-group-block">
-  <div class="form-check">
-  <input class="form-check-input" type="radio" id="allMessages" name="status" value="allMessages">
-  <label class="form-check-label" for="allMessages">All</label>
+  <div class="btn btn-dropdown "><span>Filter</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
-  <div class="form-check">
-  <input class="form-check-input" type="radio" id="unreadMessages" name="status" value="unreadMessages">
-  <label class="form-check-label" for="unreadMessages">Unread</label>
+  <div class="form-check-wrapper form-group-block">
+   <div class="form-check">
+    <input class="form-check-input" type="radio" id="allMessages" name="status" value="allMessages">
+    <label class="form-check-label" for="allMessages">All</label>
+   </div>
+   <div class="form-check">
+    <input class="form-check-input" type="radio" id="unreadMessages" name="status" value="unreadMessages">
+    <label class="form-check-label" for="unreadMessages">Unread</label>
+   </div>
+   <div class="form-check">
+    <input class="form-check-input" type="radio" id="readMessages" name="status" value="readMessages">
+    <label class="form-check-label" for="readMessages">Read</label>
+   </div>
+   <div class="form-check">
+    <input class="form-check-input" type="radio" id="archiveMessages" name="status" value="archiveMessages">
+    <label class="form-check-label" for="archiveMessages">Archive</label>
+   </div>
   </div>
-  <div class="form-check">
-  <input class="form-check-input" type="radio" id="readMessages" name="status" value="readMessages">
-  <label class="form-check-label" for="readMessages">Read</label>
-  </div>
-  <div class="form-check">
-  <input class="form-check-input" type="radio" id="archiveMessages" name="status" value="archiveMessages">
-  <label class="form-check-label" for="archiveMessages">Archive</label>
-  </div>
- </div>
  </div>
 
 </div>
@@ -86,20 +88,20 @@
 {% block sidebar %}
 <div class="sidebar-inner">
  <div class="sidebar-block">
- <div class="sidebar-link">
-  <a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}"
-  href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
-  <i class="fas fa-envelope"></i>
-  <div class="sidebar-link__text">New Messages</div>
-  </a>
- </div>
- <div class="sidebar-link">
-  <a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}"
-  href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
-  <i class="fas fa-envelope-open-text"></i>
-  <div class="sidebar-link__text">Read Messages</div>
-  </a>
- </div>
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('new') ? 'active' }}"
+    href="{{ pathFor('adminMessage', {'status': 'new'}) }}">
+    <i class="fas fa-envelope"></i>
+    <div class="sidebar-link__text">New Messages</div>
+   </a>
+  </div>
+  <div class="sidebar-link">
+   <a class="{{ currentRoute('adminMessage') and inUrl('read') ? 'active' }}"
+    href="{{ pathFor('adminMessage', {'status': 'read'}) }}">
+    <i class="fas fa-envelope-open-text"></i>
+    <div class="sidebar-link__text">Read Messages</div>
+   </a>
+  </div>
  </div>
 </div>
 {% endblock sidebar %}
@@ -107,31 +109,40 @@
 {% macro message(m) %}
 <div class="message-block jsMessageWrap">
 
-<div class="message-block-inner">
  <div class="message-wrapper">
-  <div> <a class="strong-text" href="mailto:{{ m.email }}" target="_blank"><i class="fas fa-envelope"></i>&nbsp;&nbsp;{{ m.name }}</a> | 
- <span class="strong-text">Sent:</span>&nbsp;&nbsp;{{ m.createdDate|date('d F Y h:i a') }} |
- <span class="strong-text">Via:</span>&nbsp;&nbsp; {{ m.context|default('Unknown Page') }}</div>
-  <hr>
-  <div><p>{{ m.message|nl2br }}</p></div>
- </div>
+  <div class="message-header span">
+   <div class="message-link">
+    <a href="mailto:{{ m.email }}" target="_blank">
+     <i class="fas fa-envelope"></i>&nbsp;&nbsp;{{ m.name }}</a>
+   </div>
+
+   <div class="message-date">
+    Sent:&nbsp;&nbsp;{{ m.createdDate|date('d F Y h:i a') }}
+   </div>
+
+   <div class="message-origin">
+    Via:&nbsp;&nbsp; {{ m.context|default('Unknown Page') }}
+   </div>
+  </div>
+
+  <div class="message-content">
+   <p>{{ m.message|nl2br }}</p>
+  </div>
+
+  <form class="btn-group" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
+  
+   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+   <input type="hidden" name="id" value="{{ m.id }}">
  
-
-  <form class="button-wrapper" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-  <input type="hidden" name="id" value="{{ m.id }}">
-
-  <button class="btn btn-delete " name="button" title="Delete message" type="submit"
-  data-is-read="{{ m.isRead }}" value="delete" formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
-
-  <button class="btn btn-save btn-block" type="submit" name="button" value="toggle"
-   data-is-read="{{ m.isRead }}">Mark as
-   {% if m.isRead == 'Y' %}Unread{% else %}Read
-   {% endif %}
-  </button>
+   <button class="btn btn-block btn-delete " name="button" title="Delete message" type="submit"
+    data-is-read="{{ m.isRead }}" value="delete" formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
  
+   <button class="btn btn-block btn-save" type="submit" name="button" value="toggle" data-is-read="{{ m.isRead }}">Mark as {% if m.isRead == 'Y' %}Unread{% else %}Read{% endif %}
+   </button>
+
   </form>
- 
-</div>
+
+ </div>
+
 </div>
 {% endmacro %}

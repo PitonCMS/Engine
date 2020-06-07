@@ -37,6 +37,7 @@ input:-webkit-autofill:active {
  display: grid;
  grid-template-columns: auto 1fr;
  align-items: center;
+ justify-content: flex-start;
 
  label {
   font-weight: 300;
@@ -72,7 +73,7 @@ input:-webkit-autofill:active {
 }
 
 /* Form Select Styles */
-select, input[type="text"], textarea {
+select, input[type="text"], input[type="email"], textarea {
  @include padding(.5em 3.5em .5em 1em);
  @include margin(0);
  width: 100%;
