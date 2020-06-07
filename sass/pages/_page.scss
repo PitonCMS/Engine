@@ -2,7 +2,7 @@
 
 // wrapper for page list header
 .list-item-page-header {
- @include padding(.5em null .25em);
+ @include padding(.5em null .25em .5em);
  display: flex;
  flex-flow: row nowrap;
  justify-content: space-between;
