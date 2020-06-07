@@ -16,43 +16,31 @@
  }
 
 /* Users */
+.user-list-item-header {
+ @include padding(.5em 1em .25em);
+ color: $text-secondary;
+ border-bottom: solid 1px $border;
+}
+.user-list-item {
+ background: $bg-white;
+ @include padding(.5em);
+ border-bottom: solid 1px $border;
+ &:hover {
+  background: $bg-grey; 
+ }
+}
+
+
 .user-list-item,
 .user-list-item-header {
- @include padding(.5em);
- background: $bg-white;
  display: grid;
  grid-template-columns: repeat(2, 1fr) repeat(2, .5fr);
  gap: 1em;
  justify-content: center;
  align-items: center;
- border-top: solid 1px $border;
-
-&__title{
- font-weight: 600;
-}
- &:hover {
-  background: $bg-grey; 
- }
-
- &__heading {
-  font-size: 1.2rem;
-  font-weight: bold;
- }
-
- &:last-child {
-  border-bottom: solid 1px $border;
- }
 
 }
-.user-list-item-header {
- height: 2.2rem;
- font-weight: bold;
- border: none;
- &:hover{
-  background: $bg-light;
 
- }
-}
 
 .add-user {
  justify-self: flex-start;

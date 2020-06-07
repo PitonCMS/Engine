@@ -1492,42 +1492,28 @@ select:-moz-focusring {
 }
 
 /* Users */
+.user-list-item-header {
+  padding: 0.5em 1em 0.25em;
+  color: #212f78;
+  border-bottom: solid 1px #dee3e7;
+}
+
+.user-list-item {
+  background: white;
+  padding: 0.5em;
+  border-bottom: solid 1px #dee3e7;
+}
+.user-list-item:hover {
+  background: #dee3e7;
+}
+
 .user-list-item,
 .user-list-item-header {
-  padding: 0.5em;
-  background: white;
   display: grid;
   grid-template-columns: repeat(2, 1fr) repeat(2, 0.5fr);
   gap: 1em;
   justify-content: center;
   align-items: center;
-  border-top: solid 1px #dee3e7;
-}
-.user-list-item__title,
-.user-list-item-header__title {
-  font-weight: 600;
-}
-.user-list-item:hover,
-.user-list-item-header:hover {
-  background: #dee3e7;
-}
-.user-list-item__heading,
-.user-list-item-header__heading {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-.user-list-item:last-child,
-.user-list-item-header:last-child {
-  border-bottom: solid 1px #dee3e7;
-}
-
-.user-list-item-header {
-  height: 2.2rem;
-  font-weight: bold;
-  border: none;
-}
-.user-list-item-header:hover {
-  background: #f3f5f7;
 }
 
 .add-user {
@@ -1541,8 +1527,7 @@ select:-moz-focusring {
   gap: 1em;
   align-items: center;
 }
-.user-block-wrapper input,
-.user-block-wrapper label {
+.user-block-wrapper input, .user-block-wrapper label {
   margin: 0;
 }
 .user-block-wrapper .user-block-item {
