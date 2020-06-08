@@ -196,7 +196,7 @@ class Admin extends Base
 
         // Get all media categories and create key: value pair array
         $categories = $mediaCategoryMapper->findCategories() ?? [];
-        $categories = array_combine(array_column($categories, 'id'), array_column($categories, 'category'));
+        $categories = array_column($categories, 'category', 'id');
 
         return $this->cache['mediaCategories'] = $categories;
     }

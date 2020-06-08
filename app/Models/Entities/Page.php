@@ -99,7 +99,7 @@ class Page extends PitonEntity
             return;
         }
 
-        $this->settings = array_combine(array_column($settings, 'setting_key'), array_column($settings, 'setting_value'));
+        $this->settings = array_column($settings, 'setting_value', 'setting_key');
     }
 
     /**
