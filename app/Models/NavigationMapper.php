@@ -152,21 +152,6 @@ SQL;
     }
 
     /**
-     * Delete Navigation Link
-     *
-     * Recursively deletes children of nav link
-     * @param  int  $navId
-     * @return bool
-     */
-    public function deleteByNavId(int $navId): bool
-    {
-        $this->sql = 'delete from `navigation` where `id` = ?;';
-        $this->bindValues[] =  $navId;
-
-        return $this->execute();
-    }
-
-    /**
      * Delete by Page ID
      *
      * Delete navigation record by page_id
