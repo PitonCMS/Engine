@@ -32,17 +32,23 @@ const dragStartHandler = function(event) {
     setTimeout(() => {
         document.querySelectorAll(`[draggable="true"]`).forEach(element => {
             // Insert drop zone before all draggable elements
-            element.parentElement.insertBefore(dropZone.cloneNode(), element);
+            // Except around and inside the movedElement
+            if (element !== movedElement && element !== movedElement.nextElementSibling) {
+                element.parentElement.insertBefore(dropZone.cloneNode(), element);
+            }
 
             // Insert drop zone after last child
-            if (element.parentElement.lastElementChild === element) {
+            if (element === element.parentElement.lastElementChild && element !== movedElement) {
                 element.parentElement.appendChild(dropZone.cloneNode());
             }
         });
 
         // Optional "other" drop targets
         document.querySelectorAll(`[data-drop-zone="1"]`).forEach(element => {
-            element.parentElement.insertBefore(dropZone.cloneNode(), element);
+            if (element === movedElement) {
+                // Not sure why this condition works, should be opposite?
+                element.parentElement.insertBefore(dropZone.cloneNode(), element);
+            }
         });
     }, 0);
 }
