@@ -4,14 +4,9 @@ let movedElement;
 // Event to dispatch pseudo "input" event
 const inputEvent = new Event("input", {"bubbles": true});
 
-// Drop zone classes
-const dragZone = "border: 1px dashed #000; height: 20px;";
-const dragHover = "border: 1px dashed #000; height: 60px;";
-
 // Empty drop zone divs to inject in DOM around draggable elements
 const dropZone = document.createElement("div");
 dropZone.classList.add("drag-drop");
-dropZone.style.cssText = dragZone;
 
 /**
  * Return Moved Element
@@ -63,7 +58,6 @@ const dragEnterHandler = function(event) {
 
     if (event.target.matches(".drag-drop")) {
         event.target.classList.add("drag-hover");
-        event.target.style.cssText = dragHover;
     }
 }
 
@@ -88,7 +82,6 @@ const dragLeaveHandler = function(event) {
 
     if (event.target.matches(".drag-drop")) {
         event.target.classList.remove("drag-hover");
-        event.target.style.cssText = dragZone;
     }
 }
 
