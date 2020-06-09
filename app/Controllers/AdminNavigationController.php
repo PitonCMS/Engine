@@ -105,6 +105,11 @@ class AdminNavigationController extends AdminBaseController
                 $nav->parent_id = null;
             }
 
+            // Yes, this happened. A nav element cannot be a child of itself.
+            if ($nav->page_id === $nav->parent_id) {
+                throw new Exception("PitonCMS: A navigation element cannot be a child of itself");
+            }
+
             $nav->sort = $index;
             $nav->title = trim($navItem['navTitle']) ?? null;
             $nav->url = $navItem['url'] ?? null;
