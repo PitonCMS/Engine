@@ -60,8 +60,10 @@ class AdminNavigationController extends AdminBaseController
 
         $data['pages'] = $pageMapper->findPages();
         $data['collections'] = $collectioMapper->find();
-        $data['navigation'] = $navMapper->findNavHierarchy($args['navigator'], null, false) ?? [];
         $data['navDefinition'] = $navs[$args['navigator']];
+
+        $navList = $navMapper->findNavigationStructure($args['navigator']);
+        $data['navigation'] = $navMapper->buildNavigation($navList, null, false);
 
         return $this->render('navigation/navigationEdit.html', $data);
     }
@@ -106,7 +108,7 @@ class AdminNavigationController extends AdminBaseController
             }
 
             // Yes, this happened. A nav element cannot be a child of itself.
-            if ($nav->page_id === $nav->parent_id) {
+            if ($nav->parent_id !== null && $nav->page_id === $nav->parent_id) {
                 throw new Exception("PitonCMS: A navigation element cannot be a child of itself");
             }
 

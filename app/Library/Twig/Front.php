@@ -151,6 +151,8 @@ class Front extends Base
         $url = $this->uri->getPath();
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
 
-        return $this->cache['navigator'][$navigator] = $navigationMapper->findNavHierarchy($navigator, $url);
+        $navList = $navigationMapper->findNavigation($navigator, $url);
+
+        return $this->cache['navigator'][$navigator] = $navigationMapper->buildNavigation($navList, $url);
     }
 }
