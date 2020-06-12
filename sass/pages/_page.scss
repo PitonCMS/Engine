@@ -62,82 +62,79 @@
 
 /* Page/Collection Add/Edit Styles */
 
-.pageEdit__wrapper {
- @include margin(1rem null null null);
- display: flex;
- position: relative;
-}
-
-// Page Edit Blocks
-.pageEdit__title {
- @include margin(0 0 .5em 0);
-
-}
-
-.pageEdit__sectionBlock {
- @include margin(null null 1em null);
- display: grid;
- grid-template-columns: 1fr;
- // cursor: pointer;
-
- &-header {
-  background: $bg-grey;
-  @include padding(.5em);
-  margin: 0 !important;
+.pageEdit {
+ &__wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: $nav-height;
+  flex-flow: column nowrap;
 
-  position: sticky;
-  top: calc(#{$nav-height * 2});
-  z-index: 50;
+  @media screen and (min-width: $breakpoint) {
+   flex-flow: row nowrap;
+  }
  }
 
- &-title {
-  @include padding(null null .25em null);
+ &__leftCol {
+  order: 2;
+
+  @media screen and (min-width: $breakpoint) {
+   order: 0;
+   flex: 1;
+  }
  }
+
+ &__rightCol {
+  @media screen and (min-width: $breakpoint) {
+   flex: .5;
+   @include margin(1rem null null 1rem);
+  }
+
+ }
+
+ &__twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
+
+  @media screen and (min-width: $breakpoint) {
+   grid-template-columns: 1fr;
+   gap: .25rem;
+  }
+
+  img {
+   max-height: 200px;
+   object-fit: cover;
+  }
+ }
+
+ &__filter-block {
+  grid-template-columns: 1fr;
+ }
+
+ &__title {
+  @include margin(null null .25em null);
+  font-size: 1.8rem;
+
+ }
+
+
+
+
 }
-
-.page-elementBlock {
- background: $bg-light;
- @include margin(null null .5em null);
- @include padding(.5em .25em);
- border-radius: $border-radius;
-}
-
-.form-block__elementWrapper {
- background: $bg-white;
-
- padding: 1em;
-}
-
 .new-element {
-
- animation: fadeBackground 1.5s ease-in-out forwards;
-}
-
-@keyframes fadeBackground {
- 0% {
-  opacity: 0;
-
-  background: rgba($bg-accent, .5);
+ .form-block__elementWrapper {
+  animation: fadeBackground 3s linear forwards;
  }
+ 
+}
+ // Animation
 
- 100% {
-  opacity: 1;
-  background: $bg-light;
+ @keyframes fadeBackground {
+  0% {
+   opacity: 0;
+   background: rgba($bg-accent, 1);
+  }
+
+  100% {
+   opacity: 1;
+   background: $bg-white;
+  }
  }
-}
-
-.pageEdit__leftCol {
- flex: 5;
-}
-
-.pageEdit__rightCol {
- // width: 25vw;
- // max-width: 400px;
- // min-width: 300px;
- width: clamp(15vw, 25vw, 400px);
- @include padding(.5em .75em);
-}

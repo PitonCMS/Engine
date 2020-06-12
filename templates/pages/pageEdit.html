@@ -21,13 +21,13 @@
   <!-- Breadcrumbs -->
   <div class="breadcrumb"></div>
   <!-- Section Title -->
-  <h1 class="section-title">Editing: {{ page.title }}</h1>
+  <h1 class="section-title">{{ page.title }}</h1>
 
   <div class="btn-group">
    <a class="btn btn-cancel" data-form-button="cancel"
     href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
-   <button class="btn btn-publish " data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
-   <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
+   <button class="btn btn-publish" data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
+   <button class="btn btn-save" data-form-button="save" type="submit" disabled>Save</button>
   </div>
 
   <!-- Control Buttons -->
@@ -58,21 +58,16 @@
  {% endblock contentHeader %}
 
  {% block content %}
- <div class="pageEdit__wrapper" data-page-edit="1">
+ {# Page Title #}
+ <div class="form-block">
+  <h2 class="pageEdit__title">Page Title</h2>
+  <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
+   data-url-slug="source" autocomplete="off" required>
+ </div>
 
+ <div class="pageEdit__wrapper" data-page-edit="1">
   <!-- Left Column Page Edit -->
   <div class="pageEdit__leftCol">
-
-   {# Page Title #}
-  
-    <div class="form-block__elementWrapper">
-     <h2 class="pageEdit__sectionBlock-title">Page Title</h2>
-     <input type="text" name="title" maxlength="60" placeholder="Page title" value="{{ page.title }}"
-      data-url-slug="source" autocomplete="off" required>
-
-    </div>
- 
-
    {# Custom Settings Tab #}
    {% if page.settings %}
    <div class="toggle-block" data-collapse="parent">
@@ -108,7 +103,7 @@
    </div>
    {% endfor %}
    {# End Blocks and Elements Loops #}
-   
+
   </div>
 
   <!-- right Column Page Edit -->
@@ -116,9 +111,9 @@
 
    {# Publish Date Input #}
    <h4 class="pageEdit__title">Page Settings</h4>
-   <div class="form-block">
+    <div class="form-block">
     <p>Publish(ed) date</p>
-    <input type="text"  name="published_date" placeholder="Publish date"
+    <input type="text" name="published_date" placeholder="Publish date"
      value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
 
     {% if page.getPublishedStatus == 'draft' %}
@@ -130,7 +125,7 @@
     {% elseif page.getPublishedStatus == 'published' %}
     <div>Status: <span class="published">Published</span></div>
     {% endif %}
-   </div>
+   </div> 
 
    {# Page Slug Input with locking icon #}
    {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
@@ -138,10 +133,10 @@
    {% else %}
    {% set readonlyStatus, lockedStatus = '', 'unlock' %}
    {% endif %}
-   <div class="element-block-wrapper">
+
     <div class="form-block">
      <label>Page Slug <span class="text-required">*</span></label>
-     <div class="filter-block">
+     <div class="filter-block pageEdit__filter-block">
       <div class="input-block">
        <div class="input-block__icon ">
         <i class="fas fa-{{ lockedStatus }}" data-url-slug-lock="1"></i>
@@ -153,49 +148,49 @@
        </div>
       </div>
      </div>
-     <small class="form-text text-muted">URL link to page. The <code>home</code> URL is restricted from being
-      changed.
-      Warning, changing the URL slug after the page is published may negatively impact links to your page.</small>
+     <div class="small-text">URL link to page. The <code>home</code> URL is restricted from being changed. Warning, changing the URL slug after the page is published may negatively impact links to your page.</div>
     </div>
-   </div>
+  
 
    {# Meta Description Input #}
-   <div class="element-block-wrapper">
+ 
     <div class="form-block">
      <label>Meta Description</label>
-     <textarea  name="meta_description" maxlength="320"
+     <textarea name="meta_description" maxlength="320"
       placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
-     <small class="form-text text-muted">Limit 320 characters. Search engines may use this text in matching search
-      results.</small>
+     <div class="small-text"">Limit 320 characters. Search engines may use this text in matching search
+      results.</div>
     </div>
-   </div>
+  
 
    {# Page Featured Media Select #}
    {% if page.definition.showFeaturedImage|default(1) %}
-   <div class="form-block" data-media-select="1">
-    <img src="{{ getMediaPath(page.media.filename, 'large') }}"
-     class="img-fluid {% if not page.media.filename %}d-none{% endif %}">
-    <input type="hidden"  name="page_media_id" value="{{ page.media_id }}">
-    <label>Featured Page Image</label>
+   <div class="form-block pageEdit__twoCol" data-media-select="1">
+    <label class="span">Featured Page Image</label>
+    <img src="{{ getMediaPath(page.media.filename, 'large') }}" class="{% if not page.media.filename %}d-none{% endif %}">
+    <input type="hidden" name="page_media_id" value="{{ page.media_id }}">
+   
 
     <div class="btn-group-pageEdit">
-     <button class="btn  btn-delete" type="button" data-media-clear="1">Clear Media</button>
-     <button class="btn  btn-save" type="button" data-media-modal="1">Select Media</button>
+     <button class="btn btn-delete btn-block" type="button" data-media-clear="1">Clear Media</button>
+     <button class="btn btn-save btn-block" type="button" data-media-modal="1">Select Media</button>
     </div>
    </div>
    {% endif %}
   </div>
 
  </div>
-      {# Delete Page Button #}
-      <div class="btn-group-bottom span">
-       {% if page.id %}
-       <button class="btn btn-delete btn-block" type="submit"
-        data-delete-prompt="Are you sure you want to permanently delete this page?"
-        formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
-        title="The home page cannot be deleted." {% endif %}>Delete Page</button>
-       {% endif %}
-      </div>
+
+ {# Delete Page Button #}
+ <div class="btn-group-bottom span">
+  {% if page.id %}
+  <button class="btn btn-delete btn-block" type="submit"
+   data-delete-prompt="Are you sure you want to permanently delete this page?"
+   formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
+   title="The home page cannot be deleted." {% endif %}>Delete Page</button>
+  {% endif %}
+ </div>
+
  {% endblock content %}
 
  {% block closeForm %}
