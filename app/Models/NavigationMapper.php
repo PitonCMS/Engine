@@ -105,8 +105,9 @@ SQL;
      * @param string     $currentRoute Page slug
      * @param bool       $isPublished  Flag to only return published pages
      * @param int|null   $parentId
+     * @return array|null
      */
-    public function buildNavigation(?array $navList, string $currentRoute = null, bool $isPublished = true, int $parentId = null): array
+    public function buildNavigation(?array $navList, string $currentRoute = null, bool $isPublished = true, int $parentId = null): ?array
     {
         if (empty($navList)) {
             return null;
