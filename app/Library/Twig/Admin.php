@@ -231,10 +231,14 @@ class Admin extends Base
      */
     public function getUnreadMessageCount(): ?int
     {
+        if (isset($this->cache['unreadMessageCount'])) {
+            return $this->cache['unreadMessageCount'];
+        }
+
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $count = $messageMapper->findUnreadCount();
 
-        return ($count === 0) ? null : $count;
+        return $this->cache['unreadMessageCount'] = ($count === 0) ? null : $count;
     }
 
     /**

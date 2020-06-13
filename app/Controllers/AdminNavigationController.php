@@ -158,7 +158,7 @@ class AdminNavigationController extends AdminBaseController
             }
         } catch (Throwable $th) {
             $status = "error";
-            $text = "Exception getting new element: ". $th->getMessage();
+            $text = "Exception deleting navigator: ". $th->getMessage();
         }
 
         return $this->xhrResponse($status, $text);

@@ -126,10 +126,9 @@ if (pageEditNode) {
                     .then(() => {
                         element.remove();
                     })
-                    .then(() => {
-                        disableSpinner();
-                    }).catch((data) => {
+                    .catch((data) => {
                         console.log("Failed to delete element: ", data);
+                        alertInlineMessage('danger', 'Failed to Delete Element', text);
                         disableSpinner();
                     });
             }

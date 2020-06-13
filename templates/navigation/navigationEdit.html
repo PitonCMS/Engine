@@ -4,7 +4,7 @@
 {% block htmlTitle 'Edit Navigation' %}
 
 {% block openForm %}
-<form class="jsNavigatorForm" action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
+<form action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
   <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
   <input type="hidden" name="navigator" value="{{ page.navDefinition.key }}">
 {% endblock openForm %}
@@ -16,7 +16,7 @@
 
   <div class="btn-group">
     <a href="{{ pathFor('adminNavigationEdit', {'navigator': page.navDefinition.key}) }}" class="btn btn-cancel" data-form-button="cancel">Discard</a>
-    <button class="btn btn-save " data-form-button="save" type="submit">Save</button>
+    <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
   </div>
 </div>
 {% endblock contentHeader %}

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -155,7 +155,7 @@ $app->group('/admin', function () {
                 return (new AdminMediaController($this))->saveMediaCategories();
             })->add('csrfGuardHandler')->setName('adminMediaCategorySave');
 
-            // Delete media category
+            // XHR Delete media category
             $this->post('/delete', function ($args) {
                 return (new AdminMediaController($this))->deleteMediaCategory();
             })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');

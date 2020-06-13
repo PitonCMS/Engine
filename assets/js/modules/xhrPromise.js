@@ -21,9 +21,11 @@ const XHRPromise = function(method, url, data) {
                     if (response.status === "success") {
                         // Response content successful
                         resolve(response.text);
+                        disableSpinner();
                     } else {
                         // Response successful but application failed
                         reject(alertInlineMessage('danger', 'Failed', [response.text]));
+                        disableSpinner();
                     }
                 } else {
                     // Failed server runtime response

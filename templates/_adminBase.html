@@ -108,7 +108,9 @@
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
  {# Footer block element #}
- {% block foot '' %}
+ {% block foot %}
+ {{ getJsFileSource('main') }}
+ {% endblock foot %}
 </body>
 
 </html>

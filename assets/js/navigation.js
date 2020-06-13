@@ -5,6 +5,7 @@ import './modules/main.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragEndHandler, getMovedElement } from './modules/drag.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
+import { alertInlineMessage } from './modules/alert.js';
 
 const navItems = [];
 const navPages = document.querySelectorAll(`[data-add-nav="page"] input`);
@@ -12,7 +13,7 @@ const navCollections = document.querySelectorAll(`[data-add-nav="collection"] in
 const navPlaceholder = document.querySelectorAll(`[data-add-nav="placeholder"] input`);
 const navElement = document.querySelector(`[data-navigation="spare"] > div`);
 const navContainer = document.querySelector(`[data-navigation-container="1"]`);
-let navItemKey = 0;
+let elementKey = 0;
 
 /**
  * Append Navigation Elements
@@ -21,7 +22,7 @@ const appendNavElements = function() {
     navItems.forEach(nav => {
         // Clone spare navigation element, and set unique name array key so POST array keeps inputs together
         let newNav = navElement.cloneNode(true);
-        let arrayKey = (navItemKey++) + "n";
+        let arrayKey = (elementKey++) + "n";
         newNav.querySelectorAll(`input[name^=nav]`).forEach(input => {
             input.name = input.name.replace(/(.+?\[)(\].+)/, "$1" + arrayKey + "$2");
         });
@@ -158,7 +159,7 @@ const dragDropHandler = function(event) {
     }
 }
 
-const deleteNavItem =  function(event) {
+const deleteNavItem = function(event) {
     if (!event.target.dataset.deleteNavigationPrompt) return;
     if (!confirm(event.target.dataset.deleteNavigationPrompt)) return;
 
@@ -169,7 +170,7 @@ const deleteNavItem =  function(event) {
      // Get this ID and all currently assigned child navigation ID's. Some may have been previously saved before being added to this nav parent
      navElement.querySelectorAll(`input[name$="\[navId\]"]`).forEach((i) => {
         let id = parseInt(i.value);
-        if (id !== NaN) {
+        if (!isNaN(id)) {
             navIds.push(id);
         }
      });
@@ -183,9 +184,10 @@ const deleteNavItem =  function(event) {
             .then(() => {
                 // This removes the current nav item along with any children
                 navElement.remove();
-                disableSpinner();
-            }).catch((text) => {
+            })
+            .catch((text) => {
                 console.log("Failed to delete navigation: ", text);
+                alertInlineMessage('danger', 'Failed to Delete Navigation', text);
                 disableSpinner();
         });
 

@@ -5,29 +5,26 @@
 {% endblock htmlTitle %}
 
 {% block openForm %}
-<form class="jsUserForm" action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
+<form action="{{ pathFor('adminToolUserSave') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+ <input type="hidden" name="user_id" value="{{ page.user.id }}">
  {% endblock openForm %}
 
  {% block contentHeader %}
-
  <div class="content-header-inner">
   <div class="breadcrumb"></div>
   <h1 class="section-title">Edit User</h1>
   <div class="btn-group">
-   <a class="btn btn-cancel  jsFormCancelButton"
-    href="{{ pathFor('adminToolUserEdit', {'id': page.user.id}) }}">Discard</a>
-   <button type="submit" name="button" class="btn btn-save  jsFormSaveButton" value="save">Save</button>
+   <a class="btn btn-cancel" href="{{ pathFor('adminToolUserEdit', {'id': page.user.id}) }}">Discard</a>
+   <button type="submit" name="button" class="btn btn-save" value="save">Save</button>
   </div>
  </div>
-
  {% endblock contentHeader %}
 
  {% block content %}
-  <input type="hidden" name="user_id" value="{{ page.user.id }}">
-  
+
   <div class="settings-block">
- 
+
    <!-- User Name -->
    <div class="form-group">
     <label>First Name</label>
@@ -61,7 +58,7 @@
   </div>
 
   <div class="form-check">
- 
+
    <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
     {{ checked(page.user.active == 'Y') }}>
    <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
@@ -69,7 +66,7 @@
  </div>
 </div>
   </div>
- 
+
 
  </div>
 
