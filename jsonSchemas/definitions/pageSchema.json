@@ -38,7 +38,7 @@
                     "key": {
                         "description": "Single camelCase word with only a-z and A-Z characters",
                         "type": "string",
-                        "pattern": "^[a-zA-Z]{1,60}$"
+                        "pattern": "^[a-zA-Z0-9_]{1,60}$"
                     },
                     "description": {
                         "description": "Block description displayed in page editor",

@@ -16,7 +16,7 @@
                     "key": {
                         "description": "Navigator key to use in templates. Single camelCase word with only a-z and A-Z characters",
                         "type": "string",
-                        "pattern": "^[a-zA-Z]+$"
+                        "pattern": "^[a-zA-Z0-9_]+$"
                     },
                     "description": {
                         "description": "Text description to display in admin.",
