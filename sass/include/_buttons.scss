@@ -158,14 +158,8 @@ button:active {
 /* Button Group Page Edit */
 
 .btn-group-pageEdit {
- @include padding(1em null null null);
- width: 100%;
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 1em;
-
  button {
-  @include margin(0);
+  @include margin(0 0 1rem 0);
  }
 }
 

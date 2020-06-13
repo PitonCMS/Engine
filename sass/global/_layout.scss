@@ -141,9 +141,13 @@
 
 /* Section Title */ 
  .section-title {
-  @include margin(0);
+  @include margin(0 1rem 0 0);
   @include padding(0);
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 2rem;
  }
 }
 

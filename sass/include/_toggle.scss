@@ -20,6 +20,7 @@
   &-secondary {
    background: $bg-grey-light;
    border: solid 1px $border;
+  margin: 0 1rem !important;
   }
  }
 
@@ -36,6 +37,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  font-size: 1.6rem;
 
   &:hover {
    cursor: default;
@@ -64,6 +66,15 @@
    display: grid;
    grid-template-columns: 1fr 4fr;
   }
+ }
+
+ .drag-drop {
+  background: rgba($bg-accent-1, 40%);
+  @include margin(null 2rem);
+ }
+
+ .drag-hover {
+  background: rgba($bg-accent-1, 70%);
  }
 }
 
@@ -94,47 +105,62 @@
 
 .sub-toggle-block {
  @include padding(null 2rem);
- }
+}
 
 // Draggable blocks style
 
 .drag-drop {
-border-radius: $border-radius;
- @include margin(1rem .5rem);
-height: 2rem;
-background: $clr-light-grey;
-border: dashed 3px $clr-dark-grey-1 !important;
-animation: dragDropFadeIn 250ms ease-in-out forwards;
+ position: relative;
+ border-radius: $border-radius;
+ @include margin(.5rem null);
+ height: 2rem;
+ background: $bg-accent-1;
+ border: dashed 3px $clr-dark-grey !important;
+ animation: dragDropFadeIn 250ms ease-in-out forwards;
 
+ &::before {
+  @include padding(0 .5em);
+  color: rgba($text-grey, 10%);
+  height: 100%;
+  font-size: 1.3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  content: 'Drop Here';
+  position: absolute;
+ }
 }
 
 .drag-hover {
  height: 4rem;
- background:$clr-light-grey-1;
- border: dashed 3px $clr-dark-grey-1 !important;
+ background: darken($bg-accent-1, 5%);
+ border: dashed 3px $clr-dark !important;
  animation: dragHoverFadeIn 250ms ease-in-out forwards;
 }
 
 // Animations
 @keyframes dragDropFadeIn {
- 0%{
-opacity: 0;
-height: 0;
+ 0% {
+  opacity: 0;
+  height: 0;
  }
+
  100% {
-opacity: 1;
-height: 2rem;
+  opacity: 1;
+  height: 2rem;
  }
 }
 
 @keyframes dragHoverFadeIn {
- 0%{
-opacity: 0;
-height: 2rem;
+ 0% {
+  opacity: 0;
+  height: 2rem;
  }
+
  100% {
-opacity: 1;
-height: 4rem;
+  opacity: 1;
+  height: 4rem;
  }
 }
-

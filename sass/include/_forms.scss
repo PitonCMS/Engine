@@ -30,6 +30,9 @@ input:-webkit-autofill:active {
   height: 23px;
   flex: 0;
  }
+ &__elementWrapper {
+@include padding(null 1rem);
+ }
 }
 
 /* used on Navigation Structure Page */

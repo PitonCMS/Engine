@@ -6,7 +6,8 @@ $clr-light-grey-1: hsl(213, 16%, 89%);
 $clr-light-grey-2: hsl(210, 11%, 93%);
 $clr-dark-grey-1: hsl(214, 20%, 32%);
 $clr-dark-grey: hsl(210, 6%, 48%);
-$clr-blue: rgb(55, 130, 195);
+$clr-blue: hsl(208, 56%, 49%);
+$clr-blue-light: #d4effc;
 $clr-dark-blue: hsl(230, 57%, 30%);
 $clr-red: hsl(4, 73%, 53%);
 $clr-green: hsl(120, 100%, 25%);
@@ -15,7 +16,7 @@ $clr-dark-orange: hsl(25, 84%, 51%);
 $clr-light-orange: hsl(36, 100%, 71%);
 
 // Navigation Variables
-$breakpoint: 768px;
+$breakpoint: 769px;
 $nav-height: 50px;
 $nav-width: 175px;
 
@@ -34,6 +35,7 @@ $bg-white: $clr-light;
 $bg-grey: $clr-light-grey-1;
 $bg-grey-light: $clr-light-grey-2;
 $bg-accent: $clr-blue;
+$bg-accent-1: $clr-blue-light;
 
 // Default color Styles
 $text-light: $clr-light;
