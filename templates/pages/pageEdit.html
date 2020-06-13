@@ -65,6 +65,14 @@
    data-url-slug="source" autocomplete="off" required>
  </div>
 
+ {# Page Sub Title #}
+ {% if page.definition.showSubTitle %}
+ <div class="form-block">
+  <h3 class="pageEdit__title">Page Sub Title</h3>
+  <input type="text" name="sub_title" maxlength="150" placeholder="Page sub title" value="{{ page.sub_title }}" autocomplete="off">
+ </div>
+ {% endif %}
+
  <div class="pageEdit__wrapper" data-page-edit="1">
   <!-- Left Column Page Edit -->
   <div class="pageEdit__leftCol">
@@ -125,7 +133,7 @@
     {% elseif page.getPublishedStatus == 'published' %}
     <div>Status: <span class="published">Published</span></div>
     {% endif %}
-   </div> 
+   </div>
 
    {# Page Slug Input with locking icon #}
    {% if page.page_slug == 'home' or page.getPublishedStatus == 'published' %}
@@ -150,18 +158,17 @@
      </div>
      <div class="small-text">URL link to page. The <code>home</code> URL is restricted from being changed. Warning, changing the URL slug after the page is published may negatively impact links to your page.</div>
     </div>
-  
+
 
    {# Meta Description Input #}
- 
+
     <div class="form-block">
      <label>Meta Description</label>
      <textarea name="meta_description" maxlength="320"
       placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
-     <div class="small-text"">Limit 320 characters. Search engines may use this text in matching search
+     <div class="small-text">Limit 320 characters. Search engines may use this text in matching search
       results.</div>
     </div>
-  
 
    {# Page Featured Media Select #}
    {% if page.definition.showFeaturedImage|default(1) %}
@@ -169,7 +176,6 @@
     <label class="span">Featured Page Image</label>
     <img src="{{ getMediaPath(page.media.filename, 'large') }}" class="{% if not page.media.filename %}d-none{% endif %}">
     <input type="hidden" name="page_media_id" value="{{ page.media_id }}">
-   
 
     <div class="btn-group-pageEdit">
      <button class="btn btn-delete btn-block" type="button" data-media-clear="1">Clear Media</button>
