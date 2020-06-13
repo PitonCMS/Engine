@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -209,7 +209,6 @@ class AdminMediaController extends AdminBaseController
     public function editMediaCategories(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-
         $data = $mediaCategoryMapper->find();
 
         return $this->render('media/mediaCategories.html', ['categories' => $data]);
@@ -220,29 +219,23 @@ class AdminMediaController extends AdminBaseController
      *
      * @param void
      * @return Response
+     * @uses POST
      */
     public function saveMediaCategories(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $categoriesPost = $this->request->getParsedBody();
+        $categoriesPost = $this->request->getParsedBodyParam('category');
 
-        foreach ($categoriesPost['category_name'] as $key => $cat) {
+        foreach ($categoriesPost as $cat) {
             // Skip if category name is empty
-            if (empty($cat)) {
+            if (empty(trim($cat['name']))) {
                 continue;
             }
 
-            // Make category object
+            // Make category object and save
             $category = $mediaCategoryMapper->make();
-            $category->id = (int) $categoriesPost['category_id'][$key];
-
-            // Check if we need to delete a category, but only if this has been previously saved with an ID
-            if (isset($categoriesPost['delete'][$key]) && !empty($categoriesPost['category_id'][$key])) {
-                $mediaCategoryMapper->delete($category);
-            }
-
-            // Save
-            $category->category = $cat;
+            $category->id = $cat['id'];
+            $category->category = trim($cat['name']);
             $mediaCategoryMapper->save($category);
         }
 
@@ -253,28 +246,37 @@ class AdminMediaController extends AdminBaseController
     /**
      * Delete Media Category
      *
+     * XHR Request
      * @param void
      * @return Response
+     * @uses POST
      */
     public function deleteMediaCategory(): Response
     {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $categoryId = (int) $this->request->getParsedBodyParam('id');
-        $status = 'error';
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+            $categoryId = $this->request->getParsedBodyParam('categoryId');
+            $status = "success";
+            $text = "";
 
-        if (!empty($categoryId) && is_int($categoryId)) {
-            // Delete category assignments
-            $mediaCategoryMapper->deleteMediaCategoryAssignmentsByCategoryId($categoryId);
+            if (is_numeric($categoryId)) {
+                // Delete category assignments
+                $mediaCategoryMapper->deleteMediaCategoryAssignmentsByCategoryId((int) $categoryId);
 
-            // Delete category
-            $category = $mediaCategoryMapper->make();
-            $category->id = $categoryId;
-            $mediaCategoryMapper->delete($category);
-            $status = 'success';
+                // Delete category
+                $category = $mediaCategoryMapper->make();
+                $category->id = $categoryId;
+                $mediaCategoryMapper->delete($category);
+
+                // Foreign key constraints on media_category_map cascade delete to media associations
+            }
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception deleting medica category: ". $th->getMessage();
         }
 
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-        return $r->write(json_encode(["status" => $status]));
+        return $this->xhrResponse($status, $text);
     }
 
     /**
