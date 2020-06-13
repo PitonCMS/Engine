@@ -41,8 +41,7 @@ const deleteCategory = function(event) {
     } else {
         // Delete from DB
         enableSpinner();
-        let data = {"categoryId": categoryId};
-        postXHRPromise(pitonConfig.routes.adminMediaCategoryDelete, data)
+        postXHRPromise(pitonConfig.routes.adminMediaCategoryDelete, {"categoryId": categoryId})
             .then(() => {
                 catElement.remove();
             })

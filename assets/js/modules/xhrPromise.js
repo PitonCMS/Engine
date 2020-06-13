@@ -48,18 +48,15 @@ const XHRPromise = function(method, url, data) {
 
 /**
  * GET XHR Promise Request
- * @param {string} url    Resource URL
- * @param {string} params Query string parameters
+ * @param {string} url  Resource URL
+ * @param {object} data Object with query string parameters as key: values
  */
-const getXHRPromise = function(url, params) {
+const getXHRPromise = function(url, data) {
     let queryString;
 
-    // Accept query string or build from object
-    if (typeof params === 'string') {
-        queryString = params;
-    } else if (typeof params === 'object') {
-        queryString = Object.keys(params).map((k) => {
-            return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
+    if (data) {
+        queryString = Object.keys(data).map((k) => {
+            return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
         }).join('&');
     }
 
@@ -74,7 +71,7 @@ const getXHRPromise = function(url, params) {
 /**
  * POST XHR Promise Request
  * @param {string} url  Resource URL
- * @param {string} data FormData object or object key value pairs
+ * @param {object} data Object with query string parameters as key: values
  */
 const postXHRPromise = function(url, data) {
     data = data ?? {};

@@ -118,11 +118,7 @@ if (pageEditNode) {
             } else {
                 // Element has been saved, do a hard delete
                 enableSpinner();
-                let data = {
-                    "elementId": elementId
-                }
-
-                postXHRPromise(pitonConfig.routes.adminPageElementDelete, data)
+                postXHRPromise(pitonConfig.routes.adminPageElementDelete, {"elementId": elementId})
                     .then(() => {
                         element.remove();
                     })
