@@ -17,8 +17,8 @@
   /* Modal Content */
   .modal-content {
    @include padding(null null 1rem);
-   max-width: 100%;
-   max-height: 70%;
+   width: 70%;
+   // max-height: 100%;
    position: relative;
    background-color: $bg-light;
    border: 1px solid $border;
@@ -48,7 +48,7 @@
   }
 
   .modal-body {
-   @include padding(null 1rem .5em);
+   @include padding(1rem 1rem .5em);
 
    // Styles for Media Select Modal
    .media-wrapper {
@@ -91,13 +91,26 @@
      text-overflow: ellipsis;
     }
    }
+   .form-group {
+  @include padding(1em null);
+  
+   }
+   .form-check-wrapper {
+    
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    .form-check{
+     @include padding(1em null);
+    }
+   }
+   .modal-info {
+    @include padding(0 null);
+   }
+   .btn-group {
+    @include margin(1rem null null null);
+   }
   }
 
-  .modal-footer {
-   @include padding(.25rem 1rem);
-   background-color: $bg-grey;
-   color: $text-light;
-  }
+ 
 
   @keyframes animatetop {
    from {

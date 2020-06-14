@@ -294,6 +294,10 @@ a:hover, afocus {
 }
 
 /* Utility Classes */
+.mt-1rem {
+  margin-top: 1rem;
+}
+
 .span {
   grid-column: 1/-1;
 }
@@ -1325,8 +1329,7 @@ select:-moz-focusring {
 /* Modal Content */
 .modal-content {
   padding-bottom: 1rem;
-  max-width: 100%;
-  max-height: 70%;
+  width: 70%;
   position: relative;
   background-color: #f3f5f7;
   border: 1px solid #dee3e7;
@@ -1356,9 +1359,7 @@ select:-moz-focusring {
 }
 
 .modal-body {
-  padding-right: 1rem;
-  padding-bottom: 0.5em;
-  padding-left: 1rem;
+  padding: 1rem 1rem 0.5em;
 }
 .modal-body .media-wrapper {
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -1391,11 +1392,23 @@ select:-moz-focusring {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.modal-footer {
-  padding: 0.25rem 1rem;
-  background-color: #dee3e7;
-  color: white;
+.modal-body .form-group {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+.modal-body .form-check-wrapper {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.modal-body .form-check-wrapper .form-check {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+.modal-body .modal-info {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.modal-body .btn-group {
+  margin-top: 1rem;
 }
 
 @keyframes animatetop {

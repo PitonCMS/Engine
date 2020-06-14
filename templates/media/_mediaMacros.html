@@ -52,7 +52,7 @@
   {# Media Controls #}
   <div class="mediaControls">
    <button class="btn btn-delete btn-block" type="submit" formaction="{{ pathFor('adminMediaDelete') }}"
-   value="delete">Delete</button>
+    value="delete">Delete</button>
    <button class="btn btn-save" type="submit" value="save">Save</button>
   </div>
  </form>
@@ -79,24 +79,25 @@
 #}
 {% macro mediaListItem(media) %}
 
-<div class="media" data-media="1" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}" data-media-path="{{ getMediaPath(media.filename, 'small') }}">
+<div class="media" data-media="1" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}"
+ data-media-path="{{ getMediaPath(media.filename, 'small') }}">
 
-   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-   <div class="mediaImage">
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}">
+ {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
+ <div class="mediaImage">
+  <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}">
 
-    <span class="mediaImagePopup">
-     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}">
-    </span>
-   </div>
+  <span class="mediaImagePopup">
+   <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}">
+  </span>
+ </div>
 
-   <div class="mediaBlock">
-    <div class="mediaCaption">
-      <p>{{ media.caption }}</p>
-    </div>
-   </div>
+ <div class="mediaBlock">
+  <div class="mediaCaption">
+   <p>{{ media.caption }}</p>
+  </div>
+ </div>
 
- </div><!-- /.media -->
+</div><!-- /.media -->
 
 {% endmacro mediaListItem %}
 
@@ -106,55 +107,64 @@
 {% macro uploadForm() %}
 <form data-media-upload="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
-  {# Media file link #}
-  <div class="custom-file">
-    <input type="file" class="custom-file-input" id="media-file" name="media-file" required>
-    <label class="custom-file-label" for="media-file">Choose a file</label>
+ {# Media file link #}
+ <div class="form-group">
+  <input type="file" class="custom-file-input" id="media-file" name="media-file" required>
+  {# <label class="custom-file-label" for="media-file">Choose a file</label> #}
+  <div class="modal-info">
+   <p class="small-text text-info"> Put warning/info text here</p>
   </div>
+ </div>
 
-  <hr>
-  {# Featured image flag #}
-  <div class="form-check-wrapper">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="featured-media" name="feature">
-      <label class="form-check-label" for="featured-media" title="May be used for enhanced displays">Featured Media</label>
-    </div>
+ <hr>
+ {# Featured image flag #}
+ <div class="form-check-wrapper">
+  <div class="form-check">
+   <input class="form-check-input" type="checkbox" id="featured-media" name="feature">
+   <label class="form-check-label" for="featured-media" title="May be used for enhanced displays">Featured Media</label>
   </div>
+ </div>
 
-  <hr>
-  {# List of all available categories #}
+ <hr>
+ {# List of all available categories #}
+ <div class="form-check-wrapper">
   {% for key, name in getMediaCategories() %}
   <div class="form-check">
    <input class="form-check-input" type="checkbox" id="cat-{{ key }}" name="category[]" value="{{ key }}">
    <label class="form-check-label" for="cat-{{ key }}">{{ name }}</label>
   </div>
   {% endfor %}
+ </div>
 
-  <hr>
-  {# Media caption #}
-  <div class="form-group">
-    <label>Caption</label>
-    <input type="text" name="caption" maxlength="100" autocomplete="off" placeholder="Media caption">
-  </div>
 
-  {# Only display optimize checkbox if there is a Tinyfy key saved in settings #}
-  {% if site.settings.tinifyApiKey %}
-  <hr>
-  <div class="form-check-wrapper">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="media-optimize" name="optimize" checked>
-      <label class="form-check-check-label" for="media-optimize">Optimize Media</label>
-      <small class="form-check-text text-muted">
-        Create web optimized copies of your image using your Tinify account.
-      </small>
-    </div>
-  </div>
-  {% endif %}
+ <hr>
+ {# Media caption #}
+ <div class="form-group">
+  {# <label>Caption</label> #}
+  <input type="text" name="caption" maxlength="100" autocomplete="off" placeholder="Media caption">
+ </div>
 
-  {# Upload button #}
-  <div class="form-group">
-    <button class="btn btn-outline-primary" type="button" data-media-upload="file">Upload</button>
+ {# Only display optimize checkbox if there is a Tinyfy key saved in settings #}
+ {% if site.settings.tinifyApiKey %}
+ <hr>
+ <div class="form-check-wrapper">
+  <div class="form-check">
+   <input class="form-check-input" type="checkbox" id="media-optimize" name="optimize" checked>
+   <label class="form-check-label" for="media-optimize">Optimize Media</label>
   </div>
+ </div>
+
+ <div class="modal-info">
+  <p class="small-text"> Create web optimized copies of your image using your Tinify account.</p>
+ </div>
+<hr class="mt-1rem">
+
+ {% endif %}
+
+ {# Upload button #}
+ <div class="btn-group">
+  <button class="btn btn-save btn-block" type="button" data-media-upload="file">Upload</button>
+ </div>
 </form>
 
 {% endmacro uploadForm %}
