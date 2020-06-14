@@ -54,23 +54,24 @@ class MediaCategoryMapper extends DataMapperAbstract
      * Save Media Category Assignments
      *
      * For a media ID, save category array
-     * @param int   $mediaId
-     * @param array $categoryIds
+     * @param int        $mediaId
+     * @param array|null $categoryIds
      * @return void
      */
-    public function saveMediaCategoryAssignments(int $mediaId, array $categoryIds = null): void
+    public function saveMediaCategoryAssignments(int $mediaId, ?array $categoryIds): void
     {
         // Delete current category assignments for this media ID
         $this->deleteMediaCategoryAssignmentsByMediaId($mediaId);
 
         // Insert all assignments, if the category ID's array is not empty
-        if (null !== $categoryIds) {
+        if ($categoryIds) {
             $this->sql = 'insert into media_category_map (media_id, category_id) values ';
             foreach ($categoryIds as $catId) {
                 $this->sql .= '(?, ?),';
                 $this->bindValues[] = $mediaId;
                 $this->bindValues[] = $catId;
             }
+            // Remove trailing comma from last set of values
             $this->sql = rtrim($this->sql, ',') . ';';
 
             $this->execute();
