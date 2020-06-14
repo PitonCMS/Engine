@@ -16,6 +16,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Slim\Http\Response;
 use Throwable;
+use Exception;
 
 /**
  * Piton Media Controller
@@ -150,54 +151,92 @@ class AdminMediaController extends AdminBaseController
     }
 
     /**
+     * Get Upload Form
+     *
+     * XHR Request
+     * Gets upload form with current media categories
+     * @param void
+     * @return Response
+     */
+    public function getMediaUploadForm(): Response
+    {
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            // Make string template
+            $template = '{% import "@admin/media/_mediaMacros.html" as mediaMacro %}';
+            $template .= ' {{ mediaMacro.uploadForm() }}';
+
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting media file upload form: ". $th->getMessage();
+        }
+
+        return $this->xhrResponse($status, $text);
+    }
+
+    /**
      * Upload File
      *
+     * XHR Request
      * @param void
      * @return Response
      */
     public function uploadMedia(): Response
     {
-        $fileUpload = $this->container->fileUploadHandler;
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            // Get dependencies
+            $fileUpload = $this->container->fileUploadHandler;
+            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+            $status = "success";
+            $text = "File upload succeeded";
 
-        if ($fileUpload->upload('media-file')) {
-            // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
-            $doOptimize = false;
-            if (
-                $this->request->getParsedBodyParam('optimize', null) === 'on' &&
-                !empty($this->siteSettings['tinifyApiKey']) &&
-                in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
-            ) {
-                $doOptimize = true;
+            // Try the upload
+            if ($fileUpload->upload('media-file')) {
+                // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
+                $doOptimize = false;
+                if (
+                    $this->request->getParsedBodyParam('optimize', null) === 'on' &&
+                    !empty($this->siteSettings['tinifyApiKey']) &&
+                    in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
+                ) {
+                    $doOptimize = true;
+                }
+
+                // Save media record to database
+                $media = $mediaMapper->make();
+                $media->filename = $fileUpload->getFilename();
+                $media->caption = $this->request->getParsedBodyParam('caption');
+                $media->width = ($fileUpload->width) ?: null;
+                $media->height = ($fileUpload->height) ?: null;
+                $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+                $media->mime_type = $fileUpload->mimeType;
+                $media->optimized = ($doOptimize) ? $mediaMapper->getOptimizedCode('new') : $mediaMapper->getOptimizedCode('exclude');
+                $mediaMapper->save($media);
+
+                // Save category assignments
+                $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+
+                // Optimize media uploads
+                if ($doOptimize) {
+                    $this->optimizeNewMedia();
+                }
+            } else {
+                // Failed to upload, so throw exception and return message to client
+                throw new Exception("File Upload Failed: " . $fileUpload->getErrorMessage());
             }
 
-            // Save media record to database
-            $media = $mediaMapper->make();
-            $media->filename = $fileUpload->getFilename();
-            $media->caption = $this->request->getParsedBodyParam('caption');
-            $media->width = ($fileUpload->width) ?: null;
-            $media->height = ($fileUpload->height) ?: null;
-            $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
-            $media->mime_type = $fileUpload->mimeType;
-            $media->optimized = ($doOptimize) ? $mediaMapper->getOptimizedCode('new') : $mediaMapper->getOptimizedCode('exclude');
-            $mediaMapper->save($media);
-
-            // Save category assignments
-            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
-
-            // Optimize media uploads
-            if ($doOptimize) {
-                $this->optimizeNewMedia();
-            }
-        } else {
-            $this->setAlert('danger', 'File Upload Failed', $fileUpload->getErrorMessage());
+            // Clear file upload
+            $fileUpload->clear('media-file');
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception uploading file: ". $th->getMessage();
         }
 
-        // Clear file upload
-        $fileUpload->clear('media-file');
-
-        return $this->redirect('adminMedia');
+        return $this->xhrResponse($status, $text);
     }
 
     /**

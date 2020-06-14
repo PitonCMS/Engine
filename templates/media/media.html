@@ -4,23 +4,24 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
- <!-- Bread Crumbs -->
- <div class="breadcrumb"></div>
- <!-- Section Title -->
- <h1 class="section-title">Media</h1>
- <!-- Controls -->
+
+  <!-- Bread Crumbs -->
+  <div class="breadcrumb"></div>
+  <!-- Section Title -->
+  <h1 class="section-title">Media</h1>
+  <!-- Controls -->
   <div class="btn-dropdown-block">
-   <div class="btn btn-dropdown">
-    <span>Add Media</span> <span><i class="fas fa-chevron-down"></i></span>
-   </div>
-   <div class="form-group-block">
-    <div class="form-group">
-     <a href="#">Media</a>
+    <div class="btn btn-dropdown">
+      <span>Add Media</span> <span><i class="fas fa-chevron-down"></i></span>
     </div>
-    <div class="form-group">
-     <a href="{{ pathFor('adminMediaCategoryEdit') }}">Category</a>
+    <div class="form-group-block">
+      <div class="form-group">
+        <a href="#" data-media-upload="form" data-media-refresh="true">Media</a>
+      </div>
+      <div class="form-group">
+        <a href="{{ pathFor('adminMediaCategoryEdit') }}">Category</a>
+      </div>
     </div>
-   </div>
   </div>
 
 </div>
@@ -29,7 +30,10 @@
 {% block content %}
 
 {{ include("@admin/media/_mediaSearchControls.html") }}
-
 {{ include("@admin/media/_mediaEditList.html") }}
 
 {% endblock content %}
+
+{% block foot %}
+{{ getJsFileSource('media') }}
+{% endblock foot %}

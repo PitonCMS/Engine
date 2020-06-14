@@ -358,11 +358,11 @@ class AdminPageController extends AdminBaseController
      */
     public function getElement(): Response
     {
-        // Get dependencies
-        $definition = $this->container->jsonDefinitionHandler;
-
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
+            // Get dependencies
+            $definition = $this->container->jsonDefinitionHandler;
+
             $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
             $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
 

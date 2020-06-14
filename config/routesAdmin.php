@@ -129,10 +129,15 @@ $app->group('/admin', function () {
             return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminMediaGet');
 
-        // File upload
+        // XHR: Get media file upload form asynchronously
+        $this->get('/uploadform', function ($args) {
+            return (new AdminMediaController($this))->getMediaUploadForm();
+        })->setName('adminMediaUploadFormGet');
+
+        // XHR: File upload
         $this->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadMedia();
-        })->add('csrfGuardHandler')->setName('adminMediaUpload');
+        })->add('csrfGuardHandler')->setName('adminMediaUploadFile');
 
         // Media save
         $this->post('/save', function ($args) {

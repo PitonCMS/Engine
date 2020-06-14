@@ -5,7 +5,7 @@ import { disableSpinner } from './spinner.js';
  * XHR Request Promise
  * @param {string} method "GET"|"POST"
  * @param {string} url    Resource request URL
- * @param {mixed}  data   String or object
+ * @param {FormData} data   FormData payload to send
  */
 const XHRPromise = function(method, url, data) {
     let xhr = new XMLHttpRequest();
@@ -40,7 +40,6 @@ const XHRPromise = function(method, url, data) {
 
         // Setup and send
         xhr.open(method, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.send(data);
     });
@@ -71,18 +70,22 @@ const getXHRPromise = function(url, data) {
 /**
  * POST XHR Promise Request
  * @param {string} url  Resource URL
- * @param {object} data Object with query string parameters as key: values
+ * @param {object} data Object with key: values, or FormData instance
  */
 const postXHRPromise = function(url, data) {
-    data = data ?? {};
-    data[pitonConfig.csrfTokenName] = pitonConfig.csrfTokenValue
+    let formData;
+    if (data instanceof FormData) {
+        formData = data;
+    } else {
+        formData = new FormData();
+        for (let [key, value] of Object.entries(data)) {
+            formData.append(key, value);
+        }
+    }
 
-    // Serialize data
-    let postData = Object.keys(data).map((k) => {
-        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    }).join('&');
+    data.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
 
-    return XHRPromise("POST", url,  postData);
+    return XHRPromise("POST", url,  formData);
 }
 
 export { getXHRPromise, postXHRPromise };

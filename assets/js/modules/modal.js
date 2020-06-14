@@ -11,7 +11,7 @@ const getModal = function() {
 
 /**
  * Show Modal (Background)
- * Call first if request requires processing before content is available
+ * Call first if request requires processing time before content is available
  */
 const showModal = function() {
     modal.classList.remove("d-none");
@@ -21,11 +21,13 @@ const showModal = function() {
  * Load Modal Content and Display
  * @param {string} header
  * @param {string} body
- * @param {object} buttons
  */
-const showModalContent = function(header, body, buttons) {
+const showModalContent = function(header, body) {
+    // Assign modal header and content
     modal.querySelector(`[data-modal="header"]`).innerHTML = header;
     modal.querySelector(`[data-modal="body"]`).innerHTML = body;
+
+    // Remove d-none to display
     modal.classList.remove("d-none");
     modal.querySelector(`[data-modal="content"]`).classList.remove("d-none");
 }

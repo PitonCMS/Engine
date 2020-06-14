@@ -102,71 +102,59 @@
 
 {#
     Media Upload Modal
-
-    Could be an include but easier as a macro as it requires another media macro
 #}
-{% macro upload() %}
-{% import _self as mediaMacro %}
-<div class="modal fade" id="mediaUpload" tabindex="-1" role="dialog" aria-labelledby="mediaUploadLabel"
- aria-hidden="true">
- <div class="modal-dialog" role="document">
-  <div class="modal-content">
-   <div class="modal-header">
-    <h5 class="modal-title" id="mediaUploadLabel">Upload Media</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-     <span aria-hidden="true">&times;</span>
-    </button>
-   </div>
-   <div class="modal-body">
-    <form class="jsMediaUploadForm" action="{{ pathFor('adminMediaUpload') }}" method="post" accept-charset="utf-8"
-     enctype="multipart/form-data">
-     
-     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% macro uploadForm() %}
+<form data-media-upload="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
-     <div class="custom-file">
-      <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
-      <label class="custom-file-label" for="mediaFile">Choose a file</label>
-     </div>
-     <hr>
-     <div class="form-check-wrapper">
-      <div class="form-check">
-       <input class="form-check-input" type="checkbox" id="feature" name="feature">
-       <label class="form-check-label" for="feature" title="Enhanced display in Gallery">Featured Media</label>
-      </div>
-     </div>
-
-     <hr>
-     {% for category in page.categories %}
-     {{ mediaMacro.checkbox(category) }}
-     {% endfor %}
-     <hr>
-     <div class="form-group">
-      <label>Caption</label>
-      <input type="text"  name="caption" maxlength="100" autocomplete="off"
-       placeholder="Media caption">
-     </div>
-
-     {# Only display optimize checkbox if there is a Tinyfy key set in settings #}
-     {% if site.settings.tinifyApiKey %}
-     <hr>
-     <div class="form-check-wrapper">
-      <div class="form-check">
-       <input class="form-check-input" type="checkbox" id="optimize" name="optimize" checked>
-       <label class="form-check-check-label" for="optimize">Optimize Media</label>
-       <small class="form-check-text text-muted">
-        Create web optimized copies of your image using your Tinify account. Does not apply to bulk uploads.
-       </small>
-      </div>
-     </div>
-    
-     {% endif %}
-
-     <div class="form-group">
-      <button class="btn btn-outline-primary" type="submit" name="button" value="save">Upload</button>
-     </div>
-    </form>
-   </div>
+  {# Media file link #}
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="media-file" name="media-file" required>
+    <label class="custom-file-label" for="media-file">Choose a file</label>
   </div>
- </div>
-</div>
-{% endmacro upload %}
+
+  <hr>
+  {# Featured image flag #}
+  <div class="form-check-wrapper">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="featured-media" name="feature">
+      <label class="form-check-label" for="featured-media" title="May be used for enhanced displays">Featured Media</label>
+    </div>
+  </div>
+
+  <hr>
+  {# List of all available categories #}
+  {% for key, name in getMediaCategories() %}
+  <div class="form-check">
+   <input class="form-check-input" type="checkbox" id="cat-{{ key }}" name="category[]" value="{{ key }}">
+   <label class="form-check-label" for="cat-{{ key }}">{{ name }}</label>
+  </div>
+  {% endfor %}
+
+  <hr>
+  {# Media caption #}
+  <div class="form-group">
+    <label>Caption</label>
+    <input type="text" name="caption" maxlength="100" autocomplete="off" placeholder="Media caption">
+  </div>
+
+  {# Only display optimize checkbox if there is a Tinyfy key saved in settings #}
+  {% if site.settings.tinifyApiKey %}
+  <hr>
+  <div class="form-check-wrapper">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="media-optimize" name="optimize" checked>
+      <label class="form-check-check-label" for="media-optimize">Optimize Media</label>
+      <small class="form-check-text text-muted">
+        Create web optimized copies of your image using your Tinify account.
+      </small>
+    </div>
+  </div>
+  {% endif %}
+
+  {# Upload button #}
+  <div class="form-group">
+    <button class="btn btn-outline-primary" type="button" data-media-upload="file">Upload</button>
+  </div>
+</form>
+
+{% endmacro uploadForm %}
