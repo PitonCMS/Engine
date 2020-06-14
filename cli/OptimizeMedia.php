@@ -64,7 +64,7 @@ class OptimizeMedia extends CLIBase
             }
         }
 
-        $this->setAlert('info', 'Finished Optimizing Media');
+        $this->setAlert('info', 'Finished Optimizing Media', 'Your image has successfully been uploaded and is ready to use.');
         $this->log("Finished optimizing media.");
     }
 
