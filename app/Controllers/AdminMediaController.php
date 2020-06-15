@@ -36,21 +36,18 @@ class AdminMediaController extends AdminBaseController
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        // Get all media
-        $data['media'] = $mediaMapper->findAllMedia() ?? [];
+        // Get all media and categories
+        $media = $mediaMapper->findAllMedia() ?? [];
+        $categories = $mediaCategoryMapper->findCategories() ?? [];
+        $categories = array_column($categories, 'category', 'id');
 
-        $data['assignedCategories'] = $mediaCategoryMapper->findCategories() ?? [];
-        $categoryAssignments = $mediaCategoryMapper->findAllMediaCategoryAssignments() ?? [];
-
-        // Identify any media ID's assigned to each category
-        foreach ($data['assignedCategories'] as &$cat) {
-            $cat->media = [];
-            foreach ($categoryAssignments as $map) {
-                if ($cat->id === $map->category_id) {
-                    $cat->media[$map->media_id] = 'on';
-                }
-            }
+        foreach ($media as &$medium) {
+            $assignedCategories = ($medium->category_id_list) ? explode(',', $medium->category_id_list) : [];
+            $medium->categories = array_fill_keys($assignedCategories, true);
         }
+
+        $data['media'] = $media;
+        $data['categories'] = $categories;
 
         return $this->render('media/media.html', $data);
     }
@@ -65,10 +62,8 @@ class AdminMediaController extends AdminBaseController
      */
     public function getMedia(): Response
     {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-
         try {
-            // Find media and render template
+            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
             $data = $mediaMapper->find();
 
             $template = "
@@ -78,7 +73,7 @@ class AdminMediaController extends AdminBaseController
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
-        } catch (Throwable $th) {
+        } catch (Exception $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
         }
@@ -89,31 +84,35 @@ class AdminMediaController extends AdminBaseController
     /**
      * Save Media
      *
+     * XHR Response
      * Save media caption, categories
      * @param void
      * @return Response
+     * @uses POST
      */
     public function saveMedia(): Response
     {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        try {
+            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        $media = $mediaMapper->make();
-        $media->id = (int) $this->request->getParsedBodyParam('media_id');
-        $media->caption = $this->request->getParsedBodyParam('caption');
-        $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
-        $mediaMapper->save($media);
+            $media = $mediaMapper->make();
+            $media->id = (int) $this->request->getParsedBodyParam('media_id');
+            $media->caption = $this->request->getParsedBodyParam('caption');
+            $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+            $mediaMapper->save($media);
 
-        // Save category mappings
-        $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            // Save category mappings
+            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
 
-        // Set the response type
-        if ($this->request->isXhr()) {
-            $r = $this->response->withHeader('Content-Type', 'application/json');
-            return $r->write(json_encode(["status" => "success"]));
+            $status = "success";
+            $text = "Saved media";
+        } catch (Exception $th) {
+            $status = "error";
+            $text = "Exception getting data: {$th->getMessage()}";
         }
 
-        return $this->redirect('adminMedia');
+        return $this->xhrResponse($status, $text);
     }
 
     /**

@@ -38,19 +38,6 @@ class MediaCategoryMapper extends DataMapperAbstract
     }
 
     /**
-     * Find All Media Category Assignments
-     *
-     * @param void
-     * @return array|null
-     */
-    public function findAllMediaCategoryAssignments(): ?array
-    {
-        $this->sql = 'select media_id, category_id from media_category_map;';
-
-        return $this->find();
-    }
-
-    /**
      * Save Media Category Assignments
      *
      * For a media ID, save category array

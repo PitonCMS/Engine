@@ -5,8 +5,7 @@
 {#
   Edit Media
 #}
-{% macro editMedia(media, assignedCategories) %}
-{% import _self as mediaMacro %}
+{% macro editMedia(media, categories) %}
 
 <div class="media">
  <form class="mediaForm" method="post" accept-charset="utf-8">
@@ -40,8 +39,12 @@
 
   {# Media Categories #}
   <div class="mediaCategories">
-   {% for c in assignedCategories %}
-   {{ mediaMacro.checkbox(c, media.id) }}
+   {% for key, cat in categories %}
+   <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ key }}" name="category[]"
+     value="{{ key }}" {{ checked(media.categories[key]) }}>
+    <label class="form-check-label" for="{{ media.id }}-{{ key }}">{{ cat }}</label>
+   </div>
    {% endfor %}
   </div>
 
@@ -53,21 +56,6 @@
  </form>
 </div>
 {% endmacro editMedia %}
-
-{#
-  Media Category Checkboxes
-
-  Presents a list of available category checkboxes to assign categories in media
-#}
-{% macro checkbox(category, mediaId) %}
-{% if category %}
-<div class="form-check">
- <input class="form-check-input" type="checkbox" id="{{ mediaId }}-{{ category.id }}" name="category[]"
-  value="{{ category.id }}" {{ checked(category.media[mediaId]) }}>
- <label class="form-check-label" for="{{ mediaId }}-{{ category.id }}">{{ category.category }}</label>
-</div>
-{% endif %}
-{% endmacro checkbox %}
 
 {#
   Media List Item

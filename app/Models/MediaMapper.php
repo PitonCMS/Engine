@@ -92,7 +92,8 @@ class MediaMapper extends DataMapperAbstract
             $this->bindValues[] = $offset;
         }
 
-        return $this->find();
+        // return $this->find();
+        return null;
     }
 
     /**
@@ -125,7 +126,8 @@ class MediaMapper extends DataMapperAbstract
             $this->bindValues[] = $offset;
         }
 
-        return $this->find();
+        // return $this->find();
+        return null;
     }
 
     /**
@@ -134,16 +136,26 @@ class MediaMapper extends DataMapperAbstract
      * Make select statement
      * Overrides and sets $this->sql.
      * @param  bool $foundRows Set to true to get foundRows() after query
-     * @param  bool $outerJoin True = All media rows, False = only matching category rows
      * @return void
      */
-    protected function makeSelect(bool $foundRows = false, $outerJoin = true): void
+    protected function makeSelect(bool $foundRows = false): void
     {
         $foundRows = ($foundRows) ? ' SQL_CALC_FOUND_ROWS ' : '';
-        $outer = ($outerJoin) ? 'left outer ' : '';
         $this->sql = <<<SQL
 select $foundRows
-    mc.category,
+    m.id,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
+    m.caption,
+    m.optimized,
+    m.mime_type,
+    group_concat(mc.id) category_id_list
+from media m
+left join media_category_map mcm on m.id = mcm.media_id
+left join media_category mc on mc.id = mcm.category_id
+group by
     m.id,
     m.filename,
     m.width,
@@ -152,10 +164,7 @@ select $foundRows
     m.caption,
     m.optimized,
     m.mime_type
-from media m
-$outer join media_category_map mcm on m.id = mcm.media_id
-$outer join media_category mc on mc.id = mcm.category_id
-where 1=1
+
 SQL;
     }
 

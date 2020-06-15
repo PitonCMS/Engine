@@ -36,10 +36,13 @@ const mediaUpload = function(event) {
         .then(() => {
             if (refreshPageOnUpload) {
                 window.location.reload();
-            } else {
-                hideModal();
-                disableSpinner();
             }
+        })
+        .then(() => {
+            hideModal();
+        })
+        .then(() => {
+            disableSpinner();
         })
         .catch((text) => {
             console.log("Failed to upload file: ", text);
