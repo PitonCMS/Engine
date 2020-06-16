@@ -21,7 +21,7 @@ if (pageListFilter) {
             getXHRPromise(pitonConfig.routes.adminPageGet, {'pageStatus': filter})
                 .then((data) => {
                     pageList.insertAdjacentHTML('afterbegin', data);
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log('Something went wrong', error);
                 });
         }

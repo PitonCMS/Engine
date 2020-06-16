@@ -47,8 +47,6 @@ const deleteCategory = function(event) {
             })
             .catch((text) => {
                 console.log("Failed to delete category: ", text);
-                alertInlineMessage('danger', 'Failed to Delete Category', text);
-                disableSpinner();
         });
     }
 }

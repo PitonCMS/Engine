@@ -11,29 +11,36 @@ const XHRPromise = function(method, url, data) {
     let xhr = new XMLHttpRequest();
 
     return new Promise((resolve, reject) => {
+
+        let response;
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
             try {
                 if (xhr.status === 200) {
                     // Successful server response
-                    let response = JSON.parse(xhr.responseText);
+                    response = JSON.parse(xhr.responseText);
+
                     if (response.status === "success") {
-                        // Response content successful
+                        // Response successful, resolve
                         resolve(response.text);
                         disableSpinner();
                     } else {
-                        // Response successful but application failed
-                        reject(alertInlineMessage('danger', 'Failed', [response.text]));
+                        // Response successful but application failed, reject and alert
+                        reject();
+                        alertInlineMessage('danger', 'Piton Error', [response.text]);
                         disableSpinner();
                     }
                 } else {
                     // Failed server runtime response
-                    reject(alertInlineMessage('danger', 'Failed', [response.text]));
+                    reject(response.text);
+                    alertInlineMessage('danger', 'Server Error ' + response.status, [response.text]);
                     disableSpinner();
                 }
             } catch (error) {
-                reject(alertInlineMessage('danger', 'Error', [error]));
+                // JS Error thrown
+                reject(error);
+                alertInlineMessage('danger', 'Exception', [error]);
                 disableSpinner();
             }
         }
@@ -83,7 +90,7 @@ const postXHRPromise = function(url, data) {
         }
     }
 
-    data.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
+    formData.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
 
     return XHRPromise("POST", url,  formData);
 }

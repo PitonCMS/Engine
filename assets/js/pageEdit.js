@@ -124,8 +124,6 @@ if (pageEditNode) {
                     })
                     .catch((data) => {
                         console.log("Failed to delete element: ", data);
-                        alertInlineMessage('danger', 'Failed to Delete Element', text);
-                        disableSpinner();
                     });
             }
         }

@@ -187,9 +187,7 @@ const deleteNavItem = function(event) {
             })
             .catch((text) => {
                 console.log("Failed to delete navigation: ", text);
-                alertInlineMessage('danger', 'Failed to Delete Navigation', text);
-                disableSpinner();
-        });
+            });
 
         // Reset
         navIds.length = 0;

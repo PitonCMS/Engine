@@ -36,9 +36,17 @@ const deleteMedia = function(event) {
     if (!event.target.dataset.deleteMediaPrompt) return;
     if (!confirm(event.target.dataset.deleteMediaPrompt)) return;
 
-        console.log("delete me")
+    const form = event.target.closest(".media");
+    let mediaId = event.target.dataset.mediaId;
 
-
+    enableSpinner();
+    postXHRPromise(pitonConfig.routes.adminMediaDelete, {"media_id": mediaId})
+        .then(() => {
+            form.remove();
+        })
+        .catch((text) => {
+            console.log("Failed to delete media: ", text);
+        });
 }
 
 document.addEventListener("click", saveMedia, false);

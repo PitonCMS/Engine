@@ -47,7 +47,7 @@ class MediaMapper extends DataMapperAbstract
      */
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect();
+        $this->makeSelectWithCategory();
         $this->sql .= ' order by m.created_date desc';
 
         if ($limit) {
@@ -78,7 +78,7 @@ class MediaMapper extends DataMapperAbstract
             return null;
         }
 
-        $this->makeSelect();
+        $this->makeSelectWithCategory();
         $this->sql .= ' and mc.id = ? order by m.created_date desc';
         $this->bindValues[] = $catId;
 
@@ -112,7 +112,7 @@ class MediaMapper extends DataMapperAbstract
             return $this->findAllMedia($limit, $offset);
         }
 
-        $this->makeSelect();
+        $this->makeSelectWithCategory();
         $this->sql .= ' and mc.category = ? order by m.created_date desc';
         $this->bindValues[] = $category;
 
@@ -138,7 +138,7 @@ class MediaMapper extends DataMapperAbstract
      * @param  bool $foundRows Set to true to get foundRows() after query
      * @return void
      */
-    protected function makeSelect(bool $foundRows = false): void
+    protected function makeSelectWithCategory(bool $foundRows = false): void
     {
         $foundRows = ($foundRows) ? ' SQL_CALC_FOUND_ROWS ' : '';
         $this->sql = <<<SQL

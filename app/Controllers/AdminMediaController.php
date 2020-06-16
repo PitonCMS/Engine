@@ -73,7 +73,7 @@ class AdminMediaController extends AdminBaseController
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
-        } catch (Exception $th) {
+        } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
         }
@@ -107,7 +107,7 @@ class AdminMediaController extends AdminBaseController
 
             $status = "success";
             $text = "Saved media";
-        } catch (Exception $th) {
+        } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
         }
@@ -118,35 +118,37 @@ class AdminMediaController extends AdminBaseController
     /**
      * Delete Media
      *
+     * XHR Request
      * Deletes file and media record
      * @param void
      * @return Response
+     * @uses POST
      */
     public function deleteMedia(): Response
     {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        try {
+            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
-        // Get the media record
-        if (null !== $id = (int) $this->request->getParsedBodyParam('media_id')) {
+            // Get the media record
+            $id = (int) $this->request->getParsedBodyParam('media_id');
             $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {
-                // Delete all files and directory, then delete database record
+                // Delete all related files and directory, then delete database record
                 $dirToDelete = ($this->container->mediaPathHandler)($mediaFile->filename);
                 $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
-
-                $mediaMapper->delete($mediaFile);
             }
+
+            $mediaMapper->delete($mediaFile);
+            $status = "success";
+            $text = "Deleted media id $id, file {$mediaFile->filename}";
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception deleting media: {$th->getMessage()}";
         }
 
-        // Ajax response
-        if ($this->request->isXhr()) {
-            $r = $this->response->withHeader('Content-Type', 'application/json');
-            return $r->write(json_encode(["status" => "success"]));
-        }
-
-        return $this->redirect('adminMedia');
+        return $this->xhrResponse($status, $text);
     }
 
     /**
