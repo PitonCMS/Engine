@@ -192,16 +192,14 @@ class AdminPageController extends AdminBaseController
         $toolbox = $this->container->toolbox;
 
         // Get page object
-        $pageId = empty($this->request->getParsedBodyParam('page_id')) ? null : (int) $this->request->getParsedBodyParam('page_id');
+        $pageId = $this->request->getParsedBodyParam('page_id');
         $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('page_slug'));
 
         // Try to get the original page from database for update
-        if (null !== $pageId) {
-            if (null === $page = $pageMapper->findById($pageId)) {
-                throw new Exception("PitonCMS: savePageHeader Page $pageId not found.");
-            }
+        if ($pageId) {
+            $page = $pageMapper->findById((int) $pageId);
 
-            // Ensure we are not futzing with the home page slug
+            // Ensure we are not messing with the home page slug
             if ($page->page_slug === 'home' && $newSlug !== 'home') {
                 throw new Exception('PitonCMS: Cannot change home page slug.');
             }
@@ -470,9 +468,9 @@ class AdminPageController extends AdminBaseController
      * Save Collection Group
      *
      * Create new collection, or update existing collection
-     * From $_POST array
      * @param void
      * @return Response
+     * @uses POST
      */
     public function saveCollection(): Response
     {
@@ -480,39 +478,34 @@ class AdminPageController extends AdminBaseController
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $toolbox = $this->container->toolbox;
 
-        // Is there an ID?
-        $collectionId = empty($this->request->getParsedBodyParam('collection_id')) ? null : (int) $this->request->getParsedBodyParam('collection_id');
+        $collectionId = $this->request->getParsedBodyParam('collection_id');
 
-        // Try to get the original collection group from database for update
-        if (null !== $collectionId) {
-            if (null === $collection = $collectionMapper->findById($collectionId)) {
-                throw new Exception("PitonCMS: saveCollection Collection $collectionId not found.");
-            }
+        // Get saved collection or make one
+        if ($collectionId) {
+            $collection = $collectionMapper->findById((int) $collectionId);
         } else {
             $collection = $collectionMapper->make();
         }
 
         $collection->id = $collectionId;
-        $collection->collection_title = $this->request->getParsedBodyParam('collection_title');
+        $collection->collection_title = trim($this->request->getParsedBodyParam('collection_title'));
         $collection->collection_slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('collection_slug'));
-
-        // The definition is provided only if no pages are assigned in the form
-        if ($this->request->getParsedBodyParam('collection_definition', null) !== null) {
-            $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
-        }
-
+        $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
         $collectionMapper->save($collection);
 
-        // Save collection and redirect to collection pages
-        return $this->redirect('adminCollection', ['collectionSlug' => $collection->collection_slug]);
+        // Save collection and redirect back
+        return $this->redirect('adminCollectionEdit', ['id' => $collection->id]);
     }
 
     /**
      * Delete Collection Group
      *
      * Collections with assigned pages are restricted from being deleted
+     * @param void
+     * @return Response
+     * @uses POST
      */
-    public function deleteCollection()
+    public function deleteCollection(): Response
     {
         // Get dependencies
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
@@ -528,12 +521,12 @@ class AdminPageController extends AdminBaseController
         }
 
         if ($collection->page_count > 0) {
-            throw new Exception("PitonCMS: Cannot delete a Collection with pages assigned. First remove detail pages from this collection");
+            throw new Exception("PitonCMS: Cannot delete a Collection with pages assigned. First remove all pages from this collection");
         }
 
         $collectionMapper->delete($collection);
 
-        // Redirect back to show pages
+        // Redirect back to collection groups
         return $this->redirect('adminCollection');
     }
 }
