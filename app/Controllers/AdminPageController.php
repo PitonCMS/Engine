@@ -174,12 +174,7 @@ class AdminPageController extends AdminBaseController
         $this->savePageSettings($pageEntity->id);
         $this->savePageElements($pageEntity->id);
 
-        // Determine redirect path based on whether this is a collection detail page
-        if (!empty($this->request->getParsedBodyParam('collection_slug'))) {
-            return $this->redirect('adminCollection', ['collectionSlug' => $this->request->getParsedBodyParam('collection_slug')]);
-        } else {
-            return $this->redirect('adminPage');
-        }
+        return $this->redirect('adminPageEdit', ['id' => $pageEntity->id]);
     }
 
     /**
@@ -216,10 +211,10 @@ class AdminPageController extends AdminBaseController
 
         $page->collection_id = $this->request->getParsedBodyParam('collection_id');
         $page->template = $this->request->getParsedBodyParam('template');
-        $page->title = $this->request->getParsedBodyParam('title');
+        $page->title = trim($this->request->getParsedBodyParam('title'));
         $page->sub_title = $this->request->getParsedBodyParam('sub_title');
         $page->page_slug = $newSlug;
-        $page->meta_description = $this->request->getParsedBodyParam('meta_description');
+        $page->meta_description = trim($this->request->getParsedBodyParam('meta_description'));
         $page->media_id = $this->request->getParsedBodyParam('page_media_id');
 
         // Process published date

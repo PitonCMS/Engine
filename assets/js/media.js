@@ -5,7 +5,7 @@
 import './modules/main.js';
 import './modules/mediaUpload.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
-import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
+import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';
 
 /**
