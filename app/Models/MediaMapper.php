@@ -47,8 +47,7 @@ class MediaMapper extends DataMapperAbstract
      */
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelectWithCategory();
-        $this->sql .= ' order by m.created_date desc';
+        $this->mediaSelectJoinCategory();
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -67,54 +66,18 @@ class MediaMapper extends DataMapperAbstract
      * Find Media By Category ID
      *
      * Find media by category ID
-     * @param  int   $catId
-     * @param  int  $limit
-     * @param  int  $offset
+     * @param  int|null  $categoryId
+     * @param  int       $limit
+     * @param  int       $offset
      * @return array|null
      */
-    public function findMediaByCategoryId(int $catId = null, int $limit = null, int $offset = null): ?array
+    public function findMediaByCategoryId(?int $categoryId, int $limit = null, int $offset = null): ?array
     {
-        if (null === $catId) {
+        if (null === $categoryId) {
             return null;
         }
 
-        $this->makeSelectWithCategory();
-        $this->sql .= ' and mc.id = ? order by m.created_date desc';
-        $this->bindValues[] = $catId;
-
-        if ($limit) {
-            $this->sql .= " limit ?";
-            $this->bindValues[] = $limit;
-        }
-
-        if ($offset) {
-            $this->sql .= " offset ?";
-            $this->bindValues[] = $offset;
-        }
-
-        // return $this->find();
-        return null;
-    }
-
-    /**
-     * Find Media By Category Name (Optional)
-     *
-     * Find media by optional category name.
-     * If no category is provided then return all
-     * @param  string $category
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
-     */
-    public function findMediaByCategoryName(string $category = null, int $limit = null, int $offset = null): ?array
-    {
-        if (null === $category) {
-            return $this->findAllMedia($limit, $offset);
-        }
-
-        $this->makeSelectWithCategory();
-        $this->sql .= ' and mc.category = ? order by m.created_date desc';
-        $this->bindValues[] = $category;
+        $this->mediaSelectJoinCategory(false, $categoryId);
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -135,12 +98,21 @@ class MediaMapper extends DataMapperAbstract
      *
      * Make select statement
      * Overrides and sets $this->sql.
-     * @param  bool $foundRows Set to true to get foundRows() after query
+     * @param  bool $foundRows  Set to true to get foundRows() after query
+     * @param  int  $categoryId Optional cateogry ID
      * @return void
      */
-    protected function makeSelectWithCategory(bool $foundRows = false): void
+    protected function mediaSelectJoinCategory(bool $foundRows = false, int $categoryId = null): void
     {
+        // Add where clause on category ID if one was provided
+        $where = '';
+        if ($categoryId) {
+            $where = ' where mc.id = ?';
+            $this->bindValues[] = $categoryId;
+        }
+
         $foundRows = ($foundRows) ? ' SQL_CALC_FOUND_ROWS ' : '';
+
         $this->sql = <<<SQL
 select $foundRows
     m.id,
@@ -151,10 +123,12 @@ select $foundRows
     m.caption,
     m.optimized,
     m.mime_type,
+    m.created_date,
     group_concat(mc.id) category_id_list
 from media m
 left join media_category_map mcm on m.id = mcm.media_id
 left join media_category mc on mc.id = mcm.category_id
+$where
 group by
     m.id,
     m.filename,
@@ -163,8 +137,9 @@ group by
     m.feature,
     m.caption,
     m.optimized,
-    m.mime_type
-
+    m.mime_type,
+    m.created_date
+order by m.created_date desc
 SQL;
     }
 
@@ -177,12 +152,12 @@ SQL;
      */
     public function findNewMediaToOptimize(string $key): ?array
     {
-        // Set a key on 'new' rows
+        // Set the key on 'new' rows
         $this->sql = "update `media` set `optimized` = '$key' where `optimized` = ? and `mime_type` in ('image/png', 'image/jpeg');";
         $this->bindValues[] = $this->optimizedStatus['new'];
         $this->execute();
 
-        // Now get rows marked for optimization
+        // Now select those rows marked for optimization
         $this->sql = "select `id`, `filename`, `optimized` from `media` where `optimized` = ?;";
         $this->bindValues[] = $key;
 
@@ -198,7 +173,7 @@ SQL;
      */
     public function optimizeKeyExists(string $key): bool
     {
-        $this->sql = "select `id` from `media` where `optimized` = ?;";
+        $this->sql = "select `id` from `media` where `optimized` = ? limit 1;";
         $this->bindValues[] = $key;
 
         return ($this->findRow()) ?? false;
