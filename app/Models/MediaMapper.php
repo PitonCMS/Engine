@@ -89,8 +89,7 @@ class MediaMapper extends DataMapperAbstract
             $this->bindValues[] = $offset;
         }
 
-        // return $this->find();
-        return null;
+        return $this->find();
     }
 
     /**
