@@ -46,12 +46,12 @@ class AdminSettingController extends AdminBaseController
         $definition = $this->container->jsonDefinitionHandler;
 
         // Validate we have one of the defined categories
-        if (!in_array($args['cat'], ['site', 'social', 'contact'])) {
+        if (!in_array($args['category'], ['site', 'social', 'contact'])) {
             throw new Exception("PitonCMS: Unexpected value for category.");
         }
 
         // Get saved settings from database
-        $savedSettings = $dataStoreMapper->findSiteSettings($args['cat']) ?? [];
+        $savedSettings = $dataStoreMapper->findSiteSettings($args['category']) ?? [];
 
         // Get seeded PitonCMS settings definition
         if (null === $seededSettings = $definition->getSeededSiteSettings()) {
@@ -66,7 +66,7 @@ class AdminSettingController extends AdminBaseController
             $data['settings'] = $this->mergeSettings(
                 $savedSettings,
                 array_merge($seededSettings->settings, $customSettings->settings),
-                $args['cat']
+                $args['category']
             );
         }
 

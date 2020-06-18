@@ -1,3 +1,6 @@
+
+const alertContainer = document.querySelector(`[data-alert-modal="1"]`);
+
 /**
  * Dismiss Inline Alert
  * @param {Event} event
@@ -30,9 +33,8 @@ const alertInlineMessage = function(severity, heading, message) {
 
     container.querySelector(`[data-alert="content"]`).innerHTML = message;
 
-    // Insert into main or body
-    let mainContainer = document.querySelector("main.main-content");
-    mainContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
+    // Insert into modal-alert container
+    alertContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
     window.scrollTo(0,0);
 }
 
