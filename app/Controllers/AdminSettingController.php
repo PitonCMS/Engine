@@ -60,7 +60,7 @@ class AdminSettingController extends AdminBaseController
 
         // Get custom settings definition
         if (null === $customSettings = $definition->getSiteSettings()) {
-            $this->setAlert('danger', 'Custom Settings Error', $definition->getErrorMessages());
+            $this->setAlert('danger', 'Custom Settings Definition Error', $definition->getErrorMessages());
         } else {
             // Merge saved settings with custom settings
             $data['settings'] = $this->mergeSettings(
@@ -90,6 +90,7 @@ class AdminSettingController extends AdminBaseController
 
         // Get setting data POST array
         $settings = $this->request->getParsedBodyParam('setting');
+        $category = $this->request->getParsedBodyParam('category');
 
         // Save each setting
         foreach ($settings as $row) {
@@ -109,6 +110,6 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        return $this->redirect('adminToolSetting');
+        return $this->redirect('adminToolSettingEdit', ['category' => $category]);
     }
 }

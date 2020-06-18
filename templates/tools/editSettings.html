@@ -1,5 +1,5 @@
 {% extends '@admin/_adminBase.html' %}
-{% import '@admin/tools/_editSettingInputMacro.html' as settingForm %}
+{% import '@admin/tools/_editSettingInputMacro.html' as settingMacro %}
 
 {% block htmlTitle %}
 Edit {{ page.category|capitalize }} Settings
@@ -7,36 +7,40 @@ Edit {{ page.category|capitalize }} Settings
 
 {% block openForm %}
 <form action="{{ pathFor('adminToolSettingSave') }}" method="post" accept-charset="utf-8">
-    <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-    <input type="hidden" name="category" value="{{ page.category }}">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="category" value="{{ page.category }}">
 {% endblock openForm %}
 
 {% block contentHeader %}
   <div class="content-header-inner">
     <!-- Bread Crumbs  -->
     <div class="breadcrumb"><a href="#">
-     <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;Settings
-    </a></div>
+        <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;Settings
+      </a></div>
 
     <!-- Page Title -->
     <h1 class="section-title">{{ page.category|capitalize }} Settings</h1>
 
     <!-- Control Buttons -->
     <div class="btn-group">
-      <a class="btn btn-cancel  jsFormCancelButton" href="{{ pathFor('adminToolSettingEdit', {'cat': page.category }) }}">Discard</a>
-      <button class="btn btn-save  jsFormSaveButton" type="submit" name="button" value="save">Save</button>
+      <a class="btn btn-cancel" href="{{ pathFor('adminToolSettingEdit', {'category': page.category }) }}" data-form-button="cancel">Discard</a>
+      <button class="btn btn-save" type="submit" name="button" value="save" data-form-button="save" disabled>Save</button>
     </div><!-- /.btn-group -->
   </div><!-- /.content-header-inner  -->
 {% endblock contentHeader %}
 
 {% block content %}
   <div class="settings-block">
-  {% for setting in page.settings %}
-    {{ settingForm.settingInput(setting) }}
-  {% endfor %}
+    {% for setting in page.settings %}
+    {{ settingMacro.settingInput(setting) }}
+    {% endfor %}
   </div><!-- /.settings-block -->
 {% endblock content %}
 
 {% block closeForm %}
 </form>
 {% endblock closeForm %}
+
+{% block foot %}
+{{ getJsFileSource('settings', true) }}
+{% endblock foot %}

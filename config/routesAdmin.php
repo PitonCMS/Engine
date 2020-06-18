@@ -218,7 +218,7 @@ $app->group('/admin', function () {
             })->add('csrfGuardHandler')->setName('adminToolSitemapUpdate');
 
             // Edit settings by category
-            $this->get('/{cat:site|contact|social}/edit', function ($args) {
+            $this->get('/{category:site|contact|social}/edit', function ($args) {
                 return (new AdminSettingController($this))->editSettings($args);
             })->setName('adminToolSettingEdit');
         });
