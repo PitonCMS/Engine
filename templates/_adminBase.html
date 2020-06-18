@@ -80,7 +80,9 @@
   <main class="main-content">
 
     {# Load any alerts #}
-    {{ include("@admin/includes/_alert.html") }}
+    <div class="modal-alert">
+     {{ include("@admin/includes/_alert.html") }}
+    </div>
 
     {# Page level forms must wrap  contentHeader and content blocks #}
     {% block openForm '' %}
