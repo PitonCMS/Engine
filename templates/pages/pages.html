@@ -25,7 +25,7 @@
     <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
    </div>
    {% endfor %}
-
+<hr>
    {# List all saved collection groups #}
    {% for ct in getCollections() %}
    <div class="form-group">
