@@ -1385,15 +1385,21 @@ select:-moz-focusring {
     opacity: 1;
   }
 }
+.modal-alert {
+  position: fixed;
+  width: 80%;
+  z-index: 2000;
+  top: 0;
+  transform: scale(1, 0);
+  transform-origin: top;
+  animation: fadeIn 125ms ease-in-out forwards;
+}
+
 .alert {
-  margin: calc(100px) 5vw 0;
+  margin: 1rem auto;
   border-radius: 0.25rem;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(54, 54, 54, 0.15);
   background: white !important;
-  width: 50vw;
-  transform: scale(1, 0);
-  transform-origin: top;
-  animation: fadeIn 250ms ease-in-out forwards;
 }
 .alert-header {
   padding: 1rem;
