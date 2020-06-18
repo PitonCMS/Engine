@@ -71,7 +71,7 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Send category name to page to help with redirects
-        $data['category'] = $args['cat'];
+        $data['category'] = $args['category'];
 
         return $this->render('tools/editSettings.html', $data);
     }
