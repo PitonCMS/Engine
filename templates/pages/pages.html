@@ -2,38 +2,33 @@
 {% import '@admin/pages/_pageMacros.html' as pageMacro %}
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
-{#
-  Show All Pages
-
-  Shows all pages, status, and edit link, with pagination (if over config row limit)
-#}
 {% block htmlTitle 'Content' %}
 
 {% block contentHeader %}
 <div class="content-header-inner">
- <div class="breadcrumb"></div>
- <h1 class="section-title">Content</h1>
+  <div class="breadcrumb"></div>
+  <h1 class="section-title">Content</h1>
 
- <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown">
-    <span>Add Page</span> <i class="fas fa-chevron-down"></i>
+  <div class="btn-dropdown-block">
+    <div class="btn btn-dropdown">
+      <span>Add Page</span> <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="form-group-block">
+      {# List all templates with "templateType": "page" #}
+      {% for pt in getPageTemplates() %}
+      <div class="form-group">
+        <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
+      </div>
+      {% endfor %}
+      <hr>
+      {# List all saved collection groups #}
+      {% for ct in getCollections() %}
+      <div class="form-group">
+        <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
+      </div>
+      {% endfor %}
+    </div>
   </div>
-  <div class="form-group-block">
-   {# List all templates with "templateType": "page" #}
-   {% for pt in getPageTemplates() %}
-   <div class="form-group">
-    <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
-   </div>
-   {% endfor %}
-<hr>
-   {# List all saved collection groups #}
-   {% for ct in getCollections() %}
-   <div class="form-group">
-    <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
-   </div>
-   {% endfor %}
-  </div>
- </div>
 
 </div>
 {% endblock contentHeader %}
@@ -43,18 +38,17 @@
 <div class="filter-block">
 
   {{ pitonMacro.filterSearch() }}
-
   {{ pitonMacro.filterControl('radio', 'Page Status', ['All', 'Published', 'Pending', 'Draft']) }}
 
 </div>
 
 {# Page List Titles #}
 <div class="list-item-page-header">
- <div class="list-item-page__heading media">Media</div>
- <div class="list-item-page__heading title">Title</div>
- <div class="list-item-page__heading status">Status</div>
- <div class="list-item-page__heading template">Template</div>
- <div class="list-item-page__heading collection">Collection</div>
+  <div class="list-item-page__heading media">Media</div>
+  <div class="list-item-page__heading title">Title</div>
+  <div class="list-item-page__heading status">Status</div>
+  <div class="list-item-page__heading template">Template</div>
+  <div class="list-item-page__heading collection">Collection</div>
 </div>
 
 {# Page List  #}
@@ -67,8 +61,3 @@
 
 {{ pagination() }}
 {% endblock content %}
-
-
-{% block foot %}
-<script src="{{ basePath() }}/admin/js/page.js"></script>
-{% endblock foot %}
