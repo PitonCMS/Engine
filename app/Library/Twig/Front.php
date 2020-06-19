@@ -52,6 +52,7 @@ class Front extends Base
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
+            new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
         ]);
     }
 
@@ -154,5 +155,22 @@ class Front extends Base
         $navList = $navigationMapper->findNavigation($navigator, $url);
 
         return $this->cache['navigator'][$navigator] = $navigationMapper->buildNavigation($navList, $url);
+    }
+
+    /**
+     * Get Navigation Link
+     *
+     * @param PitonEntity $navLink
+     * @return string|null
+     */
+    public function getNavigationLink(PitonEntity $navLink): ?string
+    {
+        if (isset($navLink->url)) {
+            return $navLink->url;
+        } elseif (isset($navLink->collection_slug)) {
+            return $this->pathFor('showPage', ['slug1' => $navLink->collection_slug, 'slug2' => $navLink->page_slug]);
+        } else {
+            return $this->pathFor('showPage', ['slug1' => $navLink->page_slug]);
+        }
     }
 }
