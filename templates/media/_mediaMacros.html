@@ -21,10 +21,15 @@
   </div>
 
   <div class="mediaBlock">
-   {# Media Caption and Categories #}
+   {# Media Caption #}
    <div class="mediaCaption">
     <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
      placeholder="Media caption">
+   </div>
+
+   {# File Link #}
+   <div>
+    <input type="text" class="form-control form-control-sm" value="{{ baseUrl() ~ getMediaPath(media.filename) }}" readonly>
    </div>
 
    {# Featured Media #}
