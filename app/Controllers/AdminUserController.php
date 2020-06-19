@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -14,6 +14,7 @@ namespace Piton\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use PDOException;
+use Throwable;
 
 /**
  * Admin User Controller
@@ -80,33 +81,35 @@ class AdminUserController extends AdminBaseController
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $id = (int) $this->request->getParsedBodyParam('user_id');
 
         // Save user
         $user = $userMapper->make();
-        $user->id = $id;
+        $user->id = (int) $this->request->getParsedBodyParam('user_id');
         $user->first_name = trim($this->request->getParsedBodyParam('first_name'));
         $user->last_name = trim($this->request->getParsedBodyParam('last_name'));
         $user->email = trim($this->request->getParsedBodyParam('email'));
 
-        $user->role = ($this->request->getParsedBodyParam('role')) ? 'A' : null;
+        // $user->role = ($this->request->getParsedBodyParam('role')) ? 'A' : null;
+        $user->role = 'A';
         $user->active = ($this->request->getParsedBodyParam('active')) ? 'Y' : 'N';
 
         try {
             // There might be a duplicate user email
             $userMapper->save($user);
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
             if ($e->getCode() === '23000') {
-                // Duplicate email_uq unique index error
-                $this->setAlert('danger', 'Duplicate Email', "The user email {$row['email']} already exists.");
+                // Duplicate email error
+                $this->setAlert('danger', 'Duplicate User Email', "The user email {$user->email} already exists.");
 
-                return $this->redirect('adminToolUserEdit', ['id' => $id]);
+                // Redirect to users. If a new user failed to save the ID will be falsey (0)
+                $user->id = $user->id ?: null;
+                return $this->redirect('adminToolUserEdit', ['id' => $user->id]);
             }
 
             throw $e;
         }
 
         // Redirect to users
-        return $this->redirect('adminToolUser');
+        return $this->redirect('adminToolUserEdit', ['id' => $user->id]);
     }
 }

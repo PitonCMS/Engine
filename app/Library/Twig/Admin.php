@@ -122,8 +122,12 @@ class Admin extends Base
         $session = $this->container->sessionHandler;
 
         // If AdminBaseController render() is called then alert data is provided to Twig context for this request
-        // or if AdminBaseController redirect() was called in last request then saved to flash session data
-        $alert = $context['alert'] ?? $session->getFlashData('alert');
+        // But if AdminBaseController redirect() was called in last request the alert was saved to flash session data
+        if (!empty($context['alert'])) {
+            $alert = [$context['alert']];
+        } else {
+            $alert = $session->getFlashData('alert');
+        }
 
         // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
         if (isset($this->container->settings['site']['appAlert'])) {

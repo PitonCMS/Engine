@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Piton\Controllers\AdminController;
 use Piton\Controllers\AdminUserController;
 use Piton\Controllers\AdminPageController;
@@ -37,7 +39,7 @@ $app->group('/admin', function () {
         })->setName('adminPageGet');
 
         // Edit or add new page. Must provide ID or page layout argument
-        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
             $args['type'] = 'page';
             return (new AdminPageController($this))->editPage($args);
         })->setName('adminPageEdit');
@@ -77,7 +79,7 @@ $app->group('/admin', function () {
     // Collection group routes
     $this->group('/collection', function () {
         // Edit group collection
-        $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
             return (new AdminPageController($this))->editCollection($args);
         })->setName('adminCollectionEdit');
 
@@ -232,7 +234,7 @@ $app->group('/admin', function () {
             })->setName('adminToolUser');
 
             // Edit User
-            $this->get('/edit[/{id:[0-9]+}]', function ($args) {
+            $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
                 return (new AdminUserController($this))->editUser($args);
             })->setName('adminToolUserEdit');
 
@@ -254,7 +256,7 @@ $app->group('/admin', function () {
     $this->get('[/]', function () {
         return $this->response->withRedirect($this->router->pathFor('adminHome'));
     });
-})->add(function ($request, $response, $next) {
+})->add(function (Request $request, Response $response, callable $next) {
     // Authentication
     $Security = $this->accessHandler;
 
@@ -265,7 +267,7 @@ $app->group('/admin', function () {
 
     // Next call
     return $next($request, $response);
-})->add(function ($request, $response, $next) {
+})->add(function (Request $request, Response $response, callable $next) {
     // Add http no-cache, no-store headers to prevent back button access to admin
     $response = $next($request, $response);
     return $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
