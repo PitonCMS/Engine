@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `name` varchar(100) NULL DEFAULT NULL,
   `email` varchar(100) NULL DEFAULT NULL,
   `message` varchar(1000) NULL DEFAULT NULL,
-  `is_read` enum('Y', 'N') NOT NULL DEFAULT 'N',
+  `is_read` enum('Y','N','A') NOT NULL DEFAULT 'N',
   `context` varchar(100) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
@@ -195,4 +195,5 @@ VALUES
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
   ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now(),
-  ('piton', NULL, 'engine', NULL, 1, now(), 1, now());
+  ('piton', NULL, 'engine', NULL, 1, now(), 1, now()),
+  ('piton', NULL, 'schema', NULL, 1, now(), 1, now());

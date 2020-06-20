@@ -1,5 +1,5 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as html %}
+{% import _self as messageMacro %}
 
 {% block htmlTitle 'Messages' %}
 
@@ -7,7 +7,7 @@
 <div class="content-header-inner">
   <div class="breadcrumb"></div>
   {# TODO under section-title add title to match the type of filter? Like Messages - Unread or Message Read #}
-  <h1 class="section-title">Messages - All </h1>
+  <h1 class="section-title">Messages</h1>
   <div class="btn-group"></div>
 </div>
 {% endblock contentHeader %}
@@ -51,26 +51,13 @@
 </div>
 
 <div class="content-block-messages">
-  {% if page.status == 'new' %}
 
   {% for m in page.messages %}
-  {% if m.isRead == 'N' %}
-  {{ html.message(m) }}
-  {% endif %}
+    {{ messageMacro.messageRow(m) }}
   {% else %}
-  <p>You have no unread messages.</p>
+    <p>You have messages.</p>
   {% endfor %}
 
-  {% else %}
-
-  {% for m in page.messages %}
-  {% if m.isRead == 'Y' %}
-  {{ html.message(m) }}
-  {% endif %}
-  {% else %}
-  <p>You have no read messages.</p>
-  {% endfor %}
-  {% endif %}
 </div>
 {% endblock content %}
 
@@ -78,44 +65,42 @@
 {{ getJsFileSource('navigation') }}
 {% endblock foot %}
 
-{% macro message(m) %}
-<div class="message-block jsMessageWrap">
 
+{#
+  Message Macro
+#}
+{% macro messageRow(message) %}
+{% set faIcon = (message.isRead == 'N') ? 'fa-envelope' : (message.isRead == 'Y' ? 'fa-envelope-open' : 'fa-archive') %}
+
+<div class="message-block" data-message="parent" data-message-id="{{ message.id }}">
   <div class="message-wrapper">
     <div class="message-header span">
       <div class="message-link">
-        <a href="mailto:{{ m.email }}" target="_blank">
-          <i class="fas fa-envelope"></i>&nbsp;&nbsp;{{ m.name }}</a>
+        <a href="mailto:{{ message.email }}" target="_blank">
+          <i class="fas {{ faIcon }}"></i>&nbsp;&nbsp;{{ message.name }}</a>
       </div>
 
       <div class="message-date">
-        Sent:&nbsp;&nbsp;{{ m.createdDate|date('d F Y h:i a') }}
+        Sent:&nbsp;&nbsp;{{ message.createdDate|date('d F Y h:i a') }}
       </div>
 
       <div class="message-origin">
-        Via:&nbsp;&nbsp; {{ m.context|default('Unknown Page') }}
+        Via:&nbsp;&nbsp; {{ message.context|default('Unknown Page') }}
       </div>
     </div>
 
     <div class="message-content">
-      <p>{{ m.message|nl2br }}</p>
+      <p>{{ message.message|nl2br }}</p>
     </div>
 
-    <form class="btn-group" action="{{ pathFor('adminMessageSave') }}" method="post" accept-charset="utf-8">
-
-      <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-      <input type="hidden" name="id" value="{{ m.id }}">
-
-      <button class="btn btn-block btn-delete " name="button" title="Delete message" type="submit"
-        data-is-read="{{ m.isRead }}" value="delete" formaction="{{ pathFor('adminMessageDelete') }}">Delete</button>
-
-      <button class="btn btn-block btn-save" type="submit" name="button" value="toggle"
-        data-is-read="{{ m.isRead }}">Mark as {% if m.isRead == 'Y' %}Unread{% else %}Read{% endif %}
+    <div class="btn-group" action="{{ pathFor('adminMessageSave') }}">
+      <button class="btn btn-block btn-delete" type="button" title="Delete message">Delete</button>
+      <button class="btn btn-block btn-warning" type="button" title="Archive message">Archive</button>
+      <button class="btn btn-block btn-save" type="button"
+        data-is-read="{{ message.isRead }}">Mark as {% if message.isRead == 'Y' %}Unread{% else %}Read{% endif %}
       </button>
-
-    </form>
-
+    </div>
   </div>
 
 </div>
-{% endmacro %}
+{% endmacro messageRow %}
