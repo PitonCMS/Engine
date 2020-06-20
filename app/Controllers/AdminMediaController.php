@@ -35,9 +35,14 @@ class AdminMediaController extends AdminBaseController
     {
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $pagination = $this->container->adminMediaPagination;
 
-        // Get all media and categories
-        $media = $mediaMapper->findAllMedia() ?? [];
+        // Get all media and categories and setup pagination
+        $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
+        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
+        $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
+        $this->container->view->addExtension($pagination);
+
         $categories = $mediaCategoryMapper->findCategories() ?? [];
         $categories = array_column($categories, 'category', 'id');
 

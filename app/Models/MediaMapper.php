@@ -47,7 +47,7 @@ class MediaMapper extends DataMapperAbstract
      */
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
-        $this->mediaSelectJoinCategory();
+        $this->mediaSelectJoinCategory(true);
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -77,7 +77,7 @@ class MediaMapper extends DataMapperAbstract
             return null;
         }
 
-        $this->mediaSelectJoinCategory(false, $categoryId);
+        $this->mediaSelectJoinCategory(true, $categoryId);
 
         if ($limit) {
             $this->sql .= " limit ?";
