@@ -47,7 +47,7 @@ class MediaMapper extends DataMapperAbstract
      */
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
-        $this->mediaSelectJoinCategory(true);
+        $this->mediaSelectJoinCategory();
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -77,7 +77,7 @@ class MediaMapper extends DataMapperAbstract
             return null;
         }
 
-        $this->mediaSelectJoinCategory(true, $categoryId);
+        $this->mediaSelectJoinCategory($categoryId);
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -97,11 +97,10 @@ class MediaMapper extends DataMapperAbstract
      *
      * Make select statement
      * Overrides and sets $this->sql.
-     * @param  bool $foundRows  Set to true to get foundRows() after query
      * @param  int  $categoryId Optional cateogry ID
      * @return void
      */
-    protected function mediaSelectJoinCategory(bool $foundRows = false, int $categoryId = null): void
+    protected function mediaSelectJoinCategory(int $categoryId = null): void
     {
         // Add where clause on category ID if one was provided
         $where = '';
@@ -110,10 +109,8 @@ class MediaMapper extends DataMapperAbstract
             $this->bindValues[] = $categoryId;
         }
 
-        $foundRows = ($foundRows) ? ' SQL_CALC_FOUND_ROWS ' : '';
-
         $this->sql = <<<SQL
-select $foundRows
+select SQL_CALC_FOUND_ROWS
     m.id,
     m.filename,
     m.width,
