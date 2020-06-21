@@ -38,7 +38,7 @@
 <div class="filter-block">
 
   {{ pitonMacro.filterSearch() }}
-  {{ pitonMacro.filterControl('radio', 'Page Status', ['All', 'Published', 'Pending', 'Draft']) }}
+  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', ['All', 'Published', 'Pending', 'Draft']) }}
 
 </div>
 
@@ -61,3 +61,7 @@
 
 {{ pagination() }}
 {% endblock content %}
+
+{% block foot %}
+{{ getJsFileSource('pages') }}
+{% endblock foot %}

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -31,13 +31,36 @@ class MessageMapper extends DataMapperAbstract
     /**
      * Find Messages in Date Order
      *
-     * @param void
+     * @param  string     $filter
+     * @param  int        $limit
+     * @param  int        $offset
      * @return array|null
      */
-    public function findAllInDateOrder(): ?array
+    public function findMessages(string $filter = 'read', int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect();
+        $this->makeSelect(true);
+
+        if ($filter === 'readUnRead') {
+            $this->sql .= " and is_read in ('Y','N')";
+        } elseif ($filter === 'read') {
+            $this->sql .= " and is_read = 'Y'";
+        } elseif ($filter === 'unread') {
+            $this->sql .= " and is_read = 'N'";
+        } elseif ($filter === 'archive') {
+            $this->sql .= " and is_read = 'A'";
+        }
+
         $this->sql .= ' order by created_date desc';
+
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
 
         return $this->find();
     }
@@ -54,21 +77,6 @@ class MessageMapper extends DataMapperAbstract
         $this->sql = 'select count(*) unread from message where is_read = \'N\'';
 
         return (int) $this->findRow()->unread;
-    }
-
-    /**
-     * Find Unread Messages
-     *
-     * Gets all unread messages
-     * @param  void
-     * @return array|null
-     */
-    public function findUnread(): ?array
-    {
-        $this->makeSelect();
-        $this->sql .= 'and is_read = \'N\'';
-
-        return $this->find();
     }
 
     /**
@@ -94,6 +102,20 @@ class MessageMapper extends DataMapperAbstract
     public function markAsUnread(int $messageId): bool
     {
         $this->sql = 'update message set is_read = \'N\' where id = ?';
+        $this->bindValues[] = $messageId;
+
+        return $this->execute();
+    }
+
+    /**
+     * Mark As Archived
+     *
+     * @param  int  $messageId
+     * @return bool
+     */
+    public function markAsArchived(int $messageId): bool
+    {
+        $this->sql = 'update message set is_read = \'A\' where id = ?';
         $this->bindValues[] = $messageId;
 
         return $this->execute();

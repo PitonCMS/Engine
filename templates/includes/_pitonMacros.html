@@ -27,53 +27,52 @@
 {% endmacro alert %}
 
 {#
-    Filter Search
+    Filter Search Control
 
     Filter search input
+    @param string placeholder
 #}
-{% macro filterSearch() %}
+{% macro filterSearch(placeholder = "Seach ...") %}
 
-<div class="input-block">
- <div class="input-block__icon">
-  <i class="fas fa-search"></i>
- </div>
- <div class="input-block__input">
-  <input type="search" name="search" class="input-block__search-input" placeholder="Search..." autocomplete="false">
- </div>
+<div class="input-block" data-filter="search">
+	<div class="input-block__icon" data-filter-control="search">
+		<i class="fas fa-search"></i>
+	</div>
+	<div class="input-block__input">
+		<input type="search" name="search" class="input-block__search-input" placeholder="{{ placeholder }}"
+			autocomplete="false">
+	</div>
 </div>
 
 {% endmacro filterSearch %}
 
 {#
-    Filter Control
+    Filter Options Control
 
-    Create filter control for either radio or checkbox
+		Create filter control for either radio or checkbox
     @param string type  Either 'radio' or 'checkbox'
-    @param string label Display label on control
-    @param array  options List of key: value options
+		@param string label Display label on control
+		@paran string name  Input name attribute
+    @param array  options List of key: value pairs {"key1": "Name2", "key2": "Name2"}
 #}
-{% macro filterControl(type, label, options) %}
+{% macro filterOptions(type, label, name, options) %}
 
-<div class="btn-dropdown-block">
- <div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
- </div>
- <div class="form-check-wrapper form-group-block">
-
-  {% for key, value in options %}
-  {% set forKey = uniqueKey() %}
-  <div class="form-check">
-   <input class="form-check-input" type="{{ type }}" id="{{ forKey }}" name="filter" value="{{ value }}">
-   <label class="form-check-label" for="{{ forKey }}">{{ value|capitalize }}</label>
-  </div>
-  {% endfor %}
-  <div class="btn-group-filter">
-   <div class="btn btn-cancel">Clear</div>
-   <div class="btn btn-apply">Apply</div>
-  </div>
- </div>
- {# TODO Add "Clear" and "Apply" buttons at bottom #}
- {# TODO Wolf a radio button needs all of the items within a group to have the same 'name'. A different 'name' is necessary for a checkbox.
-       Maybe radios can default to a name of 'filter'. #}
+<div class="btn-dropdown-block" data-filter="options">
+	<div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
+	</div>
+	<div class="form-check-wrapper form-group-block">
+		{% for key, value in options %}
+		{% set forId = uniqueKey() %}
+		<div class="form-check">
+			<input class="form-check-input" type="{{ type }}" id="{{ forId }}" name="{{ name }}" value="{{ key }}">
+			<label class="form-check-label" for="{{ forId }}">{{ value }}</label>
+		</div>
+		{% endfor %}
+		<div class="btn-group-filter">
+			<div class="btn btn-cancel" data-filter-control="clear">Clear</div>
+			<div class="btn btn-apply" data-filter-control="apply">Apply</div>
+		</div>
+	</div>
 </div>
 
-{% endmacro filterControl %}
+{% endmacro filterOptions %}

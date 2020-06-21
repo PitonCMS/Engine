@@ -177,11 +177,15 @@ $app->group('/admin', function () {
 
     // Messages
     $this->group('/message', function () {
-        // Show messages
-        $this->get('[/[{status:new|read}]]', function ($args) {
-            $args['status'] = $args['status'] ?? 'new';
-            return (new AdminMessageController($this))->showMessages($args);
+        // Show message page
+        $this->get('[/]', function ($args) {
+            return (new AdminMessageController($this))->showMessages();
         })->setName('adminMessage');
+
+        // XHR: Get messages
+        $this->get('/get', function ($args) {
+            return (new AdminMessageController($this))->getMessages();
+        })->setName('adminMessageGet');
 
         // Save message status changes
         $this->post('/save', function ($args) {

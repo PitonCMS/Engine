@@ -34,8 +34,8 @@
     </div>
   </div>
 
-  {{ pitonMacro.filterControl('radio', 'Page Status', ['All', 'Published', 'Pending', 'Draft']) }}
-  {{ pitonMacro.filterControl('checkbox', 'By Template', ['All', 'template1', 'template2', 'withoutHero', 'withHero']) }}
+  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', ['All', 'Published', 'Pending', 'Draft']) }}
+  {{ pitonMacro.filterOptions('checkbox', 'By Template', 'template', ['All', 'template1', 'template2', 'withoutHero', 'withHero']) }}
 
 </div>
 

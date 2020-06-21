@@ -13,7 +13,7 @@
   <a href="{{ pathFor('adminMedia') }}"><i class="side-nav__icon fas fa-images"></i> Media</a>
  </li>
 
- <li class="side-nav__link navigation"> 
+ <li class="side-nav__link navigation">
     <a href="{{ pathFor('adminNavigation') }}"><i class="side-nav__icon fas fa-compass"></i> Navigation</a>
    </li>
 
@@ -21,8 +21,8 @@
   <a href="{{ pathFor('adminHelp') }}">  <i class="side-nav__icon fas fa-question"></i> Help</a>
  </li>
 
- <li class="side-nav__link messages">
-  <a href="{{ pathFor('adminMessage', {'status': 'new'}) }}">  <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
+ <li class="side-nav__link messages" data-message="count">
+  <a href="{{ pathFor('adminMessage') }}">  <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
   {% if getUnreadMessageCount() %}
   <div class="badge badge-notify">{{ getUnreadMessageCount() }}</div>
   {% endif %}

@@ -58,17 +58,14 @@ const XHRPromise = function(method, url, data) {
  * @param {object} data Object with query string parameters as key: values
  */
 const getXHRPromise = function(url, data) {
-    let queryString;
 
+    // Create query string if a data object was provided
     if (data) {
-        queryString = Object.keys(data).map((k) => {
-            return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-        }).join('&');
-    }
-
-    // Attach query string to URL
-    if (queryString) {
-        url += '?' + queryString;
+        let queryString = new URLSearchParams();
+        for (let [key, value] of Object.entries(data)) {
+            queryString.append(key, value);
+        }
+        url += "?" + queryString.toString();
     }
 
     return XHRPromise("GET", url);

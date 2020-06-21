@@ -1,6 +1,12 @@
 // --------------------------------------------------------
 // Message management
 // --------------------------------------------------------
+import "./modules/main.js";
+import { setFilterPath } from "./modules/filter.js";
+
+setFilterPath(pitonConfig.routes.adminMessageGet);
+
+/*
 // +/- Message count
 let changeMessageCount = (sign) => {
     if (sign) {
@@ -48,3 +54,4 @@ $('.jsMessageWrap').on('click', 'button', function (e) {
         }
     });
 });
+*/

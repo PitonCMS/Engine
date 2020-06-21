@@ -1,5 +1,6 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as messageMacro %}
+{% import "@admin/messages/_messageMacros.html" as messageMacro %}
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
 {% block htmlTitle 'Messages' %}
 
@@ -13,94 +14,21 @@
 {% endblock contentHeader %}
 
 {% block content %}
-<!-- Message Filters -->
-<div class="filter-block">
-  <div class="input-block">
-    <div class="input-block__icon">
-      <i class="fas fa-search"></i>
-    </div>
-    <div class="input-block__input">
-      <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Media"
-        autocomplete="false">
-    </div>
+  <div class="filter-block">
+    {{ pitonMacro.filterSearch('Search media...') }}
+    {{ pitonMacro.filterOptions('radio', 'Filter on Status', 'status', {"readUnRead": "Read and Unread", "unread": "Unread", "read": "Read", "archive": "Archive"}) }}
   </div>
 
-  <div class="btn-dropdown-block ">
-    <div class="btn btn-dropdown "><span>Filter</span> <span><i class="fas fa-chevron-down"></i></span>
-    </div>
-    <div class="form-check-wrapper form-group-block">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="allMessages" name="status" value="allMessages">
-        <label class="form-check-label" for="allMessages">All</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="unreadMessages" name="status" value="unreadMessages">
-        <label class="form-check-label" for="unreadMessages">Unread</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="readMessages" name="status" value="readMessages">
-        <label class="form-check-label" for="readMessages">Read</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="archiveMessages" name="status" value="archiveMessages">
-        <label class="form-check-label" for="archiveMessages">Archive</label>
-      </div>
-    </div>
+  <div class="content-block-messages" data-filter="content">
+
+    {% for m in page.messages %}
+      {{ messageMacro.messageRow(m) }}
+    {% endfor %}
+
+    {{ pagination() }}
   </div>
-
-</div>
-
-<div class="content-block-messages">
-
-  {% for m in page.messages %}
-    {{ messageMacro.messageRow(m) }}
-  {% else %}
-    <p>You have messages.</p>
-  {% endfor %}
-
-</div>
 {% endblock content %}
 
 {% block foot %}
-{{ getJsFileSource('navigation') }}
+{{ getJsFileSource('messages') }}
 {% endblock foot %}
-
-
-{#
-  Message Macro
-#}
-{% macro messageRow(message) %}
-{% set faIcon = (message.isRead == 'N') ? 'fa-envelope' : (message.isRead == 'Y' ? 'fa-envelope-open' : 'fa-archive') %}
-
-<div class="message-block" data-message="parent" data-message-id="{{ message.id }}">
-  <div class="message-wrapper">
-    <div class="message-header span">
-      <div class="message-link">
-        <a href="mailto:{{ message.email }}" target="_blank">
-          <i class="fas {{ faIcon }}"></i>&nbsp;&nbsp;{{ message.name }}</a>
-      </div>
-
-      <div class="message-date">
-        Sent:&nbsp;&nbsp;{{ message.createdDate|date('d F Y h:i a') }}
-      </div>
-
-      <div class="message-origin">
-        Via:&nbsp;&nbsp; {{ message.context|default('Unknown Page') }}
-      </div>
-    </div>
-
-    <div class="message-content">
-      <p>{{ message.message|nl2br }}</p>
-    </div>
-
-    <div class="btn-group" action="{{ pathFor('adminMessageSave') }}">
-      <button class="btn btn-block btn-delete" type="button" title="Delete message">Delete</button>
-      <button class="btn btn-block btn-warning" type="button" title="Archive message">Archive</button>
-      <button class="btn btn-block btn-save" type="button"
-        data-is-read="{{ message.isRead }}">Mark as {% if message.isRead == 'Y' %}Unread{% else %}Read{% endif %}
-      </button>
-    </div>
-  </div>
-
-</div>
-{% endmacro messageRow %}
