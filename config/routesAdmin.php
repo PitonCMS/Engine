@@ -187,15 +187,10 @@ $app->group('/admin', function () {
             return (new AdminMessageController($this))->getMessages();
         })->setName('adminMessageGet');
 
-        // Save message status changes
+        // XHR: Save message status changes, Archvie, Read, and Delete
         $this->post('/save', function ($args) {
-            return (new AdminMessageController($this))->toggleStatus();
+            return (new AdminMessageController($this))->updateStatus();
         })->add('csrfGuardHandler')->setName('adminMessageSave');
-
-        // Delete message
-        $this->post('/delete', function ($args) {
-            return (new AdminMessageController($this))->delete();
-        })->add('csrfGuardHandler')->setName('adminMessageDelete');
     });
     // End messages
 

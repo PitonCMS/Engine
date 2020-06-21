@@ -21,54 +21,61 @@ const removeRows = function() {
 }
 
 /**
- * Clear This Filter
+ * Clear This Filter Control
  * Resets the current filter, but not others on page
  * @param {Event} event
  */
-const clearFilter = function(event) {
-    if (event.target.dataset.filterControl === "clear") {
-        let filter = event.target.closest(`[data-filter="options"]`);
-        filter.querySelectorAll("input").forEach(input => {
-            input.checked = false;
-        });
+const clearFilterControl = function(event) {
+    if (!event.target.dataset.filterControl === "clear") return;
+
+    let filter = event.target.closest(`[data-filter="options"]`);
+    filter.querySelectorAll("input").forEach(input => {
+        input.checked = false;
+    });
+}
+
+/**
+ * Apply Filter Control
+ * @param {Event} event
+ */
+const ApplyFilterControl = function(event) {
+    if (filterPath && filterResults && event.target.dataset.filterControl === "apply") {
+        applyFilters();
     }
 }
 
 /**
  * Apply Filters
  * Applies all filters on page as single XHR request
- * @param {Event} event
  */
-const applyFilters = function(event) {
-    if (filterPath && filterResults && event.target.dataset.filterControl === "apply") {
-        let filters = document.querySelectorAll(`[data-filter="options"] input`);
-        let selectedOptions = {};
-        enableSpinner();
+const applyFilters = function() {
+    let filters = document.querySelectorAll(`[data-filter="options"] input`);
+    let selectedOptions = {};
+    enableSpinner();
 
-        // Get filter options
-        filters.forEach((input) => {
-            if (input.checked) {
-                // Check if this property has already been set, in which case concatenate value
-                if (selectedOptions.hasOwnProperty(input.name)) {
-                    selectedOptions[input.name] += "," + input.value;
-                } else {
-                    selectedOptions[input.name] = input.value;
-                }
+    // Get filter options
+    filters.forEach((input) => {
+        if (input.checked) {
+            // Check if this property has already been set, in which case concatenate value
+            if (selectedOptions.hasOwnProperty(input.name)) {
+                selectedOptions[input.name] += "," + input.value;
+            } else {
+                selectedOptions[input.name] = input.value;
             }
-        });
+        }
+    });
 
-        getXHRPromise(filterPath, selectedOptions)
-            .then((data) => {
-                removeRows();
-                return data;
-            })
-            .then(data => {
-                filterResults.insertAdjacentHTML('afterbegin', data);
-            })
-            .then(() => {
-                disableSpinner();
-            });
-    }
+    getXHRPromise(filterPath, selectedOptions)
+        .then((data) => {
+            removeRows();
+            return data;
+        })
+        .then(data => {
+            filterResults.insertAdjacentHTML('afterbegin', data);
+        })
+        .then(() => {
+            disableSpinner();
+        });
 }
 
 /**
@@ -80,7 +87,7 @@ const setFilterPath = function(route) {
 }
 
 // Bind events
-document.addEventListener("click", applyFilters, false);
-document.addEventListener("click", clearFilter, false);
+document.addEventListener("click", ApplyFilterControl, false);
+document.addEventListener("click", clearFilterControl, false);
 
-export { setFilterPath };
+export { setFilterPath, applyFilters };

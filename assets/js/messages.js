@@ -2,9 +2,55 @@
 // Message management
 // --------------------------------------------------------
 import "./modules/main.js";
-import { setFilterPath } from "./modules/filter.js";
+import { setFilterPath, applyFilters } from "./modules/filter.js";
+import { postXHRPromise } from "./modules/xhrPromise.js";
+import { disableSpinner, enableSpinner } from "./modules/spinner.js";
 
 setFilterPath(pitonConfig.routes.adminMessageGet);
+
+/**
+ * Update Unread Message Count in Sidebar
+ */
+const updateUnreadMessageCount = function() {
+
+}
+
+/**
+ * Update Message
+ * For Read, Archive status toggle, and Delete
+ * @param {Event} event
+ */
+const updateMessage = function (event) {
+    if (!event.target.dataset.messageControl) return;
+
+    let messageParent = event.target.closest(`[data-message="parent"]`);
+    let data = {"messageId": messageParent.dataset.messageId};
+
+    // Process control request
+    if (event.target.dataset.messageControl === 'delete') {
+        // Message delete
+        if (!confirm(event.target.dataset.messageDeletePrompt)) return;
+        data["control"] = "delete";
+    } else if (event.target.dataset.messageControl === 'archive') {
+        // Toggle archive
+        data["control"] = "archive";
+    } else if (event.target.dataset.messageControl === 'read') {
+        // Toggle read
+        data["control"] = "read";
+    }
+
+    enableSpinner();
+    postXHRPromise(pitonConfig.routes.adminMessageSave, data)
+        .then(() => {
+            applyFilters();
+        })
+        .then(() => {
+            disableSpinner();
+        });
+}
+
+// Bind event handlers to page
+document.addEventListener("click", updateMessage, false);
 
 /*
 // +/- Message count

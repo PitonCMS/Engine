@@ -49,10 +49,11 @@
 {#
     Filter Options Control
 
-		Create filter control for either radio or checkbox
+	Create filter control for either radio or checkbox
+	First option is checked by default
     @param string type  Either 'radio' or 'checkbox'
-		@param string label Display label on control
-		@paran string name  Input name attribute
+	@param string label Display label on control
+	@paran string name  Input name attribute
     @param array  options List of key: value pairs {"key1": "Name2", "key2": "Name2"}
 #}
 {% macro filterOptions(type, label, name, options) %}
@@ -64,7 +65,7 @@
 		{% for key, value in options %}
 		{% set forId = uniqueKey() %}
 		<div class="form-check">
-			<input class="form-check-input" type="{{ type }}" id="{{ forId }}" name="{{ name }}" value="{{ key }}">
+			<input class="form-check-input" type="{{ type }}" id="{{ forId }}" name="{{ name }}" value="{{ key }}" {% if loop.first %}checked{% endif %}>
 			<label class="form-check-label" for="{{ forId }}">{{ value }}</label>
 		</div>
 		{% endfor %}

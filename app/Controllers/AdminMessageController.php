@@ -96,50 +96,47 @@ HTML;
     /**
      * Toggle Status
      *
-     * Sets the read status to the opposite of the current status
+     * XHR Request
+     * Toggles the message status (Read, Archive), and also Delete
      * @param void
      * @return Response
+     * @uses POST
      */
-    public function toggleStatus(): Response
+    public function updateStatus(): Response
     {
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        // Message control logic:
+        // - New messages can be archived or set to read status
+        // - Read messages can be archived or set to unread status
+        // - Archived messages can set to read status
+        // - Any message can be deleted
 
-        $messageId = (int) $this->request->getParsedBodyParam('id');
-        $message = $messageMapper->findById($messageId);
-        if ($message->is_read === 'Y') {
-            $messageMapper->markAsUnread($messageId);
-        } else {
-            $messageMapper->markAsRead($messageId);
+        try {
+            // Get dependencies
+            $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $messageId = (int) $this->request->getParsedBodyParam('messageId');
+            $controlRequest = $this->request->getParsedBodyParam('control');
+
+            $message = $messageMapper->findById($messageId);
+            if ($controlRequest === 'delete') {
+                // Delete request
+                $messageMapper->delete($message);
+            } elseif ($controlRequest === 'archive') {
+                // Archive request. Set to A if in Y|N status, otherwise unarchive by setting to Y
+                $message->is_read = in_array($message->is_read, ['Y','N']) ? 'A' : 'Y';
+                $messageMapper->save($message);
+            } elseif ($controlRequest === 'read') {
+                // Read toggle request. Set to Y if in A|N status, otherwise set to N
+                $message->is_read = in_array($message->is_read, ['A','N']) ? 'Y' : 'N';
+                $messageMapper->save($message);
+            }
+
+            $status = "success";
+            $text = "Updated message";
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception updating message status: ". $th->getMessage();
         }
 
-        // Set the response type
-        if ($this->request->isXhr()) {
-            $r = $this->response->withHeader('Content-Type', 'application/json');
-            return $r->write(json_encode(["status" => "success"]));
-        }
-
-        return $this->redirect('adminMessage');
-    }
-
-    /**
-     * Delete Message
-     * @param void
-     * @return Response
-     */
-    public function delete(): Response
-    {
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
-
-        $message = $messageMapper->make();
-        $message->id = (int) $this->request->getParsedBodyParam('id');
-        $messageMapper->delete($message);
-
-        // Set the response type
-        if ($this->request->isXhr()) {
-            $r = $this->response->withHeader('Content-Type', 'application/json');
-            return $r->write(json_encode(["status" => "success"]));
-        }
-
-        return $this->redirect('adminMessage');
+        return $this->xhrResponse($status, $text);
     }
 }
