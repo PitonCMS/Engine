@@ -142,3 +142,7 @@ button,
  align-items: center;
  justify-content: space-between;
 }
+.btn-group-pageEdit,
+.btn-group-bottom {
+ @include margin(1rem null null null);
+}
