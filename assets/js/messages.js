@@ -3,16 +3,20 @@
 // --------------------------------------------------------
 import "./modules/main.js";
 import { setFilterPath, applyFilters } from "./modules/filter.js";
-import { postXHRPromise } from "./modules/xhrPromise.js";
+import { postXHRPromise, getXHRPromise } from "./modules/xhrPromise.js";
 import { disableSpinner, enableSpinner } from "./modules/spinner.js";
 
 setFilterPath(pitonConfig.routes.adminMessageGet);
+const unreadMessageCountBadge = document.querySelector(`[data-message="count"]`);
 
 /**
  * Update Unread Message Count in Sidebar
  */
 const updateUnreadMessageCount = function() {
-
+    getXHRPromise(pitonConfig.routes.adminMessageCountGet)
+        .then(data => {
+            unreadMessageCountBadge.innerHTML = data;
+        });
 }
 
 /**
@@ -43,6 +47,7 @@ const updateMessage = function (event) {
     postXHRPromise(pitonConfig.routes.adminMessageSave, data)
         .then(() => {
             applyFilters();
+            updateUnreadMessageCount();
         })
         .then(() => {
             disableSpinner();

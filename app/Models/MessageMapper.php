@@ -78,46 +78,4 @@ class MessageMapper extends DataMapperAbstract
 
         return (int) $this->findRow()->unread;
     }
-
-    /**
-     * Mark As Read
-     *
-     * @param  int  $messageId
-     * @return bool
-     */
-    public function markAsRead(int $messageId): bool
-    {
-        $this->sql = 'update message set is_read = \'Y\' where id = ?';
-        $this->bindValues[] = $messageId;
-
-        return $this->execute();
-    }
-
-    /**
-     * Mark As Unread
-     *
-     * @param  int  $messageId
-     * @return bool
-     */
-    public function markAsUnread(int $messageId): bool
-    {
-        $this->sql = 'update message set is_read = \'N\' where id = ?';
-        $this->bindValues[] = $messageId;
-
-        return $this->execute();
-    }
-
-    /**
-     * Mark As Archived
-     *
-     * @param  int  $messageId
-     * @return bool
-     */
-    public function markAsArchived(int $messageId): bool
-    {
-        $this->sql = 'update message set is_read = \'A\' where id = ?';
-        $this->bindValues[] = $messageId;
-
-        return $this->execute();
-    }
 }

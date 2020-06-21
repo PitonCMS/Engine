@@ -187,6 +187,11 @@ $app->group('/admin', function () {
             return (new AdminMessageController($this))->getMessages();
         })->setName('adminMessageGet');
 
+        // XHR: Get new message count
+        $this->get('/getnewmessagecount', function ($args) {
+            return (new AdminMessageController($this))->getNewMessageCount();
+        })->setName('adminMessageCountGet');
+
         // XHR: Save message status changes, Archvie, Read, and Delete
         $this->post('/save', function ($args) {
             return (new AdminMessageController($this))->updateStatus();

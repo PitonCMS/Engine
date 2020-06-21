@@ -139,4 +139,27 @@ HTML;
 
         return $this->xhrResponse($status, $text);
     }
+
+    /**
+     * Get New Message Count
+     *
+     * Gets count of messages with Undread status
+     * @param void
+     * @return Response
+     */
+    public function getNewMessageCount(): Response
+    {
+        try {
+            $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $count = $messageMapper->findUnreadCount();
+
+            $status = "success";
+            $text = ($count === 0) ? null : "$count";
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception updating message status: ". $th->getMessage();
+        }
+
+        return $this->xhrResponse($status, $text);
+    }
 }
