@@ -45,6 +45,7 @@
     left: 110%;
     opacity: 0;
     transition: opacity 350ms ease-in-out 250ms;
+    z-index: 100;
 
     .mediaThumbPopup {
 
@@ -67,12 +68,11 @@
   /* Media Input Grouping */
   .mediaInputBlock {
    list-style-type: none;
-   // border: solid 1px $border;
    @include padding(.5em);
 
    li {
     border-bottom: 1px solid $border;
-    margin-top: -1px; // border collapser
+    margin-top: -1px;
     position: relative;
     & + li {
      @include margin(.25em null null null);
@@ -90,6 +90,7 @@
     position: absolute;
     top: .5em;
     left: .5em;
+    z-index: -1;
 
    }
 
