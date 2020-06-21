@@ -80,6 +80,10 @@ a {
  justify-content: center;
  align-items: center;
 
+ &:empty {
+  display: none;
+ }
+
  &-notify {
   background: $clr-notify;
   color: $text-light;
