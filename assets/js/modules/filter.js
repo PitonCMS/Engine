@@ -26,12 +26,12 @@ const removeRows = function() {
  * @param {Event} event
  */
 const clearFilterControl = function(event) {
-    if (!event.target.dataset.filterControl === "clear") return;
-
-    let filter = event.target.closest(`[data-filter="options"]`);
-    filter.querySelectorAll("input").forEach(input => {
-        input.checked = false;
-    });
+    if (event.target.dataset.filterControl === "clear") {
+        let filter = event.target.closest(`[data-filter="options"]`);
+        filter.querySelectorAll("input").forEach(input => {
+            input.checked = false;
+        });
+    }
 }
 
 /**
