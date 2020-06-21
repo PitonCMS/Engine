@@ -1,83 +1,25 @@
-/* Default Button Styles */ 
+// Button html Element Styles
 button,
-input,
-optgroup,
-select,
-textarea {
- font-family: inherit;
- font-size: 100%;
- line-height: 1.15;
- margin: 0;
-}
-
-button,
-input {
- overflow: visible;
-}
-
-button,
-select {
- text-transform: none;
-}
-
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
- -webkit-appearance: button;
-}
-/* Button Styles */
-button {
- display: inline-block;
- border: none;
- border-radius: .25em;
- padding: 1rem 2rem;
- margin: 0;
- text-decoration: none;
- // background: #0069ed;
- // color: #ffffff;
- // font-family: sans-serif;
- font-size: 1rem;
- cursor: pointer;
- text-align: center;
- transition: background 250ms ease-in-out,
-  transform 150ms ease;
- -webkit-appearance: none;
- -moz-appearance: none;
-}
-
-button:hover,
-button:focus {
- background: #0053ba;
-}
-
-button:focus {
- outline: 1px solid #fff;
- outline-offset: -4px;
-}
-
-button:active {
- transform: scale(0.99);
-}
-
-
-// Default buttons
 .btn {
  @include margin(null null null 1em);
  @include padding(.5em .75em);
- line-height: 1;
+ border: none;
  font-size: .875rem;
- width: 100%;
+ line-height: 1;
+ border-radius: $border-radius;
+ box-shadow: $box-shadow-1;
+ letter-spacing: .7px;
+
  background: darkmagenta;
  color: $text-light;
- border-radius: $border-radius;
- justify-content: center;
- text-align: center;
- box-shadow: $box-shadow-1;
 
  &:hover {
-  background: hue(darkmagenta);
+  background: lighten(darkmagenta, 20%);
   cursor: pointer;
+ }
+
+ &:focus {
+  border: none;
  }
 
  &:disabled {
@@ -87,11 +29,39 @@ button:active {
    cursor: not-allowed;
   }
  }
- &:first-child{
-@include margin(null null null 0);
- }
 }
 
+button,
+input {
+ overflow: visible;
+}
+
+button,
+select {
+ text-transform: capitalize;
+}
+
+/* Default Button Styles */
+button,
+input,
+optgroup,
+select,
+textarea {
+ font-family: inherit;
+ line-height: 1.15;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+ -webkit-appearance: button;
+}
+
+
+// Buttons
+
+/* Cancel Button */
 .btn-cancel {
  color: $clr-notify;
  background: transparent;
@@ -101,69 +71,74 @@ button:active {
 
  &:hover {
   color: $btn-cancel-hover;
+  background: inherit;
  }
 }
+
+/* Publish Now Button */
 .btn-publish {
- background: $btn-green !important;
+ background: $btn-publish;
 
  &:hover {
-  background: $btn-green-hover !important;
+  background: $btn-publish-hover;
  }
 
  .disabled {
-  background: $btn-green-disabled !important;
+  background: $btn-publish-disabled;
   cursor: not-allowed;
  }
 }
 
-.btn-save, .btn-apply {
- background: $btn-blue !important;
+/* Save Button */
+.btn-save,
+.btn-apply {
+ background: $btn-blue;
 
  &:hover {
-  background: $btn-blue-hover !important;
+  background: $btn-blue-hover;
   color: $clr-light;
  }
+
+ .disabled {
+  background: $btn-blue-disabled;
+ }
 }
 
-
-
-.btn-new {
- background: rgb(109, 110, 107) !important;
- display: flex;
- justify-content: space-between;
- align-items: center;
-}
-
+/* Delete Button */ 
 .btn-delete {
- background: $btn-red !important;
+ background: $btn-red;
 
  &:hover {
-  background: $btn-red-hover !important;
+  background: $btn-red-hover;
+ }
+ .disabled {
+  background: $btn-red-disabled;
  }
 }
-.btn-block {
- display: block;
- width: auto;
+
+/* Archive Button */
+.btn-archive {
+ background: $btn-archive;
+
+ &:hover {
+  background: $btn-archive-hover;
+  color: $clr-light;
+ }
+
+ .disabled {
+  background: $btn-archive-disabled;
+ }
 }
-/* Button Block Groupings */ 
+
+/* Dropdown Buttons - SEE _buttonDropdown.scss */ 
+
+
+
+// Button Groups
 
 // Content Header Control Buttons
- .btn-group {
-  display: flex;
-   align-items: center;
-  justify-content: space-between;
-  // border: solid 5px red;
- }
-
-/* Button Group Page Edit */
-
-.btn-group-pageEdit {
- button {
-  @include margin(0 0 1rem 0);
- }
-}
-
-/* Button Group Delete Page bottom of page*/
-.btn-group-bottom {
- @include padding(1rem null null null);
+.btn-group {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
 }

@@ -117,3 +117,24 @@
 
 
  }
+
+ .mediaCategories-block {
+
+
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  .form-group {
+   background: $bg-white;
+   @include padding(1rem);
+   border-radius: $border-radius;
+   box-shadow: $box-shadow-1;
+   input {
+    background: $bg-light;
+   }
+   .btn {
+    @include margin(1rem null null 0);
+   }
+  }
+  }

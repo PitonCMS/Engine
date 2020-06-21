@@ -24,8 +24,7 @@
   <h1 class="section-title">{{ page.title }}</h1>
 
   <div class="btn-group">
-   <a class="btn btn-cancel" data-form-button="cancel"
-    href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</a>
+   <button type="reset" class="btn btn-cancel" data-form-button="cancel" href="{{ pathFor('adminPageEdit', {'id': page.id}) }}">Discard</button>
    <button class="btn btn-publish" data-form-button="save" type="submit" name="publish_now" disabled>Publish</button>
    <button class="btn btn-save" data-form-button="save" type="submit" disabled>Save</button>
   </div>

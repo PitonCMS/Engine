@@ -3,7 +3,9 @@
  @include margin(null null null 1rem);
  position: relative;
 }
+
 .btn-dropdown {
+ @include margin(null null null 0);
  background: $bg-grey;
  color: $text-secondary;
  display: flex;
@@ -13,14 +15,16 @@
 
  &>:last-child {
   margin-left: 2rem;
+
  }
 
  &:hover {
   cursor: default;
+  background: darken($bg-grey, 10%);
  }
 }
-// Dropdown buttons w/hover
 
+// Dropdown buttons w/hover
 .form-group-block {
  width: 100%;
  background: $bg-light;
