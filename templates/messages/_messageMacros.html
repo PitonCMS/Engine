@@ -33,12 +33,12 @@
         - Any message can be deleted
     #}
     <div class="btn-group">
-      <button class="btn btn-block btn-delete" type="button" data-message-control="delete" data-message-delete-prompt="Are you sure you want to delete this message?">Delete</button>
-      <button class="btn btn-block btn-archive" type="button" data-message-control="archive">
+      <button class="btn btn-delete" type="button" data-message-control="delete" data-message-delete-prompt="Are you sure you want to delete this message?">Delete</button>
+      <button class="btn btn-archive" type="button" data-message-control="archive">
         {% if message.is_read in ['Y','N'] %}Archive{% else %}Unarchive{% endif %}
       </button>
       {% if message.is_read != 'A' %}
-      <button class="btn btn-block btn-save" type="button" data-message-control="read">
+      <button class="btn btn-save" type="button" data-message-control="read">
         {% if message.is_read == 'N' %}Mark Read{% elseif message.is_read == 'Y' %}Mark Unread{% endif %}
       </button>
       {% endif %}

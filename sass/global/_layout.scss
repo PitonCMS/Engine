@@ -44,11 +44,15 @@
    }
   }
  }
- .btn-dropdown{
+
+ .btn-dropdown {
   height: $nav-height;
-  background:inherit;
+  background: inherit;
   color: inherit;
- 
+  &:hover {
+   background: inherit;
+   cursor: pointer;
+  }
  }
 }
 
@@ -139,7 +143,7 @@
   }
  }
 
-/* Section Title */ 
+ /* Section Title */
  .section-title {
   @include margin(0 1rem 0 0);
   @include padding(0);
@@ -161,4 +165,3 @@
 .content {
  @include padding(calc(#{$nav-height} + 1em) 1em 1em 1em);
 }
-

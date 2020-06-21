@@ -19,45 +19,47 @@
     <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}">
    </span>
   </div>
+<ul class="mediaInputBlock">
+ <li>
+   {# Media Caption #}
+   <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}" placeholder="Media caption">
+   <label for="caption">Caption</label>
+ </li>
+ <li>
+  {# File Link #}
+  <input type="text" class="form-control form-control-sm" value="{{ baseUrl() ~ getMediaPath(media.filename) }}" readonly>
+     <label for="fileLink">Image URL</label>
+ </li>
+</ul>
 
   <div class="mediaBlock">
-   {# Media Caption #}
-   <div class="mediaCaption">
-    <input type="text" class="form-control form-control-sm" name="caption" value="{{ media.caption }}"
-     placeholder="Media caption">
-   </div>
-
-   {# File Link #}
-   <div>
-    <input type="text" class="form-control form-control-sm" value="{{ baseUrl() ~ getMediaPath(media.filename) }}" readonly>
-   </div>
-
    {# Featured Media #}
    <div class="mediaFeatured">
     <div class="form-check">
-     <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
-      {{ checked(media.feature) }}>
+     <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature" {{ checked(media.feature) }}>
      <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
     </div>
    </div>
-  </div>
-
-  {# Media Categories #}
-  <div class="mediaCategories">
-   {% for key, cat in categories %}
-   <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ key }}" name="category[]"
-     value="{{ key }}" {{ checked(media.categories[key]) }}>
-    <label class="form-check-label" for="{{ media.id }}-{{ key }}">{{ cat }}</label>
+   <hr>
+   {# Media Categories #}
+   <div class="mediaCategories">
+    {% for key, cat in categories %}
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ key }}" name="category[]" value="{{ key }}" {{ checked(media.categories[key]) }}>
+     <label class="form-check-label" for="{{ media.id }}-{{ key }}">{{ cat }}</label>
+    </div>
+    {% endfor %}
    </div>
-   {% endfor %}
   </div>
 
   {# Media Controls #}
   <div class="mediaControls">
-   <button class="btn btn-delete btn-block" type="button" data-media-id="{{ media.id }}" data-delete-media-prompt="Are you sure you want to delete this media file?">Delete</button>
+   <button class="btn btn-delete " type="button" data-media-id="{{ media.id }}"
+    data-delete-media-prompt="Are you sure you want to delete this media file?">Delete</button>
+    <button type="reset" class="btn btn-cancel">Discard</button>
    <button class="btn btn-save" type="button" data-form-button="save" disabled>Save</button>
   </div>
+
  </form>
 </div>
 {% endmacro editMedia %}
@@ -146,13 +148,13 @@
  <div class="modal-info">
   <p class="small-text"> Create web optimized copies of your image using your Tinify account.</p>
  </div>
-<hr class="mt-1rem">
+ <hr class="mt-1rem">
 
  {% endif %}
 
  {# Upload button #}
  <div class="btn-group">
-  <button class="btn btn-save btn-block" type="button" data-media-upload="file">Upload</button>
+  <button class="btn btn-save " type="button" data-media-upload="file">Upload</button>
  </div>
 </form>
 
