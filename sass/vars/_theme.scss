@@ -62,9 +62,9 @@ $btn-red: $clr-red;
 $btn-red-hover: darken($btn-red, 10%);
 $btn-red-disabled: lighten($btn-red, 10%);
 
-$btn-green: $clr-green;
-$btn-green-hover: darken($btn-green, 10%);
-$btn-green-disabled: lighten($btn-green, 10%);
+$btn-publish: $clr-green;
+$btn-publish-hover: darken($btn-publish, 10%);
+$btn-publish-disabled: lighten($btn-publish, 10%);
 
 $btn-cancel: $clr-notify;
 $btn-cancel-hover: darken($btn-cancel, 10%);
@@ -73,3 +73,7 @@ $btn-cancel-disabled: lighten($btn-cancel, 10%);
 $btn-apply: $clr-dark-grey;
 $btn-apply-hover: darken($btn-apply, 10%);
 $btn-apply-disabled: lighten($btn-apply, 10%);
+
+$btn-archive: $clr-warning;
+$btn-archive-hover: darken($btn-archive, 10%);
+$btn-archive-disabled: lighten($btn-archive, 10%)

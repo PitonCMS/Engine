@@ -13,7 +13,7 @@
     <div class="breadcrumb"></div>
     <h1 class="section-title">Media Categories</h1>
     <div class="btn-group">
-      <a class="btn btn-cancel" href="{{ pathFor('adminMediaCategoryEdit') }}" data-form-button="cancel">Discard</a>
+      <button type="reset" class="btn btn-cancel" href="{{ pathFor('adminMediaCategoryEdit') }}" data-form-button="cancel">Discard</button>
       <button type="submit" name="button" class="btn btn-save" value="save" data-form-button="save"
         disabled>Save</button>
     </div>
@@ -21,13 +21,13 @@
     {# Add New Element Button  #}
     <div class="btn-dropdown-block">
       <div class="btn btn-dropdown">
-        <span>Add Category</span>
+        <span>Add</span>
         <i class="fas fa-chevron-down"></i>
       </div>
 
       <div class="form-group-block">
         <div class="form-group">
-          <a name="#" class="form-group-link" data-category="add">Add</a>
+          <a name="#" class="form-group-link" data-category="add">Category</a>
         </div>
       </div>
 
@@ -37,7 +37,7 @@
 
 {% block content %}
 
-  <div data-category="wrapper">
+  <div class="mediaCategories-block" data-category="wrapper">
     {% for c in page.categories %}
     {# Macro category macro at bottom of file #}
     {{ mediaMacro.categoryInput(c) }}
