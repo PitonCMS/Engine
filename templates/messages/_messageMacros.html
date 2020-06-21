@@ -27,9 +27,9 @@
     </div>
 
     <div class="btn-group" action="{{ pathFor('adminMessageSave') }}">
-      <button class="btn btn-block btn-delete" type="button" title="Delete message">Delete</button>
-      <button class="btn btn-block btn-archive" type="button" title="Archive message">Archive</button>
-      <button class="btn btn-block btn-save" type="button"
+      <button class="btn  btn-delete" type="button" title="Delete message">Delete</button>
+      <button class="btn  btn-archive" type="button" title="Archive message">Archive</button>
+      <button class="btn  btn-save" type="button"
         data-is-read="{{ message.isRead }}">Mark as {% if message.isRead == 'Y' %}Unread{% else %}Read{% endif %}
       </button>
     </div>

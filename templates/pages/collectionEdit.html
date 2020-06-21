@@ -107,7 +107,7 @@
 
   <div class="btn-group-bottom">
     {% if page.collection.id %}
-    <button class="btn btn-delete btn-block" type="submit"
+    <button class="btn btn-delete " type="submit"
       formaction="{{ pathFor('adminCollectionDelete') }}" value="delete"
       {% if page.collection.page_count > 0 %}
       disabled title="You must remove all detail pages assigned to this collection before deleting"

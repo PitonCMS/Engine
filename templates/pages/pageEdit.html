@@ -177,8 +177,8 @@
     <input type="hidden" name="page_media_id" value="{{ page.media_id }}">
 
     <div class="btn-group-pageEdit">
-     <button class="btn btn-delete btn-block" type="button" data-media-clear="1">Clear Media</button>
-     <button class="btn btn-save btn-block" type="button" data-media-modal="1">Select Media</button>
+     <button class="btn btn-delete " type="button" data-media-clear="1">Clear Media</button>
+     <button class="btn btn-save " type="button" data-media-modal="1">Select Media</button>
     </div>
    </div>
    {% endif %}
@@ -189,7 +189,7 @@
  {# Delete Page Button #}
  <div class="btn-group-bottom span">
   {% if page.id %}
-  <button class="btn btn-delete btn-block" type="submit"
+  <button class="btn btn-delete " type="submit"
    data-delete-prompt="Are you sure you want to permanently delete this page?"
    formaction="{{ pathFor('adminPageDelete') }}" {% if page.page_slug == 'home' %}disabled
    title="The home page cannot be deleted." {% endif %}>Delete Page</button>
