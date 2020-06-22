@@ -86,8 +86,39 @@ const setFilterPath = function(route) {
     filterPath = route;
 }
 
+/**
+ * Pagination Controls
+ * Interrupts page link request to submit as XHR to keep control filter state
+ * @param {Event} event
+ */
+const paginationControl = function(event) {
+    if (event.target.closest(".pagination > div")) {
+        event.preventDefault();
+        enableSpinner();
+
+        // Get query string parameters from pagination link and submit to XHRPromise as a URLSearchParams object
+        let link = event.target.closest(".pagination > div").querySelector("a").href;
+        let url = new URL(link);
+        let searchParams = new URLSearchParams(url.search);
+
+        getXHRPromise(filterPath, searchParams)
+        .then((data) => {
+            removeRows();
+            return data;
+        })
+        .then(data => {
+            filterResults.insertAdjacentHTML('afterbegin', data);
+        })
+        .then(() => {
+            disableSpinner();
+        });
+
+    }
+}
+
 // Bind events
 document.addEventListener("click", ApplyFilterControl, false);
 document.addEventListener("click", clearFilterControl, false);
+document.addEventListener("click", paginationControl, false);
 
 export { setFilterPath, applyFilters };
