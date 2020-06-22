@@ -1,16 +1,26 @@
 /**
- * Filter Controls for Results Sets
+ * Filter and Search Controls for Results Sets
  */
 import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise } from './xhrPromise.js';
 
-// Expect one content wrapper per page for result set
+// Expect one content wrapper (data-filter="content") per page for result set
 const filterResults = document.querySelector(`[data-filter="content"]`);
+// Request route for filter search
 let filterPath;
 
 /**
+ * Set Route to Request
+ * Exported to calling file to set route
+ * @param {string} route
+ */
+const setFilterPath = function(route) {
+    filterPath = route;
+}
+
+/**
  * Remove Rows
- * Clears result set
+ * Clears result set from filterResults constant
  */
 const removeRows = function() {
     if (filterResults) {
@@ -22,7 +32,7 @@ const removeRows = function() {
 
 /**
  * Clear This Filter Control
- * Resets the current filter, but not others on page
+ * Resets the current filter, but not other filters
  * @param {Event} event
  */
 const clearFilterControl = function(event) {
@@ -42,6 +52,24 @@ const ApplyFilterControl = function(event) {
     if (filterPath && filterResults && event.target.dataset.filterControl === "apply") {
         applyFilters();
     }
+}
+
+/**
+ * Private: Get Filter XHR Promise
+ * @param {object} options
+ */
+const getFilterXHRPromise = function(options) {
+    getXHRPromise(filterPath, options)
+        .then((data) => {
+            removeRows();
+            return data;
+        })
+        .then(data => {
+            filterResults.insertAdjacentHTML('afterbegin', data);
+        })
+        .then(() => {
+            disableSpinner();
+        });
 }
 
 /**
@@ -65,25 +93,7 @@ const applyFilters = function() {
         }
     });
 
-    getXHRPromise(filterPath, selectedOptions)
-        .then((data) => {
-            removeRows();
-            return data;
-        })
-        .then(data => {
-            filterResults.insertAdjacentHTML('afterbegin', data);
-        })
-        .then(() => {
-            disableSpinner();
-        });
-}
-
-/**
- * Route to Request
- * @param {string} route
- */
-const setFilterPath = function(route) {
-    filterPath = route;
+    getFilterXHRPromise(selectedOptions);
 }
 
 /**
@@ -101,18 +111,7 @@ const paginationControl = function(event) {
         let url = new URL(link);
         let searchParams = new URLSearchParams(url.search);
 
-        getXHRPromise(filterPath, searchParams)
-        .then((data) => {
-            removeRows();
-            return data;
-        })
-        .then(data => {
-            filterResults.insertAdjacentHTML('afterbegin', data);
-        })
-        .then(() => {
-            disableSpinner();
-        });
-
+        getFilterXHRPromise(searchParams);
     }
 }
 

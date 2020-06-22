@@ -11,4 +11,3 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{}],"U1es":[function(require,module,exports) {
 "use strict";require("./modules/main.js");var e=require("./modules/url.js");document.querySelector('[data-url-slug="source"]').addEventListener("input",function(u){(0,e.setCleanSlug)(u.target.value)},!1),document.querySelector('[data-url-slug-lock="1"]').addEventListener("click",function(u){(0,e.unlockSlug)(u)},!1);
 },{"./modules/main.js":"mlrC","./modules/url.js":"EQVZ"}]},{},["U1es"], null)
-//# sourceMappingURL=/collectionEdit.js.map

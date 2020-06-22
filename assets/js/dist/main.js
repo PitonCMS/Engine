@@ -9,4 +9,3 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{"./formControl.js":"ncrz","./alert.js":"Jvqk","./collapse.js":"BLPW"}],"epB2":[function(require,module,exports) {
 "use strict";require("./modules/main.js");
 },{"./modules/main.js":"mlrC"}]},{},["epB2"], null)
-//# sourceMappingURL=/main.js.map
