@@ -20,7 +20,8 @@
         "monolog/monolog": "~1.25.3",
         "erusev/parsedown": "~1.7.4",
         "phpmailer/phpmailer": "~6.1.6",
-        "justinrainbow/json-schema": "~5.2.9"
+        "justinrainbow/json-schema": "~5.2.9",
+        "tinify/tinify": "~1.5.2"
         },
     "autoload": {
         "psr-4": {
