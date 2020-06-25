@@ -133,8 +133,8 @@ class Admin extends Base
         if (isset($this->container->settings['site']['appAlert'])) {
             $appData = json_decode($this->container->settings['site']['appAlert'], true);
             if (is_array($appData)) {
-                // Append to $alert array
-                $alert = array_merge($alert, $appData);
+                // Append to $alert array, if exists
+                $alert = array_merge($alert ?? [], $appData);
 
                 // Unset app alert data
                 $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
