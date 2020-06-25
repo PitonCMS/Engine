@@ -63,9 +63,6 @@ return call_user_func(
             require ROOT_DIR . 'config/dependencies.php';
         }
 
-        // Invoke session handler and run prior to other steps to ensure the session cookie is set properly before any ouptput
-        $startSession = $container['sessionHandler'];
-
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
