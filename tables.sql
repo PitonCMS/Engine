@@ -176,7 +176,8 @@ CREATE TABLE IF NOT EXISTS `message` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `is_read_idx` (`is_read`),
-  KEY `created_date_idx` (`created_date`)
+  KEY `created_date_idx` (`created_date`),
+  FULLTEXT `message_ft` (`name`,`email`,`message`,`context`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `page_slug`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `media_id`, `created_by`, `created_date`, `updated_by`, `updated_date`)
@@ -196,4 +197,4 @@ VALUES
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
   ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now(),
   ('piton', NULL, 'engine', NULL, 1, now(), 1, now()),
-  ('piton', NULL, 'schema', NULL, 1, now(), 1, now());
+  ('piton', NULL, 'schema', '1', 1, now(), 1, now());

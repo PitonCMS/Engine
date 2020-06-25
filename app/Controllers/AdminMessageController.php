@@ -83,9 +83,17 @@ HTML;
         $pagination = $this->container->adminPagePagination;
 
         $option = $this->request->getQueryParam('status', 'unread');
+        $terms = $this->request->getQueryParam('terms');
 
-        // Get all messages and setup pagination
-        $messages = $messageMapper->findMessages($option, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        if (!empty($terms)) {
+            // This was a search request
+            $messages = $messageMapper->textSearch($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        } else {
+            // Otherwise return filtered list
+            $messages = $messageMapper->findMessages($option, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        }
+
+        // Setup pagination
         $pagination->setTotalResultsFound($messageMapper->foundRows() ?? 0);
         $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
         $this->container->view->addExtension($pagination);
@@ -104,7 +112,7 @@ HTML;
      */
     public function updateStatus(): Response
     {
-        // Message control logic:
+        // Message is_read status logic:
         // - New messages can be archived or set to read status
         // - Read messages can be archived or set to unread status
         // - Archived messages can set to read status

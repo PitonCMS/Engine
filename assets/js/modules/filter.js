@@ -97,6 +97,17 @@ const applyFilters = function() {
 }
 
 /**
+ * Text Search
+ */
+const search = function() {
+    let terms = document.querySelector(`[data-filter="search"] input`);
+    let query = {"terms": terms.value};
+    enableSpinner();
+
+    getFilterXHRPromise(query);
+}
+
+/**
  * Pagination Controls
  * Interrupts page link request to submit as XHR to keep control filter state
  * @param {Event} event
@@ -116,8 +127,15 @@ const paginationControl = function(event) {
 }
 
 // Bind events
+// There may be more than one filter control on the page
 document.addEventListener("click", ApplyFilterControl, false);
 document.addEventListener("click", clearFilterControl, false);
 document.addEventListener("click", paginationControl, false);
+
+// There should be only one search control per page, so binding directly to element
+document.querySelector(`[data-filter-control="search"]`)?.addEventListener("click", search, false);
+document.querySelector(`[data-filter="search"] input`)?.addEventListener("keypress", (event) => {
+    if (event.key === 'Enter') search();
+}, false);
 
 export { setFilterPath, applyFilters };

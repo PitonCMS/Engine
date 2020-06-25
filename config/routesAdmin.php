@@ -182,7 +182,7 @@ $app->group('/admin', function () {
             return (new AdminMessageController($this))->showMessages();
         })->setName('adminMessage');
 
-        // XHR: Get messages
+        // XHR: Get filtered messages
         $this->get('/get', function ($args) {
             return (new AdminMessageController($this))->getMessages();
         })->setName('adminMessageGet');
