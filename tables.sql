@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `media` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `optimized_idx` (`optimized`),
-  KEY `caption_idx` (`caption`)
+  KEY `caption_idx` (`caption`),
+  FULLTEXT KEY `media_ft` (`filename`,`caption`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category` (
@@ -96,6 +97,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   UNIQUE KEY `collection_id_page_slug_uq` (`collection_id`,`page_slug`),
   KEY `published_date_idx` (`published_date`),
   KEY `media_id_idx` (`media_id`),
+  FULLTEXT KEY `page_ft` (`title`,`sub_title`,`meta_description`),
   CONSTRAINT `page_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL,
   CONSTRAINT `page_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   PRIMARY KEY (`id`),
   KEY `page_id_idx` (`page_id`),
   KEY `media_id_idx` (`media_id`),
+  FULLTEXT KEY `page_element_ft` (`title`,`content_raw`),
   CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
   CONSTRAINT `page_element_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL,
   CONSTRAINT `page_element_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE SET NULL
@@ -160,7 +163,8 @@ CREATE TABLE IF NOT EXISTS `data_store` (
   PRIMARY KEY (`id`),
   KEY `category_idx` (`category`),
   KEY `page_id_category_uq` (`page_id`, `category`),
-  CONSTRAINT `page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE
+  CONSTRAINT `page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
+  FULLTEXT KEY `data_store_ft` (`setting_value`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `message` (
@@ -177,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `is_read_idx` (`is_read`),
   KEY `created_date_idx` (`created_date`),
-  FULLTEXT `message_ft` (`name`,`email`,`message`,`context`)
+  FULLTEXT KEY `message_ft` (`name`,`email`,`message`,`context`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `page_slug`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `media_id`, `created_by`, `created_date`, `updated_by`, `updated_date`)
@@ -195,6 +199,6 @@ VALUES
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
-  ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now(),
+  ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now()),
   ('piton', NULL, 'engine', NULL, 1, now(), 1, now()),
   ('piton', NULL, 'schema', '1', 1, now(), 1, now());
