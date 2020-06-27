@@ -29,7 +29,7 @@ class AdminSettingController extends AdminBaseController
      */
     public function showSettings(): Response
     {
-        return $this->render('tools/settings.html');
+        return $this->render('settings/settings.html');
     }
 
     /**
@@ -73,7 +73,7 @@ class AdminSettingController extends AdminBaseController
         // Send category name to page to help with redirects
         $data['category'] = $args['category'];
 
-        return $this->render('tools/editSettings.html', $data);
+        return $this->render('settings/editSettings.html', $data);
     }
 
     /**
