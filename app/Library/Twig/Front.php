@@ -108,7 +108,7 @@ class Front extends Base
      * @param  int   $collectionId Collection ID
      * @return array|null
      */
-    public function getCollectionPages(int $collectionId): ?array
+    public function getCollectionPages(?int $collectionId): ?array
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');

@@ -292,7 +292,7 @@ HTML;
      * @return array|null
      */
     public function findCollectionPagesById(
-        int $collectionId,
+        ?int $collectionId,
         string $status = 'published',
         int $limit = null,
         int $offset = null
