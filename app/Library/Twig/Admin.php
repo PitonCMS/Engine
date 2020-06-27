@@ -57,7 +57,12 @@ class Admin extends Base
     {
         return array_merge_recursive(parent::getGlobals(), [
             'site' => [
-                'environment' => ['projectDir' => basename(ROOT_DIR)]
+                'environment' => [
+                    'projectDir' => basename(ROOT_DIR),
+                    'sessionUserId' => $this->container->sessionHandler->getData('user_id'),
+                    'sessionUserFirstName' => $this->container->sessionHandler->getData('first_name'),
+                    'sessionUserLastName' => $this->container->sessionHandler->getData('last_name'),
+                    ]
             ]
         ]);
     }

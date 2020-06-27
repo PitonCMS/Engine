@@ -90,6 +90,8 @@ class AdminAccessController extends AdminBaseController
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'role' => $user->role,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
             ]);
 
             // Get request details to create login link and email to user
