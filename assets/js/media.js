@@ -18,9 +18,10 @@ const saveMedia = function(event) {
 
     postXHRPromise(pitonConfig.routes.adminMediaSave, new FormData(form))
         .then(() => {
-            // Show save complete by disabling save button again
-            let button = form.querySelector(`[data-form-button="save"]`);
-            button.disabled = true;
+            // Show save complete by disabling save and discard buttons again
+            form.querySelectorAll(`[data-form-button="save"], [data-form-button="cancel"]`)?.forEach(control => {
+                control.disabled = true;
+            });
         })
         .then(() => {
             disableSpinner();
