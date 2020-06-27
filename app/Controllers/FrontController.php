@@ -78,10 +78,10 @@ class FrontController extends FrontBaseController
             $messageMapper->save($message);
 
             // Send message to workflow email
-            if ($this->siteSettings['contactFormEmail']) {
+            if ($this->settings['site']['contactFormEmail']) {
                 // Only send email if a contact form email setting is saved
-                $siteName = empty($this->siteSettings['displayName']) ? 'PitonCMS' : $this->siteSettings['displayName'];
-                $email->setTo($this->siteSettings['contactFormEmail'], '')
+                $siteName = empty($this->settings['site']['displayName']) ? 'PitonCMS' : $this->settings['site']['displayName'];
+                $email->setTo($this->settings['site']['contactFormEmail'], '')
                     ->setSubject("New Contact Message to $siteName")
                     ->setMessage("{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}")
                     ->send();
@@ -89,7 +89,7 @@ class FrontController extends FrontBaseController
         }
 
         // Set the response type and return
-        $responseText = $this->siteSettings['contactFormAcknowledgement'] ?? "Thank You";
+        $responseText = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
         $r = $this->response->withHeader('Content-Type', 'application/json');
         return $r->write(json_encode(["status" => "success", "response" => $responseText]));
     }

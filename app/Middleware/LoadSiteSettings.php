@@ -66,12 +66,10 @@ class LoadSiteSettings
         // Because of PSR7 immutability the $request object passed into the controller constructor is a copy
         // and does not have the route object attribute
         $route = $request->getAttribute('route');
-        $this->settings['currentRouteName'] = ($route !== null) ? $route->getName() : null;
+        $this->settings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
 
-        // Replace site settings with new settings
-        $this->appSettings->replace([
-            'site' => $this->settings
-        ]);
+        // Update with new settings
+        $this->appSettings->replace($this->settings);
 
         // Next Middleware call
         return $next($request, $response);
@@ -93,21 +91,28 @@ class LoadSiteSettings
         } catch (PDOException $th) {
             // SQLSTATE[42S02]
             if ($th->getCode() === '42S02') {
-                // Go to installer
+                // Go to installer script
                 header('Location: /install.php', true, 302);
                 exit;
-            } else {
-                throw $th;
             }
+
+            throw $th;
         }
 
         $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
-        // Create new multi-dimensional array
-        $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
+        // Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
+        foreach ($siteSettings as $row) {
+            if ($row->category === 'piton') {
+                $this->settings['environment'][$row->setting_key] = $row->setting_value;
+            } else {
+                $this->settings['site'][$row->setting_key] = $row->setting_value;
+            }
+        }
 
         // Load additional settings from server config file into settings array
-        $this->settings['production'] = $this->appSettings['site']['production'];
-        $this->settings['assetVersion'] = ($this->settings['production']) ? $this->settings['engine'] : date('U');
+        $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+        $this->settings['environment']['assetVersion'] =
+            ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
     }
 }

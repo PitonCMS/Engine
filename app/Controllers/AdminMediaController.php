@@ -206,7 +206,7 @@ class AdminMediaController extends AdminBaseController
                 $doOptimize = false;
                 if (
                     $this->request->getParsedBodyParam('optimize', null) === 'on' &&
-                    !empty($this->siteSettings['tinifyApiKey']) &&
+                    !empty($this->settings['site']['tinifyApiKey']) &&
                     in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
                 ) {
                     $doOptimize = true;

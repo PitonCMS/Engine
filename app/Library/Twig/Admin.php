@@ -57,7 +57,7 @@ class Admin extends Base
     {
         return array_merge_recursive(parent::getGlobals(), [
             'site' => [
-                'settings' => ['projectDir' => basename(ROOT_DIR)]
+                'environment' => ['projectDir' => basename(ROOT_DIR)]
             ]
         ]);
     }
@@ -130,8 +130,8 @@ class Admin extends Base
         }
 
         // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
-        if (isset($this->container->settings['site']['appAlert'])) {
-            $appData = json_decode($this->container->settings['site']['appAlert'], true);
+        if (isset($this->container->settings['environment']['appAlert'])) {
+            $appData = json_decode($this->container->settings['environment']['appAlert'], true);
             if (is_array($appData)) {
                 // Append to $alert array, if exists
                 $alert = array_merge($alert ?? [], $appData);
@@ -267,7 +267,7 @@ class Admin extends Base
     public function getBreadcrumb(): ?array
     {
         // TODO
-        $currentRoute = $this->container['settings']['site']['currentRouteName'];
+        $currentRoute = $this->container['settings']['environment']['currentRouteName'];
 
         return [];
     }
@@ -282,10 +282,10 @@ class Admin extends Base
      */
     public function getJsFileSource(string $file, bool $module = false)
     {
-        if ($this->container['settings']['site']['production'] || !$module) {
-            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['site']['assetVersion'];
+        if ($this->container['settings']['environment']['production'] || !$module) {
+            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         } else {
-            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['site']['assetVersion'];
+            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         }
 
         $moduleType = ($module) ? 'type="module"' : '';

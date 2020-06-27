@@ -232,7 +232,7 @@ class AdminPageController extends AdminBaseController
             $page->published_date = $date->format('Y-m-d');
         } elseif (!empty($publishedDate)) {
             // Otherwise if a date was provided, honor that date
-            $date = DateTime::createFromFormat($phpDateFormat[$this->siteSettings['dateFormat']], $publishedDate);
+            $date = DateTime::createFromFormat($phpDateFormat[$this->settings['site']['dateFormat']], $publishedDate);
             $page->published_date = $date->format('Y-m-d');
         } else {
             $page->published_date = null;

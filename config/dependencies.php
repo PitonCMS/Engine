@@ -35,7 +35,7 @@ $container['view'] = function ($c) {
 
     $view = new Slim\Views\Twig($templatePaths, [
         'cache' => ROOT_DIR . 'cache/twig',
-        'debug' => !$settings['site']['production'],
+        'debug' => !$settings['environment']['production'],
         'autoescape' => false,
     ]);
 
@@ -62,7 +62,7 @@ $container['view'] = function ($c) {
     }
 
     // Load Twig debugger if in development
-    if ($settings['site']['production'] === false) {
+    if (!$settings['environment']['production']) {
         $view->addExtension(new Twig\Extension\DebugExtension());
     }
 
@@ -98,7 +98,7 @@ $container['adminMediaPagination'] = function ($c) {
  * @return Monolog\Logger
  */
 $container['logger'] = function ($c) {
-    $level = ($c->get('settings')['site']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
+    $level = ($c->get('settings')['environment']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
     $logger = new Monolog\Logger('app');
     $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_DIR . 'logs/' . date('Y-m-d') . '.log', $level));
 

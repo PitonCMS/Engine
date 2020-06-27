@@ -75,6 +75,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         return [
             'site' => [
                 'settings' => $this->container['settings']['site'] ?? null,
+                'environment' => $this->container['settings']['environment'] ?? null,
                 'csrf' => [
                     'name' => $this->csrfTokenName,
                     'value' => $this->csrfTokenValue
@@ -165,7 +166,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
-        if ($routeName === $this->container->settings['site']['currentRouteName']) {
+        if ($routeName === $this->container->settings['environment']['currentRouteName']) {
             return $returnValue;
         }
 
@@ -183,7 +184,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function currentRouteGroup(string $routeGroup, string $returnValue = 'active'): ?string
     {
-        if (substr($this->container->settings['site']['currentRouteName'], 0, strlen($routeGroup)) === $routeGroup) {
+        if (substr($this->container->settings['environment']['currentRouteName'], 0, strlen($routeGroup)) === $routeGroup) {
             return $returnValue;
         }
 

@@ -31,7 +31,7 @@
 
  <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
- <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.settings.assetVersion }}">
+ <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
 
  {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
  {{ include('@admin/includes/_pitonConfigJs.html') }}
@@ -56,14 +56,13 @@
   </div>
   <div class="form-group-block">
    <div class="form-group">
-    <a href="/admin/tools/user/edit/1">Profile</a>
+    <a href="{{ pathFor('adminToolUserEdit') }}">Profile</a>
    </div>
    <div class="form-group">
     <a href="#">Logout</a>
    </div>
   </div>
  </div>
-
 
   </header>
 

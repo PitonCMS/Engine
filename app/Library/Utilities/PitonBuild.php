@@ -126,7 +126,7 @@ class PitonBuild
         if ($lines) {
             foreach ($lines as &$line) {
                 // Production environment to false
-                if (strpos($line, 'site') !== false && strpos($line, 'production') !== false) {
+                if (strpos($line, 'environment') !== false && strpos($line, 'production') !== false) {
                     $line = str_replace('true', 'false', $line);
                 }
 

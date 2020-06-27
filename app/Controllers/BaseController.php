@@ -48,10 +48,10 @@ class BaseController
     protected $alert = [];
 
     /**
-     * Site Settings Array
+     * Settings Array
      * @var array
      */
-    protected $siteSettings = [];
+    protected $settings = [];
 
     /**
      * Constructor
@@ -63,7 +63,8 @@ class BaseController
         $this->container = $container;
         $this->request = $container->request;
         $this->response = $container->response;
-        $this->siteSettings = $container->get('settings')['site'];
+        $this->settings['site'] = $container->get('settings')['site'];
+        $this->settings['environment'] = $container->get('settings')['environment'];
     }
 
     /**

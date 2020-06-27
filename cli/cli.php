@@ -77,14 +77,25 @@ $container['sessionHandler'] = function ($c) {
 // Load saved site settings from data_store and merge into $container['settings']['site']
 $dataStoreMapper = ($container->dataMapper)('DataStoreMapper');
 $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
-$settings = array_column($siteSettings, 'setting_value', 'setting_key');
-$container['settings']['site'] = array_merge($container['settings']['site'], $settings);
+
+// Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
+$loadSettings = [];
+foreach ($siteSettings as $row) {
+    if ($row->category === 'piton') {
+        $loadSettings['environment'][$row->setting_key] = $row->setting_value;
+    } else {
+        $loadSettings['site'][$row->setting_key] = $row->setting_value;
+    }
+}
+
+$container['settings']['site'] = array_merge($container['settings']['site'] ?? [], $loadSettings['site']);
+$container['settings']['environment'] = array_merge($container['settings']['environment'], $loadSettings['environment']);
 
 // Parse CLI request and ignore the filename
 $argv = $GLOBALS['argv'];
 array_shift($argv);
 
-if ($argv[0] === 'optimizeMedia') {
+if (isset($argv[0]) && $argv[0] === 'optimizeMedia') {
     $optimizer = new OptimizeMedia($container);
     $optimizer->run();
 }
