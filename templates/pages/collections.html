@@ -22,23 +22,6 @@
 
 {% block content %}
 
-<!-- Media Filter -->
-<div class="filter-block">
-  <div class="input-block">
-    <div class="input-block__icon">
-      <i class="fas fa-search"></i>
-    </div>
-    <div class="input-block__input">
-      <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Pages"
-        autocomplete="false">
-    </div>
-  </div>
-
-  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', ['All', 'Published', 'Pending', 'Draft']) }}
-  {{ pitonMacro.filterOptions('checkbox', 'By Template', 'template', ['All', 'template1', 'template2', 'withoutHero', 'withHero']) }}
-
-</div>
-
 {# List Titles #}
 <div class="list-item-collections__header">
   <div class="list-item-collections__header-title">Title</div>
