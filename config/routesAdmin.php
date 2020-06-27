@@ -35,7 +35,7 @@ $app->group('/admin', function () {
     $this->group('/page', function () {
         // XHR: Get page list asynchronously
         $this->get('/get', function ($args) {
-            return (new AdminPageController($this))->showPages();
+            return (new AdminPageController($this))->getPages();
         })->setName('adminPageGet');
 
         // Edit or add new page. Must provide ID or page layout argument
@@ -69,7 +69,7 @@ $app->group('/admin', function () {
 
         // Show All Pages
         $this->get('[/]', function ($args) {
-            return (new AdminPageController($this))->showPages($args);
+            return (new AdminPageController($this))->showPages();
         })->setName('adminPage');
 
         // End page elements

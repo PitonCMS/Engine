@@ -37,8 +37,13 @@
 <!-- Media Filter -->
 <div class="filter-block">
 
+  {# This creates an array of available collections appended to "all" and "pages" #}
+  {% set collections = {"all": "All", "pages": "Pages"} %}
+  {% set collections = collections|merge(getCollections()|column('collection_title', 'collection_slug')) %}
+
   {{ pitonMacro.filterSearch() }}
-  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', ['All', 'Published', 'Pending', 'Draft']) }}
+  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', {"all": "All", "published": "Published", "pending": "Pending", "draft": "Draft"}) }}
+  {{ pitonMacro.filterOptions('radio', 'Collection', 'type', collections) }}
 
 </div>
 
@@ -52,16 +57,18 @@
 </div>
 
 {# Page List  #}
-{% for p in page.pages %}
-{# From _pageMacros #}
-{{ pageMacro.pageListItem(p) }}
-{% else %}
-<h5>No Pages Found</h5>
-{% endfor %}
+<div data-filter="content">
 
-{{ pagination() }}
+  {% for p in page.pages %}
+    {{ pageMacro.pageListItem(p) }}
+  {% endfor %}
+
+  {{ pagination() }}
+
+</div>
+
 {% endblock content %}
 
 {% block foot %}
-{{ getJsFileSource('pages') }}
+{{ getJsFileSource('pages', true) }}
 {% endblock foot %}

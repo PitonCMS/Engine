@@ -27,10 +27,57 @@ class AdminPageController extends AdminBaseController
      * Show Pages and Collection Pages
      *
      * Show all pages and collection pages
-     * @param array $args Route arguments
+     * @param void
      * @return Response
      */
     public function showPages(): Response
+    {
+        $data['pages'] = $this->loadPages();
+        return $this->render('pages/pages.html', $data);
+    }
+
+    /**
+     * Get Pages
+     *
+     * XHR Request
+     * Returns filtered page list
+     * @param void
+     * @return Response
+     */
+    public function getPages(): Response
+    {
+        try {
+            $pages = $this->loadPages();
+
+            // Make string template
+            $template =<<<HTML
+            {% import '@admin/pages/_pageMacros.html' as pageMacro %}
+            {% for p in pages %}
+                {{ pageMacro.pageListItem(p) }}
+            {% endfor %}
+
+            {{ pagination() }}
+HTML;
+
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template, ['pages' => $pages]);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting pages: ". $th->getMessage();
+        }
+
+        return $this->xhrResponse($status, $text);
+    }
+
+    /**
+     * Load Pages
+     *
+     * Get all pages using query string parameters
+     * @param void
+     * @param array
+     * @uses GET params
+     */
+    protected function loadPages(): array
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -38,52 +85,34 @@ class AdminPageController extends AdminBaseController
         $definition = $this->container->jsonDefinitionHandler;
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
-        // Get filter if requested
-        $status = htmlspecialchars($this->request->getQueryParam('pageStatus', 'all'));
-
-        // Validate filter string
-        if (!in_array($status, ['published', 'pending', 'draft', 'all'])) {
-            $this->setAlert('danger', 'Invalid Value', "The filter query $status is not valid.");
-        }
+        // Get filters or search if requested
+        $status = htmlspecialchars($this->request->getQueryParam('status', 'all'));
+        $type = htmlspecialchars($this->request->getQueryParam('type', 'all'));
+        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
 
         // Get data
-        $data['pages'] = $pageMapper->findContent($status, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        if (!empty($terms)) {
+            // This was a search request
+            $pages = $pageMapper->searchContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        } else {
+            // Otherwise return filtered list
+            $pages = $pageMapper->findContent($status, $type, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        }
 
         // Setup pagination
-        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $this->container->view->addExtension($pagination);
 
         // Use filename as key for quick look up when adding template name into result set
         $pageTemplates = array_combine(array_column($pageTemplates, 'filename'), $pageTemplates);
 
         // Set template name in result set
-        foreach ($data['pages'] as &$page) {
+        foreach ($pages as &$page) {
             $page->template_name = $pageTemplates[$page->template]['name'] ?? null;
         }
 
-        // Check if this request was XHR
-        if ($this->request->isXhr()) {
-            try {
-                // Render template
-                $template =
-                    "{% import \"@admin/pages/_pageMacros.html\" as pageMacro %}
-                    {% for p in page.pages %}
-                        {{ pageMacro.pageListItem(p, 'adminPageEdit') }}
-                    {% endfor %}";
-
-                $status = "success";
-                $text = $this->container->view->fetchFromString($template, ['page' => $data]);
-            } catch (Throwable $th) {
-                $status = "error";
-                $text = "Exception getting data: {$th->getMessage()}";
-            }
-
-            return $this->xhrResponse($status, $text);
-        }
-
-        // Otherwise render whole page
-        return $this->render('pages/pages.html', $data);
+        return $pages;
     }
 
     /**

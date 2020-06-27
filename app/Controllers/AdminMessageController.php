@@ -73,7 +73,7 @@ HTML;
      *
      * Get all messages using query string params
      * @param void
-     * @return string
+     * @return array
      * @uses GET params
      */
     protected function loadMessages(): array
@@ -82,8 +82,9 @@ HTML;
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $pagination = $this->container->adminPagePagination;
 
-        $option = $this->request->getQueryParam('status', 'unread');
-        $terms = $this->request->getQueryParam('terms');
+        // Get filters or search if requested
+        $option = htmlspecialchars($this->request->getQueryParam('status', 'unread'));
+        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
 
         if (!empty($terms)) {
             // This was a search request

@@ -57,20 +57,32 @@ class PageMapper extends DataMapperAbstract
      *
      * Gets all pages and collection pages without elements
      * @param  string $status 'draft'|'pending'|'published'|'all'
+     * @param  string $type   'all'|'pages\|collection_slug
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
-    public function findContent(string $status, int $limit = null, int $offset = null): ?array
+    public function findContent(?string $status, ?string $type, int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect(true);
+        $this->makeSelect();
 
+        // Status filter. status = all skips these statement
         if ($status === 'published') {
             $this->sql .= " and p.published_date <= '{$this->today}'";
         } elseif ($status === 'pending') {
             $this->sql .= " and p.published_date > '{$this->today}'";
         } elseif ($status === 'draft') {
             $this->sql .= " and p.published_date is null";
+        }
+
+        // Type filter, type = all skips these statements
+        if (!empty($type) && $type === 'pages') {
+            // Only pages, no collections
+            $this->sql .= " and c.collection_slug is null";
+        } elseif (!empty($type) && $type !== 'all') {
+            // Collection filter
+            $this->sql .= " and c.collection_slug = ?";
+            $this->bindValues[] = $type;
         }
 
         if ($limit) {
@@ -87,6 +99,47 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
+     * Text Search Content
+     *
+     * This query searches each of these fields for having all supplied terms:
+     *  - page.title, page.sub_title page.meta_description
+     *  - page_element.title, page_element.content_raw
+     * @param  string $terms                Search terms
+     * @param  int    $limit                Limit
+     * @param  int    $offset               Offset
+     * @return array|null
+     */
+    public function searchContent(string $terms, int $limit = null, int $offset = null): ?array
+    {
+        $this->makeSelect();
+        $this->sql .= ' and match(`title`,`sub_title`,`meta_description`) against (? IN BOOLEAN MODE)';
+        $this->bindValues[] = $terms;
+
+        // Get page element content
+        $this->sql .=<<<HTML
+ or p.id in (
+    select page_id
+    from page_element
+    where match(`title`,`content_raw`) against(?)
+)
+HTML;
+        $this->bindValues[] = $terms;
+        $this->sql .= ' order by `created_date` desc';
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
      * Find All Published Page Content
      *
      * Gets all pages and collection pages without elements
@@ -96,7 +149,7 @@ class PageMapper extends DataMapperAbstract
      */
     public function findPublishedContent(int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect(true);
+        $this->makeSelect();
         $this->sql .= " and p.published_date <= '{$this->today}'";
 
         if ($limit) {
@@ -124,7 +177,7 @@ class PageMapper extends DataMapperAbstract
      */
     public function findPages(string $status = 'published', int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect(true);
+        $this->makeSelect();
         $this->sql .= ' and p.collection_id is null';
 
         if ($status === 'published') {
@@ -200,7 +253,7 @@ class PageMapper extends DataMapperAbstract
         int $limit = null,
         int $offset = null
     ): ?array {
-        $this->makeSelect(true);
+        $this->makeSelect();
         $this->sql .= ' and c.collection_slug = ?';
         $this->bindValues[] = $collectionSlug;
 
@@ -244,7 +297,7 @@ class PageMapper extends DataMapperAbstract
         int $limit = null,
         int $offset = null
     ): ?array {
-        $this->makeSelect(true);
+        $this->makeSelect();
         $this->sql .= ' and c.id = ?';
         $this->bindValues[] = $collectionId;
 
@@ -283,7 +336,7 @@ class PageMapper extends DataMapperAbstract
      */
     public function findCollectionPages(string $status = 'published', int $limit = null, int $offset = null): ?array
     {
-        $this->makeSelect(true);
+        $this->makeSelect();
         $this->sql .= ' and p.collection_id is not null';
 
         if ($status === 'published') {
@@ -333,14 +386,13 @@ class PageMapper extends DataMapperAbstract
      *
      * Make select statement with outer join to media
      * Overrides and sets $this->sql.
-     * @param  bool $foundRows Set to true to get foundRows() after query
+     * @param bool $foundRows
      * @return void
      */
     protected function makeSelect(bool $foundRows = false)
     {
-        $modifier = $foundRows ? 'SQL_CALC_FOUND_ROWS ' : '';
         $this->sql = <<<SQL
-select $modifier
+select SQL_CALC_FOUND_ROWS
     c.collection_slug,
     c.collection_title,
     p.*,
