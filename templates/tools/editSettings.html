@@ -23,7 +23,7 @@ Edit {{ page.category|capitalize }} Settings
 
     <!-- Control Buttons -->
     <div class="btn-group">
-      <button type="reset" class="btn btn-cancel" href="{{ pathFor('adminToolSettingEdit', {'category': page.category }) }}" data-form-button="cancel">Discard</button>
+      <button type="reset" class="btn btn-cancel" data-form-button="cancel" disabled>Discard</button>
       <button class="btn btn-save" type="submit" name="button" value="save" data-form-button="save" disabled>Save</button>
     </div><!-- /.btn-group -->
   </div><!-- /.content-header-inner  -->

@@ -25,8 +25,8 @@
       {% else %}Add{% endif %} Collection
     </h1>
     <div class="btn-group">
-      <button type="reset" class="btn btn-cancel" href="{{ pathFor('adminCollectionEdit', {'id': page.collection.id}) }}" data-form-button="cancel">Discard</button>
-      <button type="submit" name="button" class="btn btn-save" value="save" data-form-button="save" disabled>Save</button>
+      <button type="reset" class="btn btn-cancel" data-form-reset-href="{{ pathFor('adminCollectionEdit', {'id': page.collection.id}) }}" data-form-button="cancel" disabled>Discard</button>
+      <button type="submit" class="btn btn-save" data-form-button="save" disabled>Save</button>
     </div>
   </div>
 

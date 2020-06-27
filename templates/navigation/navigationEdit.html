@@ -15,8 +15,8 @@
   <h1 class="section-title">Nav Structure: {{ page.navDefinition.name }}</h1>
 
   <div class="btn-group">
-    <button type="reset" {{ pathFor('adminNavigationEdit', {'navigator': page.navDefinition.key}) }}" class="btn btn-cancel" data-form-button="cancel">Discard</button>
-    <button class="btn btn-save " data-form-button="save" type="submit" disabled>Save</button>
+    <button class="btn btn-cancel" type="reset" data-form-reset-href="{{ pathFor('adminNavigationEdit', {'navigator': page.navDefinition.key}) }}" data-form-button="cancel" disabled>Discard</button>
+    <button class="btn btn-save" type="submit"  data-form-button="save" disabled>Save</button>
   </div>
 </div>
 {% endblock contentHeader %}
