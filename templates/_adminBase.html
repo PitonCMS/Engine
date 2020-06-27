@@ -52,11 +52,11 @@
 
  <div class="btn-dropdown-block">
   <div class="btn btn-dropdown">
-   <span>Welcome Peri</span> <span><i class="fas fa-chevron-down"></i></span>
+   <span>Welcome {{ site.environment.sessionUserFirstName }}</span> <span><i class="fas fa-chevron-down"></i></span>
   </div>
   <div class="form-group-block">
    <div class="form-group">
-    <a href="{{ pathFor('adminToolUserEdit') }}">Profile</a>
+    <a href="{{ pathFor('adminToolUserEdit', {"id": site.environment.sessionUserId}) }}">Profile</a>
    </div>
    <div class="form-group">
     <a href="#">Logout</a>
