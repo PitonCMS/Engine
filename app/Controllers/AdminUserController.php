@@ -46,7 +46,7 @@ class AdminUserController extends AdminBaseController
         }
         $data['recommendRecoveryEmail'] = ($admins < 2) ? true : false;
 
-        return $this->render('tools/users.html', $data);
+        return $this->render('users/users.html', $data);
     }
 
     /**
@@ -67,7 +67,7 @@ class AdminUserController extends AdminBaseController
             $data['user'] = $userMapper->make();
         }
 
-        return $this->render('tools/userEdit.html', $data);
+        return $this->render('users/userEdit.html', $data);
     }
 
     /**
