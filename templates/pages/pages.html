@@ -39,7 +39,7 @@
 
   {# This creates an array of available collections appended to "all" and "pages" #}
   {% set collections = {"all": "All", "pages": "Pages"} %}
-  {% set collections = collections|merge(getCollections()|column('collection_title', 'collection_slug')) %}
+  {% set collections = collections|merge(getCollections()|default([])|column('collection_title', 'collection_slug')) %}
 
   {{ pitonMacro.filterSearch() }}
   {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', {"all": "All", "published": "Published", "pending": "Pending", "draft": "Draft"}) }}

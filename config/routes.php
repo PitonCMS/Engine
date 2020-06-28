@@ -16,7 +16,7 @@ use Piton\Controllers\FrontController;
  * Public Piton Application Routes
  */
 
- // Submit contact message
+ // XHR: Submit contact message
 $app->post('/contact', function ($args) {
     return (new FrontController($this))->submitMessage();
 })->add('csrfGuardHandler')->setName('submitMessage');
