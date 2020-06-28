@@ -3,6 +3,14 @@
     "settings": [
         {
             "category": "site",
+            "label": "Website Display Name",
+            "key": "displayName",
+            "value": "",
+            "inputType": "input",
+            "help": "Website name or brand name."
+        },
+        {
+            "category": "site",
             "label": "Date Format",
             "key": "dateFormat",
             "value": "mm/dd/yyyy",

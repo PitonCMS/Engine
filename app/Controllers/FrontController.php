@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Slim\Http\Response;
+use Throwable;
 
 /**
  * Piton Front End Controller
@@ -59,38 +60,45 @@ class FrontController extends FrontBaseController
     /**
      * Submit Contact Message
      *
-     * Expects POST array
+     * XHR Request
      * @param void
      * @return Response
+     * @uses POST
      */
     public function submitMessage(): Response
     {
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $email = $this->container->emailHandler;
+        try {
+            $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $email = $this->container->emailHandler;
 
-        // Check honepot and if clean, then save message
-        if ('alt@example.com' === $this->request->getParsedBodyParam('alt-email')) {
-            $message = $messageMapper->make();
-            $message->name = $this->request->getParsedBodyParam('name');
-            $message->email = $this->request->getParsedBodyParam('email');
-            $message->message = $this->request->getParsedBodyParam('message');
-            $message->context = $this->request->getParsedBodyParam('context', 'Unknown Page');
-            $messageMapper->save($message);
+            // Check honepot and if clean, then save message
+            if ('alt@example.com' === $this->request->getParsedBodyParam('alt-email')) {
+                $message = $messageMapper->make();
+                $message->name = $this->request->getParsedBodyParam('name');
+                $message->email = $this->request->getParsedBodyParam('email');
+                $message->message = $this->request->getParsedBodyParam('message');
+                $message->context = $this->request->getParsedBodyParam('context', 'Unknown Page');
+                $messageMapper->save($message);
 
-            // Send message to workflow email
-            if ($this->settings['site']['contactFormEmail']) {
-                // Only send email if a contact form email setting is saved
-                $siteName = empty($this->settings['site']['displayName']) ? 'PitonCMS' : $this->settings['site']['displayName'];
-                $email->setTo($this->settings['site']['contactFormEmail'], '')
-                    ->setSubject("New Contact Message to $siteName")
-                    ->setMessage("{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}")
-                    ->send();
+                // Send message to workflow email
+                if (!empty($this->settings['site']['contactFormEmail'])) {
+                    // Only send email if a contact form email setting is saved
+                    $siteName = $this->settings['site']['displayName'] ?? 'PitonCMS';
+                    $email->setTo($this->settings['site']['contactFormEmail'], '')
+                        ->setSubject("New Contact Message to $siteName")
+                        ->setMessage("{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}")
+                        ->send();
+                }
             }
+            $status = "success";
+        } catch (Throwable $th) {
+            $status = "error";
+            $this->container->logger->alert("PitonCMS: Exception submitting contact message " . $th->getMessage());
         }
 
         // Set the response type and return
-        $responseText = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
-        $r = $this->response->withHeader('Content-Type', 'application/json');
-        return $r->write(json_encode(["status" => "success", "response" => $responseText]));
+        $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
+
+        return $this->xhrResponse($status, $text);
     }
 }
