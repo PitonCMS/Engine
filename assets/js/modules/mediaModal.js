@@ -1,5 +1,6 @@
 import { getModal, showModal, showModalContent, hideModal } from './modal.js';
 import { getXHRPromise } from './xhrPromise.js';
+import { alertInlineMessage } from './alert.js';
 
 /**
  * Event to dispatch pseudo "input" event on hidden inputs
@@ -15,6 +16,10 @@ const openMediaModal = function(elementTarget) {
     getXHRPromise(pitonConfig.routes.adminMediaGet)
         .then(data => {
             showModalContent("Select Media", data);
+        })
+        .catch((error) => {
+            hideModal();
+            alertInlineMessage("danger", "Failed to Launch Media Modal", error);
         });
 
     // Add click listener to set media ID on select and dismiss

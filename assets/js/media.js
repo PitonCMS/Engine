@@ -26,10 +26,9 @@ const saveMedia = function(event) {
         .then(() => {
             disableSpinner();
         })
-        .catch((text) => {
-            console.log("Failed to save media: ", text);
-            alertInlineMessage('danger', 'Failed to Save Media', text);
+        .catch((error) => {
             disableSpinner();
+            alertInlineMessage('danger', 'Failed to Save Media', error);
         });
 }
 
@@ -45,8 +44,12 @@ const deleteMedia = function(event) {
         .then(() => {
             form.remove();
         })
-        .catch((text) => {
-            console.log("Failed to delete media: ", text);
+        .then(() => {
+            disableSpinner();
+        })
+        .catch((error) => {
+            disableSpinner();
+            alertInlineMessage('danger', 'Failed to Delete Media', error);
         });
 }
 

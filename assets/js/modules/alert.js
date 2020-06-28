@@ -7,7 +7,7 @@ const alertContainer = document.querySelector(`[data-alert-modal="1"]`);
  */
 const dismissAlertInlineMessage = function(event) {
     if (event.target.dataset.dismiss === "alert") {
-        event.target.closest(`[data-alert="container"]`).remove();
+        event.target.closest(`[data-alert="container"]`)?.remove();
     }
 }
 
@@ -15,7 +15,7 @@ const dismissAlertInlineMessage = function(event) {
  * Display Inline HTML Message Alert
  * @param {string} severity Severity color code
  * @param {string} heading  Message heading
- * @param {mixed} message   Message list
+ * @param {mixed} message   Message text or object
  */
 const alertInlineMessage = function(severity, heading, message) {
     // Create element and insert alert HTML and update with alert data
@@ -25,10 +25,10 @@ const alertInlineMessage = function(severity, heading, message) {
     container.querySelector(`[data-alert="heading"]`).innerHTML = heading;
 
     // Stringify message
-    if (typeof message === 'object') {
+    if (typeof message === "undefined") {
+        message = ""
+    } else if (typeof message === "object") {
         message = message.join("<br>");
-    } else if (typeof message === 'undefined') {
-        message = "";
     }
 
     container.querySelector(`[data-alert="content"]`).innerHTML = message;

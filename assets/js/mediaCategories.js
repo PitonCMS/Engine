@@ -45,8 +45,12 @@ const deleteCategory = function(event) {
             .then(() => {
                 catElement.remove();
             })
+            .then(() => {
+                disableSpinner();
+            })
             .catch((text) => {
-                console.log("Failed to delete category: ", text);
+                disableSpinner();
+                alertInlineMessage('danger', 'Failed to Delete Category', text);
         });
     }
 }

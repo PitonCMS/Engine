@@ -1,5 +1,3 @@
-import { alertInlineMessage } from './alert.js';
-import { disableSpinner } from './spinner.js';
 
 /**
  * XHR Request Promise
@@ -11,37 +9,33 @@ const XHRPromise = function(method, url, data) {
     let xhr = new XMLHttpRequest();
 
     return new Promise((resolve, reject) => {
-
         let response;
+
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
             try {
                 if (xhr.status === 200) {
-                    // Successful server response
+                    // Successful server response, parse payload to check status
                     response = JSON.parse(xhr.responseText);
 
                     if (response.status === "success") {
                         // Response successful, resolve
                         resolve(response.text);
-                        disableSpinner();
-                    } else {
-                        // Response successful but application failed, reject and alert
-                        reject();
-                        alertInlineMessage('danger', 'Piton Error', [response.text]);
-                        disableSpinner();
+                        return;
                     }
-                } else {
-                    // Failed server runtime response
-                    reject(response.text);
-                    alertInlineMessage('danger', 'Server Error ' + response.status, [response.text]);
-                    disableSpinner();
+
+                    throw new Error(`Application Error ${response.text}.`);
                 }
+
+                throw new Error(`Server Error ${xhr.status} ${xhr.statusText}.`);
             } catch (error) {
                 // JS Error thrown
-                reject(error);
-                alertInlineMessage('danger', 'Exception', [error]);
-                disableSpinner();
+                if (!(error instanceof Error)) {
+                    let error = new Error(error);
+                }
+
+                reject(error.message);
             }
         }
 

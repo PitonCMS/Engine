@@ -59,7 +59,7 @@ const ApplyFilterControl = function(event) {
  * @param {object} options
  */
 const getFilterXHRPromise = function(options) {
-    getXHRPromise(filterPath, options)
+    return getXHRPromise(filterPath, options)
         .then((data) => {
             removeRows();
             return data;
@@ -93,7 +93,7 @@ const applyFilters = function() {
         }
     });
 
-    getFilterXHRPromise(selectedOptions);
+    return getFilterXHRPromise(selectedOptions);
 }
 
 /**
@@ -104,7 +104,7 @@ const search = function() {
     let query = {"terms": terms.value};
     enableSpinner();
 
-    getFilterXHRPromise(query);
+    return getFilterXHRPromise(query);
 }
 
 /**
@@ -122,7 +122,7 @@ const paginationControl = function(event) {
         let url = new URL(link);
         let searchParams = new URLSearchParams(url.search);
 
-        getFilterXHRPromise(searchParams);
+        return getFilterXHRPromise(searchParams);
     }
 }
 

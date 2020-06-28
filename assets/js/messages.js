@@ -5,6 +5,7 @@ import "./modules/main.js";
 import { setFilterPath, applyFilters } from "./modules/filter.js";
 import { postXHRPromise, getXHRPromise } from "./modules/xhrPromise.js";
 import { disableSpinner, enableSpinner } from "./modules/spinner.js";
+import { alertInlineMessage } from "./modules/alert.js";
 
 setFilterPath(pitonConfig.routes.adminMessageGet);
 const unreadMessageCountBadge = document.querySelector(`[data-message="count"]`);
@@ -16,6 +17,9 @@ const updateUnreadMessageCount = function() {
     getXHRPromise(pitonConfig.routes.adminMessageCountGet)
         .then(data => {
             unreadMessageCountBadge.innerHTML = data;
+        })
+        .catch(error => {
+            alertInlineMessage('danger', 'Unable to Update Inbox Message Count', error);
         });
 }
 
@@ -46,11 +50,17 @@ const updateMessage = function (event) {
     enableSpinner();
     postXHRPromise(pitonConfig.routes.adminMessageSave, data)
         .then(() => {
-            applyFilters();
             updateUnreadMessageCount();
         })
         .then(() => {
+            applyFilters();
+        })
+        .then(() => {
             disableSpinner();
+        })
+        .catch(error => {
+            disableSpinner();
+            alertInlineMessage('danger', 'Failed to Update Message', error);
         });
 }
 

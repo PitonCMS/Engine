@@ -185,8 +185,12 @@ const deleteNavItem = function(event) {
                 // This removes the current nav item along with any children
                 navElement.remove();
             })
-            .catch((text) => {
-                console.log("Failed to delete navigation: ", text);
+            .then(() => {
+                disableSpinner();
+            })
+            .catch((error) => {
+                disableSpinner();
+                alertInlineMessage("danger", "Failed to delete navigation", error);
             });
 
         // Reset

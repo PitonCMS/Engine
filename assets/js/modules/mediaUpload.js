@@ -19,6 +19,10 @@ const showMediaUploadForm = function() {
     getXHRPromise(pitonConfig.routes.adminMediaUploadFormGet)
         .then(data => {
             showModalContent("Upload Media", data);
+        })
+        .catch((error) => {
+            hideModal();
+            alertInlineMessage("danger", "Failed To Open Media Upload Modal", error);
         });
 }
 
@@ -44,11 +48,10 @@ const mediaUpload = function(event) {
         .then(() => {
             disableSpinner();
         })
-        .catch((text) => {
-            console.log("Failed to upload file: ", text);
-            alertInlineMessage('danger', 'Failed to Upload File', text);
+        .catch((error) => {
             hideModal();
             disableSpinner();
+            alertInlineMessage('danger', 'Failed to Upload File', error);
         });
 }
 

@@ -8,6 +8,7 @@ import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { mediaSelect } from './modules/mediaModal.js';
 import { setCleanSlug, unlockSlug } from './modules/url.js';
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler } from './modules/drag.js';
+import { alertInlineMessage } from './modules/alert.js';
 
 /**
  * Set Element Title
@@ -86,14 +87,11 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
 
                 return windowTarget;
             })
-            .then(target => {
-                // TODO Smooth scroll leaving room for navs
-                // window.location.hash = target;
-            })
             .then(() => {
                 disableSpinner();
-            }).catch(() => {
+            }).catch((error) => {
                 disableSpinner();
+                alertInlineMessage("danger", "Failed to Add Element", error);
             });
     }, false);
 });
@@ -122,8 +120,12 @@ if (pageEditNode) {
                     .then(() => {
                         element.remove();
                     })
-                    .catch((data) => {
-                        console.log("Failed to delete element: ", data);
+                    .then(() => {
+                        disableSpinner();
+                    })
+                    .catch((error) => {
+                        disableSpinner();
+                        alertInlineMessage("danger", "Failed to Delete Element", error);
                     });
             }
         }
