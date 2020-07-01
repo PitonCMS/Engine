@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Library\Twig;
 
 use Twig\TwigFunction;
+use Exception;
 
 /**
  * Piton Back End Admin Twig Extension
@@ -23,13 +24,12 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
-     * Admin Sitemap Hierarchy
+     * Admin Site Hierarchy
      * pageRouteName => parentPageRouteName
      * Null values represent top level navigation routes
-     *
      * @var array
      */
-    protected const Breadcrumbs = [
+    protected const SiteHierarchy = [
         // Level 0 pages
         'adminHome' => null,
         'adminPage' => null,
@@ -102,7 +102,6 @@ class Admin extends Base
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
             new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
-            // new TwigFunction('getBreadcrumb', [$this, 'getBreadcrumb']),
             new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
         ]);
     }
@@ -269,20 +268,6 @@ class Admin extends Base
     }
 
     /**
-     * Get Breadcrumb
-     *
-     * @param void
-     * @return array|null
-     */
-    public function getBreadcrumb(): ?array
-    {
-        // TODO
-        $currentRoute = $this->container['settings']['environment']['currentRouteName'];
-
-        return [];
-    }
-
-    /**
      * Get JS File Source
      *
      * Returns <script> tag with link to JS source
@@ -303,7 +288,6 @@ class Admin extends Base
         return "<script src=\"$source\" $moduleType></script>";
     }
 
-
     /**
      * Current Route Parent
      *
@@ -317,8 +301,13 @@ class Admin extends Base
         // Trace current page route name through Breadcrumb array to find parent with null value
         $route = $this->container->settings['environment']['currentRouteName'];
 
-        while (self::Breadcrumbs[$route] ?? false) {
-            $route = self::Breadcrumbs[$route];
+        while (self::SiteHierarchy[$route] ?? false) {
+            // Check for recursion in this while loop if the array is accidentally setup incorrectly
+            if ($route === self::SiteHierarchy[$route]) {
+                throw new Exception("PitonCMS: Recursive reference in Twig Admin SiteHierarchy");
+            }
+
+            $route = self::SiteHierarchy[$route];
         }
 
         if ($route === $routeName) {
