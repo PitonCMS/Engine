@@ -23,28 +23,32 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
-     * Breadcrump Hierarchy
+     * Admin Sitemap Hierarchy
+     * pageRouteName => parentPageRouteName
+     * Null values represent top level navigation routes
+     *
      * @var array
      */
     protected const Breadcrumbs = [
-        'adminHome' => [
-            'adminPage' => [
-                'adminPageEdit' => 'adminPageEdit'
-            ],
-            'adminMedia' => [
-                'adminMediaCategoryEdit' => true
-            ],
-            'adminNavigation' => [
-                'adminNavigationEdit' => 'adminNavigationEdit'
-            ],
-            'adminMessage' => 'adminMessage',
-            'adminToolSetting' => [
-                'adminToolSettingEdit' => true,
-                'adminToolSitemap' => true,
-                'adminToolUser' => true
-            ],
-            'adminHelp' => 'adminHelp'
-        ]
+        // Level 0 pages
+        'adminHome' => null,
+        'adminPage' => null,
+        'adminMedia' => null,
+        'adminNavigation' => null,
+        'adminMessage' => null,
+        'adminToolSetting' => null,
+        'adminHelp' =>  null,
+        // Level 1 pages
+        'adminPageEdit' => 'adminPage',
+        'adminNavigationEdit' => 'adminNavigation',
+        'adminToolSettingEdit' => 'adminToolSetting',
+        'adminToolSitemap' => 'adminToolSetting',
+        'adminCollection' => 'adminToolSetting',
+        'adminMediaCategoryEdit' => 'adminToolSetting',
+        'adminToolUser' => 'adminToolSetting',
+        // Level 2 pages
+        'adminToolUserEdit' => 'adminToolUser',
+        'adminCollectionEdit' => 'adminCollection',
     ];
 
     /**
@@ -99,6 +103,7 @@ class Admin extends Base
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
             new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
             // new TwigFunction('getBreadcrumb', [$this, 'getBreadcrumb']),
+            new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
         ]);
     }
 
@@ -296,5 +301,30 @@ class Admin extends Base
         $moduleType = ($module) ? 'type="module"' : '';
 
         return "<script src=\"$source\" $moduleType></script>";
+    }
+
+
+    /**
+     * Current Route Parent
+     *
+     * If the supplied route name resolves as the parent in the navigation hierarcy, returns the returnValue string
+     * @param  string $routeName   Name of the route to test
+     * @param  string $returnValue Value to return
+     * @return string|null
+     */
+    public function currentRouteParent(string $routeName, string $returnValue = 'active'): ?string
+    {
+        // Trace current page route name through Breadcrumb array to find parent with null value
+        $route = $this->container->settings['environment']['currentRouteName'];
+
+        while (self::Breadcrumbs[$route] ?? false) {
+            $route = self::Breadcrumbs[$route];
+        }
+
+        if ($route === $routeName) {
+            return $returnValue;
+        }
+
+        return null;
     }
 }
