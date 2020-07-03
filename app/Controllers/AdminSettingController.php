@@ -110,6 +110,6 @@ class AdminSettingController extends AdminBaseController
         }
 
         // Redirect back to list of settings
-        return $this->redirect('adminToolSettingEdit', ['category' => $category]);
+        return $this->redirect('adminSettingEdit', ['category' => $category]);
     }
 }

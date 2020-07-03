@@ -85,7 +85,7 @@ class AdminController extends AdminBaseController
             $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
         }
 
-        return $this->redirect('adminToolSitemap');
+        return $this->redirect('adminSitemap');
     }
 
     /**

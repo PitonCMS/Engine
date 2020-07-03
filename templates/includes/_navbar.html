@@ -23,8 +23,8 @@
     <div class="badge badge-notify" data-message="count">{% if getUnreadMessageCount() %}{{ getUnreadMessageCount() }}{% endif %}</div>
   </li>
 
-  <li class="side-nav__link settings {{ currentRouteParent('adminToolSetting') }}">
-    <a href="{{ pathFor('adminToolSetting') }}"><i class="side-nav__icon fas fa-cog"></i> Settings</a>
+  <li class="side-nav__link settings {{ currentRouteParent('adminSetting') }}">
+    <a href="{{ pathFor('adminSetting') }}"><i class="side-nav__icon fas fa-cog"></i> Settings</a>
   </li>
 
   <li class="side-nav__link help {{ currentRouteParent('adminHelp') }}">

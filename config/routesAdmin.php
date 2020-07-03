@@ -199,38 +199,34 @@ $app->group('/admin', function () {
     });
     // End messages
 
-    // Tools routes
-    $this->group('/tools', function () {
-        // Settings
-        $this->group('/settings', function () {
-            // Show settings landing page
-            $this->get('[/]', function ($args) {
-                return (new AdminSettingController($this))->showSettings($args);
-            })->setName('adminToolSetting');
+    // Settings
+    $this->group('/settings', function () {
+        // Show settings landing page
+        $this->get('[/]', function ($args) {
+            return (new AdminSettingController($this))->showSettings($args);
+        })->setName('adminSetting');
 
-            // Save settings
-            $this->post('/save', function ($args) {
-                return (new AdminSettingController($this))->saveSettings();
-            })->add('csrfGuardHandler')->setName('adminToolSettingSave');
+        // Save settings
+        $this->post('/save', function ($args) {
+            return (new AdminSettingController($this))->saveSettings();
+        })->add('csrfGuardHandler')->setName('adminSettingSave');
 
-            // Show sitemap submit page
-            $this->get('/sitemap', function ($args) {
-                return (new AdminController($this))->sitemap();
-            })->setName('adminToolSitemap');
+        // Show sitemap submit page
+        $this->get('/sitemap', function ($args) {
+            return (new AdminController($this))->sitemap();
+        })->setName('adminSitemap');
 
-            // Update sitemap
-            $this->post('/sitemap/update', function ($args) {
-                return (new AdminController($this))->updateSitemap();
-            })->add('csrfGuardHandler')->setName('adminToolSitemapUpdate');
+        // Update sitemap
+        $this->post('/sitemap/update', function ($args) {
+            return (new AdminController($this))->updateSitemap();
+        })->add('csrfGuardHandler')->setName('adminSitemapUpdate');
 
-            // Edit settings by category
-            $this->get('/{category:site|contact|social}/edit', function ($args) {
-                return (new AdminSettingController($this))->editSettings($args);
-            })->setName('adminToolSettingEdit');
-        });
-        // End settings
+        // Edit settings by category
+        $this->get('/{category:site|contact|social}/edit', function ($args) {
+            return (new AdminSettingController($this))->editSettings($args);
+        })->setName('adminSettingEdit');
     });
-    // End tools
+    // End settings
 
     // User routes
     $this->group('/user', function () {
