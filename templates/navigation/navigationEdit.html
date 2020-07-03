@@ -11,7 +11,11 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
-  <div class="breadcrumb"></div>
+  <div class="breadcrumb">
+    <a href="{{ pathFor('adminNavigation') }}">
+      Navigation <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
   <h1 class="section-title">Nav Structure: {{ page.navDefinition.name }}</h1>
 
   <div class="btn-group">

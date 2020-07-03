@@ -4,7 +4,11 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
-  <div class="breadcrumb"></div>
+  <div class="breadcrumb">
+    <a href="{{ pathFor('adminToolSetting') }}">
+      Settings <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
   <h1 class="section-title">Users</h1>
 
   <div class="btn-dropdown-block">

@@ -19,7 +19,14 @@
 {% block contentHeader %}
 
   <div class="content-header-inner">
-    <div class="breadcrumb"></div>
+    <div class="breadcrumb">
+      <a href="{{ pathFor('adminToolSetting') }}">
+        Settings <i class="fas fa-chevron-right"></i>
+      </a>
+      <a href="{{ pathFor('adminCollection') }}">
+        Collections <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
     <h1 class="section-title">
       {% if page.collection.id %}Edit {{ page.collection.collection_title }}
       {% else %}Add{% endif %} Collection

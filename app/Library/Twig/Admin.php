@@ -298,7 +298,7 @@ class Admin extends Base
      */
     public function currentRouteParent(string $routeName, string $returnValue = 'active'): ?string
     {
-        // Trace current page route name through Breadcrumb array to find parent with null value
+        // Trace current page route name through SiteHierarchy array to find parent with null value
         $route = $this->container->settings['environment']['currentRouteName'];
 
         while (self::SiteHierarchy[$route] ?? false) {

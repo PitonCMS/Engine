@@ -14,9 +14,11 @@ Edit {{ page.category|capitalize }} Settings
 {% block contentHeader %}
   <div class="content-header-inner">
     <!-- Bread Crumbs  -->
-    <div class="breadcrumb"><a href="#">
-        <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;Settings
-      </a></div>
+    <div class="breadcrumb">
+      <a href="{{ pathFor('adminToolSetting') }}">
+        Settings <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
 
     <!-- Page Title -->
     <h1 class="section-title">{{ page.category|capitalize }} Settings</h1>

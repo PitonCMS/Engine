@@ -3,10 +3,13 @@
 {% block htmlTitle 'Sitemap' %}
 
 {% block contentHeader %}
-<form class="jsUserForm" action="{{ pathFor('adminToolSitemapUpdate') }}" method="post" accept-charset="utf-8">
+<form action="{{ pathFor('adminToolSitemapUpdate') }}" method="post" accept-charset="utf-8">
  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
  <div class="content-header-inner">
-  <div class="breadcrumb"></div>
+  <div class="breadcrumb">
+    <a href="{{ pathFor('adminToolSetting') }}">
+        Settings <i class="fas fa-chevron-right"></i>
+      </a>  </div>
   <h1 class="section-title">Sitemap</h1>
   <div class="btn-group">
    <!-- Control Buttons -->
@@ -26,7 +29,7 @@
     <div class="sitemap-link">
      <a href="/sitemap.xml" target="_blank"><i class="fas fa-external-link-alt"></i> Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
     </div>
- 
+
     <pre>{{ page.sitemapXML|escape }}</pre>
     {% else %}
     No Sitemap Found - Click Update Sitemap

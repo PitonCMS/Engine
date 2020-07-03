@@ -10,7 +10,11 @@
 
 {% block contentHeader %}
   <div class="content-header-inner">
-    <div class="breadcrumb"></div>
+    <div class="breadcrumb">
+      <a href="{{ pathFor('adminToolSetting') }}">
+        Settings <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
     <h1 class="section-title">Media Categories</h1>
     <div class="btn-group">
       <button type="reset" class="btn btn-cancel" data-form-reset-href="{{ pathFor('adminMediaCategoryEdit') }}" data-form-button="cancel" disabled>Discard</button>
