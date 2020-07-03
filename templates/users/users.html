@@ -18,7 +18,7 @@
    <div class="form-group-block">
 
      <div class="form-group">
-      <a  href="{{ pathFor('adminToolUserEdit') }}">Add User</a>
+      <a  href="{{ pathFor('adminUserEdit') }}">Add User</a>
      </div>
 
    </div>
@@ -48,7 +48,7 @@
 
 {# Loop through saved users #}
 {% for user in page.users %}
-<a class="user-list-item" href="{{ pathFor('adminToolUserEdit', {'id': user.id}) }}">
+<a class="user-list-item" href="{{ pathFor('adminUserEdit', {'id': user.id}) }}">
   <div class="user-list-item__title">{{ user.first_name }} {{ user.last_name }}</div>
   <div class="user-list-item__email">{{ user.email }}</div>
   <div class="user-list-item__status">{% if user.active == 'Y' %}Active{% endif %}</div>

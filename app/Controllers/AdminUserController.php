@@ -103,13 +103,13 @@ class AdminUserController extends AdminBaseController
 
                 // Redirect to users. If a new user failed to save the ID will be falsey (0)
                 $user->id = $user->id ?: null;
-                return $this->redirect('adminToolUserEdit', ['id' => $user->id]);
+                return $this->redirect('adminUserEdit', ['id' => $user->id]);
             }
 
             throw $e;
         }
 
         // Redirect to users
-        return $this->redirect('adminToolUserEdit', ['id' => $user->id]);
+        return $this->redirect('adminUserEdit', ['id' => $user->id]);
     }
 }

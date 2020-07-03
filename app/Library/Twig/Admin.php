@@ -45,9 +45,9 @@ class Admin extends Base
         'adminToolSitemap' => 'adminToolSetting',
         'adminCollection' => 'adminToolSetting',
         'adminMediaCategoryEdit' => 'adminToolSetting',
-        'adminToolUser' => 'adminToolSetting',
+        'adminUser' => 'adminToolSetting',
         // Level 2 pages
-        'adminToolUserEdit' => 'adminToolUser',
+        'adminUserEdit' => 'adminUser',
         'adminCollectionEdit' => 'adminCollection',
     ];
 

@@ -229,27 +229,27 @@ $app->group('/admin', function () {
             })->setName('adminToolSettingEdit');
         });
         // End settings
-
-        // User routes
-        $this->group('/user', function () {
-            // Show Users
-            $this->get('[/]', function ($args) {
-                return (new AdminUserController($this))->showUsers();
-            })->setName('adminToolUser');
-
-            // Edit User
-            $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
-                return (new AdminUserController($this))->editUser($args);
-            })->setName('adminToolUserEdit');
-
-            // Save Users
-            $this->post('/save', function ($args) {
-                return (new AdminUserController($this))->saveUser();
-            })->add('csrfGuardHandler')->setName('adminToolUserSave');
-        });
-        // End user routes
     });
     // End tools
+
+    // User routes
+    $this->group('/user', function () {
+        // Show Users
+        $this->get('[/]', function ($args) {
+            return (new AdminUserController($this))->showUsers();
+        })->setName('adminUser');
+
+        // Edit User
+        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
+            return (new AdminUserController($this))->editUser($args);
+        })->setName('adminUserEdit');
+
+        // Save Users
+        $this->post('/save', function ($args) {
+            return (new AdminUserController($this))->saveUser();
+        })->add('csrfGuardHandler')->setName('adminUserSave');
+    });
+    // End user routes
 
     // Help content
     $this->get('/help[/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
