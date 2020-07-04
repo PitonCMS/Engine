@@ -114,7 +114,7 @@ class Front extends Base
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
         // Get collection pages
-        return $pageMapper->findCollectionPagesById($collectionId);
+        return $pageMapper->findPublishedCollectionPagesById($collectionId);
     }
 
     /**

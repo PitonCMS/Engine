@@ -62,20 +62,6 @@ class DataStoreMapper extends DataMapperAbstract
     }
 
     /**
-     * Delete Page Settings
-     *
-     * @param  int  $pageId Page ID
-     * @return bool
-     */
-    public function deleteByPageId(int $pageId): bool
-    {
-        $this->sql = "delete from {$this->table} where category = 'page' and page_id = ?;";
-        $this->bindValues[] = $pageId;
-
-        return $this->execute();
-    }
-
-    /**
      * Set Application Alert
      *
      * Saves Piton alert notices for display in application that are not saved to session flash data.

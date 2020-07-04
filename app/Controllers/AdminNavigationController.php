@@ -58,7 +58,7 @@ class AdminNavigationController extends AdminBaseController
         $navs = $navivation->navigators;
         $navs = array_combine(array_column($navs, 'key'), $navs);
 
-        $data['pages'] = $pageMapper->findPages();
+        $data['pages'] = $pageMapper->findContent('all', 'pages');
         $data['collections'] = $collectioMapper->find();
         $data['navDefinition'] = $navs[$args['navigator']];
 

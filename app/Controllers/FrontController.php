@@ -51,7 +51,7 @@ class FrontController extends FrontBaseController
         // Get and set block elements
         $page->setBlockElements($pageElement->findElementsByPageId($page->id));
 
-        // Get and set page data key-value pairs
+        // Get and set page settings key-value pairs
         $page->setDataKeyValues($dataStoreMapper->findPageSettings($page->id));
 
         return $this->render("{$page->template}.html", $page);

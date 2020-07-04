@@ -55,9 +55,9 @@ class PageMapper extends DataMapperAbstract
     /**
      * Find All Page Content
      *
-     * Gets all pages and collection pages without elements
+     * Gets all pages and/or collection pages without elements
      * @param  string $status 'draft'|'pending'|'published'|'all'
-     * @param  string $type   'all'|'pages\|collection_slug
+     * @param  string $type   'all'|'pages'|{collection_slug}
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
@@ -166,44 +166,6 @@ HTML;
     }
 
     /**
-     * Find All Pages
-     *
-     * Gets all pages without elements
-     * Does not include collection detail pages
-     * @param  string $status 'draft'|'pending'|'published'|'all'
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
-     */
-    public function findPages(string $status = 'published', int $limit = null, int $offset = null): ?array
-    {
-        $this->makeSelect();
-        $this->sql .= ' and p.collection_id is null';
-
-        if ($status === 'published') {
-            $this->sql .= " and p.published_date <= '{$this->today}'";
-        } elseif ($status === 'pending') {
-            $this->sql .= " and p.published_date > '{$this->today}'";
-        } elseif ($status === 'draft') {
-            $this->sql .= " and p.published_date is null";
-        }
-
-        $this->sql .= ' order by p.title';
-
-        if ($limit) {
-            $this->sql .= ' limit ?';
-            $this->bindValues[] = $limit;
-        }
-
-        if ($offset) {
-            $this->sql .= ' offset ?';
-            $this->bindValues[] = $offset;
-        }
-
-        return $this->find();
-    }
-
-    /**
      * Find Published Page By Slug
      *
      * Finds published page by by slug
@@ -238,62 +200,16 @@ HTML;
     }
 
     /**
-     * Find All Collection Pages by Collection Slug
-     *
-     * Finds all related collection detail pages
-     * @param  string   $collectionSlug
-     * @param  string $status 'draft'|'pending'|'published'|'all'
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
-     */
-    public function findCollectionPagesBySlug(
-        string $collectionSlug,
-        string $status = 'published',
-        int $limit = null,
-        int $offset = null
-    ): ?array {
-        $this->makeSelect();
-        $this->sql .= ' and c.collection_slug = ?';
-        $this->bindValues[] = $collectionSlug;
-
-        if ($status === 'published') {
-            $this->sql .= " and p.published_date <= '{$this->today}'";
-        } elseif ($status === 'pending') {
-            $this->sql .= " and p.published_date > '{$this->today}'";
-        } elseif ($status === 'draft') {
-            $this->sql .= " and p.published_date is null";
-        }
-
-        // Sort pages by 1. Draft, 2. Pending, 3. Published
-        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
-
-        if ($limit) {
-            $this->sql .= ' limit ?';
-            $this->bindValues[] = $limit;
-        }
-
-        if ($offset) {
-            $this->sql .= ' offset ?';
-            $this->bindValues[] = $offset;
-        }
-
-        return $this->find();
-    }
-
-    /**
-     * Find All Collection Pages by Collection ID
+     * Find Published Collection Pages by Collection ID
      *
      * Finds all related collection detail pages
      * @param  int   $collectionId
-     * @param  string $status 'draft'|'pending'|'published'|'all'
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
      */
-    public function findCollectionPagesById(
+    public function findPublishedCollectionPagesById(
         ?int $collectionId,
-        string $status = 'published',
         int $limit = null,
         int $offset = null
     ): ?array {
@@ -301,16 +217,7 @@ HTML;
         $this->sql .= ' and c.id = ?';
         $this->bindValues[] = $collectionId;
 
-        if ($status === 'published') {
-            $this->sql .= " and p.published_date <= '{$this->today}'";
-        } elseif ($status === 'pending') {
-            $this->sql .= " and p.published_date > '{$this->today}'";
-        } elseif ($status === 'draft') {
-            $this->sql .= " and p.published_date is null";
-        }
-
-        // Sort pages by 1. Draft, 2. Pending, 3. Published
-        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
+        $this->sql .= ' order by p.published_date desc';
 
         if ($limit) {
             $this->sql .= ' limit ?';
@@ -323,62 +230,6 @@ HTML;
         }
 
         return $this->find();
-    }
-
-    /**
-     * Find All Collection Detail Pages
-     *
-     * Finds all pages, does not include element data
-     * @param  string $status 'draft'|'pending'|'published'|'all'
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
-     */
-    public function findCollectionPages(string $status = 'published', int $limit = null, int $offset = null): ?array
-    {
-        $this->makeSelect();
-        $this->sql .= ' and p.collection_id is not null';
-
-        if ($status === 'published') {
-            $this->sql .= " and p.published_date <= '{$this->today}'";
-        } elseif ($status === 'pending') {
-            $this->sql .= " and p.published_date > '{$this->today}'";
-        } elseif ($status === 'draft') {
-            $this->sql .= " and p.published_date is null";
-        }
-
-        // Sort pages by 1. Draft, 2. Pending, 3. Published
-        $this->sql .= ' order by p.published_date is null desc, p.published_date desc';
-
-        if ($limit) {
-            $this->sql .= " limit ?";
-            $this->bindValues[] = $limit;
-        }
-
-        if ($offset) {
-            $this->sql .= " offset ?";
-            $this->bindValues[] = $offset;
-        }
-
-        return $this->find();
-    }
-
-    /**
-     * Page Count by Collection ID
-     *
-     * Returns the total number of pages by collection ID
-     * @param  int $collectionId
-     * @return int
-     */
-    public function pageCountByCollectionId(int $collectionId): ?int
-    {
-        $this->sql = 'select count(*) rows from page where collection_id = ?;';
-        $this->bindValues[] = $collectionId;
-        $this->fetchMode = PDO::FETCH_COLUMN;
-
-        $this->execute();
-
-        return $this->statement->fetch() ?: 0;
     }
 
     /**
@@ -403,8 +254,8 @@ select SQL_CALC_FOUND_ROWS
     m.feature media_feature,
     m.caption media_caption
 from page p
-left outer join collection c on c.id = p.collection_id
-left outer join media m on m.id = p.media_id
+left join collection c on c.id = p.collection_id
+left join media m on m.id = p.media_id
 where 1=1
 SQL;
     }
