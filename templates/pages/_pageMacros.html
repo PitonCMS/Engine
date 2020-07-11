@@ -10,7 +10,7 @@
 #}
 
 {% macro elementForm(element, blockKey, elementTypeOptions, loopIndex = 1) %}
-
+{% import '@admin/settings/_editSettingInputMacro.html' as settingMacro %}
 {% set arrayKey = element.id ?? uniqueKey() %}
 {% set elementTypes = getElements() %}
 {% set enableInput = elementTypes[element.template].enableInput %}
@@ -22,15 +22,17 @@
   <!-- Element Title -->
   <div class="toggle-block__header toggle-block__header-secondary">
    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
+   <div class="small-text">{{ element.definition.elementName }}</div>
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
   <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse="target">
-  <div class="form-block">
-    <label class="form-block__title">Element Title</label>
-    <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
-      placeholder="Element Title" autocomplete="off">
-  </div>
+    <div class="form-block">
+      <label class="form-block__title">Element Title</label>
+      <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
+        placeholder="Element Title" autocomplete="off">
+    </div>
+
     {# Element radio buttons #}
     <div class="form-block">
       <label class="form-block__title">Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
@@ -51,13 +53,18 @@
       </div>
     </div>
 
-    <!-- Element Content Area -->
+    {# Element custom settings #}
+    {% for setting in element.settings %}
+      {{ settingMacro.settingInput(setting) }}
+    {% endfor %}
+
+    {# Element Content Area #}
     <div class="form-block ">
       <label class="form-block__title">Element Content</label>
       <textarea  data-mde="1" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
     </div>
 
-    <!-- Embedded HTML -->
+    {# Embedded HTML #}
     <div class="form-block {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}" data-element-input-option="embedded">
       <label class="form-block__title">Embedded HTML</label>
       <textarea  rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>

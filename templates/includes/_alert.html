@@ -5,8 +5,8 @@
 #}
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
-{% for alert in getAlert() %}
+{% for a in getAlert() %}
 
-  {{ pitonMacro.alert(alert.severity, alert.heading, alert.message) }}
+  {{ pitonMacro.alert(a.severity, a.heading, a.message) }}
 
 {% endfor %}

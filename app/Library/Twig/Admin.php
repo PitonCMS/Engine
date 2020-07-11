@@ -133,7 +133,7 @@ class Admin extends Base
         // If AdminBaseController render() is called then alert data is provided to Twig context for this request
         // But if AdminBaseController redirect() was called in last request the alert was saved to flash session data
         if (!empty($context['alert'])) {
-            $alert = [$context['alert']];
+            $alert = $context['alert'];
         } else {
             $alert = $session->getFlashData('alert');
         }

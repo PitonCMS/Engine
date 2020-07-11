@@ -58,7 +58,7 @@ $app->group('/admin', function () {
         $this->group('/element', function () {
             // XHR: Get element
             $this->get('/get', function ($args) {
-                return (new AdminPageController($this))->getElement();
+                return (new AdminPageController($this))->getNewElement();
             })->setName('adminPageElementGet');
 
             // XHR: Delete ELement

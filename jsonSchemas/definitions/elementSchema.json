@@ -15,7 +15,33 @@
             "description": "What additional input to enable for this element",
             "type": "string",
             "enum": ["collection","embedded","image","gallery"]
+        },
+        "showContentTexarea": {
+            "description": "Show content textarea, defaults to true",
+            "type": "boolean"
+        },
+        "enableEditor": {
+            "description": "Enable content textarea editor controls, defaults to true",
+            "type": "boolean"
+        },
+        "settings": {
+            "$ref": "settingsDefinitionSchema.json#/definition"
         }
     },
+    "oneOf": [
+        {
+            "properties": {
+                "settings": {
+                    "items": {
+                        "properties": {
+                            "category": {
+                                "pattern": "^(?:element)$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
     "required": ["elementName"]
 }

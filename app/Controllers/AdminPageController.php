@@ -131,12 +131,9 @@ HTML;
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
-        // Fetch page, or create new page
-        if (isset($args['id']) && is_numeric($args['id'])) {
-            // Load existing page from database.
-            $page = $pageMapper->findById((int) $args['id']);
-            $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
-            $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
+        // Check if existing saved page or creating a new page
+        if (is_numeric($args['id'])) {
+            return $this->editLoadSavedPage((int) $args['id']);
         } else {
             // New page object
             $page = $pageMapper->make();
@@ -187,6 +184,83 @@ HTML;
         if (isset($page->definition->settings)) {
             $page->settings = $this->mergeSettings($settings, $page->definition->settings);
         }
+
+        return $this->render('pages/pageEdit.html', $page);
+    }
+
+    /**
+     * Edit Load Saved Page
+     *
+     * @param int $pageId Page ID
+     * @return Response
+     */
+    protected function editLoadSavedPage(int $pageId): Response
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+
+        // Load existing page from database
+        $page = $pageMapper->findById($pageId);
+
+        // Return 404 if not found
+        if (empty($page)) {
+            return $this->notFound();
+        }
+
+        // Get page definition
+        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
+            $this->setAlert('danger', 'Page Definition Error ' . $page->template . '.json', $definition->getErrorMessages());
+        }
+
+        // Get and load page settings
+        $pageSettings = $dataStoreMapper->findPageSettings($page->id) ?? [];
+
+        if (isset($page->definition->settings)) {
+            $page->settings = $this->mergeSettings($pageSettings, $page->definition->settings);
+        } else {
+            // This case is for when page settings were saved to the DB but then deleted from the JSON definition
+            $page->settings = $pageSettings;
+        }
+
+        // Get saved elements and element settings
+        $elements = $pageElementMapper->findElementsByPageId($page->id);
+
+        foreach ($elements as &$el) {
+            // Get element definition
+            if (null === $el->definition = $definition->getElement($el->template . '.json')) {
+                $this->setAlert('danger', 'Element Definition Error ' . $el->template . '.json', $definition->getErrorMessages());
+            }
+
+            // Get and load page element settings
+            $elementSettings = $dataStoreMapper->findPageElementSettings($el->id) ?? [];
+
+            if (isset($el->definition->settings)) {
+                $el->settings = $this->mergeSettings($elementSettings, $el->definition->settings);
+            } else {
+                // This case is for when page element settings were saved to the DB but then deleted from the JSON definition
+                $el->settings = $elementSettings;
+            }
+        }
+
+        $page->setBlockElements($elements);
+
+        return $this->render('pages/pageEdit.html', $page);
+    }
+
+    /**
+     * Edit Load New Page
+     */
+    protected function editLoadNewPage()
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
 
         return $this->render('pages/pageEdit.html', $page);
     }
@@ -378,7 +452,7 @@ HTML;
      * @uses queryParam blockKey
      * @return Response
      */
-    public function getElement(): Response
+    public function getNewElement(): Response
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
