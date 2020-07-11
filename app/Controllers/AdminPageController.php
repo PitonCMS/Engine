@@ -363,7 +363,7 @@ HTML;
                 $setting = $dataStoreMapper->make();
                 $setting->id = $row['id'];
 
-                // Check for a page setting delete
+                // Check for a page setting delete flag
                 if (isset($row['delete'])) {
                     $dataStoreMapper->delete($setting);
                     continue;

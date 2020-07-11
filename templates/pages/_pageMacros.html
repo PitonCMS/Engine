@@ -18,6 +18,7 @@
 <div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
   <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
   <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+  <input type="hidden" name="element_template[{{ arrayKey }}]" value="{{ element.template }}">
 
   <!-- Element Title -->
   <div class="toggle-block__header toggle-block__header-secondary">
@@ -31,26 +32,6 @@
       <label class="form-block__title">Element Title</label>
       <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
         placeholder="Element Title" autocomplete="off">
-    </div>
-
-    {# Element radio buttons #}
-    <div class="form-block">
-      <label class="form-block__title">Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
-      <div class="form-check-wrapper">
-        {% for el in elementTypes %}
-        {% if (elementTypeOptions and el.filename in elementTypeOptions) or (not elementTypeOptions) %}
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]"
-            id="{{ arrayKey }}-{{ el.filename }}" value="{{ el.filename }}"
-            data-element-enable-input="{{ el.enableInput|default(1) }}"
-            {{ checked(element.template == el.filename) }} required>
-
-            <label class="form-check-label" for="{{ arrayKey }}-{{ el.filename }}"
-            title="{{ el.description }}">{{ el.name }}</label>
-        </div>
-        {% endif %}
-        {% endfor %}
-      </div>
     </div>
 
     {# Element custom settings #}
