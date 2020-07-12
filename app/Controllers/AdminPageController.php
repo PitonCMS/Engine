@@ -124,69 +124,124 @@ HTML;
      */
     public function editPage($args): Response
     {
+        // Determine whether to edit an existing page or create a new page
+        if (isset($args['id']) && is_numeric($args['id'])) {
+            // Edit saved page
+            return $this->editLoadSavedPage((int) $args['id']);
+        } else {
+            // Create new page
+            return $this->editLoadNewPage();
+        }
+    }
+
+    /**
+     * Edit Load Saved Page
+     *
+     * @param int $pageId Page ID
+     * @return Response
+     */
+    protected function editLoadSavedPage(int $pageId): Response
+    {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;
 
-        // Fetch page, or create new page
-        if (isset($args['id']) && is_numeric($args['id'])) {
-            // Load existing page from database.
-            $page = $pageMapper->findById((int) $args['id']);
-            $page->setBlockElements($pageElementMapper->findElementsByPageId($page->id));
-            $settings = $dataStoreMapper->findPageSettings($page->id) ?? [];
-        } else {
-            // New page object
-            $page = $pageMapper->make();
-            $settings = [];
+        // Load existing page from database
+        $page = $pageMapper->findById($pageId);
 
-            // Create new page, and get template from query string
-            $templateParam = $this->request->getQueryParam('definition');
-            if ($templateParam) {
-                $templateParam = htmlspecialchars($templateParam);
-
-                // Validate that we have a proper definition file name
-                if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
-                    // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
-                    throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
-                }
-
-                $page->template = $templateParam;
-            }
-
-            // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-            $collectionId = $this->request->getQueryParam('collectionId');
-            if (is_numeric($collectionId)) {
-                $collection = $collectionMapper->findById((int) $collectionId);
-                $page->collection_id = $collectionId;
-                $page->collection_title = $collection->collection_title;
-                $page->collection_slug = $collection->collection_slug;
-                $page->template = $collection->collection_definition;
-            }
+        // Return 404 if not found
+        if (empty($page)) {
+            return $this->notFound();
         }
 
         // Get page definition
         if (null === $page->definition = $definition->getPage($page->template . '.json')) {
-            $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
+            $this->setAlert('danger', 'Page Definition Error ' . $page->template . '.json', $definition->getErrorMessages());
         }
 
-        // If this is a new page (has no ID) then add a default element to each block
-        if (empty($page->id)) {
-            foreach ($page->definition->blocks as $block) {
-                $newElement = $pageElementMapper->make();
-                $newElement->block_key = $block->key;
-                $newElement->template = $block->elementTypeDefault;
+        // Get and load page settings
+        $pageSettings = $dataStoreMapper->findPageSettings($page->id) ?? [];
 
-                $page->setBlockElements([$newElement]);
+        if (isset($page->definition->settings)) {
+            $page->settings = $this->mergeSettings($pageSettings, $page->definition->settings);
+        } else {
+            // This case is for when page settings were saved to the DB but then deleted from the JSON definition
+            $page->settings = $pageSettings;
+        }
+
+        // Get saved elements and element settings
+        $elements = $pageElementMapper->findElementsByPageId($page->id);
+
+        foreach ($elements as &$el) {
+            // Get element definition
+            if (null === $el->definition = $definition->getElement($el->template . '.json')) {
+                $this->setAlert('danger', 'Element Definition Error ' . $el->template . '.json', $definition->getErrorMessages());
+            }
+
+            // Get and load page element settings
+            $elementSettings = $dataStoreMapper->findPageElementSettings($el->id) ?? [];
+
+            if (isset($el->definition->settings)) {
+                $el->settings = $this->mergeSettings($elementSettings, $el->definition->settings);
+            } else {
+                // This case is for when page element settings were saved to the DB but then deleted from the JSON definition
+                $el->settings = $elementSettings;
             }
         }
 
-        // Merge saved page settings with settings from page JSON definition
-        if (isset($page->definition->settings)) {
-            $page->settings = $this->mergeSettings($settings, $page->definition->settings);
+        $page->setBlockElements($elements);
+
+        return $this->render('pages/pageEdit.html', $page);
+    }
+
+    /**
+     * Edit Load New Page
+     */
+    protected function editLoadNewPage()
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+
+        // Create new page object
+        $page = $pageMapper->make();
+
+        // Get requested page template from query string
+        $templateParam = $this->request->getQueryParam('definition');
+        if ($templateParam) {
+            $templateParam = htmlspecialchars($templateParam);
+
+            // Validate that we have a proper definition file name
+            if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
+            }
+
+            $page->template = $templateParam;
         }
+
+        // OR - "collectionId" and "definition" should be exclusive options to create a page
+
+        // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
+        $collectionId = $this->request->getQueryParam('collectionId');
+        if (is_numeric($collectionId)) {
+            $collection = $collectionMapper->findById((int) $collectionId);
+            $page->collection_id = $collectionId;
+            $page->collection_title = $collection->collection_title;
+            $page->collection_slug = $collection->collection_slug;
+            $page->template = $collection->collection_definition;
+        }
+
+        // Get page definition
+        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
+            $this->setAlert('danger', 'Page JSON Definition Error ' . $page->template . '.json', $definition->getErrorMessages());
+        }
+
+        // Populate page settings
+        $page->settings = $page->definition->settings;
 
         return $this->render('pages/pageEdit.html', $page);
     }
@@ -210,9 +265,9 @@ HTML;
      * Save Page
      *
      * Create new page, or update existing page
-     * From $_POST array
      * @param void
      * @return PitonEntity
+     * @uses POST
      */
     public function savePageHeader(): ?PitonEntity
     {
@@ -274,9 +329,9 @@ HTML;
     /**
      * Save Page Settings
      *
-     * From $_POST array
      * @param int $pageId
      * @return void
+     * @uses POST
      */
     protected function savePageSettings(int $pageId)
     {
@@ -289,7 +344,7 @@ HTML;
                 $setting = $dataStoreMapper->make();
                 $setting->id = $row['id'];
 
-                // Check for a page setting delete
+                // Check for a page setting delete flag
                 if (isset($row['delete'])) {
                     $dataStoreMapper->delete($setting);
                     continue;
@@ -307,36 +362,57 @@ HTML;
     /**
      * Save Page Elements
      *
-     * From $_POST array
      * @param int $pageId
      * @return void
+     * @users POST
      */
     protected function savePageElements(int $pageId)
     {
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
 
         // Save page elements by block
         $index = 1;
-        foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
+        foreach ($this->request->getParsedBodyParam('element') as $element) {
             // Save element
             $pageElement = $pageElementMapper->make();
-            $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
+            $pageElement->id = $element['element_id'];
             $pageElement->page_id = $pageId;
-            $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
-            $pageElement->template = $this->request->getParsedBodyParam('element_template')[$key];
+            $pageElement->block_key = $element['block_key'];
+            $pageElement->template = $element['element_template'];
             $pageElement->element_sort = $index++;
-            $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
-            $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
-            $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->title = $element['element_title'];
+            $pageElement->content_raw = $element['content_raw'];
+            $pageElement->content = $markdown->text($element['content_raw']);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
-            $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
-            $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
-            $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
+            $pageElement->collection_id = $element['element_collection_id'];
+            $pageElement->gallery_id = $element['element_gallery_id'];
+            $pageElement->embedded = $element['embedded'];
+            $pageElement->media_id = $element['element_media_id'];
 
             $pageElement = $pageElementMapper->save($pageElement);
+
+            // Save any element settings
+            if ($element['setting']) {
+                foreach ($element['setting'] as $row) {
+                    $setting = $dataStoreMapper->make();
+                    $setting->id = $row['id'];
+
+                    // Check for a page setting delete flag
+                    if (isset($row['delete'])) {
+                        $dataStoreMapper->delete($setting);
+                        continue;
+                    }
+
+                    $setting->element_id = $pageElement->id;
+                    $setting->category = 'element';
+                    $setting->setting_key = $row['setting_key'];
+                    $setting->setting_value = $row['setting_value'];
+                    $dataStoreMapper->save($setting);
+                }
+            }
         }
     }
 
@@ -378,33 +454,34 @@ HTML;
      * @uses queryParam blockKey
      * @return Response
      */
-    public function getElement(): Response
+    public function getNewElement(): Response
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Get dependencies
             $definition = $this->container->jsonDefinitionHandler;
+            $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+            $pageElement = $pageElementMapper->make();
 
-            $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
-            $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
+            $pageElement->template = htmlspecialchars($this->request->getQueryParam('template'));
+            $pageElement->block_key = htmlspecialchars($this->request->getQueryParam('blockKey'));
 
-            // Get page definition
-            if (null === $pageDefinition = $definition->getPage($pageTemplate . '.json')) {
-                throw new Exception('Page Definition Error', print_r($definition->getErrorMessages(), true));
+            // Get element definition
+            if (null === $pageElement->definition = $definition->getElement($pageElement->template . '.json')) {
+                throw new Exception('Element Definition Error ' . $pageElement->template . '.json' . print_r($definition->getErrorMessages(), true));
             }
 
-            // Get defined blocks and use block key as array index
-            $blocks = array_combine(array_column($pageDefinition->blocks, 'key'), $pageDefinition->blocks);
-
-            $form['blockKey'] = $blockKey;
-            $form['elementTypeOptions'] = $blocks[$blockKey]->elementTypeOptions ?? null;
+            // Get and load page element settings
+            if (isset($pageElement->definition->settings)) {
+                $pageElement->settings = $pageElement->definition->settings;
+            }
 
             // Make string template
             $template = '{% import "@admin/pages/_pageMacros.html" as pageMacro %}';
-            $template .= ' {{ pageMacro.elementForm(element, element.blockKey, element.elementTypeOptions) }}';
+            $template .= ' {{ pageMacro.elementForm(element, element.blockKey) }}';
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['element' => $form]);
+            $text = $this->container->view->fetchFromString($template, ['element' => $pageElement]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting new element: ". $th->getMessage();

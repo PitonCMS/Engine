@@ -33,7 +33,7 @@ class FrontController extends FrontBaseController
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $pageElement = ($this->container->dataMapper)('PageElementMapper');
+        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
 
         if (isset($args['slug2'])) {
             // This request is for a collection detail page
@@ -43,16 +43,23 @@ class FrontController extends FrontBaseController
             $page = $pageMapper->findPublishedPageBySlug($args['slug1']);
         }
 
-        // Send 404 if not found
+        // Return 404 if not found
         if (empty($page)) {
             return $this->notFound();
         }
 
-        // Get and set block elements
-        $page->setBlockElements($pageElement->findElementsByPageId($page->id));
+        // Get page elements
+        $elements = $pageElementMapper->findElementsByPageId($page->id) ?? [];
 
-        // Get and set page settings key-value pairs
-        $page->setDataKeyValues($dataStoreMapper->findPageSettings($page->id));
+        // Get and set page and element settings
+        $settings = $dataStoreMapper->findPageAndElementSettingsByPageId($page->id) ?? [];
+        $page->setPageSettings($settings);
+        array_walk($elements, function ($el) use ($settings) {
+            $el->setElementSettings($settings);
+        });
+
+        // Set elements in blocks
+        $page->setBlockElements($elements);
 
         return $this->render("{$page->template}.html", $page);
     }

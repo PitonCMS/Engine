@@ -18,6 +18,12 @@ namespace Piton\Models\Entities;
 class PageElement extends PitonEntity
 {
     /**
+     * Page Elements Settings Array
+     * @var array
+     */
+    public $settings = [];
+
+    /**
      * Media Sub-Object
      * @var PitonEntity
      */
@@ -51,5 +57,25 @@ class PageElement extends PitonEntity
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
+    }
+
+    /**
+     * Set Page Element Settings
+     *
+     * Filters array of data_store settings on element category and creates key:value array on $this->settings
+     * @param array|null
+     * @return void
+     */
+    public function setElementSettings(?array $settings): void
+    {
+        if (empty($settings)) {
+            return;
+        }
+
+        array_walk($settings, function ($setting) {
+            if ($setting->category === 'element' && $this->id === $setting->element_id) {
+                $this->settings[$setting->setting_key] = $setting->setting_value;
+            }
+        });
     }
 }

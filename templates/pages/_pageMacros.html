@@ -4,63 +4,47 @@
   Edit Element Form
 
   Returns one element
-  @param arrayKey     Each element gets a unique arrayKey set to keep those inputs together on save.
-  @param elementTypes List of available elements to select
-  @param enableInput  Flag to enable optional input, textarea, or selects
+  @param object element  Element object
 #}
 
-{% macro elementForm(element, blockKey, elementTypeOptions, loopIndex = 1) %}
-
+{% macro elementForm(element) %}
+{% import '@admin/settings/_editSettingInputMacro.html' as settingMacro %}
 {% set arrayKey = element.id ?? uniqueKey() %}
-{% set elementTypes = getElements() %}
-{% set enableInput = elementTypes[element.template].enableInput %}
 
 <div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
-  <input type="hidden" name="element_id[{{ arrayKey }}]" value="{{ element.id }}">
-  <input type="hidden" name="block_key[{{ arrayKey }}]" value="{{ blockKey }}">
+  <input type="hidden" name="element[{{ arrayKey }}][element_id]" value="{{ element.id }}">
+  <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ element.block_key }}">
+  <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
   <!-- Element Title -->
   <div class="toggle-block__header toggle-block__header-secondary">
    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
+   <div class="small-text">{{ element.definition.elementName }}</div>
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
   </div>
 
   <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse="target">
-  <div class="form-block">
-    <label class="form-block__title">Element Title</label>
-    <input type="text"  name="element_title[{{ arrayKey }}]" value="{{ element.title }}"
-      placeholder="Element Title" autocomplete="off">
-  </div>
-    {# Element radio buttons #}
     <div class="form-block">
-      <label class="form-block__title">Element Type&nbsp;&nbsp;<span class="text-required">*</span></label>
-      <div class="form-check-wrapper">
-        {% for el in elementTypes %}
-        {% if (elementTypeOptions and el.filename in elementTypeOptions) or (not elementTypeOptions) %}
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="element_template[{{ arrayKey }}]"
-            id="{{ arrayKey }}-{{ el.filename }}" value="{{ el.filename }}"
-            data-element-enable-input="{{ el.enableInput|default(1) }}"
-            {{ checked(element.template == el.filename) }} required>
-
-            <label class="form-check-label" for="{{ arrayKey }}-{{ el.filename }}"
-            title="{{ el.description }}">{{ el.name }}</label>
-        </div>
-        {% endif %}
-        {% endfor %}
-      </div>
+      <label class="form-block__title">Element Title</label>
+      <input type="text"  name="element[{{ arrayKey }}][element_title]" value="{{ element.title }}"
+        placeholder="Element Title" autocomplete="off">
     </div>
 
-    <!-- Element Content Area -->
-    <div class="form-block ">
+    {# Element custom settings #}
+    {% for setting in element.settings %}
+      {{ settingMacro.settingInput(setting, "element[" ~ arrayKey ~ "][setting]") }}
+    {% endfor %}
+
+    {# Element Content Editor Area. Bool false in Twig is empty, so need this hack for actual bool false #}
+    <div class="form-block {% if not element.definition.showContentTexarea %}d-none{% endif %}">
       <label class="form-block__title">Element Content</label>
-      <textarea  data-mde="1" rows="5" name="content_raw[{{ arrayKey }}]">{{ element.content_raw }}</textarea>
+      <textarea  data-mde="1" rows="5" name="element[{{ arrayKey }}][content_raw]">{{ element.content_raw }}</textarea>
     </div>
 
-    <!-- Embedded HTML -->
-    <div class="form-block {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}" data-element-input-option="embedded">
+    {# Embedded HTML #}
+    <div class="form-block {% if element.definition.enableInput != 'embedded' %}d-none{% endif %}" data-element-input-option="embedded">
       <label class="form-block__title">Embedded HTML</label>
-      <textarea  rows="3" name="embedded[{{ arrayKey }}]">{{ element.embedded }}</textarea>
+      <textarea  rows="3" name="element[{{ arrayKey }}][embedded]">{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
     </div>
 
@@ -70,13 +54,13 @@
     This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
     Selecting an image sets the media table ID in the element_media_id input.
     #}
-    <div class="form-block mediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block mediaInput {% if element.definition.enableInput != 'image' %}d-none{% endif %}"
       data-element-input-option="image" data-media-select="1">
 
       <img src="{{ getMediaPath(element.media.filename, 'large') }}"
         class="{% if not element.media.filename %}d-none{% endif %}">
 
-      <input type="hidden"  name="element_media_id[{{ arrayKey }}]"
+      <input type="hidden"  name="element[{{ arrayKey }}][element_media_id]"
         value="{{ element.media.id }}">
       <label class="form-block__title">Media</label>
 
@@ -88,11 +72,11 @@
     </div>
 
     {# Collection Select #}
-    <div class="form-block {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block {% if element.definition.enableInput != 'collection' %}d-none{% endif %}"
       data-element-input-option="collection">
       <label class="form-block__title">Collection</label>
-      <select class="minimal" name="element_collection_id[{{ arrayKey }}]"
-        {% if enableInput == 'collection' %}required{% endif %}>
+      <select class="minimal" name="element[{{ arrayKey }}][element_collection_id]"
+        {% if element.definition.enableInput == 'collection' %}required{% endif %}>
         <option value="">- None -</option>
         {% for c in getCollections() %}
         <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
@@ -103,10 +87,10 @@
     </div>
 
     {# Gallery Category Select #}
-    <div class="form-block {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block {% if element.definition.enableInput != 'gallery' %}d-none{% endif %}"
     data-element-input-option="gallery">
       <label class="form-block__title">Gallery</label>
-      <select class="minimal" name="element_gallery_id[{{ arrayKey }}]" {% if enableInput == 'gallery' %}required{% endif %}>
+      <select class="minimal" name="element[{{ arrayKey }}][element_gallery_id]" {% if element.definition.enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
         {% for id, cat in getMediaCategories() %}
         <option value="{{ id }}" {% if id == element.gallery_id %}selected{% endif %}>{{ cat }}</option>

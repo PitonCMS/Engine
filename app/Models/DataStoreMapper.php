@@ -23,7 +23,7 @@ class DataStoreMapper extends DataMapperAbstract
 {
     protected $inCategories = "('site','contact','social','piton')";
     protected $table = 'data_store';
-    protected $modifiableColumns = ['category', 'page_id', 'setting_key', 'setting_value'];
+    protected $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
 
     /**
      * Find Settings
@@ -55,7 +55,50 @@ class DataStoreMapper extends DataMapperAbstract
     public function findPageSettings(int $pageId): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' and category = \'page\' and page_id = ?';
+        $this->sql .= " and category = 'page' and page_id = ?";
+        $this->bindValues[] = $pageId;
+
+        return $this->find();
+    }
+
+    /**
+     * Find Page Element Settings
+     *
+     * Get page element level settings
+     * @param  int   $elementId  Element ID
+     * @return array|null
+     */
+    public function findPageElementSettings(int $elementId): ?array
+    {
+        $this->makeSelect();
+        $this->sql .= " and category = 'element' and element_id = ?";
+        $this->bindValues[] = $elementId;
+
+        return $this->find();
+    }
+
+    /**
+     * Find All Page and Element Settings
+     *
+     * Get all page and page_element settings for all elements in this page in one query
+     * @param int $pageId Page ID
+     * @return array|null
+     */
+    public function findPageAndElementSettingsByPageId(int $pageId): ?array
+    {
+        $this->sql = <<<SQL
+select ds.id, ds.category, ds.page_id, ds.element_id, ds.setting_key, ds.setting_value
+from data_store ds
+join page p on ds.page_id = p.id
+where p.id = ?
+union all
+select ds.id, ds.category, ds.page_id, ds.element_id, ds.setting_key, ds.setting_value
+from data_store ds
+join page_element pe on ds.element_id = pe.id and ds.category = 'element'
+join page p on pe.page_id = p.id
+where p.id = ?
+SQL;
+        $this->bindValues[] = $pageId;
         $this->bindValues[] = $pageId;
 
         return $this->find();

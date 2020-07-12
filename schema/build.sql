@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `media_category` (
 CREATE TABLE IF NOT EXISTS `media_category_map` (
   `media_id` int NOT NULL,
   `category_id` int NOT NULL,
+  `media_sort` smallint NULL DEFAULT NULL,
   UNIQUE KEY `media_id_category_id_uq` (`media_id`, `category_id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `media_category_map_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE,
@@ -128,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `page_id` int NOT NULL,
   `block_key` varchar(60) NOT NULL,
   `template` varchar(200) NOT NULL,
-  `element_sort` int NOT NULL DEFAULT 1,
+  `element_sort` smallint NOT NULL DEFAULT 1,
   `title` varchar(200) NULL DEFAULT NULL,
   `content_raw` mediumtext NULL DEFAULT NULL,
   `content` mediumtext NULL DEFAULT NULL,
@@ -154,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `data_store` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
   `page_id` int DEFAULT NULL,
+  `element_id` int DEFAULT NULL,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT 1,
@@ -162,8 +164,10 @@ CREATE TABLE IF NOT EXISTS `data_store` (
   `updated_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_idx` (`category`),
-  KEY `page_id_category_uq` (`page_id`, `category`),
+  KEY `page_id_category_idx` (`page_id`, `category`),
+  KEY `element_id_category_idx` (`element_id`, `category`),
   CONSTRAINT `page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `element_id_fk` FOREIGN KEY (`element_id`) REFERENCES `page_element` (`id`) ON DELETE CASCADE,
   FULLTEXT KEY `data_store_ft` (`setting_value`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 

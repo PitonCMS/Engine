@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Exception;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use JsonSchema\Constraints\Constraint;
 
 /**
  * Piton JSON Definition File Loader and Validator
@@ -174,7 +174,6 @@ class Definition
                 'filename' => mb_substr($file, 0, mb_stripos($file, '.json')),
                 'name' => $definition->elementName,
                 'description' => $definition->elementDescription ?? null,
-                'enableInput' => $definition->enableInput ?? null,
             ];
         }
 
@@ -261,7 +260,7 @@ class Definition
     {
         // Get and decode JSON to be validated
         if (!file_exists($json) || false === $contents = file_get_contents($json)) {
-            $this->errors[] = "Unable to get file: $json";
+            $this->errors[] = "Unable to read file: $json";
             return null;
         }
 
@@ -270,32 +269,34 @@ class Definition
 
         if ($schema) {
             // Validate JSON
-            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema], Constraint::CHECK_MODE_APPLY_DEFAULTS);
 
-            if ($this->validator->isValid()) {
-                return $jsonDecodedInput;
+            if (!$this->validator->isValid()) {
+                // If not valid, record error messages and return null
+                foreach ($this->validator->getErrors() as $error) {
+                    $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
+                }
+
+                $jsonDecodedInput = null;
             }
-
-            // If not valid, record error messages and return null
-            foreach ($this->validator->getErrors() as $error) {
-                $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
-            }
-
-            return null;
-        } else {
-            return $jsonDecodedInput;
         }
+
+        $this->validator->reset();
+        return $jsonDecodedInput;
     }
 
     /**
      * Get Errors
      *
-     * Returns array of error messages
+     * Returns array of error messages and resets error array
      * @param void
      * @return array
      */
     public function getErrorMessages(): array
     {
-        return $this->errors;
+        $errors = $this->errors;
+        $this->errors = [];
+
+        return $errors;
     }
 }

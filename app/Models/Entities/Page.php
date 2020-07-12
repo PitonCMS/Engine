@@ -87,19 +87,23 @@ class Page extends PitonEntity
     }
 
     /**
-      * Set Custom Page Data Settings
-      *
-      * Takes array of custom page settings and assigns to $this->settings using setting_key as keys
-      * @param array|null  $settings Array of page settings
-      * @return void
-      */
-    public function setDataKeyValues(?array $settings): void
+     * Set Page Settings
+     *
+     * Filters array of data_store settings on page category and creates key:value array on $this->settings
+     * @param array|null
+     * @return void
+     */
+    public function setPageSettings(?array $settings): void
     {
         if (empty($settings)) {
             return;
         }
 
-        $this->settings = array_column($settings, 'setting_value', 'setting_key');
+        array_walk($settings, function ($setting) {
+            if ($setting->category === 'page' && $this->id === $setting->page_id) {
+                $this->settings[$setting->setting_key] = $setting->setting_value;
+            }
+        });
     }
 
     /**

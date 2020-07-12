@@ -25,11 +25,10 @@ const alertInlineMessage = function(severity, heading, message) {
     container.querySelector(`[data-alert="heading"]`).innerHTML = heading;
 
     // Stringify message
-    if (typeof message === "undefined") {
-        message = ""
-    } else if (typeof message === "object") {
-        message = message.join("<br>");
+    if (typeof message === "undefined" || typeof message === "string") {
+        message = [message ?? ""];
     }
+    message = message.join("<br>");
 
     container.querySelector(`[data-alert="content"]`).innerHTML = message;
 
