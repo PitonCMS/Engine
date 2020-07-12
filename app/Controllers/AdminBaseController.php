@@ -92,7 +92,7 @@ class AdminBaseController extends BaseController
                 unset($savedSettings[$settingIndex[$setting->key]]);
             } else {
                 // If a matching saved setting was NOT found, then set default value
-                $setting->setting_value = $setting->value;
+                $setting->setting_value = $setting->value ?? null;
                 $setting->status = 'new';
             }
 
