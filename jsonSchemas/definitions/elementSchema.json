@@ -16,7 +16,7 @@
             "type": "string",
             "enum": ["collection","embedded","image","gallery"]
         },
-        "showContentTexarea": {
+        "showContentTextarea": {
             "description": "Show content textarea, defaults to true",
             "type": "boolean",
             "default": true
