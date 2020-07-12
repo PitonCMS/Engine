@@ -124,68 +124,14 @@ HTML;
      */
     public function editPage($args): Response
     {
-        // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $definition = $this->container->jsonDefinitionHandler;
-
-        // Check if existing saved page or creating a new page
-        if (is_numeric($args['id'])) {
+        // Determine whether to edit an existing page or create a new page
+        if (isset($args['id']) && is_numeric($args['id'])) {
+            // Edit saved page
             return $this->editLoadSavedPage((int) $args['id']);
         } else {
-            // New page object
-            $page = $pageMapper->make();
-            $settings = [];
-
-            // Create new page, and get template from query string
-            $templateParam = $this->request->getQueryParam('definition');
-            if ($templateParam) {
-                $templateParam = htmlspecialchars($templateParam);
-
-                // Validate that we have a proper definition file name
-                if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
-                    // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
-                    throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
-                }
-
-                $page->template = $templateParam;
-            }
-
-            // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-            $collectionId = $this->request->getQueryParam('collectionId');
-            if (is_numeric($collectionId)) {
-                $collection = $collectionMapper->findById((int) $collectionId);
-                $page->collection_id = $collectionId;
-                $page->collection_title = $collection->collection_title;
-                $page->collection_slug = $collection->collection_slug;
-                $page->template = $collection->collection_definition;
-            }
+            // Create new page
+            return $this->editLoadNewPage();
         }
-
-        // Get page definition
-        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
-            $this->setAlert('danger', 'Page JSON Definition Error', $definition->getErrorMessages());
-        }
-
-        // If this is a new page (has no ID) then add a default element to each block
-        if (empty($page->id)) {
-            foreach ($page->definition->blocks as $block) {
-                $newElement = $pageElementMapper->make();
-                $newElement->block_key = $block->key;
-                $newElement->template = $block->elementTypeDefault;
-
-                $page->setBlockElements([$newElement]);
-            }
-        }
-
-        // Merge saved page settings with settings from page JSON definition
-        if (isset($page->definition->settings)) {
-            $page->settings = $this->mergeSettings($settings, $page->definition->settings);
-        }
-
-        return $this->render('pages/pageEdit.html', $page);
     }
 
     /**
@@ -257,10 +203,45 @@ HTML;
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;
+
+        // Create new page object
+        $page = $pageMapper->make();
+
+        // Get requested page template from query string
+        $templateParam = $this->request->getQueryParam('definition');
+        if ($templateParam) {
+            $templateParam = htmlspecialchars($templateParam);
+
+            // Validate that we have a proper definition file name
+            if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
+                // $this->setAlert('danger', 'Invalid Template Name', 'The template name must only include a-z, A-Z, 0-9, and /');
+                throw new Exception("PitonCMS: Invalid query parameter for 'definition': $templateParam");
+            }
+
+            $page->template = $templateParam;
+        }
+
+        // OR - "collectionId" and "definition" should be exclusive options to create a page
+
+        // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
+        $collectionId = $this->request->getQueryParam('collectionId');
+        if (is_numeric($collectionId)) {
+            $collection = $collectionMapper->findById((int) $collectionId);
+            $page->collection_id = $collectionId;
+            $page->collection_title = $collection->collection_title;
+            $page->collection_slug = $collection->collection_slug;
+            $page->template = $collection->collection_definition;
+        }
+
+        // Get page definition
+        if (null === $page->definition = $definition->getPage($page->template . '.json')) {
+            $this->setAlert('danger', 'Page JSON Definition Error ' . $page->template . '.json', $definition->getErrorMessages());
+        }
+
+        // Populate page settings
+        $page->settings = $page->definition->settings;
 
         return $this->render('pages/pageEdit.html', $page);
     }
