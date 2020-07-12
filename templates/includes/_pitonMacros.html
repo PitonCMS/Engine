@@ -58,10 +58,11 @@
 #}
 {% macro filterOptions(type, label, name, options) %}
 
-<div class="btn-dropdown-block" data-filter="options">
-	<div class="btn btn-dropdown"><span>{{ label }}</span> <span><i class="fas fa-chevron-down"></i></span>
+<div class="btn-dropdown-block" data-filter="options" data-collapse="parent">
+	<div class="btn btn-dropdown" data-collapse="toggle">
+		{{ label }} <i class="fas fa-chevron-down"></i>
 	</div>
-	<div class="form-check-wrapper form-group-block">
+	<div class="form-check-wrapper form-group-block" data-collapse="target">
 		{% for key, value in options %}
 		{% set forId = uniqueKey() %}
 		<div class="form-check">

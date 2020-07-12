@@ -47,14 +47,14 @@
 
   <header class="top-header">
     <div class="logo">
-     <a href="{{ pathFor('adminHome') }}">Piton<span>CMS</span></a>
+     <a href="{{ pathFor('adminHome') }}">PitonCMS</a>
     </div>
 
- <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown">
-   <span>Welcome {{ site.environment.sessionUserFirstName }}</span> <span><i class="fas fa-chevron-down"></i></span>
+ <div class="btn-dropdown-block" data-collapse="parent">
+  <div class="btn btn-dropdown" data-collapse="toggle">
+   Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
   </div>
-  <div class="form-group-block">
+  <div class="form-group-block" data-collapse="target">
    <div class="form-group">
     <a href="{{ pathFor('adminUserEdit', {"id": site.environment.sessionUserId}) }}">Profile</a>
    </div>

@@ -156,7 +156,7 @@ a {
 
 .collapsed {
  display: none;
- animation: collapse 250ms ease-in-out forwards;
+ animation: collapse 125ms ease forwards;
 }
 
 @keyframes collapse {
@@ -165,7 +165,7 @@ a {
  }
 
  100% {
-  opacity: .25;
+  opacity: 1;
  }
 }
 

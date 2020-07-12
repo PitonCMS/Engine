@@ -1,19 +1,21 @@
 // color theme
-$clr-dark: hsl(0, 0%, 21%);
-$clr-light: hsl(0, 0%, 100%);
-$clr-light-grey: hsl(210, 22%, 96%);
-$clr-light-grey-1: hsl(213, 16%, 89%);
-$clr-light-grey-2: hsl(210, 11%, 93%);
-$clr-dark-grey-1: hsl(214, 20%, 32%);
-$clr-dark-grey: hsl(210, 6%, 48%);
-$clr-blue: hsl(208, 56%, 49%);
-$clr-blue-light: #d4effc;
-$clr-dark-blue: hsl(230, 57%, 30%);
-$clr-red: hsl(4, 73%, 53%);
-$clr-green: hsl(120, 100%, 25%);
-$clr-gold: hsl(51, 84%, 53%);
-$clr-dark-orange: hsl(25, 84%, 51%);
-$clr-light-orange: hsl(36, 100%, 71%);
+$clr-dark: #3b3b3b;
+$clr-light: #ffffff;
+
+$clr-light-grey: #f3f5f7;
+$clr-medium-grey: #dee3e7;
+$clr-dark-grey: #737a82;
+
+$clr-blue: #3782c3;
+$clr-blue-light: rgb(212, 239, 252);
+$clr-dark-blue: #212f78;
+
+$clr-red: #df3b30;
+$clr-green: #008000;
+$clr-gold: #ecce22;
+
+$clr-dark-orange: #eb7119;
+$clr-light-orange: #ffc46b;
 
 // Navigation Variables
 $breakpoint: 769px;
@@ -26,21 +28,18 @@ $box-shadow: 0 2px 2px rgba($clr-dark, .5);
 $box-shadow-1: 0 0 0 1px rgba(63, 63, 68, .05), 0 1px 3px 0 rgba($clr-dark, .15);
 $box-shadow-inset: inset 0 0 0 1px rgba(63, 63, 68, .05), inset 0 1px 3px 0 rgba($clr-dark, .15);
 
-// Text Colors
-
 // Background Colors
 $bg-dark: $clr-dark;
 $bg-light: $clr-light-grey;
 $bg-white: $clr-light;
-$bg-grey: $clr-light-grey-1;
-$bg-grey-light: $clr-light-grey-2;
+$bg-grey: $clr-medium-grey;
 $bg-accent: $clr-blue;
 $bg-accent-1: $clr-blue-light;
 
 // Default color Styles
 $text-light: $clr-light;
 $text-dark: $clr-dark;
-$text-grey: $clr-dark-grey-1;
+$text-grey: $clr-dark-grey;
 $text-accent: $clr-dark-orange;
 $text-accent-hover: lighten($text-accent, 10%);
 $text-secondary: $clr-dark-blue;
@@ -52,11 +51,11 @@ $clr-danger: $clr-red;
 $clr-warning: $clr-gold;
 $clr-draft: $clr-dark-grey;
 
-$border: $clr-light-grey-1;
+$border: $clr-medium-grey;
 
-$btn-blue:$clr-blue;
+$btn-blue: $clr-blue;
 $btn-blue-hover: darken($btn-blue, 10%);
-$btn-blue-disabled: lighten($btn-blue, 20%);
+$btn-blue-disabled: lighten($btn-blue, 10%);
 
 $btn-red: $clr-red;
 $btn-red-hover: darken($btn-red, 10%);
