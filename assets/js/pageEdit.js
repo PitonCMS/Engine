@@ -14,11 +14,11 @@ import { alertInlineMessage } from './modules/alert.js';
  * Set Element Title
  */
 const setElementTitleText = function(event) {
-    if (event.target.matches(`input[name^="element_title"]`)) {
-        let title = event.target.value;
-        let elementTitle = event.target.closest(`[data-element="parent"]`).querySelector(".secondary-title");
-        elementTitle.innerHTML = title;
-    }
+    if (!event.target.matches(`input[name*="element_title"]`)) return;
+
+    let title = event.target.value;
+    let elementTitle = event.target.closest(`[data-element="parent"]`).querySelector(".secondary-title");
+    elementTitle.innerHTML = title;
 }
 
 /**
