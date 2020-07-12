@@ -18,7 +18,7 @@
   z-index: 60;
 
   &-secondary {
-   background: $bg-grey-light;
+   background: $bg-light;
    border: solid 1px $border;
   margin: 0 1rem !important;
   }
@@ -33,11 +33,12 @@
 
  &__title {
   @include padding(.5em 1em .5em null);
+  @include margin(0);
   flex: 1;
   height: 100%;
   display: flex;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
 
   &:hover {
    cursor: default;
@@ -80,6 +81,7 @@
 
 .secondary-title {
  @include padding(null null null .75em);
+ @include margin(0);
  flex: 1;
  color: $text-secondary;
  font-size: 1.2rem;

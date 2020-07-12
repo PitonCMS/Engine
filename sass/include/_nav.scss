@@ -5,9 +5,6 @@
   display: flex;
   flex-flow: column nowrap;
 
-  @media screen and (min-width: $breakpoint) {
-  //  @include padding(1em null null null);
-  }
 
   &__link {
    @include padding(null .5em);
@@ -43,11 +40,11 @@
 
   &__icon {
    @include margin(null .5em);
-   color: rgba($text-dark, .35);
+   color: $text-grey;
   }
  }
  .active {
-  background: darken($bg-grey, 10%) !important;
+  background: $bg-grey !important;
   &:hover{
    background: inherit;
   }

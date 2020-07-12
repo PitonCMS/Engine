@@ -124,7 +124,7 @@ select.minimal:focus {
 }
 
 select:-moz-focusring {
- color: blue($color: #000000);
- text-shadow: 0 0 0 #000;
+ color: blue($color: $text-dark);
+ text-shadow: 0 0 0 $bg-dark;
 }
 
