@@ -47,20 +47,6 @@ $container['view'] = function ($c) {
         $view->addExtension(new Piton\Library\Twig\Front($c));
     }
 
-    // Set twig default date filter/function format based on site settings
-    // Map site setting date format to PHP equivalent
-    $dateFormats = [
-        'mm/dd/yyyy' => 'm/d/Y',
-        'dd-mm-yyyy' => 'd-m-Y',
-        'dd.mm.yyyy' => 'd.m.Y'
-        ];
-
-    // Set default date format based on site settings
-    if (isset($settings['site']['dateFormat'])) {
-        $twigEnvironment = $view->getEnvironment();
-        $twigEnvironment->getExtension(Twig\Extension\CoreExtension::class)->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
-    }
-
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {
         $view->addExtension(new Twig\Extension\DebugExtension());

@@ -120,8 +120,8 @@
       <h4 class="pageEdit__title">Page Settings</h4>
       <div class="form-block">
         <p>Publish(ed) date</p>
-        <input type="text" name="published_date" placeholder="Publish date"
-          value="{{ page.published_date is empty ? '' : page.published_date|date }}" autocomplete="off">
+        <input type="date" name="published_date" placeholder="YYYY-MM-DD"
+          value="{{ page.published_date }}" autocomplete="off">
 
         {% if page.getPublishedStatus == 'draft' %}
         <div>Status: <span class="draft">Draft</span></div>

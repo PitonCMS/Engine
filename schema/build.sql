@@ -199,7 +199,6 @@ VALUES
 
 INSERT INTO `data_store` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-	('site', NULL, 'dateFormat', 'mm/dd/yyyy', 1, now(), 1, now()),
 	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
   ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
   ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),

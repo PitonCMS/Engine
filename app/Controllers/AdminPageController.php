@@ -305,25 +305,20 @@ HTML;
         $page->media_id = $this->request->getParsedBodyParam('page_media_id');
 
         // Process published date
-        // The leading ! sets the time to 00:00:00
-        $phpDateFormat = [
-            'mm/dd/yyyy' => '!m/d/Y',
-            'dd-mm-yyyy' => '!d-m-Y',
-            'dd.mm.yyyy' => '!d.m.Y'
-        ];
         $publishedDate = $this->request->getParsedBodyParam('published_date');
         $publishNow = $this->request->getParsedBodyParam('publish_now');
 
         // Set publish date
         if (empty($publishedDate) && isset($publishNow)) {
-            // Set publish date to today if date is not set and the publish now button was used
+            // Set publish date to today if the date was not set and the publish now button was used
             $date = new DateTime();
             $page->published_date = $date->format('Y-m-d');
         } elseif (!empty($publishedDate)) {
-            // Otherwise if a date was provided, honor that date
-            $date = DateTime::createFromFormat($phpDateFormat[$this->settings['site']['dateFormat']], $publishedDate);
+            // Otherwise if a date was provided, honor the selected date
+            $date = DateTime::createFromFormat('Y-m-d', $publishedDate);
             $page->published_date = $date->format('Y-m-d');
         } else {
+            // Clear date
             $page->published_date = null;
         }
 
