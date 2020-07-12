@@ -460,13 +460,20 @@ HTML;
         try {
             // Get dependencies
             $definition = $this->container->jsonDefinitionHandler;
+            $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+            $pageElement = $pageElementMapper->make();
 
-            $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
-            $form['blockKey'] = htmlspecialchars($this->request->getQueryParam('blockKey'));
+            $pageElement->template = htmlspecialchars($this->request->getQueryParam('template'));
+            $pageElement->block_key = htmlspecialchars($this->request->getQueryParam('blockKey'));
 
-            // Get page definition
-            if (null === $pageDefinition = $definition->getPage($pageTemplate . '.json')) {
-                throw new Exception('Page Definition Error ' . $pageTemplate . '.json', print_r($definition->getErrorMessages(), true));
+            // Get element definition
+            if (null === $pageElement->definition = $definition->getElement($pageElement->template . '.json')) {
+                throw new Exception('Element Definition Error ' . $pageElement->template . '.json' . print_r($definition->getErrorMessages(), true));
+            }
+
+            // Get and load page element settings
+            if (isset($pageElement->definition->settings)) {
+                $pageElement->settings = $pageElement->definition->settings;
             }
 
             // Make string template
@@ -474,7 +481,7 @@ HTML;
             $template .= ' {{ pageMacro.elementForm(element, element.blockKey) }}';
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['element' => $form]);
+            $text = $this->container->view->fetchFromString($template, ['element' => $pageElement]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting new element: ". $th->getMessage();

@@ -217,22 +217,29 @@ class Admin extends Base
     /**
      * Get Elements
      *
-     * @param  void
-     * @return array
+     * Optionally filter list of elements
+     * @param  array|null $filter Return only listed elements
+     * @return array|null
      */
-    public function getElements(): array
+    public function getElements(array $filter = null): ?array
     {
-        // Return cached set of elements, if available
-        if (isset($this->cache['elements'])) {
+        // Set cached elements, if not set
+        if (!isset($this->cache['elements'])) {
+            // Get dependencies
+            $definition = $this->container->jsonDefinitionHandler;
+            $elements = $definition->getElements();
+            $elements = array_combine(array_column($elements, 'filename'), $elements);
+
+            $this->cache['elements'] = $elements;
+        }
+
+        if (!$filter) {
             return $this->cache['elements'];
         }
 
-        // Get dependencies
-        $definition = $this->container->jsonDefinitionHandler;
-        $elements = $definition->getElements();
-        $elements = array_combine(array_column($elements, 'filename'), $elements);
+        $filter = array_flip($filter);
 
-        return $this->cache['elements'] = $elements;
+        return array_intersect_key($this->cache['elements'], $filter);
     }
 
     /**

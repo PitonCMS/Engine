@@ -5,18 +5,15 @@
 
   Returns one element
   @param object element  Element object
-  @param string arrayKey Each element gets a unique block arrayKey set to keep those element inputs together on save.
 #}
 
-{% macro elementForm(element, blockKey) %}
+{% macro elementForm(element) %}
 {% import '@admin/settings/_editSettingInputMacro.html' as settingMacro %}
 {% set arrayKey = element.id ?? uniqueKey() %}
-{% set elementTypes = getElements() %}
-{% set enableInput = elementTypes[element.template].enableInput %}
 
 <div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
   <input type="hidden" name="element[{{ arrayKey }}][element_id]" value="{{ element.id }}">
-  <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ blockKey }}">
+  <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ element.block_key }}">
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
   <!-- Element Title -->
@@ -45,7 +42,7 @@
     </div>
 
     {# Embedded HTML #}
-    <div class="form-block {% if enableInput == 'embedded' %}d-block{% else %}d-none{% endif %}" data-element-input-option="embedded">
+    <div class="form-block {% if element.definition.enableInput != 'embedded' %}d-none{% endif %}" data-element-input-option="embedded">
       <label class="form-block__title">Embedded HTML</label>
       <textarea  rows="3" name="element[{{ arrayKey }}][embedded]">{{ element.embedded }}</textarea>
       <small class="form-text text-muted">Enter embedded HTML.</small>
@@ -57,7 +54,7 @@
     This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
     Selecting an image sets the media table ID in the element_media_id input.
     #}
-    <div class="form-block mediaInput {% if enableInput == 'image' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block mediaInput {% if element.definition.enableInput != 'image' %}d-none{% endif %}"
       data-element-input-option="image" data-media-select="1">
 
       <img src="{{ getMediaPath(element.media.filename, 'large') }}"
@@ -75,11 +72,11 @@
     </div>
 
     {# Collection Select #}
-    <div class="form-block {% if enableInput == 'collection' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block {% if element.definition.enableInput != 'collection' %}d-none{% endif %}"
       data-element-input-option="collection">
       <label class="form-block__title">Collection</label>
       <select class="minimal" name="element[{{ arrayKey }}][element_collection_id]"
-        {% if enableInput == 'collection' %}required{% endif %}>
+        {% if element.definition.enableInput == 'collection' %}required{% endif %}>
         <option value="">- None -</option>
         {% for c in getCollections() %}
         <option value="{{ c.id }}" {% if c.id == element.collection_id %}selected{% endif %}>
@@ -90,10 +87,10 @@
     </div>
 
     {# Gallery Category Select #}
-    <div class="form-block {% if enableInput == 'gallery' %}d-block{% else %}d-none{% endif %}"
+    <div class="form-block {% if element.definition.enableInput != 'gallery' %}d-none{% endif %}"
     data-element-input-option="gallery">
       <label class="form-block__title">Gallery</label>
-      <select class="minimal" name="element[{{ arrayKey }}][element_gallery_id]" {% if enableInput == 'gallery' %}required{% endif %}>
+      <select class="minimal" name="element[{{ arrayKey }}][element_gallery_id]" {% if element.definition.enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
         {% for id, cat in getMediaCategories() %}
         <option value="{{ id }}" {% if id == element.gallery_id %}selected{% endif %}>{{ cat }}</option>

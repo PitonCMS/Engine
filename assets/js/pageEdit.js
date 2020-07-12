@@ -48,21 +48,21 @@ const initMarkdownEditor = function(element) {
 document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
     addEl.addEventListener("click", (e) => {
         e.preventDefault();
-        let limit = parseInt(addEl.dataset.elementCountLimit) || 100;
-        let count = parseInt(addEl.dataset.elementCount) || 0;
+        // let limit = parseInt(addEl.dataset.elementCountLimit) || 100;
+        // let count = parseInt(addEl.dataset.elementCount) || 0;
 
-        // Check element limit
-        if (count >= limit) {
-            alert('This Block has the maximum number of Elements allowed by the design');
-            return;
-        }
+        // // Check element limit
+        // if (count >= limit) {
+        //     alert('This Block has the maximum number of Elements allowed by the design');
+        //     return;
+        // }
 
         // Get new element
         enableSpinner();
 
         // Get query string and XHR Promise
         let query = {
-            "pageTemplate": document.querySelector(`input[name="template"]`).value,
+            "template": addEl.dataset.elementTemplate,
             "blockKey": addEl.dataset.blockKey
         }
 
@@ -73,7 +73,7 @@ document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
                 container.innerHTML = response;
 
                 // Set element order number and update count in add element data-element-count
-                addEl.dataset.elementCount = ++count;
+                // addEl.dataset.elementCount = ++count;
 
                 container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                 targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
@@ -128,28 +128,6 @@ if (pageEditNode) {
                         alertInlineMessage("danger", "Failed to Delete Element", error);
                     });
             }
-        }
-    }, false);
-}
-
-// Enable additional inputs on elements when selected
-if (pageEditNode) {
-    pageEditNode.addEventListener("click", (event) => {
-        if (event.target.dataset.elementEnableInput) {
-            let elementParent = event.target.closest(`[data-element="parent"]`);
-            let requiredOption = event.target.dataset.elementEnableInput;
-
-            // Get special inputs and set visible or hide class
-            elementParent.querySelectorAll(`[data-element-input-option]`).forEach(option => {
-                if (requiredOption === option.dataset.elementInputOption) {
-                    option.classList.remove("d-none");
-                    option.classList.add("d-block");
-                } else {
-                    option.classList.add("d-none");
-                    option.classList.remove("d-block");
-                }
-
-            });
         }
     }, false);
 }
