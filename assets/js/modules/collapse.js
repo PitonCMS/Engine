@@ -3,13 +3,11 @@
  * @param {Event} event
  */
 const collapseToggle = function(event) {
-    if (event.target.dataset.collapse === 'toggle') {
-        let collapseTarget = event.target.closest(`[data-collapse="parent"]`).querySelector(`[data-collapse="target"]`);
+    if (!event.target.closest(`[data-collapse-toggle]`)) return;
+    let toggleKey = event.target.closest(`[data-collapse-toggle]`).dataset.collapseToggle;
 
-        if (collapseTarget) {
-            collapseTarget.classList.toggle("collapsed");
-        }
-    }
+    // Find the matching collapse target by value and toggle class
+    document.querySelector(`[data-collapse-target="${toggleKey}"]`)?.classList.toggle("collapsed");
 }
 
-export { collapseToggle };
+document.addEventListener("click", collapseToggle, false);

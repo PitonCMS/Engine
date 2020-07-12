@@ -11,7 +11,7 @@
 {% import '@admin/settings/_editSettingInputMacro.html' as settingMacro %}
 {% set arrayKey = element.id ?? uniqueKey() %}
 
-<div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent" data-collapse="parent">
+<div draggable="true" class="toggle-block" id="page-element-{{ arrayKey }}" data-element="parent">
   <input type="hidden" name="element[{{ arrayKey }}][element_id]" value="{{ element.id }}">
   <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ element.block_key }}">
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
@@ -20,10 +20,10 @@
   <div class="toggle-block__header toggle-block__header-secondary">
    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
    <div class="small-text">{{ element.definition.elementName }}</div>
-   <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+   <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
   </div>
 
-  <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse="target">
+  <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse-target="pageElement-{{ arrayKey }}">
     <div class="form-block">
       <label class="form-block__title">Element Title</label>
       <input type="text"  name="element[{{ arrayKey }}][element_title]" value="{{ element.title }}"

@@ -56,12 +56,12 @@
     <div class="pageEdit__leftCol">
       {# Custom Settings Tab #}
       {% if page.settings %}
-      <div class="toggle-block" data-collapse="parent">
+      <div class="toggle-block">
         <div class="toggle-block__header">
           <h3 class="toggle-block__title">Custom Page Settings</h3>
-          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageSettings"></i>
         </div>
-        <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse="target">
+        <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse-target="pageSettings">
           {% for setting in page.settings %}
           {{ settingMacro.settingInput(setting) }}
           {% endfor %}
@@ -71,18 +71,17 @@
 
       {# Page Blocks and Elements #}
       {% for blockDefinition in page.definition.blocks %}
-
       {# Outer loop: All blocks defined in the JSON page definition file #}
-      <div class="toggle-block" data-collapse="parent">
+      <div class="toggle-block">
         <div class="toggle-block__header">
           <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
           {# Add New Element Button for Block  #}
           <div class="btn-dropdown-block">
-            <div class="btn btn-dropdown">
-              <span>Add Element</span>
+            <div class="btn btn-dropdown" data-collapse-toggle="newElementButton-{{ blockDefinition.key }}">
+              Add Element
               <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="form-group-block">
+            <div class="form-group-block" data-collapse-target="newElementButton-{{ blockDefinition.key }}">
               {# Check if the block has the max elements allowed #}
               {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit) %}
               {# Loop through elements to create add link #}
@@ -97,9 +96,9 @@
               {% endfor %}
             </div>
           </div>
-          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+          <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="block-{{ blockDefinition.key }}"></i>
         </div>
-        <div class="toggle-block__content" data-collapse="target">
+        <div class="toggle-block__content" data-collapse-target="block-{{ blockDefinition.key }}">
           {# Element order is draggable. On drag empty div's with class drag-drop are inserted around all elements as drop zone targets #}
           <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
             {% for element in page.blocks[blockDefinition.key] %}

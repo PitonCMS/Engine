@@ -37,4 +37,6 @@ const alertInlineMessage = function(severity, heading, message) {
     window.scrollTo(0,0);
 }
 
-export { alertInlineMessage, dismissAlertInlineMessage };
+document.addEventListener("click", dismissAlertInlineMessage, false);
+
+export { alertInlineMessage };

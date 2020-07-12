@@ -121,7 +121,7 @@
 {% macro navElement(navigation) %}
 {% import _self as navMacro %}
 
-<div class="toggle-block {% if navigation.parent_id %}sub-toggle-block{% endif %}" draggable="true" data-collapse="parent" data-navigation="parent" data-nav-id="{{ navigation.id }}">
+<div class="toggle-block {% if navigation.parent_id %}sub-toggle-block{% endif %}" draggable="true" data-navigation="parent" data-nav-id="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][navId]" value="{{ navigation.id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][parentId]" value="{{ navigation.parent_id }}">
   <input type="hidden" name="nav[{{ navigation.id }}][pageId]" value="{{ navigation.page_id }}">
@@ -130,10 +130,10 @@
   <div class="toggle-block__header">
     <h3 class="toggle-block__title secondary-title" data-nav="title">{{ navigation.title }}</h3>
     <div class="small-text toggle-block__type" data-nav="type">{% if navigation.page_id %}page{% elseif navigation.collection_id %}collection{% else %}placeholder{% endif %}</div>
-    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse="toggle"></i>
+    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="navElement-{{ navigation.id }}"></i>
   </div>
 
-  <div class="toggle-block__content {% if navigation.id %}collapsed{% endif %}" data-collapse="target">
+  <div class="toggle-block__content {% if navigation.id %}collapsed{% endif %}" data-collapse-target="navElement-{{ navigation.id }}">
 
     <div class="toggle-block__inner">
       <div class="form-group">

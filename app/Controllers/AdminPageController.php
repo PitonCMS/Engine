@@ -209,9 +209,12 @@ HTML;
         // Create new page object
         $page = $pageMapper->make();
 
-        // Get requested page template from query string
+        // Get options
         $templateParam = $this->request->getQueryParam('definition');
-        if ($templateParam) {
+        $collectionId = $this->request->getQueryParam('collectionId');
+
+        // Get requested page template from query string
+        if ($templateParam && empty($collectionId)) {
             $templateParam = htmlspecialchars($templateParam);
 
             // Validate that we have a proper definition file name
@@ -226,8 +229,8 @@ HTML;
         // OR - "collectionId" and "definition" should be exclusive options to create a page
 
         // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-        $collectionId = $this->request->getQueryParam('collectionId');
-        if (is_numeric($collectionId)) {
+
+        if (is_numeric($collectionId) && empty($templateParam)) {
             $collection = $collectionMapper->findById((int) $collectionId);
             $page->collection_id = $collectionId;
             $page->collection_title = $collection->collection_title;
@@ -241,7 +244,9 @@ HTML;
         }
 
         // Populate page settings
-        $page->settings = $page->definition->settings;
+        if (isset($page->definition->settings)) {
+            $page->settings = $this->mergeSettings([], $page->definition->settings);
+        }
 
         return $this->render('pages/pageEdit.html', $page);
     }
@@ -473,7 +478,7 @@ HTML;
 
             // Get and load page element settings
             if (isset($pageElement->definition->settings)) {
-                $pageElement->settings = $pageElement->definition->settings;
+                $pageElement->settings = $this->mergeSettings([], $pageElement->definition->settings);
             }
 
             // Make string template
