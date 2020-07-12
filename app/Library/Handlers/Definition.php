@@ -15,6 +15,7 @@ namespace Piton\Library\Handlers;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use JsonSchema\Constraints\Constraint;
 
 /**
  * Piton JSON Definition File Loader and Validator
@@ -268,7 +269,7 @@ class Definition
 
         if ($schema) {
             // Validate JSON
-            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema]);
+            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema], Constraint::CHECK_MODE_APPLY_DEFAULTS);
 
             if (!$this->validator->isValid()) {
                 // If not valid, record error messages and return null

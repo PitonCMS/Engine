@@ -284,9 +284,9 @@ HTML;
      * Save Page
      *
      * Create new page, or update existing page
-     * From $_POST array
      * @param void
      * @return PitonEntity
+     * @uses POST
      */
     public function savePageHeader(): ?PitonEntity
     {
@@ -348,9 +348,9 @@ HTML;
     /**
      * Save Page Settings
      *
-     * From $_POST array
      * @param int $pageId
      * @return void
+     * @uses POST
      */
     protected function savePageSettings(int $pageId)
     {
@@ -381,36 +381,57 @@ HTML;
     /**
      * Save Page Elements
      *
-     * From $_POST array
      * @param int $pageId
      * @return void
+     * @users POST
      */
     protected function savePageElements(int $pageId)
     {
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
 
         // Save page elements by block
         $index = 1;
-        foreach ($this->request->getParsedBodyParam('block_key') as $key => $value) {
+        foreach ($this->request->getParsedBodyParam('element') as $element) {
             // Save element
             $pageElement = $pageElementMapper->make();
-            $pageElement->id = $this->request->getParsedBodyParam('element_id')[$key];
+            $pageElement->id = $element['element_id'];
             $pageElement->page_id = $pageId;
-            $pageElement->block_key = $this->request->getParsedBodyParam('block_key')[$key];
-            $pageElement->template = $this->request->getParsedBodyParam('element_template')[$key];
+            $pageElement->block_key = $element['block_key'];
+            $pageElement->template = $element['element_template'];
             $pageElement->element_sort = $index++;
-            $pageElement->title = $this->request->getParsedBodyParam('element_title')[$key];
-            $pageElement->content_raw = $this->request->getParsedBodyParam('content_raw')[$key];
-            $pageElement->content = $markdown->text($this->request->getParsedBodyParam('content_raw')[$key]);
+            $pageElement->title = $element['element_title'];
+            $pageElement->content_raw = $element['content_raw'];
+            $pageElement->content = $markdown->text($element['content_raw']);
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
-            $pageElement->collection_id = $this->request->getParsedBodyParam('element_collection_id')[$key];
-            $pageElement->gallery_id = $this->request->getParsedBodyParam('element_gallery_id')[$key];
-            $pageElement->embedded = $this->request->getParsedBodyParam('embedded')[$key];
-            $pageElement->media_id = $this->request->getParsedBodyParam('element_media_id')[$key];
+            $pageElement->collection_id = $element['element_collection_id'];
+            $pageElement->gallery_id = $element['element_gallery_id'];
+            $pageElement->embedded = $element['embedded'];
+            $pageElement->media_id = $element['element_media_id'];
 
             $pageElement = $pageElementMapper->save($pageElement);
+
+            // Save any element settings
+            if ($element['setting']) {
+                foreach ($element['setting'] as $row) {
+                    $setting = $dataStoreMapper->make();
+                    $setting->id = $row['id'];
+
+                    // Check for a page setting delete flag
+                    if (isset($row['delete'])) {
+                        $dataStoreMapper->delete($setting);
+                        continue;
+                    }
+
+                    $setting->element_id = $pageElement->id;
+                    $setting->category = 'element';
+                    $setting->setting_key = $row['setting_key'];
+                    $setting->setting_value = $row['setting_value'];
+                    $dataStoreMapper->save($setting);
+                }
+            }
         }
     }
 
@@ -460,22 +481,16 @@ HTML;
             $definition = $this->container->jsonDefinitionHandler;
 
             $pageTemplate = htmlspecialchars($this->request->getQueryParam('pageTemplate'));
-            $blockKey = htmlspecialchars($this->request->getQueryParam('blockKey'));
+            $form['blockKey'] = htmlspecialchars($this->request->getQueryParam('blockKey'));
 
             // Get page definition
             if (null === $pageDefinition = $definition->getPage($pageTemplate . '.json')) {
-                throw new Exception('Page Definition Error', print_r($definition->getErrorMessages(), true));
+                throw new Exception('Page Definition Error ' . $pageTemplate . '.json', print_r($definition->getErrorMessages(), true));
             }
-
-            // Get defined blocks and use block key as array index
-            $blocks = array_combine(array_column($pageDefinition->blocks, 'key'), $pageDefinition->blocks);
-
-            $form['blockKey'] = $blockKey;
-            $form['elementTypeOptions'] = $blocks[$blockKey]->elementTypeOptions ?? null;
 
             // Make string template
             $template = '{% import "@admin/pages/_pageMacros.html" as pageMacro %}';
-            $template .= ' {{ pageMacro.elementForm(element, element.blockKey, element.elementTypeOptions) }}';
+            $template .= ' {{ pageMacro.elementForm(element, element.blockKey) }}';
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['element' => $form]);

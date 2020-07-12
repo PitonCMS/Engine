@@ -19,11 +19,13 @@
         },
         "showSubTitle": {
             "description": "Show sub-title input, defaults to true",
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         },
         "showFeaturedImage": {
             "description": "Show featured image input, defaults to true",
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         },
         "blocks": {
             "description": "An array of page block definitions",

@@ -18,11 +18,13 @@
         },
         "showContentTexarea": {
             "description": "Show content textarea, defaults to true",
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         },
         "enableEditor": {
             "description": "Enable content textarea editor controls, defaults to true",
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         },
         "settings": {
             "$ref": "settingsDefinitionSchema.json#/definition"

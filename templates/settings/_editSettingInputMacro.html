@@ -1,129 +1,135 @@
 {#
-  Setting Form Input Macros
+  Setting Input Macros
+
+  Used in Site, Page, and Elements for custom settings
 #}
 
-{# Wrapper Macro #}
-{% macro settingInput(setting) %}
+{#
+  Wrapper Input Macro
+
+  Disambiguates input select type to display
+  @param object setting Setting object
+  @param string nameKey Attribute key to use in name="" as prefix
+#}
+{% macro settingInput(setting, nameKey = 'setting') %}
 {% import _self as input %}
+
 {% if setting.input_type == 'select' %}
-{{ input.selectHtml(setting) }}
+  {{ input.selectHtml(setting, nameKey) }}
 {% elseif setting.input_type == 'textarea' %}
-{{ input.textareaHtml(setting) }}
+  {{ input.textareaHtml(setting, nameKey) }}
 {% elseif setting.input_type == 'media' %}
-{{ input.mediaInputHtml(setting) }}
+  {{ input.mediaInputHtml(setting, nameKey) }}
 {% else %}
-{{ input.inputHtml(setting) }}
+  {{ input.inputHtml(setting, nameKey) }}
 {% endif %}
+
 {% endmacro settingInput %}
 
-{# Input Macro #}
-{% macro inputHtml(setting) %}
-{% import _self as status %}
+{#
+  Input Macro
+#}
+{% macro inputHtml(setting, nameKey) %}
+{% import _self as settingMacro %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
 
- {# form-block Title #}
- <label class="form-block__title">{{ setting.label }} {# Badge if set #} {{ status.flag(setting.status, arrayKey) }} </label> 
-
- <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
- <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
- <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
- 
- {# form-block input #}
- <input type="text" class="" name="setting[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}" autocomplete="off">
-
- {# form-block help text #}
- <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-
+<div class="form-block">
+  <label class="form-block__title">{{ setting.label }}</label> {{ settingMacro.flag(setting.status, nameKey, arrayKey) }}
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][id]" value="{{ setting.id }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+  <input type="text" class="" name="{{ nameKey }}[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
+    autocomplete="off">
+  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>
+
 {% endmacro inputHtml %}
 
-{# Media Input Macro #}
-{% macro mediaInputHtml(setting) %}
-{% import _self as status %}
+{#
+  Media Input Macro
+#}
+{% macro mediaInputHtml(setting, nameKey) %}
+{% import _self as settingMacro %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-block jsSettingParent jsMediaInput" id="page-setting-{{ setting.setting_key }}">
 
- <label class="form-block__title">{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
- <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
- <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
- <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
- <input type="hidden" name="setting[{{ arrayKey }}][type]" value="media">
+<div class="form-block">
+  <label class="form-block__title">{{ setting.label }}</label> {{ settingMacro.flag(setting.status, nameKey, arrayKey) }}
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][id]" value="{{ setting.id }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][type]" value="media">
 
-
- <img src="{{ getMediaPath(setting.setting_value, 'large') }}"
-  class="img-fluid {% if setting.setting_value %}d-block{% else %}d-none{% endif %}">
- <div class="input-group">
-  <div class="input-group-prepend">
-   <button class="btn btn-outline-info jsSelectMediaFile" type="button">Select</button>
+  <img src="{{ getMediaPath(setting.setting_value, 'large') }}"
+    class="img-fluid {% if setting.setting_value %}d-block{% else %}d-none{% endif %}">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <button class="btn btn-outline-info" type="button">Select</button>
+    </div>
+    <input type="text" class="form-control" name="{{ nameKey }}[{{ arrayKey }}][setting_value]"
+      value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
+    <div class="input-group-append">
+      <button class="btn btn-light" type="button">Clear</button>
+    </div>
   </div>
-  <input type="text" class="form-control jsMediaInputField" name="setting[{{ arrayKey }}][setting_value]"
-   value="{{ getMediaPath(setting.setting_value) }}" autocomplete="off">
-  <div class="input-group-append">
-   <button class="btn btn-light jsMediaClear" type="button">Clear</button>
-  </div>
- </div>
- <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-
+  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>
+
 {% endmacro mediaInputHtml %}
 
-{# Select List Macro #}
-{% macro selectHtml(setting) %}
-{% import _self as status %}
+{#
+  Select List Macro
+#}
+{% macro selectHtml(setting, nameKey) %}
+{% import _self as settingMacro %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
 
-<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
- <label class="form-block__title">{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-
- {# Hidden Inputs #}
- <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
- <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
- <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-
- <select class="minimal" name="setting[{{ arrayKey }}][setting_value]">
-
-  {% for key, option in setting.options %}
-  <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
-  {% endfor %}
-
- </select>
-
- <small>Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-
+<div class="form-block">
+  <label class="form-block__title">{{ setting.label }}</label> {{ settingMacro.flag(setting.status, nameKey, arrayKey) }}
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][id]" value="{{ setting.id }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+  <select class="minimal" name="{{ nameKey }}[{{ arrayKey }}][setting_value]">
+    {% for key, option in setting.options %}
+    <option value="{{ key }}" {% if key == setting.setting_value %}selected{% endif %}>{{ option }}</option>
+    {% endfor %}
+  </select>
+  <small>Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>
+
 {% endmacro selectHtml %}
 
-{# Textarea Macro #}
-{% macro textareaHtml(setting) %}
-{% import _self as status %}
+{#
+  Textarea Macro
+#}
+{% macro textareaHtml(setting, nameKey) %}
+{% import _self as settingMacro %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
-<div class="form-block jsSettingParent" id="page-setting-{{ setting.setting_key }}">
 
- <label class="form-block__title">{{ setting.label }}</label> {{ status.flag(setting.status, arrayKey) }}
-
-  {# Hidden Inputs #}
- <input type="hidden" name="setting[{{ arrayKey }}][id]" value="{{ setting.id }}">
- <input type="hidden" name="setting[{{ arrayKey }}][category]" value="{{ setting.category }}">
- <input type="hidden" name="setting[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-
- <textarea rows="3" name="setting[{{ arrayKey }}][setting_value]">{{ setting.setting_value }}</textarea>
- <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
+<div class="form-block">
+  <label class="form-block__title">{{ setting.label }}</label> {{ settingMacro.flag(setting.status, nameKey, arrayKey) }}
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][id]" value="{{ setting.id }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
+  <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
+  <textarea rows="3" name="{{ nameKey }}[{{ arrayKey }}][setting_value]">{{ setting.setting_value }}</textarea>
+  <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>
+
 {% endmacro textareaHtml %}
 
-{# Setting Status #}
-{% macro flag(status, key) %}
+{#
+  Setting Status
+#}
+{% macro flag(status, nameKey, key) %}
 
 {% if status == 'orphaned' %}
 <div class="badge badge-danger">Orphaned</div>
 <div class="form-check-wrapper">
- <div class="form-check">
-  <input class="form-check-input" type="checkbox" name="setting[{{ key }}][delete]" value="delete" title="Deletes on save">
-  <label class="form-check-label text-danger">Delete?</label>
- </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="{{ nameKey }}[{{ key }}][delete]" value="delete"
+      title="Deletes on save">
+    <label class="form-check-label text-danger">Delete?</label>
+  </div>
 </div>
-
 
 {% elseif status == 'new' %}
 <div class="badge badge-success">New</div>

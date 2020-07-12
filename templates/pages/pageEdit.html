@@ -105,7 +105,7 @@
      <div class="pageElements__wrapper" id="block-{{ blockDefinition.key }}" data-draggable="children">
       {% for element in page.blocks[blockDefinition.key] %}
       {# Inner loop: Elements inside block #}
-      {{ pageMacro.elementForm(element, blockDefinition.key, blockDefinition.elementTypeOptions, loop.index) }}
+      {{ pageMacro.elementForm(element, blockDefinition.key) }}
       {% endfor %}
      </div>
     </div>
@@ -172,7 +172,7 @@
     </div>
 
    {# Page Featured Media Select #}
-   {% if page.definition.showFeaturedImage|default(1) %}
+   {% if page.definition.showFeaturedImage %}
    <div class="form-block pageEdit__twoCol" data-media-select="1">
     <label class="span">Featured Page Image</label>
     <img src="{{ getMediaPath(page.media.filename, 'large') }}" class="{% if not page.media.filename %}d-none{% endif %}">
