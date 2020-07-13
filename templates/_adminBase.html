@@ -47,7 +47,7 @@
 
   <header class="top-header">
     <div class="logo">
-     <a href="{{ pathFor('adminHome') }}">PitonCMS</a>
+     <a href="{{ pathFor('adminHome') }}">{{ site.settings.displayName|default("PitonCMS") }}</a>
     </div>
 
  <div class="btn-dropdown-block">
