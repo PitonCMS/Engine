@@ -451,6 +451,10 @@ a {
 }
 a:hover, afocus {
   color: #5f72d3;
+  outline: none;
+}
+a:active {
+  outline: dashed 5px #ef8e48;
 }
 
 ::selection {
@@ -935,7 +939,7 @@ a:hover, afocus {
   outline: none;
 }
 .sidebar .side-nav__link:active {
-  outline: #ef8e48 5px solid;
+  outline: #ef8e48 3px solid;
   position: relative;
   z-index: 100;
 }
