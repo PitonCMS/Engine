@@ -44,100 +44,113 @@ const initMarkdownEditor = function(element) {
       });
 }
 
-// Add Page Block Element
-document.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
-    addEl.addEventListener("click", (e) => {
-        e.preventDefault();
-        // let limit = parseInt(addEl.dataset.elementCountLimit) || 100;
-        // let count = parseInt(addEl.dataset.elementCount) || 0;
+// Add new element event
+document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
+    // Track element count and limit to enable or disable new elements
+    let blockKey = block.dataset.elementSelectBlock;
+    let blockElementCount = parseInt(block.dataset.elementCount ?? 0);
+    let blockElementCountLimit = parseInt(block.dataset.elementCountLimit);
+    let newElementDropdown = block.querySelector(`[data-collapse-toggle*="newElementButton"]`).parentElement;
 
-        // // Check element limit
-        // if (count >= limit) {
-        //     alert('This Block has the maximum number of Elements allowed by the design');
-        //     return;
-        // }
+    const addElementToggleState = function (increment) {
+        blockElementCount = blockElementCount + increment;
 
-        // Get new element
-        enableSpinner();
+        if (blockElementCount >= blockElementCountLimit) {
+            // Disable
+            newElementDropdown.classList.add("disabled-dropdown");
+        } else {
+            // Enable
+            newElementDropdown.classList.remove("disabled-dropdown");
+        }
+    }
 
-        // Get query string and XHR Promise
-        let query = {
-            "template": addEl.dataset.elementTemplate,
-            "blockKey": addEl.dataset.blockKey
+    // New element
+    block.querySelectorAll(`a[data-element="add"]`).forEach(addEl => {
+        addEl.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Check element limit
+            if (blockElementCount >= blockElementCountLimit) {
+                return;
+            }
+
+            // Get new element
+            enableSpinner();
+
+            // Get query string and XHR Promise
+            let query = {
+                "template": addEl.dataset.elementTemplate,
+                "blockKey": blockKey
+            }
+
+            getXHRPromise(pitonConfig.routes.adminPageElementGet, query)
+                .then(response => {
+                    let container = document.createElement("div");
+                    let targetBlock = document.getElementById("block-" + blockKey);
+                    container.innerHTML = response;
+
+                    // Update element count
+                    addElementToggleState(1);
+
+                    container.querySelector(`[data-element="parent"]`).classList.add("new-element");
+                    targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
+
+                    // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
+                    let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-mde="1"]`);
+                    initMarkdownEditor(newEditor);
+
+                    // Get new block ID for window scroll
+                    let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
+
+                    return windowTarget;
+                })
+                .then(() => {
+                    disableSpinner();
+                }).catch((error) => {
+                    disableSpinner();
+                    alertInlineMessage("danger", "Failed to Add Element", error);
+                });
+        }, false);
+    });
+
+    // Delete element
+    block.addEventListener("click", (event) => {
+        if (!event.target.dataset.deleteElementPrompt) return;
+        // Confirm delete
+        if (!confirm(event.target.dataset.deleteElementPrompt)) return;
+
+        // Get element ID and element
+        let elementId = parseInt(event.target.dataset.elementId);
+        let element = event.target.closest(`[data-element="parent"]`);
+
+        if (isNaN(elementId)) {
+            // Element has not been saved to DB, just remove from DOM
+            element.remove();
+        } else {
+            // Element has been saved, do a hard delete
+            enableSpinner();
+            postXHRPromise(pitonConfig.routes.adminPageElementDelete, {"elementId": elementId})
+                .then(() => {
+                    element.remove();
+                })
+                .then(() => {
+                    disableSpinner();
+                })
+                .catch((error) => {
+                    disableSpinner();
+                    alertInlineMessage("danger", "Failed to Delete Element", error);
+                });
         }
 
-        getXHRPromise(pitonConfig.routes.adminPageElementGet, query)
-            .then(response => {
-                let container = document.createElement("div");
-                let targetBlock = document.getElementById("block-" + addEl.dataset.blockKey);
-                container.innerHTML = response;
+        addElementToggleState(-1);
 
-                // Set element order number and update count in add element data-element-count
-                // addEl.dataset.elementCount = ++count;
-
-                container.querySelector(`[data-element="parent"]`).classList.add("new-element");
-                targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
-
-                // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
-                let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-mde="1"]`);
-                initMarkdownEditor(newEditor);
-
-                // Get new block ID for window scroll
-                let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
-
-                return windowTarget;
-            })
-            .then(() => {
-                disableSpinner();
-            }).catch((error) => {
-                disableSpinner();
-                alertInlineMessage("danger", "Failed to Add Element", error);
-            });
     }, false);
 });
 
-// Get Page Edit block
-const pageEditNode = document.querySelector(`[data-page-edit="1"]`);
-
-// Delete element
-if (pageEditNode) {
-    pageEditNode.addEventListener("click", (event) => {
-        if (event.target.dataset.deleteElementPrompt) {
-            // Confirm delete
-            if (!confirm(event.target.dataset.deleteElementPrompt)) return;
-
-            // Get element ID and element
-            let elementId = parseInt(event.target.dataset.elementId);
-            let element = event.target.closest(`[data-element="parent"]`);
-
-            if (isNaN(elementId)) {
-                // Element has not been saved to DB, just remove from DOM
-                element.remove();
-            } else {
-                // Element has been saved, do a hard delete
-                enableSpinner();
-                postXHRPromise(pitonConfig.routes.adminPageElementDelete, {"elementId": elementId})
-                    .then(() => {
-                        element.remove();
-                    })
-                    .then(() => {
-                        disableSpinner();
-                    })
-                    .catch((error) => {
-                        disableSpinner();
-                        alertInlineMessage("danger", "Failed to Delete Element", error);
-                    });
-            }
-        }
-    }, false);
-}
-
 // Bind Markdown Editor to selected textareas on page load
-if (pageEditNode) {
-    pageEditNode.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
-        initMarkdownEditor(editor);
-    });
-}
+document.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
+    initMarkdownEditor(editor);
+});
 
 // Bind set page slug from page title
 document.querySelector(`[data-url-slug="source"]`).addEventListener("input", (e) => {

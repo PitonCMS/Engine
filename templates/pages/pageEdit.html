@@ -72,30 +72,33 @@
       {# Page Blocks and Elements #}
       {% for blockDefinition in page.definition.blocks %}
       {# Outer loop: All blocks defined in the JSON page definition file #}
-      <div class="toggle-block">
+      <div class="toggle-block"
+        data-element-select-block="{{ blockDefinition.key }}"
+        data-element-count="{{ page.blocks[blockDefinition.key]|length|default(0) }}"
+        data-element-count-limit="{{ blockDefinition.elementCountLimit }}">
         <div class="toggle-block__header">
           <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
-          {# Add New Element Button for Block  #}
-          <div class="btn-dropdown-block">
+
+          {# Add New Element Button to block. Check element limit on page load #}
+          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit) %}
+          <div class="btn-dropdown-block {% if maxElements %}disabled-dropdown{% endif %}">
             <div class="btn btn-dropdown" data-collapse-toggle="newElementButton-{{ blockDefinition.key }}">
               Add Element
               <i class="fas fa-chevron-down"></i>
             </div>
             <div class="form-group-block" data-collapse-target="newElementButton-{{ blockDefinition.key }}">
-              {# Check if the block has the max elements allowed #}
-              {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit) %}
-              {# Loop through elements to create add link #}
+              {# Loop through filtered elements to create add element link #}
               {% for newEl in getElements(blockDefinition.elementTypeOptions) %}
               <div class="form-group">
-                <a name="#" class="{% if maxElements %}disabled{% endif %} form-group-link"
+                <a name="#" class="form-group-link"
                   data-element="add"
-                  data-block-key="{{ blockDefinition.key }}"
                   data-element-template="{{ newEl.filename }}"
                   >{{ newEl.name }}</a>
               </div>
               {% endfor %}
             </div>
           </div>
+
           <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="block-{{ blockDefinition.key }}"></i>
         </div>
         <div class="toggle-block__content" data-collapse-target="block-{{ blockDefinition.key }}">
