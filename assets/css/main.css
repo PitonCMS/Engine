@@ -504,7 +504,7 @@ a:hover, afocus {
 }
 
 .draft {
-  color: #737a82;
+  color: #5e6369;
   text-transform: capitalize;
 }
 
@@ -853,12 +853,12 @@ a:hover, afocus {
   margin-bottom: 0.5rem;
   height: 2rem;
   background: #d4effc;
-  border: dashed 3px #737a82 !important;
+  border: dashed 3px #5e6369 !important;
   animation: dragDropFadeIn 250ms ease-in-out forwards;
 }
 .drag-drop::before {
   padding: 0 0.5em;
-  color: rgba(115, 122, 130, 0.1);
+  color: rgba(94, 99, 105, 0.1);
   height: 100%;
   font-size: 1.3rem;
   display: flex;
@@ -904,15 +904,16 @@ a:hover, afocus {
 .sidebar .side-nav__link {
   padding-right: 0.5em;
   padding-left: 0.5em;
-  height: 50px;
   display: grid;
   grid-template-columns: 1fr 20px;
   align-items: center;
   column-gap: 0.25em;
 }
 .sidebar .side-nav__link:hover {
-  background: #dee3e7;
+  background: #cfd6dc;
   color: #eb7119;
+  position: relative;
+  z-index: 100;
 }
 .sidebar .side-nav__link a {
   height: 50px;
@@ -930,10 +931,18 @@ a:hover, afocus {
 .sidebar .side-nav__link a:hover {
   color: #eb7119;
 }
+.sidebar .side-nav__link a:focus {
+  outline: none;
+}
+.sidebar .side-nav__link:active {
+  outline: #ef8e48 5px solid;
+  position: relative;
+  z-index: 100;
+}
 .sidebar .side-nav__icon {
   margin-right: 0.5em;
   margin-left: 0.5em;
-  color: #737a82;
+  color: #5e6369;
 }
 .sidebar .active {
   background: #dee3e7 !important;
@@ -1167,7 +1176,7 @@ button,
   pointer-events: none;
 }
 .dropdown-disabled .btn-dropdown {
-  color: #737a82;
+  color: #5e6369;
 }
 
 .nav-toggle,
@@ -1317,7 +1326,7 @@ select, input[type=text], input[type=email], textarea {
 
 input[type=text], input[type=email], textarea {
   padding: 0.5em;
-  color: #737a82;
+  color: #5e6369;
 }
 
 select.minimal {
@@ -1428,7 +1437,7 @@ select:-moz-focusring {
   outline: none;
 }
 .input-block .fa-unlock {
-  color: #737a82;
+  color: #5e6369;
 }
 
 /* Modal background */
@@ -1506,7 +1515,7 @@ select:-moz-focusring {
 .modal-body .mediaCaption {
   width: 100%;
   font-size: 0.75rem;
-  color: #737a82;
+  color: #5e6369;
 }
 .modal-body .mediaCaption p {
   white-space: nowrap;
@@ -1683,7 +1692,7 @@ select:-moz-focusring {
   transition: color 0.4s ease, background-color 0.1s ease-in-out;
 }
 .media-wrapper .mediaInputBlock label {
-  color: #8d949b;
+  color: #767c84;
   letter-spacing: 0.03em;
   position: absolute;
   top: 0.5em;
@@ -1783,7 +1792,7 @@ select:-moz-focusring {
   border-bottom: solid 1px #dee3e7;
 }
 .message-block .message-content p {
-  color: #737a82;
+  color: #5e6369;
 }
 .message-block .btn-group {
   background: #ffffff;
@@ -2094,7 +2103,7 @@ select:-moz-focusring {
 .nav-wrapper .nav-item__content {
   padding-right: 1em;
   padding-left: 1em;
-  color: #737a82;
+  color: #5e6369;
   font-weight: 300;
 }
 .nav-wrapper .nav-item__title {
