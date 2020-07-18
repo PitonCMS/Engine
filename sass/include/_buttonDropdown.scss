@@ -1,80 +1,80 @@
 /* Button Dropdown Block */
 .btn-dropdown-block {
- @include margin(null null null 1rem);
- position: relative;
+  @include margin(null null null 1rem);
+  position: relative;
 }
 
 .btn-dropdown {
- @include margin(null null null 0);
- background: $bg-grey;
- color: $text-secondary;
- display: flex;
- justify-content: space-between;
- align-items: center;
- border-radius: 0;
+  @include margin(null null null 0);
+  background: $bg-grey;
+  color: $text-secondary;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
 
- &>:last-child {
-  margin-left: 2rem;
+  &>:last-child {
+    margin-left: 2rem;
 
- }
+  }
 
- &:hover {
-  cursor: pointer;
-  background: darken($bg-grey, 10%);
- }
+  &:hover {
+    cursor: pointer;
+    background: darken($bg-grey, 10%);
+  }
 }
 
 // Dropdown buttons w/hover
 .form-group-block {
- width: 100%;
- background: $bg-light;
- box-shadow: $box-shadow-1;
- grid-template-columns: 1fr !important;
-
- transform-origin: top;
- transform: scale(1, 0);
- transition: transform 125ms ease;
-
- position: absolute;
- top: 100%;
- left: 0rem;
- z-index: 100;
-
- &:hover {
-  cursor: pointer;
- }
-
- .check-block-item {
-  display: flex;
-  align-items: center;
-
-  label {
-   @include margin(null null null .5em);
-  }
- }
-
- .form-group {
-  @include padding(.5em);
   width: 100%;
-  height: 100%;
-  font-size: 0.875rem;
+  background: $bg-light;
+  box-shadow: $box-shadow-1;
+  grid-template-columns: 1fr !important;
+
+  transform-origin: top;
+  transform: scale(1, 0);
+  transition: transform 125ms ease;
+
+  position: absolute;
+  top: 100%;
+  left: 0rem;
+  z-index: 100;
 
   &:hover {
-   background: $bg-grey;
+    cursor: pointer;
   }
 
-  a {
-   display: flex;
-   @include padding(.5em .5em);
-   width: 100%;
-   color: $text-dark;
-   height: 100%;
+  .check-block-item {
+    display: flex;
+    align-items: center;
 
-   &:hover {
-    color: $text-accent-hover;
-   }
+    label {
+      @include margin(null null null .5em);
+    }
   }
- }
+
+  .form-group {
+    @include padding(.5em);
+    width: 100%;
+    height: 100%;
+    font-size: 0.875rem;
+
+    &:hover {
+      background: $bg-grey;
+    }
+
+    a {
+      display: flex;
+      @include padding(.5em .5em);
+      width: 100%;
+      color: $text-dark;
+      height: 100%;
+
+      &:hover {
+        color: $text-accent-hover;
+      }
+    }
+  }
 }
 
 /* dropdown trigger */
@@ -84,17 +84,24 @@
 //  transform: scale(1);
 // }
 .form-group-block.collapsed {
- cursor: pointer;
- transform: scale(1, 1);
- display: block;
+  cursor: pointer;
+  transform: scale(1, 1);
+  display: block;
 }
 
 .btn-group-filter {
- @include padding(1rem .5rem);
+  @include padding(1rem .5rem);
 
- width: 100%;
-display: flex;
- .btn {
+  width: 100%;
+  display: flex;
 
- }
+  .btn {}
+}
+
+.dropdown-disabled {
+  pointer-events: none;
+
+  .btn-dropdown {
+    color: $text-grey;
+  }
 }

@@ -1163,6 +1163,13 @@ button,
   width: 100%;
   display: flex;
 }
+.dropdown-disabled {
+  pointer-events: none;
+}
+.dropdown-disabled .btn-dropdown {
+  color: #737a82;
+}
+
 .nav-toggle,
 .element-toggle {
   position: absolute !important;
