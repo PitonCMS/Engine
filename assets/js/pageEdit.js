@@ -57,10 +57,10 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
 
         if (blockElementCount >= blockElementCountLimit) {
             // Disable
-            newElementDropdown.classList.add("disabled-dropdown");
+            newElementDropdown.classList.add("dropdown-disabled");
         } else {
             // Enable
-            newElementDropdown.classList.remove("disabled-dropdown");
+            newElementDropdown.classList.remove("dropdown-disabled");
         }
     }
 

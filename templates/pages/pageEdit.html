@@ -81,12 +81,12 @@
 
           {# Add New Element Button to block. Check element limit on page load #}
           {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit) %}
-          <div class="btn-dropdown-block {% if maxElements %}disabled-dropdown{% endif %}">
+          <div class="btn-dropdown-block {% if maxElements %}dropdown-disabled{% endif %}">
             <div class="btn btn-dropdown" data-collapse-toggle="newElementButton-{{ blockDefinition.key }}">
               Add Element
               <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="form-group-block" data-collapse-target="newElementButton-{{ blockDefinition.key }}">
+            <div class="form-group-block collapsed" data-collapse-target="newElementButton-{{ blockDefinition.key }}" data-collapse-event="click">
               {# Loop through filtered elements to create add element link #}
               {% for newEl in getElements(blockDefinition.elementTypeOptions) %}
               <div class="form-group">
