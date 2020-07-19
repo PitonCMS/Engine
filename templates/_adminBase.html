@@ -26,7 +26,7 @@
   {% if block('htmlTitle') is defined %}
     {{ block('htmlTitle') ~ ' - ' }}
   {% endif %}
-  PitonCMS
+  {{ site.settings.displayName|default("PitonCMS") }}
  </title>
 
  <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
