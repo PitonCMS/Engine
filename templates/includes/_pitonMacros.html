@@ -62,7 +62,7 @@
 	<div class="btn btn-dropdown" data-collapse-toggle="filter-{{ name }}">
 		{{ label }} <i class="fas fa-chevron-down"></i>
 	</div>
-	<div class="form-check-wrapper form-group-block" data-collapse-target="filter-{{ name }}">
+	<div class="form-check-wrapper form-group-block collapsed" data-collapse-target="filter-{{ name }}" data-collapse-auto="true">
 		{% for key, value in options %}
 		{% set forId = uniqueKey() %}
 		<div class="form-check">

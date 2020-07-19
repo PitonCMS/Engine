@@ -13,7 +13,7 @@
     <div class="btn btn-dropdown" data-collapse-toggle="addPageButton">
      Add Page <i class="fas fa-chevron-down"></i>
     </div>
-    <div class="form-group-block"  data-collapse-target="addPageButton">
+    <div class="form-group-block collapsed"  data-collapse-target="addPageButton" data-collapse-auto="true">
       {# List all templates with "templateType": "page" #}
       {% for pt in getPageTemplates() %}
       <div class="form-group">
