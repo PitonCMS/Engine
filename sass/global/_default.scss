@@ -212,3 +212,31 @@ a {
     transform: rotate(360deg);
   }
 }
+
+// .ck-editor__editable h1 {
+//   all: initial;
+// }
+.ck-content {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $text-dark;
+
+  }
+
+  ul,
+  ol {
+
+    @include margin(1rem null null 2rem);
+
+
+  }
+
+  p {
+    @include margin(1rem null null null);
+  }
+}
