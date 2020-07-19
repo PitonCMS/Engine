@@ -17,12 +17,13 @@
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
   <!-- Element Title -->
-  <div class="toggle-block__header toggle-block__header-secondary">
+  <div class="toggle-block__header toggle-block__header-secondary" data-drag-handle="true">
    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
    <div class="small-text">{{ element.definition.elementName }}</div>
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
   </div>
 
+  <!-- Element Content -->
   <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse-target="pageElement-{{ arrayKey }}">
     <div class="form-block">
       <label class="form-block__title">Element Title</label>

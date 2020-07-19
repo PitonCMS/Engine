@@ -43,7 +43,27 @@ const initEditor = function(textElement) {
         });
 }
 
-// Add new element event
+/**
+ * Enable Draggable
+ * Use with mouseup event to re-enable draggable=true on parent element
+ * @param {Event} event
+ */
+const enableDraggable = function(event) {
+    if (event.target.closest(`[data-drag-handle="true"]`)) return;
+    event.target.closest(`[data-element="parent"]`).setAttribute("draggable", true);
+}
+
+/**
+ * Disable Draggable
+ * Use with mousedown event to disable draggable=true on parent element
+ * @param {Event} event
+ */
+const disableDraggable = function(event) {
+    if (event.target.closest(`[data-drag-handle="true"]`)) return;
+    event.target.closest(`[data-element="parent"]`).setAttribute("draggable", false);
+}
+
+// Add new event.target event
 document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
     // Track element count and limit to enable or disable new elements
     let blockKey = block.dataset.elementSelectBlock;
@@ -167,6 +187,8 @@ document.addEventListener("change", setElementTitleText, false);
 
 // Draggable page elements
 document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
+    zone.addEventListener("mousedown", disableDraggable, false);
+    zone.addEventListener("mouseup", enableDraggable, false);
     zone.addEventListener("dragstart", dragStartHandler, false);
     zone.addEventListener("dragenter", dragEnterHandler, false);
     zone.addEventListener("dragover", dragOverHandler, false);
