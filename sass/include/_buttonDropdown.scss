@@ -1,4 +1,5 @@
 /* Button Dropdown Block */
+
 .btn-dropdown-block {
   @include margin(null null null 1rem);
   position: relative;
@@ -8,14 +9,16 @@
   @include margin(null null null 0);
   background: $bg-grey;
   color: $text-secondary;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 0;
 
-  &>:last-child {
-    margin-left: 2rem;
 
+
+  &>:last-child {
+    @include margin(null null null 2rem);
   }
 
   &:hover {
@@ -24,21 +27,22 @@
   }
 }
 
-// Dropdown buttons w/hover
+/* Button Dropdown Menu */
 .form-group-block {
   width: 100%;
   background: $bg-light;
   box-shadow: $box-shadow-1;
+
+  /* Grid Column to override the form-check-wrapper for 1 column */
   grid-template-columns: 1fr !important;
 
   transform-origin: top;
-  transform: scale(1, 0);
+  transform: scale(1, 1);
   transition: transform 125ms ease;
 
   position: absolute;
   top: 100%;
   left: 0rem;
-  z-index: 100;
 
   &:hover {
     cursor: pointer;
@@ -59,6 +63,7 @@
     height: 100%;
     font-size: 0.875rem;
 
+
     &:hover {
       background: $bg-grey;
     }
@@ -77,16 +82,12 @@
   }
 }
 
-/* dropdown trigger */
-// .btn-dropdown-block:hover>.form-group-block,
-// .btn-dropdown-block:hover>.form-group-block-add {
-//  cursor: pointer;
-//  transform: scale(1);
-// }
-.form-group-block.collapsed {
-  cursor: pointer;
-  transform: scale(1, 1);
-  display: block;
+.dropdown-disabled {
+  pointer-events: none;
+
+  .btn-dropdown {
+    color: $text-grey;
+  }
 }
 
 .btn-group-filter {
@@ -95,13 +96,10 @@
   width: 100%;
   display: flex;
 
-  .btn {}
 }
 
-.dropdown-disabled {
-  pointer-events: none;
-
-  .btn-dropdown {
-    color: $text-grey;
-  }
+.form-group-block.collapsed {
+  cursor: pointer;
+  transform: scale(1, 1);
+  display: none;
 }

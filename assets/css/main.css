@@ -1121,18 +1121,19 @@ button,
   background: #c0cad2;
 }
 
+/* Button Dropdown Menu */
 .form-group-block {
   width: 100%;
   background: #f3f5f7;
   box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(59, 59, 59, 0.15);
+  /* Grid Column to override the form-check-wrapper for 1 column */
   grid-template-columns: 1fr !important;
   transform-origin: top;
-  transform: scale(1, 0);
+  transform: scale(1, 1);
   transition: transform 125ms ease;
   position: absolute;
   top: 100%;
   left: 0rem;
-  z-index: 100;
 }
 .form-group-block:hover {
   cursor: pointer;
@@ -1164,11 +1165,11 @@ button,
   color: #ef8e48;
 }
 
-/* dropdown trigger */
-.form-group-block.collapsed {
-  cursor: pointer;
-  transform: scale(1, 1);
-  display: block;
+.dropdown-disabled {
+  pointer-events: none;
+}
+.dropdown-disabled .btn-dropdown {
+  color: #5e6369;
 }
 
 .btn-group-filter {
@@ -1176,11 +1177,11 @@ button,
   width: 100%;
   display: flex;
 }
-.dropdown-disabled {
-  pointer-events: none;
-}
-.dropdown-disabled .btn-dropdown {
-  color: #5e6369;
+
+.form-group-block.collapsed {
+  cursor: pointer;
+  transform: scale(1, 1);
+  display: none;
 }
 
 .nav-toggle,
