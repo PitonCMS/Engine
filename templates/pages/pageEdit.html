@@ -86,7 +86,7 @@
               Add Element
               <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="form-group-block collapsed" data-collapse-target="newElementButton-{{ blockDefinition.key }}" data-collapse-event="click">
+            <div class="form-group-block collapsed" data-collapse-target="newElementButton-{{ blockDefinition.key }}" data-collapse-auto="1">
               {# Loop through filtered elements to create add element link #}
               {% for newEl in getElements(blockDefinition.elementTypeOptions) %}
               <div class="form-group">
