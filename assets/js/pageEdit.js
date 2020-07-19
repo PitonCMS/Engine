@@ -30,10 +30,14 @@ const initEditor = function(textElement) {
         .create(textElement, {
             toolbar: ["heading","bold","italic","link","bulletedList","numberedList","blockQuote","undo","redo"]
         })
-        // .then(editor => {
-        //     // Displays toolbar options to include in the toolbar config above
-        //     console.log(Array.from( editor.ui.componentFactory.names()));
-        // })
+        .then(editor => {
+            editor.model.document.on('change:data', (e) => {
+                textElement.dispatchEvent(new Event("input", {"bubbles": true}));
+            });
+
+            // Displays toolbar options to include in the toolbar config above
+            // console.log(Array.from( editor.ui.componentFactory.names()));
+        })
         .catch(error => {
             console.error(error);
         });
@@ -170,48 +174,3 @@ document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
     zone.addEventListener("drop", dragDropHandler, false);
     zone.addEventListener("dragend", dragEndHandler, false);
 });
-
-/*
-
-// Bind Markdown Editor to Textareas
-let getMediaForMDE = function (editor) {
-    // Bind media click once, and load media in modal
-    $('#mediaModal').unbind().on('click', 'img', function () {
-      let imgsrc = $(this).data('source');
-      let imgalt = $(this).data('caption');
-      let output = '![' + imgalt + '](' + imgsrc + ') ';
-      editor.codemirror.replaceSelection(output);
-      editor.codemirror.focus();
-
-      $('#mediaModal').modal('hide');
-    });
-
-    $.ajax({
-      url: pitonConfig.routes.adminMediaGet,
-      method: "GET",
-      success: function (r) {
-        $('#mediaModal').find('.modal-body').html(r.html).end().modal();
-      }
-    });
-  };
-
-  [].forEach.call(document.getElementsByClassName('jsMDE'), element => {
-    let simplemde = new SimpleMDE({
-      element: element,
-      forceSync: true,
-      promptURLs: true,
-      toolbar: [
-        "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
-        "horizontal-rule", "table", "|", "link",
-        {
-          name: "image",
-          action: getMediaForMDE,
-          className: "fa fa-picture-o",
-          title: "Media"
-        },
-        "guide"
-      ]
-    });
-  });
-
-/* */
