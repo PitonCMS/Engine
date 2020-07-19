@@ -131,7 +131,6 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   `template` varchar(200) NOT NULL,
   `element_sort` smallint NOT NULL DEFAULT 1,
   `title` varchar(200) NULL DEFAULT NULL,
-  `content_raw` mediumtext NULL DEFAULT NULL,
   `content` mediumtext NULL DEFAULT NULL,
   `excerpt` varchar(60) NULL DEFAULT NULL,
   `collection_id` int NULL DEFAULT NULL,
@@ -145,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   PRIMARY KEY (`id`),
   KEY `page_id_idx` (`page_id`),
   KEY `media_id_idx` (`media_id`),
-  FULLTEXT KEY `page_element_ft` (`title`,`content_raw`),
+  FULLTEXT KEY `page_element_ft` (`title`,`content`),
   CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
   CONSTRAINT `page_element_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL,
   CONSTRAINT `page_element_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE SET NULL
@@ -192,10 +191,10 @@ INSERT INTO `page` (`id`, `page_slug`, `template`, `title`, `sub_title`, `meta_d
 VALUES
   (1,'home','default/heroPage','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now());
 
-INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `template`, `element_sort`, `title`, `content_raw`, `content`, `excerpt`, `gallery_id`, `media_id`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `template`, `element_sort`, `title`, `content`, `excerpt`, `gallery_id`, `media_id`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-  (1,1,'heroBlock','default/hero/hero',1,'Welcome to PitonCMS','A flexible content management system for your personal website.','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,1,now(),1,now()),
-  (2,1,'contentBlock','default/text/text',1,'Where to Start?','Congratulations! You have successfully installed PitonCMS. \r\n\r\nTo start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  \r\n\r\n','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now());
+  (1,1,'heroBlock','default/hero/hero',1,'Welcome to PitonCMS','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,1,now(),1,now()),
+  (2,1,'contentBlock','default/text/text',1,'Where to Start?','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now());
 
 INSERT INTO `data_store` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES

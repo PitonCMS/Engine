@@ -370,7 +370,6 @@ HTML;
     {
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
         $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $markdown = $this->container->markdownParser;
         $toolbox = $this->container->toolbox;
 
         // Save page elements by block
@@ -384,8 +383,7 @@ HTML;
             $pageElement->template = $element['element_template'];
             $pageElement->element_sort = $index++;
             $pageElement->title = $element['element_title'];
-            $pageElement->content_raw = $element['content_raw'];
-            $pageElement->content = $markdown->text($element['content_raw']);
+            $pageElement->content = $element['content'];
             $pageElement->excerpt = $toolbox->truncateHtmlText($pageElement->content, 60);
             $pageElement->collection_id = $element['element_collection_id'];
             $pageElement->gallery_id = $element['element_gallery_id'];

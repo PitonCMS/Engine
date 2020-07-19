@@ -204,9 +204,10 @@
 {% endblock content %}
 
 {% block closeForm %}
-</form>
+  </form>
 {% endblock closeForm %}
 
 {% block foot %}
-{{ getJsFileSource('pageEdit') }}
+  <script src="https://cdn.ckeditor.com/ckeditor5/20.0.0/classic/ckeditor.js"></script>
+  {{ getJsFileSource('pageEdit') }}
 {% endblock foot %}

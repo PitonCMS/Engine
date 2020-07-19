@@ -103,7 +103,7 @@ class PageMapper extends DataMapperAbstract
      *
      * This query searches each of these fields for having all supplied terms:
      *  - page.title, page.sub_title page.meta_description
-     *  - page_element.title, page_element.content_raw
+     *  - page_element.title, page_element.content
      * @param  string $terms                Search terms
      * @param  int    $limit                Limit
      * @param  int    $offset               Offset
@@ -120,7 +120,7 @@ class PageMapper extends DataMapperAbstract
  or p.id in (
     select page_id
     from page_element
-    where match(`title`,`content_raw`) against(?)
+    where match(`title`,`content`) against(?)
 )
 HTML;
         $this->bindValues[] = $terms;

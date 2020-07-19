@@ -26,7 +26,6 @@ class PageElementMapper extends DataMapperAbstract
         'template',
         'element_sort',
         'title',
-        'content_raw',
         'content',
         'excerpt',
         'collection_id',

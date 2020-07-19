@@ -22,26 +22,21 @@ const setElementTitleText = function(event) {
 }
 
 /**
- * Markdown Editor
- * @param {object} element
+ * Text CK Editor
+ * @param {object} textElement
  */
-const initMarkdownEditor = function(element) {
-    return new SimpleMDE({
-        element: element,
-        forceSync: true,
-        promptURLs: true,
-        toolbar: [
-          "bold", "italic", "|", "heading-2", "heading-3", "|", "unordered-list", "ordered-list", "|",
-          "horizontal-rule", "table", "|", "link",
-        //   {
-        //     name: "image",
-        //     // action: getMediaForMDE,
-        //     className: "fa fa-picture-o",
-        //     title: "Media"
-        //   },
-          "guide"
-        ]
-      });
+const initEditor = function(textElement) {
+    ClassicEditor
+        .create(textElement, {
+            toolbar: ["heading","bold","italic","link","bulletedList","numberedList","blockQuote","undo","redo"]
+        })
+        // .then(editor => {
+        //     // Displays toolbar options to include in the toolbar config above
+        //     console.log(Array.from( editor.ui.componentFactory.names()));
+        // })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 // Add new element event
@@ -96,8 +91,8 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
                     targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
                     // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
-                    let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-mde="1"]`);
-                    initMarkdownEditor(newEditor);
+                    let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-cke="true"]`);
+                    initEditor(newEditor);
 
                     // Get new block ID for window scroll
                     let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
@@ -147,9 +142,9 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
     }, false);
 });
 
-// Bind Markdown Editor to selected textareas on page load
-document.querySelectorAll(`textarea[data-mde="1"]`).forEach(editor => {
-    initMarkdownEditor(editor);
+// Bind CK Editor to selected textareas on page load
+document.querySelectorAll(`textarea[data-cke="true"]`).forEach(editor => {
+    initEditor(editor);
 });
 
 // Bind set page slug from page title
