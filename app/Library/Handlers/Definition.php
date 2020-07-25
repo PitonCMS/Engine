@@ -16,6 +16,7 @@ use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use JsonSchema\Constraints\Constraint;
+use Throwable;
 
 /**
  * Piton JSON Definition File Loader and Validator
@@ -264,21 +265,26 @@ class Definition
             return null;
         }
 
-        // TODO Add JSON_THROW_ON_ERROR when on min PHP 7.3
-        $jsonDecodedInput = json_decode($contents, false);
+        try {
+            // TODO Add JSON_THROW_ON_ERROR when on min PHP 7.3
+            $jsonDecodedInput = json_decode($contents, false);
 
-        if ($schema) {
-            // Validate JSON
-            $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema], Constraint::CHECK_MODE_APPLY_DEFAULTS);
+            if ($schema) {
+                // Validate JSON
+                $this->validator->validate($jsonDecodedInput, (object)['$ref' => 'file://' . $schema], Constraint::CHECK_MODE_APPLY_DEFAULTS);
 
-            if (!$this->validator->isValid()) {
-                // If not valid, record error messages and return null
-                foreach ($this->validator->getErrors() as $error) {
-                    $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
+                if (!$this->validator->isValid()) {
+                    // If not valid, record error messages and return null
+                    foreach ($this->validator->getErrors() as $error) {
+                        $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
+                    }
+
+                    $jsonDecodedInput = null;
                 }
-
-                $jsonDecodedInput = null;
             }
+        } catch (Throwable $th) {
+            $this->errors[] = "Error: {$th->getMessage()}";
+            return null;
         }
 
         $this->validator->reset();
