@@ -257,10 +257,10 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Creates list of available image files in source set format
      * @param string $filename Media filename
      * @param string $altText  Media caption to use as alt text
-     * @param string $sizes    Source set sizes string
+     * @param array $options   Options array, includes "sizes", "style"
      * @return string
      */
-    public function getMediaSrcSet(string $filename = null, string $altText = null, string $sizes = null): ?string
+    public function getMediaSrcSet(string $filename = null, string $altText = null, array $options = null): ?string
     {
         // If filename is empty, just return nothing
         if (empty($filename)) {
@@ -296,13 +296,14 @@ class Base extends AbstractExtension implements GlobalsInterface
         ksort($sources);
 
         $sourceSet = implode(",\n", $sources);
-        $sizes = $sizes ?? '(max-width: 767px) 100vw, (max-width: 899px) 50vw, 33vw';
+        $sizes = $options['sizes'] ?? '(max-width: 767px) 100vw, (max-width: 899px) 50vw, 33vw';
+        $style = (isset($options['style'])) ? 'style="' . $options['style'] .'"' : '';
 
         // Create HTML source set string only if there is more than one media file
         $sourceSetString = (iterator_count($files) > 1) ? "srcset=\"$sourceSet\"\nsizes=\"$sizes\"\n" : '';
         $srcAttr = $this->getMediaPath($filename, 'xlarge');
 
-        return $this->cache['mediaSrcSet'][$filename] = "<img $sourceSetString src=\"$srcAttr\" alt=\"$altText\">\n";
+        return $this->cache['mediaSrcSet'][$filename] = "<img $sourceSetString src=\"$srcAttr\" alt=\"$altText\" $style>\n";
     }
 
     /**
