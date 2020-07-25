@@ -172,7 +172,7 @@ HTML;
         }
 
         // Get saved elements and element settings
-        $elements = $pageElementMapper->findElementsByPageId($page->id);
+        $elements = $pageElementMapper->findElementsByPageId($page->id) ?? [];
 
         foreach ($elements as &$el) {
             // Get element definition
