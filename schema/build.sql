@@ -150,11 +150,30 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   CONSTRAINT `page_element_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `message` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NULL DEFAULT NULL,
+  `email` varchar(100) NULL DEFAULT NULL,
+  `message` varchar(1000) NULL DEFAULT NULL,
+  `is_read` enum('Y','N','A') NOT NULL DEFAULT 'N',
+  `context` varchar(100) NULL DEFAULT NULL,
+  `custom` varchar(4000) NULL DEFAULT NULL,
+  `created_by` int NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL,
+  `updated_by` int NOT NULL DEFAULT 1,
+  `updated_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `is_read_idx` (`is_read`),
+  KEY `created_date_idx` (`created_date`),
+  FULLTEXT KEY `message_ft` (`name`,`email`,`message`,`context`,`custom`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `data_store` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(60) NOT NULL,
   `page_id` int DEFAULT NULL,
   `element_id` int DEFAULT NULL,
+  `message_id` int DEFAULT NULL,
   `setting_key` varchar(60) NOT NULL,
   `setting_value` varchar(4000) DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT 1,
@@ -165,26 +184,11 @@ CREATE TABLE IF NOT EXISTS `data_store` (
   KEY `category_idx` (`category`),
   KEY `page_id_category_idx` (`page_id`, `category`),
   KEY `element_id_category_idx` (`element_id`, `category`),
+  KEY `message_id_category_idx` (`message_id`, `category`),
   CONSTRAINT `page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
   CONSTRAINT `element_id_fk` FOREIGN KEY (`element_id`) REFERENCES `page_element` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `message_id_fk` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`) ON DELETE CASCADE,
   FULLTEXT KEY `data_store_ft` (`setting_value`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `message` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NULL DEFAULT NULL,
-  `email` varchar(100) NULL DEFAULT NULL,
-  `message` varchar(1000) NULL DEFAULT NULL,
-  `is_read` enum('Y','N','A') NOT NULL DEFAULT 'N',
-  `context` varchar(100) NULL DEFAULT NULL,
-  `created_by` int NOT NULL DEFAULT 1,
-  `created_date` datetime NOT NULL,
-  `updated_by` int NOT NULL DEFAULT 1,
-  `updated_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `is_read_idx` (`is_read`),
-  KEY `created_date_idx` (`created_date`),
-  FULLTEXT KEY `message_ft` (`name`,`email`,`message`,`context`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `page` (`id`, `page_slug`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `media_id`, `created_by`, `created_date`, `updated_by`, `updated_date`)

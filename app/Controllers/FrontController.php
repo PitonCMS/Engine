@@ -14,6 +14,7 @@ namespace Piton\Controllers;
 
 use Slim\Http\Response;
 use Throwable;
+use Exception;
 
 /**
  * Piton Front End Controller
@@ -76,34 +77,70 @@ class FrontController extends FrontBaseController
     {
         try {
             $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+            $definition = $this->container->jsonDefinitionHandler;
             $email = $this->container->emailHandler;
 
-            // Check honepot and if clean, then save message
-            if ('alt@example.com' === $this->request->getParsedBodyParam('alt-email')) {
-                $message = $messageMapper->make();
-                $message->name = $this->request->getParsedBodyParam('name');
-                $message->email = $this->request->getParsedBodyParam('email');
-                $message->message = $this->request->getParsedBodyParam('message');
-                $message->context = $this->request->getParsedBodyParam('context', 'Unknown Page');
-                $messageMapper->save($message);
+            // Check honepot before saving message
+            if ('alt@example.com' !== $this->request->getParsedBodyParam('alt-email')) {
+                throw new Exception("Honeypot found a fly", 1);
+            }
 
-                // Send message to workflow email
-                if (!empty($this->settings['site']['contactFormEmail'])) {
-                    // Only send email if a contact form email setting is saved
-                    $siteName = $this->settings['site']['displayName'] ?? 'PitonCMS';
-                    $email->setTo($this->settings['site']['contactFormEmail'], '')
-                        ->setSubject("New Contact Message to $siteName")
-                        ->setMessage("{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}")
-                        ->send();
+            // Save message
+            $message = $messageMapper->make();
+            $message->name = $this->request->getParsedBodyParam('name');
+            $message->email = $this->request->getParsedBodyParam('email');
+            $message->message = $this->request->getParsedBodyParam('message');
+            $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
+            $message = $messageMapper->save($message);
+
+            // Check if there are custom contact field inputs to save
+            $contactInputsDefinition = $definition->getContactInputs();
+
+            if ($contactInputsDefinition) {
+                $appendMessageText = "\n";
+
+                // Go through defined contact custom fields and match to POST array
+                foreach ($contactInputsDefinition as $field) {
+                    // Check if there is matching input to save
+                    if (!$this->request->getParsedBodyParam($field->key)) {
+                        continue;
+                    }
+
+                    // Create message text to append to email
+                    $appendMessageText .= "\n" . $field->name . ": " . $this->request->getParsedBodyParam($field->key);
+
+                    // Save to data store
+                    $dataStore = $dataStoreMapper->make();
+                    $dataStore->category = 'message';
+                    $dataStore->message_id = $message->id;
+                    $dataStore->setting_key = $field->key;
+                    $dataStore->setting_value = $this->request->getParsedBodyParam($field->key);
+                    $dataStoreMapper->save($dataStore);
                 }
             }
-            $status = "success";
+
+            // Send message to workflow email if an email address has been saved to settings
+            if (!empty($this->settings['site']['contactFormEmail'])) {
+                $siteName = $this->settings['site']['displayName'] ?? 'PitonCMS';
+
+                $messageText = "{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}";
+
+                if (isset($appendMessageText)) {
+                    $messageText .= $appendMessageText;
+                }
+
+                $email->setTo($this->settings['site']['contactFormEmail'], '')
+                        ->setSubject("New Contact Message to $siteName")
+                        ->setMessage($messageText)
+                        ->send();
+            }
         } catch (Throwable $th) {
-            $status = "error";
             $this->container->logger->alert("PitonCMS: Exception submitting contact message " . $th->getMessage());
         }
 
-        // Set the response type and return
+        // Always return a positive message to the public
+        $status = "success";
         $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
 
         return $this->xhrResponse($status, $text);

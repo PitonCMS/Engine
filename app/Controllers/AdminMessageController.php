@@ -80,7 +80,12 @@ HTML;
     {
         // Get dependencies
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $pagination = $this->container->adminPagePagination;
+        $definition = $this->container->jsonDefinitionHandler;
+
+        $contactInputsDefinition = $definition->getContactInputs() ?? [];
+        $contactInputsDefinition = array_combine(array_column($contactInputsDefinition, 'key'), $contactInputsDefinition);
 
         // Get filters or search if requested
         $option = htmlspecialchars($this->request->getQueryParam('status', 'unread'));
@@ -98,6 +103,19 @@ HTML;
         $pagination->setTotalResultsFound($messageMapper->foundRows() ?? 0);
         $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
         $this->container->view->addExtension($pagination);
+
+        // Get custom fields from data_store for each message
+        foreach ($messages as &$msg) {
+            $customFields = $dataStoreMapper->findMessageSettingsByMessageId($msg->id);
+
+            if ($customFields) {
+                foreach ($customFields as &$field) {
+                    $field->name = $contactInputsDefinition[$field->setting_key]->name ?? $field->setting_key;
+                }
+
+                $msg->inputs = $customFields;
+            }
+        }
 
         return $messages;
     }

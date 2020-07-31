@@ -108,7 +108,7 @@ class MessageMapper extends DataMapperAbstract
      */
     public function findUnreadCount(): int
     {
-        $this->sql = 'select count(*) unread from message where is_read = \'N\'';
+        $this->sql = 'select count(*) unread from `message` where `is_read` = \'N\'';
 
         return (int) $this->findRow()->unread;
     }

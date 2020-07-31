@@ -24,6 +24,10 @@
 
     <div class="message-content">
       <p>{{ message.message|nl2br }}</p>
+      <br>
+      {% for field in message.inputs %}
+        <p>{{ field.name }}: {{ field.setting_value }}</p>
+      {% endfor %}
     </div>
 
     {#  Control Button State

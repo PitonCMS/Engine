@@ -39,6 +39,7 @@ class Definition
         'navigation' => ROOT_DIR . 'structure/definitions/navigation.json',
         'siteSettings' => ROOT_DIR . 'structure/definitions/siteSettings.json',
         'seededSettings' => ROOT_DIR . 'vendor/pitoncms/engine/config/settings.json',
+        'contact' => ROOT_DIR . 'structure/definitions/contactInputs.json',
     ];
 
     /**
@@ -50,6 +51,7 @@ class Definition
         'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/pageSchema.json',
         'navigation' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/navigationSchema.json',
         'settings' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/settingsSchema.json',
+        'contact' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/contactSchema.json',
     ];
 
     /**
@@ -150,6 +152,17 @@ class Definition
     public function getElement(string $elementDefinition)
     {
         return $this->decodeValidJson($this->definition['elements'] . $elementDefinition, $this->validation['element']);
+    }
+
+    /**
+     * Get Contact Inputs
+     *
+     * Custom contact field validation
+     * @param void
+     */
+    public function getContactInputs()
+    {
+        return $this->decodeValidJson($this->definition['contact'], $this->validation['contact']);
     }
 
     /**
@@ -255,9 +268,9 @@ class Definition
      * Validation errors available from getErrorMessages()
      * @param string $json   Path to page JSON file to decode
      * @param string $schema Path to validation JSON Schema file
-     * @return object
+     * @return mixed|null
      */
-    protected function decodeValidJson(string $json, string $schema = null): ?object
+    protected function decodeValidJson(string $json, string $schema = null)
     {
         // Get and decode JSON to be validated
         if (!file_exists($json) || false === $contents = file_get_contents($json)) {
