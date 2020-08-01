@@ -3,6 +3,12 @@
 // --------------------------------------------------------
 import { postXHRPromise } from './modules/xhrPromise.js';
 
+// Set the honeypot to a know value
+const honeypotValue = "alt@example.com";
+document.querySelectorAll(`input[name="alt-email"]`).forEach(input => {
+  input.setAttribute("value", honeypotValue);
+});
+
 /**
  * Contact Submit Message
  * @param {Event} event
@@ -12,7 +18,7 @@ const contactSubmitMessage = function(event) {
   event.preventDefault();
 
   // Check honeypot if available
-  if (event.target.querySelector(".alt-email") && event.target.querySelector(".alt-email").value !== 'alt@example.com') return;
+  if (event.target.querySelector(".alt-email") && event.target.querySelector(".alt-email").value !== honeypotValue) return;
 
   // Set indicator of work in progress
   let buttonText = (event.target.dataset.contactFormButtonText) ? event.target.dataset.contactFormButtonText : "Sending...";
