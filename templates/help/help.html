@@ -4,152 +4,28 @@
 
 {% block contentHeader %}
 <div class="content-header-inner">
-  <div class="breadcrumb"></div>
+  <div class="breadcrumb">
+    {% if page.helpContent %}
+    <a href="{{ pathFor('adminSetting') }}">
+      Settings <i class="fas fa-chevron-right"></i>
+    </a>
+    {% endif %}
+  </div>
   <h1 class="seciton-title" class="section-title">Support</h1>
   <div class="btn-group"></div>
 </div>
 {% endblock contentHeader %}
 
 {% block content %}
-<style>
-  /* Hack - needs something better in CSS */
-  .help-content img {
-    width: 75%;
-  }
 
-  .help-content {
-    padding: 20px;
-  }
-
-  .help-content li {
-    list-style: inherit;
-  }
-</style>
-
-<div class="page-list-item-filter">
-  <form>
-    <div class="input-block">
-      <div class="input-block__icon">
-        <i class="fas fa-search"></i>
-      </div>
-      <div class="input-block__input">
-        <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support"
-          autocomplete="false">
-      </div>
+  {% if page.helpContent %}
+    {# Load Help File #}
+    <div class="help-content">
+      {{ page.helpContent }}
     </div>
-  </form>
-</div>
+  {% else %}
+    {# Load Help Menu #}
+    {% include('@admin/help/_helpIndex.html') %}
+  {% endif %}
 
-{# For Client Users #}
-<div class="content-cards">
-  <h2 class="content-cards__title span">For Users</h2>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Overview</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Pages</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Collections</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Navigation</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Media</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Messages</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Settings</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-</div>
-
-{# For Designers #}
-<div class="content-cards">
-  <h2 class="content-cards__title span">For Designers</h2>
-  <a href="{{ pathFor('adminHelp', {'file': 'adminHelpDesigner'}) }}" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Index</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Building websites with PitonCMS.</p>
-    </div>
-  </a>
-</div>
-
-{# For Developers #}
-<div class="content-cards">
-  <h2 class="content-cards__title span">For Developers</h2>
-
-  <a href="#" class="content-card">
-    <div class="content-card__header">
-      <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Version</h3>
-    </div>
-
-    <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
-    </div>
-  </a>
-</div>
 {% endblock content %}

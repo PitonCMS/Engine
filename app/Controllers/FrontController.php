@@ -86,6 +86,11 @@ class FrontController extends FrontBaseController
                 throw new Exception("Honeypot found a fly", 1);
             }
 
+            // Check if there is anything to save
+            if (empty($this->request->getParsedBodyParam('email'))) {
+                throw new Exception("Empty message submitted");
+            }
+
             // Save message
             $message = $messageMapper->make();
             $message->name = $this->request->getParsedBodyParam('name');
