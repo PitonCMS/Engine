@@ -1579,6 +1579,33 @@ select:-moz-focusring {
   border-bottom: solid 1px #dee3e7;
 }
 
+.help-content {
+  background: #ffffff;
+  padding: 1rem 1rem 2rem;
+  margin-bottom: 4rem;
+}
+.help-content ol,
+.help-content li {
+  margin-left: 1rem;
+  padding-left: -1rem;
+}
+.help-content pre {
+  white-space: pre-wrap;
+  /* css-3 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */
+}
+
+.help-content * + * {
+  margin-top: 1rem;
+}
+
 /* Page Listing */
 .list-item-page-header {
   padding-top: 0.5em;
