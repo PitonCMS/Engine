@@ -48,6 +48,7 @@ class MediaMapper extends DataMapperAbstract
     public function findAllMedia(int $limit = null, int $offset = null): ?array
     {
         $this->mediaSelectJoinCategory();
+        $this->sql .= ' order by m.`created_date` desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -73,11 +74,51 @@ class MediaMapper extends DataMapperAbstract
      */
     public function findMediaByCategoryId(?int $categoryId, int $limit = null, int $offset = null): ?array
     {
+        // If no category ID was provided just return
         if (null === $categoryId) {
             return null;
         }
 
-        $this->mediaSelectJoinCategory($categoryId);
+        $where = '';
+        if ($categoryId) {
+            $where = ' and mc.id = ?';
+            $this->bindValues[] = $categoryId;
+        }
+
+        $this->mediaSelectJoinCategory($where);
+        $this->sql .= ' order by mcm.`media_sort`, m.`created_date`';
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
+     * Text Search Media
+     *
+     * This query searches each of these fields for having all supplied terms:
+     *  - page.title, page.sub_title page.meta_description
+     *  - page_element.title, page_element.content
+     * @param  string $terms                Search terms
+     * @param  int    $limit                Limit
+     * @param  int    $offset               Offset
+     * @return array|null
+     */
+    public function searchMedia(string $terms, int $limit = null, int $offset = null): ?array
+    {
+        $where = ' and match(m.caption) against (? IN BOOLEAN MODE)';
+        $this->bindValues[] = $terms;
+
+        $this->mediaSelectJoinCategory($where);
+        $this->sql .= ' order by `created_date` desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -97,18 +138,11 @@ class MediaMapper extends DataMapperAbstract
      *
      * Make select statement
      * Overrides and sets $this->sql.
-     * @param  int  $categoryId Optional cateogry ID
+     * @param  string|null $where Optional where clause staring with "and..."
      * @return void
      */
-    protected function mediaSelectJoinCategory(int $categoryId = null): void
+    protected function mediaSelectJoinCategory(string $where = null): void
     {
-        // Add where clause on category ID if one was provided
-        $where = '';
-        if ($categoryId) {
-            $where = ' where mc.id = ?';
-            $this->bindValues[] = $categoryId;
-        }
-
         $this->sql = <<<SQL
 select SQL_CALC_FOUND_ROWS
     m.id,
@@ -124,7 +158,7 @@ select SQL_CALC_FOUND_ROWS
 from media m
 left join media_category_map mcm on m.id = mcm.media_id
 left join media_category mc on mc.id = mcm.category_id
-$where
+where 1=1 $where
 group by
     m.id,
     m.filename,
@@ -135,7 +169,6 @@ group by
     m.optimized,
     m.mime_type,
     m.created_date
-order by m.created_date desc
 SQL;
     }
 

@@ -33,27 +33,7 @@ class AdminMediaController extends AdminBaseController
      */
     public function showMedia(): Response
     {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $pagination = $this->container->adminMediaPagination;
-
-        // Get all media and categories and setup pagination
-        $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
-        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
-        $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
-        $this->container->view->addExtension($pagination);
-
-        $categories = $mediaCategoryMapper->findCategories() ?? [];
-        $categories = array_column($categories, 'category', 'id');
-
-        foreach ($media as &$medium) {
-            $assignedCategories = ($medium->category_id_list) ? explode(',', $medium->category_id_list) : [];
-            $medium->categories = array_fill_keys($assignedCategories, true);
-        }
-
-        $data['media'] = $media;
-        $data['categories'] = $categories;
-
+        $data = $this->loadMedia();
         return $this->render('media/media.html', $data);
     }
 
@@ -68,13 +48,9 @@ class AdminMediaController extends AdminBaseController
     public function getMedia(): Response
     {
         try {
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $data = $mediaMapper->find();
+            $data = $this->loadMedia();
 
-            $template = "
-                {{ include(\"@admin/media/_mediaSearchControls.html\") }}
-                {{ include(\"@admin/media/_mediaList.html\") }}
-            ";
+            $template = '{{ include("@admin/media/_mediaList.html") }}';
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
@@ -84,6 +60,57 @@ class AdminMediaController extends AdminBaseController
         }
 
         return $this->xhrResponse($status, $text);
+    }
+
+    /**
+     * Load Media
+     *
+     * Get all media using query string parameters
+     * @param void
+     * @param array
+     * @uses GET params
+     */
+    protected function loadMedia(): array
+    {
+        // Load dependencies
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $pagination = $this->container->adminMediaPagination;
+
+        // Get filters or search if requested
+        $category = htmlspecialchars($this->request->getQueryParam('category', 'all'));
+        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
+
+        // Get data
+        if (!empty($terms)) {
+            // This is a search request
+            $media = $mediaMapper->searchMedia($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        } elseif (is_numeric($category)) {
+            // Return filtered list by category ID
+            $media = $mediaMapper->findMediaByCategoryId((int) $category, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        } else {
+            // Get all media
+            $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
+        }
+
+        // Setup pagination
+        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
+        $pagination->setTotalResultsFound($mediaMapper->foundRows());
+        $this->container->view->addExtension($pagination);
+
+        // Load and assign media categories
+        $categories = $mediaCategoryMapper->findCategories() ?? [];
+        $categories = array_column($categories, 'category', 'id');
+
+        foreach ($media as &$medium) {
+            $assignedCategories = ($medium->category_id_list) ? explode(',', $medium->category_id_list) : [];
+            $medium->categories = array_fill_keys($assignedCategories, true);
+        }
+
+        $data['media'] = $media;
+        $data['categories'] = $categories;
+
+        return $data;
     }
 
     /**
