@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   PRIMARY KEY (`id`),
   KEY `optimized_idx` (`optimized`),
   KEY `caption_idx` (`caption`),
-  FULLTEXT KEY `media_ft` (`filename`,`caption`)
+  FULLTEXT KEY `media_ft` (`caption`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category` (
@@ -157,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `message` (
   `message` varchar(1000) NULL DEFAULT NULL,
   `is_read` enum('Y','N','A') NOT NULL DEFAULT 'N',
   `context` varchar(100) NULL DEFAULT NULL,
-  `custom` varchar(4000) NULL DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
@@ -165,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `is_read_idx` (`is_read`),
   KEY `created_date_idx` (`created_date`),
-  FULLTEXT KEY `message_ft` (`name`,`email`,`message`,`context`,`custom`)
+  FULLTEXT KEY `message_ft` (`name`,`email`,`message`,`context`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `data_store` (
