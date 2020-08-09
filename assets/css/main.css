@@ -1600,6 +1600,7 @@ select:-moz-focusring {
   /* Opera 7 */
   word-wrap: break-word;
   /* Internet Explorer 5.5+ */
+  text-align: justify;
 }
 
 .help-content * + * {
