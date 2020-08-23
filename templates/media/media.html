@@ -19,14 +19,13 @@
       </div>
     </div>
   </div>
-
 </div>
 {% endblock contentHeader %}
 
 {% block content %}
 
 {{ include("@admin/media/_mediaSearchControls.html") }}
-{{ include("@admin/media/_mediaEditList.html") }}
+{{ include("@admin/media/_mediaCards.html") }}
 {{ pagination() }}
 
 {% endblock content %}

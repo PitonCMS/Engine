@@ -50,7 +50,7 @@ class AdminMediaController extends AdminBaseController
         try {
             $data = $this->loadMedia();
 
-            $template = '{{ include("@admin/media/_mediaList.html") }}';
+            $template = '{{ include("@admin/media/_mediaCards.html") }}';
 
             $status = "success";
             $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);

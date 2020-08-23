@@ -3,20 +3,19 @@
 #}
 
 {#
-  Edit Media
+  Media Card
 #}
-{% macro editMedia(media, categories) %}
+{% macro card(media, categories) %}
 <div class="media">
-
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
   <div class="mediaImage">
     <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}">
   </div>
+
   <div class="mediaMeta">
     {# Media Caption #}
     <h5 class="mediaCaption">{{ media.caption }}</h5>
-
     {# Media Categories #}
     <div class="mediaCategories">
       {% for key, cat in media.categories %}
@@ -40,39 +39,8 @@
     {% endif %}
   </div>
 
-
-
-
 </div>
-{% endmacro editMedia %}
-
-{#
-  Media List Item
-  Used in select media modal
-#}
-{% macro mediaListItem(media) %}
-
-<div class="media" data-media="1" data-media-caption="{{ media.caption }}" data-media-id="{{ media.id }}"
-  data-media-path="{{ getMediaPath(media.filename, 'small') }}">
-
-  {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-  <div class="mediaImage">
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}">
-
-    <span class="mediaImagePopup">
-      <img src="{{ getMediaPath(media.filename, 'small') }}" class="mediaThumbPopup" alt="{{ media.caption }}">
-    </span>
-  </div>
-
-  <div class="mediaBlock">
-    <div class="mediaCaption">
-      <p>{{ media.caption }}</p>
-    </div>
-  </div>
-
-</div><!-- /.media -->
-
-{% endmacro mediaListItem %}
+{% endmacro card %}
 
 {#
     Media Upload Modal

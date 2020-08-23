@@ -1,12 +1,11 @@
-{# Media List #}
+{# Media Editable List #}
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
-{# Media List #}
 <div class="media-wrapper">
 
-  <!-- Media File List -->
+  <!-- Media List -->
   {% for media in page.media %}
-    {{ mediaMacro.mediaListItem(media) }}
+    {{ mediaMacro.card(media, page.categories) }}
   {% endfor %}
 
 </div>
