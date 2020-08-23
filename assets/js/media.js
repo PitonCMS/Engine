@@ -7,6 +7,9 @@ import './modules/mediaUpload.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';
+import { setFilterPath } from "./modules/filter.js";
+
+setFilterPath(pitonConfig.routes.adminMediaGet);
 
 /**
  * Save Media

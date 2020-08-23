@@ -49,11 +49,15 @@ class AdminMediaController extends AdminBaseController
     {
         try {
             $data = $this->loadMedia();
-
-            $template = '{{ include("@admin/media/_mediaCards.html") }}';
+            $template =<<<HTML
+                {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
+                {% for medium in media %}
+                    {{ mediaMacro.card(medium, categories) }}
+                {% endfor %}
+HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['page' => ['media' => $data]]);
+            $text = $this->container->view->fetchFromString($template, ['media' => $data['media'], 'categories' => $data['categories']]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
@@ -95,7 +99,7 @@ class AdminMediaController extends AdminBaseController
 
         // Setup pagination
         $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
-        $pagination->setTotalResultsFound($mediaMapper->foundRows());
+        $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
         // Load and assign media categories

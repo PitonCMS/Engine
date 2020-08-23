@@ -105,11 +105,10 @@ class MediaMapper extends DataMapperAbstract
      * Text Search Media
      *
      * This query searches each of these fields for having all supplied terms:
-     *  - page.title, page.sub_title page.meta_description
-     *  - page_element.title, page_element.content
-     * @param  string $terms                Search terms
-     * @param  int    $limit                Limit
-     * @param  int    $offset               Offset
+     *  - media.caption
+     * @param  string $terms  Search terms
+     * @param  int    $limit  Limit
+     * @param  int    $offset Offset
      * @return array|null
      */
     public function searchMedia(string $terms, int $limit = null, int $offset = null): ?array
@@ -154,6 +153,7 @@ select SQL_CALC_FOUND_ROWS
     m.optimized,
     m.mime_type,
     m.created_date,
+    mcm.media_sort,
     group_concat(mc.id) category_id_list
 from media m
 left join media_category_map mcm on m.id = mcm.media_id
@@ -168,7 +168,8 @@ group by
     m.caption,
     m.optimized,
     m.mime_type,
-    m.created_date
+    m.created_date,
+    mcm.media_sort
 SQL;
     }
 
