@@ -87,7 +87,7 @@ HTML;
 
         // Get data
         if (!empty($terms)) {
-            // This is a search request
+            // This is a search request and takes precedence
             $media = $mediaMapper->searchMedia($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
         } elseif (is_numeric($category)) {
             // Return filtered list by category ID

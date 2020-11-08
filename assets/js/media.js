@@ -43,13 +43,13 @@ const deleteMedia = function(event) {
     if (!event.target.dataset.deleteMediaPrompt) return;
     if (!confirm(event.target.dataset.deleteMediaPrompt)) return;
 
-    const form = event.target.closest(".media");
-    let mediaId = event.target.dataset.mediaId;
+    let mediaCard = event.target.closest('[data-media-card="true"]');
+    let mediaId = event.target.dataset.deleteMediaId;
 
     enableSpinner();
     postXHRPromise(pitonConfig.routes.adminMediaDelete, {"media_id": mediaId})
         .then(() => {
-            form.remove();
+            mediaCard.remove();
         })
         .then(() => {
             disableSpinner();
@@ -82,6 +82,7 @@ const copyMediaPath = function(event) {
     }
 }
 
+// Bind events
 document.addEventListener("click", saveMedia, false);
 document.addEventListener("click", deleteMedia, false);
 document.addEventListener("click", copyMediaPath, false);

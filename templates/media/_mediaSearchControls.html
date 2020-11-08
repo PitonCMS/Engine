@@ -1,10 +1,10 @@
 {# Media Filter and Search Controls #}
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
-<!-- Media Search Filter -->
+<!-- Media Search Filter and Options -->
 <div class="filter-block">
 
     {{ pitonMacro.filterSearch() }}
-    {{ pitonMacro.filterOptions('radio', 'Category', 'category', getMediaCategories()) }}
+    {{ pitonMacro.filterOptions('radio', 'Category', 'category', {'all': 'All'} + getMediaCategories()) }}
 
 </div>

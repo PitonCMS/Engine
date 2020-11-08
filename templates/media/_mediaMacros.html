@@ -6,36 +6,79 @@
   Media Card
 #}
 {% macro card(media, categories) %}
-<div class="media">
+<div class="media" data-media-card="true">
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
   <div class="mediaImage">
     <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}" title="{{ media.caption }}">
   </div>
 
+  {# TODO: Integrate fly up Edit button to launch fly out form fields to edit.
   <div class="mediaMeta">
-    {# Media Caption #}
+    {# Media Caption
     <h5 class="mediaCaption">{{ media.caption }}</h5>
-    {# Media Categories #}
+    {# Assigned Media Categories
     <div class="mediaCategories">
       {% for key, cat in media.categories %}
       <div class="mediaCategory">{{ categories[key] }}</div>
       {% endfor %}
     </div>
 
-    {# Media Controls #}
+    {# Media Controls
     <div class="mediaControls">
-      {# Edit Button #}
       <button class="btn btn-save" type="button">Edit</button>
+      <button class="btn btn-delete" type="button" data-delete-media-prompt="Are you sure you want to delete?"
+        data-delete-media-id="{{ media.id }}">Delete</button>
     </div>
   </div>
+  #}
 
   <div class="mediaExtra">
-    <i class="fas fa-link mediaLink" title="Copy media link to clipboard" data-media-click-copy="{{ getMediaPath(media.filename, 'large') }}"></i>
+    {# TODO Need to give some visual response that the click copy happened #}
+    <i class="fas fa-link mediaLink" title="Copy media link to clipboard"
+      data-media-click-copy="{{ getMediaPath(media.filename, 'large') }}"></i>
     {# Featured Media Flag #}
     {% if media.feature == 'Y' %}
     <div class="mediaFeatured" title="Featured Image">F</div>
     {% endif %}
+  </div>
+
+  <div data-media-edit-form="true">
+    <form accept-charset="utf-8">
+      <input type="hidden" name="media_id" value="{{ media.id }}">
+
+      {# Featured Media Flag #}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="feature-{{ media.id }}" name="feature"
+          {{ checked(media.feature) }}>
+        <label class="form-check-label" for="feature-{{ media.id }}">Featured Media</label>
+      </div>
+
+      <hr>
+      {# Media Categories #}
+      <div class="mediaCategories">
+        {% for key, cat in categories %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ key }}" name="category[]"
+            value="{{ key }}" {{ checked(media.categories[key]) }}>
+          <label class="form-check-label" for="{{ media.id }}-{{ key }}">{{ cat }}</label>
+        </div>
+        {% endfor %}
+      </div>
+
+      <hr>
+      <div class="form-group">
+        <input type="text" name="caption" maxlength="100" value="{{ media.caption }}">
+      </div>
+
+      <hr>
+      <div class="form-group">
+        <button class="btn btn-delete" type="button" data-delete-media-prompt="Are you sure you want to delete?"
+          data-delete-media-id="{{ media.id }}">Delete</button>
+        <button class="btn btn-cancel" type="reset" data-form-button="cancel" disabled>Discard</button>
+        <button class="btn btn-save" type="button" data-form-button="save" disabled>Save</button>
+      </div>
+    </form>
   </div>
 
 </div>

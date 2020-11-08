@@ -5,7 +5,7 @@
 // Form Control Events
 document.querySelectorAll("form").forEach(form => {
     // Disable form controls and listen for form input changes to re-enable save controls
-    let controls = form.querySelectorAll(`[data-form-button="save"], [data-form-button="cancel"]`);
+    let controls = form.querySelectorAll('[data-form-button="save"], [data-form-button="cancel"]');
 
     if (controls) {
         controls.forEach(control => {
@@ -32,8 +32,12 @@ document.querySelectorAll("form").forEach(form => {
             if (event.target.dataset.formResetHref) {
                 event.preventDefault();
                 window.location = event.target.dataset.formResetHref;
+            } else {
+                // Otherwise let type="reset" reset form as default event
+                controls.forEach(control => {
+                    control.disabled = true;
+                });
             }
-            // Otherwise let type="reset" reset form as default event
         }, false);
     });
 
