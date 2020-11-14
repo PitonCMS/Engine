@@ -1,16 +1,32 @@
 /**
  * Filter and Search Controls for Results Sets
+ *
+ * HTML
+ * Import /includes/_pitonMacros.html
+ * Echo filterSearch() and filterOptions()
+ *
+ * Add data-filter="content" on the parent elment containing the result set.
+ * When the query is executed the direct children of data-filter="content" are removed and replaced
+ *
+ * JS
+ * Import
+ *   import { setFilterPath } from "./modules/filter.js";
+ *
+ * Define query endpoint in main script
+ *   setFilterPath("path/to/query/endpoint")
+ *
  */
 import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise } from './xhrPromise.js';
 
 // Expect one content wrapper (data-filter="content") per page for result set
 const filterResults = document.querySelector(`[data-filter="content"]`);
-// Request route for filter search
+
+// Hoist request route for filter search
 let filterPath;
 
 /**
- * Set Route to Request
+ * Set Route to Request Endpoint
  * Exported to calling file to set route
  * @param {string} route
  */
