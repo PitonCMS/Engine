@@ -77,7 +77,7 @@ class FrontController extends FrontBaseController
     {
         try {
             $messageMapper = ($this->container->dataMapper)('MessageMapper');
-            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+            $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
             $definition = $this->container->jsonDefinitionHandler;
             $email = $this->container->emailHandler;
 
@@ -116,12 +116,11 @@ class FrontController extends FrontBaseController
                     $appendMessageText .= "\n" . $field->name . ": " . $this->request->getParsedBodyParam($field->key);
 
                     // Save to data store
-                    $dataStore = $dataStoreMapper->make();
-                    $dataStore->category = 'message';
+                    $dataStore = $messageDataMapper->make();
                     $dataStore->message_id = $message->id;
-                    $dataStore->setting_key = $field->key;
-                    $dataStore->setting_value = $this->request->getParsedBodyParam($field->key);
-                    $dataStoreMapper->save($dataStore);
+                    $dataStore->data_key = $field->key;
+                    $dataStore->data_value = $this->request->getParsedBodyParam($field->key);
+                    $messageDataMapper->save($dataStore);
                 }
             }
 

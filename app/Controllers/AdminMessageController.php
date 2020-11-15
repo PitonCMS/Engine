@@ -80,7 +80,7 @@ HTML;
     {
         // Get dependencies
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
         $pagination = $this->container->adminPagePagination;
         $definition = $this->container->jsonDefinitionHandler;
 
@@ -106,11 +106,11 @@ HTML;
 
         // Get custom fields from data_store for each message
         foreach ($messages as &$msg) {
-            $customFields = $dataStoreMapper->findMessageSettingsByMessageId($msg->id);
+            $customFields = $messageDataMapper->findMessageDataByMessageId($msg->id);
 
             if ($customFields) {
                 foreach ($customFields as &$field) {
-                    $field->name = $contactInputsDefinition[$field->setting_key]->name ?? $field->setting_key;
+                    $field->name = $contactInputsDefinition[$field->data_key]->name ?? $field->data_key;
                 }
 
                 $msg->inputs = $customFields;

@@ -26,7 +26,7 @@
       <p>{{ message.message|nl2br }}</p>
       <br>
       {% for field in message.inputs %}
-        <p>{{ field.name }}: {{ field.setting_value }}</p>
+        <p>{{ field.name }}: {{ field.data_value }}</p>
       {% endfor %}
     </div>
 

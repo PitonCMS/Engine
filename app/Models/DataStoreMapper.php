@@ -23,7 +23,7 @@ class DataStoreMapper extends DataMapperAbstract
 {
     protected $inCategories = "('site','contact','social','piton')";
     protected $table = 'data_store';
-    protected $modifiableColumns = ['category', 'page_id', 'element_id', 'message_id', 'setting_key', 'setting_value'];
+    protected $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
 
     /**
      * Find Settings
@@ -100,21 +100,6 @@ where p.id = ?
 SQL;
         $this->bindValues[] = $pageId;
         $this->bindValues[] = $pageId;
-
-        return $this->find();
-    }
-
-    /**
-     * Find Message Settings
-     *
-     * @param int $messageId Message ID
-     * @return array|null
-     */
-    public function findMessageSettingsByMessageId(int $messageId): ?array
-    {
-        $this->makeSelect();
-        $this->sql .= " and `category` = 'message' and `message_id` = ?";
-        $this->bindValues[] = $messageId;
 
         return $this->find();
     }
