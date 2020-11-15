@@ -86,7 +86,7 @@ class AdminAccessController extends AdminBaseController
             $token = $security->generateLoginToken();
             $session->setData([
                 $this->loginTokenKey => $token,
-                $this->loginTokenExpiresKey => time() + 300,
+                $this->loginTokenExpiresKey => time() + 15*60,
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'role' => $user->role,
