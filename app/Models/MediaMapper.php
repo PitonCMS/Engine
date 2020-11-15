@@ -81,14 +81,76 @@ class MediaMapper extends DataMapperAbstract
             return null;
         }
 
-        $where = '';
-        if ($categoryId) {
-            $where = ' and mc.id = ?';
-            $this->bindValues[] = $categoryId;
+        $this->sql = <<<SQL
+select SQL_CALC_FOUND_ROWS
+    m.id,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
+    m.caption,
+    m.optimized,
+    m.mime_type,
+    m.created_date,
+    mcm.media_sort
+from media m
+join media_category_map mcm on m.id = mcm.media_id
+where mcm.category_id = ?
+order by mcm.media_sort
+SQL;
+
+        $this->bindValues[] = $categoryId;
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
         }
 
-        $this->mediaSelectJoinCategory($where);
-        $this->sql .= ' order by mcm.`media_sort`, m.`created_date`';
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
+     * Find Media By Category ID
+     *
+     * Find media by category ID
+     * @param  int|null  $categoryId
+     * @param  int       $limit
+     * @param  int       $offset
+     * @return array|null
+     */
+    public function findMediaWithOtherCategoriesByCategoryId(?int $categoryId, int $limit = null, int $offset = null): ?array
+    {
+        // If no category ID was provided just return
+        if (null === $categoryId) {
+            return null;
+        }
+
+        $this->sql = <<<SQL
+select SQL_CALC_FOUND_ROWS
+    m.id,
+    m.filename,
+    m.width,
+    m.height,
+    m.feature,
+    m.caption,
+    m.optimized,
+    m.mime_type,
+    m.created_date,
+    (select group_concat(mcm2.category_id)
+       from media_category_map mcm2
+      where mcm2.media_id = m.id) category_id_list
+from media m
+join media_category_map mcm on m.id = mcm.media_id
+where mcm.category_id = ?
+order by mcm.media_sort
+SQL;
+
+        $this->bindValues[] = $categoryId;
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -155,11 +217,9 @@ select SQL_CALC_FOUND_ROWS
     m.optimized,
     m.mime_type,
     m.created_date,
-    mcm.media_sort,
-    group_concat(mc.id) category_id_list
+    group_concat(mcm.category_id) category_id_list
 from media m
 left join media_category_map mcm on m.id = mcm.media_id
-left join media_category mc on mc.id = mcm.category_id
 where 1=1 $where
 group by
     m.id,
@@ -170,8 +230,7 @@ group by
     m.caption,
     m.optimized,
     m.mime_type,
-    m.created_date,
-    mcm.media_sort
+    m.created_date
 SQL;
     }
 

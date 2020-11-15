@@ -91,7 +91,7 @@ HTML;
             $media = $mediaMapper->searchMedia($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
         } elseif (is_numeric($category)) {
             // Return filtered list by category ID
-            $media = $mediaMapper->findMediaByCategoryId((int) $category, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $media = $mediaMapper->findMediaWithOtherCategoriesByCategoryId((int) $category, $pagination->getLimit(), $pagination->getOffset()) ?? [];
         } else {
             // Get all media
             $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];

@@ -59,9 +59,10 @@
       <div class="mediaCategories">
         {% for key, cat in categories %}
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="{{ media.id }}-{{ key }}" name="category[]"
+          {% set forId = uniqueKey() %}
+          <input class="form-check-input" type="checkbox" id="{{ forId }}" name="category[]"
             value="{{ key }}" {{ checked(media.categories[key]) }}>
-          <label class="form-check-label" for="{{ media.id }}-{{ key }}">{{ cat }}</label>
+          <label class="form-check-label" for="{{ forId }}">{{ cat }}</label>
         </div>
         {% endfor %}
       </div>
