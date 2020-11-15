@@ -130,7 +130,7 @@ HTML;
     {
         try {
             $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
 
             $media = $mediaMapper->make();
             $media->id = (int) $this->request->getParsedBodyParam('media_id');
@@ -139,7 +139,7 @@ HTML;
             $mediaMapper->save($media);
 
             // Save category mappings
-            $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
 
             $status = "success";
             $text = "Saved media";
@@ -176,7 +176,9 @@ HTML;
                 $this->deleteRecursive($path);
             }
 
+            // Foreign key constraints on media_category_map cascade delete from media table
             $mediaMapper->delete($mediaFile);
+
             $status = "success";
             $text = "Deleted media id $id, file {$mediaFile->filename}";
         } catch (Throwable $th) {
@@ -320,6 +322,36 @@ HTML;
     }
 
     /**
+     * Save Category Media Sort Order
+     *
+     * XHR Request
+     * @param void
+     * @return Response
+     * @uses POST
+     */
+    public function saveCategoryMediaOrder(): Response
+    {
+        // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
+        try {
+            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $categoryId = $this->request->getParsedBodyParam('categoryId');
+            $mediaIds = $this->request->getParsedBodyParam('mediaIds');
+            $status = "success";
+            $text = "";
+
+            if (is_numeric($categoryId) && $mediaIds) {
+                $mediaArray = explode(',', $mediaIds);
+                $mediaCategoryMapMapper->saveCategoryMediaAssignmentOrder((int) $categoryId, $mediaArray);
+            }
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception saving media category assignments: ". $th->getMessage();
+        }
+
+        return $this->xhrResponse($status, $text);
+    }
+
+    /**
      * Delete Media Category
      *
      * XHR Request
@@ -337,19 +369,16 @@ HTML;
             $text = "";
 
             if (is_numeric($categoryId)) {
-                // Delete category assignments
-                $mediaCategoryMapper->deleteMediaCategoryAssignmentsByCategoryId((int) $categoryId);
-
                 // Delete category
                 $category = $mediaCategoryMapper->make();
-                $category->id = $categoryId;
+                $category->id = (int) $categoryId;
                 $mediaCategoryMapper->delete($category);
 
                 // Foreign key constraints on media_category_map cascade delete to media associations
             }
         } catch (Throwable $th) {
             $status = "error";
-            $text = "Exception deleting medica category: ". $th->getMessage();
+            $text = "Exception deleting media category: ". $th->getMessage();
         }
 
         return $this->xhrResponse($status, $text);

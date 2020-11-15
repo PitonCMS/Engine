@@ -6,5 +6,7 @@
 
     {{ pitonMacro.filterSearch() }}
     {{ pitonMacro.filterOptions('radio', 'Category', 'category', {'all': 'All'} + getMediaCategories()) }}
+    {# TODO Display only when viewing a category #}
+    <span>Move media into the desired order.</span>
 
 </div>

@@ -57,9 +57,11 @@ CREATE TABLE IF NOT EXISTS `media_category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `media_category_map` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `media_id` int NOT NULL,
   `category_id` int NOT NULL,
   `media_sort` smallint NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `media_id_category_id_uq` (`media_id`, `category_id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `media_category_map_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE,

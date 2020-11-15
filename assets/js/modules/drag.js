@@ -1,4 +1,12 @@
-// Reference to element to be moved
+/**
+ * Drag and Drop elements
+ *
+ * HTML
+ * Set parent container with data-draggable="children"
+ * Set draggable children with draggable="true"
+ */
+
+// Hoist reference to element to be moved
 let movedElement;
 
 // Event to dispatch pseudo "input" event
@@ -114,8 +122,16 @@ const dragEndHandler = function(event) {
         zone.remove();
     });
 
-    // Initiatve input event
+    // Dispatch input event
     movedElement.dispatchEvent(inputEvent);
 }
 
-export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler, getMovedElement };
+/**
+ * Dispatch Input Event on Moved Element
+ * @param void
+ */
+const dispatchInputEventOnMovedElement = function() {
+    movedElement.dispatchEvent(inputEvent);
+}
+
+export { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler, getMovedElement, dispatchInputEventOnMovedElement };

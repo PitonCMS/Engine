@@ -6,7 +6,7 @@
   Media Card
 #}
 {% macro card(media, categories) %}
-<div class="media" data-media-card="true">
+<div class="media" data-media-card="true" data-media-id="{{ media.id }}" draggable="true">
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
   <div class="mediaImage">

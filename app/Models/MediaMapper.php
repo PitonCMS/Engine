@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -30,6 +30,8 @@ class MediaMapper extends DataMapperAbstract
         'optimized',
     ];
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Media';
+
+    // Status codes for processing new images
     protected $optimizedStatus = [
         'new' => 'new',
         'complete' => 'complete',

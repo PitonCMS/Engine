@@ -8,8 +8,16 @@ import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';
 import { setFilterPath } from "./modules/filter.js";
+import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dispatchInputEventOnMovedElement } from './modules/drag.js';
 
+// Set filter query end point
 setFilterPath(pitonConfig.routes.adminMediaGet);
+
+// To avoid detaching a child img element from the draggable parent, set draggable false on all images
+let images = document.getElementsByTagName('img');
+for (let i = 0 ; i < images.length; i++) {
+    images[i].draggable = false;
+}
 
 /**
  * Save Media
@@ -81,6 +89,64 @@ const copyMediaPath = function(event) {
         alert("Error in click to copy: " + error);
     }
 }
+
+/**
+ * OVERRIDE
+ * Drag End Handler
+ *
+ * Cleans up end of drag events, and also saves new order of images
+ * @param {Event} event
+ */
+const dragEndHandler = function(event) {
+    // Cleanup drop zones
+    document.querySelectorAll(".drag-drop").forEach(zone => {
+        zone.remove();
+    });
+
+    // Only call to update if the category filter option has been set.
+    // TODO Add condition to only trigger when viewing a category
+    let filterCategoryId = document.querySelector('input[type="radio"][name="category"]:checked')?.value;
+
+    if (!isNaN(filterCategoryId)) {
+        enableSpinner();
+
+        // Get all media elements listed on page
+        let mediaElements = document.querySelectorAll(`[data-draggable="children"] > [draggable="true"]`);
+
+        // Assign media ID to array
+        let mediaArray = [];
+        mediaElements.forEach(media => {
+            mediaArray.push(media.dataset.mediaId);
+        });
+
+        let data = {
+            "categoryId": filterCategoryId,
+            "mediaIds": mediaArray
+        }
+
+        postXHRPromise(pitonConfig.routes.adminMediaCategorySaveOrder, data)
+            .then(() => {
+                disableSpinner();
+            })
+            .catch((error) => {
+                disableSpinner();
+                alertInlineMessage('danger', 'Failed to Save Media Order', error);
+            });
+    }
+
+    // Dispatch input event to finish
+    dispatchInputEventOnMovedElement();
+}
+
+// Draggable media elements
+document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
+    zone.addEventListener("dragstart", dragStartHandler, false);
+    zone.addEventListener("dragenter", dragEnterHandler, false);
+    zone.addEventListener("dragover", dragOverHandler, false);
+    zone.addEventListener("dragleave", dragLeaveHandler, false);
+    zone.addEventListener("drop", dragDropHandler, false);
+    zone.addEventListener("dragend", dragEndHandler, false);
+});
 
 // Bind events
 document.addEventListener("click", saveMedia, false);

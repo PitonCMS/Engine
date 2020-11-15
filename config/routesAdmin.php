@@ -166,6 +166,11 @@ $app->group('/admin', function () {
             $this->post('/delete', function ($args) {
                 return (new AdminMediaController($this))->deleteMediaCategory();
             })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');
+
+            // XHR Save Category Sort Order
+            $this->post('/saveorder', function ($args) {
+                return (new AdminMediaController($this))->saveCategoryMediaOrder();
+            })->add('csrfGuardHandler')->setName('adminMediaCategorySaveOrder');
         });
 
         // Show all media
