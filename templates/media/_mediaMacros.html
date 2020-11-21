@@ -4,13 +4,18 @@
 
 {#
   Media Card
+
+  Draggable defaults to false so media cannot be reordered when viewing all records.
+  This is changed to true when viewing a category.
 #}
 {% macro card(media, categories) %}
-<div class="media" data-media-card="true" data-media-id="{{ media.id }}" draggable="true">
+{# TODO: We can remove the cursor: move from the CSS, this is now set in JS when eligible to move #}
+<div class="media" data-media-card="true" data-media-id="{{ media.id }}" draggable="false">
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
+  {# Setting <img draggable="false" to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
   <div class="mediaImage">
-    <img src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}" title="{{ media.caption }}">
+    <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}" class="mediaThumb" alt="{{ media.caption }}" title="{{ media.caption }}">
   </div>
 
   {# TODO: Integrate fly up Edit button to launch fly out form fields to edit.

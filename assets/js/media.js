@@ -1,6 +1,6 @@
-// --------------------------------------------------------
-// Media management
-// --------------------------------------------------------
+/**
+ * Media Page
+ */
 
 import './modules/main.js';
 import './modules/mediaUpload.js';
@@ -13,11 +13,43 @@ import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, 
 // Set filter query end point
 setFilterPath(pitonConfig.routes.adminMediaGet);
 
-// To avoid detaching a child img element from the draggable parent, set draggable false on all images
-let images = document.getElementsByTagName('img');
-for (let i = 0 ; i < images.length; i++) {
-    images[i].draggable = false;
+// Reference to <span> that contains text suggestion to move media order when a category has been selected
+const draggableMessage = document.querySelector(`[data-drag-media-message="true"]`);
+
+/**
+ * Get Curent Filter Category ID
+ *
+ * From filter options control
+ */
+const getFlterCategoryId = function () {
+    return document.querySelector('input[type="radio"][name="category"]:checked')?.value;
 }
+
+/**
+ * Filter Category Change
+ *
+ * Update controls and message when selecting a media category filter option.
+ */
+const filterCategoryChange = function() {
+    // Respond whether viewing a defined category (ID) or "all"
+    if (!isNaN(getFlterCategoryId())) {
+        draggableMessage.style.display = "inline";
+        document.querySelectorAll(`[data-media-card="true"]`)?.forEach(media => {
+            media.setAttribute("draggable", true);
+            media.style.cursor = "move";
+        });
+    } else {
+        draggableMessage.style.display = "none";
+        document.querySelectorAll(`[data-media-card="true"]`)?.forEach(media => {
+            media.setAttribute("draggable", false);
+            media.style.cursor = "default";
+        });
+    }
+}
+
+// Watch for changes to DOM when media filters are applied, to update draggable state
+const observer = new MutationObserver(filterCategoryChange);
+observer.observe(document.querySelector(`[data-filter="content"]`), {childList: true});
 
 /**
  * Save Media
@@ -103,11 +135,7 @@ const dragEndHandler = function(event) {
         zone.remove();
     });
 
-    // Only call to update if the category filter option has been set.
-    // TODO Add condition to only trigger when viewing a category
-    let filterCategoryId = document.querySelector('input[type="radio"][name="category"]:checked')?.value;
-
-    if (!isNaN(filterCategoryId)) {
+    if (!isNaN(getFlterCategoryId())) {
         enableSpinner();
 
         // Get all media elements listed on page
@@ -120,7 +148,7 @@ const dragEndHandler = function(event) {
         });
 
         let data = {
-            "categoryId": filterCategoryId,
+            "categoryId": getFlterCategoryId(),
             "mediaIds": mediaArray
         }
 
