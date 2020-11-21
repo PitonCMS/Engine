@@ -1,50 +1,87 @@
-// --------------------------------------------------------
-// Form Controls. Enables controls on form input, and prompts on reset and delete
-// --------------------------------------------------------
+/**
+ * Form Controls
+ *
+ * Listens for input events to:
+ * - Enable form controls (save, cancel) on Input events
+ * - Delete confirm prompts
+ * - Reset confirm prompts
+ *
+ * HTML
+ * Assumes all control buttons are set to disabled on page load, except delete which should always be enabled
+ * Add data-form-button="save" to Save buttons
+ * Add data-form-button="cancel" to Cancel / Reset buttons
+ * - Optionally add data-form-reset-href="{{ <url> }}" to load a page instead of resetting the form
+ * Add data-delete-prompt="Custom message" to any delete button
+ *
+ * JS
+ * import './formControl.js';
+ */
 
-// Form Control Events
-document.querySelectorAll("form").forEach(form => {
-    // Disable form controls and listen for form input changes to re-enable save controls
+ /**
+  * Enable Form Controls on Input Event
+  * @param {Event} event
+  */
+ const enableFormControlsOnInput = function (event) {
+    if (!event.target.closest("form")) return;
+
+    // Get reference to buttons and form
+    let form = event.target.closest("form");
     let controls = form.querySelectorAll('[data-form-button="save"], [data-form-button="cancel"]');
 
+    // Enable buttons
     if (controls) {
         controls.forEach(control => {
-            control.disabled = true;
+            control.disabled = false;
         });
+    }
+ }
 
-        // Listen for form changes to reenable controls
-        form.addEventListener("input", (e) => {
-            controls.forEach(control => {
-                control.disabled = false;
-            });
-        }, false);
+/**
+ * Confirm Form Reset Cancel Prompt
+ * @param {Event} event
+ */
+ const confirmResetCancelPrompt = function (event) {
+    if (event.target.dataset.formButton !== "cancel") return;
+    event.stopPropagation();
+
+    // Stop if cancel is selected on prompt
+    if (!confirm("Click Ok to discard your changes, or Cancel continue editing.")) {
+        event.preventDefault();
+        return;
     }
 
-    // Confirm discard of changes
-    form.querySelectorAll(`[data-form-button="cancel"]`).forEach(control => {
-        control.addEventListener("click", (event) => {
-            if(!confirm("Click Ok to discard your changes, or Cancel continue editing.")) {
-                event.preventDefault();
-                return;
-            }
+    // Disable all form controls once again
+    let form = event.target.closest("form");
+    let controls = form.querySelectorAll('[data-form-button="save"], [data-form-button="cancel"]');
 
-            // Reload page if a url was provided
-            if (event.target.dataset.formResetHref) {
-                event.preventDefault();
-                window.location = event.target.dataset.formResetHref;
-            } else {
-                // Otherwise let type="reset" reset form as default event
+    // Disable buttons
+    if (controls) {
+        if (event.target.dataset.formResetHref) {
+            // Reload page if a url was provided as a data value
+            event.preventDefault();
+            window.location = event.target.dataset.formResetHref;
+        } else {
+            // Otherwise let type="reset" reset form as default event and disable buttons again
+            // The type="reset" native reset was not working as this JS was disabling that button before the form could be reset
+            // Wrapping this in setTimeout() seems to fix this. Weird.
+            setTimeout(() => {
                 controls.forEach(control => {
                     control.disabled = true;
                 });
-            }
-        }, false);
-    });
+            }, 0);
+        }
+    }
+ }
 
-    // Confirm delete
-    form.querySelectorAll(`[data-delete-prompt]`).forEach(control => {
-        control.addEventListener("click", (e) => {
-            if (!confirm(e.target.dataset.deletePrompt)) e.preventDefault();
-        }, false);
-    });
-});
+/**
+ * Confirm Delete Prompt
+ * @param {Event} event
+ */
+ const confirmDeletePrompt = function (event) {
+    if (!event.target.dataset.deletePrompt) return;
+    if (!confirm(event.target.dataset.deletePrompt)) event.preventDefault();
+ }
+
+document.addEventListener("input", enableFormControlsOnInput, false);
+document.addEventListener("click", confirmDeletePrompt, false);
+document.addEventListener("click", confirmResetCancelPrompt, false);
