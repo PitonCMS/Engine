@@ -109,6 +109,9 @@ class AdminController extends AdminBaseController
             return $this->release();
         }
 
+        // Pass through reference to subject
+        $data['subject'] = ($args['subject'] === 'client') ? 'Users' : 'Designers';
+
         // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
         $helpFile = ROOT_DIR . "vendor/pitoncms/engine/templates/help/{$args['subject']}/{$args['file']}.md";
