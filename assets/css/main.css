@@ -1079,6 +1079,7 @@ select:-moz-focusring {
 .input-block {
   background: #ffffff !important;
   box-shadow: inset 0 0 0 1px rgba(63, 63, 68, 0.05), inset 0 1px 3px 0 rgba(59, 59, 59, 0.15);
+  padding: 0.25rem 0.75rem;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -1086,7 +1087,7 @@ select:-moz-focusring {
   flex: 1;
 }
 .input-block:hover, .input-block:focus-within {
-  outline: solid;
+  outline: none;
   outline-color: #d3e4f3;
 }
 @media screen and (min-width: 769px) {
@@ -1105,6 +1106,7 @@ select:-moz-focusring {
   border: none !important;
   font-size: 1rem;
   color: #eb7119;
+  width: 100%;
 }
 .input-block__search-input:focus {
   outline: none;
