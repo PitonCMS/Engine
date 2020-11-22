@@ -17,80 +17,73 @@
 <div class="content-cards">
   <h2 class="content-cards__title span">For Users</h2>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'overview'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Overview</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Overview of PitonCMS.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'pages'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Pages</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Create and manage content on your website.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'collections'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Collections</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Create and manage groups of related content.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'navigation'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Navigation</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Create and manage navigation bars and links.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'media'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Media</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Manage media, images, files to share on your website.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'messages'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Messages</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Manage messages and requests from your audience.</p>
     </div>
   </a>
 
-  <a href="#" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'settings'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Settings</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ad!</p>
+      <p>Manage website settings.</p>
     </div>
   </a>
 </div>
@@ -98,25 +91,25 @@
 {# For Designers #}
 <div class="content-cards">
   <h2 class="content-cards__title span">For Designers</h2>
-  <a href="{{ pathFor('adminHelp', {'file': 'adminHelpDesigner'}) }}" class="content-card">
+
+  <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'overview'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
-      <h3 class="content-card__title">Index</h3>
+      <h3 class="content-card__title">Overview</h3>
     </div>
-
     <div class="content-card__body">
       <p>Building websites with PitonCMS.</p>
     </div>
   </a>
 
-  <a href="{{ pathFor('adminHelp', {'file': 'designerContact'}) }}" class="content-card">
+  <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'contact'}) }}" class="content-card">
     <div class="content-card__header">
       <i class="fas fa-cog card-icon"></i>
       <h3 class="content-card__title">Contact Forms</h3>
     </div>
-
     <div class="content-card__body">
-      <p>Build contact forms with custom fields.</p>
+      <p>Easily build custom contact forms with custom form fields.</p>
     </div>
   </a>
+
 </div>

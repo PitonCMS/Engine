@@ -100,27 +100,18 @@ class AdminController extends AdminBaseController
         $markdown = $this->container->markdownParser;
 
         // Check if a help file was requested, if not default to help index
-        if (!isset($args['file'])) {
+        if (!isset($args['subject']) && !isset($args['file'])) {
             return $this->render('help/help.html');
         }
 
         // If requesting the release notes page from GitHub
-        if ($args['file'] === 'adminHelpDeveloperRelease') {
+        if ($args['file'] === 'pitonRelease') {
             return $this->release();
         }
 
-        // Add deep link to anchor
+        // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
-
-        // Get subject from help file name. Client is default
-        $data['subject'] = 'client';
-        if (stripos($args['file'], 'designer') !== false) {
-            $data['subject'] = 'designer';
-        } elseif (stripos($args['file'], 'developer') !== false) {
-            $data['subject'] = 'developer';
-        }
-
-        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/templates/help/{$data['subject']}/{$args['file']}.md";
+        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/templates/help/{$args['subject']}/{$args['file']}.md";
 
         if (file_exists($helpFile)) {
             $helpContent = $markdown->text(file_get_contents($helpFile));
@@ -138,10 +129,12 @@ class AdminController extends AdminBaseController
                 }
             }
 
+            // Get breadcrumb title from first H1 in file and render HTML
+            $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
             $data['helpContent'] = $document->saveHTML();
         } else {
-            $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$data['subject']}, File {$args['file']}.");
-            $data['helpContent'] = "<h1>Help File {$args['file']} Does Not Exist</h1>";
+            $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$args['subject']}, File {$args['file']}.");
+            $data['helpContent'] = "<h1>Help File Does Not Exist</h1>";
         }
 
         return $this->render('help/help.html', $data);

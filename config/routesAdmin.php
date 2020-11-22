@@ -253,7 +253,7 @@ $app->group('/admin', function () {
     // End user routes
 
     // Help content
-    $this->get('/help[/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
+    $this->get('/help[/{subject:client|designer}/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
         return (new AdminController($this))->showHelp($args);
     })->setName('adminHelp');
 

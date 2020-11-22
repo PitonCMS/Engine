@@ -6,12 +6,12 @@
 <div class="content-header-inner">
   <div class="breadcrumb">
     {% if page.helpContent %}
-    <a href="{{ pathFor('adminSetting') }}">
-      Settings <i class="fas fa-chevron-right"></i>
+    <a href="{{ pathFor('adminHelp') }}">
+      Support <i class="fas fa-chevron-right"></i>
     </a>
     {% endif %}
   </div>
-  <h1 class="seciton-title" class="section-title">Support</h1>
+  <h1 class="seciton-title" class="section-title">{{ page.breadcrumbTitle }}</h1>
   <div class="btn-group"></div>
 </div>
 {% endblock contentHeader %}
