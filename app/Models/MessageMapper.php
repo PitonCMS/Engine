@@ -73,6 +73,7 @@ class MessageMapper extends DataMapperAbstract
      *  - email
      *  - message
      *  - context
+     *  - Custom message fields
      * @param  string $terms                Search terms
      * @param  int    $limit                Limit
      * @param  int    $offset               Offset
@@ -81,10 +82,16 @@ class MessageMapper extends DataMapperAbstract
     public function textSearch(string $terms, int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect(true);
-        $this->sql .= ' and match(`name`, `email`, `message`, `context`) against (? IN BOOLEAN MODE)';
-        $this->bindValues[] = $terms;
+        $this->sql .=<<<SQL
+and (
+    match(`name`, `email`, `message`, `context`) against (? IN BOOLEAN MODE)
+    or `id` in (select `message_id` from `message_data` where match(`data_value`) against (? IN BOOLEAN MODE))
+    )
+order by `created_date` desc
+SQL;
 
-        $this->sql .= ' order by `created_date` desc';
+        $this->bindValues[] = $terms;
+        $this->bindValues[] = $terms;
 
         if ($limit) {
             $this->sql .= " limit ?";
@@ -108,7 +115,7 @@ class MessageMapper extends DataMapperAbstract
      */
     public function findUnreadCount(): int
     {
-        $this->sql = 'select count(*) unread from `message` where `is_read` = \'N\'';
+        $this->sql = "select count(*) unread from {$this->table} where `is_read` = 'N';";
 
         return (int) $this->findRow()->unread;
     }
