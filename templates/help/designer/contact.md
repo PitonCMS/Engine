@@ -60,7 +60,7 @@ And then print the honeypot macro anywhere inside the form.
 To extend the contact form with custom field inputs to create ordering or registration forms and more:
 
 1. Add any custom inputs to your form and give each custom input a unique `name`. The name should only include letters, numbers, dashes, or underscores without spaces
-2. Register the custom input in `structure/definitions/contactInputs.json`
+2. Register the custom input in `structure/definitions/contactInputs.json`. You can put all custom contact forms inputs in this single array
 
 For example, to include an Arrival Date and Departure Date on a guest contact form add these inputs to your form.
 
