@@ -956,6 +956,7 @@ input:-webkit-autofill:active {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 0 0.25em;
+  z-index: 100;
 }
 
 .form-check {
@@ -978,7 +979,10 @@ input:-webkit-autofill:active {
 }
 
 /* Form Select Styles */
-select, input[type=text], input[type=email], textarea {
+select,
+input[type=text],
+input[type=email],
+textarea {
   padding: 0.5em 3.5em 0.5em 1em;
   margin: 0;
   width: 100%;
@@ -991,7 +995,9 @@ select, input[type=text], input[type=email], textarea {
   -moz-appearance: none;
 }
 
-input[type=text], input[type=email], textarea {
+input[type=text],
+input[type=email],
+textarea {
   padding: 0.5em;
   color: #5e6369;
 }
