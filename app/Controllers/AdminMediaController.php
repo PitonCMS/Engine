@@ -229,7 +229,7 @@ HTML;
             // Get dependencies
             $fileUpload = $this->container->fileUploadHandler;
             $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
             $status = "success";
             $text = "File upload succeeded";
 
@@ -257,7 +257,7 @@ HTML;
                 $mediaMapper->save($media);
 
                 // Save category assignments
-                $mediaCategoryMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+                $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
 
                 // Optimize media uploads
                 if ($doOptimize) {
