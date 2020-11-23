@@ -1646,14 +1646,18 @@ select:-moz-focusring {
   align-items: center;
 }
 .list-item-page:hover {
+  background: #f3f5f7;
+}
+.list-item-page:active {
   background: #dee3e7;
+  outline: none;
 }
 .list-item-page .media {
+  box-shadow: none;
   display: flex;
   align-items: center;
 }
 .list-item-page .media img {
-  margin: 0.25em 8px;
   height: 60px;
   width: 80px;
   object-fit: cover;
@@ -1661,6 +1665,7 @@ select:-moz-focusring {
 
 .title {
   flex: 1.5;
+  margin-left: 0.5em;
 }
 
 .status {
