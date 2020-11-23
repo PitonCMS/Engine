@@ -1295,12 +1295,21 @@ select:-moz-focusring {
   font-weight: bold;
 }
 
-.media-wrapper {
+.media-wrapper,
+.modal-body {
   padding: 1rem;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
+}
+
+.modal-body .media__extra,
+.modal-body .form-check,
+.modal-body .media__categories,
+.modal-body .media__controls,
+.modal-body .media__caption {
+  display: none;
 }
 
 .media {
