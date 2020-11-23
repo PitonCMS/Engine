@@ -1,33 +1,34 @@
 {#  Admin Navbar #}
 
 <ul class="side-nav">
-  <li class="side-nav__link home {{ currentRoute('adminHome') }}">
+  <li class="side-nav__link {{ currentRoute('adminHome') }}">
     <a href="{{ pathFor('adminHome') }}"><i class="side-nav__icon fas fa-home"></i> Home</a>
   </li>
 
-  <li class="side-nav__link pageContent {{ currentRouteParent('adminPage') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminPage') }}">
     <a href="{{ pathFor('adminPage') }}"><i class="side-nav__icon fas fa-pencil-alt"></i> Content</a>
   </li>
 
-  <li class="side-nav__link media {{ currentRouteParent('adminMedia') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminMedia') }}">
     <a href="{{ pathFor('adminMedia') }}"><i class="side-nav__icon fas fa-images"></i> Media</a>
   </li>
 
-  <li class="side-nav__link navigation {{ currentRouteParent('adminNavigation') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminNavigation') }}">
     <a href="{{ pathFor('adminNavigation') }}"><i class="side-nav__icon fas fa-compass"></i> Navigation</a>
   </li>
 
-  <li class="side-nav__link messages {{ currentRouteParent('adminMessage') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminMessage') }}">
     <a href="{{ pathFor('adminMessage') }}"> <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
     {# Note: No whitespace inside of badge element or :empty selector does not work #}
-    <div class="badge badge-notify" data-message="count">{% if getUnreadMessageCount() %}{{ getUnreadMessageCount() }}{% endif %}</div>
+    <div class="badge badge-notify" data-message="count">
+      {% if getUnreadMessageCount() %}{{ getUnreadMessageCount() }}{% endif %}</div>
   </li>
 
-  <li class="side-nav__link settings {{ currentRouteParent('adminSetting') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminSetting') }}">
     <a href="{{ pathFor('adminSetting') }}"><i class="side-nav__icon fas fa-cog"></i> Settings</a>
   </li>
 
-  <li class="side-nav__link help {{ currentRouteParent('adminHelp') }}">
+  <li class="side-nav__link {{ currentRouteParent('adminHelp') }}">
     <a href="{{ pathFor('adminHelp') }}"> <i class="side-nav__icon fas fa-question"></i> Support</a>
   </li>
 

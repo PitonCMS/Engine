@@ -1296,63 +1296,39 @@ select:-moz-focusring {
 }
 
 .media-wrapper {
-  padding: 2rem 1rem;
+  padding: 1rem;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-auto-rows: min-content;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  align-items: center;
 }
-.media-wrapper .media {
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 2px 2px rgba(59, 59, 59, 0.5);
+
+.media {
+  font-size: 0.75rem;
+  color: #5e6369;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(59, 59, 59, 0.15);
+  background: #ffffff;
   border-radius: 0.25rem;
+  position: relative;
 }
-.media-wrapper .media:hover {
-  cursor: move;
+.media hr {
+  border: 1px dashed #f3f5f7;
+  border-radius: 0.25rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
 }
-.media-wrapper .media:hover > .mediaMeta {
-  top: 50%;
+.media .form-check-input:checked ~ .form-check-label {
+  background: #f3f5f7;
 }
-.media-wrapper .mediaCaption {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.media .form-check-input {
+  height: inherit;
+  width: inherit;
 }
-.media-wrapper .mediaMeta {
-  background: rgba(59, 59, 59, 0.75);
-  color: #ffffff;
-  display: flex;
-  flex-flow: column wrap;
-  padding: 0.5rem 1rem;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  top: 100%;
-  transition: top 125ms ease-out 125ms;
+.media__image img {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
-.media-wrapper .mediaMeta > div {
-  margin-top: 0.25rem;
-}
-.media-wrapper .mediaCategories {
-  display: flex;
-  flex-wrap: wrap;
-}
-.media-wrapper .mediaCategory:not(:first-child) {
-  margin-left: 1rem;
-}
-.media-wrapper .mediaControls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.media-wrapper .mediaControls > * {
-  margin: 0;
-}
-.media-wrapper .mediaExtra {
+.media__extra {
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
@@ -1362,15 +1338,110 @@ select:-moz-focusring {
   width: 100%;
   color: #ffffff;
 }
-.media-wrapper .mediaFeatured {
+.media__link {
+  border-radius: 0.25rem;
+  background: rgba(94, 99, 105, 0.5);
+  color: #ffffff;
+  padding: 0.25rem;
+  transition: all 125ms ease;
+}
+.media__link:hover {
+  background: #5e6369;
+}
+.media__link:active {
+  outline: dashed #eb7119 3px;
+  outline-offset: 3px;
+}
+.media__link:visited {
+  background: red;
+}
+.media__featured {
   padding: 0 0.25rem;
   border-radius: 0.25rem;
   background: #eb7119;
   color: #ffffff;
   font-size: 0.8rem;
 }
-.media-wrapper .mediaFeatured span {
+.media__featured span {
   display: none;
+}
+.media__categories {
+  display: flex;
+  flex-flow: row wrap;
+}
+.media__caption {
+  margin: 0rem;
+  border-radius: none;
+}
+.media__caption input[type=text] {
+  border-radius: 0px !important;
+  background: #f3f5f7;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(63, 63, 68, 0.05), inset 0 1px 3px 0 rgba(59, 59, 59, 0.15);
+}
+.media__caption input[type=text]:focus {
+  background: #ffffff;
+  border-bottom: solid #dee3e7 1px;
+  outline: none;
+}
+.media__controls {
+  padding: 0.25rem 0 0.5rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.media__controls > * {
+  margin: 0 5px 0 0;
+}
+.media__controls > *:last-child {
+  margin: 0;
+}
+
+.mediaCategories-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.mediaCategories-block .form-group {
+  display: flex;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(59, 59, 59, 0.15);
+}
+
+/** LIGHTBOX MARKUP **/
+.lightbox {
+  display: none;
+  /* Overlay entire screen */
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* A bit of padding around image */
+  padding: 3rem;
+  /* Translucent background */
+  background: rgba(59, 59, 59, 0.8);
+}
+
+/* Unhide the lightbox when it's the target */
+.lightbox:target {
+  display: block;
+}
+
+.lightbox span {
+  /* Full width and height */
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Size and position background image */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .message-block {
