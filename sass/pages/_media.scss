@@ -13,7 +13,8 @@
   .form-check,
   .media__categories,
   .media__controls,
-  .media__caption {
+  .media__caption,
+  .lightbox:target {
     display: none;
   }
 }
