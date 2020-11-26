@@ -1308,7 +1308,8 @@ select:-moz-focusring {
 .modal-body .form-check,
 .modal-body .media__categories,
 .modal-body .media__controls,
-.modal-body .media__caption {
+.modal-body .media__caption,
+.modal-body .lightbox:target {
   display: none;
 }
 
