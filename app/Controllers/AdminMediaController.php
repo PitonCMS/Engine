@@ -86,7 +86,8 @@ HTML;
         $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
 
         // Get filters or search if requested
-        $category = htmlspecialchars($this->request->getQueryParam('category', 'all'));
+        $category = htmlspecialchars($this->request->getQueryParam('category', '0'));
+        $featured = htmlspecialchars($this->request->getQueryParam('featured', 'all'));
         $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
 
         // Get data
@@ -94,10 +95,10 @@ HTML;
             // This is a search request and takes precedence
             $media = $mediaMapper->searchMedia($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
-        } elseif (is_numeric($category)) {
-            // Return filtered list by category ID
+        } elseif ($category !== '0' || $featured !== 'all') {
+            // Return filtered list by category ID and featured flag
             // Filter by category has no pagination so that one can see all media in the category to reorder
-            $media = $mediaMapper->findMediaWithOtherCategoriesByCategoryId((int) $category) ?? [];
+            $media = $mediaMapper->findMediaByCategoryIdAndFeatured((int) $category, $featured) ?? [];
         } else {
             // Get all media
             $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];

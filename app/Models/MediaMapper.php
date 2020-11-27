@@ -115,19 +115,31 @@ SQL;
     }
 
     /**
-     * Find Media By Category ID
+     * Find Media By Category ID and Featured Flag
      *
-     * Find media by category ID
-     * @param  int|null  $categoryId
-     * @param  int       $limit
-     * @param  int       $offset
+     * Returns matching media records with all assigned categories
+     * Category and Featured are the unique set (inclusive)
+     * @param  int|null     $categoryId
+     * @param  string|null  $featured Y|N
+     * @param  int          $limit
+     * @param  int          $offset
      * @return array|null
      */
-    public function findMediaWithOtherCategoriesByCategoryId(?int $categoryId, int $limit = null, int $offset = null): ?array
+    public function findMediaByCategoryIdAndFeatured(?int $categoryId, ?string $featured, int $limit = null, int $offset = null): ?array
     {
-        // If no category ID was provided just return
-        if (null === $categoryId) {
-            return null;
+        // Build optional where clause
+        $where = '';
+
+        // Category filter
+        if ($categoryId !== null && $categoryId !== 0) {
+            $where .= " and mcm.category_id = ?";
+            $this->bindValues[] = $categoryId;
+        }
+
+        // Featured flag filter
+        if ($featured !== null && in_array($featured, ['Y', 'N'])) {
+            $where .= " and m.feature = ?";
+            $this->bindValues[] = $featured;
         }
 
         $this->sql = <<<SQL
@@ -145,12 +157,13 @@ select SQL_CALC_FOUND_ROWS
        from media_category_map mcm2
       where mcm2.media_id = m.id) category_id_list
 from media m
-join media_category_map mcm on m.id = mcm.media_id
-where mcm.category_id = ?
+left join media_category_map mcm on m.id = mcm.media_id
+where 1=1
+$where
 order by mcm.media_sort
 SQL;
 
-        $this->bindValues[] = $categoryId;
+
 
         if ($limit) {
             $this->sql .= " limit ?";

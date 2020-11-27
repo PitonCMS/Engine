@@ -5,7 +5,8 @@
 <div class="filter-block">
 
     {{ pitonMacro.filterSearch() }}
-    {{ pitonMacro.filterOptions('radio', 'Category', 'category', {'all': 'All'} + getMediaCategories()) }}
+    {{ pitonMacro.filterOptions('radio', 'Category', 'category', {'0': 'All'} + getMediaCategories()) }}
+    {{ pitonMacro.filterOptions('radio', 'Featured', 'featured', {'all': 'All', 'Y': 'Featured', 'N': 'Not Featured'}) }}
     <span data-drag-media-message="true" style="display: none;">Move media into the desired order.</span>
 
 </div>
