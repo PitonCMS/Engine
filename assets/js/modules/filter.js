@@ -18,6 +18,7 @@
  */
 import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise } from './xhrPromise.js';
+import { alertInlineMessage } from './alert.js';
 
 // Expect one content wrapper (data-filter="content") per page for result set
 const filterResults = document.querySelector(`[data-filter="content"]`);
@@ -85,6 +86,10 @@ const getFilterXHRPromise = function(options) {
         })
         .then(() => {
             disableSpinner();
+        })
+        .catch((error) => {
+            disableSpinner();
+            alertInlineMessage('danger', 'Failed to Get Media', error);
         });
 }
 

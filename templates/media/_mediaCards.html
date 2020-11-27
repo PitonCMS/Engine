@@ -7,5 +7,6 @@
   {% for media in page.media %}
     {{ mediaMacro.cardEdit(media, page.categories) }}
   {% endfor %}
+  {{ pagination() }}
 
 </div>

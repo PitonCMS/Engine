@@ -1,3 +1,8 @@
+/**
+ * Toggle Collapse of Elements
+ *
+ *
+ */
 // Class name to toggle to show/hide elements
 const collapseClass = "collapsed";
 

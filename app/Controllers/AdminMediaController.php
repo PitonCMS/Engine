@@ -56,6 +56,7 @@ class AdminMediaController extends AdminBaseController
                 {% for medium in media %}
                     {{ mediaMacro.$macro(medium, categories) }}
                 {% endfor %}
+                {{ pagination() }}
 HTML;
 
             $status = "success";
@@ -82,6 +83,7 @@ HTML;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $pagination = $this->container->adminMediaPagination;
+        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
 
         // Get filters or search if requested
         $category = htmlspecialchars($this->request->getQueryParam('category', 'all'));
@@ -91,17 +93,17 @@ HTML;
         if (!empty($terms)) {
             // This is a search request and takes precedence
             $media = $mediaMapper->searchMedia($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         } elseif (is_numeric($category)) {
             // Return filtered list by category ID
-            $media = $mediaMapper->findMediaWithOtherCategoriesByCategoryId((int) $category, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+            // Filter by category has no pagination so that one can see all media in the category to reorder
+            $media = $mediaMapper->findMediaWithOtherCategoriesByCategoryId((int) $category) ?? [];
         } else {
             // Get all media
             $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
+            $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         }
 
-        // Setup pagination
-        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
-        $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         $this->container->view->addExtension($pagination);
 
         // Load and assign media categories
