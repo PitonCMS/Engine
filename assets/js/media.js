@@ -17,12 +17,19 @@ setFilterPath(pitonConfig.routes.adminMediaGet + "edit");
 const draggableMessage = document.querySelector(`[data-drag-media-message="true"]`);
 
 /**
- * Get Curent Filter Category ID
+ * Get Category ID Filter Value
  *
  * From filter options control
  */
 const getFlterCategoryId = function () {
     return document.querySelector('input[type="radio"][name="category"]:checked')?.value;
+}
+
+/**
+ * Get Featured Flag Filter Value
+ */
+const getFilterFeatured = function () {
+    return document.querySelector('input[type="radio"][name="featured"]:checked')?.value;
 }
 
 /**
@@ -32,7 +39,7 @@ const getFlterCategoryId = function () {
  */
 const filterCategoryChange = function() {
     // Respond whether viewing a defined category (ID) or "all"
-    if (!isNaN(getFlterCategoryId())) {
+    if (!isNaN(getFlterCategoryId()) && getFilterFeatured() === "all") {
         draggableMessage.style.display = "inline";
         document.querySelectorAll(`[data-media-card="true"]`)?.forEach(media => {
             media.setAttribute("draggable", true);
