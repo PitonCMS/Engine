@@ -1,13 +1,17 @@
-// --------------------------------------------------------
-// Media management
-// --------------------------------------------------------
+/**
+ * Media Category JS
+ */
 
 import './modules/main.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';
 
+// Keep a copy of a new category element ready. Add the new-category class
 const categoryElement = document.querySelector(`[data-media-category="spare"] > div`);
+categoryElement.classList.add("new-category");
+
+// New category index
 let elementKey = 0;
 
 /**
