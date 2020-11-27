@@ -23,7 +23,7 @@
         Content <i class="fas fa-chevron-right"></i>
       </a>
     </div>
-    <h1 class="section-title">{{ page.title }}</h1>
+    <h1 class="section-title">{% if page.id %}Edit {{ page.title }}{% else %}Add Page{% endif %}</h1>
 
     <div class="btn-group">
       <button type="reset" class="btn btn-cancel" data-form-button="cancel"
