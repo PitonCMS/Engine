@@ -42,17 +42,19 @@ class AdminMediaController extends AdminBaseController
      *
      * XHR asynchronous request
      * Gets filtered media rendered as HTML from template
+     * @param array $args['context']: edit | static
      * @param  void
      * @return Response
      */
-    public function getMedia(): Response
+    public function getMedia(array $args): Response
     {
         try {
+            $macro = ($args['context'] === "edit") ? "cardEdit" : "cardStatic";
             $data = $this->loadMedia();
             $template =<<<HTML
                 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
                 {% for medium in media %}
-                    {{ mediaMacro.card(medium, categories) }}
+                    {{ mediaMacro.$macro(medium, categories) }}
                 {% endfor %}
 HTML;
 

@@ -127,7 +127,7 @@ $app->group('/admin', function () {
     // Media
     $this->group('/media', function () {
         // XHR: Get media asynchronously
-        $this->get('/get', function ($args) {
+        $this->get('/get/[{context:edit|static}]', function ($args) {
             return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminMediaGet');
 

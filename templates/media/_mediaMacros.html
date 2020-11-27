@@ -1,23 +1,20 @@
 {#
-    All Twig Macros for Media and Media Category Management
+    All Macros for Media and Media Category Management
 #}
 
 {#
-  Media Card
+  Media Card (Editable)
 
+  Has form to update categories and captions
   Draggable defaults to false so media cannot be reordered when viewing all records.
   This is changed to true when viewing a category.
 #}
-
-{% macro card(media, categories) %}
-
-{# TODO: We can remove the cursor: move from the CSS, this is now set in JS when eligible to move #}
+{% macro cardEdit(media, categories) %}
 
 <div class="media" data-media-card="true" data-media-id="{{ media.id }}" draggable="false">
 
   {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-  {# Setting <img draggable="false" to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
-
+  {# Set <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
   <div class="media__image">
     <a href="#{{ media.filename }}"> <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}"
         class="media__thumb" alt="{{ media.caption }}" title="{{ media.caption }}"></a>
@@ -58,9 +55,6 @@
         {% endfor %}
       </div>
 
-
-
-
       <div class="media__controls">
         <button class="btn btn-delete" type="button" data-delete-media-prompt="Are you sure you want to delete?"
           data-delete-media-id="{{ media.id }}">Delete</button>
@@ -71,7 +65,25 @@
   </div>
 
 </div>
-{% endmacro card %}
+{% endmacro cardEdit %}
+
+{#
+  Media Card (Static)
+
+  For use in modal to select media for use
+  Draggable defaults to false so media cannot be reordered when viewing
+#}
+{% macro cardStatic(media, categories) %}
+<div class="media" data-media-card="true" data-media-id="{{ media.id }}" data-media-filename="{{ getMediaPath(media.filename) }}" data-media-caption="{{ media.caption }}">
+
+  {# Setting <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
+  <div class="media__image">
+      <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}"
+        class="media__thumb" alt="{{ media.caption }}" title="{{ media.caption }}">
+  </div>
+
+</div>
+{% endmacro cardStatic %}
 
 {#
     Media Upload Modal
@@ -108,7 +120,6 @@
     </div>
     {% endfor %}
   </div>
-
 
   <hr>
   {# Media caption #}

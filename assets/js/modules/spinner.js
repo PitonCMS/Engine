@@ -1,11 +1,13 @@
 /**
+ * Enable or Disable Spinner
+ */
+
+/**
  * Enable Spinner Overlay
  * @param {void}
  */
 const enableSpinner = function() {
-    if (document.querySelector("body > .spinner").classList.contains("d-none")) {
-        document.querySelector("body > .spinner").classList.remove("d-none")
-    }
+    document.body.insertAdjacentHTML("afterbegin", pitonConfig.spinnerHTML);
 }
 
 /**
@@ -13,9 +15,7 @@ const enableSpinner = function() {
  * @param {void}
  */
 const disableSpinner = function() {
-    if (!document.querySelector("body > .spinner").classList.contains("d-none")) {
-        document.querySelector("body > .spinner").classList.add("d-none")
-    }
+    document.querySelector('[data-spinner="true"]')?.remove();
 }
 
 export { enableSpinner, disableSpinner };

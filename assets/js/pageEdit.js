@@ -1,11 +1,11 @@
-// --------------------------------------------------------
-// Page Edit JS
-// --------------------------------------------------------
+/**
+ * Page Edit Main JS
+ */
 
 import './modules/main.js';
+import './modules/mediaModal.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
-import { mediaSelect } from './modules/mediaModal.js';
 import { setCleanSlug, unlockSlug } from './modules/url.js';
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dragEndHandler } from './modules/drag.js';
 import { alertInlineMessage } from './modules/alert.js';
@@ -182,7 +182,6 @@ document.querySelector(`[data-url-slug-lock="1"]`).addEventListener("click", (e)
 }, false);
 
 // Bind page edit listeners for events that bubble
-document.addEventListener("click", mediaSelect, false);
 document.addEventListener("change", setElementTitleText, false);
 
 // Draggable page elements

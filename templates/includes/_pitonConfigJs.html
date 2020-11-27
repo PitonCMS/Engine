@@ -1,5 +1,5 @@
 {#
-    Piton Config JS Include
+    Piton Config Admin JS Include
 
     This creates a JS object in the base page layout with runtime variables.
 #}
@@ -27,7 +27,10 @@
         adminCollection: "{{ pathFor('adminCollection') }}",
         adminNavigationDelete: "{{ pathFor('adminNavigationDelete') }}",
       },
-      alertInlineHTML: `{{ pitonMacro.alert() }}`,
+      alertInlineHTML: `{{ pitonMacro.alert()|spaceless }}`,
+      modalBackgroundHTML: `{{ pitonMacro.modalBackground()|spaceless }}`,
+      modalContentHTML: `{{ pitonMacro.modalContent()|spaceless }}`,
+      spinnerHTML: `{{ pitonMacro.spinner()|spaceless }}`,
       {% block jsPitonConfig '' %}
     };
   </script>

@@ -78,3 +78,43 @@
 </div>
 
 {% endmacro filterOptions %}
+
+{#
+	Modal Background
+
+	Returns modal background HTML
+	Modal content is another marco, see modalContent()
+	@param void
+#}
+{% macro modalBackground() %}
+<div class="modal" data-modal="modal"></div>
+{% endmacro modalBackground %}
+
+{#
+	Modal Content
+
+	Returns modal content HTML
+	Modal background is another marco, see modalBackground()
+	@param void
+#}
+{% macro modalContent() %}
+<div class="modal-content" data-modal="content">
+	<div class="modal-header">
+		{# Header gets inserted here #}
+		<h3 data-modal="header"></h3>
+		<i class="fas fa-times modal-dismiss" aria-hidden="true" data-modal="dismiss"></i>
+	</div>
+
+	{# Content gets inserted here #}
+	<div class="modal-body" data-modal="body"></div>
+</div>
+{% endmacro modalContent %}
+
+{#
+	Spinner
+
+	Returns spinner HTML
+#}
+{% macro spinner() %}
+<div class="spinner" data-spinner="true"></div>
+{% endmacro spinner %}

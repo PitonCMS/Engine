@@ -1,56 +1,65 @@
-// Get base modal HTML available in all pages
-const modal = document.getElementById("modal");
+/**
+ * Open, Load, and Dismiss Modal Window
+ */
 
 /**
  * Get Modal
- * Returns modal object
+ *
+ * Returns reference to modal content node, but only after inserted into DOM by loadModalContent()
  */
 const getModal = function() {
-    return modal;
+    return document.querySelector(`[data-modal="content"]`);
 }
 
 /**
- * Show Modal (Background)
- * Call first if request requires processing time before content is available
+ * Load Modal (Background)
+ *
+ * Call first if request requires processing time before content is available to load in loadModalContent
  */
-const showModal = function() {
-    modal.classList.remove("d-none");
+const loadModal = function() {
+    document.body.insertAdjacentHTML("afterbegin", pitonConfig.modalBackgroundHTML);
 }
 
 /**
  * Load Modal Content and Display
+ *
+ * Loads modal background if not already loaded
  * @param {string} header
  * @param {string} body
  */
-const showModalContent = function(header, body) {
-    // Assign modal header and content
-    modal.querySelector(`[data-modal="header"]`).innerHTML = header;
-    modal.querySelector(`[data-modal="body"]`).innerHTML = body;
+const loadModalContent = function(header, body) {
+    // Create new element and load modal
+    let modalDiv = document.createElement("div");
+    modalDiv.innerHTML = pitonConfig.modalContentHTML;
+    modalDiv.querySelector(`[data-modal="header"]`).innerHTML = header;
+    modalDiv.querySelector(`[data-modal="body"]`).innerHTML = body;
 
-    // Remove d-none to display
-    modal.classList.remove("d-none");
-    modal.querySelector(`[data-modal="content"]`).classList.remove("d-none");
+    // Create modal background if it does not exit
+    if (document.querySelector(`[data-modal="modal"]`) === null) {
+        loadModal();
+    }
+
+    // Insert into modal div as child
+    document.querySelector(`[data-modal="modal"]`).appendChild(modalDiv.firstChild);
 }
 
 /**
- * Hide Modal and Clear Contents
+ * Remove Modal and Contents
  */
-const hideModal = function() {
-    modal.classList.add("d-none");
-    modal.querySelector(`[data-modal="content"]`).classList.add("d-none");
-    modal.querySelector(`[data-modal="header"]`).innerHTML = "";
-    modal.querySelector(`[data-modal="body"]`).innerHTML = "";
+const removeModal = function() {
+    document.querySelector(`[data-modal="modal"]`)?.remove();
 }
 
-// Bind close modal events
-modal.querySelector(`[data-dismiss="modal"]`).addEventListener("click", () => {
-    hideModal();
-}, false);
+/**
+ * Remove Modal (Event)
+ * @param {Event} event
+ */
+const removeModalEvent = function(event) {
+    if (!(event.target.dataset.modal === "modal" || event.target.dataset.modal === "dismiss")) return;
+    removeModal();
+}
 
-window.addEventListener("click", (event) => {
-    if (event.target === modal) {
-        hideModal();
-    }
-}, false);
+// Bind modal events
+document.addEventListener("click", removeModalEvent, false);
 
-export { getModal, showModal, showModalContent, hideModal };
+export { getModal, loadModal, loadModalContent, removeModal };

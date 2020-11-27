@@ -162,9 +162,7 @@
           changing the URL slug after the page is published may negatively impact links to your page.</div>
       </div>
 
-
       {# Meta Description Input #}
-
       <div class="form-block">
         <label>Meta Description</label>
         <textarea name="meta_description" maxlength="320"
@@ -175,15 +173,15 @@
 
       {# Page Featured Media Select #}
       {% if page.definition.showFeaturedImage %}
-      <div class="form-block pageEdit__twoCol" data-media-select="1">
+      <div class="form-block pageEdit__twoCol" data-media-select="true">
         <label class="span">Featured Page Image</label>
         <img src="{{ getMediaPath(page.media.filename, 'large') }}"
           class="{% if not page.media.filename %}d-none{% endif %}">
         <input type="hidden" name="page_media_id" value="{{ page.media_id }}">
 
         <div class="btn-group-pageEdit">
-          <button class="btn btn-delete " type="button" data-media-clear="1">Clear Media</button>
-          <button class="btn btn-save " type="button" data-media-modal="1">Select Media</button>
+          <button class="btn btn-delete " type="button" data-media-clear="true">Clear Media</button>
+          <button class="btn btn-save " type="button" data-media-modal="true">Select Media</button>
         </div>
       </div>
       {% endif %}

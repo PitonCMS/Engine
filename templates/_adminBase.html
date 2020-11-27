@@ -38,13 +38,9 @@
 </head>
 
 <body>
- {# Load Spinner #}
- <div class="spinner d-none"></div>
-  {# Load modal #}
- {{ include("@admin/includes/_modal.html") }}
-
-
-  <header class="top-header">
+ {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
+    and are defined as macros in _pitonMacros.html #}
+<header class="top-header">
     <div class="logo">
      <a href="{{ pathFor('adminHome') }}">{{ site.settings.displayName|default("PitonCMS") }}</a>
     </div>
@@ -64,7 +60,6 @@
  </div>
 
   </header>
-
 
  <div class="wrapper">
    {# Hamburger #}

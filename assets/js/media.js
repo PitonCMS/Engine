@@ -11,7 +11,7 @@ import { setFilterPath } from "./modules/filter.js";
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dispatchInputEventOnMovedElement } from './modules/drag.js';
 
 // Set filter query end point
-setFilterPath(pitonConfig.routes.adminMediaGet);
+setFilterPath(pitonConfig.routes.adminMediaGet + "edit");
 
 // Reference to <span> that contains text suggestion to move media order when a category has been selected
 const draggableMessage = document.querySelector(`[data-drag-media-message="true"]`);

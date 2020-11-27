@@ -2,7 +2,7 @@
 // Upload media
 // --------------------------------------------------------
 
-import { showModal, showModalContent, hideModal } from './modal.js';
+import { loadModal, loadModalContent, removeModal } from './modal.js';
 import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise, postXHRPromise } from './xhrPromise.js';
 import { alertInlineMessage } from './alert.js';
@@ -15,13 +15,13 @@ const refreshPageOnUpload = document.querySelector(`[data-media-refresh="true"]`
  */
 const showMediaUploadForm = function() {
     // Get file upload form with most current list of categories
-    showModal();
+    loadModal();
     getXHRPromise(pitonConfig.routes.adminMediaUploadFormGet)
         .then(data => {
-            showModalContent("Upload Media", data);
+            loadModalContent("Upload Media", data);
         })
         .catch((error) => {
-            hideModal();
+            removeModal();
             alertInlineMessage("danger", "Failed To Open Media Upload Modal", error);
         });
 }
@@ -43,13 +43,13 @@ const mediaUpload = function(event) {
             }
         })
         .then(() => {
-            hideModal();
+            removeModal();
         })
         .then(() => {
             disableSpinner();
         })
         .catch((error) => {
-            hideModal();
+            removeModal();
             disableSpinner();
             alertInlineMessage('danger', 'Failed to Upload File', error);
         });
