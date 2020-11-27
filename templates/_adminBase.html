@@ -49,7 +49,7 @@
   <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
    Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
   </div>
-  <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="true">
+  <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
    <div class="form-group">
     <a href="{{ pathFor('adminUserEdit', {"id": site.environment.sessionUserId}) }}">Profile</a>
    </div>
