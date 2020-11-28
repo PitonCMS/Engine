@@ -62,6 +62,23 @@ const clearFilterControl = function(event) {
 }
 
 /**
+ * Clear All Filter Controls
+ *
+ * Use to reset filters controls with other events such a search
+ * @param void
+ */
+const clearAllFilterControls = function() {
+    let filters = document.querySelectorAll(`[data-filter="options"]`);
+
+    // Clear filters
+    filters.forEach((input) => {
+        if (input.checked) {
+            input.checked = false;
+        }
+    });
+}
+
+/**
  * Apply Filter Control
  * @param {Event} event
  */
@@ -124,6 +141,7 @@ const search = function() {
     let terms = document.querySelector(`[data-filter="search"] input`);
     let query = {"terms": terms.value};
     enableSpinner();
+    clearAllFilterControls();
 
     return getFilterXHRPromise(query);
 }
@@ -154,6 +172,7 @@ document.addEventListener("click", clearFilterControl, false);
 document.addEventListener("click", paginationControl, false);
 
 // There should be only one search control per page, so binding directly to element
+// For the search box, attach listener to both the search icon click, and also the enter key submit
 document.querySelector(`[data-filter-control="search"]`)?.addEventListener("click", search, false);
 document.querySelector(`[data-filter="search"] input`)?.addEventListener("keypress", (event) => {
     if (event.key === 'Enter') search();
