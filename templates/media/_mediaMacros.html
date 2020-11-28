@@ -74,12 +74,13 @@
   Draggable defaults to false so media cannot be reordered when viewing
 #}
 {% macro cardStatic(media, categories) %}
-<div class="media" data-media-card="true" data-media-id="{{ media.id }}" data-media-filename="{{ getMediaPath(media.filename) }}" data-media-caption="{{ media.caption }}">
+<div class="media" data-media-card="true" data-media-id="{{ media.id }}"
+  data-media-filename="{{ getMediaPath(media.filename) }}" data-media-caption="{{ media.caption }}">
 
   {# Setting <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
   <div class="media__image">
-      <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}"
-        class="media__thumb" alt="{{ media.caption }}" title="{{ media.caption }}">
+    <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}" class="media__thumb"
+      alt="{{ media.caption }}" title="{{ media.caption }}">
   </div>
 
 </div>
@@ -89,7 +90,7 @@
     Media Upload Modal
 #}
 {% macro uploadForm() %}
-<form data-media-upload="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+<form data-media-upload="form" class="modal-form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
   {# Media file link #}
   <div class="form-group">

@@ -1215,6 +1215,9 @@ select:-moz-focusring {
 .modal-body .btn-group {
   margin-top: 1rem;
 }
+.modal-body .modal-form {
+  grid-column: 1/-1;
+}
 
 @keyframes animatetop {
   from {
@@ -1303,15 +1306,6 @@ select:-moz-focusring {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-}
-
-.modal-body .media__extra,
-.modal-body .form-check,
-.modal-body .media__categories,
-.modal-body .media__controls,
-.modal-body .media__caption,
-.modal-body .lightbox:target {
-  display: none;
 }
 
 .media {
