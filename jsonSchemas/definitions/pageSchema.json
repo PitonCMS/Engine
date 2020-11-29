@@ -13,9 +13,9 @@
             "type": "string"
         },
         "templateType": {
-            "description": "Template type: 'page' or 'collection', optional.",
+            "description": "Template type: 'page' or 'collection', required.",
             "type": "string",
-            "enum": ["page","collection",""]
+            "enum": ["page","collection"]
         },
         "showSubTitle": {
             "description": "Show sub-title input, defaults to true",
@@ -85,5 +85,5 @@
             }
         }
     ],
-    "required": ["templateName","templateDescription"]
+    "required": ["templateName","templateDescription","templateType"]
 }

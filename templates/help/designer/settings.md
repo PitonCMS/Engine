@@ -35,7 +35,7 @@ To edit or add site settings, in the `siteSettings.json` file edit a setting obj
 }
 ```
 
-## Page Settings
+## Page and Block Element Settings
 Page template settings are defined the custom page template definition file in `structure/templates/pages/*.json`, and are updated in the **Content** page manager for pages using that template. A user can then define different values in different pages using the same template.
 
 Page settings are available on the pages using this template, under the `page.settings.` array and indexed with the `key` you define in the JSON file. You are welcome to delete the default settings that come with PitonCMS as examples.
@@ -56,6 +56,7 @@ To edit or add page settings, in the page template JSON file add a setting objec
  ]
 }
 ```
+You can also define Block Element settings for target data points per element on a page.
 
 ## Setting Definitions
 Settings allow for very specific input types. The basic setting object has these properties at a minimum:
