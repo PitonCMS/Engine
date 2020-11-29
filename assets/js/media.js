@@ -173,6 +173,13 @@ const dragEndHandler = function(event) {
     dispatchInputEventOnMovedElement();
 }
 
+// Disable default enter key submit on media card edit forms. Save should be an explicit button click to save
+document.addEventListener("keypress", event => {
+    if (event.target.closest("form") && event.key === "Enter") {
+        event.preventDefault();
+    }
+}, false);
+
 // Draggable media elements
 document.querySelectorAll(`[data-draggable="children"]`).forEach(zone => {
     zone.addEventListener("dragstart", dragStartHandler, false);

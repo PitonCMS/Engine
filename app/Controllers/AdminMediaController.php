@@ -38,6 +38,32 @@ class AdminMediaController extends AdminBaseController
     }
 
     /**
+     * Get Media Search Controls
+     *
+     * XHR asynchronous request
+     * Loads media search controls for use in media select modals
+     * @param void
+     * @return Response
+     */
+    public function getMediaSearchControls(): Response
+    {
+        try {
+            $template =<<<HTML
+                {{ include("@admin/media/_mediaSearchControls.html") }}
+                <div class="media-wrapper" data-filter="content"></div>
+HTML;
+
+            $status = "success";
+            $text = $this->container->view->fetchFromString($template);
+        } catch (Throwable $th) {
+            $status = "error";
+            $text = "Exception getting media controls: {$th->getMessage()}";
+        }
+
+        return $this->xhrResponse($status, $text);
+    }
+
+    /**
      * Get Media
      *
      * XHR asynchronous request

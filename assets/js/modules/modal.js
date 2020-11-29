@@ -28,19 +28,27 @@ const loadModal = function() {
  * @param {string} body
  */
 const loadModalContent = function(header, body) {
-    // Create new element and load modal
-    let modalDiv = document.createElement("div");
-    modalDiv.innerHTML = pitonConfig.modalContentHTML;
-    modalDiv.querySelector(`[data-modal="header"]`).innerHTML = header;
-    modalDiv.querySelector(`[data-modal="body"]`).innerHTML = body;
+    // Create temp new div element and load modal HTML string to make live
+    let container = document.createElement("div");
+    container.insertAdjacentHTML("afterbegin", pitonConfig.modalContentHTML);
 
-    // Create modal background if it does not exit
+    // Insert the modal title in the header element
+    container.querySelector(`[data-modal="header"]`).insertAdjacentHTML("afterbegin", header);
+
+    // Determine if the body is text HTML to be turned into a DOM element, or is already a Node
+    if (typeof body === "string") {
+        container.querySelector(`[data-modal="body"]`).insertAdjacentHTML("afterbegin", body);
+    } else if (typeof body === "object" && body instanceof Node) {
+        container.querySelector(`[data-modal="body"]`).append(body)
+    }
+
+    // Load modal background if it does not yet exit in the DOM
     if (document.querySelector(`[data-modal="modal"]`) === null) {
         loadModal();
     }
 
-    // Insert into modal div as child
-    document.querySelector(`[data-modal="modal"]`).appendChild(modalDiv.firstChild);
+    // Insert into the background modal div, stripping off the temp container div container
+    document.querySelector(`[data-modal="modal"]`).append(container.firstChild);
 }
 
 /**

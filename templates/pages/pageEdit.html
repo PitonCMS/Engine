@@ -171,10 +171,10 @@
           results.</div>
       </div>
 
-      {# Page Featured Media Select #}
+      {# Page Media with Modal Media Select #}
       {% if page.definition.showFeaturedImage %}
       <div class="form-block pageEdit__twoCol" data-media-select="true">
-        <label class="span">Featured Page Image</label>
+        <label class="span">Page Image</label>
         <img src="{{ getMediaPath(page.media.filename, 'large') }}"
           class="{% if not page.media.filename %}d-none{% endif %}">
         <input type="hidden" name="page_media_id" value="{{ page.media_id }}">

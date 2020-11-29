@@ -131,6 +131,11 @@ $app->group('/admin', function () {
             return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminMediaGet');
 
+        // XHR: Get media controls asynchronously
+        $this->get('/getmediacontrols', function ($args) {
+            return (new AdminMediaController($this))->getMediaSearchControls();
+        })->setName('adminMediaControlsGet');
+
         // XHR: Get media file upload form asynchronously
         $this->get('/uploadform', function ($args) {
             return (new AdminMediaController($this))->getMediaUploadForm();

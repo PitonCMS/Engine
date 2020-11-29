@@ -4,8 +4,8 @@
 <!-- Media List -->
 <div class="media-wrapper" data-filter="content" data-draggable="children">
 
-  {% for media in page.media %}
-    {{ mediaMacro.cardEdit(media, page.categories) }}
+  {% for medium in page.media %}
+    {{ mediaMacro.cardEdit(medium, page.categories) }}
   {% endfor %}
   {{ pagination() }}
 

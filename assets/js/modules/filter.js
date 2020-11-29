@@ -20,14 +20,21 @@ import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise } from './xhrPromise.js';
 import { alertInlineMessage } from './alert.js';
 
-// Expect one content wrapper (data-filter="content") per page for result set
-const filterResults = document.querySelector(`[data-filter="content"]`);
-
 // Hoist request route for filter search
 let filterPath;
 
 /**
+ * Get Filter Results Set Element
+ *
+ * @param void
+ */
+const getFilterResultsElement = function () {
+    return document.querySelector(`[data-filter="content"]`);
+}
+
+/**
  * Set Route to Request Endpoint
+ *
  * Exported to calling file to set route
  * @param {string} route
  */
@@ -36,13 +43,15 @@ const setFilterPath = function(route) {
 }
 
 /**
- * Remove Rows
- * Clears result set from filterResults constant
+ * Remove Result Set Rows
+ *
+ * Clears result set from getFilterResultsElement()
+ * @param void
  */
 const removeRows = function() {
-    if (filterResults) {
-        while (filterResults.firstChild) {
-            filterResults.removeChild(filterResults.lastChild);
+    if (getFilterResultsElement()) {
+        while (getFilterResultsElement().firstChild) {
+            getFilterResultsElement().removeChild(getFilterResultsElement().lastChild);
         }
     }
 }
@@ -80,16 +89,18 @@ const clearAllFilterControls = function() {
 
 /**
  * Apply Filter Control
+ *
  * @param {Event} event
  */
 const ApplyFilterControl = function(event) {
-    if (filterPath && filterResults && event.target.dataset.filterControl === "apply") {
+    if (filterPath && getFilterResultsElement() && event.target.dataset.filterControl === "apply") {
         applyFilters();
     }
 }
 
 /**
  * Private: Get Filter XHR Promise
+ *
  * @param {object} options
  */
 const getFilterXHRPromise = function(options) {
@@ -99,7 +110,7 @@ const getFilterXHRPromise = function(options) {
             return data;
         })
         .then(data => {
-            filterResults.insertAdjacentHTML('afterbegin', data);
+            getFilterResultsElement().insertAdjacentHTML('afterbegin', data);
         })
         .then(() => {
             disableSpinner();
@@ -112,7 +123,9 @@ const getFilterXHRPromise = function(options) {
 
 /**
  * Apply Filters
+ *
  * Applies all filters on page as single XHR request
+ * @param void
  */
 const applyFilters = function() {
     let filters = document.querySelectorAll(`[data-filter="options"] input`);
@@ -136,6 +149,8 @@ const applyFilters = function() {
 
 /**
  * Text Search
+ *
+ * @param void
  */
 const search = function() {
     let terms = document.querySelector(`[data-filter="search"] input`);
@@ -148,6 +163,7 @@ const search = function() {
 
 /**
  * Pagination Controls
+ *
  * Interrupts page link request to submit as XHR to keep control filter state
  * @param {Event} event
  */
@@ -171,11 +187,14 @@ document.addEventListener("click", ApplyFilterControl, false);
 document.addEventListener("click", clearFilterControl, false);
 document.addEventListener("click", paginationControl, false);
 
-// There should be only one search control per page, so binding directly to element
-// For the search box, attach listener to both the search icon click, and also the enter key submit
-document.querySelector(`[data-filter-control="search"]`)?.addEventListener("click", search, false);
-document.querySelector(`[data-filter="search"] input`)?.addEventListener("keypress", (event) => {
-    if (event.key === 'Enter') search();
+// For the search box, listen to both the search icon click, and also the enter key submit
+document.addEventListener("click", (event) => {
+    if (!event.target.closest(`[data-filter-control="search"]`)) return;
+    search();
+}, false);
+document.addEventListener("keypress", (event) => {
+    if (!(event.target.closest(`[data-filter="search"]`) && event.key === 'Enter')) return;
+    search();
 }, false);
 
 export { setFilterPath, applyFilters };
