@@ -57,7 +57,7 @@ const openMediaModal = function() {
                 .then(controls => {
                     // Create element to inject HTML string into to get this live
                     let container = document.createElement("div");
-                    container.classList.add("container");
+                    container.classList.add("modal-container");
                     container.dataset.mediaSelectModal = true;
                     container.insertAdjacentHTML("afterbegin", controls);
 
