@@ -141,7 +141,7 @@ class AdminController extends AdminBaseController
             $data['helpContent'] = "<h1>Help File Does Not Exist</h1>";
         }
 
-        return $this->render('help/_helpFile.html', $data);
+        return $this->render('help/helpFile.html', $data);
     }
 
     /**
