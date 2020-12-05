@@ -6,7 +6,7 @@ Collections are groups of *related* pages such as blog posts, recipes, services,
 
 Pages and Collection Detail Pages are structured by **Templates** around designer defined page **Blocks** that represent broad areas of the page design, to which you can add one or more **Elements** that contain your page content and display media.
 
-There may also be designer defined **Custom Page Settings** in the page template, that store specific bits of information for the page.
+There may also be designer defined **Custom Page Settings** in the page template, blocks, and elements, that store specific bits of information for the page.
 
 You can pre-publish pages by setting the published date to a future date.
 
@@ -17,21 +17,27 @@ In this example of the **With Hero** template, the web designer defined the Bloc
 
 ![Page Template Overview"](/admin/img/help/pageBlockElementOverview.png)
 
-When editing a page, you will see three editor tabs:
-* Page Settings: Important details such as title, URL, meta description.
-* Custom Settings: Optional by design. Additional custom page values, such as a call to action link.
-* Content: The actual page content, divided by Block and Element.
+When editing a page, you will see:
+* Page Title as the display name for the page, and the Sub Title (Optional) which slightly expands on the title
+* Custom Page Settings (Optional) Custom page data configured by the designer
+* Content Blocks To which you can add one or more elements to hold dynamic data (this is where you enter the actual page content)
+* About This Page (Sidebar), which has the publish date, URL slug, Meta Description, and primary media image
 
-Once the page has been created, you will default to the Content tab when editing.
-
-### Page Information
-This tab contains top level information about the page, and where it can be found (URL).
+### Editing the Page
+The main content sections include:
 
 * **Title** Required. The heading title for this page.
 * **Sub Title** Optional, and may be hidden by design.
+
+
+You can unpublish a page by changing the publish date to the future, or removing the publish date. **Note**: This may break links to your website!
+
+### About This Page
+
+* **Published Date**
 * **Slug** Required. This is the relative URL to access the page content. By default the URL slug defaults to the title (after being cleaned), but can be changed. **Note**: Once the page is published, the URL slug can only be changed by unlocking the slug. Changing the URL may links to your page!
 * **Meta Description** Optional. A brief description of the page and content, and might be used by search engines as the displayed text in search results.
-* **Featured Page Image** Optional, and may be hidden by design. Select an image from your media collection to display in the page. **Note**: How this featured page image works may depend on your website design.
+* **Page Image** Optional, and may be hidden by design. Select an image from your media collection to display in the page. **Note**: How this featured page image works may depend on your website design.
 * **Published Date** (Sidebar). The date when the page should be visible.
 
 The page can be in three statuses:
@@ -40,7 +46,6 @@ The page can be in three statuses:
 * **Pending** The page is not visible. A future publish date has been set, and the page will automatically be visible on that date.
 * **Published** The page is visible.
 
-You can unpublish a page by changing the publish date to the future, or removing the publish date. **Note**: This may break links to your website!
 
 ### Custom Settings
 Your web designer may include custom page settings, which are specific bits of information to be used in the page. This may include examples such as:
