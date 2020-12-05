@@ -115,7 +115,7 @@ class AdminController extends AdminBaseController
 
         // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
-        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/templates/help/{$args['subject']}/{$args['file']}.md";
+        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
 
         if (file_exists($helpFile)) {
             $helpContent = $markdown->text(file_get_contents($helpFile));
