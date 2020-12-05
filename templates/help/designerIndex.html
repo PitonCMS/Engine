@@ -1,0 +1,66 @@
+{% extends '@admin/help/_helpIndex.html' %}
+
+{% block supportIndex %}
+    {# For Designers #}
+    <h2 class="content-cards__title span">For Designers</h2>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'overview'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Overview</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Building websites with PitonCMS.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'data'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Printing Data</h3>
+      </div>
+      <div class="content-card__body">
+        <p>How to access and print website data variables in your templates.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'templates'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Page Templates</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Use page templates to define static pages and collection page details.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'settings'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Custom Settings</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Use custom page or site user managed settings to enhance your web design.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'navigation'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Navigators</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Define and print custom navigation.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'designer', 'file': 'contact'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Contact Forms</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Easily build custom contact forms with custom form fields.</p>
+      </div>
+    </a>
+    {% endblock supportIndex %}
