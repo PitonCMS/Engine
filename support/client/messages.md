@@ -1,4 +1,4 @@
-# PitonCMS Messages
+# Messages
 
 You website may have a contact form for visitors to submit messages. This is a design consideration set by your website designer. If configured, when visitors submit a message you will receive an email with the message, and a copy of the message will be kept in PitonCMS for reference.
 

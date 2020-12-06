@@ -1,4 +1,4 @@
-# PitonCMS Navigation
+# Navigation
 
 With the **Content > Navigation** menu, you can control which page links appear and in what order in any navigator. Your website designer will have defined the navigator groups, such as main, footer, sidebar, etc.
 

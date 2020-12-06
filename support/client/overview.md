@@ -1,4 +1,4 @@
-# PitonCMS Overview
+# Overview
 
 PitonCMS is an easy to use, powerful Content Management System for personal and small business websites.
 

@@ -1,4 +1,4 @@
-# PitonCMS Navigation
+# Navigation
 PitonCMS supports creating multiple navigation bars (navigators), including drop down menus. As a designer, you can define a navigation bar, and let the user add or remove links from the navigation bar using the **Navigation** mananger.
 
 Note, only static Pages, Collections, and custom links can be added to a navigator by the user. Links to individual Collection Detail Pages technically can be added to a navigation bar as placeholder link, but the individual Collection Detail Pages themselves do not appear as an option in the Navigation manager, only the Collection Summaries themselves.

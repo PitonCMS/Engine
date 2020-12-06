@@ -1,4 +1,4 @@
-# PitonCMS for Designers
+# Overview
 
 PitonCMS was designed to be _designer friendly_, giving great flexibility to the designer to build creative websites without requiring additional custom backend development.
 

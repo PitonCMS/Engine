@@ -1,4 +1,4 @@
-# PitonCMS Collections
+# Collections
 
 Collections are groups of *related* pages such as blog posts, recipes, services etc. and consist of *Collection Detail Pages* (each accessible at a specific URL). Collections are ideal to categorize similar topics on your website.
 

@@ -1,4 +1,4 @@
-# PitonCMS Tools
+# Tools
 
 The Tools in PitonCMS help you manage your custom website.
 

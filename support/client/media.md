@@ -1,4 +1,4 @@
-# PitonCMS Media Images
+# Media Images
 
 PitonCMS can manage and optimize (with a Tinify key) JPG and PNG images for use in your website. For videos, we recommend hosting the video with any one of the popular video streaming services and then embed the video link in a **Page Element**.
 

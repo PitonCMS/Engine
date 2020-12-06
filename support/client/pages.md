@@ -1,4 +1,4 @@
-# PitonCMS Pages and Collection Detail Pages
+# Pages and Collection Detail Pages
 
 **Pages** have content accessible at a specific URL. Typically these hold mostly *static* content such as Home, About, Location, and Collection Summaries etc. and are part of the main website navigation. You can create new Pages from the **Content > Pages > Add [Template]** menu.
 
