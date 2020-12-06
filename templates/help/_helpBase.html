@@ -5,16 +5,19 @@
 {% block contentHeader %}
 <div class="content-header-inner">
   <div class="breadcrumb">
+    {% if page.helpContent or page.subject == 'designer' %}
     <a href="{{ pathFor('adminHelp', {'subject': 'client'}) }}">
-      User <i class="fas fa-chevron-right"></i>
+      Support <i class="fas fa-chevron-right"></i>
     </a>
 
-    {% if page.subject == 'designer' %}
-    <a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">
-      Designer <i class="fas fa-chevron-right"></i>
-    </a>
+      {% if page.helpContent and page.subject == 'designer' %}
+      <a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">
+        Designer <i class="fas fa-chevron-right"></i>
+      </a>
+      {% endif %}
     {% endif %}
   </div>
-  <h1 class="seciton-title" class="section-title">{{ page.breadcrumbTitle|default("Support") }}</h1>
+  {% set breadcrumbTitle = page.breadcrumbTitle ?? ((page.subject == 'designer') ? 'Designer' : 'Support') %}
+  <h1 class="seciton-title" class="section-title">{{ breadcrumbTitle }}</h1>
 </div>
 {% endblock contentHeader %}
