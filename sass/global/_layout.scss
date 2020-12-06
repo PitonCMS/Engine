@@ -131,15 +131,22 @@
 
  .breadcrumb {
   font-weight: 300;
-  font-size: 0.75rem;
+  // font-size: 0.75rem;
   @include padding(null 1em null null);
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   a {
    color: $text-accent;
 
    &:hover {
     color: $text-accent-hover;
    }
+  }
+   *+*, .breadcrumb__indicator {
+ 
+    @include margin(null null null .5rem);
+
   }
  }
 
@@ -152,6 +159,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 2rem;
+
  }
 }
 

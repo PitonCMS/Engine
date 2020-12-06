@@ -382,14 +382,19 @@ a:active {
 }
 .content-header .breadcrumb {
   font-weight: 300;
-  font-size: 0.75rem;
   padding-right: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .content-header .breadcrumb a {
   color: #eb7119;
 }
 .content-header .breadcrumb a:hover {
   color: #ef8e48;
+}
+.content-header .breadcrumb * + *, .content-header .breadcrumb .breadcrumb__indicator {
+  margin-left: 0.5rem;
 }
 .content-header .section-title {
   margin: 0 1rem 0 0;
