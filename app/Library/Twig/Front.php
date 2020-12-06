@@ -52,6 +52,7 @@ class Front extends Base
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
+            new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
         ]);
     }
 
@@ -86,34 +87,34 @@ class Front extends Base
     public function getElementHtml(?PitonEntity $element): ?string
     {
         // Ensure we have an element type
-        if (!isset($element->template) && empty($element->template)) {
+        if (empty($element->template)) {
             throw new Exception("PitonCMS: Missing page element template");
         }
 
         try {
-            $html = $this->container->view->fetch("elements/{$element->template}", ['element' => $element]);
+            return $this->container->view->fetch("elements/{$element->template}.html", ['element' => $element]);
         } catch (LoaderError $e) {
             // If template name is malformed, just return null to fail gracefully
-            $this->container->logger->error('Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
-            $html = null;
+            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            return null;
         }
-
-        return $html;
     }
 
     /**
      * Get Collection Page List
      *
-     * Get collection pages by collection slug
+     * Get collection pages by collection ID
      * For use in page element as collection landing page
-     * @param  string   $collectionSlug Collection Slug
+     * @param  int   $collectionId Collection ID
      * @return array|null
      */
-    public function getCollectionPages(string $collectionSlug): ?array
+    public function getCollectionPages(?int $collectionId): ?array
     {
+        // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
-        return $pageMapper->findCollectionPagesBySlug($collectionSlug);
+        // Get collection pages
+        return $pageMapper->findPublishedCollectionPagesById($collectionId);
     }
 
     /**
@@ -151,6 +152,25 @@ class Front extends Base
         $url = $this->uri->getPath();
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
 
-        return $this->cache['navigator'][$navigator] = $navigationMapper->findNavHierarchy($navigator, $url);
+        $navList = $navigationMapper->findNavigation($navigator, $url);
+
+        return $this->cache['navigator'][$navigator] = $navigationMapper->buildNavigation($navList, $url);
+    }
+
+    /**
+     * Get Navigation Link
+     *
+     * @param PitonEntity $navLink
+     * @return string|null
+     */
+    public function getNavigationLink(PitonEntity $navLink): ?string
+    {
+        if (isset($navLink->url)) {
+            return $navLink->url;
+        } elseif (isset($navLink->collection_slug)) {
+            return $this->pathFor('showPage', ['slug1' => $navLink->collection_slug, 'slug2' => $navLink->page_slug]);
+        } else {
+            return $this->pathFor('showPage', ['slug1' => $navLink->page_slug]);
+        }
     }
 }

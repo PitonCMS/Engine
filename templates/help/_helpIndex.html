@@ -1,49 +1,31 @@
-{% extends '@admin/_adminBase.html' %}
-
-{% block htmlTitle 'PitonCMS Help' %}
-{% block headText 'PitonCMS Help' %}
-{% block sectionId 'adminHome' %}
-
-{% block sidebar %}
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminHome'}) }}"><i class="fas fa-file"></i>PitonCMS</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}"><i class="fas fa-file"></i>Pages</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminPages'}) }}"><i class="fas fa-file"></i>Collections</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminNavigations'}) }}"><i class="fas fa-file"></i>Navigation</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminMedia'}) }}"><i class="fas fa-file"></i>Media</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminMessages'}) }}"><i class="fas fa-file"></i>Messages</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminHelp', {'file': 'adminSettings'}) }}"><i class="fas fa-file"></i>Tools</a>
-</div>
-<div class="sidebar-links">
-    <a class="nav-link" href="{{ pathFor('adminEngineRelease', {'release': site.settings.engine}) }}"><i class="fas fa-file"></i>Versions</a>
-</div>
-{% endblock sidebar %}
+{% extends '@admin/help/_helpBase.html' %}
 
 {% block content %}
-    <style>
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+{# TODO: Add help search
+<div class="page-list-item-filter">
+  <form>
+    <div class="input-block">
+      <div class="input-block__icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="input-block__input">
+        <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support"
+          autocomplete="false">
+      </div>
+    </div>
+  </form>
+</div>
+#}
 
-    {% if page.file %}
-        {% set deepLink = (page.link) ? '#' ~ page.link : '' %}
-        <iframe src="{{ pathFor('adminHelpContent', {'file': page.file}) }}{{ deepLink }}"></iframe>
-    {% else %}
-        <h3>Select a Help Topic</h3>
-    {% endif %}
+{# Support Cards #}
+<div class="content-cards">
+  {% block supportIndex %}
+  {% endblock supportIndex %}
+</div>
+
+{# Only show designer support link when viewing client user support index #}
+{% if page.subject == 'client' %}
+<a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">Support for Designers</a>
+{% endif %}
+
 {% endblock content %}

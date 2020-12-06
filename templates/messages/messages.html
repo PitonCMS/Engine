@@ -1,70 +1,34 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as html %}
+{% import "@admin/messages/_messageMacros.html" as messageMacro %}
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
 {% block htmlTitle 'Messages' %}
-{% block headText 'Manage Messages' %}
-{% block sectionId 'messages' %}
 
-{% block sidebar %}
-	<div class="sidebar-links">
-		<a class="nav-link {{ currentRoute('adminMessages') and inUrl('new') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
-			<i class="fas fa-envelope"></i>
-			New Messages</a>
-	</div>
-	<div class="sidebar-links">
-		<a class="nav-link {{ currentRoute('adminMessages') and inUrl('read') ? 'active' }}" href="{{ pathFor('adminMessages', {'status': 'read'}) }}">
-			<i class="fas fa-envelope-open-text"></i>
-			Read Messages</a>
-	</div>
-{% endblock sidebar %}
+{% block contentHeader %}
+<div class="content-header-inner">
+  <div class="breadcrumb"></div>
+  {# TODO under section-title add title to match the type of filter? Like Messages - Unread or Message Read #}
+  <h1 class="section-title">Messages</h1>
+  <div class="btn-group"></div>
+</div>
+{% endblock contentHeader %}
 
 {% block content %}
-	{% if page.status == 'new' %}
-        {% for m in page.messages %}
-            {% if m.isRead == 'N' %}
+  <div class="filter-block">
+    {{ pitonMacro.filterSearch('Search media...') }}
+    {{ pitonMacro.filterOptions('radio', 'Filter on Status', 'status', {"unread": "Unread", "read": "Read", "readUnRead": "Read and Unread", "archive": "Archive"}) }}
+  </div>
 
-				{{ html.message(m) }}
-			{% endif %}
-		{% else %}
-			<p>You have no unread messages.</p>
-		{% endfor %}
+  <div class="content-block-messages" data-filter="content">
 
-	{% else %}
+    {% for m in page.messages %}
+      {{ messageMacro.messageRow(m) }}
+    {% endfor %}
 
-		{% for m in page.messages %}
-			{% if m.isRead == 'Y' %}
-				{{ html.message(m) }}
-			{% endif %}
-		{% else %}
-			<p>You have no read messages.</p>
-		{% endfor %}
-	{% endif %}
+    {{ pagination() }}
+  </div>
 {% endblock content %}
 
 {% block foot %}
-	<script src="{{ basePath() }}/admin/js/message.js"></script>
+{{ getJsFileSource('messages') }}
 {% endblock foot %}
-
-
-{% macro message(m) %}
-	<div class="jsMessageWrap">
-		<div class="message-wrapper">
-			<p>
-				<a href="mailto:{{ m.email }}" target="_blank">{{ m.name }}</a>
-				{{ m.createdDate|date('d F Y  h:i a') }}
-			</p>
-			{{ m.message|nl2br }}
-		</div>
-		<div class="button-wrapper">
-			<form class="" action="{{ pathFor('adminSaveMessage') }}" method="post" accept-charset="utf-8">
-				<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-				<input type="hidden" name="id" value="{{ m.id }}">
-				<button class="btn btn-primary btn-sm" type="submit" name="button" value="toggle" data-is-read="{{ m.isRead }}">Mark as
-					{% if m.isRead == 'Y' %}Unread{% else %}Read
-					{% endif %}
-				</button>
-				<button class="btn btn-danger btn-sm" name="button" title="Delete message" type="submit" data-is-read="{{ m.isRead }}" value="delete" formaction="{{ pathFor('adminDeleteMessage') }}">Delete</button>
-			</form>
-		</div>
-	</div>
-{% endmacro %}

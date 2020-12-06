@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Psr\Http\Message\ResponseInterface as Response;
 use PDOException;
+use Throwable;
 
 /**
  * Admin User Controller
@@ -24,8 +26,10 @@ class AdminUserController extends AdminBaseController
     /**
      * Show All Users
      *
+     * @param void
+     * @return Response
      */
-    public function showUsers()
+    public function showUsers(): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
@@ -42,71 +46,70 @@ class AdminUserController extends AdminBaseController
         }
         $data['recommendRecoveryEmail'] = ($admins < 2) ? true : false;
 
-        return $this->render('tools/users.html', $data);
+        return $this->render('users/users.html', $data);
     }
 
     /**
-     * Save Users
+     * Edit User
      *
-     * Save all email addresses, ignoring duplicates
+     * @param  array $args
+     * @return Response
      */
-    public function saveUsers()
+    public function editUser($args): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $post = $this->request->getParsedBody();
 
-        // Save users
-        foreach ($post['email'] as $key => $row) {
-            if (!empty($post['email'][$key])) {
-                $user = $userMapper->make();
-                $user->id = $post['user_id'][$key];
-                $user->role = (isset($post['admin'][$key]) && $post['admin'][$key] === 'on') ? 'A' : null;
-                $user->email = strtolower(trim($post['email'][$key]));
-                try {
-                    $userMapper->save($user);
-                } catch (PDOException $e) {
-                    if ($e->getCode() === '23000') {
-                        // Duplicate entry error
-                        $this->setAlert('danger', 'Duplicate User', "The user {$post['email'][$key]} already exists.");
-                        break;
-                    }
-
-                    throw $e;
-                }
-            }
+        // Fetch user or make new user
+        if (isset($args['id'])) {
+            $data['user'] = $userMapper->findById((int) $args['id']);
+        } else {
+            $data['user'] = $userMapper->make();
         }
 
-        // Redirect back to list of users
-        return $this->redirect('adminUsers');
+        return $this->render('users/userEdit.html', $data);
     }
 
     /**
-     * Change User Status
+     * Save User
      *
-     * Sets user active status: Y|N
+     * Save all users
+     * @param void
+     * @return Response
      */
-    public function userStatus($args)
+    public function saveUser(): Response
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $post = $this->request->getParsedBody();
 
-        // Find user to change status
-        foreach ($post['user_id'] as $key => $row) {
-            // Both arguments will be strings, so no need to cast one or the other
-            if ($row === $args['id']) {
-                $user = $userMapper->make();
-                $user->id = $post['user_id'][$key];
-                $user->active = $args['status'];
-                $userMapper->save($user);
+        // Save user
+        $user = $userMapper->make();
+        $user->id = (int) $this->request->getParsedBodyParam('user_id');
+        $user->first_name = trim($this->request->getParsedBodyParam('first_name'));
+        $user->last_name = trim($this->request->getParsedBodyParam('last_name'));
+        $user->email = trim($this->request->getParsedBodyParam('email'));
 
-                // All done here
-                break;
+        // $user->role = ($this->request->getParsedBodyParam('role')) ? 'A' : null;
+        $user->role = 'A';
+        $user->active = ($this->request->getParsedBodyParam('active')) ? 'Y' : 'N';
+
+        try {
+            // There might be a duplicate user email
+            $userMapper->save($user);
+        } catch (Throwable $e) {
+            if ($e->getCode() === '23000') {
+                // Duplicate email error
+                $this->setAlert('danger', 'Duplicate User Email', "The user email {$user->email} already exists.");
+
+                // Redirect to users. If a new user failed to save the ID will be falsey (0)
+                $user->id = $user->id ?: null;
+                return $this->redirect('adminUserEdit', ['id' => $user->id]);
             }
+
+            throw $e;
         }
 
-        // Redirect back to list of users
-        return $this->redirect('adminUsers');
+        // Redirect to users
+        return $this->redirect('adminUserEdit', ['id' => $user->id]);
     }
 }

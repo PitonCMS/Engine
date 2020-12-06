@@ -1,74 +1,74 @@
 {% extends '@admin/_adminBase.html' %}
+{% import '@admin/pages/_pageMacros.html' as pageMacro %}
+{% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
-{% block htmlTitle %}
-{% if page.type == 'collection' %}Collections{% else %}Pages{% endif %}
-{% endblock htmlTitle %}
+{% block htmlTitle 'Content' %}
 
-{% block headText %}
-{% if page.type == 'collection' %}Manage Collection Pages{% else %}Manage Pages{% endif %}
-{% endblock headText %}
+{% block contentHeader %}
+<div class="content-header-inner">
+  <div class="breadcrumb"></div>
+  <h1 class="section-title">Content</h1>
 
-{% block sectionId %}
-{% if page.type == 'collection' %}collections{% else %}pages{% endif %}
-{% endblock sectionId %}
-
-{% block sidebar %}
-
-{% for template in page.templates %}
-<div class="sidebar-links">
-  <a class="nav-link" href="{{ pathFor('adminEditPage', {}, {'definition': template.filename}) }}"
-    title="{{ template.description }}">
-    <i class="fas fa-edit"></i>
-    {{ template.name }}
-  </a>
-  <i class="fas fa-info-circle" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right"
-    data-content="{{ template.description }}"></i>
-
-</div>
-{% else %}
-<h5>No Page Definitions Found</h5>
-{% endfor %}
-{% endblock sidebar %}
-
-{% block content %}
-{% if page.type == 'page' %}
-
-<h3>Pages</h3>
-<div class="grid-wrapper">
-  {% for p in page.pages %}
-  {% include "@admin/pages/_pageCard.html" %}
-  {% else %}
-  <h5>No Pages Found</h5>
-  {% endfor %}
-</div>
-
-{% elseif page.type == 'collection' %}
-
-{% for c in page.collectionNames %}
-<!-- <div class="collection-wrapper"> -->
-<div class="card mb-3">
-  <div class="card-header">
-    <h3>{{ c.name }}</h3>
-  </div>
-
-  <div class="card-body">
-    <div class="grid-wrapper">
-      {% for p in page.pages %}
-        {% if p.collection_slug == c.value %}
-          {% include "@admin/pages/_pageCard.html" %}
-        {% endif %}
-      {% else %}
-      <h5>No Pages Found</h5>
+  <div class="btn-dropdown-block">
+    <div class="btn btn-dropdown" data-collapse-toggle="addPageButton">
+     Add Page <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="form-group-block collapsed"  data-collapse-target="addPageButton" data-collapse-auto="addPageButton">
+      {# List all templates with "templateType": "page" #}
+      {% for pt in getPageTemplates() %}
+      <div class="form-group">
+        <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
+      </div>
+      {% endfor %}
+      <hr>
+      {# List all saved collection groups #}
+      {% for ct in getCollections() %}
+      <div class="form-group">
+        <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
+      </div>
       {% endfor %}
     </div>
   </div>
-  <div class="card-footer">
-    <a class="muted-text" href="#">See All {{ c.name }}</a>
-  </div>
+
 </div>
-<!-- </div> -->
+{% endblock contentHeader %}
 
-{% endfor %}
+{% block content %}
+<!-- Media Filter -->
+<div class="filter-block">
 
-{% endif %}
+  {# This creates an array of available collections appended to "all" and "pages" #}
+  {% set collections = {"all": "All", "pages": "Pages"} %}
+  {% set collections = collections|merge(getCollections()|default([])|column('collection_title', 'collection_slug')) %}
+
+  {{ pitonMacro.filterSearch() }}
+  {{ pitonMacro.filterOptions('radio', 'Page Status', 'status', {"all": "All", "published": "Published", "pending": "Pending", "draft": "Draft"}) }}
+  {{ pitonMacro.filterOptions('radio', 'Collection', 'type', collections) }}
+
+</div>
+
+{# Page List Titles #}
+<div class="list-item-page-header">
+  <div class="list-item-page__heading media">Media</div>
+  <div class="list-item-page__heading title">Title</div>
+  <div class="list-item-page__heading status">Status</div>
+  <div class="list-item-page__heading template">Template</div>
+  <div class="list-item-page__heading collection">Collection</div>
+</div>
+
+{# Page List  #}
+<div data-filter="content">
+
+  {% for p in page.pages %}
+    {{ pageMacro.pageListItem(p) }}
+  {% endfor %}
+
+  {{ pagination() }}
+
+</div>
+
 {% endblock content %}
+
+{% block foot %}
+{{ getJsFileSource('pages') }}
+{% endblock foot %}

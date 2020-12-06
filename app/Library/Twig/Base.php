@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -74,8 +74,8 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'pages' => $this->container['settings']['pages'] ?? null,
                 'settings' => $this->container['settings']['site'] ?? null,
+                'environment' => $this->container['settings']['environment'] ?? null,
                 'csrf' => [
                     'name' => $this->csrfTokenName,
                     'value' => $this->csrfTokenValue
@@ -106,6 +106,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
+            new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
         ];
     }
 
@@ -159,12 +160,12 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * If the supplied route name is the current route, returns the second parameter
      * @param  string $routeName   Name of the route to test
-     * @param  string  $returnValue Value to return
+     * @param  string $returnValue Value to return
      * @return string|null
      */
     public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
-        if ($routeName === $this->container->settings['site']['currentRouteName']) {
+        if ($routeName === $this->container->settings['environment']['currentRouteName']) {
             return $returnValue;
         }
 
@@ -253,15 +254,22 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Media Source Set
      *
-     * Creates list of available image files with width in source set format
+     * Creates list of available image files in source set format
      * @param string $filename Media filename
+     * @param string $altText  Media caption to use as alt text
+     * @param array $options   Options array, includes "sizes", "style"
      * @return string
      */
-    public function getMediaSrcSet(string $filename = null): ?string
+    public function getMediaSrcSet(string $filename = null, string $altText = null, array $options = null): ?string
     {
-        // If filename is empty, just return
+        // If filename is empty, just return nothing
         if (empty($filename)) {
             return null;
+        }
+
+        // Get cached img source set for this file if available
+        if (isset($this->cache['mediaSrcSet'][$filename])) {
+            return $this->cache['mediaSrcSet'][$filename];
         }
 
         // Get image directory and scan for all sizes
@@ -287,6 +295,33 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
         ksort($sources);
 
-        return implode(",\n", $sources);
+        $sourceSet = implode(",\n", $sources);
+        $sizes = $options['sizes'] ?? '(max-width: 767px) 100vw, (max-width: 899px) 50vw, 33vw';
+        $style = (isset($options['style'])) ? 'style="' . $options['style'] .'"' : '';
+
+        // Create HTML source set string only if there is more than one media file
+        $sourceSetString = (iterator_count($files) > 1) ? "srcset=\"$sourceSet\"\nsizes=\"$sizes\"\n" : '';
+        $srcAttr = $this->getMediaPath($filename, 'xlarge');
+
+        return $this->cache['mediaSrcSet'][$filename] = "<img $sourceSetString src=\"$srcAttr\" alt=\"$altText\" $style>\n";
+    }
+
+    /**
+     * Get Query String Parameter
+     *
+     * Returns htmlspecialchars() escaped query param
+     * Missing params and empty string values are returned as null
+     * @param string|null $param
+     * @return string|null
+     */
+    public function getQueryParam(string $param = null): ?string
+    {
+        $value = $this->container->request->getQueryParam($param);
+
+        if (!empty($value)) {
+            return htmlspecialchars($value);
+        }
+
+        return null;
     }
 }

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -20,37 +20,77 @@ use Piton\ORM\DataMapperAbstract;
 class NavigationMapper extends DataMapperAbstract
 {
     protected $table = 'navigation';
-    protected $modifiableColumns = ['navigator','parent_id','sort','page_id','title','active'];
+    protected $modifiableColumns = ['navigator','parent_id','sort','page_id', 'collection_id', 'title', 'url'];
 
     /**
-     * All Navigation Data Rows
-     * @var array
+     * Find Navigation Structure
+     *
+     * Selects all nav rows for this navigator, and returns in a flat array
+     * Note: Similar to findNavigation but does not include all matching collection detail pages. Use to manage navigator.
+     * @param string $navigator Navigator name
+     * @return array|null
      */
-    protected $allNavRows;
+    public function findNavigationStructure(string $navigator): ?array
+    {
+        $this->sql =<<<SQL
+select
+    n.navigator,
+    n.id,
+    n.parent_id,
+    n.sort,
+    n.title nav_title,
+    n.url,
+    n.collection_id,
+    c.collection_title,
+    c.collection_slug,
+    p.id page_id,
+    p.title page_title,
+    p.published_date,
+    p.page_slug page_slug
+from navigation n
+left join page p on n.page_id = p.id
+left join collection c on n.collection_id = c.id
+where n.navigator = ?
+order by n.sort;
+SQL;
 
-    /**
-     * New Navigation
-     * @var array
-     */
-    protected $newNav;
+        $this->bindValues[] = $navigator;
+
+        return $this->find();
+    }
 
     /**
      * Find Navigation
      *
-     * Finds all navigation rows by navigator name
-     * @param  string $navigator Name of navigator
+     * Selects all nav rows for this navigator including all matching collection detail pages.
+     * Note: Similar to findNavigationStructure but includes all matching collection pages. Use to display navigator.
+     * @param string $navigator Navigator name
      * @return array|null
      */
     public function findNavigation(string $navigator): ?array
     {
         $this->sql =<<<SQL
 select
-    n.id, n.navigator, n.parent_id, n.sort, n.page_id,
-    p.title page_title, n.title nav_title, n.active, p.published_date, p.page_slug
+    n.navigator,
+    n.id,
+    n.parent_id,
+    n.sort,
+    n.title nav_title,
+    n.url,
+    n.collection_id,
+    c.collection_title,
+    c.collection_slug,
+    coalesce(p.id, cp.id) page_id,
+    coalesce(p.title, cp.title) page_title,
+    coalesce(p.published_date, cp.published_date) published_date,
+    coalesce(p.page_slug, cp.page_slug) page_slug
 from navigation n
-left join page p on n.page_id = p.id and p.collection_slug is null
+left join page p on n.page_id = p.id
+left join collection c on n.collection_id = c.id
+left join page cp on c.id = cp.collection_id
 where n.navigator = ?
-order by n.sort
+order by n.sort, cp.published_date desc
+
 SQL;
         $this->bindValues[] = $navigator;
 
@@ -58,119 +98,51 @@ SQL;
     }
 
     /**
-     * Navigation Hierarchy
+     * Build Navigation
      *
-     * Get navigation records and build multidimensional hierarchy
-     * @param  string $navigator    Navigator name
-     * @param  string $currentRoute Current route path to match and set active flag
-     * @param  bool   $published    Filter on published pages
-     * @param  bool   $active       Filter on active links
+     * Takes flat array of navigation links and builds multi-dimensional array of navigation items nested by parent ID
+     * @param array|null $navList      Array of navigation links
+     * @param string     $currentRoute Page slug
+     * @param bool       $isPublished  Flag to only return published pages
+     * @param int|null   $parentId
      * @return array|null
      */
-    public function findNavHierarchy(
-        string $navigator,
-        string $currentRoute = null,
-        bool $published = true,
-        bool $active = true
-    ): ?array {
-        // Get navigator rows
-        $this->allNavRows = $this->findNavigation($navigator) ?? [];
+    public function buildNavigation(?array $navList, string $currentRoute = null, bool $isPublished = true, int $parentId = null): ?array
+    {
+        if (empty($navList)) {
+            return null;
+        }
 
-        // Recursive depth indicator
-        $level =  1;
-
-        foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published, or navigation link not active
-            if (
-                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
-                ($active && $row->active === 'N')
-            ) {
+        $nav = [];
+        foreach ($navList as $row) {
+            // Published page check, skip ahead if page is not published
+            if ($isPublished && !is_null($row->page_id) && (is_null($row->published_date) || $row->published_date > $this->today)) {
                 continue;
             }
 
-            // Assign top level nav rows (parent_id is null)
-            if ($row->parent_id === null) {
-                $row->level = $level;
-
+            // Check if navigation list row matches requested parent. First pass is where parent_id is null
+            if ($row->parent_id === $parentId) {
                 // Is this the current route? If so set currentPage flag
                 if ($currentRoute === $row->page_slug) {
                     $row->currentPage = true;
                 }
 
-                // Set nav title, default to page title
-                $row->title = $row->nav_title ?? $row->page_title;
+                // Set title
+                $row->title = $row->nav_title ?? $row->page_title ?? $row->collection_title;
 
-                // Asign to navigator array
-                $this->newNav[] = &$row;
+                // Add any children
+                $children = $this->buildNavigation($navList, $currentRoute, $isPublished, $row->id);
 
-                // Add any nav children
-                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
-            }
-        }
-
-        return $this->newNav;
-    }
-
-    /**
-     * Add Child Navigation Item
-     *
-     * Recursive function to build multidimensional navigation object
-     * @param object  $parent       Parent nav item reference
-     * @param integer $level        Recursion depth of parent
-     * @param  string $currentRoute Current route path to match and set active flag
-     * @param  bool   $published    Filter on published pages
-     * @param  bool   $active       Filter on active links
-     * @return void
-     */
-    protected function addChildNavItem(&$parent, int $level, ?string $currentRoute, bool $published, bool $active): void
-    {
-        // Recursive depth indicator
-        $level++;
-
-        // Go through all nav rows and append child of $parent
-        foreach ($this->allNavRows as &$row) {
-            // Skip if page is not published, or navigation link not active
-            if (
-                ($published && (is_null($row->published_date) || $row->published_date > $this->today)) ||
-                ($active && $row->active === 'N')
-            ) {
-                continue;
-            }
-
-            if ($parent->id === $row->parent_id) {
-                $row->level = $level;
-
-                // Is this the current route?
-                if ($currentRoute === $row->page_slug) {
-                    $row->currentPage = true;
+                if ($children) {
+                    $row->childNav = $children;
                 }
 
-                // Set nav title, default to page title
-                $row->title = $row->nav_title ?? $row->page_title;
-
-                // If parent row already has child array, then assign child to parent, othwerwise create childNav array
-                isset($parent->childNav) ?: $parent->childNav = [];
-                $parent->childNav[] = &$row;
-
-                // Find any children
-                $this->addChildNavItem($row, $level, $currentRoute, $published, $active);
+                // Asign to return navigator array
+                $nav[] = $row;
             }
         }
-    }
 
-    /**
-     * Delete Navigation Link
-     *
-     * Recursively deletes children of nav link
-     * @param  int  $navId
-     * @return bool
-     */
-    public function deleteByNavId(int $navId): bool
-    {
-        $this->sql = 'delete from `navigation` where `id` = ?;';
-        $this->bindValues[] =  $navId;
-
-        return $this->execute();
+        return $nav;
     }
 
     /**

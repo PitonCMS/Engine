@@ -78,7 +78,7 @@ class Toolbox
         $string = preg_replace('/[^a-zA-Z0-9]+/', '-', $string);
 
         // Lower case
-        $string = mb_strtolower($string);
+        // $string = mb_strtolower($string);
 
         // Finally remove any trailing dashes
         $string = trim($string, '-');

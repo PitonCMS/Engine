@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Models;
 
+use Piton\Models\Entities\PitonEntity;
 use Piton\ORM\DataMapperAbstract;
 
 /**
@@ -20,7 +21,7 @@ use Piton\ORM\DataMapperAbstract;
 class UserMapper extends DataMapperAbstract
 {
     protected $table = 'user';
-    protected $modifiableColumns = ['email', 'role','active'];
+    protected $modifiableColumns = ['first_name', 'last_name', 'email', 'role', 'active'];
 
     /**
      * Find All Users
@@ -32,22 +33,23 @@ class UserMapper extends DataMapperAbstract
     public function findUsers(): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' order by `active`';
+        $this->sql .= " order by `created_date`;";
 
         return $this->find();
     }
 
     /**
-     * Find Active Users
+     * Find Active User by Email
      *
-     * @param void
+     * @param string $email
      * @return array|null
      */
-    public function findActiveUsers(): ?array
+    public function findActiveUserByEmail(string $email): ?PitonEntity
     {
         $this->makeSelect();
-        $this->sql .= ' and `active` = \'Y\'';
+        $this->sql .= " and `active` = 'Y' and `email` = ?;";
+        $this->bindValues[] = $email;
 
-        return $this->find();
+        return $this->findRow();
     }
 }

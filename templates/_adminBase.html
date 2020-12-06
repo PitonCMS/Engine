@@ -1,96 +1,109 @@
-{#
-    Piton Administration Base Layout
-
-    Available blocks in base layout:
-    - htmlTitle     HTML <title> text
-    - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
-    - head          Insert additional <head> HTLM elements
-    - headText      Page heading
-    - sectionId     HTML <section> tag ID
-    - openForm      HTLM Optional open <form> tag with hidden inputs, automatically closes closeform tag
-    - sidebar       Sidebar content area
-    - content       Main content area
-    - closeForm     HTML Optional close </form> tag (self closing)
-    - foot          Insert additional footer HTML elements after JS links
-#}
 <!doctype html>
 <html lang="en">
 
+{#
+    Piton Administration Base Layout Template
+
+    Available blocks to extend:
+    - htmlTitle     HTML <title> text
+    - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
+    - head          Insert additional <head> HTLM elements
+    - openForm      To open <form> tag to wrap form around header and content
+    - contentHeader Content header and form controls
+    - content       Main content area
+    - closeForm     To close </form> tag
+    - foot          Insert additional footer HTML elements after JS links
+#}
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="PitonCMS">
-  <link rel="icon" href="">
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <meta name="author" content="PitonCMS">
+ <link rel="icon" href="">
 
-  <title>
-    {% if block('htmlTitle') is defined %}{{ block('htmlTitle') ~ ' - ' }}{% endif %}
-    PitonCMS Administration
-  </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ basePath() }}/admin/css/main.css">
+ <title>
+  {# Concatenate htmlTitle, if provided in extending page #}
+  {% if block('htmlTitle') is defined %}
+    {{ block('htmlTitle') ~ ' - ' }}
+  {% endif %}
+  {{ site.settings.displayName|default("PitonCMS") }}
+ </title>
 
-  <script>
-    let pitonConfig = {
-      dateFormat: "{{ site.settings.dateFormat }}",
-      weekStart: {{ site.settings.dateFormat == 'mm/dd/yyyy' ? '0' : '1' }},
-      csrfTokenName: "{{ site.csrf.name }}",
-      csrfTokenValue: "{{ site.csrf.value }}",
-      routes: {
-        adminNewElement: "{{ pathFor('adminNewElement') }}",
-        adminDeleteElement: "{{ pathFor('adminDeleteElement') }}",
-        adminSaveMessage: "{{ pathFor('adminSaveMessage') }}",
-        adminDeleteMessage: "{{ pathFor('adminDeleteMessage') }}",
-        adminSaveMedia: "{{ pathFor('adminSaveMedia') }}",
-        adminGetMedia: "{{ pathFor('adminGetMedia') }}",
-        adminDeleteMedia: "{{ pathFor('adminDeleteMedia') }}",
-        adminDeleteMediaCategory: "{{ pathFor('adminDeleteMediaCategory') }}",
-      },
-      {% block jsPitonConfig '' %}
-    };
-  </script>
-  {% block head '' %}
+ <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
+ <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
+
+ {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
+ {{ include('@admin/includes/_pitonConfigJs.html') }}
+ {% block head '' %}
 </head>
 
 <body>
-  {% include "@admin/includes/_navbar.html" with {headText: block('headText') is defined ? block('headText')} %}
-  {% include "@admin/includes/_alert.html" %}
+ {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
+    and are defined as macros in _pitonMacros.html #}
+<header class="top-header">
+    <div class="logo">
+     <a href="{{ pathFor('adminHome') }}">{{ site.settings.displayName|default("PitonCMS") }}</a>
+    </div>
 
-  <section id="{% block sectionId 'default' %}">
+ <div class="btn-dropdown-block">
+  <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
+   Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
+  </div>
+  <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
+   <div class="form-group">
+    <a href="{{ pathFor('adminUserEdit', {"id": site.environment.sessionUserId}) }}">Profile</a>
+   </div>
+   <div class="form-group">
+    <a href="#">Logout</a>
+   </div>
+  </div>
+ </div>
 
-    {# Open form block if wrapping sidebar and content #}
+  </header>
+
+ <div class="wrapper">
+   {# Hamburger #}
+  <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <aside class="sidebar">
+   {# Load admin side navigation.#}
+   {{ include("@admin/includes/_navbar.html") }}
+  </aside>
+
+  <main class="main-content">
+
+    {# Load any alerts #}
+    <div class="modal-alert" data-alert-modal="1">
+     {{ include("@admin/includes/_alert.html") }}
+    </div>
+
+    {# Page level forms must wrap  contentHeader and content blocks #}
     {% block openForm '' %}
 
-    <aside class="sidebar">
-      <div class="sidebar-inner">
-        {% block sidebar '' %}
-      </div>
-    </aside>
+   <!-- Content Header w/title & controls -->
+   <div class="content-header">
+    <div class="container">
+     {% block contentHeader 'Content Header' %}
+    </div><!-- /.container -->
+  </div><!-- /.content-header -->
 
-    <main role="main" class="{% block mainClass 'content' %}">
-      {% block content '' %}
-    </main>
+   <!-- Content Block -->
+   <div class="content">
+    <div class="container">
+     {% block content 'Main Content' %}
+    </div><!-- /.container -->
+   </div><!-- /.content -->
 
-    {% block closeForm %}
-    {# Self closing form tag #}
-    {{ block('openForm') != '' ? '</form>' }}
-    {% endblock closeForm %}
+   {# Closing form if required #}
+   {% block closeForm '' %}
 
-  </section>
+  </main>
+ </div><!-- /.wrapper -->
 
-
-  {# // <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> #}
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
-  <script src="{{ basePath() }}/admin/js/main.js"></script>
-
-  {% block foot '' %}
+ {# Footer block element #}
+ {% block foot %}
+ {{ getJsFileSource('main') }}
+ {% endblock foot %}
 </body>
 
 </html>

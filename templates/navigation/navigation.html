@@ -1,98 +1,35 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as navSet %}
 
 {% block htmlTitle 'Navigation' %}
-{% block headText 'Manage Navigation' %}
-{% block sectionId 'navigation' %}
 
-{% block sidebar %}
-	{# Get list of defined navigagors from navigation.json #}
-	{% for navigator in page.navigators %}
-		<div class="sidebar-links">
-			<a class="nav-link {{ navigator == page.navigator ? 'active' }}" href="{{ pathFor('adminNavigations', {'nav': navigator}) }}">
-				<i class="fas fa-compass"></i>
-				{{ navigator|capitalize }}</a>
-		</div>
-	{% endfor %}
-{% endblock sidebar %}
+{% block contentHeader %}
+<div class="content-header-inner">
+ <div class="breadcrumb"></div>
+ <h1 class="section-title">Navigation</h1>
+ <div class="btn-group"></div>
+</div>
+
+{% endblock contentHeader %}
 
 {% block content %}
 
-	<h3>Navigation</h3>
-	{% if page.navigator %}
-		<strong>{{ page.navigator|capitalize }}
-			Navigator</strong>
+<div class="content-cards">
 
-		<form class="jsNavigatorForm" action="{{ pathFor('adminSaveNavigation') }}" method="post" accept-charset="utf-8">
-			<input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-			<input type="hidden" name="navigator" value="{{ page.navigator }}">
-			<a class="mb-2 btn btn-warning my-3" href="{{ pathFor('adminNavigations', {'nav': page.navigator}) }}">Cancel</a>
-			<button type="submit" class="btn btn-primary my-3" disabled>Save Navigation</button>
+  {% for nav in page.navigators %}
 
-			<div class="jsEditNavBlock">
-				<ol class="jsNavParent nav-parent">
-					{{ navSet.navBlock(page.navigation) }}
-				</ol>
-			</div>
-		</form>
+  <a href="{{ pathFor('adminNavigationEdit', {'navigator': nav.key}) }}" class="content-card">
+   <div class="content-card__header">
+    <i class="fas fa-compass card-icon"></i>
+    <h3 class="title-text">{{ nav.name }}</h3>
+   </div>
+   <div class="content-card__body">
+    <p>{{ nav.description }}</p>
+   </div>
+  
+  </a>
 
-		<hr>
+  {% else %}
+    <strong>No Navigators Found</strong>
 
-		<label>Add Page to Navigation</label>
-		<select class="form-control jsNavPageSelector">
-			<option value="x" selected>Add a page to the navigation</option>
-			<option value="0">[Dropdown]</option>
-			{% for p in getNavPages() %}
-				<option value="{{ p.id }}">{{ p.title }}</option>
-			{% endfor %}
-		</select>
-
-		<div class="jsNewNavItem d-none">
-			{{ navSet.navBlock([1]) }}
-		</div>
-	{% else %}
-		<p>No navigators are defined.</p>
-	{% endif %}
-
+  {% endfor %}
 {% endblock content %}
-
-{% block foot %}
-	<script src="{{ basePath() }}/admin/js/navigation.js"></script>
-{% endblock foot %}
-
-
-{# This is a recursive macro function, which calls itself if the current nav item has a child #}
-{% macro navBlock(nav) %}
-	{% import _self as navSet %}
-
-	{% for n in nav %}
-		<li class="nav-item nav-item-level-{{ n.level|default('1') }} {% if n.active == 'N' %}bg-warning text-white{% endif %} jsNavItem" data-level="{{ n.level }}" data-key="{{ n.id }}">
-			<div class="jsNavItemTitle nav-parent-title">{{ n.page_title ?? n.nav_title }}</div>
-			<input type="hidden" name="nav[{{ n.id }}][navId]" value="{{ n.id }}">
-			<input type="hidden" class="jsNavPageId" name="nav[{{ n.id }}][pageId]" value="{{ n.page_id }}">
-			<input type="hidden" class="jsNavParentId" name="nav[{{ n.id }}][parentId]" value="{{ n.parent_id }}">
-			<input type="hidden" class="jsNavDeleteFlag" name="nav[{{ n.id }}][delete]" value="">
-			<input type="hidden" class="jsNavActiveFlag" name="nav[{{ n.id }}][active]" value="{{ n.active }}">
-			<input type="text" class="jsNavAltTitle" name="nav[{{ n.id }}][navTitle]" value="{{ n.nav_title }}" autocomplete="off" placeholder="Navigation title" {% if not n.page_id %} required {% endif %}>
-
-			<div class="nav-controls">
-				<i class="fa fa-eye-slash jsNavItemCtrl" data-control="disable" title="Disable"></i>
-				|
-				<i class="fa fa-arrow-up jsNavItemCtrl" data-control="up" title="Move Up"></i>
-				<i class="fa fa-arrow-down jsNavItemCtrl" data-control="down" title="Move Down"></i>
-				|
-				<i class="fa fa-arrow-left jsNavItemCtrl" data-control="left" title="Move Left"></i>
-				<i class="fa fa-arrow-right jsNavItemCtrl" data-control="right" title="Move Right"></i>
-				|
-				<i class="fa fa-trash-alt jsNavItemCtrl" data-control="delete" title="Delete"></i>
-			</div>
-
-			{% if n.childNav %}
-				<ol class="jsNavParent nav-child">
-					{{ navSet.navBlock(n.childNav) }}
-				</ol>
-			{% endif %}
-		</li>
-	{% endfor %}
-
-{% endmacro navBlock %}

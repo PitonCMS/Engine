@@ -1,54 +1,77 @@
 {% extends '@admin/_adminBase.html' %}
-{% import _self as form %}
+{% import _self as mediaMacro %}
 
-{% block htmlTitle 'Galleries' %}
-{% block headText 'Galleries' %}
-{% block sectionId 'mediaCategories' %}
+{% block htmlTitle 'Media Categories' %}
 
-{% block sidebar %}
-{% include "@admin/media/_mediaSidebar.html" %}
-{% endblock sidebar %}
+{% block openForm %}
+<form action="{{ pathFor('adminMediaCategorySave') }}" method="post" accept-charset="utf-8">
+  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+{% endblock openForm %}
+
+{% block contentHeader %}
+  <div class="content-header-inner">
+    <div class="breadcrumb">
+      <a href="{{ pathFor('adminSetting') }}">
+        Settings <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+    <h1 class="section-title">Media Categories</h1>
+    <div class="btn-group">
+      <button type="reset" class="btn btn-cancel" data-form-reset-href="{{ pathFor('adminMediaCategoryEdit') }}" data-form-button="cancel" disabled>Discard</button>
+      <button type="submit" class="btn btn-save" data-form-button="save" disabled>Save</button>
+    </div>
+
+    {# Add New Element Button  #}
+    <div class="btn-dropdown-block">
+      <div class="btn btn-dropdown" data-collapse-toggle="addMediaCategoryButton">
+        Add <i class="fas fa-chevron-down"></i>
+      </div>
+
+      <div class="form-group-block collapsed" data-collapse-target="addMediaCategoryButton" data-collapse-auto="addMediaCategoryButton">
+        <div class="form-group">
+          <a name="#" class="form-group-link" data-category="add">Category</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock contentHeader %}
 
 {% block content %}
-<form class="jsEditMediaCategory" action="{{ pathFor('adminSaveMediaCategories') }}" method="post"
-  accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
 
-  {#
-  <div class="button-group span">
-    <a class="btn btn-warning ml-2" href="{{ pathFor('adminEditMediaCategories') }}">Cancel</a>
-  </div>
-  #}
-  <div class="page-title span">
-    <h3>Gallery Management</h3>
+  <div class="mediaCategories-block" data-category="wrapper">
+    {% for c in page.categories %}
+    {# Category macro at bottom of file #}
+    {{ mediaMacro.categoryInput(c) }}
+    {% endfor %}
   </div>
 
-  {% for c in page.categories %}
-  {{ form.categoryInput(c) }}
-  {% endfor %}
-
-  {# Extra empty form on page load to add a new category #}
-  {{ form.categoryInput(c) }}
-
-</form>
 {% endblock content %}
 
+{% block closeForm %}
+</form>
+
+{# Extra empty hidden form on page load to add a new category #}
+<div class="d-none" data-media-category="spare">
+  {{ mediaMacro.categoryInput() }}
+</div>
+{% endblock closeForm %}
+
 {% block foot %}
-	<script src="{{ basePath() }}/admin/js/media.js"></script>
+{{ getJsFileSource('mediaCategories') }}
 {% endblock foot %}
 
+
+{#
+  Category Input Macro
+#}
 {% macro categoryInput(category) %}
-<div class="form-group jsMediaCategory">
-  <input type="hidden" name="id[{{ category.id }}]" value="{{ category.id }}">
-
-  <input type="text" class="form-control" name="category[{{ category.id }}]" value="{{ category.category }}"
-    placeholder="New Gallery name" autocomplete="off">
-  {% if not category.id  %}
-  <button class="btn btn-success btn-sm" type="submit" name="button" value="save">Add</button>
-  {% endif %}
-  {% if category.id %}
-  <button class="btn btn-danger btn-sm" type="button" name="button" value="{{ category.id }}">Delete</button>
-  {% endif %}
-
+<div class="form-group" data-category="parent">
+  <input type="hidden" name="category[{{ category.id }}][id]" value="{{ category.id }}">
+  <input type="text" class="form-control" name="category[{{ category.id }}][name]" value="{{ category.category }}"
+    placeholder="Category name" autocomplete="off" maxlength="100">
+  <button class="btn btn-delete " type="button"
+    data-delete-category-prompt="Are you sure you want to permanently delete this category?"
+    data-category-id="{{ category.id }}">Delete</button>
 </div>
 {% endmacro categoryInput %}

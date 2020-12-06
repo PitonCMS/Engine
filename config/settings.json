@@ -3,16 +3,11 @@
     "settings": [
         {
             "category": "site",
-            "label": "Date Format",
-            "key": "dateFormat",
-            "value": "mm/dd/yyyy",
-            "inputType": "select",
-            "options": [
-                {"name": "mm/dd/yyyy", "value": "mm/dd/yyyy"},
-                {"name": "dd-mm-yyyy", "value": "dd-mm-yyyy"},
-                {"name": "dd.mm.yyyy", "value": "dd.mm.yyyy"}
-            ],
-            "help": "Select date-picker date format preference for your location."
+            "label": "Website Display Name",
+            "key": "displayName",
+            "value": "",
+            "inputType": "input",
+            "help": "Website name or brand name."
         },
         {
             "category": "site",

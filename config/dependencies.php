@@ -35,7 +35,7 @@ $container['view'] = function ($c) {
 
     $view = new Slim\Views\Twig($templatePaths, [
         'cache' => ROOT_DIR . 'cache/twig',
-        'debug' => !$settings['site']['production'],
+        'debug' => !$settings['environment']['production'],
         'autoescape' => false,
     ]);
 
@@ -47,25 +47,34 @@ $container['view'] = function ($c) {
         $view->addExtension(new Piton\Library\Twig\Front($c));
     }
 
-    // Set twig default date filter/function format based on site settings
-    // Map site setting date format to PHP equivalent
-    $dateFormats = [
-        'mm/dd/yyyy' => 'm/d/Y',
-        'dd-mm-yyyy' => 'd-m-Y',
-        'dd.mm.yyyy' => 'd.m.Y'
-        ];
-
-    if (isset($settings['site']['dateFormat'])) {
-        $twigEnvironment = $view->getEnvironment();
-        $twigEnvironment->getExtension(Twig\Extension\CoreExtension::class)->setDateFormat($dateFormats[$settings['site']['dateFormat']]);
-    }
-
     // Load Twig debugger if in development
-    if ($settings['site']['production'] === false) {
+    if (!$settings['environment']['production']) {
         $view->addExtension(new Twig\Extension\DebugExtension());
     }
 
     return $view;
+};
+
+/**
+ * Admin Twig Page Pagination
+ *
+ * Loads Piton Pagination to use in Twig templates for page numbered links
+ */
+$container['adminPagePagination'] = function ($c) {
+    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminPagePagination']['resultsPerPage'];
+    $config['paginationWrapperClass'] = 'pagination';
+    return new Piton\Pagination\TwigPagination($config);
+};
+
+/**
+ * Admin Twig Media Pagination
+ *
+ * Loads Piton Pagination to use in Twig templates for media numbered links
+ */
+$container['adminMediaPagination'] = function ($c) {
+    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminMediaPagination']['resultsPerPage'];
+    $config['paginationWrapperClass'] = 'pagination';
+    return new Piton\Pagination\TwigPagination($config);
 };
 
 /**
@@ -75,7 +84,7 @@ $container['view'] = function ($c) {
  * @return Monolog\Logger
  */
 $container['logger'] = function ($c) {
-    $level = ($c->get('settings')['site']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
+    $level = ($c->get('settings')['environment']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
     $logger = new Monolog\Logger('app');
     $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_DIR . 'logs/' . date('Y-m-d') . '.log', $level));
 
@@ -259,11 +268,11 @@ $container['sitemapHandler'] = function ($c) {
  * File Upload Handler
  *
  * Manages file uploads.
- * Renames uploaded files and places in the directory defined in the mediaPath handler
+ * Renames uploaded files and places in the directory defined in the mediaPathHandler
  * @return Piton\Library\Handlers\FileUpload
  */
 $container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPath'], $c['filenameGenerator']);
+    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPathHandler'], $c['filenameGenerator']);
 };
 
 /**
@@ -288,7 +297,7 @@ $container['mediaPathHandler'] = function ($c) {
  * @return Piton\Library\Handlers\Media
  */
 $container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Media($c['mediaPath'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
+    return new Piton\Library\Handlers\Media($c['mediaPathHandler'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
 };
 
 /**

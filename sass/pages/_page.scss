@@ -1,0 +1,151 @@
+/* Page Listing */
+
+// wrapper for page list header
+.list-item-page-header {
+  @include padding(.5em null .25em .5em);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px $border;
+
+  .media {
+    width: 92px;
+  }
+}
+
+.list-item-page__heading {
+  color: $text-secondary;
+}
+
+.list-item-page {
+  background: $bg-white;
+  border-bottom: solid 1px $border;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background: $bg-light;
+  }
+
+  &:active {
+    background: $bg-grey;
+    outline: none;
+  }
+
+
+  .media {
+    box-shadow: none;
+    // @include margin(.25rem);
+    display: flex;
+    align-items: center;
+
+    img {
+      // @include margin(.25em 8px);
+      height: 60px;
+      width: 80px;
+      object-fit: cover;
+    }
+  }
+}
+
+.title {
+  flex: 1.5;
+  @include margin(null null null .5em);
+}
+
+.status {
+  flex: 1;
+}
+
+.template {
+  flex: 1;
+}
+
+.collection {
+  flex: 1;
+}
+
+/* Page/Collection Add/Edit Styles */
+
+.pageEdit {
+  &__wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+
+    @media screen and (min-width: $breakpoint) {
+      flex-flow: row nowrap;
+    }
+  }
+
+  &__leftCol {
+    order: 2;
+
+    @media screen and (min-width: $breakpoint) {
+      order: 0;
+      flex: 1;
+    }
+  }
+
+  &__rightCol {
+    @media screen and (min-width: $breakpoint) {
+      flex: .5;
+      @include margin(1rem null null 1rem);
+    }
+
+  }
+
+  &__twoCol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+
+    @media screen and (min-width: $breakpoint) {
+      grid-template-columns: 1fr;
+      gap: .25rem;
+    }
+
+    img {
+      max-height: 200px;
+      object-fit: cover;
+    }
+  }
+
+  &__filter-block {
+    grid-template-columns: 1fr;
+  }
+
+  &__title {
+    @include margin(null null .25em null);
+    font-size: 1.8rem;
+
+  }
+
+
+
+
+}
+
+.new-element {
+  .form-block__elementWrapper {
+    animation: fadeBackground 3s linear forwards;
+  }
+
+}
+
+// Animation
+
+@keyframes fadeBackground {
+  0% {
+    opacity: 0;
+    background: rgba($bg-accent, 1);
+  }
+
+  100% {
+    opacity: 1;
+    background: $bg-white;
+  }
+}

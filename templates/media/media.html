@@ -1,98 +1,34 @@
 {% extends '@admin/_adminBase.html' %}
-{% import "@admin/media/_mediaCardMacro.html" as file %}
-{% import '@admin/media/_mediaCategoryCheckboxMacro.html' as categoryInput %}
 
 {% block htmlTitle 'Media' %}
-{% block headText 'Media' %}
-{% block sectionId 'mediaAll' %}
 
-{% block sidebar %}
-{% include "@admin/media/_mediaSidebar.html" %}
-{% endblock sidebar %}
-
-{% block content %}
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-  Upload New Media
-</button>
-<hr>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Media Manager</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+{% block contentHeader %}
+<div class="content-header-inner">
+  <div class="breadcrumb"></div>
+  <h1 class="section-title">Media</h1>
+  <div class="btn-dropdown-block">
+    <div class="btn btn-dropdown" data-collapse-toggle="addMediaButton">
+      Manage Media <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="form-group-block collapsed" data-collapse-target="addMediaButton" data-collapse-auto="addMediaButton">
+      <div class="form-group">
+        <a href="#" data-media-upload="form" data-media-refresh="true">Add Media</a>
       </div>
-      <div class="modal-body">
-
-        <form class="jsMediaUploadForm" action="{{ pathFor('adminFileUpload') }}" method="post" accept-charset="utf-8"
-          enctype="multipart/form-data">
-          <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="mediaFile" name="media-file" required>
-            <label class="custom-file-label" for="mediaFile">Choose a file</label>
-          </div>
-
-          <hr>
-          <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="feature" name="feature">
-            <label class="form-check-label" for="feature">Featured Media</label>
-          </div>
-          <hr>
-          {% for category in page.categories %}
-          {{ categoryInput.checkbox(category) }}
-          {% endfor %}
-          <hr>
-          <div class="form-group">
-            <label>Caption</label>
-            <input type="text" class="form-control" name="caption" autocomplete="off" placeholder="Media caption">
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary" type="submit" name="button" value="save">Upload</button>
-          </div>
-        </form>
-
-        {% if not site.settings.tinifyApiKey %}
-        <div class="p-2 mb-0 bg-warning">
-          <p class="small">PitonCMS recommends using <a href="https://tinyjpg.com/" target="_blank">TinyJPG</a> to
-             optimize your media files for the web. To use TinyJPG with PitonCMS, go to
-
-            <a href="https://tinyjpg.com/developers" target="_blank">https://tinyjpg.com/developers</a>.
-
-            Enter your name and email address to receive an API key. Save this key to <a
-              href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">PitonCMS Tools > Site >
-              Tinify
-              API Key</a>. TinyJPG has a generous free plan up to 500 transformations per month.
-          </p>
-        </div>
-        <hr>
-        {% endif %}
-
-        <p>Select a file to upload. You can assign it as featured media and/or assign the image to a
-          gallery. Giving your picture a caption will provide alt text.</p>
-        <p>The upload and conversion process of your images may take extra time depending upon your internet speed.</p>
+      <div class="form-group">
+        <a href="{{ pathFor('adminMediaCategoryEdit') }}">Manage Categories</a>
       </div>
     </div>
   </div>
 </div>
-<h3>All Media</h3>
-<div class="grid-wrapper">
-  {% for media in page.media %}
-  {{ file.mediaCard(media, page.categories, true) }}
-  {% else %}
-  <strong>No Media Found</strong>
-  {% endfor %}
-</div>
+{% endblock contentHeader %}
+
+{% block content %}
+
+{{ include("@admin/media/_mediaSearchControls.html") }}
+{{ include("@admin/media/_mediaCards.html") }}
+
 {% endblock content %}
 
 {% block foot %}
-<script src="{{ basePath() }}/admin/js/media.js"></script>
-{# This fixes an issue with the BS file upload so that the selected filename shows in the input #}
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-<script>bsCustomFileInput.init()</script>
+{{ getJsFileSource('media') }}
 {% endblock foot %}

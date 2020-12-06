@@ -1,0 +1,94 @@
+
+/**
+ * XHR Request Promise
+ * @param {string} method "GET"|"POST"
+ * @param {string} url    Resource request URL
+ * @param {FormData} data   FormData payload to send
+ */
+const XHRPromise = function(method, url, data) {
+    let xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+        let response;
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+            try {
+                if (xhr.status === 200) {
+                    // Successful server response, parse payload to check status
+                    response = JSON.parse(xhr.responseText);
+
+                    if (response.status === "success") {
+                        // Response successful, resolve
+                        resolve(response.text);
+                        return;
+                    }
+
+                    throw new Error(`Application Error ${response.text}.`);
+                }
+
+                throw new Error(`Server Error ${xhr.status} ${xhr.statusText}.`);
+            } catch (error) {
+                // JS Error thrown
+                if (!(error instanceof Error)) {
+                    let error = new Error(error);
+                }
+
+                reject(error.message);
+            }
+        }
+
+        // Setup and send
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(data);
+    });
+}
+
+/**
+ * GET XHR Promise Request
+ * @param {string} url  Resource URL
+ * @param {object} data Object with query string parameters as key: values
+ */
+const getXHRPromise = function(url, data) {
+    // Create query string if a data object was provided
+    if (data) {
+        let queryString;
+        if (data instanceof URLSearchParams) {
+            queryString = data;
+        } else {
+            queryString = new URLSearchParams();
+            for (let [key, value] of Object.entries(data)) {
+                queryString.append(key, value);
+            }
+        }
+
+        url += "?" + queryString.toString();
+    }
+
+    return XHRPromise("GET", url);
+}
+
+/**
+ * POST XHR Promise Request
+ * @param {string} url  Resource URL
+ * @param {object} data Object with key: values, or FormData instance
+ */
+const postXHRPromise = function(url, data) {
+    let formData;
+    if (data instanceof FormData) {
+        formData = data;
+    } else {
+        formData = new FormData();
+        for (let [key, value] of Object.entries(data)) {
+            formData.append(key, value);
+        }
+    }
+
+    formData.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
+
+    return XHRPromise("POST", url,  formData);
+}
+
+export { getXHRPromise, postXHRPromise };

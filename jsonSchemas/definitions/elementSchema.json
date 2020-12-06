@@ -7,15 +7,43 @@
             "description": "Element name displayed in page editor",
             "type": "string"
         },
-        "elementTemplateFile": {
-            "description": "The template page HTML file. Relative path from templates/elements/",
+        "elementDescription": {
+            "description": "Element description displayed in radio title",
             "type": "string"
         },
         "enableInput": {
             "description": "What additional input to enable for this element",
             "type": "string",
             "enum": ["collection","embedded","image","gallery"]
+        },
+        "showContentTextarea": {
+            "description": "Show content textarea, defaults to true",
+            "type": "boolean",
+            "default": true
+        },
+        "enableEditor": {
+            "description": "Enable content textarea editor controls, defaults to true",
+            "type": "boolean",
+            "default": true
+        },
+        "settings": {
+            "$ref": "settingsDefinitionSchema.json#/definition"
         }
     },
-    "required": ["elementName","elementTemplateFile"]
+    "oneOf": [
+        {
+            "properties": {
+                "settings": {
+                    "items": {
+                        "properties": {
+                            "category": {
+                                "pattern": "^(?:element)$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "required": ["elementName"]
 }

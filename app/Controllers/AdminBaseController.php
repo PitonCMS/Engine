@@ -38,7 +38,8 @@ class AdminBaseController extends BaseController
      * Set Alert
      *
      * Set alert using flash data to session
-     * @param string        $severity Severity level
+     * Severity levels are one of: 'primary','secondary','success','danger','warning','info'
+     * @param string        $severity Severity level color code
      * @param string        $heading  Heading text
      * @param string|array  $messge   Message or array of messages (Optional)
      * @return void
@@ -46,31 +47,14 @@ class AdminBaseController extends BaseController
      */
     public function setAlert(string $severity, string $heading, $message = null): void
     {
-        // Make sure severity level is in our Bootstrap CSS
-        $severityList = ['primary','secondary','success','danger','warning','info'];
-        if (!in_array($severity, $severityList)) {
-            throw new Exception("PitonCMS: Alert severity not found in list.");
-        }
-
-        // Alert data is made available in the template, or if $this->redirect() is called
-        // then data persists in flash data for one page view
-        $this->alert = [
+        // Alert message is displayed in the admin base template
+        // If render() is called then alert data is provided to Twig context to display in this request
+        // or if redirect() is called then saved to flash session data for next request
+        $this->alert[] = [
             'severity' => $severity,
             'heading' => $heading,
             'message' => (is_array($message)) ? $message : [$message]
         ];
-    }
-
-    /**
-     * Append Alert Message
-     *
-     * Add additional messages to alert dialog
-     * @param  string $message
-     * @return void
-     */
-    public function appendAlertMessage(string $message): void
-    {
-        $this->alert['message'][] = $message;
     }
 
     /**
@@ -108,7 +92,7 @@ class AdminBaseController extends BaseController
                 unset($savedSettings[$settingIndex[$setting->key]]);
             } else {
                 // If a matching saved setting was NOT found, then set default value
-                $setting->setting_value = $setting->value;
+                $setting->setting_value = $setting->value ?? null;
                 $setting->status = 'new';
             }
 

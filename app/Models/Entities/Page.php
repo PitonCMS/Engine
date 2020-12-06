@@ -18,10 +18,10 @@ namespace Piton\Models\Entities;
 class Page extends PitonEntity
 {
     /**
-     * Elements Array
+     * Block Elements Array
      * @var array
      */
-    public $elements = [];
+    public $blocks = [];
 
     /**
      * Page Settings Array
@@ -63,6 +63,47 @@ class Page extends PitonEntity
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
+    }
+
+    /**
+     * Set Block Elements
+     *
+     * Accepts array of element objects and converts to multidimensional array of
+     * [block_key][] element objects and assigns to $this->blocks
+     * @param array|null $elements
+     * @return void
+     */
+    public function setBlockElements(?array $elements): void
+    {
+        // Nothing to do with an empty array but stop
+        if (empty($elements)) {
+            return;
+        }
+
+        // Go through array and assign by block key as index
+        array_walk($elements, function ($el) {
+            $this->blocks[$el->block_key][] = $el;
+        });
+    }
+
+    /**
+     * Set Page Settings
+     *
+     * Filters array of data_store settings on page category and creates key:value array on $this->settings
+     * @param array|null
+     * @return void
+     */
+    public function setPageSettings(?array $settings): void
+    {
+        if (empty($settings)) {
+            return;
+        }
+
+        array_walk($settings, function ($setting) {
+            if ($setting->category === 'page' && $this->id === $setting->page_id) {
+                $this->settings[$setting->setting_key] = $setting->setting_value;
+            }
+        });
     }
 
     /**

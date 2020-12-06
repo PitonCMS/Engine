@@ -33,46 +33,4 @@ class FrontBaseController extends BaseController
     {
         return parent::render('pages/' . $template, $data);
     }
-
-    /**
-      * Build Page Elements by Block
-      *
-      * Takes array of page elements and changes keys to use block->key as array keys
-      * @param array  $elements Array of page element domain models
-      * @return array
-      */
-    protected function buildElementsByBlock(array $elements): array
-    {
-        if (empty($elements)) {
-            return $elements;
-        }
-
-        $output = [];
-        foreach ($elements as $element) {
-            $output[$element->block_key][] = $element;
-        }
-
-        return $output;
-    }
-
-    /**
-     * Build Page Settings
-     *
-     * Takes array of page settings and changes keys to use setting->key as array keys
-     * @param array  $settings Array of page settings
-     * @return array
-     */
-    protected function buildPageSettings(array $settings): array
-    {
-        if (empty($settings)) {
-            return $settings;
-        }
-
-        $output = [];
-        foreach ($settings as $setting) {
-            $output[$setting->setting_key] = $setting->setting_value;
-        }
-
-        return $output;
-    }
 }

@@ -1,52 +1,35 @@
-{# Admin Navbar #}
+{#  Admin Navbar #}
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{ pathFor('adminHome') }}">PitonCMS</a>
-    <span class="navbar-text d-lg-block d-none">{{ headText }}</span>
+<ul class="side-nav">
+  <li class="side-nav__link {{ currentRoute('adminHome') }}">
+    <a href="{{ pathFor('adminHome') }}"><i class="side-nav__icon fas fa-home"></i> Home</a>
+  </li>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pitonAdminNavbar" aria-controls="pitonAdminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <li class="side-nav__link {{ currentRouteParent('adminPage') }}">
+    <a href="{{ pathFor('adminPage') }}"><i class="side-nav__icon fas fa-pencil-alt"></i> Content</a>
+  </li>
 
-    <div class="collapse navbar-collapse" id="pitonAdminNavbar">
-      <ul class="navbar-nav ml-auto">
+  <li class="side-nav__link {{ currentRouteParent('adminMedia') }}">
+    <a href="{{ pathFor('adminMedia') }}"><i class="side-nav__icon fas fa-images"></i> Media</a>
+  </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminPages') or inUrl('page') ? 'active' }}" href="{{ pathFor('adminPages') }}">Pages</a>
-        </li>
+  <li class="side-nav__link {{ currentRouteParent('adminNavigation') }}">
+    <a href="{{ pathFor('adminNavigation') }}"><i class="side-nav__icon fas fa-compass"></i> Navigation</a>
+  </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminCollections') or inUrl('collection') ? 'active' }}" href="{{ pathFor('adminCollections') }}">Collections</a>
-        </li>
+  <li class="side-nav__link {{ currentRouteParent('adminMessage') }}">
+    <a href="{{ pathFor('adminMessage') }}"> <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
+    {# Note: No whitespace inside of badge element or :empty selector does not work #}
+    <div class="badge badge-notify" data-message="count">
+      {% if getUnreadMessageCount() %}{{ getUnreadMessageCount() }}{% endif %}</div>
+  </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminNavigations') }}" href="{{ pathFor('adminNavigations') }}">Navigation</a>
-        </li>
+  <li class="side-nav__link {{ currentRouteParent('adminSetting') }}">
+    <a href="{{ pathFor('adminSetting') }}"><i class="side-nav__icon fas fa-cog"></i> Settings</a>
+  </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminMedia')|default(inUrl('media')) }}" href="{{ pathFor('adminMedia') }}">Media</a>
-        </li>
+  <li class="side-nav__link {{ currentRouteParent('adminHelp') }}">
+    <a href="{{ pathFor('adminHelp', {'subject': 'client'}) }}"> <i class="side-nav__icon fas fa-question"></i> Support</a>
+  </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ currentRoute('adminMessages') }}" href="{{ pathFor('adminMessages', {'status': 'new'}) }}">
-            Messages <span class="badge badge-light jsMessageCount">{{ getUnreadMessageCount() }}</span>
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link {{ inUrl('tools') }}" href="{{ pathFor('adminSettings', {'cat': 'site'}) }}">Tools</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="{{ pathFor('adminHelp') }}" title="PitonCMS Help Documentation">Help</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link jsLogout" href="{{ pathFor('adminLogout') }}" title="Logout">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-</nav>
+</ul>

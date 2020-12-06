@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Middleware;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use ArrayAccess;
 use PDOException;
 
@@ -38,12 +40,11 @@ class LoadSiteSettings
     /**
      * Constructor
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
      * @param  closure
      * @param  ArrayAccess
      * @return void
      */
-    public function __construct($request, $dataMapper, ArrayAccess $appSettings)
+    public function __construct($dataMapper, ArrayAccess $appSettings)
     {
         $this->dataMapper = $dataMapper;
         $this->appSettings = $appSettings;
@@ -52,13 +53,12 @@ class LoadSiteSettings
     /**
      * Callable
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
-     * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
-     * @param  callable                                 $next     Next middleware
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param  Request  $request  PSR7 request
+     * @param  Response $response PSR7 response
+     * @param  callable $next     Next middleware
+     * @return Response
      */
-    public function __invoke($request, $response, $next)
+    public function __invoke($request, $response, $next): Response
     {
         $this->loadSettings();
 
@@ -66,12 +66,10 @@ class LoadSiteSettings
         // Because of PSR7 immutability the $request object passed into the controller constructor is a copy
         // and does not have the route object attribute
         $route = $request->getAttribute('route');
-        $this->settings['currentRouteName'] = ($route !== null) ? $route->getName() : null;
+        $this->settings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
 
-        // Replace site settings with new settings
-        $this->appSettings->replace([
-            'site' => $this->settings
-        ]);
+        // Update with new settings
+        $this->appSettings->replace($this->settings);
 
         // Next Middleware call
         return $next($request, $response);
@@ -89,24 +87,32 @@ class LoadSiteSettings
         // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
         // Otherwise rethrow to let the application handler deal with whatever happened.
         try {
-            $settingMapper = ($this->dataMapper)('SettingMapper');
+            $dataStoreMapper = ($this->dataMapper)('DataStoreMapper');
         } catch (PDOException $th) {
             // SQLSTATE[42S02]
             if ($th->getCode() === '42S02') {
-                // Go to installer
+                // Go to installer script
                 header('Location: /install.php', true, 302);
                 exit;
+            }
+
+            throw $th;
+        }
+
+        $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
+
+        // Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
+        foreach ($siteSettings as $row) {
+            if ($row->category === 'piton') {
+                $this->settings['environment'][$row->setting_key] = $row->setting_value;
             } else {
-                throw $th;
+                $this->settings['site'][$row->setting_key] = $row->setting_value;
             }
         }
 
-        $siteSettings = $settingMapper->findSiteSettings() ?? [];
-
-        // Create new multi-dimensional array
-        $this->settings = array_column($siteSettings, 'setting_value', 'setting_key');
-
-        // Load some config file settings into settings array
-        $this->settings['production'] = $this->appSettings['site']['production'];
+        // Load additional settings from server config file into settings array
+        $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+        $this->settings['environment']['assetVersion'] =
+            ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
     }
 }

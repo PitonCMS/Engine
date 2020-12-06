@@ -1,444 +1,167 @@
-#adminHome,
-#pages,
-#navigation,
-#collections,
-#mediaAll,
-#mediaUpload,
-#mediaCategories,
-#messages {
+/* Layout */
+/* Header, Logo */
+.top-header {
+ @include padding(null 1em);
+ background-color: $bg-dark;
+ color: $text-accent;
+ height: $nav-height;
+
+ position: fixed;
+ left: 0;
+ right: 0;
+ width: 100%;
+ z-index: 201;
+ box-shadow: $box-shadow;
+
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+
+ .logo {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: $nav-height;
   display: flex;
-  flex-flow: row nowrap;
+  letter-spacing: 1.4px;
+  justify-content: flex-start;
+  @include padding(0 0 0 4rem);
 
-  aside,
-  main {
-    min-height: calc(100vh - 56px);
-    @include padding(1em);
+  @media screen and (min-width: $breakpoint) {
+   @include padding(0);
   }
 
-  aside {
-    background-color: $primary-md-grey;
-    @include padding(1em 0.5em 1em 0);
-    min-width: 200px;
-    position: relative;
+  a {
+   color: inherit;
+   text-decoration: none;
+   text-transform: uppercase;
+
+   &:hover {
+    color: $text-accent-hover;
+   }
+
+   span {
+    text-transform: lowercase;
+   }
   }
+ }
 
-  .sidebar-inner {
-    position: sticky;
-    top: 72px;
-
-    .sidebar-links {
-      display: flex;
-      align-items: center;
-
-      .nav-link {
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: $primary-dark;
-        letter-spacing: 1px;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-
-        &:hover {
-          color: var(--primary) !important;
-        }
-
-        .active {
-          background-color: rgba($primary-color, 0.5) !important;
-          color: $primary-light;
-          // @include padding(null 1rem null null);
-          @include border-right-radius(30px);
-          box-shadow: $box-shadow;
-        }
-      }
-
-    }
+ .btn-dropdown {
+  height: $nav-height;
+  background: inherit;
+  color: inherit;
+  &:hover {
+   background: inherit;
+   cursor: pointer;
   }
-
-  main {
-    flex: 1;
-  }
-
-  .grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1em;
-
-    .card-title {
-      @include margin(0);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      h5 {
-        @include margin(0);
-        @include padding(0);
-      }
-    }
-
-    .card-footer {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
-
-  .fa-info-circle {
-    cursor: pointer;
-    color: $primary-dark-grey;
-  }
-
-  .card {
-    border: none;
-    box-shadow: $box-shadow;
-  }
+ }
 }
 
-// Release Notes
-#releaseNotes {}
+/* Full sidebar/content wrapper to create columns */
+.wrapper {
+ min-height: 100%;
+ @include padding(#{$nav-height} null null null);
+ display: flex;
+ flex-flow: row nowrap;
+ position: relative;
 
-// Collections
-#collections {
-  .card .card {
-    box-shadow: none;
-    border: 1px solid rgba(black, 0.125);
-  }
+ @media screen and (min-width: $breakpoint) {
+  @include padding(#{$nav-height} null null #{$nav-width});
+ }
 
-  h3 {
-    @include margin(null null 0);
-    @include padding(null null 0);
+ .sidebar {
+  background: $bg-light !important;
+  min-width: $nav-width;
+  height: calc(100vh - #{$nav-height});
+  flex-grow: 1;
+  font-size: .875rem;
+  border-right: solid $border 1px;
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: $nav-height;
+  z-index: 200;
+
+  transform: scale(0, 1);
+  transform-origin: left;
+  transition: transform 250ms ease-in-out;
+
+  @media screen and (min-width: $breakpoint) {
+   transform: scale(1, 1);
+   display: block;
+   position: fixed;
+   height: calc(100vh - #{$nav-height});
   }
+ }
+
+ .main-content {
+  background: $bg-light;
+  flex-basis: 0;
+  flex-grow: 999;
+  display: flex;
+  flex-flow: column nowrap;
+  position: relative;
+ }
 }
 
-// Media
-#mediaCategories {
-  form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1em;
+// Content Header Styles
+.content-header {
+ @include padding(0 1em);
+ background: $bg-light;
+ min-height: $nav-height;
+ width: 100%;
+ box-shadow: $box-shadow-1;
 
-    .form-group {
-      display: grid;
-      grid-template-columns: 1fr 4em;
-      grid-gap: 1em;
-    }
+ display: flex;
+ align-items: center;
+
+ position: fixed;
+ z-index: 100;
+ top: $nav-height;
+
+ @media screen and (min-width: $breakpoint) {
+  width: calc(100vw - #{$nav-width});
+ }
+
+ &-inner {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+ }
+
+ .breadcrumb {
+  font-weight: 300;
+  font-size: 0.75rem;
+  @include padding(null 1em null null);
+
+  a {
+   color: $text-accent;
+
+   &:hover {
+    color: $text-accent-hover;
+   }
   }
+ }
+
+ /* Section Title */
+ .section-title {
+  @include margin(0 1rem 0 0);
+  @include padding(0);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 2rem;
+ }
 }
 
-// Messages
-#messages {
-  .jsMessageWrap {
-    @include margin(null null 1em null);
-    display: flex;
-    border-radius: $border-radius;
-  }
-
-  .message-wrapper {
-    flex: 2;
-    @include padding(0.5em);
-    @include margin(null 0.25em null null);
-    background: $primary-light-grey;
-    box-shadow: $box-shadow;
-  }
-
-  .button-wrapper {
-    @include padding(0.5em);
-    box-shadow: $box-shadow;
-    background: $primary-light-grey;
-  }
-
-  .button-wrapper form {
-    display: flex;
-    flex-flow: column nowrap;
-
-    button {
-      @include margin(0.5em null);
-    }
-  }
+// Content Section Layout
+.container {
+ width: 100%;
+ max-width: $container-max;
+ @include margin(0 auto);
 }
 
-/********************************************/
-/******* Page & Collection Edit Pages *******/
-/********************************************/
-#editPage,
-#collectionDetail {
-
-  .pageEditForm {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1em;
-    position: relative;
-
-    @media screen and (min-width: 768px) {
-      grid-template-columns: max-content 1fr;
-    }
-
-    .sidebar {
-      min-height: calc(100vh - 56px);
-      width: 100%;
-      background: #efefef;
-      position: relative;
-
-      .sidebar-inner {
-        @include padding(1em);
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1em;
-
-        position: sticky;
-        top: 60px;
-        z-index: 5;
-
-        @media screen and (min-width: 768px) {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .sidebar-block {
-
-        @media screen and (min-width: 768px) {
-          display: flex;
-          flex-flow: column nowrap;
-        }
-      }
-    }
-
-    .content {
-      position: relative;
-      @include padding(null 1em);
-
-      @media screen and (min-width: 768px) {
-        @include padding(1em null null);
-      }
-
-      .block-element-wrapper {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1em;
-      }
-
-      .nav-tabs {
-        background: white;
-        position: sticky;
-        top: 55px;
-        z-index: 5;
-      }
-    }
-  }
-
-  .form-group-wrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    background: #efefef;
-    border-radius: 7px;
-
-    .form-group {
-      background: white;
-      border-radius: 7px;
-      @include padding(1em);
-      @include margin(1em);
-    }
-
-    .form-group {
-
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: .5em;
-    }
-  }
-
-  // EditPage Content Tab
-  .block-element-wrapper {
-
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1em;
-
-    .element-block {
-      position: relative;
-
-    }
-
-    .block-title-wrapper {
-      background: white;
-
-    }
-
-    .block-content {
-
-      background: #efefef;
-      @include padding(1em);
-      border-radius: 7px;
-
-      .jsAddElement {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-    }
-  }
-}
-
-
-/*****************************************************************/
-/****** Tools - general, users, contact, *************************/
-/****** social, sitemap, releaseNotes ****************************/
-/*****************************************************************/
-
-#tools,
-#users,
-#sitemap,
-#releaseNotes {
-  .toolsEditForm {
-    background: #efefef;
-    width: 100%;
-    max-width: 1200px;
-    min-height: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1em;
-
-    @media screen and (min-width: 768px) {
-      grid-template-columns: 1fr 3fr;
-      gap: 0;
-    }
-
-    @media screen and (min-width: 900px) {
-      grid-template-columns: 1fr 4fr;
-    }
-  }
-
-  .sidebar {
-    background: #efefef;
-    position: relative;
-    border-bottom: solid 1px darken(#efefef, 8);
-
-    @media screen and (min-width: 768px) {
-      border: none;
-    }
-  }
-
-  .sidebar-inner {
-    @include padding(1em 1em null 1em);
-    position: sticky;
-    top: 60px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    @media screen and (min-width: 768px) {
-      @include padding(null null null 0);
-      grid-template-columns: 1fr;
-      justify-content: flex-start;
-      text-align: left;
-    }
-
-    .nav-link {
-      color: $primary-dark;
-      letter-spacing: 1px;
-      display: grid;
-      grid-template-columns: 1.5rem 1fr;
-      justify-content: center;
-      align-items: center;
-      @include margin(null null 1em null);
-
-      @media screen and (min-width: 768px) {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        @include padding(0.25em 0.5em);
-        @include margin(null null null 0);
-      }
-
-      &:hover {
-        color: var(--primary) !important;
-      }
-
-      i {
-        justify-self: center;
-        align-self: center;
-      }
-    }
-
-    .button-group {
-      @include padding(null null .25em null);
-      display: flex;
-      justify-content: center;
-
-      @media screen and (min-width: 768px) {
-        @include padding(1em null null 1em);
-        flex-flow: column nowrap;
-      }
-
-      .btn {
-        @include margin(null null 1em 1em);
-
-        @media screen and (min-width: 768px) {
-          @include margin(0 0 1em 0);
-        }
-      }
-    }
-  }
-
-  .content {
-
-    @include padding(null 1em);
-    background: #efefef;
-
-    .grid-wrapper {
-      @include margin(.5em 1em);
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1em;
-
-    }
-
-    .form-group {
-      background: white;
-      @include padding(1em);
-      border-radius: 7px;
-    }
-  }
-
-  .active {
-    background-color: rgba($primary-color, 0.8) !important;
-    color: $primary-light !important;
-    @include padding(null 1rem null null);
-    @include border-right-radius(25px);
-    @include border-left-radius(25px);
-    box-shadow: $box-shadow;
-
-    @media screen and (min-width: 768px) {
-      @include border-left-radius(0);
-    }
-  }
-
-}
-
-/****************************************/
-/********* Release Notes Code Wrap ******/
-/****************************************/
-
-pre {
-  font-family: "Courier 10 Pitch", Courier, monospace;
-  font-size: 95%;
-  line-height: 140%;
-  white-space: pre;
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -o-pre-wrap;
-}
-
-code {
-  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-  font-size: 95%;
-  line-height: 140%;
-  white-space: pre;
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -o-pre-wrap;
-  background: rgb(250, 248, 230);
+.content {
+ @include padding(calc(#{$nav-height} + 1em) 1em 1em 1em);
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Library\Twig;
 
 use Twig\TwigFunction;
+use Exception;
 
 /**
  * Piton Back End Admin Twig Extension
@@ -23,6 +24,34 @@ use Twig\TwigFunction;
 class Admin extends Base
 {
     /**
+     * Admin Site Hierarchy
+     * pageRouteName => parentPageRouteName
+     * Null values represent top level navigation routes
+     * @var array
+     */
+    protected const SiteHierarchy = [
+        // Level 0 pages
+        'adminHome' => null,
+        'adminPage' => null,
+        'adminMedia' => null,
+        'adminNavigation' => null,
+        'adminMessage' => null,
+        'adminSetting' => null,
+        'adminHelp' =>  null,
+        // Level 1 pages
+        'adminPageEdit' => 'adminPage',
+        'adminNavigationEdit' => 'adminNavigation',
+        'adminSettingEdit' => 'adminSetting',
+        'adminSitemap' => 'adminSetting',
+        'adminCollection' => 'adminSetting',
+        'adminMediaCategoryEdit' => 'adminSetting',
+        'adminUser' => 'adminSetting',
+        // Level 2 pages
+        'adminUserEdit' => 'adminUser',
+        'adminCollectionEdit' => 'adminCollection',
+    ];
+
+    /**
      * Register Global variables
      *
      * @param void
@@ -32,7 +61,12 @@ class Admin extends Base
     {
         return array_merge_recursive(parent::getGlobals(), [
             'site' => [
-                'settings' => ['projectDir' => basename(ROOT_DIR)]
+                'environment' => [
+                    'projectDir' => basename(ROOT_DIR),
+                    'sessionUserId' => $this->container->sessionHandler->getData('user_id'),
+                    'sessionUserFirstName' => $this->container->sessionHandler->getData('first_name'),
+                    'sessionUserLastName' => $this->container->sessionHandler->getData('last_name'),
+                    ]
             ]
         ]);
     }
@@ -62,10 +96,13 @@ class Admin extends Base
             new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
             new TwigFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
             new TwigFunction('getCollections', [$this, 'getCollections']),
-            new TwigFunction('getGalleries', [$this, 'getGalleries']),
+            new TwigFunction('getPageTemplates', [$this, 'getPageTemplates']),
+            new TwigFunction('getMediaCategories', [$this, 'getMediaCategories']),
             new TwigFunction('getElements', [$this, 'getElements']),
             new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
-            new TwigFunction('getNavPages', [$this, 'getNavPages']),
+            new TwigFunction('getSessionData', [$this, 'getSessionData']),
+            new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
+            new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
         ]);
     }
 
@@ -84,37 +121,43 @@ class Admin extends Base
     /**
      * Get Alert Messages
      *
-     * Get alert data. Returns null if no alert found.
-     * @param  array  $context Twig context, includes controller alert array
+     * Get flash and application alert notices to display.
+     * @param  array  $context Twig context, includes controller 'alert' array
      * @param  string $key     Alert keys: severity|heading|message
-     * @return array|string|null
+     * @return array|null
      */
-    public function getAlert(array $context, string $key = null)
+    public function getAlert(array $context): ?array
     {
         $session = $this->container->sessionHandler;
 
-        // Get alert notices from page context, or failing that then session flash data
-        $alert = $context['alert'] ?? $session->getFlashData('alert');
-
-        if ($key === null) {
-            return $alert;
+        // If AdminBaseController render() is called then alert data is provided to Twig context for this request
+        // But if AdminBaseController redirect() was called in last request the alert was saved to flash session data
+        if (!empty($context['alert'])) {
+            $alert = $context['alert'];
+        } else {
+            $alert = $session->getFlashData('alert');
         }
 
-        if (isset($alert[$key])) {
-            if ($key === 'message') {
-                return ($alert['message']) ? '<ul>' . implode('</li><li>', $alert['message']) . '</ul>' : null;
+        // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
+        if (isset($this->container->settings['environment']['appAlert'])) {
+            $appData = json_decode($this->container->settings['environment']['appAlert'], true);
+            if (is_array($appData)) {
+                // Append to $alert array, if exists
+                $alert = array_merge($alert ?? [], $appData);
+
+                // Unset app alert data
+                $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+                $dataMapper->unsetAppAlert();
             }
-
-            return $alert[$key];
         }
 
-        return null;
+        return $alert;
     }
 
     /**
-     * Get Collections
+     * Get All Collections
      *
-     * Get list of distinct collections
+     * Get list of collections
      * @param  void
      * @return array|null
      */
@@ -124,54 +167,79 @@ class Admin extends Base
             return $this->cache['collections'];
         }
 
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
 
-        // Structure return array
-        $data = $pageMapper->findCollections();
-        $collections = array_map(function ($col) {
-            return [
-                'name' => ucfirst($col->collection_slug),
-                'value' => $col->collection_slug
-            ];
-        }, $data);
-
-        return $this->cache['collections'] = $collections;
+        // Return and cache
+        return $this->cache['collections'] = $collectionMapper->find();
     }
 
     /**
-     * Get Gallery Options
+     * Get Page Templates
      *
-     * Get all gallery media categories
+     * Get list of page templates
      * @param  void
      * @return array|null
      */
-    public function getGalleries(): ?array
+    public function getPageTemplates(): ?array
     {
-        if (isset($this->cache['galleries'])) {
-            return $this->cache['galleries'];
+        if (isset($this->cache['pageTemplates'])) {
+            return $this->cache['pageTemplates'];
+        }
+
+        $definition = $this->container->jsonDefinitionHandler;
+
+        // Return and cache
+        return $this->cache['pageTemplates'] = $definition->getPages();
+    }
+
+    /**
+     * Get Media Categories
+     *
+     * Get all media categories
+     * @param  void
+     * @return array|null
+     */
+    public function getMediaCategories(): ?array
+    {
+        if (isset($this->cache['mediaCategories'])) {
+            return $this->cache['mediaCategories'];
         }
 
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
 
-        return $this->cache['galleries'] = $mediaCategoryMapper->findCategories();
+        // Get all media categories and create key: value pair array
+        $categories = $mediaCategoryMapper->findCategories() ?? [];
+        $categories = array_column($categories, 'category', 'id');
+
+        return $this->cache['mediaCategories'] = $categories;
     }
 
     /**
      * Get Elements
      *
-     * @param  void
-     * @return array
+     * Optionally filter list of elements
+     * @param  array|null $filter Return only listed elements
+     * @return array|null
      */
-    public function getElements(): array
+    public function getElements(array $filter = null): ?array
     {
-        // Return cached set of elements, if available
-        if (isset($this->cache['elements'])) {
+        // Set cached elements, if not set
+        if (!isset($this->cache['elements'])) {
+            // Get dependencies
+            $definition = $this->container->jsonDefinitionHandler;
+            $elements = $definition->getElements();
+            $elements = array_combine(array_column($elements, 'filename'), $elements);
+
+            $this->cache['elements'] = $elements;
+        }
+
+        if (!$filter) {
             return $this->cache['elements'];
         }
 
-        // Get dependencies
-        $definition = $this->container->jsonDefinitionHandler;
-        return $this->cache['elements'] = $definition->getElements();
+        $filter = array_flip($filter);
+
+        return array_intersect_key($this->cache['elements'], $filter);
     }
 
     /**
@@ -183,28 +251,76 @@ class Admin extends Base
      */
     public function getUnreadMessageCount(): ?int
     {
+        if (isset($this->cache['unreadMessageCount'])) {
+            return $this->cache['unreadMessageCount'];
+        }
+
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $count = $messageMapper->findUnreadCount();
 
-        return ($count === 0) ? null : $count;
+        return $this->cache['unreadMessageCount'] = ($count === 0) ? null : $count;
     }
 
     /**
-     * Get Pages
+     * Get Session Data
      *
-     * Gets a list of all pages, including unpublished
-     * @param void
-     * @return array
+     * Gets data from session handler
+     * @param string $key
+     * @param string $default
+     * @return mixed
      */
-    public function getNavPages(): ?array
+    public function getSessionData(string $key = null, string $default = null)
     {
-        // Get cached pages if available
-        if (isset($this->cache['pages'])) {
-            return $this->cache['pages'];
+        return $this->container->sessionHandler->getData($key, $default);
+    }
+
+    /**
+     * Get JS File Source
+     *
+     * Returns <script> tag with link to JS source
+     * Uses compiled JS in /dist, unless requested to be type=module for development
+     * @param string $file JS file to load without the extension
+     * @param bool   $module Flag to return type=module
+     */
+    public function getJsFileSource(string $file, bool $module = false)
+    {
+        if ($this->container['settings']['environment']['production'] || !$module) {
+            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+        } else {
+            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         }
 
-        // Otherwise fetch all pages
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        return $this->cache['pages'] = $pageMapper->findPages(true);
+        $moduleType = ($module) ? 'type="module"' : '';
+
+        return "<script src=\"$source\" $moduleType></script>";
+    }
+
+    /**
+     * Current Route Parent
+     *
+     * If the supplied route name resolves as the parent in the navigation hierarcy, returns the returnValue string
+     * @param  string $routeName   Name of the route to test
+     * @param  string $returnValue Value to return
+     * @return string|null
+     */
+    public function currentRouteParent(string $routeName, string $returnValue = 'active'): ?string
+    {
+        // Trace current page route name through SiteHierarchy array to find parent with null value
+        $route = $this->container->settings['environment']['currentRouteName'];
+
+        while (self::SiteHierarchy[$route] ?? false) {
+            // Check for recursion in this while loop if the array is accidentally setup incorrectly
+            if ($route === self::SiteHierarchy[$route]) {
+                throw new Exception("PitonCMS: Recursive reference in Twig Admin SiteHierarchy");
+            }
+
+            $route = self::SiteHierarchy[$route];
+        }
+
+        if ($route === $routeName) {
+            return $returnValue;
+        }
+
+        return null;
     }
 }

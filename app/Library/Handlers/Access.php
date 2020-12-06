@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Piton\Interfaces\SessionInterface;
-use SessionIdInterface;
+use Piton\Library\Interfaces\SessionInterface;
 
 /**
  * Access Control Handler
@@ -25,7 +24,7 @@ class Access
     /**
      * Session Handler
      *
-     * @var Piton\Interfaces\SessionInterface
+     * @var Piton\Library\Interfaces\SessionInterface
      */
     protected $session;
 
@@ -39,7 +38,7 @@ class Access
     /**
      * Constructor
      *
-     * @param SessionIdInterface
+     * @param SessionInterface
      * @return void
      */
     public function __construct(SessionInterface $sessionHandler)

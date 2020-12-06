@@ -4,13 +4,27 @@
     "type": "object",
     "properties": {
         "navigators": {
-            "description": "An array of navigator keys",
+            "description": "An array of navigation definition objects",
             "type": "array",
             "items": {
-                "type": "string",
-                "pattern": "^[a-zA-Z]+$"
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Navigator display name in admin.",
+                        "type": "string"
+                    },
+                    "key": {
+                        "description": "Navigator key to use in templates. Single camelCase word with only a-z and A-Z characters",
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9_]+$"
+                    },
+                    "description": {
+                        "description": "Text description to display in admin.",
+                        "type": "string"
+                    }
+                },
+                "required": ["name", "key"]
             }
         }
-    },
-    "required": ["navigators"]
+    }
 }
