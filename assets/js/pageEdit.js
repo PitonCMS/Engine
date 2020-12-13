@@ -28,7 +28,50 @@ const setElementTitleText = function(event) {
 const initEditor = function(textElement) {
     ClassicEditor
         .create(textElement, {
-            toolbar: ["heading","bold","italic","link","bulletedList","numberedList","blockQuote","undo","redo"]
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    // 'underline',
+                    '|',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    // 'indent',
+                    // 'outdent',
+                    // '|',
+                    'link',
+                    'imageInsert',
+                    '|',
+                    'blockQuote',
+                    'insertTable',
+                    'horizontalLine',
+                    '|',
+                    'code',
+                    'codeBlock',
+                    // '|',
+                    // 'strikethrough',
+                    // 'subscript',
+                    // 'superscript',
+                    // '|',
+                    // 'undo',
+                    // 'redo',
+                    // 'removeFormat',
+                ]
+            },
+            // language: 'en',
+            codeBlock: {
+                languages: [
+                    {language: 'html', label: 'HTML'},
+                    {language: 'css', label: 'CSS'},
+                    {language: 'php', label: 'PHP'},
+                    {language: 'js', label: 'JS'},
+                    {language: 'sql', label: 'SQL'},
+                    {language: 'sh', label: 'Shell'},
+                ],
+            },
         })
         .then(editor => {
             editor.model.document.on('change:data', (e) => {
