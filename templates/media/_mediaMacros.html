@@ -75,7 +75,7 @@
 #}
 {% macro cardStatic(media, categories) %}
 <div class="media" data-media-card="true" data-media-id="{{ media.id }}"
-  data-media-filename="{{ getMediaPath(media.filename) }}" data-media-caption="{{ media.caption }}">
+  data-media-filename="{{ getMediaPath(media.filename, 'large') }}" data-media-caption="{{ media.caption }}">
 
   {# Setting <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
   <div class="media__image">

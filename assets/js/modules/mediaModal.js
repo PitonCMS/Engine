@@ -188,16 +188,20 @@ const mediaCKEditorSelectedListener = function (editor) {
             // Set media in editor
             if (mediaCard.dataset) {
                 editor.model.change(writer => {
-                    const imageElement = writer.createElement('image', {
+                    const mediaElement = writer.createElement('image', {
                         src: mediaCard.dataset.mediaFilename,
                         alt: mediaCard.dataset.mediaCaption
                     });
 
-                    // Remove the click handler from document. This mediaClickBody will be added again on the next toolbar select media click
-                    document.removeEventListener("click", mediaClickBody, false);
+                    const mediaCaption = writer.createElement('caption');
+                    writer.appendText(mediaCard.dataset.mediaCaption ?? "", mediaCaption);
+                    writer.append(mediaCaption, mediaElement);
 
                     // Insert the image in the current selection location.
-                    editor.model.insertContent(imageElement, editor.model.document.selection);
+                    editor.model.insertContent(mediaElement, editor.model.document.selection);
+
+                    // Remove the click handler from document. This mediaClickBody will be added again on the next toolbar select media click
+                    document.removeEventListener("click", mediaClickBody, false);
 
                     // No need to dispatch input event when working in the text editor
                 });
