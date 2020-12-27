@@ -24,6 +24,11 @@ const inputEvent = new Event("input", {"bubbles": true});
 let targetElement = null;
 
 /**
+ * Flag (bool) whether return and set object data (true, default), or return the media path and filename (false)
+ */
+let returnObject = true;
+
+/**
  * Set Target Element
  *
  * This is the element to set the selected media
@@ -48,7 +53,7 @@ const getTargetElement = function () {
  * @param void
  */
 const openMediaModal = function() {
-    // Load modal background first to show response as XHR request processes
+    // Load modal background first to show something is happening as XHR get request processes
     loadModal();
     getXHRPromise(pitonConfig.routes.adminMediaGet + "static")
         .then(data => {
@@ -58,6 +63,7 @@ const openMediaModal = function() {
                     // Create element to inject HTML string into to get this live
                     let container = document.createElement("div");
                     container.classList.add("modal-container");
+                    // Set data-media-select-modal="true" as selector
                     container.dataset.mediaSelectModal = true;
                     container.insertAdjacentHTML("afterbegin", controls);
 
@@ -77,16 +83,33 @@ const openMediaModal = function() {
 }
 
 /**
- * Media Select listener
+ * Media Input Select Modal
  *
- * Binds click event to loaded media modal to listen for when a media card file is selected
+ * Launches media select modal attached to Piton form media inputs
  * @param {Event} event
  */
-const mediaSelectListener = function (event) {
-    if (!(event.target.closest(`[data-media-card="true"]`) && event.target.closest(`[data-media-select-modal]`))) return;
+const mediaInputSelectModal = function (event) {
+    if (event.target.dataset.mediaModal) {
+        // Save reference to target element and load modal
+        setTargetElement(event.target.closest(`[data-media-select="true"]`))
+        openMediaModal();
+        returnObject = true;
+    }
+}
 
-    let mediaCard = event.target.closest(`[data-media-card="true"]`);
+/**
+ * Media Input Selected listener
+ *
+ * Listens for click event when a media file is selected
+ * Sets selected media file in form input
+ * @param {Event} event
+ */
+const mediaInputSelectedListener = function (event) {
+    if (!(event.target.closest(`[data-media-card="true"]`) && event.target.closest(`[data-media-select-modal]`))) return;
+    if (!returnObject) return;
+
     // Get media data and set in form
+    let mediaCard = event.target.closest(`[data-media-card="true"]`);
     let data = {
         "id": mediaCard.dataset.mediaId,
         "caption": mediaCard.dataset.mediaCaption,
@@ -110,18 +133,14 @@ const mediaSelectListener = function (event) {
 }
 
 /**
- * Media Select
+ * Media Input Clear
  *
- * Launches media select modal
+ * Clears media set in input
  * @param {Event} event
  */
-const mediaSelect = function (event) {
-    if (event.target.dataset.mediaModal) {
-        // Save reference to target element and load modal
-        setTargetElement(event.target.closest(`[data-media-select="true"]`))
-        openMediaModal();
-    } else if (event.target.dataset.mediaClear) {
-        // Clear media from form
+const mediaInputClear = function (event) {
+    if (event.target.dataset.mediaClear) {
+        // Clear media input form
         let targetInput = event.target.closest(`[data-media-select="true"]`).querySelector(`input[name*="media_id"]`);
         let targetImg = event.target.closest(`[data-media-select="true"]`).querySelector("img");
 
@@ -131,10 +150,71 @@ const mediaSelect = function (event) {
         targetImg.title = "";
         targetImg.classList.add("d-none");
 
-        // Dispatch event on hidden field
+        // Dispatch input event to trigger save button state
         targetInput.dispatchEvent(inputEvent);
     }
 }
 
-document.addEventListener("click", mediaSelect, false);
-document.addEventListener("click", mediaSelectListener, false);
+/**
+ * Media CKEditor Select Modal
+ *
+ * Opens media select modal, returns selected media file or null
+ * @param {void}
+ */
+const mediaCKEditorSelectModal = function () {
+    returnObject = false;
+    openMediaModal();
+}
+
+/**
+ * Media CKEditor Media Click Listener
+ *
+ * Listens for click event when a media file is selected in the media modal while editing text
+ * Sets selected media filename text editor
+ * @param {editor} editor
+ */
+const mediaCKEditorSelectedListener = function (editor) {
+
+    /**
+     * CKEditor Media Select Click Handler
+     * @param {event} event
+     */
+    const mediaClickBody = function (event) {
+        if ((event.target.closest(`[data-media-card="true"]`) && event.target.closest(`[data-media-select-modal]`)) && !returnObject) {
+            let mediaCard = event.target.closest(`[data-media-card="true"]`);
+            returnObject = true;
+            removeModal();
+
+            // Set media in editor
+            if (mediaCard.dataset) {
+                editor.model.change(writer => {
+                    const imageElement = writer.createElement('image', {
+                        src: mediaCard.dataset.mediaFilename,
+                        alt: mediaCard.dataset.mediaCaption
+                    });
+
+                    // Remove the click handler from document. This mediaClickBody will be added again on the next toolbar select media click
+                    document.removeEventListener("click", mediaClickBody, false);
+
+                    // Insert the image in the current selection location.
+                    editor.model.insertContent(imageElement, editor.model.document.selection);
+
+                    // No need to dispatch input event when working in the text editor
+                });
+            } else {
+                throw new Error("Piton: mediaCard.dataset not set.");
+            }
+        }
+    }
+
+    // Return this in callback submitted to CKEditor plugin
+    return function() {
+        document.addEventListener("click", mediaClickBody, false);
+    }
+}
+
+document.addEventListener("click", mediaInputSelectModal, false);
+document.addEventListener("click", mediaInputClear, false);
+document.addEventListener("click", mediaInputSelectedListener, false);
+
+export { mediaCKEditorSelectModal, mediaCKEditorSelectedListener };
