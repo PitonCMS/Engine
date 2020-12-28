@@ -17,8 +17,14 @@
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
   <!-- Element Title -->
+  {#
+    Element Title Logic. Set display title to:
+    1) If saved (has element.id) and has a title, display the title
+    2) If saved (had element.id) and has NO title, display short excerpt of text
+    3) If new, then display "New Element"
+  #}
   <div class="toggle-block__header toggle-block__header-secondary" data-drag-handle="true">
-   <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
+   <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title|default(element.excerpt) }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
    <div class="small-text">{{ element.definition.elementName }}</div>
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
   </div>
