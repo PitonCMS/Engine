@@ -18,8 +18,10 @@
   {{ input.selectHtml(setting, nameKey) }}
 {% elseif setting.input_type == 'textarea' %}
   {{ input.textareaHtml(setting, nameKey) }}
+{# Disable media input option
 {% elseif setting.input_type == 'media' %}
   {{ input.mediaInputHtml(setting, nameKey) }}
+#}
 {% else %}
   {{ input.inputHtml(setting, nameKey) }}
 {% endif %}
@@ -38,7 +40,7 @@
   <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][id]" value="{{ setting.id }}">
   <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
   <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
-  <input type="text" class="" name="{{ nameKey }}[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
+  <input type="{{ setting.input_type|default('text') }}" class="" name="{{ nameKey }}[{{ arrayKey }}][setting_value]" value="{{ setting.setting_value }}"
     autocomplete="off">
   <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>

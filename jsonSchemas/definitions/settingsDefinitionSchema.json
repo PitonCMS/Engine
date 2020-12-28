@@ -22,9 +22,9 @@
                     "$ref": "../validations/setting.json#/properties/setting_value"
                 },
                 "inputType": {
-                    "description": "HTML input type: input, select, textarea, media.",
+                    "description": "HTML input type: text, select, textarea, color, date, email, number, tel, url.",
                     "type": "string",
-                    "enum": ["input","select","textarea","media"]
+                    "enum": ["text","select","textarea","color","date","email","number","tel","url"]
                 },
                 "help": {
                     "description": "Form input help text, optional"
