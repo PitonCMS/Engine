@@ -46,10 +46,8 @@ const mediaCKEditorSelectedListenerCallback = function(editor) {
  * @param {object} textElement
  */
 const initEditor = function(textElement) {
-        // The CKEditor navbar configuration is preset in a custom build defined in the PitonCMS/ceditor5 project, /packages/ckeditor5-build-classic bundle
-        // To  update the editor layout or configuration, update in PitonCMS/ckeditor5 /packages/ckeditor5-build-classic/src/ckeditor.js
-        // And npm run build
-        // Then copy the /build directory into PitonCMS/engine/assets/ckeditor5/
+        // The toolbar configuration is set in a custom build of CKEditor, in the PitonCMS/PitonCKEditor project fork.
+        // To  update the editor layout or configuration, modify in /packages/piton-build bundle
         ClassicEditor.create(textElement, {
                 extraPlugins: [mediaCKEditorSelectModalCallback, mediaCKEditorSelectedListenerCallback]
             })
@@ -58,10 +56,8 @@ const initEditor = function(textElement) {
                     textElement.dispatchEvent(new Event("input", {"bubbles": true}));
                 });
 
-                // Uncomment to display toolbar options
-                // Toolbar options
+                // Uncomment to display toolbar and plugin options
                 // console.log(Array.from(editor.ui.componentFactory.names()));
-                // Plugins
                 // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
             })
             .catch(error => {
