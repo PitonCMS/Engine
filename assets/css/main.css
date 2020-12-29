@@ -987,6 +987,11 @@ input:-webkit-autofill:active {
 select,
 input[type=text],
 input[type=email],
+input[type=number],
+input[type=url],
+input[type=color],
+input[type=date],
+input[type=tel],
 textarea {
   padding: 0.5em 3.5em 0.5em 1em;
   margin: 0;
