@@ -28,10 +28,11 @@ To edit or add site settings, in the `siteSettings.json` file edit a setting obj
  "settings": [
 	{
 	 "category": "site",
-	 "label": "Google Webmaster Verification Link",
+	 "label": "Google SEO Verification Link",
 	 "key": "googleWebMaster",
 	 "value": "",
-	 "inputType": "text"
+   "inputType": "text",
+   "placeholder": "Google Search Console verification"
     }
  ]
 }
@@ -74,6 +75,7 @@ Settings allow for very specific input types. The basic setting object has these
 * `inputType` The type of input to present, defaults to `text` if left blank
   * Options are: `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
 * `help` Optional help text for input
+* `placeholder` Optional input placeholder text. Only works with normal inputs (not `textarea` or select `types`)
 * `options` If the `inputType` is `select`, then add an array of `name` and `value` options for the select list
 
 ### Input Setting
