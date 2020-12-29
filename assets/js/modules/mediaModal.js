@@ -193,9 +193,12 @@ const mediaCKEditorSelectedListener = function (editor) {
                         alt: mediaCard.dataset.mediaCaption
                     });
 
-                    const mediaCaption = writer.createElement('caption');
-                    writer.appendText(mediaCard.dataset.mediaCaption ?? "", mediaCaption);
-                    writer.append(mediaCaption, mediaElement);
+                    // Add caption if set
+                    if (mediaCard.dataset.mediaCaption) {
+                        const captionElement = writer.createElement('caption');
+                        writer.appendText(mediaCard.dataset.mediaCaption, captionElement);
+                        writer.append( captionElement, mediaElement );
+                    }
 
                     // Insert the image in the current selection location.
                     editor.model.insertContent(mediaElement, editor.model.document.selection);
