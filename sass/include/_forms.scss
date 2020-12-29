@@ -4,7 +4,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
-  box-shadow: 0 0 0 30px white inset !important;
+  box-shadow        : 0 0 0 30px white inset !important;
   // outline: none;
 }
 
@@ -13,22 +13,22 @@ input:-webkit-autofill:active {
 .form-block {
   @include padding(.5em 1em);
   @include margin(null null 1em null);
-  background: $bg-white;
+  background   : $bg-white;
   border-radius: $border-radius;
-  box-shadow: $box-shadow-1;
-  border: solid 1px $border;
-  color: $text-secondary;
-  position: relative;
+  box-shadow   : $box-shadow-1;
+  border       : solid 1px $border;
+  color        : $text-secondary;
+  position     : relative;
 
   .badge {
     font-size: .875rem;
-    position: absolute;
-    top: .5em;
-    right: .5em;
-    flex: 0;
-    width: 40px;
-    height: 23px;
-    flex: 0;
+    position : absolute;
+    top      : .5em;
+    right    : .5em;
+    flex     : 0;
+    width    : 40px;
+    height   : 23px;
+    flex     : 0;
   }
 
   &__elementWrapper {
@@ -38,10 +38,10 @@ input:-webkit-autofill:active {
 
 /* used on Navigation Structure Page */
 .checkbox-block {
-  display: grid;
+  display              : grid;
   grid-template-columns: auto 1fr;
-  align-items: center;
-  justify-content: flex-start;
+  align-items          : center;
+  justify-content      : flex-start;
 
   label {
     font-weight: 300;
@@ -50,30 +50,30 @@ input:-webkit-autofill:active {
 
 /* Form Checkbox & Radio block styles */
 .form-check-wrapper {
-  display: grid;
+  display              : grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 0 .25em;
-  z-index: 100;
+  gap                  : 0 .25em;
+  z-index              : 100;
 }
 
 .form-check {
   @include padding(.5em);
-  display: grid;
+  display              : grid;
   grid-template-columns: 10px 1fr;
-  gap: 1em;
-  align-items: center;
-  justify-content: center;
+  gap                  : 1em;
+  align-items          : center;
+  justify-content      : center;
 
   &-label {
     @include margin(0);
     @include padding(0);
     font-weight: 400;
-    font-size: 1em;
+    font-size  : 1em;
   }
 
   &-input {
     height: 17px;
-    width: 17px;
+    width : 17px;
   }
 }
 
@@ -81,17 +81,22 @@ input:-webkit-autofill:active {
 select,
 input[type="text"],
 input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="color"],
+input[type="date"],
+input[type="tel"],
 textarea {
   @include padding(.5em 3.5em .5em 1em);
   @include margin(0);
-  width: 100%;
-  border: thin solid $border;
-  border-radius: $border-radius;
-  display: inline-block;
-  font: inherit;
-  line-height: 1.5em;
+  width             : 100%;
+  border            : thin solid $border;
+  border-radius     : $border-radius;
+  display           : inline-block;
+  font              : inherit;
+  line-height       : 1.5em;
   -webkit-appearance: none;
-  -moz-appearance: none;
+  -moz-appearance   : none;
 }
 
 input[type="text"],
@@ -129,10 +134,10 @@ select.minimal:focus {
     5px 5px,
     1px 1.5em;
   background-repeat: no-repeat;
-  border-color: $border;
+  border-color     : $border;
 }
 
 select:-moz-focusring {
-  color: blue($color: $text-dark);
+  color      : blue($color: $text-dark);
   text-shadow: 0 0 0 $bg-dark;
 }
