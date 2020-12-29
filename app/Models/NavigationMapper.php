@@ -70,26 +70,30 @@ SQL;
     public function findNavigation(string $navigator): ?array
     {
         $this->sql =<<<SQL
-select
-    n.navigator,
-    n.id,
-    n.parent_id,
-    n.sort,
-    n.title nav_title,
-    n.url,
-    n.collection_id,
-    c.collection_title,
-    c.collection_slug,
-    coalesce(p.id, cp.id) page_id,
-    coalesce(p.title, cp.title) page_title,
-    coalesce(p.published_date, cp.published_date) published_date,
-    coalesce(p.page_slug, cp.page_slug) page_slug
-from navigation n
-left join page p on n.page_id = p.id
-left join collection c on n.collection_id = c.id
-left join page cp on c.id = cp.collection_id
-where n.navigator = ?
-order by n.sort, cp.published_date desc
+select *
+from (
+    select
+        n.navigator,
+        n.id,
+        n.parent_id,
+        n.sort,
+        n.title nav_title,
+        n.url,
+        n.collection_id,
+        c.collection_title,
+        c.collection_slug,
+        coalesce(p.id, cp.id) page_id,
+        coalesce(p.title, cp.title) page_title,
+        coalesce(p.published_date, cp.published_date) published_date,
+        coalesce(p.page_slug, cp.page_slug) page_slug
+    from navigation n
+    left join page p on n.page_id = p.id
+    left join collection c on n.collection_id = c.id
+    left join page cp on c.id = cp.collection_id
+    where n.navigator = ?
+    order by n.sort, cp.published_date desc
+) as nav
+where nav.page_slug is not null
 
 SQL;
         $this->bindValues[] = $navigator;

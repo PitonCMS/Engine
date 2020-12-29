@@ -167,7 +167,7 @@ class Front extends Base
     {
         if (isset($navLink->url)) {
             return $navLink->url;
-        } elseif (isset($navLink->collection_slug)) {
+        } elseif (isset($navLink->collection_slug) && isset($navLink->page_slug)) {
             return $this->pathFor('showPage', ['slug1' => $navLink->collection_slug, 'slug2' => $navLink->page_slug]);
         } else {
             return $this->pathFor('showPage', ['slug1' => $navLink->page_slug]);
