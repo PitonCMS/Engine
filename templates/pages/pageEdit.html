@@ -206,6 +206,6 @@
 {% endblock closeForm %}
 
 {% block foot %}
-  <script src="{{ baseUrl() }}/admin/ckeditor5/build/ckeditor.js"></script>
+  {{ getJsFileSource('ckeditor') }}
   {{ getJsFileSource('pageEdit') }}
 {% endblock foot %}

@@ -284,9 +284,14 @@ class Admin extends Base
      */
     public function getJsFileSource(string $file, bool $module = false)
     {
-        if ($this->container['settings']['environment']['production'] || !$module) {
+        if ($file === 'ckeditor') {
+            // First check if the request is for the ckeditor file, which does not depend on modules
+            $source = $this->baseUrl() . "/admin/ckeditor5/build/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+        } elseif ($this->container['settings']['environment']['production'] || !$module) {
+            // Next, for other JS files, check the production and not a module flag to return the /dist version
             $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         } else {
+            // Finally return the module JS since this is a non-production or development environment
             $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         }
 
