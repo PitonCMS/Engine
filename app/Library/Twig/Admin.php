@@ -103,6 +103,7 @@ class Admin extends Base
             new TwigFunction('getSessionData', [$this, 'getSessionData']),
             new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
             new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
+            new TwigFunction('getMaxUploadSize', [$this, 'getMaxUploadSize']),
         ]);
     }
 
@@ -327,5 +328,38 @@ class Admin extends Base
         }
 
         return null;
+    }
+
+    /**
+     * Get Max Upload Size
+     *
+     * Returns the minimum of ini settings: post_max_size, upload_max_filesize, memory_limit
+     * @param void
+     * @return int|null
+     */
+    public function getMaxUploadSize(): ?int
+    {
+        function parseSize($val)
+        {
+            switch (substr($val, -1)) {
+                case 'M':
+                case 'm':
+                    return (int)$val * 1048576;
+                case 'K':
+                case 'k':
+                    return (int)$val * 1024;
+                case 'G':
+                case 'g':
+                    return (int)$val * 1073741824;
+                default:
+                    return $val;
+            }
+        }
+
+        $postSize = parseSize(ini_get('post_max_size'));
+        $fileSize = parseSize(ini_get('upload_max_filesize'));
+        $memSize = parseSize(ini_get('memory_limit'));
+
+        return min($postSize, $fileSize, $memSize);
     }
 }

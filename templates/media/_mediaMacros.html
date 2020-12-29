@@ -95,9 +95,8 @@
   {# Media file link #}
   <div class="form-group">
     <input type="file" class="custom-file-input" id="media-file" name="media-file" required>
-    {# <label class="custom-file-label" for="media-file">Choose a file</label> #}
     <div class="modal-info">
-      <p class="small-text text-info"> Put warning/info text here</p>
+      <p class="small-text text-info" data-media-upload="message"></p>
     </div>
   </div>
 
@@ -143,12 +142,11 @@
     <p class="small-text"> Create web optimized copies of your image using your Tinify account.</p>
   </div>
   <hr class="mt-1rem">
-
   {% endif %}
 
   {# Upload button #}
   <div class="btn-group">
-    <button class="btn btn-save " type="button" data-media-upload="file">Upload</button>
+    <button class="btn btn-save " type="button" data-media-upload="button">Upload</button>
   </div>
 </form>
 
