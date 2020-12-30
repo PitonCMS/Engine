@@ -35,7 +35,7 @@
 {% for col in page.collections %}
 <a class="list-item-collections" href="{{ pathFor('adminCollectionEdit', {'id': col.id}) }}">
   <div class="list-item-collections-title">{{ col.collection_title }}</div>
-  <div class="list-item-collections-template">Template: <code>{{ col.collection_definition }}</code></div>
+  <div class="list-item-collections-template">Template: {{ col.template_name }}</div>
 </a>
 {% else %}
 <h5>No Collection Groups Found</h5>

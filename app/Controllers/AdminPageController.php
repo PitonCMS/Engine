@@ -535,8 +535,18 @@ HTML;
     public function showCollectionGroups()
     {
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+        $templates = $definition->getCollections();
 
         $collections = $collectionMapper->find();
+
+        // Use filename as key for quick look up when adding template name into result set
+        $templates = array_combine(array_column($templates, 'filename'), $templates);
+
+        // Set template name in result set
+        foreach ($collections as &$page) {
+            $page->template_name = $templates[$page->collection_definition]['name'] ?? null;
+        }
 
         return $this->render('pages/collections.html', ['collections' => $collections]);
     }
