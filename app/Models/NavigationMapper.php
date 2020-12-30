@@ -70,8 +70,6 @@ SQL;
     public function findNavigation(string $navigator): ?array
     {
         $this->sql =<<<SQL
-select *
-from (
     select
         n.navigator,
         n.id,
@@ -92,8 +90,6 @@ from (
     left join page cp on c.id = cp.collection_id
     where n.navigator = ?
     order by n.sort, cp.published_date desc
-) as nav
-where nav.page_slug is not null
 
 SQL;
         $this->bindValues[] = $navigator;
