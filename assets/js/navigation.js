@@ -27,6 +27,8 @@ const appendNavElements = function() {
             input.name = input.name.replace(/(.+?\[)(\].+)/, "$1" + arrayKey + "$2");
         });
         newNav.dataset.navId = arrayKey;
+        newNav.querySelector(`[data-collapse-toggle]`).dataset.collapseToggle = arrayKey;
+        newNav.querySelector(`[data-collapse-target]`).dataset.collapseTarget = arrayKey;
 
         // Set data
         if (nav.pageId) {
