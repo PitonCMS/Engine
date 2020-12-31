@@ -284,7 +284,7 @@ $app->group('/admin', function () {
 });
 
 //
-// Public unsecured routes
+// Public unsecured admin routes
 //
 
 // Login page with form to submit email

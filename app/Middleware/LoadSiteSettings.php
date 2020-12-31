@@ -112,6 +112,14 @@ class LoadSiteSettings
 
         // Load additional settings from server config file into settings array
         $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+
+        // Load piton engine version form composer.lock
+        if (null !== $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
+            $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));
+            $this->settings['environment']['engine'] = $definition->packages[$engineKey]->version;
+            $this->settings['environment']['commit'] = $definition->packages[$engineKey]->source->reference;
+        }
+
         $this->settings['environment']['assetVersion'] =
             ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
     }
