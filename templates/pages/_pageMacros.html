@@ -45,7 +45,7 @@
     {# Element Content Editor Area. Bool false in Twig is empty, so need this hack for actual bool false #}
     <div class="form-block {% if not element.definition.showContentTextarea %}d-none{% endif %}">
       <label class="form-block__title">Element Content</label>
-      <textarea {% if element.definition.enableEditor %}data-cke="true"{% endif %} rows="5" name="element[{{ arrayKey }}][content]">{{ element.content }}</textarea>
+      <textarea {% if element.definition.enableEditor %}data-cke="true"{% endif %} rows="5" name="element[{{ arrayKey }}][content]">{{ element.content|escape }}</textarea>
     </div>
 
     {# Embedded HTML #}
