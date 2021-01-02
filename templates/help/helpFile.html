@@ -1,8 +1,20 @@
 {% extends '@admin/help/_helpBase.html' %}
 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css"
+    integrity="sha384-s4RLYRjGGbVqKOyMGGwfxUTMOO6D7r2eom7hWZQ6BjK2Df4ZyfzLXEkonSm0KLIQ" crossorigin="anonymous">
+{% endblock head %}
+
 {% block content %}
     {# Load Help File #}
     <div class="help-content">
         {{ page.helpContent }}
     </div>
 {% endblock content %}
+
+{% block foot %}
+{{ parent() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"
+    integrity="sha384-0H+01+wORQpYAMaLWyObzDlXZaG1Mgzrj0DsIDeQX762Cfo2fPEycKxVmhlDjSV4" crossorigin="anonymous"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock foot %}
