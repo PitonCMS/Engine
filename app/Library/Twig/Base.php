@@ -17,6 +17,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 use FilesystemIterator;
+use Piton\Pagination\TwigPagination;
 
 /**
  * Piton Base Twig Extension
@@ -108,6 +109,19 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
             new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
         ];
+    }
+
+    /**
+     * Get Pagination Object
+     *
+     * Returns Piton\Pagination\TwigPagination object from the Twig environment array of extensions
+     * to allow update of runtime settings
+     * @param void
+     * @return Piton\Pagination\TwigPagination
+     */
+    protected function getPagination(): TwigPagination
+    {
+        return $this->container->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
     }
 
     /**

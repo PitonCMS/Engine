@@ -108,7 +108,7 @@ HTML;
         // Load dependencies
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $pagination = $this->container->adminMediaPagination;
+        $pagination = $this->getPagination();
         $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
 
         // Get filters or search if requested
@@ -130,8 +130,6 @@ HTML;
             $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         }
-
-        $this->container->view->addExtension($pagination);
 
         // Load and assign media categories
         $categories = $mediaCategoryMapper->findCategories() ?? [];

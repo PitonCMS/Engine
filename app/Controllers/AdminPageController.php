@@ -81,7 +81,7 @@ HTML;
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pagination = $this->container->adminPagePagination;
+        $pagination = $this->getPagination();
         $definition = $this->container->jsonDefinitionHandler;
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
@@ -99,10 +99,8 @@ HTML;
             $pages = $pageMapper->findContent($status, $type, $pagination->getLimit(), $pagination->getOffset()) ?? [];
         }
 
-        // Setup pagination
+        // Set pagination found rows
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
-        $this->container->view->addExtension($pagination);
 
         // Use filename as key for quick look up when adding template name into result set
         $pageTemplates = array_combine(array_column($pageTemplates, 'filename'), $pageTemplates);

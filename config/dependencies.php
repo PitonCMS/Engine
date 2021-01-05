@@ -47,34 +47,15 @@ $container['view'] = function ($c) {
         $view->addExtension(new Piton\Library\Twig\Front($c));
     }
 
+    // Load Pagination with default results per page setting
+    $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => 20]));
+
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {
         $view->addExtension(new Twig\Extension\DebugExtension());
     }
 
     return $view;
-};
-
-/**
- * Admin Twig Page Pagination
- *
- * Loads Piton Pagination to use in Twig templates for page numbered links
- */
-$container['adminPagePagination'] = function ($c) {
-    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminPagePagination']['resultsPerPage'];
-    $config['paginationWrapperClass'] = 'pagination';
-    return new Piton\Pagination\TwigPagination($config);
-};
-
-/**
- * Admin Twig Media Pagination
- *
- * Loads Piton Pagination to use in Twig templates for media numbered links
- */
-$container['adminMediaPagination'] = function ($c) {
-    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminMediaPagination']['resultsPerPage'];
-    $config['paginationWrapperClass'] = 'pagination';
-    return new Piton\Pagination\TwigPagination($config);
 };
 
 /**

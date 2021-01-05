@@ -81,7 +81,7 @@ HTML;
         // Get dependencies
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
-        $pagination = $this->container->adminPagePagination;
+        $pagination = $this->getPagination();
         $definition = $this->container->jsonDefinitionHandler;
 
         $contactInputsDefinition = $definition->getContactInputs() ?? [];
@@ -101,8 +101,6 @@ HTML;
 
         // Setup pagination
         $pagination->setTotalResultsFound($messageMapper->foundRows() ?? 0);
-        $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
-        $this->container->view->addExtension($pagination);
 
         // Get custom fields from data_store for each message
         foreach ($messages as &$msg) {

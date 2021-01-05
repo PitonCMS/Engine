@@ -50,6 +50,7 @@ class Front extends Base
             new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
             new TwigFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
+            new TwigFunction('getCollectionPagesWithPagination', [$this, 'getCollectionPagesWithPagination']),
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
             new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
@@ -105,16 +106,45 @@ class Front extends Base
      *
      * Get collection pages by collection ID
      * For use in page element as collection landing page
-     * @param  int   $collectionId Collection ID
+     * @param  int        $collectionId Collection ID
+     * @param  int|null   $limit
      * @return array|null
      */
-    public function getCollectionPages(?int $collectionId): ?array
+    public function getCollectionPages(?int $collectionId, int $limit = null): ?array
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
 
         // Get collection pages
-        return $pageMapper->findPublishedCollectionPagesById($collectionId);
+        return $pageMapper->findPublishedCollectionPagesById($collectionId, $limit);
+    }
+
+    /**
+     * Get Collection Page List With Pagination
+     *
+     * Get collection pages by collection ID
+     * For use in page element as collection landing page
+     * @param  int        $collectionId Collection ID
+     * @param  int|null   $resultsPerPage
+     * @return array|null
+     */
+    public function getCollectionPagesWithPagination(?int $collectionId, int $resultsPerPage = null): ?array
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
+
+        if ($resultsPerPage) {
+            $pagination->setConfig(['resultsPerPage' => $resultsPerPage]);
+        }
+
+        // Get collection pages
+        $collectionPages = $pageMapper->findPublishedCollectionPagesById($collectionId, $pagination->getLimit(), $pagination->getOffset());
+
+        // Setup pagination
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+
+        return $collectionPages;
     }
 
     /**
