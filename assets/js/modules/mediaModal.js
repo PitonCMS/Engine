@@ -13,13 +13,13 @@
  * Loads modal with available media with search and filter controls.
  */
 
-import { setFilterPath } from "./filter.js";
+import { setQueryRequestPath } from "./filter.js";
 import { loadModal, loadModalContent, removeModal } from './modal.js';
 import { getXHRPromise } from './xhrPromise.js';
 import { alertInlineMessage } from './alert.js';
 
 // Set filter query end point
-setFilterPath(pitonConfig.routes.adminMediaGet + "static");
+setQueryRequestPath(pitonConfig.routes.adminMediaGet + "static");
 
 /**
  * Event to dispatch pseudo "input" event on hidden inputs
