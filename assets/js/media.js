@@ -9,6 +9,7 @@
 /**
  * Manage Media JS
  */
+
 import './modules/main.js';
 import './modules/mediaUpload.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';

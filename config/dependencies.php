@@ -48,7 +48,7 @@ $container['view'] = function ($c) {
     }
 
     // Load Pagination with default results per page setting
-    $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => 20]));
+    $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => 5]));
 
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {

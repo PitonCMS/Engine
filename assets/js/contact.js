@@ -7,7 +7,7 @@
  */
 
 /**
- * Front End Contact Form XHR Submission
+ * Front End Contact Form XHR Request JS
  */
 
 import { postXHRPromise } from './modules/xhrPromise.js';
