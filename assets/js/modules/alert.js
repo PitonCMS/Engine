@@ -10,7 +10,7 @@
  * Display system alert messages module
  */
 
-const alertContainer = document.querySelector(`[data-alert-modal="1"]`);
+const alertContainer = document.querySelector(`[data-alert-modal="true"]`);
 
 /**
  * Dismiss Inline Alert
@@ -31,12 +31,6 @@ const dismissAlertInlineMessage = function(event) {
  * @param {mixed} message   Message text or object
  */
 const alertInlineMessage = function(severity, heading, message) {
-    // Create element and insert alert HTML and update with alert data
-    let container = document.createElement("div");
-    container.innerHTML = pitonConfig.alertInlineHTML;
-    container.querySelector(`[data-alert="container"]`).classList.add("alert-" + severity);
-    container.querySelector(`[data-alert="heading"]`).innerHTML = heading;
-
     // Stringify message
     if (Array.isArray(message) && message !== null) {
         message = message.join("<br>");
@@ -48,15 +42,20 @@ const alertInlineMessage = function(severity, heading, message) {
         message = String(message);
     }
 
-    container.querySelector(`[data-alert="content"]`).innerHTML = message;
-
-    // Insert into modal-alert container
+    // Insert into inline alert container
     if (alertContainer) {
+        // Create element and insert alert HTML and update with alert data
+        let container = document.createElement("div");
+        container.innerHTML = pitonConfig.alertInlineHTML;
+        container.querySelector(`[data-alert="container"]`).classList.add("alert-" + severity);
+        container.querySelector(`[data-alert="heading"]`).innerHTML = heading;
+        container.querySelector(`[data-alert="content"]`).innerHTML = message;
+
         alertContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
         window.scrollTo(0,0);
     } else {
         // If alert container does not exist, then use standard JS alert
-        alert(container.innerHTML);
+        alert(message);
     }
 
 }
