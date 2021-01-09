@@ -310,7 +310,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         ksort($sources);
 
         $sourceSet = implode(",\n", $sources);
-        $sizes = $options['sizes'] ?? '(max-width: 767px) 100vw, (max-width: 899px) 50vw, 33vw';
+        $sizes = $options['sizes'] ?? '';
         $style = (isset($options['style'])) ? 'style="' . $options['style'] .'"' : '';
 
         // Create HTML source set string only if there is more than one media file
