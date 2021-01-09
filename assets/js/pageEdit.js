@@ -1,5 +1,5 @@
 /**
- * Page Edit Main JS
+ * Page Edit JS
  */
 
 import './modules/main.js';

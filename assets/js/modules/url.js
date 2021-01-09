@@ -5,6 +5,8 @@ const pageSlug = document.querySelector(`[data-url-slug="target"]`);
 
 /**
  * Clean URL Slug
+ *
+ * Should match to Piton\Library\Utilities cleanUrl()
  * @param {string} value
  */
 const setCleanSlug = function(value) {
@@ -16,6 +18,7 @@ const setCleanSlug = function(value) {
         value = value.replace(`'`, '');
         value = value.replace(/[^a-z0-9]+/gi, '-');
         value = value.replace(/-+$/gi, '');
+        value = value.toLowerCase();
 
         pageSlug.value = value;
     }
