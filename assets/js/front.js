@@ -13,10 +13,7 @@
 import { postXHRPromise } from "./modules/xhrPromise.js";
 import { setQueryRequestPath } from "./modules/pagination.js";
 
-// Only set pagination XHR path if pitonConfig has a currentPath set
-if (pitonConfig.currentPath) {
-  setQueryRequestPath(pitonConfig.currentPath);
-}
+setQueryRequestPath(window.location.pathname);
 
 // Set the contact honeypot to a know value
 const honeypotValue = "alt@example.com";
