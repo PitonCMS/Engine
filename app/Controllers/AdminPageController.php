@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -82,6 +82,7 @@ HTML;
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pagination = $this->getPagination();
+        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $definition = $this->container->jsonDefinitionHandler;
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
