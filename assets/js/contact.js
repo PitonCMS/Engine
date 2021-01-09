@@ -1,6 +1,15 @@
-// --------------------------------------------------------
-// Front End Contact Form Submission
-// --------------------------------------------------------
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Front End Contact Form XHR Submission
+ */
+
 import { postXHRPromise } from './modules/xhrPromise.js';
 
 // Set the honeypot to a know value

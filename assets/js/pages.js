@@ -1,8 +1,16 @@
-// --------------------------------------------------------
-// Page List JS
-// --------------------------------------------------------
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Manage Content JS
+ */
 
 import "./modules/main.js";
-import { setFilterPath } from "./modules/filter.js";
+import { setQueryRequestPath } from "./modules/filter.js";
 
-setFilterPath(pitonConfig.routes.adminPageGet);
+setQueryRequestPath(pitonConfig.routes.adminPageGet);

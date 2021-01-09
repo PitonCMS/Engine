@@ -1,17 +1,28 @@
-// --------------------------------------------------------
-// Message management
-// --------------------------------------------------------
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Manage Messages JS
+ */
+
 import "./modules/main.js";
-import { setFilterPath, applyFilters } from "./modules/filter.js";
+import { setQueryRequestPath, applyFilters } from "./modules/filter.js";
 import { postXHRPromise, getXHRPromise } from "./modules/xhrPromise.js";
 import { disableSpinner, enableSpinner } from "./modules/spinner.js";
 import { alertInlineMessage } from "./modules/alert.js";
 
-setFilterPath(pitonConfig.routes.adminMessageGet);
+setQueryRequestPath(pitonConfig.routes.adminMessageGet);
 const unreadMessageCountBadge = document.querySelector(`[data-message="count"]`);
 
 /**
  * Update Unread Message Count in Sidebar
+ *
+ * @param {void}
  */
 const updateUnreadMessageCount = function() {
     getXHRPromise(pitonConfig.routes.adminMessageCountGet)
@@ -25,6 +36,7 @@ const updateUnreadMessageCount = function() {
 
 /**
  * Update Message
+ *
  * For Read, Archive status toggle, and Delete
  * @param {Event} event
  */

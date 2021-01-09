@@ -1,6 +1,22 @@
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
 
 /**
- * XHR Request Promise
+ * XHR Promise Base
+ *
+ * Piton XHR request objects return a Promise.
+ * For GET call getXHRPromise()
+ * For POST call postXHRPromise()
+ */
+
+/**
+ * XHR Request Promise Base
+ *
  * @param {string} method "GET"|"POST"
  * @param {string} url    Resource request URL
  * @param {FormData} data   FormData payload to send
@@ -48,6 +64,7 @@ const XHRPromise = function(method, url, data) {
 
 /**
  * GET XHR Promise Request
+ *
  * @param {string} url  Resource URL
  * @param {object} data Object with query string parameters as key: values
  */
@@ -72,6 +89,7 @@ const getXHRPromise = function(url, data) {
 
 /**
  * POST XHR Promise Request
+ *
  * @param {string} url  Resource URL
  * @param {object} data Object with key: values, or FormData instance
  */

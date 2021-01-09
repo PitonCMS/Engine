@@ -1,8 +1,20 @@
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Display system alert messages
+ */
 
 const alertContainer = document.querySelector(`[data-alert-modal="1"]`);
 
 /**
  * Dismiss Inline Alert
+ *
  * @param {Event} event
  */
 const dismissAlertInlineMessage = function(event) {
@@ -13,6 +25,7 @@ const dismissAlertInlineMessage = function(event) {
 
 /**
  * Display Inline HTML Message Alert
+ *
  * @param {string} severity Severity color code
  * @param {string} heading  Message heading
  * @param {mixed} message   Message text or object
@@ -38,8 +51,14 @@ const alertInlineMessage = function(severity, heading, message) {
     container.querySelector(`[data-alert="content"]`).innerHTML = message;
 
     // Insert into modal-alert container
-    alertContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
-    window.scrollTo(0,0);
+    if (alertContainer) {
+        alertContainer.insertAdjacentHTML('afterbegin', container.innerHTML);
+        window.scrollTo(0,0);
+    } else {
+        // If alert container does not exist, then use standard JS alert
+        alert(container.innerHTML);
+    }
+
 }
 
 document.addEventListener("click", dismissAlertInlineMessage, false);

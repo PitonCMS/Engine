@@ -2,7 +2,7 @@
 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
 
 <!-- Media List -->
-<div class="media-wrapper" data-filter="content" data-draggable="children">
+<div class="media-wrapper" data-query="content" data-draggable="children">
 
   {% for medium in page.media %}
     {{ mediaMacro.cardEdit(medium, page.categories) }}
