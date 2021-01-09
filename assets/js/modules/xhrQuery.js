@@ -7,7 +7,7 @@
  */
 
 /**
- * XHR query request refresh for filters, search, and pagination
+ * XHR query request refresh for filters, search, and pagination module
  */
 
  import { enableSpinner, disableSpinner } from './spinner.js';

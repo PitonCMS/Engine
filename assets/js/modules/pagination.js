@@ -7,7 +7,7 @@
  */
 
  /**
-  * Enable XHR Pagination Requests
+  * Enable XHR Pagination Requests Module
   */
 
  import { setQueryRequestPath, getQueryXHRPromise } from './xhrQuery.js';

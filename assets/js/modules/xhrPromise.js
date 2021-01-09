@@ -7,7 +7,7 @@
  */
 
 /**
- * XHR Promise Base
+ * XHR Promise Base Module
  *
  * Piton XHR request objects return a Promise.
  * For GET call getXHRPromise()

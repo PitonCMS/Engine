@@ -7,7 +7,7 @@
  */
 
 /**
- * Display system alert messages
+ * Display system alert messages module
  */
 
 const alertContainer = document.querySelector(`[data-alert-modal="1"]`);

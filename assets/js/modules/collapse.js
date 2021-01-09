@@ -1,5 +1,13 @@
 /**
- * Toggle Collapse of Elements
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Toggle Collapse of Elements Module
  *
  * When the element with data-collapse-toggle="<key>" is clicked the element with data-collapse-target="<key>"
  * has the "collapsed" class toggled to animate a slide up or down.

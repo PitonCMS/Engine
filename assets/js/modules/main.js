@@ -7,7 +7,7 @@
  */
 
 /**
- * Main JS Modules
+ * Main JS Module
  */
 
 import './formControl.js';

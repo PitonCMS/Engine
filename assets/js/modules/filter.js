@@ -7,7 +7,7 @@
  */
 
 /**
- * Filter, Search, and Pagination XHR Controls for Results Sets
+ * Filter, Search, and Pagination XHR Controls for Results Sets Module
  *
  * HTML
  * Import /includes/_pitonMacros.html

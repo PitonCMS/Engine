@@ -1,5 +1,13 @@
 /**
- * Media Select Modal
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Media Select Modal Module
  *
  * Allows selecting media for use.
  * Loads modal with available media with search and filter controls.
