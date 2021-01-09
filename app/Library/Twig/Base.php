@@ -298,8 +298,8 @@ class Base extends AbstractExtension implements GlobalsInterface
         // Create array of available images with actual sizes, sorted by ascending size
         $sources = [];
         foreach ($files as $file) {
-            // Include only image variants, not the original or thumb. Thumbnails will be loaded explicity when needed
-            if ($filename !== $file->getFilename() && false === mb_strpos($file->getFilename(), 'thumb')) {
+            // Include only image variants, not the original.
+            if ($filename !== $file->getFilename()) {
                 // Only include in source set if width is non-zero (possible error)
                 $info = getimagesize($file->getPathname());
                 if (is_int($info[0]) && $info[0] > 0) {

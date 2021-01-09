@@ -7,19 +7,26 @@
  */
 
 /**
- * Front End Contact Form XHR Request JS
+ * Piton Front End JS
  */
 
-import { postXHRPromise } from './modules/xhrPromise.js';
+import { postXHRPromise } from "./modules/xhrPromise.js";
+import { setQueryRequestPath } from "./modules/pagination.js";
 
-// Set the honeypot to a know value
+// Only set pagination XHR path if pitonConfig has a currentPath set
+if (pitonConfig.currentPath) {
+  setQueryRequestPath(pitonConfig.currentPath);
+}
+
+// Set the contact honeypot to a know value
 const honeypotValue = "alt@example.com";
 document.querySelectorAll(`input[name="alt-email"]`).forEach(input => {
   input.setAttribute("value", honeypotValue);
 });
 
 /**
- * Contact Submit Message
+ * Contact Submit Message Request
+ *
  * @param {Event} event
  */
 const contactSubmitMessage = function(event) {
