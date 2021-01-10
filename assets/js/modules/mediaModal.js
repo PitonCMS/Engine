@@ -76,7 +76,7 @@ const openMediaModal = function() {
                     container.insertAdjacentHTML("afterbegin", controls);
 
                     // Find the query filter content div to inject media results from first query
-                    container.querySelector(`[data-filter="content"]`).insertAdjacentHTML("afterbegin", data);
+                    container.querySelector(`[data-query="content"]`).insertAdjacentHTML("afterbegin", data);
 
                     return container;
                 })

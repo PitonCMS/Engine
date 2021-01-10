@@ -50,7 +50,7 @@ class AdminMediaController extends AdminBaseController
         try {
             $template =<<<HTML
                 {{ include("@admin/media/_mediaSearchControls.html") }}
-                <div class="media-wrapper" data-filter="content"></div>
+                <div class="media-wrapper" data-query="content"></div>
 HTML;
 
             $status = "success";
