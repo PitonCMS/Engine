@@ -213,9 +213,12 @@ VALUES
   (1,1,'heroBlock','default/hero/hero',1,'Welcome to PitonCMS','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,1,now(),1,now()),
   (2,1,'contentBlock','default/text/text',1,'Where to Start?','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now());
 
-INSERT INTO `data_store` (`category`,`page_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
+INSERT INTO `data_store` (`category`,`page_id`, `element_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-	('site', NULL, 'theme', 'default', 1, '2020-02-07 07:26:35', 1, '2020-02-07 07:26:35'),
-  ('page',1,'ctaTitle','Read more on Github',1,now(),1,now()),
-  ('page',1,'ctaTarget','https://github.com/pitoncms',1,now(),1,now()),
-  ('piton', NULL, 'appAlert', NULL, 1, now(), 1, now()));
+  ('site', NULL, NULL, 'theme', 'default', 1, now(), 1, now()),
+  ('page', 1, NULL, 'ctaTitle', 'Read more on Github', 1, now(), 1, now()),
+  ('page', 1, NULL, 'ctaTarget', 'https://github.com/PitonCMS/Piton', 1, now(), 1, now()),
+  ('element', NULL, 1, 'overlay', '100', 1, now(), 1, now()),
+  ('element', NULL, 1, 'overlayColor', '51, 102, 153', 1, now(), 1, now()),
+  ('element', NULL, 1, 'placement', 'Center', 1, now(), 1, '2021-01-10 13:23:42');
+  ('piton', NULL, NULL, 'appAlert', NULL, 1, now(), 1, now());
