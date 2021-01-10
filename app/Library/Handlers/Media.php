@@ -235,7 +235,7 @@ class Media
         $resize = [
             'method' => 'thumb',
             'width' => 350,
-            'height' => 265
+            'height' => 263
         ];
 
         return $this->resizeMedia($this->getAbsoluteFilenameBySize('thumb'), $resize);
