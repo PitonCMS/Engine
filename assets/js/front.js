@@ -11,10 +11,10 @@
  */
 
 import { postXHRPromise } from "./modules/xhrPromise.js";
-import { setQueryRequestPath } from "./modules/pagination.js";
+// import { setQueryRequestPath } from "./modules/pagination.js";
 
 // For XHR pagination set current path
-setQueryRequestPath(window.location.pathname);
+// setQueryRequestPath(window.location.pathname);
 
 // Set the contact honeypot to a know value
 const honeypotValue = "alt@example.com";
