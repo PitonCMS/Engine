@@ -103,7 +103,7 @@ As a designer, you can add or remove global site `settings` for each website you
 Site settings can be useful data such as a link to a Twitter account, but can also be used as a flag (Y or N, for example) to control application flow.
 
 These settings are core to PitonCMS and cannot be changed in the design definition file:
-* `displayName`
+* `siteName`
 * `tinifyApiKey`
 * `contactFormEmail`
 * `contactFormAcknowledgement`

@@ -3,11 +3,10 @@
     "settings": [
         {
             "category": "site",
-            "label": "Website Display Name",
-            "key": "displayName",
+            "label": "Website Name",
+            "key": "siteName",
             "value": "",
-            "inputType": "text",
-            "help": "Website name or brand name."
+            "inputType": "text"
         },
         {
             "category": "site",

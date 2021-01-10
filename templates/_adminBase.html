@@ -25,7 +25,7 @@
   {% if block('htmlTitle') is defined %}
     {{ block('htmlTitle') ~ ' - ' }}
   {% endif %}
-  {{ site.settings.displayName|default("PitonCMS") }}
+  {{ site.settings.siteName|default("PitonCMS") }}
  </title>
 
  <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
@@ -41,7 +41,7 @@
     and are defined as macros in _pitonMacros.html #}
 <header class="top-header">
     <div class="logo">
-     <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.displayName|default("PitonCMS") }}</a>
+     <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
     </div>
 
  <div class="btn-dropdown-block">
