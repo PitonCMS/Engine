@@ -15,29 +15,33 @@
 
 <body>
   {{ include ("includes/_navbar.html") }}
-  <section class="element">
-    <div class="container loginPage">
-      <h2>PitonCMS Login</h2>
-      <form class="form-signin contact-form" action="{{ pathFor('adminRequestLoginToken') }}" method="post"
-        accept-charset="utf-8">
 
-        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
-
-
-
-        <div class="input-group">
-          <label for="inputEmail" class="sr-only">Email address</label>
-
-          <input type="email" id="inputEmail" class="form-control contact-form__form-control" name="email"
-            maxlength="60" placeholder="Enter registered email" required autofocus>
+<div class="container">
+<main>
+        <div class="container loginPage">
+          <h2>PitonCMS Login</h2>
+          <form class="form-signin contact-form" action="{{ pathFor('adminRequestLoginToken') }}" method="post"
+            accept-charset="utf-8">
+    
+            <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+    
+    
+    
+            <div class="input-group">
+              <label for="inputEmail" class="sr-only">Email address</label>
+    
+              <input type="email" id="inputEmail" class="form-control contact-form__form-control" name="email"
+                maxlength="60" placeholder="Enter registered email" required autofocus>
+            </div>
+    
+            <!-- <submit class="" type="submit">Request Login</button> -->
+            <input class="btn span" type="submit" value="Request Login">
+    
+          </form>
         </div>
-
-        <!-- <submit class="" type="submit">Request Login</button> -->
-        <input class="btn span" type="submit" value="Request Login">
-
-      </form>
-    </div>
-  </section>
+</main>
+</div>
+ 
 
   {{ include ("includes/_footer.html") }}
 </body>
