@@ -33,8 +33,9 @@
   <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse-target="pageElement-{{ arrayKey }}">
     <div class="form-block">
       <label class="form-block__title">Element Title</label>
-      <input type="text"  name="element[{{ arrayKey }}][element_title]" value="{{ element.title }}"
-        placeholder="Element Title" autocomplete="off">
+      <input type="text"  name="element[{{ arrayKey }}][element_title]" value="{{ element.title }}" placeholder="Element Title" autocomplete="off">
+      <div class="small-text">The element title is not required. You can also use the Page Title as your main heading.</div>
+
     </div>
 
     {# Element custom settings #}

@@ -1640,16 +1640,11 @@ select:-moz-focusring {
 /* Page Listing */
 .list-item-page-header {
   padding-top: 0.5em;
-  padding-bottom: 0.25em;
-  padding-left: 0.5em;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  padding-bottom: 0.5em;
   border-bottom: solid 1px #dee3e7;
-}
-.list-item-page-header .media {
-  width: 92px;
+  display: grid;
+  grid-template-columns: 80px 2fr repeat(3, 1fr);
+  gap: 1rem;
 }
 
 .list-item-page__heading {
@@ -1659,44 +1654,23 @@ select:-moz-focusring {
 .list-item-page {
   background: #ffffff;
   border-bottom: solid 1px #dee3e7;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 80px 2fr repeat(3, 1fr);
   align-items: center;
 }
 .list-item-page:hover {
   background: #f3f5f7;
 }
-.list-item-page:active {
-  background: #dee3e7;
-  outline: none;
+.list-item-page-item {
+  padding: 0.5em;
 }
-.list-item-page .media {
-  box-shadow: none;
-  display: flex;
-  align-items: center;
+.list-item-page-item.media {
+  padding: 0;
 }
-.list-item-page .media img {
+.list-item-page-item.media img {
   height: 60px;
   width: 80px;
   object-fit: cover;
-}
-
-.title {
-  flex: 1.5;
-  margin-left: 0.5em;
-}
-
-.status {
-  flex: 1;
-}
-
-.template {
-  flex: 1;
-}
-
-.collection {
-  flex: 1;
 }
 
 /* Page/Collection Add/Edit Styles */
@@ -1721,7 +1695,6 @@ select:-moz-focusring {
 @media screen and (min-width: 769px) {
   .pageEdit__rightCol {
     flex: 0.5;
-    margin-top: 1rem;
     margin-left: 1rem;
   }
 }
