@@ -141,17 +141,25 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
                     // Update element count
                     addElementToggleState(1);
 
+                    // If Block container is collapsed, uncollapse
+                    if (targetBlock.parentElement.classList.contains("collapsed")) {
+                        targetBlock.parentElement.classList.remove("collapsed")
+                    }
+
+                    // Add new-element class and insert element
                     container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                     targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
+
+                    // Set focus with page scroll to newly inserted element
+                    const elementList = targetBlock.querySelectorAll(`input[name*="element_title"]`);
+                    elementList[elementList.length - 1].focus();
+
+                    // Trigger form control state change with Input event
+                    targetBlock.dispatchEvent(new Event("input", {"bubbles": true}));
 
                     // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
                     let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-cke="true"]`);
                     initEditor(newEditor);
-
-                    // Get new block ID for window scroll
-                    let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
-
-                    return windowTarget;
                 })
                 .then(() => {
                     disableSpinner();

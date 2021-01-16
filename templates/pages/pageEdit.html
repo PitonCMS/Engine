@@ -13,9 +13,9 @@
   <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
   <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
   <input type="hidden" name="template" value="{{ page.template }}">
-  {% endblock openForm %}
+{% endblock openForm %}
 
-  {% block contentHeader %}
+{% block contentHeader %}
   <!-- Content Header Control Bar -->
   <div class="content-header-inner">
     <div class="breadcrumb">
@@ -32,12 +32,12 @@
       <button class="btn btn-save" data-form-button="save" type="submit" disabled>Save</button>
     </div>
   </div>
-  {% endblock contentHeader %}
+{% endblock contentHeader %}
 
-  {% block content %}
+{% block content %}
   <div class="pageEdit__wrapper" data-page-edit="1">
-    <!-- Left Column Page Edit -->
 
+    <!-- Left Column Page Edit -->
     <div class="pageEdit__leftCol">
       {# Page Title #}
       <div class="form-block">
@@ -54,11 +54,12 @@
           autocomplete="off">
       </div>
       {% endif %}
+
       {# Page Media with Modal Media Select #}
       {% if page.definition.showFeaturedImage %}
       <div class="form-block pageEdit__twoCol" data-media-select="true">
         <h3 class="pageEdit__title">Page Image</h3>
-        <img src="{{ getMediaPath(page.media.filename, 'large') }}"
+        <img src="{{ getMediaPath(page.media.filename, 'thumb') }}"
           class="{% if not page.media.filename %}d-none{% endif %}">
         <input type="hidden" name="page_media_id" value="{{ page.media_id }}">
         <div class="small-text">This image can be used as a thumbnail and a header image in a collection detail/summary. </div>
@@ -70,14 +71,15 @@
       </div>
       {% endif %}
 
-      {# Meta Description Input #}
+      {# Meta Description #}
       <div class="form-block">
         <h3 class="pageEdit__title">Meta Description</h3>
         <textarea name="meta_description" maxlength="320" required
           placeholder="Description to appear in search results">{{ page.meta_description }}</textarea>
         <div class="small-text">Limited to 320 characters. This text can be used as a blurb for a collection summary card. Search engines may use this text in matching search results.</div>
       </div>
-      {# Custom Settings Tab #}
+
+      {# Custom Settings #}
       {% if page.settings %}
       <div class="toggle-block">
         <div class="toggle-block__header">
@@ -102,8 +104,7 @@
           <h3 class="toggle-block__title">{{ blockDefinition.name }}</h3>
 
           {# Add New Element Button to block. Check element limit on page load #}
-          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit)
-          %}
+          {% set maxElements = (page.blocks[blockDefinition.key]|length|default(0) >= blockDefinition.elementCountLimit) %}
           <div class="btn-dropdown-block {% if maxElements %}dropdown-disabled{% endif %}">
             <div class="btn btn-dropdown" data-collapse-toggle="newElementButton-{{ blockDefinition.key }}">
               Add Element
@@ -114,16 +115,15 @@
               {# Loop through filtered elements to create add element link #}
               {% for newEl in getElements(blockDefinition.elementTypeOptions) %}
               <div class="form-group">
-                <a name="#" class="form-group-link" data-element="add" data-element-template="{{ newEl.filename }}">{{
-                  newEl.name }}</a>
+                <a name="#" class="form-group-link" data-element="add" data-element-template="{{ newEl.filename }}">{{ newEl.name }}</a>
               </div>
               {% endfor %}
             </div>
           </div>
-
           <i class="fas fa-chevron-down toggle-block__toggle"
             data-collapse-toggle="block-{{ blockDefinition.key }}"></i>
         </div>
+
         <div class="toggle-block__content" data-collapse-target="block-{{ blockDefinition.key }}">
           {# Element order is draggable. On drag empty div's with class drag-drop are inserted around all elements as
           drop zone targets #}
@@ -137,14 +137,12 @@
       </div>
       {% endfor %}
       {# End Blocks and Elements Loops #}
-
     </div>
 
     <!-- right Column Page Edit -->
     <div class="pageEdit__rightCol">
 
       {# Publish Date Input #}
-      {# <h4 class="pageEdit__title">About This Page</h4> #}
       <div class="form-block">
         <h4 class="pageEdit__title">Publish date</h4>
         <input type="date" name="published_date" placeholder="YYYY-MM-DD" value="{{ page.published_date }}"
@@ -199,9 +197,9 @@
     {% endif %}
   </div>
 
-  {% endblock content %}
+{% endblock content %}
 
-  {% block closeForm %}
+{% block closeForm %}
 </form>
 {% endblock closeForm %}
 
