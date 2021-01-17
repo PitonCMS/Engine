@@ -279,8 +279,7 @@ class Definition
         }
 
         try {
-            // TODO Add JSON_THROW_ON_ERROR when on min PHP 7.3
-            $jsonDecodedInput = json_decode($contents, false);
+            $jsonDecodedInput = json_decode($contents, false, JSON_THROW_ON_ERROR);
 
             if ($schema) {
                 // Validate JSON
