@@ -39,13 +39,8 @@ $container['view'] = function ($c) {
         'autoescape' => false,
     ]);
 
-    // Piton Twig Extensions
-    $currentPath = $c->request->getUri()->getPath();
-    if (substr($currentPath, 0, 6) === '/admin') {
-        $view->addExtension(new Piton\Library\Twig\Admin($c));
-    } else {
-        $view->addExtension(new Piton\Library\Twig\Front($c));
-    }
+    // Piton Twig Extension
+    $view->addExtension(new Piton\Library\Twig\Base($c));
 
     // Load Pagination with default results per page setting
     $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => $settings['pagination']['resultsPerPage']]));

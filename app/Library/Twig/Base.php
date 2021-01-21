@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,17 +12,20 @@ declare(strict_types=1);
 
 namespace Piton\Library\Twig;
 
+use Piton\Pagination\TwigPagination;
+use Piton\Models\Entities\PitonEntity;
 use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
+use Twig\Error\LoaderError;
 use Twig\TwigFunction;
 use FilesystemIterator;
-use Piton\Pagination\TwigPagination;
+use Exception;
 
 /**
- * Piton Base Twig Extension
+ * Piton Twig Extension
  *
- * Has core Twig properties and functions used on public and on admin sites.
+ * Custom functions used on public and on admin sites.
  */
 class Base extends AbstractExtension implements GlobalsInterface
 {
@@ -33,11 +36,13 @@ class Base extends AbstractExtension implements GlobalsInterface
     protected $cache = [];
 
     /**
+     * URI Object
      * @var Slim\Http\Uri
      */
     protected $uri;
 
     /**
+     * Dependency Container
      * @var Psr\Container\ContainerInterface
      */
     protected $container;
@@ -55,6 +60,37 @@ class Base extends AbstractExtension implements GlobalsInterface
     protected $csrfTokenValue;
 
     /**
+     * Admin Site Hierarchy
+     *
+     * pageRouteName => parentPageRouteName
+     * Null values represent top level navigation routes
+     * @var array
+     */
+    protected const AdminSiteHierarchy = [
+        // Level 0 pages
+        'adminHome' => null,
+        'adminPage' => null,
+        'adminMedia' => null,
+        'adminNavigation' => null,
+        'adminMessage' => null,
+        'adminSetting' => null,
+        'adminHelp' =>  null,
+
+        // Level 1 pages
+        'adminPageEdit' => 'adminPage',
+        'adminNavigationEdit' => 'adminNavigation',
+        'adminSettingEdit' => 'adminSetting',
+        'adminSitemap' => 'adminSetting',
+        'adminCollection' => 'adminSetting',
+        'adminMediaCategoryEdit' => 'adminSetting',
+        'adminUser' => 'adminSetting',
+
+        // Level 2 pages
+        'adminUserEdit' => 'adminUser',
+        'adminCollectionEdit' => 'adminCollection',
+    ];
+
+    /**
      * Constructor
      *
      * @param object Psr\Container\ContainerInterface
@@ -70,13 +106,24 @@ class Base extends AbstractExtension implements GlobalsInterface
 
     /**
      * Register Global variables
+     *
+     * @param void
+     * @return array
      */
     public function getGlobals(): array
     {
         return [
             'site' => [
                 'settings' => $this->container['settings']['site'] ?? null,
-                'environment' => $this->container['settings']['environment'] ?? null,
+                'environment' => array_merge(
+                    $this->container['settings']['environment'] ?? null,
+                    [
+                        'projectDir' => basename(ROOT_DIR),
+                        'sessionUserId' => $this->container->sessionHandler->getData('user_id'),
+                        'sessionUserFirstName' => $this->container->sessionHandler->getData('first_name'),
+                        'sessionUserLastName' => $this->container->sessionHandler->getData('last_name'),
+                    ]
+                ),
                 'csrf' => [
                     'name' => $this->csrfTokenName,
                     'value' => $this->csrfTokenValue
@@ -87,6 +134,9 @@ class Base extends AbstractExtension implements GlobalsInterface
 
     /**
      * Register Custom Filters
+     *
+     * @param void
+     * @return array
      */
     public function getFilters(): array
     {
@@ -95,10 +145,14 @@ class Base extends AbstractExtension implements GlobalsInterface
 
     /**
      * Register Custom Functions
+     *
+     * @param void
+     * @return array
      */
     public function getFunctions(): array
     {
         return [
+            // Base functions
             new TwigFunction('pathFor', [$this, 'pathFor']),
             new TwigFunction('baseUrl', [$this, 'baseUrl']),
             new TwigFunction('basePath', [$this, 'basePath']),
@@ -108,6 +162,28 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
             new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
+
+            // Front end functions
+            new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
+            new TwigFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
+            new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
+            new TwigFunction('getCollectionPagesWithPagination', [$this, 'getCollectionPagesWithPagination']),
+            new TwigFunction('getGallery', [$this, 'getGallery']),
+            new TwigFunction('getNavigator', [$this, 'getNavigator']),
+            new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
+
+            // Back end functions
+            new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
+            new TwigFunction('getAlert', [$this, 'getAlert'], ['needs_context' => true]),
+            new TwigFunction('getCollections', [$this, 'getCollections']),
+            new TwigFunction('getPageTemplates', [$this, 'getPageTemplates']),
+            new TwigFunction('getMediaCategories', [$this, 'getMediaCategories']),
+            new TwigFunction('getElements', [$this, 'getElements']),
+            new TwigFunction('getUnreadMessageCount', [$this, 'getUnreadMessageCount']),
+            new TwigFunction('getSessionData', [$this, 'getSessionData']),
+            new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
+            new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
+            new TwigFunction('getMaxUploadSize', [$this, 'getMaxUploadSize']),
         ];
     }
 
@@ -337,5 +413,412 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         return null;
+    }
+
+    // ---------------- Front End Functions ----------------
+
+    /**
+     * Get All Block Elements HTML
+     *
+     * Gets all Element's HTML within a Block, rendered with data
+     * @param  array $block Array of Elements within a Block
+     * @return string|null
+     */
+    public function getBlockElementsHtml(?array $block): ?string
+    {
+        if (empty($block)) {
+            return null;
+        }
+
+        $blockHtml = '';
+        foreach ($block as $element) {
+            $blockHtml .= $this->getElementHtml($element) . PHP_EOL;
+        }
+
+        return $blockHtml;
+    }
+
+    /**
+     * Get HTML Element
+     *
+     * Gets Element HTML fragments rendered with data
+     * @param  PitonEntity  $element Element values
+     * @return string
+     */
+    public function getElementHtml(?PitonEntity $element): ?string
+    {
+        // Ensure we have an element type
+        if (empty($element->template)) {
+            throw new Exception("PitonCMS: Missing page element template");
+        }
+
+        try {
+            return $this->container->view->fetch("elements/{$element->template}.html", ['element' => $element]);
+        } catch (LoaderError $e) {
+            // If template name is malformed, just return null to fail gracefully
+            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            return null;
+        }
+    }
+
+    /**
+     * Get Collection Page List
+     *
+     * Get collection pages by collection ID
+     * For use in page element as collection landing page
+     * @param  int        $collectionId Collection ID
+     * @param  int|null   $limit
+     * @return array|null
+     */
+    public function getCollectionPages(?int $collectionId, int $limit = null): ?array
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+
+        // Get collection pages
+        return $pageMapper->findPublishedCollectionPagesById($collectionId, $limit);
+    }
+
+    /**
+     * Get Collection Page List With Pagination
+     *
+     * Get collection pages by collection ID
+     * For use in page element as collection landing page
+     * @param  int        $collectionId Collection ID
+     * @param  int|null   $resultsPerPage
+     * @return array|null
+     */
+    public function getCollectionPagesWithPagination(?int $collectionId, int $resultsPerPage = null): ?array
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
+
+        if ($resultsPerPage) {
+            $pagination->setConfig(['resultsPerPage' => $resultsPerPage]);
+        }
+
+        // Get collection pages
+        $collectionPages = $pageMapper->findPublishedCollectionPagesById($collectionId, $pagination->getLimit(), $pagination->getOffset());
+
+        // Setup pagination
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+
+        return $collectionPages;
+    }
+
+    /**
+     * Get Gallery by ID
+     *
+     * @param int $galleryId
+     * @return array|null
+     */
+    public function getGallery(int $galleryId = null): ?array
+    {
+        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+
+        return $mediaMapper->findMediaByCategoryId($galleryId);
+    }
+
+    /**
+     * Get Navigator
+     *
+     * Get navigation by name
+     * @param  string $navigator
+     * @return array|null
+     */
+    public function getNavigator(string $navigator): ?array
+    {
+        // Return cached navigator if available
+        if (isset($this->cache['navigator'][$navigator])) {
+            return $this->cache['navigator'][$navigator];
+        }
+
+        // Get dependencies
+        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+
+        // Get current URL path to find currentPage in navigation
+        // And check if home page '/' and reset to match page slug
+        $url = $this->uri->getPath();
+        $url = ($url === '/') ? 'home' : ltrim($url, '/');
+
+        $navList = $navigationMapper->findNavigation($navigator, $url);
+
+        return $this->cache['navigator'][$navigator] = $navigationMapper->buildNavigation($navList, $url);
+    }
+
+    /**
+     * Get Navigation Link
+     *
+     * @param PitonEntity $navLink
+     * @return string|null
+     */
+    public function getNavigationLink(PitonEntity $navLink): ?string
+    {
+        if (isset($navLink->url)) {
+            return $navLink->url;
+        } elseif (isset($navLink->collection_slug) && isset($navLink->page_slug)) {
+            return $this->pathFor('showPage', ['slug1' => $navLink->collection_slug, 'slug2' => $navLink->page_slug]);
+        } else {
+            return $this->pathFor('showPage', ['slug1' => $navLink->page_slug]);
+        }
+    }
+
+    // ---------------- Back End Functions ----------------
+
+    /**
+     * Generate Key
+     *
+     * Generates unique key of n-length.
+     * @param int $length length of key, optional (default=4)
+     * @return string
+     */
+    public function uniqueKey(int $length = 4): string
+    {
+        return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, $length);
+    }
+
+    /**
+     * Get Alert Messages
+     *
+     * Get flash and application alert notices to display.
+     * @param  array  $context Twig context, includes controller 'alert' array
+     * @param  string $key     Alert keys: severity|heading|message
+     * @return array|null
+     */
+    public function getAlert(array $context): ?array
+    {
+        $session = $this->container->sessionHandler;
+
+        // If AdminBaseController render() is called then alert data is provided to Twig context for this request
+        // But if AdminBaseController redirect() was called in last request the alert was saved to flash session data
+        if (!empty($context['alert'])) {
+            $alert = $context['alert'];
+        } else {
+            $alert = $session->getFlashData('alert');
+        }
+
+        // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
+        if (isset($this->container->settings['environment']['appAlert'])) {
+            $appData = json_decode($this->container->settings['environment']['appAlert'], true);
+            if (is_array($appData)) {
+                // Append to $alert array, if exists
+                $alert = array_merge($alert ?? [], $appData);
+
+                // Unset app alert data
+                $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+                $dataMapper->unsetAppAlert();
+            }
+        }
+
+        return $alert;
+    }
+
+    /**
+     * Get All Collections
+     *
+     * Get list of collections
+     * @param  void
+     * @return array|null
+     */
+    public function getCollections(): ?array
+    {
+        if (isset($this->cache['collections'])) {
+            return $this->cache['collections'];
+        }
+
+        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+
+        // Return and cache
+        return $this->cache['collections'] = $collectionMapper->find();
+    }
+
+    /**
+     * Get Page Templates
+     *
+     * Get list of page templates
+     * @param  void
+     * @return array|null
+     */
+    public function getPageTemplates(): ?array
+    {
+        if (isset($this->cache['pageTemplates'])) {
+            return $this->cache['pageTemplates'];
+        }
+
+        $definition = $this->container->jsonDefinitionHandler;
+
+        // Return and cache
+        return $this->cache['pageTemplates'] = $definition->getPages();
+    }
+
+    /**
+     * Get Media Categories
+     *
+     * Get all media categories
+     * @param  void
+     * @return array|null
+     */
+    public function getMediaCategories(): ?array
+    {
+        if (isset($this->cache['mediaCategories'])) {
+            return $this->cache['mediaCategories'];
+        }
+
+        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+
+        // Get all media categories and create key: value pair array
+        $categories = $mediaCategoryMapper->findCategories() ?? [];
+        $categories = array_column($categories, 'category', 'id');
+
+        return $this->cache['mediaCategories'] = $categories;
+    }
+
+    /**
+     * Get Elements
+     *
+     * Optionally filter list of elements
+     * @param  array|null $filter Return only listed elements
+     * @return array|null
+     */
+    public function getElements(array $filter = null): ?array
+    {
+        // Set cached elements, if not set
+        if (!isset($this->cache['elements'])) {
+            // Get dependencies
+            $definition = $this->container->jsonDefinitionHandler;
+            $elements = $definition->getElements();
+            $elements = array_combine(array_column($elements, 'filename'), $elements);
+
+            $this->cache['elements'] = $elements;
+        }
+
+        if (!$filter) {
+            return $this->cache['elements'];
+        }
+
+        $filter = array_flip($filter);
+
+        return array_intersect_key($this->cache['elements'], $filter);
+    }
+
+    /**
+     * Get Unread Message Count
+     *
+     * Gets count of unread messages
+     * @param  void
+     * @return int|null
+     */
+    public function getUnreadMessageCount(): ?int
+    {
+        if (isset($this->cache['unreadMessageCount'])) {
+            return $this->cache['unreadMessageCount'];
+        }
+
+        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        $count = $messageMapper->findUnreadCount();
+
+        return $this->cache['unreadMessageCount'] = ($count === 0) ? null : $count;
+    }
+
+    /**
+     * Get Session Data
+     *
+     * Gets data from session handler
+     * @param string $key
+     * @param string $default
+     * @return mixed
+     */
+    public function getSessionData(string $key = null, string $default = null)
+    {
+        return $this->container->sessionHandler->getData($key, $default);
+    }
+
+    /**
+     * Get JS File Source
+     *
+     * Returns <script> tag with link to JS source
+     * Uses compiled JS in /dist, unless requested to be type=module for development
+     * @param string $file JS file to load without the extension
+     * @param bool   $module Flag to return type=module
+     */
+    public function getJsFileSource(string $file, bool $module = false)
+    {
+        if ($file === 'ckeditor') {
+            // First check if the request is for the ckeditor file, which does not depend on modules
+            $source = $this->baseUrl() . "/admin/ckeditor5/build/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+        } elseif ($this->container['settings']['environment']['production'] || !$module) {
+            // Next, for other JS files, check the production and not a module flag to return the /dist version
+            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+        } else {
+            // Finally return the module JS since this is a non-production or development environment
+            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+        }
+
+        $moduleType = ($module) ? 'type="module"' : '';
+
+        return "<script src=\"$source\" $moduleType></script>";
+    }
+
+    /**
+     * Current Route Parent
+     *
+     * If the supplied route name resolves as the parent in the navigation hierarcy, returns the returnValue string
+     * @param  string $routeName   Name of the route to test
+     * @param  string $returnValue Value to return
+     * @return string|null
+     */
+    public function currentRouteParent(string $routeName, string $returnValue = 'active'): ?string
+    {
+        // Trace current page route name through AdminSiteHierarchy array to find parent with null value
+        $route = $this->container->settings['environment']['currentRouteName'];
+
+        while (self::AdminSiteHierarchy[$route] ?? false) {
+            // Check for recursion in this while loop if the array is accidentally setup incorrectly
+            if ($route === self::AdminSiteHierarchy[$route]) {
+                throw new Exception("PitonCMS: Recursive reference in Twig Admin AdminSiteHierarchy");
+            }
+
+            $route = self::AdminSiteHierarchy[$route];
+        }
+
+        if ($route === $routeName) {
+            return $returnValue;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Max Upload Size
+     *
+     * Returns the minimum of ini settings: post_max_size, upload_max_filesize, memory_limit
+     * @param void
+     * @return int|null
+     */
+    public function getMaxUploadSize(): ?int
+    {
+        function parseSize($val)
+        {
+            switch (substr($val, -1)) {
+                case 'M':
+                case 'm':
+                    return (int)$val * 1048576;
+                case 'K':
+                case 'k':
+                    return (int)$val * 1024;
+                case 'G':
+                case 'g':
+                    return (int)$val * 1073741824;
+                default:
+                    return $val;
+            }
+        }
+
+        $postSize = parseSize(ini_get('post_max_size'));
+        $fileSize = parseSize(ini_get('upload_max_filesize'));
+        $memSize = parseSize(ini_get('memory_limit'));
+
+        return min($postSize, $fileSize, $memSize);
     }
 }
