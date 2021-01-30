@@ -268,9 +268,9 @@ $app->group('/admin', function () {
     });
 })->add(function (Request $request, Response $response, callable $next) {
     // Authentication
-    $Security = $this->accessHandler;
+    $security = $this->accessHandler;
 
-    if (!$Security->isAuthenticated()) {
+    if (!$security->isAuthenticated()) {
         // Failed authentication, redirect to login
         return $response->withRedirect($this->router->pathFor('adminLoginForm'));
     }
@@ -280,7 +280,7 @@ $app->group('/admin', function () {
 })->add(function (Request $request, Response $response, callable $next) {
     // Add http no-cache, no-store headers to prevent back button access to admin
     $response = $next($request, $response);
-    return $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
+    return $response->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 });
 
 //

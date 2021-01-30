@@ -23,7 +23,7 @@
  <title>
   {# Concatenate htmlTitle, if provided in extending page #}
   {% if block('htmlTitle') is defined %}
-    {{ block('htmlTitle') ~ ' - ' }}
+    {{ block('htmlTitle') ~ ' | ' }}
   {% endif %}
   {{ site.settings.siteName|default("PitonCMS") }}
  </title>
@@ -40,7 +40,7 @@
     and are defined as macros in _pitonMacros.html #}
 <header class="top-header">
     <div class="logo">
-     <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
+      <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
     </div>
 
  <div class="btn-dropdown-block">
