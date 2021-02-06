@@ -11,12 +11,17 @@
  */
 
 import { postXHRPromise } from "./modules/xhrPromise.js";
-// import { setQueryRequestPath } from "./modules/pagination.js";
 
-// For XHR pagination set current path
-// setQueryRequestPath(window.location.pathname);
+/**
+ * Piton Config Object
+ */
+const pitonConfig = {
+  routes: {
+      submitMessage: "/contact",
+  },
+};
 
-// Set the contact honeypot to a know value
+// Set the contact honeypot to a known value
 const honeypotValue = "alt@example.com";
 document.querySelectorAll(`input[name="alt-email"]`).forEach(input => {
   input.setAttribute("value", honeypotValue);

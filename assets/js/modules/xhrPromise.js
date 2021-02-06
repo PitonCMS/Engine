@@ -104,8 +104,6 @@ const postXHRPromise = function(url, data) {
         }
     }
 
-    formData.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
-
     return XHRPromise("POST", url,  formData);
 }
 
