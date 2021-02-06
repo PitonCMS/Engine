@@ -1,8 +1,7 @@
 {% extends '@admin/help/_helpBase.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css"
-    integrity="sha384-s4RLYRjGGbVqKOyMGGwfxUTMOO6D7r2eom7hWZQ6BjK2Df4ZyfzLXEkonSm0KLIQ" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ baseUrl() }}/admin/highlight/agate.css?v={{ site.environment.assetVersion }}">
 {% endblock head %}
 
 {% block content %}
@@ -14,7 +13,6 @@
 
 {% block foot %}
 {{ parent() }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"
-    integrity="sha384-0H+01+wORQpYAMaLWyObzDlXZaG1Mgzrj0DsIDeQX762Cfo2fPEycKxVmhlDjSV4" crossorigin="anonymous"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+<script nonce="{{ site.environment.cspNonce }}" src="{{ baseUrl() }}/admin/highlight/highlight.pack.js?v={{ site.environment.assetVersion }}"></script>
+<script nonce="{{ site.environment.cspNonce }}">hljs.initHighlightingOnLoad();</script>
 {% endblock foot %}

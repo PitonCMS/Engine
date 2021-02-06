@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -112,6 +112,9 @@ class LoadSiteSettings
 
         // Load additional settings from server config file into settings array
         $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+
+        // Generate Content Security Policy nonce
+        $this->settings['environment']['cspNonce'] = base64_encode(random_bytes(16));
 
         // Load piton engine version form composer.lock
         if (null !== $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {

@@ -755,9 +755,13 @@ class Base extends AbstractExtension implements GlobalsInterface
             $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
         }
 
+        // Set module attribute if requested
         $moduleType = ($module) ? 'type="module"' : '';
 
-        return "<script src=\"$source\" $moduleType></script>";
+        // Set nonce
+        $nonce = $this->container['settings']['environment']['cspNonce'];
+
+        return "<script nonce=\"$nonce\" src=\"$source\" $moduleType></script>";
     }
 
     /**

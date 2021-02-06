@@ -7,8 +7,6 @@
 
   <script>
     const pitonConfig = {
-      csrfTokenName: "{{ site.csrf.name }}",
-      csrfTokenValue: "{{ site.csrf.value }}",
       routes: {
         adminPageGet: "{{ pathFor('adminPageGet') }}",
         adminPageElementGet: "{{ pathFor('adminPageElementGet') }}",
