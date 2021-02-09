@@ -100,15 +100,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         return [
             'site' => [
                 'settings' => $this->container['settings']['site'],
-                'environment' => array_merge(
-                    $this->container['settings']['environment'],
-                    [
-                        'projectDir' => basename(ROOT_DIR),
-                        'sessionUserId' => $this->container->sessionHandler->getData('user_id'),
-                        'sessionUserFirstName' => $this->container->sessionHandler->getData('first_name'),
-                        'sessionUserLastName' => $this->container->sessionHandler->getData('last_name'),
-                    ]
-                )
+                'environment' => $this->container['settings']['environment'],
             ],
         ];
     }

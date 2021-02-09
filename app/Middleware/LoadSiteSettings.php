@@ -146,5 +146,13 @@ class LoadSiteSettings
         // Add CSRF Token and Value to environment array
         $this->settings['environment']['csrfTokenName'] = ($this->container->csrfGuardHandler)->getTokenName();
         $this->settings['environment']['csrfTokenValue'] = ($this->container->csrfGuardHandler)->getTokenValue();
+
+        // Set current project directory
+        $this->settings['environment']['projectDir'] = basename(ROOT_DIR);
+
+        // Set session user info
+        $this->settings['environment']['sessionUserId'] = $this->container->sessionHandler->getData('user_id');
+        $this->settings['environment']['sessionUserFirstName'] = $this->container->sessionHandler->getData('first_name');
+        $this->settings['environment']['sessionUserLastName'] = $this->container->sessionHandler->getData('last_name');
     }
 }
