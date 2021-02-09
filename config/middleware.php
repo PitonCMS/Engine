@@ -16,4 +16,4 @@ declare(strict_types=1);
  * Middleware is called by Slim in reverse order (bottom up)
  */
 $app->add(new Piton\Middleware\ResponseHeaders($container['settings']));
-$app->add(new Piton\Middleware\LoadSiteSettings($container['dataMapper'], $container['settings']));
+$app->add(new Piton\Middleware\LoadSiteSettings($container));

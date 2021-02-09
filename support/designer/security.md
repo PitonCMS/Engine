@@ -8,6 +8,12 @@ Response headers can be set in `config.local.php` and will be added to the HTTP 
 Default PitonCMS headers are defined in `config.default.php` and can be overriden in `config.local.php`. The default response headers are:
 
 ```php
+/**
+ * Response Headers
+ *
+ * Sets response headers dynamically at application runtime
+ * Define any standard or custom header as a key:value, under the ['header'] array
+ */
 $config['header']['X-Frame-Options'] = 'DENY';
 $config['header']['X-Content-Type-Options'] = 'nosniff';
 $config['header']['Referrer-Policy'] = 'no-referrer-when-downgrade';

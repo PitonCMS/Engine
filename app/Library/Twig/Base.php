@@ -48,18 +48,6 @@ class Base extends AbstractExtension implements GlobalsInterface
     protected $container;
 
     /**
-     * Piton CSRF Token Name
-     * @var string
-     */
-    protected $csrfTokenName;
-
-    /**
-     * Piton CSRF Token Value
-     * @var string
-     */
-    protected $csrfTokenValue;
-
-    /**
      * Admin Site Hierarchy
      *
      * pageRouteName => parentPageRouteName
@@ -99,9 +87,6 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         $this->container = $container;
         $this->uri = $container->request->getUri();
-
-        $this->csrfTokenName = ($container->csrfGuardHandler)->getTokenName();
-        $this->csrfTokenValue = ($container->csrfGuardHandler)->getTokenValue();
     }
 
     /**
@@ -114,20 +99,16 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'settings' => $this->container['settings']['site'] ?? null,
+                'settings' => $this->container['settings']['site'],
                 'environment' => array_merge(
-                    $this->container['settings']['environment'] ?? null,
+                    $this->container['settings']['environment'],
                     [
                         'projectDir' => basename(ROOT_DIR),
                         'sessionUserId' => $this->container->sessionHandler->getData('user_id'),
                         'sessionUserFirstName' => $this->container->sessionHandler->getData('first_name'),
                         'sessionUserLastName' => $this->container->sessionHandler->getData('last_name'),
                     ]
-                ),
-                'csrf' => [
-                    'name' => $this->csrfTokenName,
-                    'value' => $this->csrfTokenValue
-                ]
+                )
             ],
         ];
     }

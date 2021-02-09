@@ -45,7 +45,7 @@ class ResponseHeaders
      * @param  callable $next     Next middleware
      * @return Response
      */
-    public function __invoke($request, $response, $next): Response
+    public function __invoke(Request $request, Response $response, callable $next): Response
     {
         // This is an Exit middleware method so wait until exiting and get next request first
         $response = $next($request, $response);
