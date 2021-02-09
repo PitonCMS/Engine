@@ -5,7 +5,7 @@ This is not a comprehensive cybersecurity overview, but does include a review of
 ## Security Headers
 Response headers can be set in `config.local.php` and will be added to the HTTP response.
 
-Default PitonCMS headers are defined in `config.default.php` and can be overriden in `config.local.php`. The default response headers are:
+Default PitonCMS headers are defined in `vendor/pitoncms/engine/config/config.default.php` and can be overriden in `config.local.php`. The default response headers are:
 
 ```php
 /**

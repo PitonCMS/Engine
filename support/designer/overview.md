@@ -15,8 +15,7 @@ Holds cached files for Twig, the router, and any other cached content. The `cach
 
 **`config/`**
 The **config** folder contains important site configuration files that are set as part of the site creation.
-* `config/config.default.php` Default site settings. **DO NOT** change settings in this file. Copy any setting you wish to modify into `config/config.local.php`.
-* `config/config.local.php` Site settings for the local environment, and overrides default settings. Copy any default settings you wish to modify into this file to modify.
+* `config/config.local.php` Site settings for the local environment, and overrides default settings. You can copy `vendor/pitoncms/engine/config/config.default.php` to `config/config.local.php` and update any settings you wish to modify.
 * `config/dependencies.php.example` Overrides core PitonCMS Dependency Injection Container (DIC). (See PitonCMS for Developers.)
 * `config/routes.php.example` Overrides and extends front end routes. (See PitonCMS for Developers.)
 

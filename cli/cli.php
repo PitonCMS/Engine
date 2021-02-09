@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -41,7 +41,7 @@ $loader = require ROOT_DIR . 'vendor/autoload.php';
 $loader->addPsr4('Piton\\CLI\\', __DIR__);
 
 // Load default and local configuration settings
-require ROOT_DIR . 'config/config.default.php';
+require ROOT_DIR . 'vendor/pitoncms/engine/config/config.default.php';
 
 if (file_exists(ROOT_DIR . 'config/config.local.php')) {
     require ROOT_DIR . 'config/config.local.php';

@@ -62,7 +62,7 @@ class PitonBuild
 
         $projectDir = self::getProjectDir();
         $salt = bin2hex(random_bytes(32));
-        $lines = file('config/config.default.php');
+        $lines = file('vendor/pitoncms/engine/config/config.default.php');
 
         // Update docblock
         $lines[2] = ' * Local Environment Configuration Settings' . PHP_EOL;
@@ -117,8 +117,8 @@ class PitonBuild
 
             file_put_contents('config/config.local.php', $lines);
         } else {
-            static::printOutput("Unable to read config/config.default.php to copy.", 'error');
-            static::printOutput("Copy config/config.default.php to config/config.local.php and edit configuration settings", 'error');
+            static::printOutput("Unable to read vendor/pitoncms/engine/config/config.default.php.", 'error');
+            static::printOutput("Copy vendor/pitoncms/engine/config/config.default.php to config/config.local.php and edit configuration settings", 'error');
         }
     }
 
