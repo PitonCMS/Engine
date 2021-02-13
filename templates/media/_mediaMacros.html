@@ -30,6 +30,7 @@
 
   <div data-media-edit-form="true">
     <form accept-charset="utf-8">
+      <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
       <input type="hidden" name="media_id" value="{{ media.id }}">
       {# Media Caption #}
       <div class="media__caption">
@@ -91,6 +92,7 @@
 #}
 {% macro uploadForm() %}
 <form data-media-upload="form" class="modal-form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+  <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
 
   {# Media file link #}
   <div class="form-group">

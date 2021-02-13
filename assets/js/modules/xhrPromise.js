@@ -55,9 +55,16 @@ const XHRPromise = function(method, url, data) {
             }
         }
 
-        // Setup and send
+        // Setup
         xhr.open(method, url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        // Add CSRF token from pitonConfig to header for any POST request
+        if (method === "POST" && pitonConfig.csrfTokenRequestHeader) {
+            xhr.setRequestHeader(pitonConfig.csrfTokenRequestHeader, pitonConfig.csrfTokenValue);
+        }
+
+        // And send request
         xhr.send(data);
     });
 }

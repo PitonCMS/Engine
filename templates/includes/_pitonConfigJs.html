@@ -7,6 +7,8 @@
 
   <script nonce="{{ site.environment.cspNonce }}">
     const pitonConfig = {
+      csrfTokenRequestHeader: "{{ site.environment.csrfHeaderName }}",
+      csrfTokenValue: "{{ site.environment.csrfTokenValue }}",
       routes: {
         adminPageGet: "{{ pathFor('adminPageGet') }}",
         adminPageElementGet: "{{ pathFor('adminPageElementGet') }}",
@@ -26,7 +28,7 @@
         adminCollection: "{{ pathFor('adminCollection') }}",
         adminNavigationDelete: "{{ pathFor('adminNavigationDelete') }}",
       },
-      maxFileUploadSize: "{{ getMaxUploadSize() }}",
+      maxFileUploadSize: {{ getMaxUploadSize() }},
       alertInlineHTML: `{{ pitonMacro.alert()|spaceless }}`,
       modalBackgroundHTML: `{{ pitonMacro.modalBackground()|spaceless }}`,
       modalContentHTML: `{{ pitonMacro.modalContent()|spaceless }}`,

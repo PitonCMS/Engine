@@ -27,10 +27,16 @@ use Exception;
 class CsrfGuard
 {
     /**
-     * CSRF token name
+     * CSRF Token Name
      * @var string
      */
     protected $csrfTokenName = 'pitonCsrfToken';
+
+    /**
+     * CSRF Header Name
+     * @var string
+     */
+    protected $csrfHeaderName = 'Piton-CSRF-Token';
 
     /**
      * CSRF token from session
@@ -77,7 +83,7 @@ class CsrfGuard
     {
         // Validate this is a POST request
         if ($request->getMethod() === 'POST') {
-            $token = $request->getParsedBodyParam($this->csrfTokenName);
+            $token = $this->getRequestToken($request);
 
             if ($token === null || !$this->validateToken($token)) {
                 // Bad token. Clear and reset
@@ -112,6 +118,37 @@ class CsrfGuard
     public function getTokenValue(): string
     {
         return $this->csrfTokenValue;
+    }
+
+    /**
+     * Get Header Name
+     *
+     * @param  void
+     * @return string
+     */
+    public function getHeaderName(): string
+    {
+        return $this->csrfHeaderName;
+    }
+
+    /**
+     * Get Request Token
+     *
+     * Returns CSRF token from 1) request header or 2) form input
+     * @param  Request $request
+     * @return string|null
+     */
+    public function getRequestToken(Request $request): ?string
+    {
+        if (null !== $token = $request->getHeader($this->csrfHeaderName)[0] ?? null) {
+            // First check request header. Because there may be more than one header with the same name, pick the first one in the array
+            return $token;
+        } elseif (null !== $token = $request->getParsedBodyParam($this->csrfTokenName)) {
+            // Then check the form input
+            return $token;
+        }
+
+        return null;
     }
 
     /**

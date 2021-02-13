@@ -8,7 +8,7 @@
 
 {% block openForm %}
 <form action="{{  pathFor('adminPageSave') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
   <input type="hidden" name="page_id" value="{{ page.id }}">
   <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
   <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">

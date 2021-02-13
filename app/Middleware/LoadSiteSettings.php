@@ -144,8 +144,9 @@ class LoadSiteSettings
             ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
 
         // Add CSRF Token and Value to environment array
-        $this->settings['environment']['csrfTokenName'] = ($this->container->csrfGuardHandler)->getTokenName();
-        $this->settings['environment']['csrfTokenValue'] = ($this->container->csrfGuardHandler)->getTokenValue();
+        $this->settings['environment']['csrfTokenName'] = $this->container->csrfGuardHandler->getTokenName();
+        $this->settings['environment']['csrfTokenValue'] = $this->container->csrfGuardHandler->getTokenValue();
+        $this->settings['environment']['csrfHeaderName'] = $this->container->csrfGuardHandler->getHeaderName();
 
         // Set current project directory
         $this->settings['environment']['projectDir'] = basename(ROOT_DIR);

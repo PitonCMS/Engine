@@ -6,13 +6,13 @@
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
-/**
+ /**
  * Piton Front End JS
  */
 
 import { postXHRPromise } from "./modules/xhrPromise.js";
 
-/**
+ /**
  * Piton Config Object
  */
 const pitonConfig = {
@@ -33,7 +33,7 @@ document.querySelectorAll(`input[name="alt-email"]`).forEach(input => {
  * @param {Event} event
  */
 const contactSubmitMessage = function(event) {
-  if (!(event.target.dataset.contactForm = "true")) return;
+  if (!(event.target.dataset.contactForm === "true")) return;
   event.preventDefault();
 
   // Check honeypot if available

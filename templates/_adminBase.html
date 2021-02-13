@@ -15,96 +15,95 @@
 #}
 
 <head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- <meta name="author" content="PitonCMS">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="PitonCMS">
 
- <title>
-  {# Concatenate htmlTitle, if provided in extending page #}
-  {% if block('htmlTitle') is defined %}
+  <title>
+    {# Concatenate htmlTitle, if provided in extending page #}
+    {% if block('htmlTitle') is defined %}
     {{ block('htmlTitle') ~ ' | ' }}
-  {% endif %}
-  {{ site.settings.siteName|default("PitonCMS") }}
- </title>
+    {% endif %}
+    {{ site.settings.siteName|default("PitonCMS") }}
+  </title>
 
- <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
+  <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
 
- {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
- {{ include('@admin/includes/_pitonConfigJs.html') }}
- {% block head '' %}
+  {% block head '' %}
 </head>
 
 <body>
- {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
+  {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
     and are defined as macros in _pitonMacros.html #}
-<header class="top-header">
-  <div class="logo">
-    <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
-  </div>
-
-  <div class="btn-dropdown-block">
-    <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
-      Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
-    </div>
-    <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
-      <div class="form-group">
-        <a href="{{ pathFor('adminUserEdit', {" id": site.environment.sessionUserId}) }}">Profile</a>
-      </div>
-      <div class="form-group">
-        <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'aboutPitonCMS'}) }}">About</a>
-      </div>
-      <div class="form-group">
-        <a href="{{ pathFor('adminLogout') }}">Logout</a>
-      </div>
-    </div>
-  </div>
-
-</header>
-
- <div class="wrapper">
-   {# Hamburger #}
-  <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-
-  <aside class="sidebar">
-   {# Load admin side navigation.#}
-   {{ include("@admin/includes/_navbar.html") }}
-  </aside>
-
-  <main class="main-content">
-
-    {# Load any alerts #}
-    <div class="modal-alert" data-alert-modal="true">
-     {{ include("@admin/includes/_alert.html") }}
+  <header class="top-header">
+    <div class="logo">
+      <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
     </div>
 
-    {# Page level forms must wrap  contentHeader and content blocks #}
-    {% block openForm '' %}
+    <div class="btn-dropdown-block">
+      <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
+        Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
+        <div class="form-group">
+          <a href="{{ pathFor('adminUserEdit', {" id": site.environment.sessionUserId}) }}">Profile</a>
+        </div>
+        <div class="form-group">
+          <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'aboutPitonCMS'}) }}">About</a>
+        </div>
+        <div class="form-group">
+          <a href="{{ pathFor('adminLogout') }}">Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
 
-   <!-- Content Header w/title & controls -->
-   <div class="content-header">
-    <div class="container">
-     {% block contentHeader 'Content Header' %}
-    </div><!-- /.container -->
-  </div><!-- /.content-header -->
+  <div class="wrapper">
+    {# Hamburger #}
+    <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
 
-   <!-- Content Block -->
-   <div class="content">
-    <div class="container">
-     {% block content 'Main Content' %}
-    </div><!-- /.container -->
-   </div><!-- /.content -->
+    <aside class="sidebar">
+      {# Load admin side navigation.#}
+      {{ include("@admin/includes/_navbar.html") }}
+    </aside>
 
-   {# Closing form if required #}
-   {% block closeForm '' %}
+    <main class="main-content">
+      {# Load any alerts #}
+      <div class="modal-alert" data-alert-modal="true">
+        {{ include("@admin/includes/_alert.html") }}
+      </div>
 
-  </main>
- </div><!-- /.wrapper -->
+      {# Page level forms must wrap contentHeader and content blocks #}
+      {% block openForm '' %}
 
- {# Footer block element #}
- {% block foot %}
- {{ getJsFileSource('main') }}
- {% endblock foot %}
+      <!-- Content Header w/title & controls -->
+      <div class="content-header">
+        <div class="container">
+          {% block contentHeader 'Content Header' %}
+        </div><!-- /.container -->
+      </div><!-- /.content-header -->
+
+      <!-- Content Block -->
+      <div class="content">
+        <div class="container">
+          {% block content 'Main Content' %}
+        </div><!-- /.container -->
+      </div><!-- /.content -->
+
+      {# Closing form if required #}
+      {% block closeForm '' %}
+
+    </main>
+  </div><!-- /.wrapper -->
+
+  {# Load pitonConfig with runtime values #}
+  {{ include('@admin/includes/_pitonConfigJs.html') }}
+
+  {# Footer block element #}
+  {% block foot %}
+  {{ getJsFileSource('main') }}
+  {% endblock foot %}
 </body>
 
 </html>

@@ -17,8 +17,8 @@
   <div class="loginPage">
     <div class="loginPage__inner">
       <h2 class="loginPage__title">{{ site.settings.siteName }} Login</h2>
-      <form class="loginPage__form" action="{{ pathFor('adminRequestLoginToken') }}" method="post"
-        accept-charset="utf-8">
+      <form class="loginPage__form" action="{{ pathFor('adminRequestLoginToken') }}" method="post" accept-charset="utf-8">
+        <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
 
         <div class="input-group">
           <label for="inputEmail" class="sr-only">Email address</label>
@@ -27,7 +27,6 @@
         </div>
 
         <input class="btn btn-save" type="submit" value="Request Login Link">
-        <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
       </form>
     </div>
   </div>
