@@ -5,7 +5,7 @@ This is not a comprehensive cybersecurity overview, but does include a review of
 ## Security Headers
 Response headers can be set in `config.local.php` and will be added to the HTTP response.
 
-Default PitonCMS headers are defined in `vendor/pitoncms/engine/config/config.default.php` and can be overriden in `config.local.php`. The default response headers are:
+Default PitonCMS headers are defined in `vendor/pitoncms/engine/config/config.default.php` and can be overriden in `config/config.local.php` (**do not** commit the local file!). The default response headers are:
 
 ```php
 /**
@@ -17,32 +17,25 @@ Default PitonCMS headers are defined in `vendor/pitoncms/engine/config/config.de
 $config['header']['X-Frame-Options'] = 'DENY';
 $config['header']['X-Content-Type-Options'] = 'nosniff';
 $config['header']['Referrer-Policy'] = 'no-referrer-when-downgrade';
-$config['header']['Feature-Policy'] = 'self';
 $config['header']['X-XSS-Protection'] = '1; mode=block';
 $config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-$config['header']['Content-Security-Policy']['default-src'] = "'self'";
-$config['header']['Content-Security-Policy']['script-src'] = "'self' 'nonce' 'unsafe-inline' 'strict-dynamic'";
-$config['header']['Content-Security-Policy']['style-src'] = "'self' 'unsafe-inline' 'strict-dynamic'";
-$config['header']['Content-Security-Policy']['font-src'] = "'self' 'strict-dynamic'";
-$config['header']['Content-Security-Policy']['img-src'] = "*";
-$config['header']['Content-Security-Policy']['base-uri'] = "'none'";
-// $config['header']['Content-Security-Policy']['report-uri'] = "";
+$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'unsafe-inline' 'strict-dynamic'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src *; base-uri 'none'";
 ```
 
 For more on these headers and others see [MDN HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
 
-You can also add standard and custom headers by adding the header name and value under the `['header']` array in `config.local.php`:
+You can also add standard and custom headers by adding the header name and value under the `['header']` array in `config/config.local.php`:
 
 ```php
 $config['header']['Breakfast'] = 'pancakes';
 ```
 
-Note that two specific headers, `Strict-Transport-Security` and `Content-Security-Policy`, are treated slightly differently.
+Note that `Strict-Transport-Security` is treated slightly differently.
 
 ### Strict Transport Security
 This header tells the browser that all requests to this site must be sent as HTTPS. You can specify how far in the future to honor this request by setting the `max-age` (in seconds), and each page view with this header pushes that date out further. `includeSubDomains` also forces HTTPS on subdomains.
 
-Note, this header is only set when _not_ on localhost. If you are developing on a domain other than localhost you might want to disable this header in `config.local.php` by setting it to `false`.
+Note, this header is only set when _not_ on localhost. If you are developing on a domain other than localhost you might want to disable this header in `config/config.local.php` by setting it to `false`.
 
 ```php
 $config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
@@ -67,31 +60,13 @@ The CSP header can be set directly as a string in `config.local.php`:
 $config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'strict-dynamic'; img-src *";
 ```
 
-Or, you can define each CSP policy directive as a sub-array of `$config['header']['Content-Security-Policy']` using `['directive'] = value`. To disable a default directive set that directive to false in `config.local.php`:
-
-```php
-$config['header']['Content-Security-Policy']['style-src'] = false;
-```
-
-To disable CSP entirely just set the header to `false` in `config.local.php`:
-
-```php
-$config['header']['Content-Security-Policy'] = false;
-```
-
-To enable a reporting solution for CSP violations, set the URI endpoint in `config.local.php`:
-
-```php
-$config['header']['Content-Security-Policy']['report-uri'] = "https://endpoint.example.com";
-```
-
 #### CSP Nonce
 PitonCMS will automatically generate a 128bit base64 encoded nonce which is sent in the `script-src` directive, and is available to print in all templates as `site.environment.cspNonce`. This nonce is regenerated on each page view.
 
 To add a nonce to any CSP policy directive, just include the `'nonce'` value in the header string (with single quotes), and also add the `nonce="{{ site.environment.cspNonce }}"` to your elements. At runtime the header string will be replaced by the actual nonce and the matching nonce added to your HTML.
 
 ```php
-$config['header']['Content-Security-Policy']['script-src'] = "'self' 'nonce' 'unsafe-inline' 'strict-dynamic'";
+$config['header']['Content-Security-Policy'] = "'script-src''self' 'nonce' 'unsafe-inline' 'strict-dynamic'";
 ```
 
 To remove the default nonce from the header, in `config.local.php` define the directive with a string that does not include `'nonce'`.
