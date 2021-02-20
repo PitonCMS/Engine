@@ -10,6 +10,8 @@
  * Enable or Disable Spinner Module
  */
 
+import { pitonConfig } from './config.js';
+
 /**
  * Enable Spinner Overlay
  * @param {void}

@@ -34,6 +34,7 @@ class CsrfGuard
 
     /**
      * CSRF Header Name
+     * When updating the CSRF Request Header name, also update assets/js/modules/config.js object property
      * @var string
      */
     protected $csrfHeaderName = 'Piton-CSRF-Token';

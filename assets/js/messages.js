@@ -11,6 +11,7 @@
  */
 
 import "./modules/main.js";
+import { pitonConfig } from './modules/config.js';
 import { setQueryRequestPath, applyFilters } from "./modules/filter.js";
 import { postXHRPromise, getXHRPromise } from "./modules/xhrPromise.js";
 import { disableSpinner, enableSpinner } from "./modules/spinner.js";

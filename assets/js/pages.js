@@ -11,6 +11,7 @@
  */
 
 import "./modules/main.js";
+import { pitonConfig } from './modules/config.js';
 import { setQueryRequestPath } from "./modules/filter.js";
 
 setQueryRequestPath(pitonConfig.routes.adminPageGet);

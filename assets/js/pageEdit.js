@@ -11,6 +11,7 @@
  */
 
 import './modules/main.js';
+import { pitonConfig } from './modules/config.js';
 import { mediaCKEditorSelectModal, mediaCKEditorSelectedListener } from './modules/mediaModal.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';

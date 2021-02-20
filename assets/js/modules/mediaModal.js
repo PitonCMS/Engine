@@ -13,6 +13,7 @@
  * Loads modal with available media with search and filter controls.
  */
 
+import { pitonConfig } from './config.js';
 import { setQueryRequestPath } from "./filter.js";
 import { loadModal, loadModalContent, removeModal } from './modal.js';
 import { getXHRPromise } from './xhrPromise.js';

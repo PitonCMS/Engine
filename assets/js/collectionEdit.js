@@ -7,7 +7,7 @@
  */
 
 /**
- * Page Edit JS
+ * Collection Group Edit JS
  */
 
 import './modules/main.js';

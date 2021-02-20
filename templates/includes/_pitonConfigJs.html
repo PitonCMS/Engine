@@ -6,32 +6,12 @@
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
   <script nonce="{{ site.environment.cspNonce }}">
-    const pitonConfig = {
-      csrfTokenRequestHeader: "{{ site.environment.csrfHeaderName }}",
+    const config = {
       csrfTokenValue: "{{ site.environment.csrfTokenValue }}",
-      routes: {
-        adminPageGet: "{{ pathFor('adminPageGet') }}",
-        adminPageElementGet: "{{ pathFor('adminPageElementGet') }}",
-        adminPageElementDelete: "{{ pathFor('adminPageElementDelete') }}",
-        adminMessageSave: "{{ pathFor('adminMessageSave') }}",
-        adminMessageGet: "{{ pathFor('adminMessageGet') }}",
-        adminMessageCountGet: "{{ pathFor('adminMessageCountGet') }}",
-        adminMedia: "{{ pathFor('adminMedia') }}",
-        adminMediaSave: "{{ pathFor('adminMediaSave') }}",
-        adminMediaGet: "{{ pathFor('adminMediaGet') }}",
-        adminMediaControlsGet: "{{ pathFor('adminMediaControlsGet') }}",
-        adminMediaCategorySaveOrder: "{{ pathFor('adminMediaCategorySaveOrder') }}",
-        adminMediaDelete: "{{ pathFor('adminMediaDelete') }}",
-        adminMediaCategoryDelete: "{{ pathFor('adminMediaCategoryDelete') }}",
-        adminMediaUploadFormGet: "{{ pathFor('adminMediaUploadFormGet') }}",
-        adminMediaUploadFile: "{{ pathFor('adminMediaUploadFile') }}",
-        adminCollection: "{{ pathFor('adminCollection') }}",
-        adminNavigationDelete: "{{ pathFor('adminNavigationDelete') }}",
-      },
-      maxFileUploadSize: {{ getMaxUploadSize() }},
       alertInlineHTML: `{{ pitonMacro.alert()|spaceless }}`,
       modalBackgroundHTML: `{{ pitonMacro.modalBackground()|spaceless }}`,
       modalContentHTML: `{{ pitonMacro.modalContent()|spaceless }}`,
       spinnerHTML: `{{ pitonMacro.spinner()|spaceless }}`,
+      maxFileUploadSize: {{ getMaxUploadSize() }},
     };
   </script>

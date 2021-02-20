@@ -12,6 +12,7 @@
 
 import './modules/main.js';
 import './modules/mediaUpload.js';
+import { pitonConfig } from './modules/config.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';

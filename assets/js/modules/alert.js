@@ -10,6 +10,8 @@
  * Display system alert messages module
  */
 
+import { pitonConfig } from './config.js';
+
 const alertContainer = document.querySelector(`[data-alert-modal="true"]`);
 
 /**

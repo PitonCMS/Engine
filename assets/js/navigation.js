@@ -11,6 +11,7 @@
  */
 
 import './modules/main.js';
+import { pitonConfig } from './modules/config.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragEndHandler, getMovedElement } from './modules/drag.js';
 import { postXHRPromise } from './modules/xhrPromise.js';

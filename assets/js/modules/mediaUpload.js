@@ -10,6 +10,7 @@
  * Upload Media Module
  */
 
+import { pitonConfig } from './config.js';
 import { loadModal, loadModalContent, removeModal } from './modal.js';
 import { enableSpinner, disableSpinner } from './spinner.js';
 import { getXHRPromise, postXHRPromise } from './xhrPromise.js';

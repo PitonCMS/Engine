@@ -14,6 +14,8 @@
  * For POST call postXHRPromise()
  */
 
+import { pitonConfig } from './config.js';
+
 /**
  * XHR Request Promise Base
  *
@@ -32,16 +34,15 @@ const XHRPromise = function(method, url, data) {
 
             try {
                 if (xhr.status === 200) {
-                    // Successful server response, parse payload to check status
+                    // Successful server response, so parse payload to check return status
                     response = JSON.parse(xhr.responseText);
 
                     if (response.status === "success") {
                         // Response successful, resolve
-                        resolve(response.text);
-                        return;
+                        return resolve(response.text);
                     }
 
-                    throw new Error(`Application Error ${response.text}.`);
+                    throw new Error(`Application Error ${response.text}`);
                 }
 
                 throw new Error(`Server Error ${xhr.status} ${xhr.statusText}.`);
@@ -51,16 +52,16 @@ const XHRPromise = function(method, url, data) {
                     let error = new Error(error);
                 }
 
-                reject(error.message);
+                return reject(error.message);
             }
         }
 
-        // Setup
+        // Setup request
         xhr.open(method, url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         // Add CSRF token from pitonConfig to header for any POST request
-        if (method === "POST" && pitonConfig.csrfTokenRequestHeader) {
+        if (method === "POST" && pitonConfig.csrfTokenValue) {
             xhr.setRequestHeader(pitonConfig.csrfTokenRequestHeader, pitonConfig.csrfTokenValue);
         }
 

@@ -10,16 +10,8 @@
  * Piton Front End JS
  */
 
+import { pitonConfig } from './modules/config.js';
 import { postXHRPromise } from "./modules/xhrPromise.js";
-
- /**
- * Piton Config Object
- */
-const pitonConfig = {
-  routes: {
-      submitMessage: "/submitmessage",
-  },
-};
 
 // Set the contact honeypot to a known value
 const honeypotValue = "alt@example.com";

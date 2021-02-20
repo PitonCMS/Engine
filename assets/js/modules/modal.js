@@ -10,6 +10,8 @@
  * Open, Load, and Dismiss Modal Window Module
  */
 
+import { pitonConfig } from './config.js';
+
 /**
  * Get Modal
  *
