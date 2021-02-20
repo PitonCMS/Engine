@@ -17,7 +17,7 @@ import { postXHRPromise } from "./modules/xhrPromise.js";
  */
 const pitonConfig = {
   routes: {
-      submitMessage: "/contact",
+      submitMessage: "/submitmessage",
   },
 };
 
