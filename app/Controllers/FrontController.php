@@ -97,8 +97,6 @@ class FrontController extends FrontBaseController
             $message->email = $this->request->getParsedBodyParam('email');
             $message->message = $this->request->getParsedBodyParam('message');
             $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
-            $message->created_date = $messageMapper->now();
-            $message->updated_date = $messageMapper->now();
             $message = $messageMapper->save($message);
 
             // Check if there are custom contact field inputs to save

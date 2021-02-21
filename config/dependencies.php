@@ -172,7 +172,7 @@ $container['dataMapper'] = function ($c) {
     return function ($mapper) use ($c) {
         // Load session user ID to set update column, and provide PSR3 logger
         $session = $c->sessionHandler;
-        $options['sessionUserId'] = (int) $session->getData('user_id');
+        $options['sessionUserId'] = (int) $session->getData('user_id') ?? 0;
         $options['logger'] = $c['logger'];
         $options['defaultDomainObjectClass'] = 'Piton\\Models\\Entities\\PitonEntity';
 
