@@ -58,17 +58,18 @@ To modify the CSP header define a new policy as a string in `config/config.local
 $config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'strict-dynamic'; img-src *";
 ```
 
-Because the CSP is potentially a very long string on a single line, it may be easier to use the concatenation assignment operator `.=` to separate all directives onto separate lines for easier review. Note, all directives should end with a semicolon, but the last directive policy does not require a trailing semicolon:
+Because the CSP is potentially a very long string on a single line, it may be easier to use the concatenation operator `.` to separate all directives onto separate lines for easier review. Note, all directives should end with a semicolon, but the last directive policy does not require a trailing semicolon:
 
 ```php
-$config['header']['Content-Security-Policy'] = "default-src 'self'; ";
-$config['header']['Content-Security-Policy'] .= "script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; ";
-$config['header']['Content-Security-Policy'] .= "connect-src 'self';";
-$config['header']['Content-Security-Policy'] .= "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ";
-$config['header']['Content-Security-Policy'] .= "font-src 'self' https://fonts.gstatic.com; ";
-$config['header']['Content-Security-Policy'] .= "img-src 'self'; ";
-$config['header']['Content-Security-Policy'] .= "base-uri 'none'; ";
-$config['header']['Content-Security-Policy'] .= "frame-ancestors 'self' ";
+$config['header']['Content-Security-Policy'] =
+    "default-src 'self'; " .
+    "script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; " .
+    "connect-src 'self'; " .
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
+    "font-src 'self' https://fonts.gstatic.com; " .
+    "img-src 'self'; " .
+    "base-uri 'none'; " .
+    "frame-ancestors 'none'";
 ```
 
 #### CSP Nonce
