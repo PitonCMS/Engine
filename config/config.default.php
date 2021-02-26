@@ -80,19 +80,13 @@ $config['pagination']['resultsPerPage'] = 20;
  * Response Headers
  *
  * Sets response headers dynamically at application runtime
- * Define any standard or custom header as a key:value, under the ['header'] array
+ * Define any standard or custom headers as a key:value, in the $config['header'] array in config.local.php
  *
  * Notes
- * - Strict-Transport-Security is *only* set when not on localhost to avoid forcing future requests to https
- * - Content-Security-Policy can be either a string, a bool false to disable CSP
- *      - See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy for more information
- *      - See https://csp.withgoogle.com/docs/strict-csp.html for the default policy explanation below
- *      - To include a nonce in the directive, include the string 'nonce' (quoted) in the value and this will be expanded to a unique base64 nonce
- *      - Consider adding a report URI to send CSP violations to a central log
+ * - Strict-Transport-Security is *only* sent when not on localhost
  */
-$config['header']['X-Frame-Options'] = 'DENY';
 $config['header']['X-Content-Type-Options'] = 'nosniff';
 $config['header']['Referrer-Policy'] = 'no-referrer-when-downgrade';
 $config['header']['X-XSS-Protection'] = '1; mode=block';
 $config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'unsafe-inline' 'strict-dynamic'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src *; base-uri 'none'";
+$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'none'";

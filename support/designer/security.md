@@ -1,82 +1,100 @@
 # Security
 
-This is not a comprehensive cybersecurity overview, but does include a review of PitonCMS options and features to consider when building a client website.
+This is not meant to be a comprehensive cybersecurity overview, but does include an overview of PitonCMS options and features to consider when building a client website.
 
 ## Security Headers
-Response headers can be set in `config.local.php` and will be added to the HTTP response.
+PitonCMS comes with a default set of security response headers which are defined in `vendor/pitoncms/engine/config/config.default.php`. You can overwrite, change, or disable any header in `config/config.local.php`. These headers will be added to all HTTP responses for both backend PitonCMS administration pages and front end visitor pages.
 
-Default PitonCMS headers are defined in `vendor/pitoncms/engine/config/config.default.php` and can be overriden in `config/config.local.php` (**do not** commit the local file!). The default response headers are:
+The default response headers are:
 
 ```php
 /**
  * Response Headers
  *
  * Sets response headers dynamically at application runtime
- * Define any standard or custom header as a key:value, under the ['header'] array
+ * Define any standard or custom headers as a key:value, in the $config['header'] array in config.local.php
  */
-$config['header']['X-Frame-Options'] = 'DENY';
 $config['header']['X-Content-Type-Options'] = 'nosniff';
 $config['header']['Referrer-Policy'] = 'no-referrer-when-downgrade';
 $config['header']['X-XSS-Protection'] = '1; mode=block';
 $config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'unsafe-inline' 'strict-dynamic'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src *; base-uri 'none'";
+$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'none'";
 ```
+Note: `style-src https://fonts.googleapis.com` and `font-src https://fonts.gstatic.com` are needed for PitonCMS backend administration pages.
 
 For more on these headers and others see [MDN HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
 
-You can also add standard and custom headers by adding the header name and value under the `['header']` array in `config/config.local.php`:
+You can add other standard and custom headers by adding the header name and value to the `$config['header']` array in `config/config.local.php`:
 
 ```php
 $config['header']['Breakfast'] = 'pancakes';
 ```
 
-Note that `Strict-Transport-Security` is treated slightly differently.
+Note that the `Strict-Transport-Security` header is treated slightly differently.
 
 ### Strict Transport Security
-This header tells the browser that all requests to this site must be sent as HTTPS. You can specify how far in the future to honor this request by setting the `max-age` (in seconds), and each page view with this header pushes that date out further. `includeSubDomains` also forces HTTPS on subdomains.
+This header tells the browser that all future requests to this site must be sent as HTTPS. You can specify how far in the future to honor this request by setting the `max-age` (in seconds), and with each page view this header pushes that date out further. `includeSubDomains` also forces HTTPS on subdomains.
 
-Note, this header is only set when _not_ on localhost. If you are developing on a domain other than localhost you might want to disable this header in `config/config.local.php` by setting it to `false`.
-
-```php
-$config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-```
-
-If your website is not HTTPS then set this policy to `false` in `config.local.php`.
+This header is only set when _not_ on localhost. If your website is not on HTTPS you might want to disable this header in `config/config.local.php` by setting it to `false` to avoid headaches.
 
 ### Content Security Policy
-A Content Security Policy is a very powerful way to secure your website from XSS attacks and other forms of malicious code injection. It instructs the browser how to control what resources the user agent is allowed to load for a given page. See [MDN Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) for more information.
+A Content Security Policy (CSP) is a very powerful way to mitigate risk to your website from XSS attacks and other forms of malicious code injection. It instructs the browser how to control what resources the user agent is allowed to load for a given page. An effective CSP blocks everything from running on your website, except for what you allow. See [MDN Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) for more information.
 
-A Content Security Policy may easily break your site if you include inline script or new external assets, unless you add the required policies and whitelisted assets, or use [nonces](#csp-nonce).
+A Content Security Policy may also easily break your site if you include inline script or external assets, unless you properly define the required policies and list allowed sources.
 
-The default CSP sent by PitonCMS is inherently a strict policy, see [Strict CSP With Google](https://csp.withgoogle.com/docs/strict-csp.html) for an explanation of this policy.
+The default CSP sent by PitonCMS is inherently a strict policy, see [Strict CSP With Google](https://csp.withgoogle.com/docs/strict-csp.html) for an explanation of the following:
 
 ```apache
-Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-cqCwEKNQNtOH4FI10G3FtQ==' 'unsafe-inline' 'strict-dynamic'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src *; base-uri 'none'
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'self'
 ```
 
-The CSP header can be set directly as a string in `config.local.php`:
+This CSP is meant to _prevent_ unauthorized code, styles, images from running on your website. This will also block your good code from running unless you add it to the allowed list. If you are unable to make a feature or design work it is possible the CSP is blocking the code from running. If the CSP is blocking functionality on your website you will see the errors in the browser developer Console or Network panels to help you debug.
+
+By default, PitonCMS blocks all scripts (inline and external) unless you include a nonce in the script element, including all JS analytics tracking code. To enable javascript, see the section on [CSP Nonces](#csp-nonce) below.
+
+To modify the CSP header define a new policy as a string in `config/config.local.php`:
 
 ```php
 $config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'strict-dynamic'; img-src *";
 ```
 
+Because the CSP is potentially a very long string on a single line, it may be easier to use the concatenation assignment operator `.=` to separate all directives onto separate lines for easier review. Note, all directives should end with a semicolon, but the last directive policy does not require a trailing semicolon:
+
+```php
+$config['header']['Content-Security-Policy'] = "default-src 'self'; ";
+$config['header']['Content-Security-Policy'] .= "script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; ";
+$config['header']['Content-Security-Policy'] .= "connect-src 'self';";
+$config['header']['Content-Security-Policy'] .= "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ";
+$config['header']['Content-Security-Policy'] .= "font-src 'self' https://fonts.gstatic.com; ";
+$config['header']['Content-Security-Policy'] .= "img-src 'self'; ";
+$config['header']['Content-Security-Policy'] .= "base-uri 'none'; ";
+$config['header']['Content-Security-Policy'] .= "frame-ancestors 'self' ";
+```
+
 #### CSP Nonce
-PitonCMS will automatically generate a 128bit base64 encoded nonce which is sent in the `script-src` directive, and is available to print in all templates as `site.environment.cspNonce`. This nonce is regenerated on each page view.
+PitonCMS will automatically generate a 128bit base64 encoded nonce which is sent by default in the [CSP](#content-security-policy) `script-src` directive, and is available to print in all templates as `site.environment.cspNonce`. This nonce is regenerated on each page view.
 
-To add a nonce to any CSP policy directive, just include the `'nonce'` value in the header string (with single quotes), and also add the `nonce="{{ site.environment.cspNonce }}"` to your elements. At runtime the header string will be replaced by the actual nonce and the matching nonce added to your HTML.
+To add the nonce to other CSP policy directives, just include the string `'nonce'` in the directive source list (with the single quotes), and also add the Twig variable `{{ site.environment.cspNonce }}` to your nonceable elements. At runtime the header `'nonce'` string will be replaced by the actual base64 nonce and the matching nonce key printed in your HTML templates.
 
-```php
-$config['header']['Content-Security-Policy'] = "'script-src''self' 'nonce' 'unsafe-inline' 'strict-dynamic'";
+For example, this CSP `script-src` directive:
+
+```apache
+script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline';
 ```
 
-To remove the default nonce from the header, in `config.local.php` define the directive with a string that does not include `'nonce'`.
+Can be applied in your templates as:
 
-To print the nonce on any nonce-able elemnt in your templates, such as a script tag, print the Twig variable:
-
-```php
+```html
 <script nonce="{{ site.environment.cspNonce }}">
-    // Analytics JS code, for example
+    let color = "blue";
+    // Or analytics JS code, for example
 </script>
+Or, for external resources:
+<script nonce="{{ site.environment.cspNonce }}" src="{{ baseUrl() }}/assets/js/custom.js"></script>
 ```
 
-The browser will check that the nonce attribute matches the header nonce and allow that block to run. Be sure to include a nonce on all script elements, or disable the script nonce header.
+To remove the default nonce from the CSP header, in `config/config.local.php` define a new CSP policy with directives that do not include the string `'nonce'`.
+
+For tracking analytics code, in addition to printing the nonce in the inline script elements you may also need to allow the analytics endpoint sources under the `connect-src` policy.
+
+If a CSP header policy requires a nonce to execute inline code the browser will check that the `nonce-<key>` in the element matches the header `nonce-<key>` and allow that block to run.
