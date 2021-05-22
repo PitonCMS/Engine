@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -50,7 +50,7 @@ class AdminMediaController extends AdminBaseController
         try {
             $template =<<<HTML
                 {{ include("@admin/media/_mediaSearchControls.html") }}
-                <div class="media-wrapper" data-filter="content"></div>
+                <div class="media-wrapper" data-query="content"></div>
 HTML;
 
             $status = "success";
@@ -108,7 +108,7 @@ HTML;
         // Load dependencies
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $pagination = $this->container->adminMediaPagination;
+        $pagination = $this->getPagination();
         $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
 
         // Get filters or search if requested
@@ -130,8 +130,6 @@ HTML;
             $media = $mediaMapper->findAllMedia($pagination->getLimit(), $pagination->getOffset()) ?? [];
             $pagination->setTotalResultsFound($mediaMapper->foundRows() ?? 0);
         }
-
-        $this->container->view->addExtension($pagination);
 
         // Load and assign media categories
         $categories = $mediaCategoryMapper->findCategories() ?? [];

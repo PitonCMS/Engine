@@ -1,17 +1,26 @@
 /**
- * Media Page
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Manage Media JS
  */
 
 import './modules/main.js';
 import './modules/mediaUpload.js';
+import { pitonConfig } from './modules/config.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { postXHRPromise } from './modules/xhrPromise.js';
 import { alertInlineMessage } from './modules/alert.js';
-import { setFilterPath } from "./modules/filter.js";
+import { setQueryRequestPath } from "./modules/filter.js";
 import { dragStartHandler, dragEnterHandler, dragOverHandler, dragLeaveHandler, dragDropHandler, dispatchInputEventOnMovedElement } from './modules/drag.js';
 
-// Set filter query end point
-setFilterPath(pitonConfig.routes.adminMediaGet + "edit");
+// Set query path end point
+setQueryRequestPath(pitonConfig.routes.adminMediaGet + "edit");
 
 // Reference to <span> that contains text suggestion to move media order when a category has been selected
 const draggableMessage = document.querySelector(`[data-drag-media-message="true"]`);
@@ -56,7 +65,7 @@ const filterCategoryChange = function() {
 
 // Watch for changes to DOM when media filters are applied, to update draggable state
 const observer = new MutationObserver(filterCategoryChange);
-observer.observe(document.querySelector(`[data-filter="content"]`), {childList: true});
+observer.observe(document.querySelector(`[data-query="content"]`), {childList: true});
 
 /**
  * Save Media

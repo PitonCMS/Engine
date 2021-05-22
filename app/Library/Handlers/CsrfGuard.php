@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -22,14 +22,22 @@ use Exception;
  * Piton CSRF Guard
  *
  * Middleware CSRF Protection for POST routes
+ * Uses the Synchronizer Token Pattern
  */
 class CsrfGuard
 {
     /**
-     * CSRF token name
+     * CSRF Token Name
      * @var string
      */
     protected $csrfTokenName = 'pitonCsrfToken';
+
+    /**
+     * CSRF Header Name
+     * When updating the CSRF Request Header name, also update assets/js/modules/config.js object property
+     * @var string
+     */
+    protected $csrfHeaderName = 'Piton-CSRF-Token';
 
     /**
      * CSRF token from session
@@ -38,7 +46,7 @@ class CsrfGuard
     protected $csrfTokenValue;
 
     /**
-     * Session Storage
+     * Session
      * @var Piton\Library\Interfaces\SessionInterface
      */
     protected $session;
@@ -56,7 +64,7 @@ class CsrfGuard
      * @param  Logger           $logger  Logging object
      * @return void
      */
-    public function __construct(SessionInterface $session, Logger $logger = null)
+    public function __construct(SessionInterface $session, Logger $logger)
     {
         $this->session = $session;
         $this->logger = $logger;
@@ -74,19 +82,17 @@ class CsrfGuard
      */
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        // Validate POST request
+        // Validate this is a POST request
         if ($request->getMethod() === 'POST') {
-            $token = $request->getParsedBodyParam($this->csrfTokenName);
+            $token = $this->getRequestToken($request);
 
             if ($token === null || !$this->validateToken($token)) {
                 // Bad token. Clear and reset
-                $this->csrfTokenValue = null;
+                $this->unsetToken();
                 $this->loadSessionToken();
-                if ($this->logger) {
-                    $this->logger->info('PitonCMS: 403 Forbidden request, CSRF token mismatch');
-                }
+                $this->logger->info('PitonCMS: 403 Forbidden request, CSRF token null or mismatch');
 
-                return $this->forbidden($request, $response);
+                return $this->forbiddenResponse($request, $response);
             }
         }
 
@@ -116,15 +122,47 @@ class CsrfGuard
     }
 
     /**
+     * Get Header Name
+     *
+     * @param  void
+     * @return string
+     */
+    public function getHeaderName(): string
+    {
+        return $this->csrfHeaderName;
+    }
+
+    /**
+     * Get Request Token
+     *
+     * Returns CSRF token from 1) request header or 2) form input
+     * @param  Request $request
+     * @return string|null
+     */
+    public function getRequestToken(Request $request): ?string
+    {
+        if (null !== $token = $request->getHeader($this->csrfHeaderName)[0] ?? null) {
+            // First check request header. Because there may be more than one header with the same name, pick the first one in the array
+            return $token;
+        } elseif (null !== $token = $request->getParsedBodyParam($this->csrfTokenName)) {
+            // Then check the form input
+            return $token;
+        }
+
+        return null;
+    }
+
+    /**
      * Unset Token
      *
-     * Remove token key and value from session
+     * Set token value to null in session and in class
      * @param  void
      * @return void
      */
     public function unsetToken(): void
     {
         $this->session->unsetData($this->csrfTokenName);
+        $this->csrfTokenValue = null;
     }
 
     /**
@@ -175,7 +213,7 @@ class CsrfGuard
      * @param Response $response  The most recent Response object
      * @return Response
      */
-    public function forbidden(Request $request, Response $response): Response
+    public function forbiddenResponse(Request $request, Response $response): Response
     {
         $contentType = $this->determineContentType($request);
         switch ($contentType) {

@@ -5,33 +5,13 @@
 #}
 {% import "@admin/includes/_pitonMacros.html" as pitonMacro %}
 
-  <script>
-    const pitonConfig = {
-      csrfTokenName: "{{ site.csrf.name }}",
-      csrfTokenValue: "{{ site.csrf.value }}",
-      routes: {
-        adminPageGet: "{{ pathFor('adminPageGet') }}",
-        adminPageElementGet: "{{ pathFor('adminPageElementGet') }}",
-        adminPageElementDelete: "{{ pathFor('adminPageElementDelete') }}",
-        adminMessageSave: "{{ pathFor('adminMessageSave') }}",
-        adminMessageGet: "{{ pathFor('adminMessageGet') }}",
-        adminMessageCountGet: "{{ pathFor('adminMessageCountGet') }}",
-        adminMedia: "{{ pathFor('adminMedia') }}",
-        adminMediaSave: "{{ pathFor('adminMediaSave') }}",
-        adminMediaGet: "{{ pathFor('adminMediaGet') }}",
-        adminMediaControlsGet: "{{ pathFor('adminMediaControlsGet') }}",
-        adminMediaCategorySaveOrder: "{{ pathFor('adminMediaCategorySaveOrder') }}",
-        adminMediaDelete: "{{ pathFor('adminMediaDelete') }}",
-        adminMediaCategoryDelete: "{{ pathFor('adminMediaCategoryDelete') }}",
-        adminMediaUploadFormGet: "{{ pathFor('adminMediaUploadFormGet') }}",
-        adminMediaUploadFile: "{{ pathFor('adminMediaUploadFile') }}",
-        adminCollection: "{{ pathFor('adminCollection') }}",
-        adminNavigationDelete: "{{ pathFor('adminNavigationDelete') }}",
-      },
+  <script nonce="{{ site.environment.cspNonce }}">
+    const config = {
+      csrfTokenValue: "{{ site.environment.csrfTokenValue }}",
       alertInlineHTML: `{{ pitonMacro.alert()|spaceless }}`,
       modalBackgroundHTML: `{{ pitonMacro.modalBackground()|spaceless }}`,
       modalContentHTML: `{{ pitonMacro.modalContent()|spaceless }}`,
       spinnerHTML: `{{ pitonMacro.spinner()|spaceless }}`,
-      {% block jsPitonConfig '' %}
+      maxFileUploadSize: {{ getMaxUploadSize() }},
     };
   </script>

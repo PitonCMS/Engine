@@ -175,7 +175,7 @@ HTML;
     public function findPublishedPageBySlug(?string $pageSlug): ?PitonEntity
     {
         $this->makeSelect();
-        $this->sql .= " and p.collection_id is null and p.page_slug = ? and published_date <= '{$this->today}';";
+        $this->sql .= " and p.collection_id is null and p.page_slug = ? and p.published_date <= '{$this->today}';";
         $this->bindValues[] = $pageSlug;
 
         return $this->findRow();
@@ -192,7 +192,7 @@ HTML;
     public function findPublishedCollectionPageBySlug(?string $collectionSlug, ?string $pageSlug): ?PitonEntity
     {
         $this->makeSelect();
-        $this->sql .= " and c.collection_slug = ? and p.page_slug = ? and published_date <= '{$this->today}';";
+        $this->sql .= " and c.collection_slug = ? and p.page_slug = ? and p.published_date <= '{$this->today}';";
         $this->bindValues[] = $collectionSlug;
         $this->bindValues[] = $pageSlug;
 
@@ -214,7 +214,7 @@ HTML;
         int $offset = null
     ): ?array {
         $this->makeSelect();
-        $this->sql .= ' and c.id = ?';
+        $this->sql .= " and c.id = ? and p.published_date <= '{$this->today}'";
         $this->bindValues[] = $collectionId;
 
         $this->sql .= ' order by p.published_date desc';

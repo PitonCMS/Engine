@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -39,13 +39,11 @@ $container['view'] = function ($c) {
         'autoescape' => false,
     ]);
 
-    // Piton Twig Extensions
-    $currentPath = $c->request->getUri()->getPath();
-    if (substr($currentPath, 0, 6) === '/admin') {
-        $view->addExtension(new Piton\Library\Twig\Admin($c));
-    } else {
-        $view->addExtension(new Piton\Library\Twig\Front($c));
-    }
+    // Piton Twig Extension
+    $view->addExtension(new Piton\Library\Twig\Base($c));
+
+    // Load Pagination with default results per page setting
+    $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => $settings['pagination']['resultsPerPage']]));
 
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {
@@ -53,28 +51,6 @@ $container['view'] = function ($c) {
     }
 
     return $view;
-};
-
-/**
- * Admin Twig Page Pagination
- *
- * Loads Piton Pagination to use in Twig templates for page numbered links
- */
-$container['adminPagePagination'] = function ($c) {
-    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminPagePagination']['resultsPerPage'];
-    $config['paginationWrapperClass'] = 'pagination';
-    return new Piton\Pagination\TwigPagination($config);
-};
-
-/**
- * Admin Twig Media Pagination
- *
- * Loads Piton Pagination to use in Twig templates for media numbered links
- */
-$container['adminMediaPagination'] = function ($c) {
-    $config['resultsPerPage'] = $c->get('settings')['pagination']['adminMediaPagination']['resultsPerPage'];
-    $config['paginationWrapperClass'] = 'pagination';
-    return new Piton\Pagination\TwigPagination($config);
 };
 
 /**
@@ -196,7 +172,7 @@ $container['dataMapper'] = function ($c) {
     return function ($mapper) use ($c) {
         // Load session user ID to set update column, and provide PSR3 logger
         $session = $c->sessionHandler;
-        $options['sessionUserId'] = (int) $session->getData('user_id');
+        $options['sessionUserId'] = (int) $session->getData('user_id') ?? 0;
         $options['logger'] = $c['logger'];
         $options['defaultDomainObjectClass'] = 'Piton\\Models\\Entities\\PitonEntity';
 

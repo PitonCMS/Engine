@@ -3,18 +3,17 @@
     "settings": [
         {
             "category": "site",
-            "label": "Website Display Name",
-            "key": "displayName",
+            "label": "Website Name",
+            "key": "siteName",
             "value": "",
-            "inputType": "input",
-            "help": "Website name or brand name."
+            "inputType": "text"
         },
         {
             "category": "site",
             "label": "Tinify API Key",
             "key": "tinifyApiKey",
             "value": "",
-            "inputType": "input",
+            "inputType": "text",
             "help": "Optimize your media files with TinyJPG. Save your API key <a href=\"https://tinyjpg.com/\" target=\"_blank\">https://tinyjpg.com/</a>."
         },
         {
@@ -22,7 +21,7 @@
             "label": "Contact Form Email",
             "key": "contactFormEmail",
             "value": "",
-            "inputType": "input",
+            "inputType": "email",
             "help": "Contact form submissions are sent to this email."
         },
         {

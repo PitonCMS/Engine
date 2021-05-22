@@ -25,7 +25,7 @@
 
 {# Only show designer support link when viewing client user support index #}
 {% if page.subject == 'client' %}
-<a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">Support for Designers</a>
+<div class="btn-group"><a class="btn btn-cancel" href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">Support for Designers</a></div>
 {% endif %}
 
 {% endblock content %}

@@ -126,7 +126,7 @@ class FrontController extends FrontBaseController
 
             // Send message to workflow email if an email address has been saved to settings
             if (!empty($this->settings['site']['contactFormEmail'])) {
-                $siteName = $this->settings['site']['displayName'] ?? 'PitonCMS';
+                $siteName = $this->settings['site']['siteName'] ?? 'PitonCMS';
 
                 $messageText = "{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}";
 

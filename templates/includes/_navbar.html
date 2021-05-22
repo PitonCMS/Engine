@@ -19,9 +19,9 @@
 
   <li class="side-nav__link {{ currentRouteParent('adminMessage') }}">
     <a href="{{ pathFor('adminMessage') }}"> <i class="side-nav__icon fas fa-envelope"></i> Mailbox</a>
+
     {# Note: No whitespace inside of badge element or :empty selector does not work #}
-    <div class="badge badge-notify" data-message="count">
-      {% if getUnreadMessageCount() %}{{ getUnreadMessageCount() }}{% endif %}</div>
+    <div class="badge badge-notify" data-message="count">{{ getUnreadMessageCount() }}</div>
   </li>
 
   <li class="side-nav__link {{ currentRouteParent('adminSetting') }}">

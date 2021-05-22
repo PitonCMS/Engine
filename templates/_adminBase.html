@@ -6,7 +6,6 @@
 
     Available blocks to extend:
     - htmlTitle     HTML <title> text
-    - jsPitonConfig Add dynamic JS variables to jsPitonConfig object
     - head          Insert additional <head> HTLM elements
     - openForm      To open <form> tag to wrap form around header and content
     - contentHeader Content header and form controls
@@ -16,94 +15,95 @@
 #}
 
 <head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- <meta name="author" content="PitonCMS">
- <link rel="icon" href="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="PitonCMS">
 
- <title>
-  {# Concatenate htmlTitle, if provided in extending page #}
-  {% if block('htmlTitle') is defined %}
-    {{ block('htmlTitle') ~ ' - ' }}
-  {% endif %}
-  {{ site.settings.displayName|default("PitonCMS") }}
- </title>
+  <title>
+    {# Concatenate htmlTitle, if provided in extending page #}
+    {% if block('htmlTitle') is defined %}
+    {{ block('htmlTitle') ~ ' | ' }}
+    {% endif %}
+    {{ site.settings.siteName|default("PitonCMS") }}
+  </title>
 
- <script src="https://kit.fontawesome.com/7d41870c98.js" crossorigin="anonymous"></script>
- <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
+  <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
 
- {# Load pitonConfig with runtime values. Also extra 'head' block for additional head elements #}
- {{ include('@admin/includes/_pitonConfigJs.html') }}
- {% block head '' %}
+  {% block head '' %}
 </head>
 
 <body>
- {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
+  {# Spinner, modal, modal background HTML are all loaded at runtime into _pitonConfig.js as JS variables,
     and are defined as macros in _pitonMacros.html #}
-<header class="top-header">
+  <header class="top-header">
     <div class="logo">
-     <a href="{{ pathFor('adminHome') }}">{{ site.settings.displayName|default("PitonCMS") }}</a>
+      <a href="{{ pathFor('home') }}" target="_blank">{{ site.settings.siteName|default("PitonCMS") }}</a>
     </div>
 
- <div class="btn-dropdown-block">
-  <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
-   Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
-  </div>
-  <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
-   <div class="form-group">
-    <a href="{{ pathFor('adminUserEdit', {"id": site.environment.sessionUserId}) }}">Profile</a>
-   </div>
-   <div class="form-group">
-    <a href="#">Logout</a>
-   </div>
-  </div>
- </div>
-
+    <div class="btn-dropdown-block">
+      <div class="btn btn-dropdown" data-collapse-toggle="userProfile">
+        Welcome {{ site.environment.sessionUserFirstName }} <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="form-group-block collapsed" data-collapse-target="userProfile" data-collapse-auto="userProfile">
+        <div class="form-group">
+          <a href="{{ pathFor('adminUserEdit', {" id": site.environment.sessionUserId}) }}">Profile</a>
+        </div>
+        <div class="form-group">
+          <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'aboutPitonCMS'}) }}">About</a>
+        </div>
+        <div class="form-group">
+          <a href="{{ pathFor('adminLogout') }}">Logout</a>
+        </div>
+      </div>
+    </div>
   </header>
 
- <div class="wrapper">
-   {# Hamburger #}
-  <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-  <aside class="sidebar">
-   {# Load admin side navigation.#}
-   {{ include("@admin/includes/_navbar.html") }}
-  </aside>
+  <div class="wrapper">
+    {# Hamburger #}
+    <input type="checkbox" name="nav-toggle" class="nav-toggle" id="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
 
-  <main class="main-content">
+    <aside class="sidebar">
+      {# Load admin side navigation.#}
+      {{ include("@admin/includes/_navbar.html") }}
+    </aside>
 
-    {# Load any alerts #}
-    <div class="modal-alert" data-alert-modal="1">
-     {{ include("@admin/includes/_alert.html") }}
-    </div>
+    <main class="main-content">
+      {# Load any alerts #}
+      <div class="modal-alert" data-alert-modal="true">
+        {{ include("@admin/includes/_alert.html") }}
+      </div>
 
-    {# Page level forms must wrap  contentHeader and content blocks #}
-    {% block openForm '' %}
+      {# Page level forms must wrap contentHeader and content blocks #}
+      {% block openForm '' %}
 
-   <!-- Content Header w/title & controls -->
-   <div class="content-header">
-    <div class="container">
-     {% block contentHeader 'Content Header' %}
-    </div><!-- /.container -->
-  </div><!-- /.content-header -->
+      <!-- Content Header w/title & controls -->
+      <div class="content-header">
+        <div class="container">
+          {% block contentHeader 'Content Header' %}
+        </div><!-- /.container -->
+      </div><!-- /.content-header -->
 
-   <!-- Content Block -->
-   <div class="content">
-    <div class="container">
-     {% block content 'Main Content' %}
-    </div><!-- /.container -->
-   </div><!-- /.content -->
+      <!-- Content Block -->
+      <div class="content">
+        <div class="container">
+          {% block content 'Main Content' %}
+        </div><!-- /.container -->
+      </div><!-- /.content -->
 
-   {# Closing form if required #}
-   {% block closeForm '' %}
+      {# Closing form if required #}
+      {% block closeForm '' %}
 
-  </main>
- </div><!-- /.wrapper -->
+    </main>
+  </div><!-- /.wrapper -->
 
- {# Footer block element #}
- {% block foot %}
- {{ getJsFileSource('main') }}
- {% endblock foot %}
+  {# Load pitonConfig with runtime values #}
+  {{ include('@admin/includes/_pitonConfigJs.html') }}
+
+  {# Footer block element #}
+  {% block foot %}
+  {{ getJsFileSource('main') }}
+  {% endblock foot %}
 </body>
 
 </html>

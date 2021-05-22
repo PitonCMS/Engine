@@ -5,38 +5,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="PitonCMS">
-  <link rel="icon" href="">
 
   <title>Login</title>
 
-  <link rel="stylesheet" href="/assets/css/{{ site.settings.theme|default('default') }}/login.css">
+  <link rel="stylesheet" href="{{ baseUrl() }}/admin/css/main.css?v={{ site.environment.assetVersion }}">
 
 </head>
 
 <body>
- {{ include ("includes/_navbar.html") }}
-<section>
- <div class="container loginPage">
-  <h1>PitonCMS</h1>
-   <form class="form-signin contact-form" action="{{ pathFor('adminRequestLoginToken') }}" method="post" accept-charset="utf-8">
 
-     <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <div class="loginPage">
+    <div class="loginPage__inner">
+      <h2 class="loginPage__title">{{ site.settings.siteName }} Login</h2>
+      <form class="loginPage__form" action="{{ pathFor('adminRequestLoginToken') }}" method="post" accept-charset="utf-8">
+        <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
 
-     <h3 class="section-title span">Please login</h3>
+        <div class="input-group">
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input type="email" id="inputEmail" class="" name="email" maxlength="60" placeholder="Enter registered email"
+            required autofocus>
+        </div>
 
-     <label for="inputEmail" class="sr-only">Email address</label>
-
-     <input type="email" id="inputEmail" class="form-control contact-form__form-control" name="email" maxlength="60"
-       placeholder="Enter registered email" required autofocus>
-
-     <!-- <submit class="" type="submit">Request Login</button> -->
-      <input class="btn" type="submit" value="Request Login">
-
-   </form>
- </div>
-</section>
-  
-
+        <input class="btn btn-save" type="submit" value="Request Login Link">
+      </form>
+    </div>
+  </div>
 </body>
 
 </html>

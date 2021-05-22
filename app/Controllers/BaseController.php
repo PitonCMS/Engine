@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -14,6 +14,7 @@ namespace Piton\Controllers;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
+use Piton\Pagination\TwigPagination;
 use Exception;
 
 /**
@@ -140,5 +141,18 @@ class BaseController
             "status" => $status,
             "text" => $text,
         ]));
+    }
+
+    /**
+     * Get Pagination Object
+     *
+     * Returns Piton\Pagination\TwigPagination object from the Twig environment array of extensions
+     * to allow update of runtime settings
+     * @param void
+     * @return Piton\Pagination\TwigPagination
+     */
+    protected function getPagination(): TwigPagination
+    {
+        return $this->container->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
     }
 }

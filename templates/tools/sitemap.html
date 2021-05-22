@@ -4,7 +4,7 @@
 
 {% block contentHeader %}
 <form action="{{ pathFor('adminSitemapUpdate') }}" method="post" accept-charset="utf-8">
- <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
  <div class="content-header-inner">
   <div class="breadcrumb">
     <a href="{{ pathFor('adminSetting') }}">

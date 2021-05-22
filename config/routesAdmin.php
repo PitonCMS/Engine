@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -268,9 +268,9 @@ $app->group('/admin', function () {
     });
 })->add(function (Request $request, Response $response, callable $next) {
     // Authentication
-    $Security = $this->accessHandler;
+    $security = $this->accessHandler;
 
-    if (!$Security->isAuthenticated()) {
+    if (!$security->isAuthenticated()) {
         // Failed authentication, redirect to login
         return $response->withRedirect($this->router->pathFor('adminLoginForm'));
     }
@@ -280,11 +280,11 @@ $app->group('/admin', function () {
 })->add(function (Request $request, Response $response, callable $next) {
     // Add http no-cache, no-store headers to prevent back button access to admin
     $response = $next($request, $response);
-    return $response->withAddedHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
+    return $response->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 });
 
 //
-// Public unsecured routes
+// Public unsecured admin routes
 //
 
 // Login page with form to submit email

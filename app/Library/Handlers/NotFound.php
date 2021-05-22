@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -39,13 +39,6 @@ class NotFound extends \Slim\Handlers\NotFound
     protected $logger;
 
     /**
-     * Template Path
-     *
-     * @var string
-     */
-    protected $templatePath;
-
-    /**
      * Constructor
      *
      * @param Twig   $view   Slim Twig view handler
@@ -72,14 +65,8 @@ class NotFound extends \Slim\Handlers\NotFound
         // Get request URL to determine if this was thrown in /admin or on the public site
         $path = $request->getUri()->getPath();
 
-        // Set notFound template path context, frontend or admin
-        $this->templatePath = 'system/notFound.html';
-        if (explode('/', $path)[1] === 'admin') {
-            $this->templatePath = '@admin/system/notFound.html';
-        }
-
         // If request is for a file or image then just return the 404 status and stop
-        if (preg_match('/^.*\.(jpg|jpeg|png|gif|css|js|ico)$/i', $path)) {
+        if (preg_match('/^.*\.(jpe?g|png|gif|css|js|map|ico|txt)$/i', $path)) {
             return $response->withStatus(404);
         }
 
@@ -99,7 +86,12 @@ class NotFound extends \Slim\Handlers\NotFound
      */
     protected function renderHtmlNotFoundOutput(Request $request): string
     {
-        // Render and return temmplate as string
-        return $this->view->fetch($this->templatePath);
+        // Set theme notFound template path
+        if (file_exists(ROOT_DIR . 'structure/templates/system/notFound.html')) {
+            return $this->view->fetch('system/notFound.html');
+        }
+
+        // Otherwise return default template
+        return $this->view->fetch('@admin/system/notFound.html');
     }
 }

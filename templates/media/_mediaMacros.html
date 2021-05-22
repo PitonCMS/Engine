@@ -30,6 +30,7 @@
 
   <div data-media-edit-form="true">
     <form accept-charset="utf-8">
+      <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
       <input type="hidden" name="media_id" value="{{ media.id }}">
       {# Media Caption #}
       <div class="media__caption">
@@ -75,7 +76,7 @@
 #}
 {% macro cardStatic(media, categories) %}
 <div class="media" data-media-card="true" data-media-id="{{ media.id }}"
-  data-media-filename="{{ getMediaPath(media.filename) }}" data-media-caption="{{ media.caption }}">
+  data-media-filename="{{ getMediaPath(media.filename, 'large') }}" data-media-caption="{{ media.caption }}">
 
   {# Setting <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
   <div class="media__image">
@@ -91,13 +92,13 @@
 #}
 {% macro uploadForm() %}
 <form data-media-upload="form" class="modal-form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+  <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
 
   {# Media file link #}
   <div class="form-group">
     <input type="file" class="custom-file-input" id="media-file" name="media-file" required>
-    {# <label class="custom-file-label" for="media-file">Choose a file</label> #}
     <div class="modal-info">
-      <p class="small-text text-info"> Put warning/info text here</p>
+      <p class="small-text text-info" data-media-upload="message"></p>
     </div>
   </div>
 
@@ -143,12 +144,11 @@
     <p class="small-text"> Create web optimized copies of your image using your Tinify account.</p>
   </div>
   <hr class="mt-1rem">
-
   {% endif %}
 
   {# Upload button #}
   <div class="btn-group">
-    <button class="btn btn-save " type="button" data-media-upload="file">Upload</button>
+    <button class="btn btn-save " type="button" data-media-upload="button">Upload</button>
   </div>
 </form>
 

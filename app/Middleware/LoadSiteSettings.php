@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Piton\Middleware;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use ArrayAccess;
 use PDOException;
 
 /*
@@ -23,16 +23,19 @@ use PDOException;
 class LoadSiteSettings
 {
     /**
-     * @var Closure returning data mapper
+     * Container
+     * @var ContainerInterface
      */
-    protected $dataMapper;
+    protected $container;
 
     /**
+     * App Settings
      * @var ArrayAccess
      */
     protected $appSettings;
 
     /**
+     * New Settings
      * @var array
      */
     protected $settings;
@@ -40,14 +43,16 @@ class LoadSiteSettings
     /**
      * Constructor
      *
-     * @param  closure
-     * @param  ArrayAccess
+     * @param  ContainerInterface
      * @return void
      */
-    public function __construct($dataMapper, ArrayAccess $appSettings)
+    public function __construct(ContainerInterface $container)
     {
-        $this->dataMapper = $dataMapper;
-        $this->appSettings = $appSettings;
+        $this->container = $container;
+        $this->appSettings = $container->settings;
+
+        $this->settings['environment'] = [];
+        $this->settings['site'] = [];
     }
 
     /**
@@ -58,17 +63,12 @@ class LoadSiteSettings
      * @param  callable $next     Next middleware
      * @return Response
      */
-    public function __invoke($request, $response, $next): Response
+    public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        $this->loadSettings();
+        $this->loadDatabaseSettings();
+        $this->loadConfigSettings($request);
 
-        // This is a bit of a Slim hack. This is the only $request object that actually has a route object attribute
-        // Because of PSR7 immutability the $request object passed into the controller constructor is a copy
-        // and does not have the route object attribute
-        $route = $request->getAttribute('route');
-        $this->settings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
-
-        // Update with new settings
+        // Update app with new settings
         $this->appSettings->replace($this->settings);
 
         // Next Middleware call
@@ -76,18 +76,18 @@ class LoadSiteSettings
     }
 
     /**
-     * Load settings from DB
+     * Load Database Settings
      *
      * @param  void
      * @return void
      */
-    protected function loadSettings()
+    protected function loadDatabaseSettings(): void
     {
         // This middleware data request is the first DB query in the application lifecycle.
         // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
         // Otherwise rethrow to let the application handler deal with whatever happened.
         try {
-            $dataStoreMapper = ($this->dataMapper)('DataStoreMapper');
+            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         } catch (PDOException $th) {
             // SQLSTATE[42S02]
             if ($th->getCode() === '42S02') {
@@ -109,10 +109,51 @@ class LoadSiteSettings
                 $this->settings['site'][$row->setting_key] = $row->setting_value;
             }
         }
+    }
 
-        // Load additional settings from server config file into settings array
+    /**
+     * Load Config Settings
+     *
+     * Set config file and other dynamic settings
+     * @param  Request  $request  PSR7 request
+     * @return void
+     */
+    protected function loadConfigSettings(Request $request): void
+    {
+        // Copy production flag from config file to keep it in the new settings array
         $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+
+        // Generate Content Security Policy nonce
+        $this->settings['environment']['cspNonce'] = base64_encode(random_bytes(16));
+
+        // Load piton engine version form composer.lock
+        if (null !== $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
+            $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));
+            $this->settings['environment']['engine'] = $definition->packages[$engineKey]->version;
+            $this->settings['environment']['commit'] = $definition->packages[$engineKey]->source->reference;
+        }
+
+        // This is a bit of a Slim hack. The $request object passed into the __invoke() method that actually has a route object attribute
+        // Because of PSR7 immutability the $request object passed into the controller constructor is a stale copy
+        // and does not have the route object attribute
+        $route = $request->getAttribute('route');
+        $this->settings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
+
+        // This is used to break the cache by appending to asset files as a get param
         $this->settings['environment']['assetVersion'] =
             ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
+
+        // Add CSRF Token and Value to environment array
+        $this->settings['environment']['csrfTokenName'] = $this->container->csrfGuardHandler->getTokenName();
+        $this->settings['environment']['csrfTokenValue'] = $this->container->csrfGuardHandler->getTokenValue();
+        // $this->settings['environment']['csrfHeaderName'] = $this->container->csrfGuardHandler->getHeaderName();
+
+        // Set current project directory
+        $this->settings['environment']['projectDir'] = basename(ROOT_DIR);
+
+        // Set session user info
+        $this->settings['environment']['sessionUserId'] = $this->container->sessionHandler->getData('user_id');
+        $this->settings['environment']['sessionUserFirstName'] = $this->container->sessionHandler->getData('first_name');
+        $this->settings['environment']['sessionUserLastName'] = $this->container->sessionHandler->getData('last_name');
     }
 }

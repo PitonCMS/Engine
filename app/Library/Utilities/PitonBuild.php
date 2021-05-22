@@ -4,15 +4,13 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright 2019 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
 namespace Piton\Library\Utilities;
 
 use Composer\Script\Event;
-use PDO;
-use Throwable;
 
 /**
  * Piton Build Scripts
@@ -43,64 +41,13 @@ class PitonBuild
      * Piton Update Engine
      *
      * Called after running composer update on pitoncms/engine.
-     * Updates the engine setting value to the current build.
      * @param Event $event
      * @return void
      */
     public static function updateEngine(Event $event): void
     {
-        try {
-            // Get data base credentials from local config file
-            if (file_exists('./config/config.local.php')) {
-                require './config/config.local.php';
-            } else {
-                self::printOutput("No config/config.local.php file found.", 'error');
-            }
-
-            // Make sure we have details to connect to the DB
-            if (
-                empty($config['database']['host']) ||
-                empty($config['database']['dbname']) ||
-                empty($config['database']['username']) ||
-                empty($config['database']['password'])
-            ) {
-                self::printOutput("Database configuration values are not set in config/config.local.php.", 'error');
-            }
-
-            // Get the pitoncms/engine version from composer.lock file, this is the stored token each page view will check
-            if (null === $definition = json_decode(file_get_contents('./composer.lock'))) {
-                self::printOutput("Unable to read PitonCMS/Engine version from composer.lock.", 'error');
-            }
-            $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));
-            $engineVersion = $definition->packages[$engineKey]->version;
-
-            // Setup database config
-            $dbConfig = $config['database'];
-            $dbConfig['options'][PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-            $dbConfig['options'][PDO::ATTR_EMULATE_PREPARES] = false;
-
-            // Define connection string
-            $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']};charset=utf8mb4";
-
-            // Return connection
-            $pdo = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
-
-            // Update engine version
-            $updateEngineSetting = 'update `data_store` set `setting_value` = ?, `updated_date` = ? where `category` = \'piton\' and `setting_key` = \'engine\';';
-            $settingValue[] = $engineVersion;
-            $settingValue[] = date('Y-m-d H:i:s');
-
-            $stmt = $pdo->prepare($updateEngineSetting);
-            $stmt->execute($settingValue);
-
-            self::printOutput("Updated PitonCMS Engine version setting to $engineVersion.");
-        } catch (Throwable $e) {
-            if ($e->getCode() === 2002) {
-                self::printOutput("Execute composer update inside docker container. Database server must be running to update: {$e->getMessage()}.", 'error');
-            } else {
-                self::printOutput("Failed to update engine setting: {$e->getMessage()}.", 'error');
-            }
-        }
+        // TODO
+        static::printOutput("Update completed. It is best to run composer update from within the Docker container.");
     }
 
     /**
@@ -115,7 +62,7 @@ class PitonBuild
 
         $projectDir = self::getProjectDir();
         $salt = bin2hex(random_bytes(32));
-        $lines = file('config/config.default.php');
+        $lines = file('vendor/pitoncms/engine/config/config.default.php');
 
         // Update docblock
         $lines[2] = ' * Local Environment Configuration Settings' . PHP_EOL;
@@ -170,8 +117,8 @@ class PitonBuild
 
             file_put_contents('config/config.local.php', $lines);
         } else {
-            static::printOutput("Unable to read config/config.default.php to copy.", 'error');
-            static::printOutput("Copy config/config.default.php to config/config.local.php and edit configuration settings", 'error');
+            static::printOutput("Unable to read vendor/pitoncms/engine/config/config.default.php.", 'error');
+            static::printOutput("Copy vendor/pitoncms/engine/config/config.default.php to config/config.local.php and edit configuration settings", 'error');
         }
     }
 

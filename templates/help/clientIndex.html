@@ -48,7 +48,7 @@
         <h3 class="content-card__title">Media</h3>
       </div>
       <div class="content-card__body">
-        <p>Manage media, images, files to share on your website.</p>
+        <p>Manage media, images, files to display on your website.</p>
       </div>
     </a>
 
@@ -58,7 +58,7 @@
         <h3 class="content-card__title">Messages</h3>
       </div>
       <div class="content-card__body">
-        <p>Manage messages and requests from your audience.</p>
+        <p>Managek contact messages from your site visitors.</p>
       </div>
     </a>
 
@@ -68,7 +68,17 @@
         <h3 class="content-card__title">Settings</h3>
       </div>
       <div class="content-card__body">
-        <p>Manage website settings.</p>
+        <p>Manage website application settings.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminHelp', {'subject': 'client', 'file': 'aboutPitonCMS'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">About</h3>
+      </div>
+      <div class="content-card__body">
+        <p>About PitonCMS.</p>
       </div>
     </a>
 {% endblock supportIndex %}

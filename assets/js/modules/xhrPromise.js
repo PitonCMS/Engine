@@ -1,6 +1,24 @@
+/**
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
 
 /**
- * XHR Request Promise
+ * XHR Promise Base Module
+ *
+ * Piton XHR request objects return a Promise.
+ * For GET call getXHRPromise()
+ * For POST call postXHRPromise()
+ */
+
+import { pitonConfig } from './config.js';
+
+/**
+ * XHR Request Promise Base
+ *
  * @param {string} method "GET"|"POST"
  * @param {string} url    Resource request URL
  * @param {FormData} data   FormData payload to send
@@ -16,16 +34,15 @@ const XHRPromise = function(method, url, data) {
 
             try {
                 if (xhr.status === 200) {
-                    // Successful server response, parse payload to check status
+                    // Successful server response, so parse payload to check return status
                     response = JSON.parse(xhr.responseText);
 
                     if (response.status === "success") {
                         // Response successful, resolve
-                        resolve(response.text);
-                        return;
+                        return resolve(response.text);
                     }
 
-                    throw new Error(`Application Error ${response.text}.`);
+                    throw new Error(`Application Error ${response.text}`);
                 }
 
                 throw new Error(`Server Error ${xhr.status} ${xhr.statusText}.`);
@@ -35,19 +52,27 @@ const XHRPromise = function(method, url, data) {
                     let error = new Error(error);
                 }
 
-                reject(error.message);
+                return reject(error.message);
             }
         }
 
-        // Setup and send
+        // Setup request
         xhr.open(method, url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        // Add CSRF token from pitonConfig to header for any POST request
+        if (method === "POST" && pitonConfig.csrfTokenValue) {
+            xhr.setRequestHeader(pitonConfig.csrfTokenRequestHeader, pitonConfig.csrfTokenValue);
+        }
+
+        // And send request
         xhr.send(data);
     });
 }
 
 /**
  * GET XHR Promise Request
+ *
  * @param {string} url  Resource URL
  * @param {object} data Object with query string parameters as key: values
  */
@@ -72,6 +97,7 @@ const getXHRPromise = function(url, data) {
 
 /**
  * POST XHR Promise Request
+ *
  * @param {string} url  Resource URL
  * @param {object} data Object with key: values, or FormData instance
  */
@@ -85,8 +111,6 @@ const postXHRPromise = function(url, data) {
             formData.append(key, value);
         }
     }
-
-    formData.append(pitonConfig.csrfTokenName, pitonConfig.csrfTokenValue);
 
     return XHRPromise("POST", url,  formData);
 }

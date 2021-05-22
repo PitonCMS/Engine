@@ -5,7 +5,7 @@
 
 {% block openForm %}
 <form action="{{ pathFor('adminNavigationSave') }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="{{ site.csrf.name }}" value="{{ site.csrf.value }}">
+  <input type="hidden" name="{{ site.environment.csrfTokenName }}" value="{{ site.environment.csrfTokenValue }}">
   <input type="hidden" name="navigator" value="{{ page.navDefinition.key }}">
 {% endblock openForm %}
 

@@ -7,17 +7,17 @@
   <div class="breadcrumb">
     {% if page.helpContent or page.subject == 'designer' %}
     <a href="{{ pathFor('adminHelp', {'subject': 'client'}) }}">
-      Support <i class="fas fa-chevron-right"></i>
+      Support<i class="fas fa-chevron-right breadcrumb__indicator"></i>
     </a>
 
       {% if page.helpContent and page.subject == 'designer' %}
       <a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">
-        Designer <i class="fas fa-chevron-right"></i>
+        Designer<i class="fas fa-chevron-right breadcrumb__indicator"></i>
       </a>
       {% endif %}
     {% endif %}
   </div>
   {% set breadcrumbTitle = page.breadcrumbTitle ?? ((page.subject == 'designer') ? 'Designer' : 'Support') %}
-  <h1 class="seciton-title" class="section-title">{{ breadcrumbTitle }}</h1>
+  <h1 class="section-title">{{ breadcrumbTitle }}</h1>
 </div>
 {% endblock contentHeader %}

@@ -1,5 +1,13 @@
 /**
- * Drag and Drop elements
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Drag and Drop elements module
  *
  * HTML
  * Set parent container with data-draggable="children"

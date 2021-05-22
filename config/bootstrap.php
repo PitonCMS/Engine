@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -27,9 +27,10 @@ declare(strict_types=1);
 return call_user_func(
     function () {
 
-        // Load default and local configuration settings
-        require ROOT_DIR . 'config/config.default.php';
+        // Load default configuration settings
+        require ROOT_DIR . 'vendor/pitoncms/engine/config/config.default.php';
 
+        // Load local configuration settings as override
         if (file_exists(ROOT_DIR . 'config/config.local.php')) {
             require ROOT_DIR . 'config/config.local.php';
         } else {

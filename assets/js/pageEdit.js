@@ -1,9 +1,18 @@
 /**
- * Page Edit Main JS
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright 2018 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ */
+
+/**
+ * Page Edit JS
  */
 
 import './modules/main.js';
-import './modules/mediaModal.js';
+import { pitonConfig } from './modules/config.js';
+import { mediaCKEditorSelectModal, mediaCKEditorSelectedListener } from './modules/mediaModal.js';
 import { enableSpinner, disableSpinner } from './modules/spinner.js';
 import { getXHRPromise, postXHRPromise } from './modules/xhrPromise.js';
 import { setCleanSlug, unlockSlug } from './modules/url.js';
@@ -22,25 +31,47 @@ const setElementTitleText = function(event) {
 }
 
 /**
- * Text CK Editor
+ * CKEditor Media Select Open Modal
+ *
+ * Passes in mediaCKEditorSelectModal to PitonSelectMedia plugin at runtime to open media modal
+ * @param {Editor} editor
+ */
+const mediaCKEditorSelectModalCallback = function(editor) {
+    editor.plugins.get("PitonSelectMedia").setOpenMediaModal(mediaCKEditorSelectModal);
+}
+
+/**
+ * CKEditor Media Select and Set Media in Editor
+ *
+ * Passes in mediaCKEditorSelectedListener to PitonSelectMedia plugin at runtime to select and close media modal
+ * @param {Editor} editor
+ */
+const mediaCKEditorSelectedListenerCallback = function(editor) {
+    editor.plugins.get("PitonSelectMedia").setMediaSelectListener(mediaCKEditorSelectedListener(editor));
+}
+
+/**
+ * Text CK Editor Initalize
  * @param {object} textElement
  */
 const initEditor = function(textElement) {
-    ClassicEditor
-        .create(textElement, {
-            toolbar: ["heading","bold","italic","link","bulletedList","numberedList","blockQuote","undo","redo"]
-        })
-        .then(editor => {
-            editor.model.document.on('change:data', (e) => {
-                textElement.dispatchEvent(new Event("input", {"bubbles": true}));
-            });
+        // The toolbar configuration is set in a custom build of CKEditor, in the PitonCMS/PitonCKEditor project fork.
+        // To  update the editor layout or configuration, modify in /packages/piton-build bundle
+        ClassicEditor.create(textElement, {
+                extraPlugins: [mediaCKEditorSelectModalCallback, mediaCKEditorSelectedListenerCallback]
+            })
+            .then(editor => {
+                editor.model.document.on('change:data', (e) => {
+                    textElement.dispatchEvent(new Event("input", {"bubbles": true}));
+                });
 
-            // Displays toolbar options to include in the toolbar config above
-            // console.log(Array.from( editor.ui.componentFactory.names()));
-        })
-        .catch(error => {
-            console.error(error);
-        });
+                // Uncomment to display toolbar and plugin options
+                // console.log(Array.from(editor.ui.componentFactory.names()));
+                // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
+            })
+            .catch(error => {
+                console.error(error);
+            });
 }
 
 /**
@@ -111,17 +142,25 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
                     // Update element count
                     addElementToggleState(1);
 
+                    // If Block container is collapsed, uncollapse
+                    if (targetBlock.parentElement.classList.contains("collapsed")) {
+                        targetBlock.parentElement.classList.remove("collapsed")
+                    }
+
+                    // Add new-element class and insert element
                     container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                     targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
+
+                    // Set focus with page scroll to newly inserted element
+                    const elementList = targetBlock.querySelectorAll(`input[name*="element_title"]`);
+                    elementList[elementList.length - 1].focus();
+
+                    // Trigger form control state change with Input event
+                    targetBlock.dispatchEvent(new Event("input", {"bubbles": true}));
 
                     // Unable to initalize SimpleMDE on the unattached HTML fragment until we insert it
                     let newEditor = targetBlock.lastElementChild.querySelector(`textarea[data-cke="true"]`);
                     initEditor(newEditor);
-
-                    // Get new block ID for window scroll
-                    let windowTarget = container.querySelector(`[data-element="parent"]`).getAttribute("id");
-
-                    return windowTarget;
                 })
                 .then(() => {
                     disableSpinner();

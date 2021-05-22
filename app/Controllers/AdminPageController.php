@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -81,7 +81,8 @@ HTML;
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pagination = $this->container->adminPagePagination;
+        $pagination = $this->getPagination();
+        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
         $definition = $this->container->jsonDefinitionHandler;
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
@@ -99,10 +100,8 @@ HTML;
             $pages = $pageMapper->findContent($status, $type, $pagination->getLimit(), $pagination->getOffset()) ?? [];
         }
 
-        // Setup pagination
+        // Set pagination found rows
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
-        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
-        $this->container->view->addExtension($pagination);
 
         // Use filename as key for quick look up when adding template name into result set
         $pageTemplates = array_combine(array_column($pageTemplates, 'filename'), $pageTemplates);
@@ -535,8 +534,18 @@ HTML;
     public function showCollectionGroups()
     {
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+        $templates = $definition->getCollections();
 
         $collections = $collectionMapper->find();
+
+        // Use filename as key for quick look up when adding template name into result set
+        $templates = array_combine(array_column($templates, 'filename'), $templates);
+
+        // Set template name in result set
+        foreach ($collections as &$page) {
+            $page->template_name = $templates[$page->collection_definition]['name'] ?? null;
+        }
 
         return $this->render('pages/collections.html', ['collections' => $collections]);
     }

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright 2018 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -81,7 +81,8 @@ HTML;
         // Get dependencies
         $messageMapper = ($this->container->dataMapper)('MessageMapper');
         $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
-        $pagination = $this->container->adminPagePagination;
+        $pagination = $this->getPagination();
+        $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
         $definition = $this->container->jsonDefinitionHandler;
 
         $contactInputsDefinition = $definition->getContactInputs() ?? [];
@@ -101,8 +102,6 @@ HTML;
 
         // Setup pagination
         $pagination->setTotalResultsFound($messageMapper->foundRows() ?? 0);
-        $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
-        $this->container->view->addExtension($pagination);
 
         // Get custom fields from data_store for each message
         foreach ($messages as &$msg) {

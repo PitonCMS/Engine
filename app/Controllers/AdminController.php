@@ -108,9 +108,9 @@ class AdminController extends AdminBaseController
             return $this->render("help/$index.html", $data);
         }
 
-        // If requesting the release notes page from GitHub
-        if ($args['file'] === 'pitonRelease') {
-            return $this->release();
+        // If requesting the about PitonCMS page
+        if ($args['file'] === 'aboutPitonCMS') {
+            return $this->aboutPiton();
         }
 
         // Build path to file and add deep link to anchor
@@ -145,39 +145,21 @@ class AdminController extends AdminBaseController
     }
 
     /**
-     * Show Piton Engine Release Notes
+     * Show Piton Engine aboutPiton Notes
      *
      * Used in Help > Developer > Version
      * @param void
      * @return Response
      */
-    public function release(): Response
+    public function aboutPiton(): Response
     {
         $markdown = $this->container->markdownParser;
-        // $installedRelease = $this->settings['environment']['engine'];
-        $responseBody = '';
+        $log = $this->container->logger;
 
+        // Get list of releases from GitHub. First check that cURL is installed on the server
         if (!function_exists('curl_init')) {
             // If curl is not installed display notice
-            $response = $this->response;
-            $response->write(sprintf(
-                "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>" .
-                "Piton Application Error</title><style>body{margin:0;padding:30px;font:14px / 1.5 Helvetica," .
-                " Arial, Verdana, sans-serif; background-color:hsl(0, 0%%, 94%%);}h1{margin:0;font-size:48px;" .
-                "font-weight:normal;line-height:48px;}strong{display:inline-block;width:75px;} .lead{ font-size:18px;}" .
-                " .navbar{ position:static; top:0; right:0; left:0; background-color:#336699; color:#ffffff; " .
-                "font-size:22.5; padding:.75rem; padding-left:30px; margin-top:-30px; margin-left:-30px; " .
-                "margin-right:-30px; margin-bottom:20px;}</style></head><body><div class=\"navbar\">PitonCMS " .
-                "</div>%s %s %s</body></html>",
-                '<h1>
-                    PHP cURL not installed
-                </h1>',
-                '<p class="lead">
-                    Required module cURL to get GitHub release notes has not been enabled on this server.
-                </p>',
-                'Go to <a href="https://github.com/PitonCMS/Engine/releases" target="_blank">GitHub PitonCMS / Engine</a> to available releases.'
-            ));
-            return $response;
+            $log->info("Piton: cURL is not installed, unable to get releases from GitHub.");
         } else {
             // Get GitHub release history for engine
             // https://developer.github.com/v3/repos/releases
@@ -194,12 +176,12 @@ class AdminController extends AdminBaseController
 
             // Verify that we have a response
             if ($responseStatus == '200') {
-                $releases = json_decode($responseBody);
-                $releases = array_slice($releases, 0, 5, true);
+                $jsonReleases = json_decode($responseBody);
+                $data['releases'] = array_slice($jsonReleases, 0, 3, true);
 
                 // Format Markdown
-                foreach ($releases as $key => $release) {
-                    $releases[$key]->body = $markdown->text($release->body);
+                foreach ($data['releases'] as $key => $release) {
+                    $data['releases'][$key]->body = $markdown->text($release->body);
                 }
 
                 // TODO
@@ -208,11 +190,13 @@ class AdminController extends AdminBaseController
                 //     $message = "The current PitonCMS version is {$releases[0]->tag_name}, you have version {$installedRelease}.";
                 //     // $this->setAlert('info', 'There is a newer version of the PitonCMS Engine', $message);
                 // }
-            } else {
-                $releases = [];
             }
         }
 
-        return $this->render('help/developer/adminHelpDeveloperRelease.html', ['releases' => $releases, 'subject' => 'developer']);
+        $data['breadcrumbTitle'] = 'About PitonCMS';
+        // Not passing any helpContent through, but sending a flag to enable the breadcrumb
+        $data['helpContent'] =  true;
+
+        return $this->render('help/about.html', $data);
     }
 }

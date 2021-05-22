@@ -82,7 +82,7 @@ The JSON file contains the important information about this template, how it is 
             "name": "Content",
             "key": "contentBlock",
             "description": "Home page text areas",
-            "elementTypeDefault": "default/text/text"
+            "elementTypeDefault": "text/text"
         }
     ]
 }
