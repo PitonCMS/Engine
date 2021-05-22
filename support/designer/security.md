@@ -99,3 +99,10 @@ To remove the default nonce from the CSP header, in `config/config.local.php` de
 For tracking analytics code, in addition to printing the nonce in the inline script elements you may also need to allow the analytics endpoint sources under the `connect-src` policy.
 
 If a CSP header policy requires a nonce to execute inline code the browser will check that the `nonce-<key>` in the element matches the header `nonce-<key>` and allow that block to run.
+
+## Session Tokens
+By default, user session tokens expire after 2 hours after the last administration request. You can change this value by stting the session `secondsUntilExpiration` configuration option. You can also use an expression to set a longer session. For example, to increase the session to 30 days in `config/config.local.php`:
+
+```php
+$config['session']['secondsUntilExpiration'] = 60*60*24*30;
+```

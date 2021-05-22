@@ -1,6 +1,6 @@
 # Pages and Collection Detail Pages
 
-**Pages** have content accessible at a specific URL. Typically these hold mostly *static* content such as Home, About, Location, and Collection Summaries etc. and are part of the main website navigation. You can create new Pages from the **Content > Pages > Add [Template]** menu.
+*Pages* have content accessible at a specific URL. Typically these pages hold mostly *fixed* content such as Home, About, Location etc. and are part of the main website navigation. You can create new Pages from the **Content > Pages > Add [Template]** menu.
 
 Collections are groups of *related* pages such as blog posts, recipes, services, activities etc. and consist of *Collection Detail Pages* (each accessible at a specific URL), and *Collection Summaries* which is a group of the related links to the detail pages. You can create a Collection Detail Page from the **Content > Collections > Add [Template]** menu, or from the view all collection details page.
 
