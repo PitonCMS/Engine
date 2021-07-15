@@ -46,10 +46,6 @@
                         "description": "Block description displayed in page editor",
                         "type": "string"
                     },
-                    "elementTypeDefault": {
-                        "description": "Default element type",
-                        "type": "string"
-                    },
                     "elementTypeOptions": {
                         "description": "List of allowable element types",
                         "type": "array",

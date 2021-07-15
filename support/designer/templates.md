@@ -81,8 +81,7 @@ The JSON file contains the important information about this template, how it is 
         {
             "name": "Content",
             "key": "contentBlock",
-            "description": "Home page text areas",
-            "elementTypeDefault": "text/text"
+            "description": "Home page text areas"
         }
     ]
 }
@@ -103,7 +102,6 @@ The blocks array contains objects `{ }` representing how the block should displa
 * `name` Required. The name of the block displayed to the user when editing the page
 * `key` Required. A page-unique string to identify that block in your template code. Must not contain any spaces, and only consist of a-z, A-Z, 0-9, underscore ( _ ), max length 60 characters. Use this key in the page template blocks variable `page.blocks.<key>`
 * `description` Optional. The description of the block displayed to the user when editing the page
-* `elementTypeDefault` Optional. Which element option (the element path and filename without the extension) should be automatically selected when adding elements to the block
 * `elementTypeOptions` Optional. An array of allowable elements (by path with filename without extension) to display to the user. If no `elementTypeOptions` is provided, the user will see all elements in the elements directory.
 * `elementCountLimit` Optional. The max number of elements allowed by design. If no value is provided, then the user can add any number of elements.
 
