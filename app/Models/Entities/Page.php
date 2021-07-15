@@ -82,7 +82,9 @@ class Page extends PitonEntity
 
         // Go through array and assign by block key as index
         array_walk($elements, function ($el) {
-            $this->blocks[$el->block_key][] = $el;
+            if ($this->id === $el->page_id) {
+                $this->blocks[$el->block_key][] = $el;
+            }
         });
     }
 
