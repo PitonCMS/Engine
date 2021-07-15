@@ -162,14 +162,22 @@ $container['emailHandler'] = function ($c) {
 };
 
 /**
- * Data Mapper
+ * Data Mapper Closure
  *
  * Data mapper ORM to CRUD the database tables
- * Returns closure to request DB table datamapper
+ * Returns closure to request DB table data mapper object
  * @return closure
  */
 $container['dataMapper'] = function ($c) {
-    return function ($mapper) use ($c) {
+    /**
+     * Data Mapper
+     *
+     * Returns instance of the requested data mapper
+     * @param string  $mapper    Class name of mapper
+     * @param string  $namesapce Optional namespace. Defaults to Piton\\Models\\. Escape backslashes!
+     * @return object            Data mapper ORM
+     */
+    return function (string $mapper, string $namepace = 'Piton\\Models\\') use ($c) {
         // Load session user ID to set update column, and provide PSR3 logger
         $session = $c->sessionHandler;
         $options['sessionUserId'] = (int) $session->getData('user_id') ?? 0;
@@ -177,7 +185,7 @@ $container['dataMapper'] = function ($c) {
         $options['defaultDomainObjectClass'] = 'Piton\\Models\\Entities\\PitonEntity';
 
         // Return instantiated mapper
-        $fqn = 'Piton\\Models\\' . $mapper;
+        $fqn = $namepace . $mapper;
         return new $fqn($c['database'], $options);
     };
 };
