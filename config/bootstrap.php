@@ -67,16 +67,16 @@ return call_user_func(
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
+        // Load custom routes. These routes are prioritized over default routes.
+        if (file_exists(ROOT_DIR . 'config/routes.php')) {
+            require ROOT_DIR . 'config/routes.php';
+        }
+
         // Load admin routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
 
         // Load front end routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routes.php';
-
-        // Load custom front end routes
-        if (file_exists(ROOT_DIR . 'config/routes.php')) {
-            require ROOT_DIR . 'config/routes.php';
-        }
 
         return $app;
     }
