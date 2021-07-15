@@ -17,10 +17,10 @@
         "pitoncms/pagination": "^0.4.0",
         "slim/slim": "~3.12.3",
         "slim/twig-view": "~2.5.1",
-        "monolog/monolog": "~1.25.3",
+        "monolog/monolog": "~2.3.1",
         "erusev/parsedown": "~1.7.4",
-        "phpmailer/phpmailer": "~6.1.6",
-        "justinrainbow/json-schema": "~5.2.9",
+        "phpmailer/phpmailer": "~6.5.0",
+        "justinrainbow/json-schema": "~5.2.10",
         "tinify/tinify": "~1.5.2"
         },
     "autoload": {
