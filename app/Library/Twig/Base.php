@@ -157,6 +157,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getJsFileSource', [$this, 'getJsFileSource']),
             new TwigFunction('currentRouteParent', [$this, 'currentRouteParent']),
             new TwigFunction('getMaxUploadSize', [$this, 'getMaxUploadSize']),
+            new TwigFunction('getJsFileExtensions', [$this, 'getJsFileExtensions']),
         ];
     }
 
@@ -797,5 +798,43 @@ class Base extends AbstractExtension implements GlobalsInterface
         $memSize = parseSize(ini_get('memory_limit'));
 
         return min($postSize, $fileSize, $memSize);
+    }
+
+    /**
+     * Get JS Custom Extensions
+     *
+     * Returns HTML script element to load custom JS extensions
+     * @param  string|null $scope 'site' for site wide extension, null for current path specific extension
+     * @return string|null
+     */
+    public function getJsFileExtensions(?string $scope = null): ?string
+    {
+        // Get nonce
+        $nonce = $this->container['settings']['environment']['cspNonce'];
+
+        // Check for site wide extension
+        if ($scope === 'site') {
+            // Check if file exists
+            if (file_exists(ROOT_DIR . 'public/extensions/extension.js')) {
+                $siteExtensionSource = '/extensions/extension.js?v=' . $this->container['settings']['environment']['assetVersion'];
+
+                return "<script nonce=\"$nonce\" src=\"$siteExtensionSource\"></script>";
+            }
+
+            return null;
+        }
+
+        // Check for current path specific extension
+        $currentPath = $this->uri->getPath();
+        $currentPath = preg_replace('/\d+$/i', '', $currentPath);
+
+        $extensionSource = '/extensions' . $currentPath . 'extension.js';
+
+        // Check if file exists
+        if (file_exists(ROOT_DIR . 'public' . $extensionSource)) {
+            return "<script nonce=\"$nonce\" src=\"$extensionSource\"></script>";
+        }
+
+        return null;
     }
 }
