@@ -104,6 +104,12 @@
   {% block foot %}
   {{ getJsFileSource('main') }}
   {% endblock foot %}
+
+  {# Load site wide custom extension #}
+  {{ getJsFileExtensions('site') }}
+
+  {# Load path specific custom extension #}
+  {{ getJsFileExtensions() }}
 </body>
 
 </html>
