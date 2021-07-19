@@ -809,14 +809,15 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function getJsFileExtensions(?string $scope = null): ?string
     {
-        // Get nonce
+        // Get nonce and asset version
         $nonce = $this->container['settings']['environment']['cspNonce'];
+        $assetVersion = '?v=' . $this->container['settings']['environment']['assetVersion'];
 
         // Check for site wide extension
         if ($scope === 'site') {
             // Check if file exists
             if (file_exists(ROOT_DIR . 'public/extensions/extension.js')) {
-                $siteExtensionSource = '/extensions/extension.js?v=' . $this->container['settings']['environment']['assetVersion'];
+                $siteExtensionSource = '/extensions/extension.js' . $assetVersion;
 
                 return "<script nonce=\"$nonce\" src=\"$siteExtensionSource\"></script>";
             }
@@ -832,6 +833,7 @@ class Base extends AbstractExtension implements GlobalsInterface
 
         // Check if file exists
         if (file_exists(ROOT_DIR . 'public' . $extensionSource)) {
+            $extensionSource .= $assetVersion;
             return "<script nonce=\"$nonce\" src=\"$extensionSource\"></script>";
         }
 
