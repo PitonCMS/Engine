@@ -91,7 +91,7 @@
           <h3 class="toggle-block__title">Custom Page Settings</h3>
           <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageSettings"></i>
         </div>
-        <div class="toggle-block__content {% if page.id %}collapsed{% endif %}" data-collapse-target="pageSettings">
+        <div class="toggle-block__content" data-collapse-target="pageSettings">
           {% for setting in page.settings %}
           {{ settingMacro.settingInput(setting) }}
           {% endfor %}
