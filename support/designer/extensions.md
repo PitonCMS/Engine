@@ -23,3 +23,19 @@ For examle, if you want to modify the content editor page which has the URL path
 ```
 public/extensions/admin/page/edit/extension.js
 ```
+
+### Selecting Custom Setting Inputs
+A common use for JavaScript extensions is to add input validations to custom settings, or trigger an update to other inputs.
+
+To help in selecting settings, a `data-setting-` attribute has been added to the custom setting input. The attribute has the form of `data-setting-<category>="<settingKey>"`, where the category is either `site`, `page`, `element`, `social`, `contact`, and the setting key is the key defined in your JSON definition file.
+
+For example, if you want the site setting "Site Name" to prepopulate a footer about text setting, you could add an extension file `/admin/settings/site/edit/extension.js`:
+
+```js
+const siteName = document.querySelector(`[data-setting-site="siteName"]`);
+const footerAbout = document.querySelector(`[data-setting-site="footerAbout"]`);
+
+siteName.addEventListener("input", () => {
+    footerAbout.value = "About " + siteName.value;
+}, false);
+```
