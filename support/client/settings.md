@@ -24,6 +24,8 @@ If your web site design has a contact form enabled, enter your message inbox ema
 
 * **Contact Form Submission Acknowledgement** Optional. The message to display after a message is submitted. Defaults to "Thank You". Accepts HTML.
 
+* **Minimum Message Length** Optional. Set the minimum number of characters in the contact message to accept. Any message less than the minimum number of characters will be ignored.
+
 ### Social
 Add your social media links, if defined by your web designer.
 
