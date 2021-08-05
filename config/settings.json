@@ -31,6 +31,14 @@
             "value": "Thank You",
             "inputType": "textarea",
             "help": "Message to display after the contact form is submitted."
+        },
+        {
+            "category": "contact",
+            "label": "Minimum Message Length",
+            "key": "minMessageLength",
+            "value": "10",
+            "inputType": "number",
+            "help": "Minimum number of characters in a contact message. Any contact message less than this length will be ignored."
         }
     ]
 }

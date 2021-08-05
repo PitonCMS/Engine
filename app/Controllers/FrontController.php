@@ -75,20 +75,31 @@ class FrontController extends FrontBaseController
      */
     public function submitMessage(): Response
     {
-        try {
-            $messageMapper = ($this->container->dataMapper)('MessageMapper');
-            $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
-            $definition = $this->container->jsonDefinitionHandler;
-            $email = $this->container->emailHandler;
+        // Get dependencies
+        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
+        $definition = $this->container->jsonDefinitionHandler;
+        $email = $this->container->emailHandler;
 
+        // Get response message and status
+        $status = "success";
+        $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
+
+        try {
             // Check honepot before saving message
             if ('alt@example.com' !== $this->request->getParsedBodyParam('alt-email')) {
-                throw new Exception("Honeypot found a fly", 1);
+                throw new Exception('Honeypot found a fly');
             }
 
-            // Check if there is anything to save
+            // Check if there is a message to save
             if (empty($this->request->getParsedBodyParam('email'))) {
-                throw new Exception("Empty message submitted");
+                throw new Exception('Empty message submitted');
+            }
+
+            // Check that we have the minimum number of message characters
+            $minLength = $this->container->get('settings')['site']['minMessageLength'] ?? 1;
+            if (mb_strlen($this->request->getParsedBodyParam('message')) < (int) $minLength) {
+                throw new Exception('Message less than minimum length');
             }
 
             // Save message
@@ -99,7 +110,7 @@ class FrontController extends FrontBaseController
             $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
             $message = $messageMapper->save($message);
 
-            // Check if there are custom contact field inputs to save
+            // Check if there are custom contact fields to save
             $contactInputsDefinition = $definition->getContactInputs();
 
             if ($contactInputsDefinition) {
@@ -135,18 +146,16 @@ class FrontController extends FrontBaseController
                 }
 
                 $email->setTo($this->settings['site']['contactFormEmail'], '')
-                        ->setSubject("New Contact Message to $siteName")
+                        ->setSubject("New Contact Message for $siteName from {$message->context} page.")
                         ->setMessage($messageText)
                         ->send();
             }
         } catch (Throwable $th) {
-            $this->container->logger->alert("PitonCMS: Exception submitting contact message " . $th->getMessage());
+            // Log issue
+            $this->container->logger->alert("PitonCMS: Exception submitting contact message: " . $th->getMessage());
         }
 
-        // Always return a positive message to the public
-        $status = "success";
-        $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
-
+        // Always return the same positive response to the public
         return $this->xhrResponse($status, $text);
     }
 }

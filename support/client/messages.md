@@ -3,19 +3,13 @@
 You website may have a contact form for visitors to submit messages. This is a design consideration set by your website designer. If configured, when visitors submit a message you will receive an email with the message, and a copy of the message will be kept in PitonCMS for reference.
 
 ## Configure Messages
+To display a contact form you need to select a Contact Element in your page (if configured by your designer).
 
-The contact form must be added to a published page as a page *Element* for visitors to access. To add a contact form:
-
-* Go to **Pages** and edit or create a page with a template block enabled with *Contact Form*.
-* Click *Add Element*, and then optionally add a *Title* and some leading text *Content*.
+* Go to **Pages** and edit or create a page with a template block enabled with Contact Form.
+* Click Add Element > Contact, and then optionally add a Title and some leading text Content.
 * Save the page, and ensure it is Published.
 
-To receive the submitted messages, you will want to add your email address in Site Settings. Note, this can be separate from your login email address.
-
-* Go to Tools > Contact.
-* Enter your email address where you want to receive messages.
-* Enter a response message after someone submits a message
-* Save
+You can configure some contact message options under Settings > Contact to have messages forwarded by email, the response message to display, and the minimum message length. See [Contact Settings Support](/admin/support/client/settings#contact) for more information.
 
 ## Manage Messages in PitonCMS
 
