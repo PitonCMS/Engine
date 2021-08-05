@@ -89,4 +89,4 @@ $config['header']['X-Content-Type-Options'] = 'nosniff';
 $config['header']['Referrer-Policy'] = 'no-referrer-when-downgrade';
 $config['header']['X-XSS-Protection'] = '1; mode=block';
 $config['header']['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'none'";
+$config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'none'";
