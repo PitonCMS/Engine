@@ -423,6 +423,7 @@ a:active {
   background: #ffffff;
   display: grid;
   grid-template-columns: 1fr;
+  position: relative;
 }
 .toggle-block__header {
   background: #dee3e7;

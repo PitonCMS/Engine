@@ -2,8 +2,11 @@
 .toggle-block {
  @include margin(1em null);
  background: $bg-white;
+
  display: grid;
  grid-template-columns: 1fr;
+
+ position: relative;
 
  &__header {
   background: $bg-grey;
