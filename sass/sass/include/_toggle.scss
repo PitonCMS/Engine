@@ -9,16 +9,17 @@
 //  position: relative;
 
  &__header {
- 
+//  background-color: $bg-grey;
   @include padding(.5em);
   margin: 0 !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: $nav-height;
-  position: sticky;
-  top: calc(#{$nav-height * 2});
+  position: relative;
+  // top: calc(#{$nav-height * 2});
   z-index: 60;
+
 
   &-secondary {
    background: $bg-light;

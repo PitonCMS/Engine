@@ -430,8 +430,7 @@ a:active {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  position: sticky;
-  top: calc(100px);
+  position: relative;
   z-index: 60;
 }
 .toggle-block__header-secondary {
