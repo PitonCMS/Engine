@@ -89,12 +89,12 @@ class AdminController extends AdminBaseController
     }
 
     /**
-     * Show Help Page
+     * Show Support Page
      *
      * @param array $args
      * @return Response
      */
-    public function showHelp($args): Response
+    public function showSupport($args): Response
     {
         // Load dependencies
         $markdown = $this->container->markdownParser;

@@ -62,7 +62,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         'adminNavigation' => null,
         'adminMessage' => null,
         'adminSetting' => null,
-        'adminHelp' =>  null,
+        'adminSupport' =>  null,
 
         // Level 1 pages
         'adminPageEdit' => 'adminPage',

@@ -257,10 +257,10 @@ $app->group('/admin', function () {
     });
     // End user routes
 
-    // Help content
+    // Support content
     $this->get('/support/{subject:client|designer}[/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
-        return (new AdminController($this))->showHelp($args);
-    })->setName('adminHelp');
+        return (new AdminController($this))->showSupport($args);
+    })->setName('adminSupport');
 
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
     $this->get('[/]', function () {
