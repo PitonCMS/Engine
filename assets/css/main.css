@@ -260,7 +260,6 @@ a:active {
 /* Layout */
 /* Header, Logo */
 .top-header {
-  padding-right: 1em;
   padding-left: 1em;
   background-color: #3b3b3b;
   color: #eb7119;
@@ -276,9 +275,9 @@ a:active {
   align-items: center;
 }
 .top-header .logo {
-  font-size: 2rem;
+  font-size: 1.4em;
   font-weight: 900;
-  line-height: 50px;
+  line-height: 1;
   display: flex;
   letter-spacing: 1.4px;
   justify-content: flex-start;
@@ -423,7 +422,6 @@ a:active {
   background: #dee3e7;
   display: grid;
   grid-template-columns: 1fr;
-  position: relative;
 }
 .toggle-block__header {
   padding: 0.5em;
@@ -444,7 +442,6 @@ a:active {
 .toggle-block__content {
   position: relative;
   z-index: 59;
-  background: #ffffff;
 }
 .toggle-block__title {
   padding-top: 0.5em;
