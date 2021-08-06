@@ -10,7 +10,7 @@ Page templates have designer defined **Blocks** which are broad areas of a page 
 
 In this example of the **With Hero** template, the web designer defined the Blocks ("Hero" and "Content"), while the client can simply add content **Elements** to the Blocks when editing the page.
 
-![Page Template Overview"](/admin/img/help/pageBlockElementOverview.png)
+![Page Template Overview"](/admin/img/support/pageBlockElementOverview.png)
 
 When designing a new website, identify how many unique page layouts are needed. Then for each layout then determine content areas for each page. These content areas might be considered Blocks. Examples might be, main content, sidebar - all broad regions of a reusable page.
 
@@ -27,9 +27,9 @@ In addition to Blocks and Elements, your HTML layout _may_ include:
 The **Structure** directory in the root of your project consists of:
 
 * `definitions` This contains JSON files for:
-  * [Contact Form](/admin/help/designer/contact) custom fields (`contactInputs.json`)
-  * [Navigators](/admin/help/designer/navigation) (`navigation.json`)
-  * [Custom Settings](/admin/help/designer/settings) (`siteSettings.json`).
+  * [Contact Form](/admin/support/designer/contact) custom fields (`contactInputs.json`)
+  * [Navigators](/admin/support/designer/navigation) (`navigation.json`)
+  * [Custom Settings](/admin/support/designer/settings) (`siteSettings.json`).
 * `sass` For your Sass files (if you use Sass).
 * `templates` Where your Page templates (and matching JSON), Element templates (and matching JSON), includes, and system templates.
 
@@ -134,5 +134,5 @@ The element JSON file definition is:
 * `enableInput` Optional. Display additional built-in input option for the type of element (just one option). Options are "collection", "embedded", "image", and "gallery"
 * `showContentTextarea` Optional, defaults to true.
 * `enableEditor` Optional, defaults to true. Enables the rich text editor
-* `settings` Optional. An array of [Custom Settings](/admin/help/designer/settings).
+* `settings` Optional. An array of [Custom Settings](/admin/support/designer/settings).
 

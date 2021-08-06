@@ -16,7 +16,7 @@ Here you can add, delete, rename, and deactivate or reactivate navigation links.
 
 **Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
 
-![Navigation Page](/admin/img/help/pageNavigation.png)
+![Navigation Page](/admin/img/support/pageNavigation.png)
 
 **Note**, **Collection Detail Pages** are not available to add to the navigator. Instead, add a **Collection Summary Element** to one of your pages as the entry point to that collection group.
 

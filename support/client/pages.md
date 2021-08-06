@@ -15,7 +15,7 @@ Pages and Collection Detail Pages can be created from **Templates**, which are c
 
 In this example of the **With Hero** template, the web designer defined the Blocks ("Hero" and "Content"), while the client can simply add content **Elements** to the Blocks when editing the page.
 
-![Page Template Overview"](/admin/img/help/pageBlockElementOverview.png)
+![Page Template Overview"](/admin/img/support/pageBlockElementOverview.png)
 
 When editing a page, you will see:
 * Page Title as the display name for the page, and the Sub Title (Optional) which slightly expands on the title
@@ -85,12 +85,12 @@ Text content areas in PitonCMS use [Markdown](https://www.markdownguide.org/basi
 **Note**: When you delete an element it is an immediate full delete, and does not wait for the page changes to be saved first.
 
 ### Media
-To use media (images and files) in your content, you should first upload and categorize your media in the Media menu. [Media help](/admin/help/adminMedia).
+To use media (images and files) in your content, you should first upload and categorize your media in the Media menu. [Media help](/admin/support/adminMedia).
 
 ## Viewing Pages
 To manage your pages, go to the **Content > Pages > All Pages** menu. From here, you can see all pages in any status, and filter by status. Click the **Edit** link to edit or delete that page.
 
-To manage your collection detail pages, go to the **Content > Collections > All Collections Pages** menu. From here, you can see all collection pages in any status, and filter by status or collection name. Click the **Edit** link to edit or delete that page. [Collection help](/admin/help/adminCollection).
+To manage your collection detail pages, go to the **Content > Collections > All Collections Pages** menu. From here, you can see all collection pages in any status, and filter by status or collection name. Click the **Edit** link to edit or delete that page. [Collection help](/admin/support/adminCollection).
 
 ## Create New Page
 To create a new page, go to **Content > Pages > [+ Template Name]**.
@@ -111,4 +111,4 @@ To delete a page, find the page in **Content > Pages > All Pages** and click edi
 **Note**: You might consider unpublishing the page as a safe way to disable a page.
 
 ## Add Navigation
-Your custom website design may likely have some navigation lists, which have links to site pages. When creating a page, you need to manually add the page to one or more navigation bars so that visitors and search engines can find your page content. The number of navigation bars and their position is determined by your web designer. [Navigation help](/admin/help/adminNavigation).
+Your custom website design may likely have some navigation lists, which have links to site pages. When creating a page, you need to manually add the page to one or more navigation bars so that visitors and search engines can find your page content. The number of navigation bars and their position is determined by your web designer. [Navigation help](/admin/support/adminNavigation).

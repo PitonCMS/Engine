@@ -49,9 +49,9 @@ You can create a Collection Detail Page either from:
 *  The **Content > Collections > Add [Template]** menu.
 *  The **Content > Collections > All [Template] Pages** where you would view the pages in the collection. Click the **Add [Template] Page** link.
 
-Creating a collection page follows the same process as a normal page. See [Page help](/admin/help/adminPage).
+Creating a collection page follows the same process as a normal page. See [Page](/admin/support/adminPage).
 
 ## Editing Collection Detail Page
 To edit a collection detail page, use the **Content > Collections > All [Template] Pages** menu to see all pages in the collection. Then find the desired page and click **Edit**.
 
-Editing Pages and Collection Detail Pages are similar. See [Page help](/admin/help/adminPage).
+Editing Pages and Collection Detail Pages are similar. See [Page](/admin/support/adminPage).

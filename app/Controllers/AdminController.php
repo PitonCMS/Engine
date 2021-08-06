@@ -105,7 +105,7 @@ class AdminController extends AdminBaseController
         // If no support file was requested, default to a support index
         if (!isset($args['file'])) {
             $index = ($args['subject'] === 'designer') ? 'designerIndex' : 'clientIndex';
-            return $this->render("help/$index.html", $data);
+            return $this->render("support/$index.html", $data);
         }
 
         // If requesting the about PitonCMS page
@@ -141,7 +141,7 @@ class AdminController extends AdminBaseController
             $data['helpContent'] = "<h1>Help File Does Not Exist</h1>";
         }
 
-        return $this->render('help/helpFile.html', $data);
+        return $this->render('support/helpFile.html', $data);
     }
 
     /**
@@ -197,6 +197,6 @@ class AdminController extends AdminBaseController
         // Not passing any helpContent through, but sending a flag to enable the breadcrumb
         $data['helpContent'] =  true;
 
-        return $this->render('help/about.html', $data);
+        return $this->render('support/about.html', $data);
     }
 }
