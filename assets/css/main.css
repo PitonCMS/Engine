@@ -420,13 +420,12 @@ a:active {
 .toggle-block {
   margin-top: 1em;
   margin-bottom: 1em;
-  background: #ffffff;
+  background: #dee3e7;
   display: grid;
   grid-template-columns: 1fr;
   position: relative;
 }
 .toggle-block__header {
-  background: #dee3e7;
   padding: 0.5em;
   margin: 0 !important;
   display: flex;
@@ -445,6 +444,7 @@ a:active {
 .toggle-block__content {
   position: relative;
   z-index: 59;
+  background: #ffffff;
 }
 .toggle-block__title {
   padding-top: 0.5em;
