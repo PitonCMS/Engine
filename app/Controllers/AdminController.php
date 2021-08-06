@@ -115,14 +115,14 @@ class AdminController extends AdminBaseController
 
         // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
-        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
+        $supportFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
 
-        if (file_exists($helpFile)) {
-            $helpContent = $markdown->text(file_get_contents($helpFile));
+        if (file_exists($supportFile)) {
+            $supportContent = $markdown->text(file_get_contents($supportFile));
 
             // Parse help file to modify headings
             $document = new DOMDocument();
-            $document->loadHTML($helpContent);
+            $document->loadHTML($supportContent);
 
             // Get heading tags h1..h6 and set ID so we can deep link to content
             foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $h) {
@@ -135,13 +135,13 @@ class AdminController extends AdminBaseController
 
             // Get breadcrumb title from first H1 in file and render HTML
             $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
-            $data['helpContent'] = $document->saveHTML();
+            $data['supportContent'] = $document->saveHTML();
         } else {
             $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$args['subject']}, File {$args['file']}.");
-            $data['helpContent'] = "<h1>Help File Does Not Exist</h1>";
+            $data['supportContent'] = "<h1>Help File Does Not Exist</h1>";
         }
 
-        return $this->render('support/helpFile.html', $data);
+        return $this->render('support/supportFile.html', $data);
     }
 
     /**
