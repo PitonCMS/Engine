@@ -6,12 +6,12 @@
 <div class="content-header-inner">
   <div class="breadcrumb">
     {% if page.supportContent or page.subject == 'designer' %}
-    <a href="{{ pathFor('adminSupport', {'subject': 'client'}) }}">
+    <a href="{{ pathFor('adminSupportIndex', {'subject': 'client'}) }}">
       Support<i class="fas fa-chevron-right breadcrumb__indicator"></i>
     </a>
 
       {% if page.supportContent and page.subject == 'designer' %}
-      <a href="{{ pathFor('adminSupport', {'subject': 'designer'}) }}">
+      <a href="{{ pathFor('adminSupportIndex', {'subject': 'designer'}) }}">
         Designer<i class="fas fa-chevron-right breadcrumb__indicator"></i>
       </a>
       {% endif %}

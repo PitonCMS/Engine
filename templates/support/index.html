@@ -1,0 +1,192 @@
+{% extends '@admin/support/_supportBase.html' %}
+
+{% block content %}
+{# TODO: Add support search
+<div class="page-list-item-filter">
+  <form>
+    <div class="input-block">
+      <div class="input-block__icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="input-block__input">
+        <input type="search" name="search" id="search" class="input-block__search-input" placeholder="Search Support"
+          autocomplete="false">
+      </div>
+    </div>
+  </form>
+</div>
+#}
+
+{# Support Cards #}
+<div class="content-cards">
+  {% if page.subject == 'client' %}
+      {# For Client Users #}
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'overview'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Overview</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Overview of PitonCMS.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'pages'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Pages</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Create and manage content on your website.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'collections'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Collections</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Create and manage groups of related content.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'navigation'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Navigation</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Create and manage navigation bars and links.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'media'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Media</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Manage media, images, files to display on your website.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'messages'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Messages</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Manage contact messages from your site visitors.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'settings'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">Settings</h3>
+        </div>
+        <div class="content-card__body">
+          <p>Manage website application settings.</p>
+        </div>
+      </a>
+
+      <a href="{{ pathFor('adminSupportContent', {'subject': 'client', 'file': 'aboutPitonCMS'}) }}" class="content-card">
+        <div class="content-card__header">
+          <i class="fas fa-cog card-icon"></i>
+          <h3 class="content-card__title">About</h3>
+        </div>
+        <div class="content-card__body">
+          <p>About PitonCMS.</p>
+        </div>
+      </a>
+  {% else %}
+    {# For Designers #}
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'overview'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Overview</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Building websites with PitonCMS.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'data'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Printing Data</h3>
+      </div>
+      <div class="content-card__body">
+        <p>How to access and print website data variables in your templates.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'templates'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Page Templates</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Use page templates to define static pages and collection page details.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'settings'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Custom Settings</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Use custom settings to enhance your web design.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'navigation'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Navigators</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Define custom navigation menus.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'contact'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Contact Forms</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Easily build contact forms with custom form fields.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'security'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Security</h3>
+      </div>
+      <div class="content-card__body">
+        <p>Overview of security options.</p>
+      </div>
+    </a>
+
+    <a href="{{ pathFor('adminSupportContent', {'subject': 'designer', 'file': 'extensions'}) }}" class="content-card">
+      <div class="content-card__header">
+        <i class="fas fa-cog card-icon"></i>
+        <h3 class="content-card__title">Extensions</h3>
+      </div>
+      <div class="content-card__body">
+        <p>How to customize PitonCMS.</p>
+      </div>
+    </a>
+  {% endif %}
+</div>
+
+{# Only show designer support link when viewing client user support index #}
+{% if page.subject == 'client' %}
+<div class="btn-group"><a class="btn btn-cancel" href="{{ pathFor('adminSupportIndex', {'subject': 'designer'}) }}">Support for Designers</a></div>
+{% endif %}
+
+{% endblock content %}

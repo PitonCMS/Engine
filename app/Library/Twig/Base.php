@@ -62,7 +62,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         'adminNavigation' => null,
         'adminMessage' => null,
         'adminSetting' => null,
-        'adminSupport' =>  null,
+        'adminSupportIndex' =>  null,
 
         // Level 1 pages
         'adminPageEdit' => 'adminPage',
@@ -72,6 +72,8 @@ class Base extends AbstractExtension implements GlobalsInterface
         'adminCollection' => 'adminSetting',
         'adminMediaCategoryEdit' => 'adminSetting',
         'adminUser' => 'adminSetting',
+        'adminSupportContent' => 'adminSupportIndex',
+        'adminSupportAbout' => 'adminSupportIndex',
 
         // Level 2 pages
         'adminUserEdit' => 'adminUser',

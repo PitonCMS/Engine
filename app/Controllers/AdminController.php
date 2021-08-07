@@ -89,29 +89,30 @@ class AdminController extends AdminBaseController
     }
 
     /**
-     * Show Support Page
+     * Show Support Index
      *
      * @param array $args
      * @return Response
      */
-    public function showSupport($args): Response
+    public function showSupportIndex($args): Response
+    {
+        $data['subject'] = $args['subject'];
+        return $this->render("support/index.html", $data);
+    }
+
+    /**
+     * Show Support Content Page
+     *
+     * @param array $args
+     * @return Response
+     */
+    public function showSupportContent($args): Response
     {
         // Load dependencies
         $markdown = $this->container->markdownParser;
 
         // Pass through reference to subject
         $data['subject'] = $args['subject'];
-
-        // If no support file was requested, default to a support index
-        if (!isset($args['file'])) {
-            $index = ($args['subject'] === 'designer') ? 'designerIndex' : 'clientIndex';
-            return $this->render("support/$index.html", $data);
-        }
-
-        // If requesting the about PitonCMS page
-        if ($args['file'] === 'aboutPitonCMS') {
-            return $this->aboutPiton();
-        }
 
         // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
@@ -147,7 +148,7 @@ class AdminController extends AdminBaseController
     /**
      * Show Piton Engine aboutPiton Notes
      *
-     * Used in Help > Developer > Version
+     * Used in Support > About
      * @param void
      * @return Response
      */
@@ -158,7 +159,7 @@ class AdminController extends AdminBaseController
 
         // Get list of releases from GitHub. First check that cURL is installed on the server
         if (!function_exists('curl_init')) {
-            // If curl is not installed display notice
+            // If curl is not installed on the server log info
             $log->info("Piton: cURL is not installed, unable to get releases from GitHub.");
         } else {
             // Get GitHub release history for engine
@@ -194,8 +195,8 @@ class AdminController extends AdminBaseController
         }
 
         $data['breadcrumbTitle'] = 'About PitonCMS';
-        // Not passing any helpContent through, but sending a flag to enable the breadcrumb
-        $data['helpContent'] =  true;
+        // Not passing any supportContent through, but sending a flag to enable the breadcrumb
+        $data['supportContent'] =  true;
 
         return $this->render('support/about.html', $data);
     }
