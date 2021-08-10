@@ -13,9 +13,9 @@
   <input type="hidden" name="collection_id" value="{{ page.collection_id }}">
   <input type="hidden" name="collection_slug" value="{{ page.collection_slug }}">
   <input type="hidden" name="template" value="{{ page.template }}">
-  {% endblock openForm %}
+{% endblock openForm %}
 
-  {% block contentHeader %}
+{% block contentHeader %}
   <!-- Content Header Control Bar -->
   <div class="content-header-inner">
     <div class="breadcrumb">
@@ -32,9 +32,9 @@
       <button class="btn btn-save" data-form-button="save" type="submit" disabled>Save</button>
     </div>
   </div>
-  {% endblock contentHeader %}
+{% endblock contentHeader %}
 
-  {% block content %}
+{% block content %}
   <div class="pageEdit__wrapper" data-page-edit="1">
 
     <!-- Left Column Page Edit -->
@@ -203,10 +203,9 @@
       title="The home page cannot be deleted." {% endif %}>Delete Page</button>
     {% endif %}
   </div>
+{% endblock content %}
 
-  {% endblock content %}
-
-  {% block closeForm %}
+{% block closeForm %}
 </form>
 {% endblock closeForm %}
 

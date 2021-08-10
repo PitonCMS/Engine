@@ -259,7 +259,6 @@ $app->group('/admin', function () {
 
     // Support content
     $this->group('/support', function () {
-
         // About PitonCMS
         $this->get('/about', function ($args) {
             return (new AdminController($this))->aboutPiton($args);
@@ -270,7 +269,7 @@ $app->group('/admin', function () {
             return (new AdminController($this))->showSupportIndex($args);
         })->setName('adminSupportIndex');
 
-        // Support file
+        // Support content page
         $this->get('/{subject:client|designer}/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]', function ($args) {
             return (new AdminController($this))->showSupportContent($args);
         })->setName('adminSupportContent');

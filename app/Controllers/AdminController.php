@@ -137,9 +137,6 @@ class AdminController extends AdminBaseController
             // Get breadcrumb title from first H1 in file and render HTML
             $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
             $data['supportContent'] = $document->saveHTML();
-        } else {
-            $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$args['subject']}, File {$args['file']}.");
-            $data['supportContent'] = "<h1>Help File Does Not Exist</h1>";
         }
 
         return $this->render('support/supportFile.html', $data);

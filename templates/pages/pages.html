@@ -17,14 +17,14 @@
       {# List all templates with "templateType": "page" #}
       {% for pt in getPageTemplates() %}
       <div class="form-group">
-        <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}">{{ pt.name }}</a>
+        <a href="{{ pathFor('adminPageEdit', {}, {'definition': pt.filename}) }}" title="{{ pt.description }}">{{ pt.name }}</a>
       </div>
       {% endfor %}
       <hr>
       {# List all saved collection groups #}
       {% for ct in getCollections() %}
       <div class="form-group">
-        <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}">{{ ct.collection_title }}</a>
+        <a href="{{ pathFor('adminPageEdit', {}, {'collectionId': ct.id}) }}" title="{{ pt.description }}">{{ ct.collection_title }}</a>
       </div>
       {% endfor %}
     </div>
