@@ -1,6 +1,6 @@
-# Tools
+# Settings
 
-The Tools in PitonCMS help you manage your custom website.
+ PitonCMS has a range of application settings and tools to help you manage your website.
 
 ## Settings
 **Site Settings** are specific values that typically apply to the entire site. You can change these settings anytime, but be aware of what each setting does before making any changes.
@@ -10,7 +10,7 @@ Your web designer may have added additional customer settings not listed below.
 ### General
 **General Settings** control general site configuration settings.
 
-* **Date Format** Controls how dates are displayed on your website. Choose from:
+* **Date Format** Controls how dates are displayed on your website. Choose from
   * mm/dd/yyyy Default
   * dd-mm-yyyy
   * dd.mm.yyyy
@@ -30,7 +30,7 @@ If your web site design has a contact form enabled, enter your message inbox ema
 Add your social media links, if defined by your web designer.
 
 ### Users
-To grant someone else access to your website administration:
+To grant someone else access to your website administration
 
 * Go to **Tools > Users**
 * Click **Add User**
@@ -41,7 +41,7 @@ To grant someone else access to your website administration:
 ### Sitemap
 A sitemap is a list of URL's to content on yourwebsite you want search engines to consider when crawling your site. After publishing new content, consider updating your [sitemap](/sitemap.xml).
 
-Go to:
+Go to
 * **Tools > Sitemap**
 * Click **Update Sitemap**
 

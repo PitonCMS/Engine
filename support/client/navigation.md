@@ -2,7 +2,7 @@
 
 With the **Content > Navigation** menu, you can control which page links appear and in what order in any navigator. Your website designer will have defined the navigator groups, such as main, footer, sidebar, etc.
 
-The navigation manager allows you to:
+The navigation manager allows you to
 
 * Add a page to any navigator (but not collection detail pages)
 * Set the desired position of the link
@@ -26,7 +26,7 @@ The navigators were defined by your website designer. To edit a navigator click 
 
 ## Add Page Link
 
-A Page must first exist before it can be added to a navigator. To add a page link:
+A Page must first exist before it can be added to a navigator. To add a page link
 
 1. Select the navigator to edit.
 2. Click the green plus button.
@@ -52,12 +52,12 @@ You can temporarily disable a navigation link or dropdown group to hide the link
 
 Note, although the deactivated navigation links will not appear on the website, if the target page is still *Published* visitors and search engines may still be able view that page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
 
-To disable a navigation link:
+To disable a navigation link
 
 1. Click the yellow deactivate icon. The selected link should turn amber (including any sub page links).
 2. Click the save button.
 
-To enable a navigation link:
+To enable a navigation link
 
 1. Click the *Disable* icon again to the left of the arrows. The highlighted color will disappear.
 2. Click the *Save Navigation* button.
@@ -68,7 +68,7 @@ You can permanently remove a navigation page link or dropdown from the website.
 
 Note, although the deleted navigation links will not appear on the website, if the target Page is still *Published* visitors and search engines may still be able view that page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
 
-To permanently delete a navigation link:
+To permanently delete a navigation link
 
 1. Click the garbage can or bin icon to the right of the arrows. The selected link should turn red.
     * If the deleted link is the parent of a Dropdown, the entire dropdown will be deleted.
@@ -76,7 +76,7 @@ To permanently delete a navigation link:
 
 You cannot delete the navigation list itself, only your website designer can remove or add navigator groups. You can, however, remove all links from a navigator group.
 
-The navigation manager allows you to:
+The navigation manager allows you to
 
 * Add a page to any navigator (but not collection detail pages)
 * Set the desired position of the link

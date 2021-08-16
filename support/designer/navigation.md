@@ -8,7 +8,7 @@ For example, if you create a `main` navigator, the user can add the Home and Abo
 You can define separate navigators for different navigation components, such as header main navigation, sidebar navigation, footer navigation and more.
 
 ## Navigators
-To define a navigator (navigation bar), open `structure/definitions/navigation.json` and add to the `navigators` array:
+To define a navigator (navigation bar), open `structure/definitions/navigation.json` and add to the `navigators` array
 
 ```json
 {
@@ -22,7 +22,7 @@ To define a navigator (navigation bar), open `structure/definitions/navigation.j
 }
 ```
 
-Where `"navigators": []` is required as the root of navigator array, and each navigator has a `key`, a display `name`, and a `description`. To add another navigator, such as for a side bar, then add:
+Where `"navigators": []` is required as the root of navigator array, and each navigator has a `key`, a display `name`, and a `description`. To add another navigator, such as for a side bar, then add
 
 ```json
 {
@@ -48,7 +48,7 @@ After saving, open Navigation manager to see the new navigator.
 ## Displaying Navigators
 To display a navigator in your template, use the Piton Twig function `getNavigator('main')` and pass in the name (key) of your navigator. This will return an array of navigation entries, that you can loop over to print each link. To print the actual anchor `href` link, be sure to use the PitonCMS Twig function `getNavigationLink()` to derive the correct URL.
 
-For example, to print the main navigator with an active link class on the current page:
+For example, to print the main navigator with an active link class on the current page
 
 ```html
 <ul class="navigation">
@@ -61,7 +61,7 @@ For example, to print the main navigator with an active link class on the curren
 ```
 
 ### Navigation Data
-These keys are available in each navigation link element returned by `getNavigator()`:
+These keys are available in each navigation link element returned by `getNavigator()`
 
 * `id` Navigation ID
 * `navigator` Name of navigator for this link

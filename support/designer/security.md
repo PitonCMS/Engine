@@ -5,7 +5,7 @@ This is not meant to be a comprehensive cybersecurity overview, but does include
 ## Security Headers
 PitonCMS comes with a default set of security response headers which are defined in `vendor/pitoncms/engine/config/config.default.php`. You can overwrite, change, or disable any header in `config/config.local.php`. These headers will be added to all HTTP responses for both backend PitonCMS administration pages and front end visitor pages.
 
-The default response headers are:
+The default response headers are
 
 ```php
 /**
@@ -24,7 +24,7 @@ Note: `style-src https://fonts.googleapis.com` and `font-src https://fonts.gstat
 
 For more on these headers and others see [MDN HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
 
-You can add other standard and custom headers by adding the header name and value to the `$config['header']` array in `config/config.local.php`:
+You can add other standard and custom headers by adding the header name and value to the `$config['header']` array in `config/config.local.php`
 
 ```php
 $config['header']['Breakfast'] = 'pancakes';
@@ -42,7 +42,7 @@ A Content Security Policy (CSP) is a very powerful way to mitigate risk to your 
 
 A Content Security Policy may also easily break your site if you include inline script or external assets, unless you properly define the required policies and list allowed sources.
 
-The default CSP sent by PitonCMS is inherently a strict policy, see [Strict CSP With Google](https://csp.withgoogle.com/docs/strict-csp.html) for an explanation of the following:
+The default CSP sent by PitonCMS is inherently a strict policy, see [Strict CSP With Google](https://csp.withgoogle.com/docs/strict-csp.html) for an explanation of the following
 
 ```apache
 Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; frame-ancestors 'self'
@@ -52,13 +52,13 @@ This CSP is meant to _prevent_ unauthorized code, styles, images from running on
 
 By default, PitonCMS blocks all scripts (inline and external) unless you include a nonce in the script element, including all JS analytics tracking code. To enable javascript, see the section on [CSP Nonces](#csp-nonce) below.
 
-To modify the CSP header define a new policy as a string in `config/config.local.php`:
+To modify the CSP header define a new policy as a string in `config/config.local.php`
 
 ```php
 $config['header']['Content-Security-Policy'] = "default-src 'self'; script-src 'strict-dynamic'; img-src *";
 ```
 
-Because the CSP is potentially a very long string on a single line, it may be easier to use the concatenation operator `.` to separate all directives onto separate lines for easier review. Note, all directives should end with a semicolon, but the last directive policy does not require a trailing semicolon:
+Because the CSP is potentially a very long string on a single line, it may be easier to use the concatenation operator `.` to separate all directives onto separate lines for easier review. Note, all directives should end with a semicolon, but the last directive policy does not require a trailing semicolon
 
 ```php
 $config['header']['Content-Security-Policy'] =
@@ -77,20 +77,20 @@ PitonCMS will automatically generate a 128bit base64 encoded nonce which is sent
 
 To add the nonce to other CSP policy directives, just include the string `'nonce'` in the directive source list (with the single quotes), and also add the Twig variable `{{ site.environment.cspNonce }}` to your nonceable elements. At runtime the header `'nonce'` string will be replaced by the actual base64 nonce and the matching nonce key printed in your HTML templates.
 
-For example, this CSP `script-src` directive:
+For example, this CSP `script-src` directive
 
 ```apache
 script-src 'self' 'nonce' 'strict-dynamic' 'unsafe-inline';
 ```
 
-Can be applied in your templates as:
+Can be applied in your templates as
 
 ```html
 <script nonce="{{ site.environment.cspNonce }}">
     let color = "blue";
     // Or analytics JS code, for example
 </script>
-Or, for external resources:
+Or, for external resources
 <script nonce="{{ site.environment.cspNonce }}" src="{{ baseUrl() }}/assets/js/custom.js"></script>
 ```
 
@@ -101,7 +101,7 @@ For tracking analytics code, in addition to printing the nonce in the inline scr
 If a CSP header policy requires a nonce to execute inline code the browser will check that the `nonce-<key>` in the element matches the header `nonce-<key>` and allow that block to run.
 
 ## Session Tokens
-By default, user session tokens expire after 2 hours after the last administration request. You can change this value by stting the session `secondsUntilExpiration` configuration option. You can also use an expression to set a longer session. For example, to increase the session to 30 days in `config/config.local.php`:
+By default, user session tokens expire after 2 hours after the last administration request. You can change this value by stting the session `secondsUntilExpiration` configuration option. You can also use an expression to set a longer session. For example, to increase the session to 30 days in `config/config.local.php`
 
 ```php
 $config['session']['secondsUntilExpiration'] = 60*60*24*30;

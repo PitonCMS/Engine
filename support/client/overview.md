@@ -1,69 +1,72 @@
 # Overview
 
-PitonCMS is an easy to use, powerful Content Management System (CMS) for personal and small business websites. Your website designer has configured and built this website for your specific requirements, and this administration console allows you to easily update your website content.
+PitonCMS is an easy to use, powerful website *Content Management System* (CMS) for personal and small business websites. Your website designer has configured and built this website for your specific requirements, and this administration console allows you to easily modify and manage your website content.
 
-If you are new to your website, here are a few things to review.
+If you are new to your website, here are a few things to get you started.
 
-## Logging In
-PitonCMS does not store confidential passwords. When your website was setup by your designer, your email address was added as a registered user. To login, simply go to your website and add "[/login](/login)" to the URL and submit.
+## How to Log In
+PitonCMS uses a passwordless login, and does not store confidential passwords. When your website was setup by your designer, your email address was added as a registered user. To login, simply go to your website and add "[/login](/login)" to the URL and submit.
 
-Enter your email address and click the **Request Login** button. If the submitted email matches a known user registered in PitonCMS, a login link will be sent to you with a one-time use login token that takes you to the PitonCMS administration console. The link sent to you expires in 15 minutes, and cannot be reused.
+Enter your email address and click the **Request Login Link** button. If the submitted email matches a known user registered in PitonCMS, a link will be sent to you with a one-time use login token that takes you to the PitonCMS administration console. The link sent to you expires in 15 minutes, and cannot be reused.
+
+Once logged in, your session remains active for about two hours after your last interaction. Your web designer can change this setting to increase or decrease the session timeout.
 
 Note, for security reasons PitonCMS login links are unique to the device and web browser. This means you must request the PitonCMS login link from the _same_ device (laptop, phone, tablet etc.) that you use to access your email. Each device you use will require a separate login request.
 
-## Settings Menu
-* **General** Browse the site wide settings and confirm the values are correct. These can be changed at anytime. Consider adding a [Tinify](https://tinyjpg.com/) key to optimize uploaded image media. Your web designer can you help you register a free key.
-* **Contact** If you have a contact form on your website enter your email address to have website contact messages forwarded directly to you, and also set the acknowledgement message after the contact form is submitted. If you do not set a forwarding email, you can still receive messages which are available to view under **Mailbox**.
+## Modify Website Settings
+Some important aspects of your website is controlled by *Settings* you can change as needed. Go to the <i class="fas fa-cog"></i> **Settings** menu and browse the Settings to ensure they are correct.
+
+The main Settings to review are
+
+* **Site** Browse the site wide settings and confirm the values are correct.
+* **Contact** If you have a contact form on your website enter your email address to have contact messages submitted to your website forwarded directly to you. If you do not set a forwarding email, you can still view messages under **Mailbox**.
 * **Social** Add links to your social media accounts.
 * **Users** Consider adding another user account, or a back up administrator email address.
 
-And of course, browse these support documents!
+You can find more information in the [Settings](/admin/support/client/settings) support document.
 
-## Content Menu
-Most of the website content can be managed from the **Content** menu.
+## Manage Website Content
+Most of your website content can be managed from the <i class="fas fa-pencil-alt"></i> **Content** menu.
 
-Pages are the building blocks of any website and have content accessible at a specific URL. Pages can be *fixed* (static) or part of a *collection* of related pages.
+The building blocks of any website are pages that have content accessible at a unique URL. PitonCMS *Pages* can either be standalone or part of a collection of related Pages called a *Collection*.
 
-### Pages
-Fixed pages typically include core content such as Home, About, Location, and Collection Summaries etc. and are part of the main website navigation.
+A Page typically has content that changes infrequently such as Home, About, Location etc. and is listed in the main website Navigation.
 
-### Collection Pages
-Collections are groups of *related* pages such as blog posts, recipes (even a specific category of recipe), services etc.
+*Collection Details* are a group of related Pages such as blog posts, recipes, services, or a category of content. An individual Collection Detail is accessible at a unique URL, but all content within that collection share a common URL segment.
 
-*Collection Detail Pages* are specific pages within a collection, a blog post or a recipe for example. When you publish a new collection detail page the link to the new page is automatically added to the *Collection Summary* or navigation bar.
+When a new Collection Detail is published a link is also automatically added to the *Collection Summary* for that Collection. A Collection Summary is the set of related links to published content within that collection. This makes for an easy to way to publish blog posts and new recipes without having to update any Navigation.
 
-*Collection Summaries* display the group of links to the collection detail pages (think of the collection summary as an index pointing to the detail pages). You can also add a link to the collection as a whole to any navigation bar, so that new content automatically appears in the website navigation.
+You can have multiple Collections on your website, to categorize content.
 
-You can have multiple collections on your website, to categorize content.
+## Page Structure
+The Page and Collection Detail layouts (the look and structure of the page) are based on the *Templates* created by your website designer. A single Template can be reused on multiple Pages.
 
-### Page Structure
-Page and Collection Detail Page templates contain **Blocks** that represent broad areas of the page template, to which you can add one or more **Elements** that contain your page content.
+Templates contain *Blocks* that represent areas of the page layout, to which you can add one or more *Elements* that contain your actual page content.
 
-There may also be designer defined *Page Settings* or *Element Settings* in the page template. These are little bits of information you can define when you edit the page to enhance how page the displays (as built by the designer).
+There may also be *Custom Page Settings* or *Custom Element Settings* in the Template. These are bits of information to enhance how page the displays (as intended by your website designer).
 
-You can *pre-publish* pages by setting the publish date to a future date.
+You can pre-publish Pages by setting the *Publish Date* to a future date.
 
-### Navigation
-You can define how page links appear in your site's navigation, including the order of links, link text, and also sub-menu (dropdown) links.
+You can find more information on how to manage content in the [Pages](/admin/support/client/pages), or the [Collections](/admin/support/client/collections) support documents.
 
-## Media
-Before you can display images and other media in your pages or collection detail pages, you need to upload the media files from the **Media** menu. You can upload any media image or PDF file type, but video and other large graphics should be hosted on a video streaming platform such as [YouTube](https://youtube.com) or [Vimeo](https://vimeo.com/). You can then embed the video player HTML into your PitonCMS page as an element.
+## Website Navigation Links
+You can define how internal links appear in your website's *Navigation* (the list of links to browse your website), including the order of links, link text, and also dropdown links in the <i class="fas fa-compass"></i> **Navigation** menu.
 
-PitonCMS recommends getting a [Tinify](https://tinyjpg.com/) key to optimize image files. You can get a free key that supports 500 media operations a month (about 100 PitonCMS image uploads). Go to [Tiny Developer API](https://tinyjpg.com/developers) and enter your email address to receive a key that you save in **Tools > General** Site Settings. Your web designer can help you set this up.
+You can find more information in the [Navigation](/admin/support/client/navigation) support document.
 
-## Messages
-If your site has a contact form enabled, your contact messages are saved under the **Mailbox** menu. You can search, delete, or archive your messages.
+## Upload Media Files
+Before you can display images and other media on this website you need to upload the media files from the <i class="fas fa-images"></i> **Media** menu.
 
-## Settings
-PitonCMS site application management is handled under the **Settings** menu, including:
+You can upload any media file type, but video and other large graphics should be hosted on a video streaming platform such as [YouTube](https://youtube.com) or [Vimeo](https://vimeo.com/). You can then embed the video player HTML into your PitonCMS page as an Element.
 
-* General Site Settings
-* Contact Form Settings
-* Social Media Links
-* Website Administration Users
-* Sitemap updates to help Search Engine Optimization
-* Define Collection Groups
-* Define Media Categories
+PitonCMS recommends getting a [Tinify](https://tinyjpg.com/) key to optimize image files. You can get a free key that supports 500 media operations a month (about 100 PitonCMS image uploads). Go to [Tiny Developer API](https://tinyjpg.com/developers) and enter your email address to receive a key that you save in **Settings > Site > Tinify API Key**. Your web designer can help you set this up.
+
+You can find more information in the [Media](/admin/support/client/media) support document.
+
+## Mailbox and Messages
+If your site has a contact form enabled, your contact messages are saved under the <i class="fas fa-envelope"></i> **Mailbox** menu. Here you can search, delete, or archive your messages submitted on your website.
+
+You can find more information in the [Messages](/admin/support/client/messages) support document.
 
 ## Issues
-If you encounter issues with PitonCMS, please submit them on [GitHub PitonCMS](https://github.com/PitonCMS/Piton/issues).
+If you encounter issues with PitonCMS, please submit them on [GitHub PitonCMS](https://github.com/PitonCMS/Piton/issues), or contact your website designer.

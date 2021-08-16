@@ -151,7 +151,7 @@
 
       {# Publish Date Input #}
       <div class="form-block">
-        <h4 class="pageEdit__title">Publish date</h4>
+        <h4 class="pageEdit__title">Publish Date</h4>
         <input type="date" name="published_date" placeholder="YYYY-MM-DD" value="{{ page.published_date }}"
           autocomplete="off">
 
@@ -187,8 +187,10 @@
             </div>
           </div>
         </div>
-        <div class="small-text">URL link to page. The <code>home</code> URL is restricted from being changed. Warning,
-          changing the URL slug after the page is published may negatively impact links to your page.</div>
+        <div class="small-text">URL link to this Page.
+          Warning: changing the Slug after the Page is Published may negatively impact links to this Page.
+          {% if page.page_slug == 'home' %}Note: the <code>home</code> Slug is restricted from being changed.{% endif %}
+        </div>
       </div>
     </div>
 
