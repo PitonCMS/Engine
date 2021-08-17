@@ -121,22 +121,55 @@ class AdminController extends AdminBaseController
         if (file_exists($supportFile)) {
             $supportContent = $markdown->text(file_get_contents($supportFile));
 
-            // Parse help file to modify headings
-            $document = new DOMDocument();
+            // Parse support HTML to add heading ID's for links, and build Table of Contents
+            // Start with a DOMDocument
+            $document = new \DOMDocument();
+            $document->preserveWhiteSpace = false;
             $document->loadHTML($supportContent);
 
-            // Get heading tags h1..h6 and set ID so we can deep link to content
-            foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $h) {
-                $nodes = $document->getElementsByTagName($h);
-                foreach ($nodes as $node) {
-                    $value = str_replace(' ', '-', strtolower($node->nodeValue));
-                    $node->setAttribute('id', $value);
+            // Use DOMXPath to find headings, but skip h1's
+            $xpath = new \DOMXpath($document);
+            $nodes = $xpath->query("//h2 | //h3 | //h4 | //h5 | //h6");
+
+            // Start TOC, and define heading relative hierarchy
+            $toc = '<ul>';
+            $hOrder = ['h1' => 0, 'h2' => 1, 'h3' => 2, 'h4' => 3, 'h5' => 4, 'h6' => 5];
+            $priorNodeName = null;
+
+            foreach ($nodes as $node) {
+                $id = str_replace(' ', '-', strtolower($node->nodeValue));
+                $node->setAttribute('id', $id);
+
+                // If this TOC heading is less than the prior heading, wrap in a new ul
+                if (isset($priorNodeName) && ($hOrder[$node->nodeName] > $hOrder[$priorNodeName])) {
+                    // Count steps to open ul
+                    for ($i=0; $i < $hOrder[$node->nodeName] - $hOrder[$priorNodeName]; $i++) {
+                        $toc .= '<ul>';
+                    }
                 }
+
+                // Close the TOC </ul> if needed
+                if (isset($priorNodeName) && ($hOrder[$node->nodeName] < $hOrder[$priorNodeName])) {
+                    // Count steps to close ul
+                    for ($i=0; $i < $hOrder[$priorNodeName] - $hOrder[$node->nodeName]; $i++) {
+                        $toc .= '</ul>';
+                    }
+                }
+
+                // Add link to TOC
+                $toc .= "<li><a href=\"#$id\">{$node->nodeValue}</a></li>\n";
+
+                // Save heading for next iteration
+                $priorNodeName = $node->nodeName;
             }
+
+            // End TOC
+            $toc .= '</ul>';
 
             // Get breadcrumb title from first H1 in file and render HTML
             $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
             $data['supportContent'] = $document->saveHTML();
+            $data['tableOfContents'] = $toc;
         }
 
         return $this->render('support/supportFile.html', $data);
