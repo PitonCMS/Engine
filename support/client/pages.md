@@ -18,12 +18,14 @@ You can modify a Page by finding it in the list of Pages in the **Content** menu
 ## Saving and Publishing
 Once you have created or modified your Page you can save your changes by clicking the **Save** button in the top right corner. You can also cancel any changes to an existing (saved) Page by clicking **Discard**.
 
-To make your Page content available on the web, you need to *Publish* your page by setting the **Publish Date** to today's date or a date in the past. You can schedule new content to be Published by setting the Publish Date to the desired future date.
-
 The Publish Date field controls the *Page Status*
 - **Draft** No Publish Date has been set, and the page is *not* visible to the public
 - **Pending** A future Publish Date has been set, and the page is *not* visible to the public
 - **Published** The Publish Date is today or in the past, and the page *is* visible to the public
+
+To make your Page content available on the web, you need to *Publish* your page by setting the **Publish Date** to today's date or a date in the past. You can schedule new content to be Published by setting the Publish Date to the desired future date.
+
+You can also unpublish a Page by clearing the Publish Date and saving your Page.
 
 ## Page Structure, Templates, Blocks, Elements
 Pages and Collection Detail Pages are created based *Templates* for the layout. These Templates were created as part of your website by your web designer. Once a Page is created you cannot change the Template.

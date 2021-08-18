@@ -63,46 +63,17 @@ To use a Placeholder as the parent of a sub-Navigation
 2. Then add the sub-Navigation pages and drag them *under* the Placeholder.
 3. Click **Save** to save your changes
 
-## How to Disable Navigation Links
+## How to Delete Navigation Links
 
-You can temporarily disable a Navigation link or sub-Navigation list to hide the link on your website.
+You can permanently remove a Navigation link or Placeholder link from your website.
 
->**Note**: although the deactivated Navigation links will not appear on the website, if the target Page is still *Published* visitors and search engines may still be able view the Page if they have the URL. Use the unpublish feature on a Page to hide it completely.
+To permanently delete a Navigation link
+1. Click on the <i class="fas fa-compass"></i> **Navigation** menu and then click on the Navigation list you wish to modify
+2. Open the link by clicking on the <i class="fas fa-chevron-down"></i> down arrow
+3. Click the **Remove** button and acknowledge the warning to delete the link
 
-To disable a Navigation link
+>**Note**: deleting a link is permanent and immediate, and cannot be undone.
 
-1. Click the yellow deactivate icon. The selected link should turn amber (including any sub page links).
-2. Click the save button.
+>**Note**: although the deleted Navigation links will no longer appear on your website, if the target Page is still *Published* visitors and search engines may still be able view that Page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
 
-To enable a navigation link
-
-1. Click the *Disable* icon again to the left of the arrows. The highlighted color will disappear.
-2. Click the *Save Navigation* button.
-
-## Delete Navigation Links
-
-You can permanently remove a navigation page link or dropdown from the website.
-
-Note, although the deleted navigation links will not appear on the website, if the target Page is still *Published* visitors and search engines may still be able view that page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
-
-To permanently delete a navigation link
-
-1. Click the garbage can or bin icon to the right of the arrows. The selected link should turn red.
-    * If the deleted link is the parent of a Dropdown, the entire dropdown will be deleted.
-2. Click the *Save Navigation* button.
-
-You cannot delete the navigation list itself, only your website designer can remove or add navigator groups. You can, however, remove all links from a navigator group.
-
-The navigation manager allows you to
-
-* Add a page to any navigator (but not collection detail pages)
-* Set the desired position of the link
-* Edit the link text (defaults to the page title)
-* Add a dropdown menu to a list of child links
-* Deactivate a link temporarily to remove it without deleting the link entry
-
-To edit a navigator, go to **Content > Navigation > Edit [Navigator Name].
-
-Here you can add, delete, rename, and deactivate or reactivate navigation links. Make your changes, and the press save.
-
-**Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
+You cannot delete the Navigation list itself, only your website designer can remove or add Navigator lists.
