@@ -16,7 +16,7 @@
       Navigation <i class="fas fa-chevron-right"></i>
     </a>
   </div>
-  <h1 class="section-title">Nav Structure: {{ page.navDefinition.name }}</h1>
+  <h1 class="section-title">{{ page.navDefinition.name }}</h1>
 
   <div class="btn-group">
     <button class="btn btn-cancel" type="reset" data-form-reset-href="{{ pathFor('adminNavigationEdit', {'navigator': page.navDefinition.key}) }}" data-form-button="cancel" disabled>Discard</button>

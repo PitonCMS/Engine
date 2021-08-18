@@ -1,58 +1,75 @@
 # Navigation
 
-With the **Content > Navigation** menu, you can control which page links appear and in what order in any navigator. Your website designer will have defined the navigator groups, such as main, footer, sidebar, etc.
+When visitors land on your website, they need a way to find your content; this is the role of *Navigation* lists. Navigation lists are the sets of links to internal Pages. Your web design may have one or more Navigation lists that you can update.
 
-The navigation manager allows you to
+Standard [published](/admin/support/client/pages#saving-and-publishing) Pages will need a link manually added to the Navigation lists for visitors to find the Page. ([Collection Pages](/admin/support/client/collections) have links shared by Collection Summaries.)
 
-* Add a page to any navigator (but not collection detail pages)
-* Set the desired position of the link
-* Edit the link text (defaults to the page title)
-* Add a dropdown menu to a list of child links
-* Deactivate a link temporarily to remove it without deleting the link entry
+Search engines also use these Navigation lists to browse your website, so having links to all Pages is essential. Furthermore, like humans search engines will read and evaluate the link text to determine if the destination is of interest. PitonCMS allows you to add internal and external links to Navigation lists, to modify the link text, to change the order of links, and even categorize links into dropdown menus.
 
-To edit a navigator, go to **Content > Navigation > Edit [Navigator Name]**.
+## Hot to Edit a Navigation List
 
-Here you can add, delete, rename, and deactivate or reactivate navigation links. Make your changes, and the press save.
+To edit a Navigation list, go to <i class="fas fa-compass"></i> **Navigation** menu. You will then see links to the different Navigation lists for your web design, such as *Main* or *Primary* or *Footer* etc. Click on the Navigation list you wish to modify.
 
-**Note**: When clicking delete on a navigation link, the link is not immediately deleted, it is marked for deletion (and turns red). The delete happens when the navigator is saved.
+Here you can add, delete, or rename Navigation links.
 
-![Navigation Page](/admin/img/support/pageNavigation.png)
+The Navigation Editor has two panels
+- Links you can add to your list (on the left)
+- The current Navigation list you are editing (on the right)
 
-**Note**, **Collection Detail Pages** are not available to add to the navigator. Instead, add a **Collection Summary Element** to one of your pages as the entry point to that collection group.
+![Navigation Page](/admin/img/support/navigationEditor.png)
 
-## Navigators
+On the left there are three types of links you can add to your Navigation list
+- **Pages** Standard Pages (both published and not published)
+- **Collections** Collection Groups
+- **Placeholder** Custom links
 
-The navigators were defined by your website designer. To edit a navigator click on **Content > Navigation > Edit [Navigator Name]**
+On the right is your current Navigation list where you can edit link text, and you can move link position by dragging and dropping links.
 
-## Add Page Link
+After making your changes you can click **Save** or click **Discard** to reset any changes.
 
-A Page must first exist before it can be added to a navigator. To add a page link
+>**Note**: Deleting links is permanent and immediate.
 
-1. Select the navigator to edit.
-2. Click the green plus button.
-3. From the dropdown menu select the desired page.
-4. Optionally enter an alternate link text (required if selecting a Dropdown link).
-5. Click the save button in the sidebar.
+## How to Add a Page or Collection Summary Link
+A Page must first exist before it can be added to a Navigation list.
 
-**Note**: You can add a link to an unpublished page. However, the navigation will not display the link in the navigation until that page is published.
+To add a link
 
-## Dropdown Navigation Links
-To add a dropdown menu to a navigator,
+ 1. In the **Pages** or **Collections** sections on the left, check the box next to the Page or Collection you wish to add
+ 2. Click the **Add Page** or **Add Collection** button
+ 3. The new link will appear at the bottom of the Navigation list on the right
+ 4. (Optional) Modify the link text
+ 5. (Optional) Drag and drop the new link into the desired position
+ 6. Click **Save** to save your changes
 
-1. Select the navigator to edit.
-2. Select **[Dropdown]** from the lis of pages. Enter an alternate link text (required).
-3. Click the green plus button under the dropdown link.
-4. Select the first sub-page from the page list.
-5. Repeat.
-6.  Click the save button in the sidebar.
+Because your Collection links will automatically grow as you publish Collection Detail Pages, it is recommended that you add Collections as a sub-Navigation list under a Placeholder link. This way the new Collection Detail Pages do not crowd your Navigation list display.
 
-## Disable Navigation Links
+>**Note**: You can add a link to an unpublished Page. However, the Navigation list will not display the link in the Navigation list until that Page is published.
 
-You can temporarily disable a navigation link or dropdown group to hide the link on your website.
+## How to Add a Placeholder Link
+The *Placeholder* link option can be useful to share
 
-Note, although the deactivated navigation links will not appear on the website, if the target page is still *Published* visitors and search engines may still be able view that page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
+- Custom links to external sites
+- As a placeholder parent of a sub-Navigation list or Collection
 
-To disable a navigation link
+To add a Placeholder link
+
+1. Enter the link text in the **Placeholder** section
+2. (Optional) Enter the link URL (can be blank if just a placeholder)
+3. (Optional) Drag and drop the new link into the desired position
+4. Click **Save** to save your changes
+
+To use a Placeholder as the parent of a sub-Navigation
+1. Add the Placeholder link and enter a suitable link title.
+2. Then add the sub-Navigation pages and drag them *under* the Placeholder.
+3. Click **Save** to save your changes
+
+## How to Disable Navigation Links
+
+You can temporarily disable a Navigation link or sub-Navigation list to hide the link on your website.
+
+>**Note**: although the deactivated Navigation links will not appear on the website, if the target Page is still *Published* visitors and search engines may still be able view the Page if they have the URL. Use the unpublish feature on a Page to hide it completely.
+
+To disable a Navigation link
 
 1. Click the yellow deactivate icon. The selected link should turn amber (including any sub page links).
 2. Click the save button.
