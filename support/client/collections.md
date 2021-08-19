@@ -1,6 +1,6 @@
 # Collections
 
->This support document covers creating and updating a *Collection*. To create and modify Page content for your *Collection Detail Page* see the [Pages](/admin/support/client/pages) support document.
+>**Note**: This support document covers creating and updating a *Collection*. To create and modify Page content for your *Collection Detail Page* see the [Pages](/admin/support/client/pages) support document.
 
 *Collections* are groups of related Pages such as blog posts, recipes, services etc. and consist of *Collection Detail Pages* with each Page in the Collection accessible at a unique URL. Collections are ideal to categorize similar topics on your website.
 
@@ -20,9 +20,9 @@ In the form that appears enter the
 
 The *Collection Slug* is the unique segment in the URL (the text between slashes `/`) that comes after your domain and before the Page Slug, and is initially based on the Page Title. You can modify the Slug if you wish to provide clarity or brevity.
 
->Note: to change the Slug after the Page is Published you must first click the <i class="fas fa-lock"></i> lock icon and acknowledge the warning. Changing the Slug after the Page is published may break links to your Page!
+>**Note**: To change the Slug after the Page is Published you must first click the <i class="fas fa-lock"></i> lock icon and acknowledge the warning. Changing the Slug after the Page is published may break links to your Page!
 
->Note: once a Detail Page has been added to the Collection, you can no longer change the Template used for the Collection Detail Pages.
+>**Note**: Once a Detail Page has been added to the Collection, you can no longer change the Template used for the Collection Detail Pages.
 
 ## How to Edit an Existing Collection Group
 To edit a Collection Group, go to the <i class="fas fa-cog"></i> **Settings** menu then click on **Collection Groups**. Then click on the row for the Collection you wish to edit.

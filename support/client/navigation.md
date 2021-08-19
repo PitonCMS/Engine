@@ -72,8 +72,8 @@ To permanently delete a Navigation link
 2. Open the link by clicking on the <i class="fas fa-chevron-down"></i> down arrow
 3. Click the **Remove** button and acknowledge the warning to delete the link
 
->**Note**: deleting a link is permanent and immediate, and cannot be undone.
+>**Note**: Deleting a link is permanent and immediate, and cannot be undone.
 
->**Note**: although the deleted Navigation links will no longer appear on your website, if the target Page is still *Published* visitors and search engines may still be able view that Page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
+>**Note**: Although the deleted Navigation links will no longer appear on your website, if the target Page is still *Published* visitors and search engines may still be able view that Page if they have the URL. Use the unpublish feature on a page to remove page content entirely.
 
-You cannot delete the Navigation list itself, only your website designer can remove or add Navigator lists.
+You cannot delete the Navigation list itself, only your website designer can remove or add Navigation lists.

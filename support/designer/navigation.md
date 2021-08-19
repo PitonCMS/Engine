@@ -1,11 +1,11 @@
 # Navigation
-PitonCMS supports creating multiple navigation bars (navigators), including drop down menus. As a designer, you can define a navigation bar, and let the user add or remove links from the navigation bar using the **Navigation** mananger.
+PitonCMS supports creating multiple Navigation lists including drop down menus. As a designer, you can define a navigation bar, and let the user add or remove links from the navigation bar using the **Navigation** mananger.
 
-Note, only static Pages, Collections, and custom links can be added to a navigator by the user. Links to individual Collection Detail Pages technically can be added to a navigation bar as placeholder link, but the individual Collection Detail Pages themselves do not appear as an option in the Navigation manager, only the Collection Summaries themselves.
+Note, only static Pages, Collections, and custom links can be added to a Navigation list by the user. Links to individual Collection Detail Pages technically can be added to a navigation bar as placeholder link, but the individual Collection Detail Pages themselves do not appear as an option in the Navigation manager, only the Collection Summaries themselves.
 
-For example, if you create a `main` navigator, the user can add the Home and About pages as navigation links. They can also add a Collection called "Blog Posts" (assuming this had already been created) so that new posts automatically appear in the navigator. However, to pin a specific Blog Post the user will need to copy and paste that URL as Placeholder navigation entry. This is where creating a static Page might be more appropriate.
+For example, if you create a `main` Navigation list, the user can add the Home and About pages as navigation links. They can also add a Collection called "Blog Posts" (assuming this had already been created) so that new posts automatically appear in the Navigation. However, to pin a specific Blog Post the user will need to copy and paste that URL as Placeholder navigation entry. This is where creating a static Page might be more appropriate.
 
-You can define separate navigators for different navigation components, such as header main navigation, sidebar navigation, footer navigation and more.
+You can define separate Navigation list for different navigation components, such as header main navigation, sidebar navigation, footer navigation and more.
 
 ## Navigators
 To define a navigator (navigation bar), open `structure/definitions/navigation.json` and add to the `navigators` array

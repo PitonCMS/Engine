@@ -1,6 +1,6 @@
 # Pages and Collection Detail Pages
 
->This support document covers creating and updating content for both *Pages* and *Collection Details*. To learn about *Collections* see the [Collections](/admin/support/client/collections) support document.
+>**Note**: This support document covers creating and updating content for both *Pages* and *Collection Details*. To learn about *Collections* see the [Collections](/admin/support/client/collections) support document.
 
 ## What are Pages
 Websites consist of pages that hold various types of content (words, links, images) and are accessible at a unique URL. In PitonCMS, *Pages* hold content that rarely changes such as Home, About, Location etc. and have links to the Page in the main website Navigation. *Collection Detail* Pages are similar, but are meant to group Pages with similar content together, such as recipes (or even a cateogry of recipe), events, services etc.
@@ -54,9 +54,9 @@ The *Page Slug* the portion of the URL (web address) that starts with a forward 
 
 In PitonCMS *standard* Pages have a simple URL structure with one segment (the text between slashes `/`). The Slug is initially based on the Page Title, but you can modify the Slug if you wish to provide clarity or brevity.
 
->Note: to change the slug *after* the Page is Published you must first click the <i class="fas fa-lock"></i> lock icon and acknowledge the warning. Changing the Slug after the Page is published may break links to your Page!
+>**Note**: To change the slug *after* the Page is Published you must first click the <i class="fas fa-lock"></i> lock icon and acknowledge the warning. Changing the Slug after the Page is published may break links to your Page!
 
->Note: The `home` Slug is restricted from being changed.
+>**Note**: The `home` Slug is restricted from being changed.
 
 Collection Detail Pages have an additional segment for the Collection after the domain and before the Page Slug. This *Collection Slug* is unique to each Collection.
 

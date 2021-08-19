@@ -57,7 +57,7 @@ You can find more information in the [Navigation](/admin/support/client/navigati
 ## Upload Media Files
 Before you can display images and other media on this website you need to upload the media files from the <i class="fas fa-images"></i> **Media** menu.
 
-You can upload any media file type, but video and other large graphics should be hosted on a video streaming platform such as [YouTube](https://youtube.com) or [Vimeo](https://vimeo.com/). You can then embed the video player HTML into your PitonCMS page as an Element.
+You can upload any media file type, but video and other large graphics should be hosted on a video streaming platform such as [YouTube](https://youtube.com) or [Vimeo](https://vimeo.com/). You can then embed the video player HTML into your PitonCMS Page as an *Embedded Element*.
 
 PitonCMS recommends getting a [Tinify](https://tinyjpg.com/) key to optimize image files. You can get a free key that supports 500 media operations a month (about 100 PitonCMS image uploads). Go to [Tiny Developer API](https://tinyjpg.com/developers) and enter your email address to receive a key that you save in **Settings > Site > Tinify API Key**. Your web designer can help you set this up.
 
