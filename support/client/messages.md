@@ -35,9 +35,24 @@ To display a contact form you need to select a *Contact Element* in your page (i
 When a visitor submits a Message (and if it passes the spam filter and Minimum Message Length) the Message is saved in PitonCMS. If a forwarding email has been saved, then a copy is also sent to that email address.
 
 The *Mailbox* menu link shows how many unread Messages you have.
-<img src="/admin/img/support/mailboxUnreadCount.png" style="width:30%;">
+![Mailbox message count](/admin/img/support/mailboxUnreadCount.png)
 
 To manage your messages, click on the <i class="fas fa-envelope"></i> **Mailbox** menu link. Here you can mark Messages as read or as unread, archive and and delete messages.
 
-Each Message is displayed in a block, which includes
+Each Message is displayed in a block
 ![Message row](/admin/img/support/messageBlock.png)
+
+and contains
+- The name and email of the visitor who submitted the message, in a ready to click email link
+- The date the message was submitted (server time)
+- **Context** On which Page or which form the message was submitted
+- The message body, with any custom fields
+- Buttons to support your workflow
+  - **Delete** Permanently delete the message
+  - **Archive** Keep but stash the message
+  - **Mark as Read** (or **Mark as Unread**) Change the status of the message
+
+## How to Find Messages
+PitonCMS Mailbox allows you to search on Messages. The **Search** input will search the *Name*, *Email*, *Message* body, and *Context* fields. To browse by status, use the **Filter on Status** menu.
+
+![Search and filter messages](/admin/img/support/messageSearch.png)
