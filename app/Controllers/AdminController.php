@@ -118,59 +118,62 @@ class AdminController extends AdminBaseController
         $data['link'] = $args['link'] ?? null;
         $supportFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
 
-        if (file_exists($supportFile)) {
-            $supportContent = $markdown->text(file_get_contents($supportFile));
+        // Send 404 if support file is not found
+        if (!file_exists($supportFile)) {
+            $this->notFound();
+        }
 
-            // Parse support HTML to add heading ID's for links, and build Table of Contents
-            // Start with a DOMDocument
-            $document = new \DOMDocument();
-            $document->preserveWhiteSpace = false;
-            $document->loadHTML($supportContent);
+        $supportContent = $markdown->text(file_get_contents($supportFile));
 
-            // Use DOMXPath to find headings, but skip h1's
-            $xpath = new \DOMXpath($document);
-            $nodes = $xpath->query("//h2 | //h3 | //h4 | //h5 | //h6");
+        // Parse support HTML to add heading ID's for links, and build Table of Contents
+        // Start with a DOMDocument
+        $document = new \DOMDocument();
+        $document->preserveWhiteSpace = false;
+        $document->loadHTML($supportContent);
 
-            // Start TOC, and define heading relative hierarchy
-            $toc = '<ul>';
-            $hOrder = ['h1' => 0, 'h2' => 1, 'h3' => 2, 'h4' => 3, 'h5' => 4, 'h6' => 5];
-            $priorNodeName = null;
+        // Use DOMXPath to find headings, but skip h1's
+        $xpath = new \DOMXpath($document);
+        $nodes = $xpath->query("//h2 | //h3 | //h4 | //h5 | //h6");
 
-            foreach ($nodes as $node) {
-                $id = str_replace(' ', '-', strtolower($node->nodeValue));
-                $node->setAttribute('id', $id);
+        // Start TOC, and define heading relative hierarchy
+        $toc = '<ul>';
+        $hOrder = ['h1' => 0, 'h2' => 1, 'h3' => 2, 'h4' => 3, 'h5' => 4, 'h6' => 5];
+        $priorNodeName = null;
 
-                // If this TOC heading is less than the prior heading, wrap in a new ul
-                if (isset($priorNodeName) && ($hOrder[$node->nodeName] > $hOrder[$priorNodeName])) {
-                    // Count steps to open ul
-                    for ($i=0; $i < $hOrder[$node->nodeName] - $hOrder[$priorNodeName]; $i++) {
-                        $toc .= '<ul>';
-                    }
+        foreach ($nodes as $node) {
+            $id = str_replace(' ', '-', strtolower($node->nodeValue));
+            $node->setAttribute('id', $id);
+
+            // If this TOC heading is less than the prior heading, wrap in a new ul
+            if (isset($priorNodeName) && ($hOrder[$node->nodeName] > $hOrder[$priorNodeName])) {
+                // Count steps to open ul
+                for ($i=0; $i < $hOrder[$node->nodeName] - $hOrder[$priorNodeName]; $i++) {
+                    $toc .= '<ul>';
                 }
-
-                // Close the TOC </ul> if needed
-                if (isset($priorNodeName) && ($hOrder[$node->nodeName] < $hOrder[$priorNodeName])) {
-                    // Count steps to close ul
-                    for ($i=0; $i < $hOrder[$priorNodeName] - $hOrder[$node->nodeName]; $i++) {
-                        $toc .= '</ul>';
-                    }
-                }
-
-                // Add link to TOC
-                $toc .= "<li><a href=\"#$id\">{$node->nodeValue}</a></li>\n";
-
-                // Save heading for next iteration
-                $priorNodeName = $node->nodeName;
             }
 
-            // End TOC
-            $toc .= '</ul>';
+            // Close the TOC </ul> if needed
+            if (isset($priorNodeName) && ($hOrder[$node->nodeName] < $hOrder[$priorNodeName])) {
+                // Count steps to close ul
+                for ($i=0; $i < $hOrder[$priorNodeName] - $hOrder[$node->nodeName]; $i++) {
+                    $toc .= '</ul>';
+                }
+            }
 
-            // Get breadcrumb title from first H1 in file and render HTML
-            $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
-            $data['supportContent'] = $document->saveHTML();
-            $data['tableOfContents'] = $toc;
+            // Add link to TOC
+            $toc .= "<li><a href=\"#$id\">{$node->nodeValue}</a></li>\n";
+
+            // Save heading for next iteration
+            $priorNodeName = $node->nodeName;
         }
+
+        // End TOC
+        $toc .= '</ul>';
+
+        // Get breadcrumb title from first H1 in file and render HTML
+        $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
+        $data['supportContent'] = $document->saveHTML();
+        $data['tableOfContents'] = $toc;
 
         return $this->render('support/supportFile.html', $data);
     }
