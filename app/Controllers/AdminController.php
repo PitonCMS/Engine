@@ -80,7 +80,9 @@ class AdminController extends AdminBaseController
 
         // Make sitemap
         if ($sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->settings['environment']['production'])) {
-            $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+            if ($this->settings['environment']['production']) {
+                $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+            }
         } else {
             $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
         }
