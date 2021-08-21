@@ -122,7 +122,7 @@ class AdminController extends AdminBaseController
 
         // Send 404 if support file is not found
         if (!file_exists($supportFile)) {
-            $this->notFound();
+            return $this->notFound();
         }
 
         $supportContent = $markdown->text(file_get_contents($supportFile));
