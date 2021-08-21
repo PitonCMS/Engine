@@ -80,7 +80,9 @@ class AdminController extends AdminBaseController
 
         // Make sitemap
         if ($sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->settings['environment']['production'])) {
-            $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+            if ($this->settings['environment']['production']) {
+                $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
+            }
         } else {
             $this->setAlert('danger', 'Unable to update sitemap', $sitemapHandler->getMessages());
         }
@@ -89,12 +91,24 @@ class AdminController extends AdminBaseController
     }
 
     /**
-     * Show Help Page
+     * Show Support Index
      *
      * @param array $args
      * @return Response
      */
-    public function showHelp($args): Response
+    public function showSupportIndex($args): Response
+    {
+        $data['subject'] = $args['subject'];
+        return $this->render("support/index.html", $data);
+    }
+
+    /**
+     * Show Support Content Page
+     *
+     * @param array $args
+     * @return Response
+     */
+    public function showSupportContent($args): Response
     {
         // Load dependencies
         $markdown = $this->container->markdownParser;
@@ -102,52 +116,74 @@ class AdminController extends AdminBaseController
         // Pass through reference to subject
         $data['subject'] = $args['subject'];
 
-        // If no support file was requested, default to a support index
-        if (!isset($args['file'])) {
-            $index = ($args['subject'] === 'designer') ? 'designerIndex' : 'clientIndex';
-            return $this->render("help/$index.html", $data);
-        }
-
-        // If requesting the about PitonCMS page
-        if ($args['file'] === 'aboutPitonCMS') {
-            return $this->aboutPiton();
-        }
-
         // Build path to file and add deep link to anchor
         $data['link'] = $args['link'] ?? null;
-        $helpFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
+        $supportFile = ROOT_DIR . "vendor/pitoncms/engine/support/{$args['subject']}/{$args['file']}.md";
 
-        if (file_exists($helpFile)) {
-            $helpContent = $markdown->text(file_get_contents($helpFile));
+        // Send 404 if support file is not found
+        if (!file_exists($supportFile)) {
+            return $this->notFound();
+        }
 
-            // Parse help file to modify headings
-            $document = new DOMDocument();
-            $document->loadHTML($helpContent);
+        $supportContent = $markdown->text(file_get_contents($supportFile));
 
-            // Get heading tags h1..h6 and set ID so we can deep link to content
-            foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $h) {
-                $nodes = $document->getElementsByTagName($h);
-                foreach ($nodes as $node) {
-                    $value = str_replace(' ', '-', strtolower($node->nodeValue));
-                    $node->setAttribute('id', $value);
+        // Parse support HTML to add heading ID's for links, and build Table of Contents
+        // Start with a DOMDocument
+        $document = new \DOMDocument();
+        $document->preserveWhiteSpace = false;
+        $document->loadHTML($supportContent);
+
+        // Use DOMXPath to find headings, but skip h1's
+        $xpath = new \DOMXpath($document);
+        $nodes = $xpath->query("//h2 | //h3 | //h4 | //h5 | //h6");
+
+        // Start TOC, and define heading relative hierarchy
+        $toc = '<ul>';
+        $hOrder = ['h1' => 0, 'h2' => 1, 'h3' => 2, 'h4' => 3, 'h5' => 4, 'h6' => 5];
+        $priorNodeName = null;
+
+        foreach ($nodes as $node) {
+            $id = str_replace(' ', '-', strtolower($node->nodeValue));
+            $node->setAttribute('id', $id);
+
+            // If this TOC heading is less than the prior heading, wrap in a new ul
+            if (isset($priorNodeName) && ($hOrder[$node->nodeName] > $hOrder[$priorNodeName])) {
+                // Count steps to open ul
+                for ($i=0; $i < $hOrder[$node->nodeName] - $hOrder[$priorNodeName]; $i++) {
+                    $toc .= '<ul>';
                 }
             }
 
-            // Get breadcrumb title from first H1 in file and render HTML
-            $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
-            $data['helpContent'] = $document->saveHTML();
-        } else {
-            $this->container->logger->warning("PitonCMS: Help file does not exist: Subject {$args['subject']}, File {$args['file']}.");
-            $data['helpContent'] = "<h1>Help File Does Not Exist</h1>";
+            // Close the TOC </ul> if needed
+            if (isset($priorNodeName) && ($hOrder[$node->nodeName] < $hOrder[$priorNodeName])) {
+                // Count steps to close ul
+                for ($i=0; $i < $hOrder[$priorNodeName] - $hOrder[$node->nodeName]; $i++) {
+                    $toc .= '</ul>';
+                }
+            }
+
+            // Add link to TOC
+            $toc .= "<li><a href=\"#$id\">{$node->nodeValue}</a></li>\n";
+
+            // Save heading for next iteration
+            $priorNodeName = $node->nodeName;
         }
 
-        return $this->render('help/helpFile.html', $data);
+        // End TOC
+        $toc .= '</ul>';
+
+        // Get breadcrumb title from first H1 in file and render HTML
+        $data['breadcrumbTitle'] = $document->getElementsByTagName('h1')[0]->textContent ?? 'Error';
+        $data['supportContent'] = $document->saveHTML();
+        $data['tableOfContents'] = $toc;
+
+        return $this->render('support/supportFile.html', $data);
     }
 
     /**
      * Show Piton Engine aboutPiton Notes
      *
-     * Used in Help > Developer > Version
+     * Used in Support > About
      * @param void
      * @return Response
      */
@@ -158,7 +194,7 @@ class AdminController extends AdminBaseController
 
         // Get list of releases from GitHub. First check that cURL is installed on the server
         if (!function_exists('curl_init')) {
-            // If curl is not installed display notice
+            // If curl is not installed on the server log info
             $log->info("Piton: cURL is not installed, unable to get releases from GitHub.");
         } else {
             // Get GitHub release history for engine
@@ -194,9 +230,9 @@ class AdminController extends AdminBaseController
         }
 
         $data['breadcrumbTitle'] = 'About PitonCMS';
-        // Not passing any helpContent through, but sending a flag to enable the breadcrumb
-        $data['helpContent'] =  true;
+        // Not passing any supportContent through, but sending a flag to enable the breadcrumb
+        $data['supportContent'] =  true;
 
-        return $this->render('help/about.html', $data);
+        return $this->render('support/about.html', $data);
     }
 }

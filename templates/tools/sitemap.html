@@ -13,7 +13,9 @@
   <h1 class="section-title">Sitemap</h1>
   <div class="btn-group">
    <!-- Control Buttons -->
-   <button class="btn btn-save " type="submit">Update Sitemap</button>
+   <button class="btn btn-save " type="submit">
+     {% if page.sitemapXML %}Update{% else %}Create{% endif %} Sitemap
+    </button>
   </div>
  </div>
 
@@ -22,17 +24,14 @@
  {% block content %}
  <div class="content-block-sitemap">
   <div class="sitemap-wrapper">
-   <p>Search engines might use your sitemap to better understand what content to index. Click update after posting new content.</p>
-
    <div class="sitemap">
     {% if page.sitemapXML %}
     <div class="sitemap-link">
-     <a href="/sitemap.xml" target="_blank"><i class="fas fa-external-link-alt"></i> Link to sitemap</a> | Last updated {{ page.lasteUpdateDate|date }}
+    Last updated {{ page.lasteUpdateDate|date }}
     </div>
-
     <pre>{{ page.sitemapXML|escape }}</pre>
     {% else %}
-    No Sitemap Found - Click Update Sitemap
+    <h2>No Sitemap Found</h2>
     {% endif %}
    </div>
   </div>

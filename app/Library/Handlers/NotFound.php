@@ -66,7 +66,7 @@ class NotFound extends \Slim\Handlers\NotFound
         $path = $request->getUri()->getPath();
 
         // If request is for a file or image then just return the 404 status and stop
-        if (preg_match('/^.*\.(jpe?g|png|gif|css|js|map|ico|txt)$/i', $path)) {
+        if (preg_match('/^.*\.(jpe?g|png|gif|css|js|map|ico|txt|svg)$/i', $path)) {
             return $response->withStatus(404);
         }
 
