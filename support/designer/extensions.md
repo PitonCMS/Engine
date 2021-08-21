@@ -10,7 +10,7 @@ All custom extension JS files must be named `extension.js`.
 ### Site Extensions
 Site level extensions always run on _every_ PitonCMS administration page. To create a site JS extension add your `extension.js` file to the root of the `public/extensions/` directory.
 
-For example:
+For example
 ```
 public/extensions/extension.js
 ```
@@ -18,7 +18,7 @@ public/extensions/extension.js
 ### Page Extensions
 Page extensions will run only one specific admin page. To create a page JS extension add your `extension.js` file to nested directories matching the administration page URL path to the root of the `public/extensions/` directory.
 
-For examle, if you want to modify the content editor page which has the URL path `/admin/page/edit/`, then create those directories and add your JS file:
+For examle, if you want to modify the content editor page which has the URL path `/admin/page/edit/`, then create those directories and add your JS file
 
 ```
 public/extensions/admin/page/edit/extension.js
@@ -29,7 +29,7 @@ A common use for JavaScript extensions is to add input validations to custom set
 
 To help in selecting settings, a `data-setting-` attribute has been added to the custom setting input. The attribute has the form of `data-setting-<category>="<settingKey>"`, where the category is either `site`, `page`, `element`, `social`, `contact`, and the setting key is the key defined in your JSON definition file.
 
-For example, if you want the site setting "Site Name" to prepopulate a footer about text setting, you could add an extension file `/admin/settings/site/edit/extension.js`:
+For example, if you want the site setting "Site Name" to prepopulate a footer about text setting, you could add an extension file `/admin/settings/site/edit/extension.js`
 
 ```js
 const siteName = document.querySelector(`[data-setting-site="siteName"]`);

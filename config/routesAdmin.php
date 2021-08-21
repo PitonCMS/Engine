@@ -257,10 +257,24 @@ $app->group('/admin', function () {
     });
     // End user routes
 
-    // Help content
-    $this->get('/support/{subject:client|designer}[/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]]', function ($args) {
-        return (new AdminController($this))->showHelp($args);
-    })->setName('adminHelp');
+    // Support content
+    $this->group('/support', function () {
+        // About PitonCMS
+        $this->get('/about', function ($args) {
+            return (new AdminController($this))->aboutPiton($args);
+        })->setName('adminSupportAbout');
+
+        // Support index
+        $this->get('/{subject:client|designer}', function ($args) {
+            return (new AdminController($this))->showSupportIndex($args);
+        })->setName('adminSupportIndex');
+
+        // Support content page
+        $this->get('/{subject:client|designer}/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]', function ($args) {
+            return (new AdminController($this))->showSupportContent($args);
+        })->setName('adminSupportContent');
+    });
+
 
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
     $this->get('[/]', function () {

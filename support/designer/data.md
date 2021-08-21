@@ -2,20 +2,20 @@
 
 All website data is saved to a MySQL database, and when a page is rendered the relevant data is made available to the page template.
 
-When you include Twig data variables in your custom templates, the variable and surrounding delimiters are replaced with the saved text. For example, if you want to print the page title in your template, include:
+When you include Twig data variables in your custom templates, the variable and surrounding delimiters are replaced with the saved text. For example, if you want to print the page title in your template, include
 
 ```html
 <h1>{{ page.title }}</h1>
 ```
 
-and when Twig renders the page you will see:
+and when Twig renders the page you will see
 ```html
 <h1>My Life on the Water</h1>
 ```
 
 The data is injected into that template as a data `array`. To access a specific key in the array use dot notation. So the `title` key inside the `page` array is accessed with `page.title`.
 
-If you don't know the key or want to print all elements in the array (such as in a list) then use the Twig [for loop](https://twig.symfony.com/doc/3.x/tags/for.html) syntax:
+If you don't know the key or want to print all elements in the array (such as in a list) then use the Twig [for loop](https://twig.symfony.com/doc/3.x/tags/for.html) syntax
 
 ```html
 <ul>
@@ -25,7 +25,7 @@ If you don't know the key or want to print all elements in the array (such as in
 </ul>
 ```
 
-**Tip:** If you are unsure what variables are available to you in a page, add this Twig `dump()` debugger statement to your script to print all variables:
+**Tip:** If you are unsure what variables are available to you in a page, add this Twig `dump()` debugger statement to your script to print all variables
 
 ```html
 {{ dump() }}
@@ -37,7 +37,7 @@ To get more details on a sub array item, E.g. Page Blocks
 ```
 
 ## Data Array
-The standard data array payload injected into each page template contains:
+The standard data array payload injected into each page template contains
 
 * `page` User saved data for this page
 * `site` General website global data
@@ -53,7 +53,7 @@ Each Page template should have defined one or more `blocks` representing broad a
 
 Under `blocks` are one or more of these custom blocks, defined in the page template JSON file in `structure/templates/pages/`. Each custom block needs a unique key name as an address. If you name a custom block in a page template as `"key": "sidebar"`, then you would access elements in this block as `page.blocks.sidebar.<elementIndex>`.
 
-Each custom block may then have one or more elements (as defined in the definition file). Because the order of elements may vary when the user updates the page content, it is best to loop through the elements. To help with this ,it is always best to use the `getBlockElementsHtml()` Twig function that will print all elements using the correct element template:
+Each custom block may then have one or more elements (as defined in the definition file). Because the order of elements may vary when the user updates the page content, it is best to loop through the elements. To help with this ,it is always best to use the `getBlockElementsHtml()` Twig function that will print all elements using the correct element template
 
 ```html
 {{ getBlockElementsHtml(page.blocks.sidebar) }}
@@ -65,7 +65,7 @@ Page level settings behave like the global site settings, but are unique to each
 As a designer, you can define custom page settings in the page template JSON file.
 
 #### Page Media (Featured)
-If enabled in the page template JSON file, a user can specific a featured image to use. This can be used in a page hero, or even a thumbnail (automatically) in a collection summary. If enabled, the featured media array will contain these keys:
+If enabled in the page template JSON file, a user can specific a featured image to use. This can be used in a page hero, or even a thumbnail (automatically) in a collection summary. If enabled, the featured media array will contain these keys
 
 * `aspectRatio` Calculated image aspect ratio
 * `orientation` Either `landscape` or `portrait`
@@ -76,7 +76,7 @@ If enabled in the page template JSON file, a user can specific a featured image 
 * `caption` Media caption
 
 #### Other Page Data
-In addition, each `page` array contains these keys to use in your templates:
+In addition, each `page` array contains these keys to use in your templates
 
 * `id` Page ID
 * `collection_slug` Optional, collection URL segment
@@ -102,14 +102,14 @@ As a designer, you can add or remove global site `settings` for each website you
 
 Site settings can be useful data such as a link to a Twitter account, but can also be used as a flag (Y or N, for example) to control application flow.
 
-These settings are core to PitonCMS and cannot be changed in the design definition file:
+These settings are core to PitonCMS and cannot be changed in the design definition file
 * `siteName`
 * `tinifyApiKey`
 * `contactFormEmail`
 * `contactFormAcknowledgement`
 
 #### Site Environment
-The `environment` contains system information such as the logged in user information, the PitonCMS version, production flag. These cannot be modified, but can be used in the design. These are the environment keys under `site.environment`:
+The `environment` contains system information such as the logged in user information, the PitonCMS version, production flag. These cannot be modified, but can be used in the design. These are the environment keys under `site.environment`
 
 * `appAlert` System messages which are handled automatically
 * `engine` PitonCMS Engine version number
@@ -118,7 +118,7 @@ The `environment` contains system information such as the logged in user informa
 * `assetVersion` Used in PitonCMS admin to break the cache on external asset files
 * `currentRouteName` The currently executed route name
 
-For example, the `production` variable is a boolean flag (true or false) that relies on `$config['environment']['production']` setting in `config.local.php` that is unique to each environment. You can use this flag in your code to conditionally print content depending on whether the code is running on a development server, or a production server. For example, to only run tracking analytics code in your layout template when in production, wrap the analytics code in a Twig `if` statement:
+For example, the `production` variable is a boolean flag (true or false) that relies on `$config['environment']['production']` setting in `config.local.php` that is unique to each environment. You can use this flag in your code to conditionally print content depending on whether the code is running on a development server, or a production server. For example, to only run tracking analytics code in your layout template when in production, wrap the analytics code in a Twig `if` statement
 
 ```html
 {% if site.environment.production %}
@@ -134,12 +134,12 @@ The CSRF token is used to help prevent [Cross Site Request Forgery](https://owas
 ## Using Dates
 Dates are stored in PitonCMS in the ISO 8601 format, YYYY-MM-DD. If you print a date variable you will get exactly that, E.g. "2020-10-05".
 
-To print a date or datetime in a more friendly way that is localised to the user, you can provide the date format mask in the Twig `date()` filter using standard [PHP date formats](https://www.php.net/manual/en/datetime.format.php):
+To print a date or datetime in a more friendly way that is localised to the user, you can provide the date format mask in the Twig `date()` filter using standard [PHP date formats](https://www.php.net/manual/en/datetime.format.php)
 
 ```html
 <div class="published-date">Published on {{ page.published_date|date('F jS, Y') }}</div>
 ```
-Would then print:
+Would then print
 ```html
 <div class="published-date">Published on October 5th, 2020</div>
 ```

@@ -1,28 +1,58 @@
 # Messages
 
-You website may have a contact form for visitors to submit messages. This is a design consideration set by your website designer. If configured, when visitors submit a message you will receive an email with the message, and a copy of the message will be kept in PitonCMS for reference.
+PitonCMS has a built-in Mailbox and Messaging system to help you manage communications with your visitors and clients.
 
-## Configure Messages
+If your web design supports it, you may have one or more *Contact Forms* for visitors to submit Messages and requests. All Messages are saved in your website administration console where you can read, archive, or delete them at your convenience. If configured, a copy of the message may also be sent to your personal email account (without sharing with the visitor).
 
-The contact form must be added to a published page as a page *Element* for visitors to access. To add a contact form:
+PitonCMS has a strong built in spam message control feature to reduce (but not necessarily eliminate) spam messages.
 
-* Go to **Pages** and edit or create a page with a template block enabled with *Contact Form*.
-* Click *Add Element*, and then optionally add a *Title* and some leading text *Content*.
-* Save the page, and ensure it is Published.
+## How to Configure Message Options
+You may configure a few options on how visitor Messages are presented.
 
-To receive the submitted messages, you will want to add your email address in Site Settings. Note, this can be separate from your login email address.
+1. Go to <i class="fas fa-cog"></i> **Settings** and then **Messages**
+2. Modify settings
+3. Click **Save** to save your changes, or **Discard** to reset your changes
 
-* Go to Tools > Contact.
-* Enter your email address where you want to receive messages.
-* Enter a response message after someone submits a message
-* Save
+The Message options are
 
-## Manage Messages in PitonCMS
+- **Contact Form Email** (Optional) Where to send a copy of any visitor messages
+- **Contact Form Submission Acknowledgement** What to display after a visitor submits a message
+- **Minimum Message Length** Set the minimum number of characters in the Message body in order to process the Message (to reduce one word message spam)
 
-All submitted messages are kept in PitonCMS for reference. The number of new messages are indicated next to the **Messages** navigation link. You can mark messages as read, or as unread, and delete messages if you wish.
+>**Note**: All submitted Messages (that pass the Minimum Message Length test and the spam filter) are saved to PitonCMS. Forwarding a copy is optional, and your forwarding address is *not* shown to the public.
 
-**To View** Go to Messages. The default view is unread.
+## How to Add a Message Contact Form
+Contact Forms are configured as part of your web design, and may include additional input fields for custom information.
 
-**To Change Read Status** Click the *Read* or *Unread* button next to the message.
+To display a contact form you need to select a *Contact Element* in your page (if configured as part of your web design).
 
-**To Delete** Click the red *Delete* button next to the message. This action is final, and the message cannot be recovered.
+1. Go to <i class="fas fa-pencil"></i> *Content* and create or edit a Page.
+2. Click **Add Element** then select **Contact** (or the custom name in your web design) to the *Block*
+3. Optionally add a Title and some text
+4. Save and Publish the Page
+
+## How to Manage Messages in PitonCMS
+When a visitor submits a Message (and if it passes the spam filter and Minimum Message Length) the Message is saved in PitonCMS. If a forwarding email has been saved, then a copy is also sent to that email address.
+
+The *Mailbox* menu link shows how many unread Messages you have.
+![Mailbox message count](/admin/img/support/mailboxUnreadCount.png)
+
+To manage your messages, click on the <i class="fas fa-envelope"></i> **Mailbox** menu link. Here you can mark Messages as read or as unread, archive and and delete messages.
+
+Each Message is displayed in a block
+![Message row](/admin/img/support/messageBlock.png)
+
+and contains
+- The name and email of the visitor who submitted the message, in a ready to click email link
+- The date the message was submitted (server time)
+- **Context** On which Page or which form the message was submitted
+- The message body, with any custom fields
+- Buttons to support your workflow
+  - **Delete** Permanently delete the message
+  - **Archive** Keep but stash the message
+  - **Mark as Read** (or **Mark as Unread**) Change the status of the message
+
+## How to Find Messages
+PitonCMS Mailbox allows you to search on Messages. The **Search** input will search the *Name*, *Email*, *Message* body, and *Context* fields. To browse by status, use the **Filter on Status** menu.
+
+![Search and filter messages](/admin/img/support/messageSearch.png)

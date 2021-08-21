@@ -9,7 +9,7 @@ When you add a new setting to the JSON definition file, that input is made avail
 If you delete a setting from the definition file, the user will see an orphaned flag and can delete the saved value for that setting. Until being hard deleted, the previously saved value remains available in the templates.
 
 ## Examples
-As a desinger you can utilize settings in many different ways, and not just to print values. Examples include:
+As a desinger you can utilize settings in many different ways, and not just to print values. Examples include
 
 * Add a new social media platform link to site settings to print in the footer on all pages
 * Add a text area to enter a store address, or create a separate input for each data point in the address.
@@ -21,7 +21,7 @@ As a desinger you can utilize settings in many different ways, and not just to p
 ## Site Settings
 Site settings are defined in `structure/definitions/siteSettings.json`, and are updated in the **Settings** manager. Site settings are available on all pages in your template, under the `site.settings.` array and indexed with the `key` you define in the JSON file. You are welcome to delete the default settings that come with PitonCMS as examples.
 
-To edit or add site settings, in the `siteSettings.json` file edit a setting object under the `"settings"` key:
+To edit or add site settings, in the `siteSettings.json` file edit a setting object under the `"settings"` key
 
 ```json
 {
@@ -43,7 +43,7 @@ Page template settings are defined the custom page template definition file in `
 
 Page settings are available on the pages using this template, under the `page.settings.` array and indexed with the `key` you define in the JSON file. You are welcome to delete the default settings that come with PitonCMS as examples.
 
-To edit or add page settings, in the page template JSON file add a setting object under the `"settings"` key:
+To edit or add page settings, in the page template JSON file add a setting object under the `"settings"` key
 
 ```json
 {
@@ -62,7 +62,7 @@ To edit or add page settings, in the page template JSON file add a setting objec
 You can also define Element settings in the element definition file, but change the `category` to `element`.
 
 ## Setting Definitions
-Settings allow for very specific input types. The basic setting object has these properties at a minimum:
+Settings allow for very specific input types. The basic setting object has these properties at a minimum
 
 * `category` Where the input editor should appear, and which category of setting this is
   * For global settings, options are `site`, `social`, `contact`

@@ -1,7 +1,7 @@
 /* Layout */
 /* Header, Logo */
 .top-header {
- @include padding(null 1em);
+ @include padding(null null null 1em);
  background-color: $bg-dark;
  color: $text-accent;
  height: $nav-height;
@@ -18,9 +18,9 @@
  align-items: center;
 
  .logo {
-  font-size: 2rem;
+  font-size: 1.4em;
   font-weight: 900;
-  line-height: $nav-height;
+  line-height: 1;
   display: flex;
   letter-spacing: 1.4px;
   justify-content: flex-start;

@@ -1,13 +1,21 @@
-{% extends '@admin/help/_helpBase.html' %}
+{% extends '@admin/support/_supportBase.html' %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ baseUrl() }}/admin/highlight/agate.css?v={{ site.environment.assetVersion }}">
 {% endblock head %}
 
 {% block content %}
-    {# Load Help File #}
+    {# TODO: Use TOC somewhere?
     <div class="help-content">
-        {{ page.helpContent }}
+        {{ page.tableOfContents }}
+    </div>
+    #}
+
+    {# Load support File #}
+    <div class="help-content">
+        {% if page.supportContent %}
+            {{ page.supportContent }}
+        {% endif %}
     </div>
 {% endblock content %}
 

@@ -12,15 +12,13 @@ declare(strict_types=1);
 
 namespace Piton\Library\Utilities;
 
-use Parsedown;
-
 /**
  * Piton Markdown Parser
  *
  * Modified parser to render single image lines without the paragraph tags
  * https://gist.github.com/fxck/d65255218de3611df3cd
  */
-class MDParse extends Parsedown
+class MDParse extends \ParsedownExtra
 {
     /**
      * Markdown image definition regex
@@ -34,7 +32,7 @@ class MDParse extends Parsedown
      */
     protected function paragraph($Line)
     {
-        // Override if MD image tag
+        // Override if image tag to not wrap in paragraph
         if (1 === preg_match($this->markdownImage, $Line['text'])) {
             return $this->inlineImage($Line);
         }

@@ -5,13 +5,13 @@
 {% block contentHeader %}
 <div class="content-header-inner">
   <div class="breadcrumb">
-    {% if page.helpContent or page.subject == 'designer' %}
-    <a href="{{ pathFor('adminHelp', {'subject': 'client'}) }}">
+    {% if page.supportContent or page.subject == 'designer' %}
+    <a href="{{ pathFor('adminSupportIndex', {'subject': 'client'}) }}">
       Support<i class="fas fa-chevron-right breadcrumb__indicator"></i>
     </a>
 
-      {% if page.helpContent and page.subject == 'designer' %}
-      <a href="{{ pathFor('adminHelp', {'subject': 'designer'}) }}">
+      {% if page.supportContent and page.subject == 'designer' %}
+      <a href="{{ pathFor('adminSupportIndex', {'subject': 'designer'}) }}">
         Designer<i class="fas fa-chevron-right breadcrumb__indicator"></i>
       </a>
       {% endif %}

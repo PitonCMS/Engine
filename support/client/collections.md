@@ -1,57 +1,52 @@
 # Collections
 
-Collections are groups of *related* pages such as blog posts, recipes, services etc. and consist of *Collection Detail Pages* (each accessible at a specific URL). Collections are ideal to categorize similar topics on your website.
+>**Note**: This support document covers creating and updating a *Collection*. To create and modify Page content for your *Collection Detail Page* see the [Pages](/admin/support/client/pages) support document.
 
-Collection Detail Pages are not listed in the normal navigation page links, and instead are accessed through a *Collection Summary* which is a group of collection page links within a single collection, embedded in a page **Element**. As you add new pages to your collection, the links will automatically appear in the Collection Summary (if the page is published).
+*Collections* are groups of related Pages such as blog posts, recipes, services etc. and consist of *Collection Detail Pages* with each Page in the Collection accessible at a unique URL. Collections are ideal to categorize similar topics on your website.
 
-## Create New Collection
-To create a new Collection group, select the **Content > Collections > Add Collection Group** menu.
+Collection Detail Pages are accessed through a *Collection Summary* which is a group of links to your Collection Detail Pages for that Collection. Unlike a standard Page, the link to your published Collection Detail Page is automatically added to its Collection Summary.
 
-Enter the **Collection Title** to describe the collection.
+Collection Summaries can be embedded in a Page Element, or the Collection Summary can be added to your website Navigation lists.
 
-The **Collection Slug** defaults to the title (but cleaned up), but you can edit the slug if desired.
+Before you can add a new Collection Detail Page, you must create at least one *Collection Group*.
 
-**Note**: Once a detail page has been added to the collection, you must unlock the slug by clicking the lock icon to make changes. Changing the collection slug with a published detail page may break links to your website.
+## How to Create a New Collection Group
+To create a new Collection Group, go to the <i class="fas fa-cog"></i> **Settings** menu, then click on **Collection Groups**. Here you will see a list of existing Collection Groups. Then click on the **Add** menu in the top right corner and then select the **Collection** link.
 
-Select a **Collection Template** from the list of available templates.
+In the form that appears enter the
+- **Collection Title** To describe the collection. This is the text that will appear in your website that refers to this Collection Group.
+- **Collection Slug** The URL segment for the Collection.
+- **Collection Template** The design *Template* to use for all Collection Detail Pages in this Collection.
 
-**Note**: Once a detail page has been added to the collection, you can no longer change the template used for the collection's detail pages.
+The *Collection Slug* is the unique segment in the URL (the text between slashes `/`) that comes after your domain and before the Page Slug, and is initially based on the Page Title. You can modify the Slug if you wish to provide clarity or brevity.
 
-## Edit Collection Group
-To edit a collection group, go to the **Content > Collections > All [Collection] Pages**. From the page where you view the collection detail pages, click on the **Edit** link next to the collection title.
+>**Note**: To change the Slug after the Page is Published you must first click the <i class="fas fa-lock"></i> lock icon and acknowledge the warning. Changing the Slug after the Page is published may break links to your Page!
 
-If pages have been added to the collection, you can only change the collection title.
+>**Note**: Once a Detail Page has been added to the Collection, you can no longer change the Template used for the Collection Detail Pages.
 
-Click **Save** in the sidebar.
+## How to Edit an Existing Collection Group
+To edit a Collection Group, go to the <i class="fas fa-cog"></i> **Settings** menu then click on **Collection Groups**. Then click on the row for the Collection you wish to edit.
 
-## Delete Collection Group
-Once a detail page has been added to the collection, you can no longer delete the collection group. You must first remove all detail pages in this collection before deleting the collection group.
+Click **Save** to save your changes, or click **Discard** to reset your changes.
 
-To delete a collection group, go to the **Content > Collections > All [Collection] Pages**. From the page where you view the collection detail pages, click on the **Edit** link next to the collection title.
+## How to Delete a Collection Group
+Once a Collection Detail Page has been added to the Collection, you can no longer delete the Collection Group. You must first remove all Collection Detail Pages in this Collection before deleting the Collection Group.
 
-Then click **Delete** in the sidebar and acknowledge the warning prompt.
+To delete a Collection Group, go to the <i class="fas fa-cog"></i> **Settings** menu then click on **Collection Groups**. Click on the row for the Collection Group and then click on **Delete Collection** and acknowledge the warning prompt.
 
-## Publish Collection Group
-Collection pages are not part of the normal website navigation bar links structure. Instead, the collection page links are displayed as a group in a page **Element**.
+## Sharing the Collection Summary
+To share links to your Collection Group, you can either
 
-To publish the links to the collection,
+- Add a *Collection Element* to a standard Page, or
+- Add the Collection Group to a main Navigation List, or
+- Do both
 
-1. Create or edit the static Page that will show the collection links.
-1. Add a new **Element** in the desired **Block**, and select **Collection** as the Element type.
-1. Select the name of the collection to display
-1. Save the page
+By using a Collection Element on a standard Page, you can create a landing page to introduce this Collection topic. To use a Collection Element
 
-As you add new collection detail pages, the new pages will automatically appear in your collection summary (if hte page is published).
+1. Create or edit the standard Page that will show the Collection Summary.
+2. Click on **Add Element** in the desired *Block*, and select then select **Collection** as the Element type.
+3. Add an optional **Element Title** and **Element Content** to introduce the Collection
+4. Select the name of the Collection to display from the drop down list
+5. Save the Page by clicking **Save**
 
-## Create Collection Detail Page
-You can create a Collection Detail Page either from:
-
-*  The **Content > Collections > Add [Template]** menu.
-*  The **Content > Collections > All [Template] Pages** where you would view the pages in the collection. Click the **Add [Template] Page** link.
-
-Creating a collection page follows the same process as a normal page. See [Page help](/admin/help/adminPage).
-
-## Editing Collection Detail Page
-To edit a collection detail page, use the **Content > Collections > All [Template] Pages** menu to see all pages in the collection. Then find the desired page and click **Edit**.
-
-Editing Pages and Collection Detail Pages are similar. See [Page help](/admin/help/adminPage).
+As you add new Collection Detail Pages, the Pages links will automatically appear in your Collection Summary.
