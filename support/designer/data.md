@@ -185,7 +185,7 @@ Which prints
 
 
 ## Using Site Data
-The *Site* array contains an array of variables under the `site` key, most of which are user managed in the **Settings** menu. All site variables are available on each page.
+The *Site* array contains an array of variables under the `site` key, most of which are user managed in the **Settings** menu. All site variables are available to every Template
 
 The `site` array contains
 - `settings` Configuration and runtime values
