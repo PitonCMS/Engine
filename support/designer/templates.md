@@ -1,138 +1,153 @@
 # Page and Element Templates
-A page template consists of an HTML layout file and a JSON definition file with matching names, that represent a type of page structure that can be reused for different content.
 
-Static pages and Collection Detail pages both use page templates, but a static Page is defined in the JSON file as `"templateType": "page"` while a Collection Detail is defined as `"templateType": "collection"`.
+PitonCMS relies on *Templates* to render your custom website design. A Template consists of an HTML layout file and a JSON Definition file with matching names, that represent a type of Page or Element layout that can be reused for different content. The JSON Definition file allows you to control features and Page flow as part of the project design.
 
 PitonCMS uses [Twig](https://twig.symfony.com/doc/3.x/) to render templates, and understanding how Twig works as a designer will simplify building custom websites with PitonCMS.
 
-## Overview
-Page templates have designer defined **Blocks** which are broad areas of a page layout design, and **Elements** which are small reusable HTML template files, which a client user can select to put into the predefined Blocks in the page.
+## An Overview
+Page Templates have *Blocks* which represent areas of a Page layout that hold editable content. Within Blocks are *Elements* which are small reusable chunks of HTML.
 
-In this example of the **With Hero** template, the web designer defined the Blocks ("Hero" and "Content"), while the client can simply add content **Elements** to the Blocks when editing the page.
+When a user edits a Page they select an Element and add content to predefined Page Blocks.
+
+In this example of the *With Hero* template, the web design has defined the *Hero* and *Content* Blocks. The user can then simply add content *Elements* to these Blocks when editing the Page.
 
 ![Page Template Overview"](/admin/img/support/pageBlockElementOverview.png)
 
-When designing a new website, identify how many unique page layouts are needed. Then for each layout then determine content areas for each page. These content areas might be considered Blocks. Examples might be, main content, sidebar - all broad regions of a reusable page.
+When designing a new website, identify how many unique Page layouts are needed. Then for each layout then determine content areas for each Page. These content areas may be considered Blocks you define in the JSON definition file for the Template.
 
-Then define the various Elements you need for a custom website. Elements may include a basic text content element, a reusable contact form, a video embed element, etc.
+Then define the various types of Elements you need for a custom website. PitonCMS comes with a number of built-in Elements, but feel free to delete or make your own to suit the design.
 
-In addition to Blocks and Elements, your HTML layout _may_ include
+Consider taking advantage of Twig's powerful templating features.
 
-* A base layout. Using Twig's [extends](https://twig.symfony.com/doc/3.x/tags/extends.html) syntax, you can define a base file to load shared components such as headers, footers, boiler plate sections. Each of your page templates can then inherit the base layout.
-  * **Tip**: You can also have intermediate base layouts between the base layout and the page template. This may solve some complex layout requirements without repeating code.
-* Includes. With Twig's [includes](https://twig.symfony.com/doc/3.x/functions/include.html) supports reusable blocks of HTML kept in separate files, to help declutter complex templates.
-* Twig [Macros](https://twig.symfony.com/doc/3.x/tags/macro.html). Macros are HTML functions that can be used in templates, and are a great way to organize reusable code where the same HTML statement needs to repeat on a page but with different data.
+- Extending Templates from a base layout. Using Twig's [extends](https://twig.symfony.com/doc/3.x/tags/extends.html) syntax, you can define a base file to load shared components and extend Page Templates from the base.
+>**Note**: You can also have intermediate layouts between the base layout and the Page Template. This may solve some complex layout requirements without repeating code.
+- Twig [Includes](https://twig.symfony.com/doc/3.x/functions/include.html) supports reusable blocks of HTML kept in separate files, to help declutter complex templates.
+- Twig [Macros](https://twig.symfony.com/doc/3.x/tags/macro.html). Macros are HTML functions that can be used in templates, and are a great way to organize reusable code where the same HTML statement needs to repeat on a page but with different data.
 
 ## Templates Directory Structure
-The **Structure** directory in the root of your project consists of
+Your website layout files are all in the `structures/` project directory
 
-* `definitions` This contains JSON files for
-  * [Contact Form](/admin/support/designer/contact) custom fields (`contactInputs.json`)
-  * [Navigators](/admin/support/designer/navigation) (`navigation.json`)
-  * [Custom Settings](/admin/support/designer/settings) (`siteSettings.json`).
-* `sass` For your Sass files (if you use Sass).
-* `templates` Where your Page templates (and matching JSON), Element templates (and matching JSON), includes, and system templates.
+- `definitions/` Site level definition files
+  - `contactInputs.json` Supplemental allowed input fields for contact Message forms
+  - `navigation.json` Navigation list definitions
+  - siteSettings.json` Custom Site level Settings
+- `sass/` Project Sass files
+- `templates/` Template HTML and JSON files
+  - `elements/` Element HTML and JSON Definitions
+  - `includes/` Optional Twig include files
+  - `pages/` Page HTML and JSON Definitions
+  - `system/` System HTML files such as Not Found template, which can be customized
 
-The `templates` directory will contain most of your HTML files. This sub directory contains
+>**Note**: *Pages* and *Collection Detail Pages* both use Page Templates, but a standard Page is defined in the JSON file as `"templateType": "page"` while a Collection Detail Page is defined as `"templateType": "collection"`.
 
-* `elements` For custom element HTML and JSON files
-* `includes` For Twig include and macro files
-* `pages` For custom page HTML and JSON files
-* `system` Reserved for system templates such as 404 Not Found
+Within `templates/elements/` and `templates/pages/`  you may modify the file and directory structures (*before* creating saved content). To organize your custom Page and Element HTML and JSON files you may create any level of additional sub-directories.
 
-For the `elements` and `pages` template directories, you can create any level of additional sub-directories to organize your files. However, each `page` or `element` HTML file has a matching JSON definition file, and these two files **must** be in the same sub-directory as siblings, and must have the same filename (except for the extension `.html` and `.json`).
+However, each `page` or `element` layout HTML file has a matching JSON definition file, and these two files **must** be in the same sub-directory, and must have the same filename (except for the extension `.html` and `.json`).
 
-## Page HTML and JSON
-At a minimum a Page template consists of one HTML file and one matching JSON file (by name) in the same sub-directory.
+## Page HTML Templates and JSON Definitions
+At a minimum a Page Template consists of one HTML file and one JSON file with matching names (except for the extensions) in the same sub-directory.
 
-The HTML file can contain static HTML, or can extend an optional base layout file, and if you want the client user to add dynamic content then you need at lest one Block defined. The built in Content Page HTML template (`contentPage.html`) has
+The HTML file can contain static HTML or can extend an optional layout file, and if you want the user to add dynamic content then you need at least one Block defined.
+
+### Page Template
+The built in *Without Hero* content Page HTML Template `contentPage.html` is very simple. It extends the `_base_layout.html` and includes a single Block `contentBlock`.
 
 ```html
-{% `extends` 'pages/_base_layout.html' %}
+{% extends 'pages/_base_layout.html' %}
 
 {% block body %}
-
-<div class="container mainContent">
   {{ getBlockElementsHtml(page.blocks.contentBlock) }}
-</div>
-
 {% endblock body %}
 ```
 
 Explanation
-* The `extends` statement means to inherit the surrounding HTML from the `pages/base_layout.html` file
-* The `block body` and `endblock body` tags contain the content that will replace the matching tags in the base layout file
-* There is one block to hold dynamic content. This content is wrapped in a `<div>` but could be any markup
-* Twig print statement `{{ }}` to print the dynamic content
-* A Twig PitonCMS function `getBlockElementsHtml()` that returns all dynamic elements saved for this block
-* `page.blocks.contentBlock` is the Twig variable which contains the dynamic content (`page` key > `blocks` key > `contentBlock` which matches the block definition in the c`ontentPage.json` file)
+- The `extends` statement inherits the surrounding HTML from the `pages/base_layout.html` file
+- The `{% block body %}` and `{% endblock body %}` tags wrap the HTML that will replace the matching body tags in the base layout file
+- There is one `contentBlock` Block to hold user saved content
+  - This key `contentBlock` is defined as the Block key in the matching JSON file
+- A PitonCMS function `getBlockElementsHtml()` returns all saved Elements in this Page's `contentBlock`
+- The Twig print delimiters `{{ }}` print the loaded content
 
-In this brief template we have a custom layout suitable to print any generic dynamic content.
+In this brief Template we have a custom layout suitable to print any generic dynamic content.
 
-The JSON file contains the important information about this template, how it is used, any custom blocks or settings, and element restrictions. The built in Content Page JSON file (`contentPage.json`) has
+The matching `contentPage.json` JSON Definition file contains information about this Template, how it is used, any custom blocks or settings, and Element restrictions.
 
 ```json
 {
     "templateName": "Without Hero",
-    "templateDescription": "Page without hero image and with content blocks.",
+    "templateDescription": "Page without hero image and with one content block.",
     "showFeaturedImage": true,
     "templateType": "page",
     "blocks": [
         {
             "name": "Content",
             "key": "contentBlock",
-            "description": "Home page text areas"
+            "description": "Simple text areas"
         }
     ]
 }
 ```
 
-Explanation
-* `templateName` Required. The name of the template displayed to the user when creating a new page
-* `templateDescription` Required. Optional. The description of the page template to help the user select the right template
-* `showFeaturedImage` Optional. A flag (true or false) on whether the user can select a primary image for page content
-* `templateType` Required. The type of template, `page` for static content or `collection` for groups of related content
-* `blocks` An array of blocks that define areas of the page layout
+**Page Definition Properties**
 
-Other keys not shown
-* `showSubTitle` Optional, default true. Whether the page should have a sub title field.
+| Key | Required | Description |
+| --- | --- | --- |
+| `templateName` | Yes | The name of the Template displayed when creating a new Page |
+| `templateDescription` | | The description of the Page Template |
+| `showFeaturedImage` | | A boolean flag (true or false) on whether to display a primary media selector for these Pages |
+| `templateType` | Yes | The type of template, `page` for static content or `collection`  for groups of related content |
+| `blocks` |  | An array of blocks that define content areas of the Page layout |
+| `showSubTitle` |  |  Whether the page should have a sub title field
 
-The blocks array contains objects `{ }` representing how the block should display and be controlled. For each block on your page, define a block in the JSON file. Keys
+The `blocks` array `[]` contains objects `{ }` representing how the Block should display and be controlled. For each Block on your page, define a Block in the JSON file.
 
-* `name` Required. The name of the block displayed to the user when editing the page
-* `key` Required. A page-unique string to identify that block in your template code. Must not contain any spaces, and only consist of a-z, A-Z, 0-9, underscore ( _ ), max length 60 characters. Use this key in the page template blocks variable `page.blocks.<key>`
-* `description` Optional. The description of the block displayed to the user when editing the page
-* `elementTypeOptions` Optional. An array of allowable elements (by path with filename without extension) to display to the user. If no `elementTypeOptions` is provided, the user will see all elements in the elements directory.
-* `elementCountLimit` Optional. The max number of elements allowed by design. If no value is provided, then the user can add any number of elements.
+**Block Definition Properties**
 
-Pages and Block Elements can also support custom settings for small bits of dynamic information.
+| Key | Required | Description |
+| --- | --- | --- |
+| `name` | Yes | The name of the block displayed to the user when editing the page |
+| `key` | Yes | A page unique string to identify that block in your Template code. Must not contain any spaces, and only consist of a-z, A-Z, 0-9, underscore ( _ ), with max length 60 characters. Use this key in the Page Template blocks variable `page.blocks.<key>` |
+| `description` |  | The description of the block displayed to the user when editing the page |
+| `elementTypeOptions` |  | An array of *allowed* elements (by path with filename without extension) to display to the user. If not provided the user will see all available elements |
+| `elementCountLimit` |  | The max number of elements allowed by design. If no value is provided, then the user can add any number of elements. |
+
+Pages and Block Elements can also support custom Settings for small bits of dynamic information.
 
 ## Elements HTML and JSON
-Elements are the smallest unit of reusable HTML on your website. As a designer, you can create custom elements (or delete built in PitonCMS elements) as needed for the site design. However, the client will select available elements when they create content; elements are not hard coded into a page. As a designer, you can restrict the type of elements that can be used for any block, including the number of elements.
+At a minimum an Element Template consists of one HTML file and one JSON file with matching names (except for the extensions) in the same sub-directory.
 
-The HTML file for a basic content element (which as a title and rich textarea) can be
+Elements are the smallest unit of reusable HTML on your website. You can create custom Elements (or modify or delete built in PitonCMS Elements) as needed for the site design.
+
+The HTML Template file for a basic *Text* Element (which has a title and rich textarea) can be
 
 ```html
-<section class="textElement">
-  <h2>{{ element.title }}</h2>
-
-  {{ element.content }}
-
-</section>
+  <div class="element">
+    <h2 class="element__title">{{ element.title }}</h2>
+    {{ element.content }}
+  </div>
 ```
 
-When the element HTML is loaded, the element data is available in the `element` array. At a minimum, there is a `title` and `content` (from the rich text editor) available in each element. Page level dynamic data in the `page` array in the element.
+When the Element HTML is loaded, the saved data is available in the `element` array. (You can also use all `site` and `page` data in an Element.)
 
-Element HTML files do not need to contain variables to print, it can consist of just boilerplate HTML and text.
+Element HTML files do not need to contain variables, it may consist of just boilerplate HTML and text.
 
-Other variables may also exist depending on the element type.
+The matching Text Element JSON Definition file contains information about the Element and how it is used.
 
-The element JSON file definition is
+```json
+{
+    "elementName": "Text",
+    "elementDescription": "Simple text content"
+}
+```
 
-* `elementName` Required. The name of the element displayed to the user
-* `elementDescription` Optional. The description of the element displayed to the user
-* `enableInput` Optional. Display additional built-in input option for the type of element (just one option). Options are "collection", "embedded", "image", and "gallery"
-* `showContentTextarea` Optional, defaults to true.
-* `enableEditor` Optional, defaults to true. Enables the rich text editor
-* `settings` Optional. An array of [Custom Settings](/admin/support/designer/settings).
+**Element Definition Properties**
+
+| Key | Required | Description |
+| --- | --- | --- |
+| `elementName` | Yes | The name of the element displayed to the user |
+| `elementDescription` |  | The description of the element displayed to the user |
+| `enableInput` |  | Display additional built-in input option for the type of element (just one option). Options are `"collection"`, `"embedded"`, `"image"`, and `"gallery"` |
+| `showContentTextarea` |  | Defaults to true. |
+| `enableEditor` |  | Defaults to true. Enables the rich text editor |
+| `settings` |  | An array of [Custom Settings](/admin/support/designer/settings). |
 
