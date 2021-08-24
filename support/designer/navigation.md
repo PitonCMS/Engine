@@ -1,14 +1,15 @@
 # Navigation
-PitonCMS supports creating multiple Navigation lists including drop down menus. As a designer, you can define a navigation bar, and let the user add or remove links from the navigation bar using the **Navigation** mananger.
 
-Note, only static Pages, Collections, and custom links can be added to a Navigation list by the user. Links to individual Collection Detail Pages technically can be added to a navigation bar as placeholder link, but the individual Collection Detail Pages themselves do not appear as an option in the Navigation manager, only the Collection Summaries themselves.
+PitonCMS supports creating multiple *Navigation* lists including with drop down menus. In your web design you can define one or more Navigation lists and let the user manage Page links using the <i class="fas fa-compass"></i> **Navigation** menu.
 
-For example, if you create a `main` Navigation list, the user can add the Home and About pages as navigation links. They can also add a Collection called "Blog Posts" (assuming this had already been created) so that new posts automatically appear in the Navigation. However, to pin a specific Blog Post the user will need to copy and paste that URL as Placeholder navigation entry. This is where creating a static Page might be more appropriate.
+This Navigation list manager allows the user to manage internal links, add external links, the order of links, and even create drop down link lists.
 
-You can define separate Navigation list for different navigation components, such as header main navigation, sidebar navigation, footer navigation and more.
+For example, if you create a `main` Navigation list, the user can add the Home and About pages as links. They can also add a Collection called "Blog Posts" (assuming this had already been created) so that new posts automatically appear in the Navigation list.
 
-## Navigators
-To define a navigator (navigation bar), open `structure/definitions/navigation.json` and add to the `navigators` array
+As part of the design you can define separate Navigation list for different placements, such as header, sidebar, footer and more.
+
+## Navigation Lists
+To define a Navigation list, open `structure/definitions/navigation.json` and add to the `navigators` array
 
 ```json
 {
@@ -22,7 +23,7 @@ To define a navigator (navigation bar), open `structure/definitions/navigation.j
 }
 ```
 
-Where `"navigators": []` is required as the root of navigator array, and each navigator has a `key`, a display `name`, and a `description`. To add another navigator, such as for a side bar, then add
+To add another Navigation list, such as for a side bar, then add
 
 ```json
 {
@@ -41,14 +42,24 @@ Where `"navigators": []` is required as the root of navigator array, and each na
 }
 ```
 
-After saving, open Navigation manager to see the new navigator.
+After saving, open Navigation menu to see the new Navigation list.
 
-**Note**: Once you define a navigator key, you cannot change the name!
+The Navigation object has these properties
 
-## Displaying Navigators
-To display a navigator in your template, use the Piton Twig function `getNavigator('main')` and pass in the name (key) of your navigator. This will return an array of navigation entries, that you can loop over to print each link. To print the actual anchor `href` link, be sure to use the PitonCMS Twig function `getNavigationLink()` to derive the correct URL.
+| Key | Required | Description |
+| --- | --- | --- |
+| `key` | Yes | The unique key you will use in your templates to reference this list |
+| `name` | Yes | The display name of this Navigation list |
+| `description` |  | The explanation of this Navigation list to show in the menu |
 
-For example, to print the main navigator with an active link class on the current page
+>**Note**: Once you define a Navigation key and save links, you cannot change the `key`.
+
+## Displaying Navigation Lists
+To display a Navigation list in your Template, use the PitonCMS function `getNavigator()` and pass in the `key` of your Navigation list. This will return an array of navigation entries, that you can loop over to print each link.
+
+To print the actual anchor `href` link, be sure to use the PitonCMS function `getNavigationLink()` to derive the correct URL.
+
+For example, to print the *Main* Navigation list with an active link class on the current page
 
 ```html
 <ul class="navigation">
@@ -61,27 +72,29 @@ For example, to print the main navigator with an active link class on the curren
 ```
 
 ### Navigation Data
-These keys are available in each navigation link element returned by `getNavigator()`
+These properties are available in each navigation link object returned by `getNavigator()` function.
 
-* `id` Navigation ID
-* `navigator` Name of navigator for this link
-* `parent_id` If this is a child link, then this is the parent navigation ID (otherwise null)
-* `currentPage` Boolean flag if this is the current page
-* `sort` Numeric position of this link relative to siblings
-* `nav_title` Override link title text defined in Navigation manager
-* `url` Link URL (if placeholder link)
-* `collection_id` Collection ID if part of a collection
-* `collection_title` Collection title if part of a collection
-* `collection_slug` Collection URL segment if part of a collection
-* `page_id` Page ID
-* `page_title` Page title
-* `published_date` Page published date
-* `page_slug` Page URL segment
-* `title` Link title
-* `childNav` Has child navigation array, if this parent has children
+| Key | Description |
+| --- | --- |
+| `id` | Navigation ID |
+| `navigator` | Name of navigator for this link |
+| `parent_id` | If this is a child link, then this is the parent navigation ID (otherwise null) |
+| `currentPage` | Boolean flag if this is the current page |
+| `sort` | Numeric position of this link relative to siblings |
+| `nav_title` | Override link title text defined in Navigation manager |
+| `url` | Link URL (if placeholder link) |
+| `collection_id` | Collection ID if part of a collection |
+| `collection_title` | Collection title if part of a collection |
+| `collection_slug` | Collection URL segment if part of a collection |
+| `page_id` | Page ID |
+| `page_title` | Page title |
+| `published_date` | Page published date |
+| `page_slug` | Page URL segment |
+| `title` | Link title |
+| `childNav` | Has child navigation array, if this parent has children |
 
 ### Child (Dropdown) Menus
-PitonCMS supports dropdown child menus (just two levels), and if a top level navigation item has a child, that parent navigation item will have the key `childNav`, which contains the child navigation array.
+PitonCMS supports dropdown child Navigation menus (just two levels deep), and if a top level navigation item has a child, that parent navigation item will have the key `childNav`, which contains the child navigation array.
 
 To manage the HTML around this, in the Twig loop use an `if` condition to check if the current navigation item has a `childNav` to print the child navigation loop and HTML, and if not then print a normal top level link.
 
