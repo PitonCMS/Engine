@@ -1,4 +1,4 @@
-# Site and Page Settings
+# Custom Settings
 
 In PitonCMS *Settings* are Key : Value pairs that can be used to display small bits of user saved data (like social media links), change a style theme, or even set user saved flags to control application flow.
 
