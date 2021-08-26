@@ -1643,10 +1643,13 @@ select:-moz-focusring {
   position: relative;
 }
 #support .help-toc ul li::before {
-  content: " > ";
+  content: "";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 0.65em;
   position: absolute;
-  top: 0px;
-  left: -0.85em;
+  top: 4px;
+  left: -1em;
 }
 #support .help-toc h1 {
   background: pink;
@@ -1685,7 +1688,7 @@ select:-moz-focusring {
   margin-left: 1em;
 }
 #support .help-content ul li, #support .help-content ol li {
-  margin-top: 0.25em;
+  margin-top: 0.15em;
   margin-right: 3rem;
 }
 

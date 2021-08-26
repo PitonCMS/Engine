@@ -22,10 +22,13 @@
     }
 
     ul li::before {
-      content : " > ";
+      content : "\f054 ";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      font-size: .65em;
       position: absolute;
-      top     : 0px;
-      left    : -.85em;
+      top     : 4px;
+      left    : -1em;
     }
     h1 {
       background: pink;
@@ -67,7 +70,7 @@
       @include margin(null null null 1em);
       li {
       
-       @include margin(.25em 3rem null null);
+       @include margin(.15em 3rem null null);
        
       }
     }
