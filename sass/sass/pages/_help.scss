@@ -1,29 +1,75 @@
-.help-content {
-  background: $bg-white;
-  @include padding(1rem 1rem 2rem 1rem);
-  @include margin(null null 4rem null);
+#support {
+  display  : flex;
+  flex-flow: row-reverse nowrap;
+  gap      : 1rem;
+  position : relative;
 
-  ol,
-  li {
-    @include margin(null null null 1rem);
-    @include padding(null null null -1rem);
+  .help-toc {
+    @include padding(null 1rem null 2rem);
+    background: $bg-white !important;
+
+    flex: 1 0 auto;
+
+    ul {
+      list-style: none;
+      position  : sticky;
+      top       : 120px;
+    }
+
+    li {
+      @include margin(.75em null null null);
+      position: relative;
+    }
+
+    ul li::before {
+      content : " > ";
+      position: absolute;
+      top     : 0px;
+      left    : -.85em;
+    }
+    h1 {
+      background: pink;
+    }
+    h2{
+      background: orange;
+    }
+    h3 {
+      background: aqua;
+    }
   }
 
-  pre {
-    white-space: pre-wrap;
-    /* css-3 */
-    white-space: -moz-pre-wrap;
-    /* Mozilla, since 1999 */
-    white-space: -pre-wrap;
-    /* Opera 4-6 */
-    white-space: -o-pre-wrap;
-    /* Opera 7 */
-    word-wrap: break-word;
-    /* Internet Explorer 5.5+ */
-    text-align: justify;
-  }
-}
+  .help-content {
+    background: $bg-white;
+    @include padding(1rem 2rem 2rem 2rem);
+    *+* {
+      @include margin(1rem null null null);
+    }
 
-.help-content *+* {
-  margin-top: 1rem;
+    pre {
+      white-space: pre-wrap;
+      word-wrap  : break-word;
+      text-align : justify;
+    }
+    blockquote {
+      background: $bg-accent-1;
+      @include padding(.5em);
+      border-left: solid .75em $bg-accent;
+    }
+    a{
+      color: $text-accent;
+      transition: all 125ms ease-in;
+      &:hover {
+        outline: dashed 3px $text-accent;
+      }
+    }
+    ul, ol {
+    
+      @include margin(null null null 1em);
+      li {
+      
+       @include margin(.25em 3rem null null);
+       
+      }
+    }
+  }
 }

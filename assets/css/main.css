@@ -1621,32 +1621,72 @@ select:-moz-focusring {
   border-bottom: solid 1px #dee3e7;
 }
 
-.help-content {
+#support {
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  gap: 1rem;
+  position: relative;
+}
+#support .help-toc {
+  padding-right: 1rem;
+  padding-left: 2rem;
+  background: #ffffff !important;
+  flex: 1 0 auto;
+}
+#support .help-toc ul {
+  list-style: none;
+  position: sticky;
+  top: 120px;
+}
+#support .help-toc li {
+  margin-top: 0.75em;
+  position: relative;
+}
+#support .help-toc ul li::before {
+  content: " > ";
+  position: absolute;
+  top: 0px;
+  left: -0.85em;
+}
+#support .help-toc h1 {
+  background: pink;
+}
+#support .help-toc h2 {
+  background: orange;
+}
+#support .help-toc h3 {
+  background: aqua;
+}
+#support .help-content {
   background: #ffffff;
-  padding: 1rem 1rem 2rem;
-  margin-bottom: 4rem;
+  padding: 1rem 2rem 2rem;
 }
-.help-content ol,
-.help-content li {
-  margin-left: 1rem;
-  padding-left: -1rem;
+#support .help-content * + * {
+  margin-top: 1rem;
 }
-.help-content pre {
+#support .help-content pre {
   white-space: pre-wrap;
-  /* css-3 */
-  white-space: -moz-pre-wrap;
-  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;
-  /* Opera 4-6 */
-  white-space: -o-pre-wrap;
-  /* Opera 7 */
   word-wrap: break-word;
-  /* Internet Explorer 5.5+ */
   text-align: justify;
 }
-
-.help-content * + * {
-  margin-top: 1rem;
+#support .help-content blockquote {
+  background: #d4effc;
+  padding: 0.5em;
+  border-left: solid 0.75em #3782c3;
+}
+#support .help-content a {
+  color: #eb7119;
+  transition: all 125ms ease-in;
+}
+#support .help-content a:hover {
+  outline: dashed 3px #eb7119;
+}
+#support .help-content ul, #support .help-content ol {
+  margin-left: 1em;
+}
+#support .help-content ul li, #support .help-content ol li {
+  margin-top: 0.25em;
+  margin-right: 3rem;
 }
 
 /* Page Listing */
