@@ -1651,15 +1651,6 @@ select:-moz-focusring {
   top: 4px;
   left: -1em;
 }
-#support .help-toc h1 {
-  background: pink;
-}
-#support .help-toc h2 {
-  background: orange;
-}
-#support .help-toc h3 {
-  background: aqua;
-}
 #support .help-content {
   background: #ffffff;
   padding: 1rem 2rem 2rem;
@@ -1684,12 +1675,46 @@ select:-moz-focusring {
 #support .help-content a:hover {
   outline: dashed 3px #eb7119;
 }
-#support .help-content ul, #support .help-content ol {
+#support .help-content ul,
+#support .help-content ol {
   margin-left: 1em;
 }
-#support .help-content ul li, #support .help-content ol li {
+#support .help-content ul li,
+#support .help-content ol li {
   margin-top: 0.15em;
   margin-right: 3rem;
+}
+#support .help-content li > ul li {
+  display: block;
+  margin-left: 1em;
+  margin-top: 0.25em;
+}
+#support .help-content li > ul li::before {
+  position: absolute;
+  left: 20px;
+}
+#support .help-content table {
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(59, 59, 59, 0.15);
+}
+#support .help-content table thead tr {
+  background-color: #3782c3;
+  color: #f3f5f7;
+  text-align: left;
+}
+#support .help-content table th,
+#support .help-content table td {
+  padding: 0.75em 1em;
+}
+#support .help-content table tbody tr {
+  border-bottom: 1px solid #dee3e7;
+}
+#support .help-content table tbody tr:nth-of-type(even) {
+  background-color: #f3f5f7;
 }
 
 /* Page Listing */

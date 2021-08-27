@@ -22,28 +22,20 @@
     }
 
     ul li::before {
-      content : "\f054 ";
+      content    : "\f054 ";
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
-      font-size: .65em;
-      position: absolute;
-      top     : 4px;
-      left    : -1em;
-    }
-    h1 {
-      background: pink;
-    }
-    h2{
-      background: orange;
-    }
-    h3 {
-      background: aqua;
+      font-size  : .65em;
+      position   : absolute;
+      top        : 4px;
+      left       : -1em;
     }
   }
 
   .help-content {
     background: $bg-white;
     @include padding(1rem 2rem 2rem 2rem);
+
     *+* {
       @include margin(1rem null null null);
     }
@@ -53,26 +45,75 @@
       word-wrap  : break-word;
       text-align : justify;
     }
+
     blockquote {
       background: $bg-accent-1;
       @include padding(.5em);
       border-left: solid .75em $bg-accent;
     }
-    a{
-      color: $text-accent;
+
+    a {
+      color     : $text-accent;
       transition: all 125ms ease-in;
+
       &:hover {
         outline: dashed 3px $text-accent;
       }
     }
-    ul, ol {
-    
+
+    ul,
+    ol {
+
       @include margin(null null null 1em);
+
       li {
-      
-       @include margin(.15em 3rem null null);
-       
+
+        @include margin(.15em 3rem null null);
+
       }
     }
+
+
+    li>ul li {
+      display    : block;
+      margin-left: 1em;
+      margin-top : .25em;
+    }
+
+    li>ul li::before {
+      position: absolute;
+      left    : 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin         : 2em 0;
+      font-size      : 0.9em;
+      font-family    : sans-serif;
+      min-width      : 400px;
+      // box-shadow     : 0 0 20px rgba(0, 0, 0, 0.15);
+      box-shadow: $box-shadow-2;
+    }
+
+    table thead tr {
+      background-color: $bg-accent;
+      color           : $bg-light;
+      text-align      : left;
+    }
+
+    table th,
+    table td {
+  
+      @include padding(.75em 1em);
+    }
+
+    table tbody tr {
+      border-bottom: 1px solid $bg-grey;
+    }
+
+    table tbody tr:nth-of-type(even) {
+      background-color: $bg-light;
+    }
+
   }
 }
