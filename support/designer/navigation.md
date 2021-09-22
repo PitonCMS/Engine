@@ -46,11 +46,11 @@ After saving, open Navigation menu to see the new Navigation list.
 
 The Navigation object has these properties
 
-| Key | Required | Description |
-| --- | --- | --- |
-| `key` | Yes | The unique key you will use in your templates to reference this list |
-| `name` | Yes | The display name of this Navigation list |
-| `description` |  | The explanation of this Navigation list to show in the menu |
+| Key | Required | Default | Description |
+| --- | --- | --- | --- |
+| `key` | Yes | | The unique key you will use in your templates to reference this list |
+| `name` | Yes | | The display name of this Navigation list |
+| `description` | | | The explanation of this Navigation list to show in the menu |
 
 >**Note**: Once you define a Navigation key and save links, you cannot change the `key`.
 

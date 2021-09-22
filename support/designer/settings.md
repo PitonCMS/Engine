@@ -42,16 +42,16 @@ To use this Site Setting in your header use the `key` defined in your Setting
 
 Settings allow for HTML5 input types. The Setting object has these properties
 
-| Key | Required | Description |
+| Key | Required | Default | Description |
 | --- | --- | --- |
-| `category` | Yes | The type of setting, one of `site`, `contact`, `social`, `page`, or `element`*
-| `label` | Yes | The label text for the input
-| `key` | Yes | Unique key you will use to access the Setting variable in your templates. Must only contain a-z, A-Z, 0-9, _ (underscore) and max 60 characters without spaces
-| `value` |  | A default value. **Note**, the default value is presented to the user when viewing the Setting, but not saved to the database until a user saves the form. Max 4,000 bytes.
-| `inputType` |  | The type of input to present, defaults to `text` if left blank. Options are `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
-| `help` |  | Help text for input
-| `placeholder` |  | Input placeholder text (if the input supports placeholder)
-| `options` |  | If the `inputType` is `select`, then add an array of `name` and `value` options for the select list
+| `category` | Yes | | The type of setting, one of `site`, `contact`, `social`, `page`, or `element`*
+| `label` | Yes | | The label text for the input
+| `key` | Yes | | Unique key you will use to access the Setting variable in your templates. Must only contain a-z, A-Z, 0-9, _ (underscore) and max 60 characters without spaces
+| `value` | | | A default value. **Note**, the default value is presented to the user when viewing the Setting, but not saved to the database until a user saves the form. Max 4,000 bytes.
+| `inputType` | | `text` | The type of HTML5 input to present. Options are `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
+| `help` | | | Help text for input
+| `placeholder` | | | Input placeholder text (if the input supports placeholder)
+| `options` | | | If the `inputType` is `select`, then add an array of `name` and `value` options for the select list
 
 ## Site Settings
 Site settings are defined in `structure/definitions/siteSettings.json`, and are set in the <i class="fas fa-cog"></i> **Settings** menu. Site settings are available to all Page Templates in your website, under the `site.settings` array and indexed with the `key` you defined in the JSON file.
