@@ -90,26 +90,26 @@ The matching `contentPage.json` JSON Definition file contains information about 
 
 **Page Definition Properties**
 
-| Key | Required | Description |
-| --- | --- | --- |
-| `templateName` | Yes | The name of the Template displayed when creating a new Page |
+| Key | Required | Default | Description |
+| --- | --- | --- | --- |
+| `templateName` | Yes | | The name of the Template displayed when creating a new Page |
 | `templateDescription` | | The description of the Page Template |
-| `showFeaturedImage` | | A boolean flag (true or false) on whether to display a primary media selector for these Pages |
-| `templateType` | Yes | The type of template, `page` for static content or `collection`  for groups of related content |
-| `blocks` |  | An array of blocks that define content areas of the Page layout |
-| `showSubTitle` |  |  Whether the page should have a sub title field
+| `showFeaturedImage` | | `true` | A boolean flag (true or false) on whether to display a primary media selector for these Pages |
+| `templateType` | Yes | | The type of template, `page` for static content or `collection`  for groups of related content |
+| `blocks` | | | An array of blocks that define content areas of the Page layout |
+| `showSubTitle` | | `true` | Whether the page should have a sub title field
 
 The `blocks` array `[]` contains objects `{ }` representing how the Block should display and be controlled. For each Block on your page, define a Block in the JSON file.
 
 **Block Definition Properties**
 
-| Key | Required | Description |
+| Key | Required | Default | Description |
 | --- | --- | --- |
-| `name` | Yes | The name of the block displayed to the user when editing the page |
-| `key` | Yes | A page unique string to identify that block in your Template code. Must not contain any spaces, and only consist of a-z, A-Z, 0-9, underscore ( _ ), with max length 60 characters. Use this key in the Page Template blocks variable `page.blocks.<key>` |
-| `description` |  | The description of the block displayed to the user when editing the page |
-| `elementTypeOptions` |  | An array of *allowed* elements (by path with filename without extension) to display to the user. If not provided the user will see all available elements |
-| `elementCountLimit` |  | The max number of elements allowed by design. If no value is provided, then the user can add any number of elements. |
+| `name` | Yes | | The name of the block displayed to the user when editing the page |
+| `key` | Yes | | A page unique string to identify that block in your Template code. Must not contain any spaces, and only consist of a-z, A-Z, 0-9, underscore ( _ ), with max length 60 characters. Use this key in the Page Template blocks variable `page.blocks.<key>` |
+| `description` | | | The description of the block displayed to the user when editing the page |
+| `elementTypeOptions` | | | An array of *allowed* elements (by path with filename without extension) to display to the user. If not provided the user will see all available elements |
+| `elementCountLimit` | | | The max number of elements allowed by design. If no value is provided, then the user can add any number of elements. |
 
 Pages and Block Elements can also support custom Settings for small bits of dynamic information.
 
@@ -142,12 +142,13 @@ The matching Text Element JSON Definition file contains information about the El
 
 **Element Definition Properties**
 
-| Key | Required | Description |
+| Key | Required | Default | Description |
 | --- | --- | --- |
-| `elementName` | Yes | The name of the element displayed to the user |
-| `elementDescription` |  | The description of the element displayed to the user |
-| `enableInput` |  | Display additional built-in input option for the type of element (just one option). Options are `"collection"`, `"embedded"`, `"image"`, and `"gallery"` |
-| `showContentTextarea` |  | Defaults to true. |
-| `enableEditor` |  | Defaults to true. Enables the rich text editor |
-| `settings` |  | An array of [Custom Settings](/admin/support/designer/settings). |
+| `elementName` | Yes | | The name of the element displayed to the user |
+| `elementDescription` | | | The description of the element displayed to the user |
+| `enableInput` | | | Display additional built-in input option for the type of element (just one option). Options are `"collection"`, `"embedded"`, `"image"`, and `"gallery"` |
+| `showTitle` | | `true` | Boolean flag on whether to display the Element Title input.|
+| `showContentTextarea` | | `true` | Boolean flag on whether to display the Element Content textarea (with or without the rich text editor) |
+| `enableEditor` | | `true` | Boolean flag on whether to enable the Element content textarea Rich Text Editor |
+| `settings` | | | An array of [Custom Settings](/admin/support/designer/settings). |
 

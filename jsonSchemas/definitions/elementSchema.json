@@ -11,6 +11,11 @@
             "description": "Element description displayed in radio title",
             "type": "string"
         },
+        "showTitle": {
+            "description": "Whether to show the Element Title input",
+            "type": "boolean",
+            "default": true
+        },
         "enableInput": {
             "description": "What additional input to enable for this element",
             "type": "string",

@@ -6,6 +6,6 @@
     "build": "parcel build ./assets/js/*.js -d ./assets/js/dist --no-source-maps --cache-dir ./../../../cache/parcel"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.5"
   }
 }

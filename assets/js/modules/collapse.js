@@ -28,8 +28,8 @@
 const collapseClass = "collapsed";
 const hideClass = "d-none";
 
-// Find all page edit data-collapse-toggle=newElementButton* toggle elements, and convert to an array
-const newElements = Array.from(document.querySelectorAll(`[data-collapse-toggle^="newElementButton"]`));
+// Find all page edit block data-collapse-toggle=newElementButton* elements, and convert to an array
+const blockNewElementButtons = Array.from(document.querySelectorAll(`[data-collapse-toggle^="newElementButton"]`));
 
 /**
  * Collapse Toggle
@@ -43,23 +43,7 @@ const collapseToggle = function (event) {
 
     // If page edit add new element toggle, then hide lower toggle lists
     if (toggleKey.match(/^newElementButton/)) {
-        // Because "Add Element" has a unique condition where the toggled target is behind other data-collapse-toggle New Elements
-        // lower in the page, we need to add and remove the class d-none to those new elements *after* this one
-
-        // Get index of the current toggle key
-        let currentIndex = newElements.findIndex((el) => {
-            return (el.dataset.collapseToggle === toggleKey);
-        });
-
-        // Slice new array starting after index
-        if (currentIndex !== -1) {
-            let hideNewElements = newElements.slice(currentIndex + 1);
-
-            // Toggle d-none class
-            hideNewElements.forEach(el => {
-                el.classList.toggle(hideClass);
-            });
-        }
+        toggleLowerNewElementButtons(toggleKey);
     }
 
     // Apply toggle class to target
@@ -78,6 +62,35 @@ const autoCollapse = function (event) {
     let toggleKey = event.target.closest(`[data-collapse-auto]`).dataset.collapseAuto;
     let collapseTarget = document.querySelector(`[data-collapse-target="${toggleKey}"]`);
     collapseTarget.classList.add(collapseClass);
+
+    // If page edit add new element toggle, then also hide lower toggle lists
+    if (toggleKey.match(/^newElementButton/)) {
+        toggleLowerNewElementButtons(toggleKey);
+    }
+}
+
+/**
+ * Toggle Lower New Element Button Collapse
+ *
+ * Because "Add Element" has a unique condition where the toggled target is behind other data-collapse-toggle New Elements
+ * lower in the page, we need to add and remove the class d-none to those new elements *after* this one
+ * @param {string} key
+ */
+const toggleLowerNewElementButtons = function(key) {
+    // Get index of the current toggle key
+    let currentIndex = blockNewElementButtons.findIndex((el) => {
+        return (el.dataset.collapseToggle === key);
+    });
+
+    // Slice new array starting after index
+    if (currentIndex !== -1) {
+        let hideNewElements = blockNewElementButtons.slice(currentIndex + 1);
+
+        // Toggle d-none class
+        hideNewElements.forEach(el => {
+            el.classList.toggle(hideClass);
+        });
+    }
 }
 
 document.addEventListener("click", collapseToggle, false);
