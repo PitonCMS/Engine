@@ -107,6 +107,10 @@ a:active {
   color: #ffffff;
 }
 
+:target {
+  scroll-margin-top: calc((50px * 2) + .25em);
+}
+
 /* Utility Classes */
 .mt-1rem {
   margin-top: 1rem;
