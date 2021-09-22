@@ -137,6 +137,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
             new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
+            new TwigFunction('currentPath', [$this, 'currentPath']),
 
             // Front end functions
             new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
@@ -389,6 +390,27 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         return null;
+    }
+
+    /**
+     * Returns current path on given URI.
+     *
+     * @param bool $withQueryString
+     * @return string
+     */
+    public function currentPath($withQueryString = false)
+    {
+        if (is_string($this->uri)) {
+            return $this->uri;
+        }
+
+        $path = $this->uri->getBasePath() . '/' . ltrim($this->uri->getPath(), '/');
+
+        if ($withQueryString && '' !== $query = $this->uri->getQuery()) {
+            $path .= '?' . $query;
+        }
+
+        return $path;
     }
 
     // ---------------- Front End Functions ----------------
