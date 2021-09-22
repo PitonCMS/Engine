@@ -100,9 +100,9 @@ In contact JSON Definition file `contactInputs.json` add your custom inputs to t
 
 **Properties**
 
-| Key | Required | Description |
-| --- | --- | ---|
-| `name` | Yes | Description of the field |
-| `key` | Yes | The input `name`. The JSON `key` must match the allowed input `name` |
+| Key | Required | Default | Description |
+| --- | --- | --- | --- |
+| `name` | Yes | | Description of the field |
+| `key` | Yes | | The input `name`. The JSON `key` must match the allowed input `name` |
 
 When the contact form is submitted only custom form inputs with a matching key in the definition file will be saved.

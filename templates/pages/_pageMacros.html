@@ -16,12 +16,11 @@
   <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ element.block_key }}">
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
-  <!-- Element Title -->
-  {#
-    Element Title Logic. Set display title to:
+  {# Element Display Title Logic
+    Set display title to:
     1) If saved (has element.id) and has a title, display the title
     2) If saved (had element.id) and has NO title, display short excerpt of text
-    3) If new, then display "New Element"
+    3) If new (no element.id), then display "New Element"
   #}
   <div class="toggle-block__header toggle-block__header-secondary" data-drag-handle="true">
    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title|default(element.excerpt) }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
@@ -29,14 +28,17 @@
    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
   </div>
 
-  <!-- Element Content -->
+ <!-- Element Content -->
   <div class="form-block__elementWrapper {% if element.id %}collapsed{% endif %}" data-collapse-target="pageElement-{{ arrayKey }}">
+
+     {# Element Title #}
+    {% if element.definition.showTitle %}
     <div class="form-block">
       <label class="form-block__title">Element Title</label>
       <input type="text"  name="element[{{ arrayKey }}][element_title]" value="{{ element.title }}" placeholder="Element Title" autocomplete="off">
       <div class="small-text">The element title is not required. You can also use the Page Title as your main heading.</div>
-
     </div>
+    {% endif %}
 
     {# Element custom settings #}
     {% for setting in element.settings %}
