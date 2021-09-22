@@ -1,92 +1,153 @@
-# Site and Page Settings
+# Custom Settings
 
-With custom settings, you can create user-managed targeted custom key: values pairs to present as specific display data or in template logic.
+In PitonCMS *Settings* are Key : Value pairs that can be used to display small bits of user saved data (like social media links), change a style theme, or even set user saved flags to control application flow.
 
-_Site_ settings are global and are available on every page, while _Page_ settings are unique to each page. You can also define settings for page _Elements_.
+Settings and the keys are defined as part of the website design in the JSON Definition files and committed to version control, and the values are set by the user in the administration console.
 
-When you add a new setting to the JSON definition file, that input is made available to the user in site Settigns or in the Page content editor. Be sure to commit these JSON files so that you can push to other environments.
+Settings can be defined as
+- **Site** Values are available to all Templates on all Pages
+- **Page** Values are unique to each saved Page
+- **Element** Values are unique to each Element within each Page
 
-If you delete a setting from the definition file, the user will see an orphaned flag and can delete the saved value for that setting. Until being hard deleted, the previously saved value remains available in the templates.
+When a new Setting is defined in a JSON Definition file, the input is available in the respective editor and the user can save the desired value. If a setting is deleted from the JSON Definition file, the user will see an orphaned flag and can delete the saved value for that setting.
 
-## Examples
-As a desinger you can utilize settings in many different ways, and not just to print values. Examples include
+>**Note**: *Contact* and *Social* are also Site Settings available on all Templates, but have separate categories to separate these in the **Settings** menu.
 
-* Add a new social media platform link to site settings to print in the footer on all pages
-* Add a text area to enter a store address, or create a separate input for each data point in the address.
-  * As a site setting this could be used on all pages, or perhaps just in a single template to allow for more targeted styling
-* Create a setting with a select list of predefined values to avoid user input errors
-* Create a setting as a flag to control page flow
-  * For example, create a pair of begin and end effective `date` inputs, and then use logic in the Twig template to only display content if today is within the effective date range
+## Defining Settings
+Whether a Site, a Page, or an Element Setting, the JSON structure is the same for a custom Setting.
+
+Settings are all defined as a list of setting objects in a `"settings"` array `[]` in the JSON Definiton file.
+
+For example, a *Site* Setting to print a Google Search Console verification code would be (in the `siteSettings.json` file)
+
+```json
+{
+  "settings": [
+    {
+      "category": "site",
+      "label": "Google SEO Verification Link",
+      "key": "googleSeoVerification",
+      "inputType": "text",
+      "placeholder": "Google Search Console verification"
+    }
+  ]
+}
+```
+
+To use this Site Setting in your header use the `key` defined in your Setting
+
+```html
+<meta name="google-site-verification" content="{{ site.settings.googleSeoVerification }}">
+```
+
+Settings allow for HTML5 input types. The Setting object has these properties
+
+| Key | Required | Default | Description |
+| --- | --- | --- |
+| `category` | Yes | | The type of setting, one of `site`, `contact`, `social`, `page`, or `element`*
+| `label` | Yes | | The label text for the input
+| `key` | Yes | | Unique key you will use to access the Setting variable in your templates. Must only contain a-z, A-Z, 0-9, _ (underscore) and max 60 characters without spaces
+| `value` | | | A default value. **Note**, the default value is presented to the user when viewing the Setting, but not saved to the database until a user saves the form. Max 4,000 bytes.
+| `inputType` | | `text` | The type of HTML5 input to present. Options are `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
+| `help` | | | Help text for input
+| `placeholder` | | | Input placeholder text (if the input supports placeholder)
+| `options` | | | If the `inputType` is `select`, then add an array of `name` and `value` options for the select list
 
 ## Site Settings
-Site settings are defined in `structure/definitions/siteSettings.json`, and are updated in the **Settings** manager. Site settings are available on all pages in your template, under the `site.settings.` array and indexed with the `key` you define in the JSON file. You are welcome to delete the default settings that come with PitonCMS as examples.
+Site settings are defined in `structure/definitions/siteSettings.json`, and are set in the <i class="fas fa-cog"></i> **Settings** menu. Site settings are available to all Page Templates in your website, under the `site.settings` array and indexed with the `key` you defined in the JSON file.
 
-To edit or add site settings, in the `siteSettings.json` file edit a setting object under the `"settings"` key
+You are welcome to delete the default settings that come with PitonCMS as examples.
 
-```json
-{
- "settings": [
-	{
-	 "category": "site",
-	 "label": "Google SEO Verification Link",
-	 "key": "googleWebMaster",
-	 "value": "",
-   "inputType": "text",
-   "placeholder": "Google Search Console verification"
-    }
- ]
-}
-```
+To add or edit Site Setting Definitions, in the `siteSettings.json` file add or edit setting objects under the `"settings"` array `[]`.
 
-## Page and Element Settings
-Page template settings are defined the custom page template definition file in `structure/templates/pages/*.json`, and are updated in the **Content** page manager for pages using that template. A user can then define different values in different pages using the same template.
+>**Note**: *Contact* and *Social* are also Site Settings available on all Templates, but have separate categories to separate these in the **Settings** menu.
 
-Page settings are available on the pages using this template, under the `page.settings.` array and indexed with the `key` you define in the JSON file. You are welcome to delete the default settings that come with PitonCMS as examples.
+## Page Settings
+Page Settings are defined in the Page Template in `structure/templates/pages/` in the JSON Definition file, and are set in the <i class="fas fa-pencil-alt"></i> **Content** menu Page editor.
 
-To edit or add page settings, in the page template JSON file add a setting object under the `"settings"` key
+Any Page using this Template can set different Setting values unique to that Page URL. The Setting values are available to the Page HTML Template and in any Element HTML Template used by that Page.
+
+To edit Page Settings, in the Page Template JSON Definition file add a setting object under the `"settings"` array.
+
+For Example, to allow the user to easily change the call to action text on a button, create a Page Setting like this
 
 ```json
 {
- "blocks": [/* */],
- "settings": [
-	{
-	 "category": "page",
-	 "label": "Google Webmaster Verification Link",
-	 "key": "googleWebMaster",
-	 "value": "",
-	 "inputType": "text"
+  "blocks": [/* */],
+  "settings": [
+    {
+      "category": "page",
+      "label": "Hero Button Text",
+      "key": "ctaTitle",
+      "value": "Learn more!",
+      "inputType": "text",
+      "help": "Limit 20 characters, keep it brief."
     }
- ]
+  ]
 }
 ```
-You can also define Element settings in the element definition file, but change the `category` to `element`.
 
-## Setting Definitions
-Settings allow for very specific input types. The basic setting object has these properties at a minimum
+And then use it in your button like this
 
-* `category` Where the input editor should appear, and which category of setting this is
-  * For global settings, options are `site`, `social`, `contact`
-  * For page settings you must use `page`
-  * For element settings use `element`
-  * The `piton` category is reserved for system settings and should not be used as custom fields
-* `label` The display label text for the input
-* `key` Unique key you will use to access the variable in your templates. Must only contain a-z, A-Z, 0-9, _ (underscores) and max 60 characters without spaces
-* `value` An optional default value. Note, the default value is presented to the user when viewing the setting, but not saved to the database until a user views and then saves. Max 4,000 bytes.
-* `inputType` The type of input to present, defaults to `text` if left blank
-  * Options are: `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
-* `help` Optional help text for input
-* `placeholder` Optional input placeholder text. Only works with normal inputs (not `textarea` or select `types`)
-* `options` If the `inputType` is `select`, then add an array of `name` and `value` options for the select list
+```html
+<a href="/signup">{{ element.settings.ctaTitle }}</a>
+```
+
+## Element Settings
+Element Settings are defined in the Element Template in `structure/templates/elements/` in the Template JSON Definition file, and are set in the <i class="fas fa-pencil-alt"></i> **Content** menu Page in the respective Element editor.
+
+Any Element using this Template can set different values unique to that Block. The Setting values are available to that Element HTML Template.
+
+To edit Element Settings, in the Element Template JSON Definition file add a setting object under the `"settings"` array.
+
+For Example, to allow the user to set effective date range for an Element (such as for a table of commercial rates), create a two Element Settings like this
+
+```json
+{
+  "settings": [
+    {
+      "category": "element",
+      "label": "Start Date",
+      "key": "startDate",
+      "inputType": "date",
+      "help": "Select the start date for these rates."
+    },
+    {
+      "category": "element",
+      "label": "End Date",
+      "key": "endDate",
+      "inputType": "date",
+      "help": "Select the end date for these rates."
+    }
+  ]
+}
+```
+
+And then use it in your Element HTML Template like this
+
+```html
+{# Create variable and set today's date in ISO8601 format #}
+{% set today = 'now'|date('Y-m-d') %}
+
+{# Compare today to effective date range #}
+{% if element.settings.startDate <= today and today < element.settings.endDate %}
+  <h3>{{ element.title }}</h3>
+  <!-- Table of seasonal rates -->
+  {{ element.content }}
+{% endif %}
+```
+
+## Setting Types
+PitonCMS supports HTML5 input types to provide some basic client side data validation. You can set `inputType` to `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, or `url`.
 
 ### Input Setting
-The default, and most used is a basic `text` input setting. You can also set `inputType` to `text`, `select`, `textarea`, `color`, `date`, `email`, `number`, `tel`, and `url`.
+The default is a basic `text` input setting.
 
 ```json
 {
     "category": "site",
     "label": "Google Webmaster Verification Link",
     "key": "googleWebMaster",
-    "value": "",
     "inputType": "text"
 }
 ```
@@ -99,13 +160,12 @@ Presents a textarea to allow for longer free form content or code (such as track
     "category": "site",
     "label": "Website Contact Address",
     "key": "contactAddress",
-    "value": "",
     "inputType": "textarea"
 }
 ```
 
 ### Select Input
-Creates a select list of predefined values for the user.
+Creates a select list of predefined values for the user to select from.
 
 ```json
 {

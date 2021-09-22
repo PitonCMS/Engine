@@ -61,6 +61,9 @@ a {
   background-color: $clr-accent;
   color: $text-light;
 }
+:target {
+  scroll-margin-top: calc((#{$nav-height} * 2) + .25em);
+}
 
 /* Utility Classes */
 .mt-1rem {
