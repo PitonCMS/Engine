@@ -1,40 +1,64 @@
 #support {
   display  : flex;
   flex-flow: row-reverse nowrap;
-  gap      : 1rem;
+  gap      : .5em;
   position : relative;
 
   .help-toc {
-    @include padding(null 1rem null 2rem);
-    background: $bg-white !important;
+    display: none;
 
-    flex: 1 0 auto;
-
-    ul {
-      list-style: none;
-      position  : sticky;
-      top       : 120px;
-    }
-
-    li {
-      @include margin(.75em null null null);
+    @media screen and (min-width: $breakpoint) {
+      display   : block;
+      background: $clr-light;
+      flex: .5;
+      @include padding(null 1.3em);
       position: relative;
+
+      a {
+        color      : $text-dark;
+        font-size  : .9em;
+        display    : block;
+        transition : opacity 250ms ease-in-out 125ms;
+        line-height: calc(#{$nav-height} / 2);
+      }
+
+
+      &__inner {
+        position: sticky;
+        top     : 120px;
+      }
+
+      &__h2 {
+        &::before {
+          content    : "\f054 ";
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          font-size  : .5em;
+          position   : absolute;
+          left       : -1.5em;
+        }
+
+      }
+
+      &__h3 {
+        @include margin(null null null 1em);
+        &::before {
+          content    : "\f054 ";
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          font-size  : .5em;
+          position   : absolute;
+          left       : .5em;
+        }
+      }
     }
 
-    ul li::before {
-      content    : "\f054 ";
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      font-size  : .65em;
-      position   : absolute;
-      top        : 4px;
-      left       : -1em;
-    }
   }
 
   .help-content {
     background: $bg-white;
     @include padding(1rem 2rem 2rem 2rem);
+    flex: 1.25;
 
     *+* {
       @include margin(1rem null null null);
@@ -86,13 +110,13 @@
     }
 
     table {
-      border-collapse: collapse;
-      margin         : 2em 0;
-      font-size      : 0.9em;
-      font-family    : sans-serif;
-      min-width      : 400px;
+      border-collapse   : collapse;
+      margin            : 2em 0;
+      font-size         : 0.9em;
+      font-family       : sans-serif;
+      min-width         : 400px;
       // box-shadow     : 0 0 20px rgba(0, 0, 0, 0.15);
-      box-shadow: $box-shadow-2;
+      box-shadow        : $box-shadow-2;
     }
 
     table thead tr {
@@ -103,7 +127,7 @@
 
     table th,
     table td {
-  
+
       @include padding(.75em 1em);
     }
 

@@ -1624,36 +1624,56 @@ select:-moz-focusring {
 #support {
   display: flex;
   flex-flow: row-reverse nowrap;
-  gap: 1rem;
+  gap: 0.5em;
   position: relative;
 }
 #support .help-toc {
-  padding-right: 1rem;
-  padding-left: 2rem;
-  background: #ffffff !important;
-  flex: 1 0 auto;
+  display: none;
 }
-#support .help-toc ul {
-  list-style: none;
-  position: sticky;
-  top: 120px;
-}
-#support .help-toc li {
-  margin-top: 0.75em;
-  position: relative;
-}
-#support .help-toc ul li::before {
-  content: "";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  font-size: 0.65em;
-  position: absolute;
-  top: 4px;
-  left: -1em;
+@media screen and (min-width: 768px) {
+  #support .help-toc {
+    display: block;
+    background: #ffffff;
+    flex: 0.5;
+    padding-right: 1.3em;
+    padding-left: 1.3em;
+    position: relative;
+  }
+  #support .help-toc a {
+    color: #3b3b3b;
+    font-size: 0.9em;
+    display: block;
+    transition: opacity 250ms ease-in-out 125ms;
+    line-height: calc(50px / 2);
+  }
+  #support .help-toc__inner {
+    position: sticky;
+    top: 120px;
+  }
+  #support .help-toc__h2::before {
+    content: "";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.5em;
+    position: absolute;
+    left: -1.5em;
+  }
+  #support .help-toc__h3 {
+    margin-left: 1em;
+  }
+  #support .help-toc__h3::before {
+    content: "";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.5em;
+    position: absolute;
+    left: 0.5em;
+  }
 }
 #support .help-content {
   background: #ffffff;
   padding: 1rem 2rem 2rem;
+  flex: 1.25;
 }
 #support .help-content * + * {
   margin-top: 1rem;
