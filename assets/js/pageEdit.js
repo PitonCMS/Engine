@@ -151,9 +151,9 @@ document.querySelectorAll(`[data-element-select-block]`).forEach(block => {
                     container.querySelector(`[data-element="parent"]`).classList.add("new-element");
                     targetBlock.insertAdjacentHTML('beforeend', container.innerHTML);
 
-                    // Set focus with page scroll to newly inserted element
-                    const elementList = targetBlock.querySelectorAll(`input[name*="element_title"]`);
-                    elementList[elementList.length - 1].focus();
+                    // Scroll to newly inserted element
+                    const elementList = targetBlock.querySelectorAll(`[data-element="parent"]`);
+                    elementList[elementList.length - 1].scrollIntoView();
 
                     // Trigger form control state change with Input event
                     targetBlock.dispatchEvent(new Event("input", {"bubbles": true}));
