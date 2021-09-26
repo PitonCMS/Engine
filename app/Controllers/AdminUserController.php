@@ -81,21 +81,26 @@ class AdminUserController extends AdminBaseController
     {
         // Get dependencies
         $userMapper = ($this->container->dataMapper)('UserMapper');
+        $session = $this->container->sessionHandler;
 
         // Save user
+        $params = $this->request->getParsedBody();
         $user = $userMapper->make();
-        $user->id = (int) $this->request->getParsedBodyParam('user_id');
-        $user->first_name = trim($this->request->getParsedBodyParam('first_name'));
-        $user->last_name = trim($this->request->getParsedBodyParam('last_name'));
-        $user->email = trim($this->request->getParsedBodyParam('email'));
-
-        // $user->role = ($this->request->getParsedBodyParam('role')) ? 'A' : null;
-        $user->role = 'A';
-        $user->active = ($this->request->getParsedBodyParam('active')) ? 'Y' : 'N';
+        $user->id = empty($params['user_id']) ? null : (int) $params['user_id'];
+        $user->first_name = trim($params['first_name']);
+        $user->last_name = trim($params['last_name']);
+        $user->email = trim($params['email']);
+        $user->role = 'A'; // Set to Admin for now (TODO)
+        $user->active = ($params['active']) ? 'Y' : 'N';
 
         try {
             // There might be a duplicate user email
-            $userMapper->save($user);
+            $user = $userMapper->save($user);
+
+            // If the active status has changed to 'N' then delete any current sessions for that user
+            if ($user->active === 'N') {
+                $session->deleteSessionsByUserId($user->id);
+            }
         } catch (Throwable $e) {
             if ($e->getCode() === '23000') {
                 // Duplicate email error

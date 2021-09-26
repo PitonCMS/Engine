@@ -62,4 +62,13 @@ interface SessionInterface
      * @return mixed      Value or array
      */
     public function getFlashData($key = null);
+
+    /**
+     * Delete Session by User ID
+     *
+     * Searches session data to remove sessions for the specified user ID
+     * @param int $userId
+     * @return void
+     */
+    public function deleteSessionsByUserId(int $userId);
 }
