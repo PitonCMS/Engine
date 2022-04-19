@@ -56,22 +56,22 @@
 
     <div class="form-group span">
       <label>Status</label>
+
+      {# Do not let a user deactivate their currently used account, or they will not be able to login again #}
+      {% if (page.user.id != site.environment.sessionUserId) %}
       <div class="form-check-wrapper">
-
-        {#
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="role" id="admin-{{ arrayKey }}"
-            {{ checked(page.user.role == 'A') }}>
-          <label class="form-check-label" for="admin-{{ arrayKey }}">Admin</label>
-        </div>
-        #}
-
         <div class="form-check">
           <input class="form-check-input" type="checkbox" name="active" id="active-{{ arrayKey }}"
             {{ checked(page.user.active|default('Y') == 'Y') }}>
           <label class="form-check-label" for="active-{{ arrayKey }}">Active</label>
         </div>
       </div>
+      {% else %}
+      <div>
+        <small class="form-text text-muted">You cannot change your own user account status.</small>
+      </div>
+      {% endif %}
+
     </div>
   </div>
 

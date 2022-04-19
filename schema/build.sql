@@ -220,5 +220,5 @@ VALUES
   ('page', 1, NULL, 'ctaTarget', 'https://github.com/PitonCMS/Piton', 1, now(), 1, now()),
   ('element', NULL, 1, 'overlay', '100', 1, now(), 1, now()),
   ('element', NULL, 1, 'overlayColor', '51, 102, 153', 1, now(), 1, now()),
-  ('element', NULL, 1, 'placement', 'Center', 1, now(), 1, '2021-01-10 13:23:42');
+  ('element', NULL, 1, 'placement', 'Center', 1, now(), 1, now()),
   ('piton', NULL, NULL, 'appAlert', NULL, 1, now(), 1, now());
