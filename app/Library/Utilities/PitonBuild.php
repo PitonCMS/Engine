@@ -33,8 +33,8 @@ class PitonBuild
         static::updateApacheHost();
         static::copyConfig();
 
-        static::printOutput('> To start Docker, from the root of this project first run \'docker-compose build\' to create the image, a one-time step.', 'info');
-        static::printOutput('> Then run \'docker-compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
+        static::printOutput('> To build the Docker image, from the root of this project run \'docker-compose build\'.', 'info');
+        static::printOutput('> To start Docker run \'docker-compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
     }
 
     /**
@@ -77,9 +77,9 @@ class PitonBuild
                     $line = str_replace('true', 'false', $line);
                 }
 
-                // Change localhost to Docker Compose image db
+                // Change localhost to Docker image 'db'
                 if (strpos($line, 'database') !== false && strpos($line, 'host') !== false) {
-                    $line = str_replace('localhost', 'db', $line);
+                    $line = str_replace('\'\'', 'db', $line);
                 }
 
                 // Change database name to project name
@@ -99,7 +99,7 @@ class PitonBuild
 
                 // Change session cookie name to project name
                 if (strpos($line, 'session') !== false && strpos($line, 'cookieName') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectDir . '_session\'', $line);
                 }
 
                 // Set session salt to unique hash
@@ -207,7 +207,7 @@ class PitonBuild
     protected static function getProjectDir()
     {
         // This class is 6 levels deep from project root
-        return basename(dirname(__DIR__, 6));
+        return mb_strtolower(basename(dirname(__DIR__, 6)));
     }
 
     /**
