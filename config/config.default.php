@@ -24,7 +24,7 @@ $config['environment']['production'] = true;
  * - username: Database user name
  * - password: Database password
  */
-$config['database']['host'] = 'localhost';
+$config['database']['host'] = '';
 $config['database']['dbname'] = '';
 $config['database']['username'] = '';
 $config['database']['password'] = '';
@@ -41,7 +41,7 @@ $config['database']['password'] = '';
  * - secondsUntilExpiration: How many seconds to set the session on each request, defaults to 2 hours.
  *      Can accept expression such as 60*60*24;
  */
-$config['session']['cookieName'] = 'pitoncms';
+$config['session']['cookieName'] = '';
 $config['session']['checkIpAddress'] = true;
 $config['session']['checkUserAgent'] = true;
 $config['session']['salt'] = '';
@@ -61,7 +61,7 @@ $config['session']['secondsUntilExpiration'] = 7200;
  * - smtpPass: Password
  * - smtpPort: Port to use, likely 465
  */
-$config['email']['from'] = 'pitoncms@localhost.com';
+$config['email']['from'] = '';
 $config['email']['protocol'] = 'mail';
 $config['email']['smtpHost'] = '';
 $config['email']['smtpUser'] = '';
