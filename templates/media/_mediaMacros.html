@@ -13,14 +13,24 @@
 
 <div class="media" data-media-card="true" data-media-id="{{ media.id }}" draggable="false">
 
-  {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
-  {# Set <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
+  {# Set thumbnail file path only if mime type is an image type #}
+  {% if media.mime_type starts with 'image' %}
+    {% set thumbnailSource = getMediaPath(media.filename, 'thumb') %}
+  {% else %}
+    {% set thumbnailSource = "/admin/img/noFeatureImg.png" %}
+  {% endif %}
+
   <div class="media__image">
-    <a href="#{{ media.filename }}"> <img draggable="false" src="{{ getMediaPath(media.filename, 'thumb') }}"
+    {# Set <img draggable="false"> to avoid default browser behavior that allows one to unattach the image from the form when dragging #}
+    <a href="#{{ media.filename }}"> <img draggable="false" src="{{ thumbnailSource }}"
         class="media__thumb" alt="{{ media.caption }}" title="{{ media.caption }}"></a>
+
+    {# Media Image Thumbnail for preview 100px wide with hover popup larger image #}
+    {% if media.mime_type starts with 'image' %}
     <a href="#" class="lightbox" id="{{ media.filename }}">
       <span style="background-image: url('{{ getMediaPath(media.filename, 'small') }}')"></span>
     </a>
+    {% endif %}
   </div>
 
   <div class="media__extra">
