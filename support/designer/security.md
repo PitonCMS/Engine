@@ -120,3 +120,18 @@ For example, to increase the admin user session to 30 days
 ```php
 $config['session']['secondsUntilExpiration'] = 60*60*24*30;
 ```
+
+## Bypass Authentication
+When developing in a non-production environment it may be convenient to temporarily disable authentication for the administration area.
+
+**WARNING**: Use with caution and only when working in a _local_ development environment with no public access!
+
+In your `config.local.php` file set `environment.production` to `false` and  `session.bypassAuthentication` to true
+
+```php
+// Set production flag to false
+$config['environment']['production'] = false;
+
+// Add bypassAuthentication and set to false
+$config['session']['bypassAuthentication'] = true;
+```

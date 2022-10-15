@@ -282,6 +282,19 @@ $app->group('/admin', function () {
     });
 })->add(function (Request $request, Response $response, callable $next) {
     // Authentication
+
+    // To bypass authentication on a *non-production* envornment only
+    // Set $config['session']['bypassAuthentication'] === true in your config.local.php file
+    if (
+        $this->get('settings')['environment']['production'] === false
+        && isset($this->get('settings')['session']['bypassAuthentication'])
+        && $this->get('settings')['session']['bypassAuthentication'] === true
+    ) {
+        // Bypassing authentication, just go to next call
+        return $next($request, $response);
+    }
+
+    // Otherwise run authentication
     $security = $this->accessHandler;
 
     if (!$security->isAuthenticated()) {

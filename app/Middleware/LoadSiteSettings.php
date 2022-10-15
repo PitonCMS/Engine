@@ -126,7 +126,7 @@ class LoadSiteSettings
         // Generate Content Security Policy nonce
         $this->settings['environment']['cspNonce'] = base64_encode(random_bytes(16));
 
-        // Load piton engine version form composer.lock
+        // Load piton engine version from composer.lock
         if (null !== $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
             $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));
             $this->settings['environment']['engine'] = $definition->packages[$engineKey]->version;
