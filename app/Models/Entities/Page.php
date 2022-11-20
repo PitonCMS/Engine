@@ -37,10 +37,11 @@ class Page extends PitonEntity
 
     /**
      * Constructor
+     *
+     * Note: The class properties are set by PDO::FETCH_CLASS *before* the constructor is called.
      */
     public function __construct()
     {
-        // The class properties are set by PDO::FETCH_CLASS *before* the constructor is called.
         // This checks if a media file was joined in the query, and then builds a media sub-object.
         // Media constructor sets additional calculated properties based on the image.
         if (isset($this->media_filename)) {
