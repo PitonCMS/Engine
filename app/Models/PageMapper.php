@@ -116,13 +116,13 @@ class PageMapper extends DataMapperAbstract
         $this->bindValues[] = $terms;
 
         // Get page element content
-        $this->sql .=<<<HTML
+        $this->sql .=<<<SQL
  or p.id in (
     select page_id
     from page_element
     where match(`title`,`content`) against(?)
 )
-HTML;
+SQL;
         $this->bindValues[] = $terms;
         $this->sql .= ' order by `created_date` desc';
 
@@ -202,7 +202,7 @@ HTML;
     /**
      * Find Published Collection Pages by Collection ID
      *
-     * Finds all related collection detail pages
+     * Finds all related collection detail pages for summary
      * @param  int   $collectionId
      * @param  int  $limit
      * @param  int  $offset
@@ -247,6 +247,7 @@ select SQL_CALC_FOUND_ROWS
     c.collection_slug,
     c.collection_title,
     p.*,
+    pe.content first_element_content,
     m.id media_id,
     m.filename media_filename,
     m.width media_width,
@@ -256,6 +257,7 @@ select SQL_CALC_FOUND_ROWS
 from page p
 left join collection c on c.id = p.collection_id
 left join media m on m.id = p.media_id
+left join page_element pe on p.id = pe.page_id and pe.element_sort = (select min(e.element_sort) from page_element e where e.page_id = pe.page_id)
 where 1=1
 SQL;
     }
