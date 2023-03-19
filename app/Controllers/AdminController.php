@@ -131,11 +131,13 @@ class AdminController extends AdminBaseController
         // Start with a DOMDocument
         $document = new \DOMDocument();
         $document->preserveWhiteSpace = false;
-        $document->loadHTML($supportContent);
+
+        // Because DOMDocument::loadHTML treats your string as being in ISO-8859-1, we are adding a XML Declaration UTF-8 hack
+        $document->loadHTML('<?xml encoding="utf-8" ?>' . $supportContent);
 
         // Use DOMXPath to find headings, but skip h1's
         $xpath = new \DOMXpath($document);
-        $nodes = $xpath->query("//h2 | //h3 | //h4 | //h5 | //h6");
+        $nodes = $xpath->query("//h1 | //h2 | //h3 | //h4 | //h5 | //h6");
 
         // Start TOC list and loop through nodes
         $toc = '';

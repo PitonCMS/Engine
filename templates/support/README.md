@@ -35,3 +35,6 @@ Use **bold** button, checkbox, select lists, or link names, and other UI interac
 
 ## Syntax Hightling
 PitonCMS support pages relies on Highlight JS for syntax highlighting. https://highlightjs.org/download/ The PitonCMS highlight build includes all default languages plus Twig. The syntax style sheet is called Agate. To update the highlighter, download a recent build of highlight.js with Twig and any additional languages, and then copy the `agate.min.css`, the `highlight.min.js`, and `LICENSE` files to `engine/assets/highlight/`.
+
+## Support Assets
+Custom graphics for PitonCMS support files are managed in Google Slides https://docs.google.com/presentation/d/1xgpDeCaA10AuDVTfgQS8qvaHjCHjMqD8AACz1evKS68/edit#slide=id.g4aebb7f868_0_0
