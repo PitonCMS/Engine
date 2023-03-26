@@ -7,9 +7,9 @@ The HTML Layout file defines the visible structure and has Twig variables to be 
 To render Templates, PitonCMS uses [Twig](https://twig.symfony.com/doc/3.x/). Understanding how Twig works as a designer will simplify building custom websites with PitonCMS. You can also read more about the [Twig library in PitonCMS](/admin/support/designer/data).
 
 ## Page Structure
-Page Templates contain designer defined *Blocks* which represent broad areas of a webpage that hold editable content. Within Blocks are one or more *Elements* which are small reusable chunks of HTML with optional custom content. Users cannot modify Blocks on the Page, but they can select and modify content within Elements contained within Blocks.
+Page Templates contain designer defined *Blocks* which represent broad areas of a webpage that hold editable content. Within Blocks are one or more *Elements* which are small reusable chunks of HTML with optional saved custom content. Users cannot modify Blocks on the Page, but they can select and modify content within Elements contained within Blocks.
 
-When a user creates a new Page for the website, they first select an available Page Template from a list of options the designer defined as part of the project. Then the user will select one or more pre-defined Elements and add custom content within a Block.
+When a user creates a new Page for the website, they first select a Page Template from a list of options the designer defined as part of the project. Then the user will select one or more pre-defined Elements within defined Blocks, and add custom content.
 
 In the example of the *With Hero* Template that comes with PitonCMS, the Template has *Hero* and *Content* Blocks. The user can then simply add Elements with custom content to these Blocks when editing the Page.
 
@@ -78,15 +78,15 @@ structure
 | Directory | Description |
 | --- | --- |
 | `structure/definitions/` | Site level JSON Definition files |
-| `structure/definitions/contactInputs.json` | Additional input fields for contact message forms |
+| `structure/definitions/contactInputs.json` | Custom input fields for contact message forms |
 | `structure/definitions/navigation.json` | Navigation lists |
 | `structure/definitions/siteSettings.json` | Custom Site Settings |
-| `structure/definitions/sass/` | Project Sass files (Optional) |
-| `structure/definitions/templates/` |  HTML Layout and JSON Definition files |
-| `structure/definitions/templates/elements/` | Element HTML and JSON Definitions |
-| `structure/definitions/templates/includes/` | Optional Twig include files |
-| `structure/definitions/templates/pages/` | Page HTML and JSON Definitions |
-| `structure/definitions/templates/system/` | System HTML files such as Not Found  template |
+| `structure/sass/` | Project Sass files (Optional) |
+| `structure/templates/` |  All HTML Layout and JSON Definition files |
+| `structure/templates/elements/` | Element HTML and JSON Definitions |
+| `structure/templates/includes/` | Optional Twig Include files |
+| `structure/templates/pages/` | Page HTML and JSON Definitions |
+| `structure/templates/system/` | System HTML files such as Not Found  template |
 
 You are welcome to add, delete, or modify Page and Element Templates (HTML and JSON files). Within `templates/elements/` and `templates/pages/` you may modify the default directory structures (*before* creating saved content) to better organize your custom Page and Element HTML and JSON files.
 
@@ -114,8 +114,8 @@ Explanation
 - The Twig `extends` statement inherits the surrounding HTML from the `pages/base_layout.html` file
 - The `{% block body %}` and `{% endblock body %}` tags wrap the HTML that will replace the matching `body` tags in the base layout file
 - There is one Block to hold user saved content named `contentBlock`
-  - This key `contentBlock` is defined as the Block key in the matching JSON file
-- A PitonCMS function `getBlockElementsHtml()` returns all saved Elements in this Page's `contentBlock`
+- The key `contentBlock` is defined as the Block key in the matching JSON file
+- A PitonCMS Twig function `getBlockElementsHtml()` returns all saved Elements in the Page's `contentBlock`
 - The Twig print delimiters `{{ }}` print the saved content
 
 In this brief Template we have a custom layout suitable to print general webpage content.
@@ -164,7 +164,7 @@ Pages and Block Elements can also support custom Settings for small bits of dyna
 >**Note**: *Pages* and *Collection Detail Pages* both use Page Templates, but a standard Page is defined in the JSON Definition file as `"templateType": "page"` while a Collection Detail Page is defined as `"templateType": "collection"`.
 
 ### Element Template Example
-Elements are the smallest unit of reusable HTML on your website. You can create custom Elements (or modify or delete built in PitonCMS Elements) as needed for youy website design.
+Elements are the smallest unit of reusable HTML on your website. You can create custom Elements (or modify or delete built in PitonCMS Elements) as needed for your website design.
 
 The HTML Layout file for a basic *Text* Element (which has a title and rich textarea) is simple.
 
