@@ -200,3 +200,14 @@ The matching JSON Definition file contains information about the Element and how
 | `enableEditor` | Boolean | | `true` | Boolean flag on whether to enable the Element content textarea Rich Text Editor |
 | `settings` | Array | | | An array of [Custom Settings](/admin/support/designer/settings) objects. |
 
+## Twig Template Features
+
+Consider taking advantage of Twig's powerful templating features.
+
+- [extends](https://twig.symfony.com/doc/3.x/tags/extends.html) syntax allows you to extend a HTML Layout from another base HTML Layout
+- [Includes](https://twig.symfony.com/doc/3.x/functions/include.html) supports reusable blocks of frequently used HTML kept in separate files, to help declutter complex templates
+- [Macros](https://twig.symfony.com/doc/3.x/tags/macro.html) are HTML functions that can be used in Templates, and are a great way to organize reusable code where the same HTML statement needs to repeat on a page but with different data
+
+>**Note**: You can also have intermediate Template HTML Layouts between the base layout and the Page Template. This may solve some complex layout requirements without repeating code.
+
+Learn more about how PitonCMS uses [Templates](/admin/support/designer/templates).
