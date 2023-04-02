@@ -544,6 +544,10 @@ Gets the Navigator by name, with the set of user defined links in a Navigation l
     public function getNavigator(string $navigator): ?array;
 ```
 
+The function returns a link object. Use `getNavigationLink()` to resolve the link object into a useable, fully formatted URL.
+
+For Navigators with sub-menu child links, see the PitonCMS built-in navigation HTML Layout, `structure/templates/includes/_navbar.html` for an example on looping through sub-menu links.
+
 Usage:
 
 ```twig
