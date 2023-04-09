@@ -65,17 +65,16 @@ class Email implements EmailInterface
     }
 
     /**
-     * Set From Address
+     * Set Reply To Address
      *
-     * @param  string  $address From email address
+     * Set the Reply To email address, which is different from the server From address.
+     * @param  string  $address Reply To email address
      * @param  string  $name    Sender name, optional
      * @return EmailInterface  $this
      */
-    public function setFrom(string $address, string $name = null): EmailInterface
+    public function setReplyTo(string $address, string $name = null): EmailInterface
     {
-        // When using mail/sendmail, we need to set the PHPMailer "auto" flag to false
-        // https://github.com/PHPMailer/PHPMailer/issues/1634
-        $this->mailer->setFrom($address, $name, false);
+        $this->mailer->addReplyTo($address, $name);
 
         return $this;
     }
@@ -131,15 +130,17 @@ class Email implements EmailInterface
     {
         // Has the from address not been set properly? If not, use config default
         if ($this->mailer->From = 'root@localhost' || empty($this->mailer->From)) {
-            $this->setFrom($this->settings['email']['from']);
+            // When using mail/sendmail, we need to set the PHPMailer "auto" flag to false
+            // https://github.com/PHPMailer/PHPMailer/issues/1634
+            $this->mailer->setFrom($this->settings['email']['from'], '', false);
         }
 
         try {
             $this->mailer->send();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // Log for debugging and then rethrow
             $this->logger->error('PitonCMS: Failed to send mail: ' . $e->getMessage());
-            throw new \Exception($e->getMessage());
+            throw new \Throwable($e->getMessage());
         }
     }
 

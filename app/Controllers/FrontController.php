@@ -86,21 +86,30 @@ class FrontController extends FrontBaseController
         $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
 
         try {
+            $this->container->logger->debug('Trying to send contact email');
+
             // Check honepot before saving message
             if ('alt@example.com' !== $this->request->getParsedBodyParam('alt-email')) {
                 throw new Exception('Honeypot found a fly');
             }
+
+            $this->container->logger->debug('...Passed honeypot test');
 
             // Check if there is a message to save
             if (empty($this->request->getParsedBodyParam('email'))) {
                 throw new Exception('Empty message submitted');
             }
 
+            $this->container->logger->debug('...Passed empty message test');
+
             // Check that we have the minimum number of message characters
             $minLength = $this->container->get('settings')['site']['minMessageLength'] ?? 1;
             if (mb_strlen($this->request->getParsedBodyParam('message')) < (int) $minLength) {
                 throw new Exception('Message less than minimum length');
             }
+
+            $this->container->logger->debug('...Passed message length test');
+            $this->container->logger->debug('...Saving message to DB...');
 
             // Save message
             $message = $messageMapper->make();
@@ -110,11 +119,14 @@ class FrontController extends FrontBaseController
             $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
             $message = $messageMapper->save($message);
 
+            $this->container->logger->debug('...Saved message to DB');
+
             // Check if there are custom contact fields to save
             $contactInputsDefinition = $definition->getContactInputs();
 
             if ($contactInputsDefinition) {
                 $appendMessageText = "\n";
+                $this->container->logger->debug('...Appending extra contact fields');
 
                 // Go through defined contact custom fields and match to POST array
                 foreach ($contactInputsDefinition as $field) {
@@ -135,8 +147,11 @@ class FrontController extends FrontBaseController
                 }
             }
 
+            $this->container->logger->debug('...Ready to send email');
+
             // Send message to workflow email if an email address has been saved to settings
             if (!empty($this->settings['site']['contactFormEmail'])) {
+                $this->container->logger->debug('...Building Mailer Message');
                 $siteName = $this->settings['site']['siteName'] ?? 'PitonCMS';
 
                 $messageText = "{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}";
@@ -145,14 +160,22 @@ class FrontController extends FrontBaseController
                     $messageText .= $appendMessageText;
                 }
 
-                $email->setTo($this->settings['site']['contactFormEmail'], '')
-                        ->setSubject("New Contact Message for $siteName from {$message->context} page.")
+                $this->container->logger->debug('...Setting mail fields and sending');
+
+                $email->setReplyTo($message->email)
+                        ->setTo($this->settings['site']['contactFormEmail'], '')
+                        ->setSubject("New {$message->context} inquiry from $siteName")
                         ->setMessage($messageText)
                         ->send();
+            } else {
+                $this->container->logger->error('...No contactFormEmail saved. Will not send email');
             }
+
+            $this->container->logger->debug('...End send email');
+
         } catch (Throwable $th) {
             // Log issue
-            $this->container->logger->alert("PitonCMS: Exception submitting contact message: " . $th->getMessage());
+            $this->container->logger->error("PitonCMS: Exception submitting contact message: " . $th->getMessage());
         }
 
         // Always return the same positive response to the public
