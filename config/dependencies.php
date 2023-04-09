@@ -57,6 +57,15 @@ $container['view'] = function ($c) {
  * Monolog PSR3 Logger
  *
  * If production minimum log level is ERRROR, but if not then all are logged.
+ * Logging Levels:
+ *  - DEBUG - detailed debug information
+ *  - INFO - interesting events
+ *  - NOTICE - normal but significant events
+ *  - WARNING - exceptional occurrences that are not errors
+ *  - ERROR - runtime errors that do not require immediate action
+ *  - CRITICAL - critical conditions
+ *  - ALERT - events for which action must be taken immediately
+ *  - EMERGENCY - emergency events
  * @return Monolog\Logger
  */
 $container['logger'] = function ($c) {
