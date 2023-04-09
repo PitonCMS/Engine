@@ -18,13 +18,14 @@ namespace Piton\Library\Interfaces;
 interface EmailInterface
 {
     /**
-     * Set From Address
+     * Set Reply To Address
      *
+     * Set the Reply To email address, which is different from the server From address.
      * @param  string  $address From email address
      * @param  string  $name    Sender name, optional
      * @return object  $this    EmailInterface
      */
-    public function setFrom(string $address, string $name = null): EmailInterface;
+    public function setReplyTo(string $address, string $name = null): EmailInterface;
 
     /**
      * Add Recipient To Address
