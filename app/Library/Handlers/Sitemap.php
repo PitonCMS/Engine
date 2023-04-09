@@ -130,7 +130,9 @@ class Sitemap
         $pingRequests[] = "http://www.google.com/ping?sitemap=" . $sitemapUrl;
 
         // Bing
-        $pingRequests[] = 'http://www.bing.com/ping?sitemap=' . $sitemapUrl;
+        // Bing has deprecated this submission endpoint
+        // https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission
+        // $pingRequests[] = 'http://www.bing.com/ping?sitemap=' . $sitemapUrl;
 
         foreach ($pingRequests as $searchEngine) {
             $logMessage = '..Submitting sitemap to: ' . $searchEngine;
