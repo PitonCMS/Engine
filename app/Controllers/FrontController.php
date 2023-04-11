@@ -176,9 +176,11 @@ class FrontController extends FrontBaseController
         } catch (Throwable $th) {
             // Log issue
             $this->container->logger->error("PitonCMS: Exception submitting contact message: " . $th->getMessage());
+            $status = "error";
+            $text = 'There was an error submitting your message.';
         }
 
-        // Always return the same positive response to the public
+        // Send the response
         return $this->xhrResponse($status, $text);
     }
 }
