@@ -14,10 +14,11 @@ import { pitonConfig } from './modules/config.js';
 import { postXHRPromise } from "./modules/xhrPromise.js";
 
 // Set the contact honeypot to a known value
-const honeypotValue = "alt@example.com";
-document.querySelectorAll(`input[name="alt-email"]`).forEach(input => {
-  input.setAttribute("value", honeypotValue);
-});
+const honeypotValue = 'alt@example.com';
+document.querySelector(`input[name="alt-email"]`)?.setAttribute("value", honeypotValue);
+
+// Get reference to hidden response message element
+const contactResponseMessage = document.querySelector(`[data-contact-response="true"]`);
 
 /**
  * Contact Submit Message Request
@@ -35,13 +36,20 @@ const contactSubmitMessage = function(event) {
   let buttonText = (event.target.dataset.contactFormButtonText) ? event.target.dataset.contactFormButtonText : "Sending...";
   event.target.querySelector(`button[type="submit"]`).innerHTML = buttonText;
 
+  // Make XHR request
   postXHRPromise(pitonConfig.routes.submitMessage, new FormData(event.target))
     .then(text => {
-      event.target.innerHTML = `<p>${text}</p>`;
+      // Success, remove form and display response message
+      event.target.remove();
+      if (contactResponseMessage) {
+        contactResponseMessage.hidden = false;
+      }
     })
     .catch(error => {
+      // Error, replace form with server error message
       event.target.innerHTML = `<p>${error}</p>`;
     });
 }
 
+// Define event listeners
 document.addEventListener("submit", contactSubmitMessage, false);
