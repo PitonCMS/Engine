@@ -1,17 +1,16 @@
 {% extends '@admin/support/_supportBase.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ baseUrl() }}/admin/highlight/agate.css?v={{ site.environment.assetVersion }}">
+<link rel="stylesheet" href="{{ baseUrl() }}/admin/highlight/agate.min.css?v={{ site.environment.assetVersion }}">
 {% endblock head %}
 
 {% block content %}
-  
+
 <section id="support">
         <div class="help-toc">
            <div class="help-toc__inner"> {{ page.tableOfContents }}</div>
         </div>
-      
-    
+
         {# Load support File #}
         <div class="help-content">
             {% if page.supportContent %}
@@ -23,6 +22,6 @@
 
 {% block foot %}
 {{ parent() }}
-<script nonce="{{ site.environment.cspNonce }}" src="{{ baseUrl() }}/admin/highlight/highlight.pack.js?v={{ site.environment.assetVersion }}"></script>
+<script nonce="{{ site.environment.cspNonce }}" src="{{ baseUrl() }}/admin/highlight/highlight.min.js?v={{ site.environment.assetVersion }}"></script>
 <script nonce="{{ site.environment.cspNonce }}">hljs.initHighlightingOnLoad();</script>
 {% endblock foot %}

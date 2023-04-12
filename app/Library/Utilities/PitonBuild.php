@@ -79,7 +79,7 @@ class PitonBuild
 
                 // Change localhost to Docker image 'db'
                 if (strpos($line, 'database') !== false && strpos($line, 'host') !== false) {
-                    $line = str_replace('\'\'', 'db', $line);
+                    $line = str_replace('\'\'', '\'db\'', $line);
                 }
 
                 // Change database name to project name
@@ -99,7 +99,7 @@ class PitonBuild
 
                 // Change session cookie name to project name
                 if (strpos($line, 'session') !== false && strpos($line, 'cookieName') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . '_session\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectDir . 'session\'', $line);
                 }
 
                 // Set session salt to unique hash
