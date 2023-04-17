@@ -131,13 +131,15 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('pathFor', [$this, 'pathFor']),
             new TwigFunction('baseUrl', [$this, 'baseUrl']),
             new TwigFunction('basePath', [$this, 'basePath']),
+            new TwigFunction('currentPath', [$this, 'currentPath']),
+            new TwigFunction('currentUrl', [$this, 'currentUrl']),
             new TwigFunction('currentRoute', [$this, 'currentRoute']),
             new TwigFunction('inUrl', [$this, 'inUrl']),
             new TwigFunction('checked', [$this, 'checked']),
             new TwigFunction('getMediaPath', [$this, 'getMediaPath']),
             new TwigFunction('getMediaSrcSet', [$this, 'getMediaSrcSet']),
             new TwigFunction('getQueryParam', [$this, 'getQueryParam']),
-            new TwigFunction('currentPath', [$this, 'currentPath']),
+            new TwigFunction('truncateHtml', [$this, 'truncateHtml']),
 
             // Front end functions
             new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
@@ -180,9 +182,9 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Path for Named Route
      *
-     * @param string $name Name of the route
-     * @param array $data Associative array to assign to route segments
-     * @param array $queryParams Query string parameters
+     * @param string  $name Name of the route
+     * @param array   $data Associative array to assign to route segments
+     * @param array   $queryParams Query string parameters
      * @return string The desired route path without the domain, but does include the basePath
      */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
@@ -220,6 +222,39 @@ class Base extends AbstractExtension implements GlobalsInterface
     public function basePath(): string
     {
         return $this->uri->getBasePath();
+    }
+
+    /**
+     * Returns current path on given URI.
+     *
+     * @param bool $withQueryString
+     * @return string
+     */
+    public function currentPath($withQueryString = false)
+    {
+        if (is_string($this->uri)) {
+            return $this->uri;
+        }
+
+        $path = $this->uri->getBasePath() . '/' . ltrim($this->uri->getPath(), '/');
+
+        if ($withQueryString && '' !== $query = $this->uri->getQuery()) {
+            $path .= '?' . $query;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Get Current Complete URL
+     *
+     * Returns the full url including scheme, domain, port, base path, and path
+     * @param  bool   $withQueryString
+     * @return string
+     */
+    public function currentUrl(bool $withQueryString = false): string
+    {
+        return $this->uri->getBaseUrl() . $this->currentPath($withQueryString);
     }
 
     /**
@@ -393,24 +428,16 @@ class Base extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * Returns current path on given URI.
+     * Truncate HTML
      *
-     * @param bool $withQueryString
+     * Accepts an HTML string, and returns just the unformatted text, truncated to the number of words
+     * @param string $html Input HTML string
+     * @param int, $characters Number of characters to return
      * @return string
      */
-    public function currentPath($withQueryString = false)
+    public function truncateHtml(string $html, int $characters = 300): string
     {
-        if (is_string($this->uri)) {
-            return $this->uri;
-        }
-
-        $path = $this->uri->getBasePath() . '/' . ltrim($this->uri->getPath(), '/');
-
-        if ($withQueryString && '' !== $query = $this->uri->getQuery()) {
-            $path .= '?' . $query;
-        }
-
-        return $path;
+        return $this->container->toolbox->truncateHtmlText($html, $characters);
     }
 
     // ---------------- Front End Functions ----------------
