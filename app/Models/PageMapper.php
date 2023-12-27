@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -14,7 +14,6 @@ namespace Piton\Models;
 
 use Piton\Models\Entities\PitonEntity;
 use Piton\ORM\DataMapperAbstract;
-use PDO;
 
 /**
  * Piton Page Mapper
@@ -112,19 +111,19 @@ class PageMapper extends DataMapperAbstract
     public function searchContent(string $terms, int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' and match(`title`,`sub_title`,`meta_description`) against (? IN BOOLEAN MODE)';
+        $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
         $this->bindValues[] = $terms;
 
         // Get page element content
         $this->sql .=<<<SQL
  or p.id in (
-    select page_id
-    from page_element
-    where match(`title`,`content`) against(?)
+    select pes.page_id
+    from page_element pes
+    where match(pes.title, pes.content) against(?)
 )
 SQL;
         $this->bindValues[] = $terms;
-        $this->sql .= ' order by `created_date` desc';
+        $this->sql .= ' order by p.created_date desc';
 
         if ($limit) {
             $this->sql .= " limit ?";
