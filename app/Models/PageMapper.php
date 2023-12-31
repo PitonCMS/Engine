@@ -98,6 +98,49 @@ class PageMapper extends DataMapperAbstract
     }
 
     /**
+     * Text Search Published Content
+     *
+     * This query searches each of these fields for having all supplied terms:
+     *  - page.title, page.sub_title page.meta_description
+     *  - page_element.title, page_element.content
+     * @param  string $terms                Search terms
+     * @param  int    $limit                Limit
+     * @param  int    $offset               Offset
+     * @return array|null
+     */
+    public function searchPublishedContent(string $terms, int $limit = null, int $offset = null): ?array
+    {
+        $this->makeSelect();
+        $this->sql .= " and p.published_date <= '{$this->today}'";
+        $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
+        $this->bindValues[] = $terms;
+
+        // Include page elements in search
+        $this->sql .=<<<SQL
+ or p.id in (
+    select pes.page_id
+    from page_element pes
+    where match(pes.title, pes.content) against(?)
+)
+SQL;
+
+        $this->bindValues[] = $terms;
+        $this->sql .= ' order by p.created_date desc';
+
+        if ($limit) {
+            $this->sql .= " limit ?";
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= " offset ?";
+            $this->bindValues[] = $offset;
+        }
+
+        return $this->find();
+    }
+
+    /**
      * Text Search Content
      *
      * This query searches each of these fields for having all supplied terms:
@@ -114,7 +157,7 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
         $this->bindValues[] = $terms;
 
-        // Get page element content
+        // Include page elements in search
         $this->sql .=<<<SQL
  or p.id in (
     select pes.page_id
@@ -122,6 +165,7 @@ class PageMapper extends DataMapperAbstract
     where match(pes.title, pes.content) against(?)
 )
 SQL;
+
         $this->bindValues[] = $terms;
         $this->sql .= ' order by p.created_date desc';
 

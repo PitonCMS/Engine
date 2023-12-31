@@ -149,6 +149,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
             new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
+            new TwigFunction('getSearchResultsWithPagination', [$this, 'getSearchResultsWithPagination']),
 
             // Back end functions
             new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
@@ -530,6 +531,35 @@ class Base extends AbstractExtension implements GlobalsInterface
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
 
         return $collectionPages;
+    }
+
+    /**
+     * Get Search Results With Pagination
+     *
+     * Executes site search and returns an array of search results for published pages
+     * @param  int|null   $resultsPerPage
+     * @return array|null
+     */
+    public function getSearchResultsWithPagination(int $resultsPerPage = null): array
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
+        $pagination->setPagePath($this->container->router->pathFor('submitSearch'));
+
+        // Set results per page, or default to Pagination config
+        if ($resultsPerPage) {
+            $pagination->setConfig(['resultsPerPage' => $resultsPerPage]);
+        }
+
+        // Get sanitized query string parameters and execute search
+        $terms = htmlspecialchars($this->container->request->getQueryParam('terms', ''));
+        $results = $pageMapper->searchContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+
+        // Complete pagination setup
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+
+        return $results;
     }
 
     /**
