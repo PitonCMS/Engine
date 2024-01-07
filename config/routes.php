@@ -16,10 +16,16 @@ use Piton\Controllers\FrontController;
  * Public Piton Application Routes
  */
 
- // XHR: Submit contact message
+// XHR: Submit contact message
 $app->post('/submitmessage', function ($args) {
     return (new FrontController($this))->submitMessage();
 })->add('csrfGuardHandler')->setName('submitMessage');
+
+// Public site search
+$app->get('/search', function ($args) {
+    $args['slug1'] = 'search';
+    return (new FrontController($this))->showPage($args);
+})->add('csrfGuardHandler')->setName('submitSearch');
 
 // Load page by /page or /collection/page. Keep as second to last route
 $app->get('/{slug1}[/{slug2}]', function ($args) {

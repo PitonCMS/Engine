@@ -142,6 +142,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('truncateHtml', [$this, 'truncateHtml']),
 
             // Front end functions
+            new TwigFunction('getPathForPage', [$this, 'getPathForPage']),
             new TwigFunction('getBlockElementsHtml', [$this, 'getBlockElementsHtml'], ['is_safe' => ['html']]),
             new TwigFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
@@ -149,6 +150,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
             new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
+            new TwigFunction('getSearchResultsWithPagination', [$this, 'getSearchResultsWithPagination']),
 
             // Back end functions
             new TwigFunction('uniqueKey', [$this, 'uniqueKey']),
@@ -180,19 +182,21 @@ class Base extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * Get Path for Named Route
+     * Path for Named Route
      *
-     * @param string  $name Name of the route
-     * @param array   $data Associative array to assign to route segments
+     * See getPathForPage() for front end routes to pages.
+     * Method to resolve route names to a URL
+     * @param string  $name        Name of the route
+     * @param array   $data        Associative array to assign to route segments
      * @param array   $queryParams Query string parameters
-     * @return string The desired route path without the domain, but does include the basePath
+     * @return string              The desired route path without the domain, but does include the basePath
      */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
-        // The `pathfor('showPage', {'url': 'home'})` route should be an alias for `pathFor('home')`
+        // The `pathfor('showPage', ['slug1' => 'home'])` route is an alias for `pathFor('home')`
         if ($name === 'showPage' && isset($data['slug1']) && $data['slug1'] === 'home') {
             $name = 'home';
-            unset($data['url']);
+            unset($data['slug1']);
         }
 
         return $this->container->router->pathFor($name, $data, $queryParams);
@@ -443,6 +447,29 @@ class Base extends AbstractExtension implements GlobalsInterface
     // ---------------- Front End Functions ----------------
 
     /**
+     * Get Path for Page
+     *
+     * Front end method to generate URL for pages. See pathFor() for other routes
+     * Alias for pathFor('showPage', ['slug1', 'slug2]).
+     * @param string  $pageSlug        Page slug
+     * @param array   $collectionSlug  Collection slug
+     * @return string                  The desired route path without the domain, but does include the basePath
+     */
+    public function getPathForPage(string $pageSlug, ?string $collectionSlug = null): string
+    {
+        // Determine if the request is for a Collection or a Page
+        $data = [];
+        if ($collectionSlug) {
+            $data['slug1'] = $collectionSlug;
+            $data['slug2'] = $pageSlug;
+        } else {
+            $data['slug1'] = $pageSlug;
+        }
+
+        return $this->pathFor('showPage', $data);
+    }
+
+    /**
      * Get All Block Elements HTML
      *
      * Gets all Element's HTML within a Block, rendered with data
@@ -533,6 +560,35 @@ class Base extends AbstractExtension implements GlobalsInterface
     }
 
     /**
+     * Get Search Results With Pagination
+     *
+     * Executes site search and returns an array of search results for published pages
+     * @param  int|null   $resultsPerPage
+     * @return array|null
+     */
+    public function getSearchResultsWithPagination(int $resultsPerPage = null): array
+    {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
+        $pagination->setPagePath($this->container->router->pathFor('submitSearch'));
+
+        // Set results per page, or default to Pagination config
+        if ($resultsPerPage) {
+            $pagination->setConfig(['resultsPerPage' => $resultsPerPage]);
+        }
+
+        // Get sanitized query string parameters and execute search
+        $terms = htmlspecialchars($this->container->request->getQueryParam('terms', ''));
+        $results = $pageMapper->searchContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+
+        // Complete pagination setup
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+
+        return $results;
+    }
+
+    /**
      * Get Gallery by ID
      *
      * @param int $galleryId
@@ -582,11 +638,10 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         if (isset($navLink->url)) {
             return $navLink->url;
-        } elseif (isset($navLink->collection_slug) && isset($navLink->page_slug)) {
-            return $this->pathFor('showPage', ['slug1' => $navLink->collection_slug, 'slug2' => $navLink->page_slug]);
-        } else {
-            return $this->pathFor('showPage', ['slug1' => $navLink->page_slug]);
         }
+
+        return $this->getPathForPage($navLink->page_slug, $navLink->collection_slug);
+
     }
 
     // ---------------- Back End Functions ----------------
