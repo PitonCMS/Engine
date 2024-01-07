@@ -218,6 +218,27 @@ Usage:
 {{ basePath() }}
 ```
 
+### getPathForPage()
+Given a Page Slug, and optionally a Collection Slug, will return the formatted link without without base path.
+
+```php
+    /**
+     * Get Path for Page
+     *
+     * Front end method to generate URL for pages. See pathFor() for other routes
+     * Alias for pathFor('showPage', ['slug1', 'slug2]).
+     * @param string  $pageSlug        Page slug
+     * @param array   $collectionSlug  Collection slug
+     * @return string                  The desired route path without the domain, but does include the basePath
+     */
+    public function getPathForPage(string $pageSlug, ?string $collectionSlug = null): string;
+```
+
+Usage:
+```twig
+{{ getPathForPage(detail.page_slug, detail.collection_slug) }}
+```
+
 ### inUrl()
 The `inUrl()` function tests if the provided string is in the current URL, and if it is then it returns a custom value. If no custom return value is defined, it returns the string 'active'. This function is useful to show the active tab or object on a custom page.
 
@@ -428,7 +449,7 @@ Usage:
 
 <ul>
     {% for detail in collection %}
-    <a href="{{ pathFor('showPage', {'slug1': detail.collection_slug, 'slug2': detail.page_slug}) }}">
+    <a href="{{ getPathForPage(detail.page_slug, detail.collection_slug) }}">
         <li class="card">
 
             {% if detail.media.filename %}
@@ -481,7 +502,7 @@ Usage:
 
   <ul class="cards">
     {% for detail in collection %}
-    <a href="{{ pathFor('showPage', {'slug1': detail.collection_slug, 'slug2': detail.page_slug}) }}">
+    <a href="{{ getPathForPage(detail.page_slug, detail.collection_slug) }}">
       <li class="card">
 
         {% if detail.media.filename %}
