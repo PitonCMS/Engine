@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `page_element` (
   CONSTRAINT `page_element_page_id_fk` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE,
   CONSTRAINT `page_element_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL,
   CONSTRAINT `page_element_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `message` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -206,12 +206,14 @@ CREATE TABLE IF NOT EXISTS `data_store` (
 
 INSERT INTO `page` (`id`, `page_slug`, `template`, `title`, `sub_title`, `meta_description`, `published_date`, `media_id`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
-  (1,'home','heroPage','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now());
+  (1,'home','heroPage','Home',NULL,'All about this page for SEO.','2018-12-27',NULL,1,now(),1,now()),
+  (2,'search','contentPage','Search Results',NULL,'PitonCMS site search.','2018-12-27',NULL,1,now(),1,now());
 
 INSERT INTO `page_element` (`id`, `page_id`, `block_key`, `template`, `element_sort`, `title`, `content`, `excerpt`, `gallery_id`, `media_id`, `embedded`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
   (1,1,'heroBlock','hero/hero',1,'Welcome to PitonCMS','<p>A flexible content management system for your personal website.</p>','A flexible content management system for your personal',NULL,NULL,NULL,1,now(),1,now()),
-  (2,1,'contentBlock','text/text',1,'Where to Start?','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now());
+  (2,1,'contentBlock','text/text',2,'Where to Start?','<p>Congratulations! You have successfully installed PitonCMS. </p>\n<p>To start, you will want to read the documentation on how to setup and configure your new site <a href=\"https://github.com/pitoncms\" target=\"_blank\">here</a>. Follow the easy step-by-step process for creating your own personalized theme.  </p>','Congratulations! You have successfully installed PitonCMS.',NULL,NULL,NULL,1,now(),1,now()),
+  (3,2,'contentBlock','searchResults/searchResults',1,'Search Results',NULL,NULL,NULL,NULL,NULL,1,now(),1,now());
 
 INSERT INTO `data_store` (`category`,`page_id`, `element_id`, `setting_key`, `setting_value`, `created_by`, `created_date`, `updated_by`, `updated_date`)
 VALUES
