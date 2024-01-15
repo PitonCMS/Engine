@@ -29,7 +29,8 @@ class PageMapper extends DataMapperAbstract
         'sub_title',
         'meta_description',
         'published_date',
-        'media_id'
+        'media_id',
+        'view_count'
     ];
     protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
 
@@ -273,6 +274,21 @@ SQL;
         }
 
         return $this->find();
+    }
+
+    /**
+     * Increment Page View Count
+     *
+     * Call when loading a public content page to increment the view count
+     * @param  int  $pageId
+     * @return void
+     */
+    public function incrementPageViewCount(int $pageId): void
+    {
+        $this->sql = "update `page` set `view_count` = `view_count` + 1 where `id` = ?;";
+        $this->bindValues[] = $pageId;
+
+        $this->execute();
     }
 
     /**

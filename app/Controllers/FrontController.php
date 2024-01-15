@@ -62,6 +62,9 @@ class FrontController extends FrontBaseController
         // Set elements in blocks
         $page->setBlockElements($elements);
 
+        // Increment page view_count
+        $pageMapper->incrementPageViewCount($page->id);
+
         return $this->render("{$page->template}.html", $page);
     }
 
