@@ -306,6 +306,9 @@ select SQL_CALC_FOUND_ROWS
     c.collection_slug,
     c.collection_title,
     p.*,
+    u.first_name,
+    u.last_name,
+    concat(u.first_name, ' ', u.last_name) author,
     pe.content first_element_content,
     m.id media_id,
     m.filename media_filename,
@@ -314,6 +317,7 @@ select SQL_CALC_FOUND_ROWS
     m.feature media_feature,
     m.caption media_caption
 from page p
+join user u on p.created_by = u.id
 left join collection c on c.id = p.collection_id
 left join media m on m.id = p.media_id
 left join page_element pe on p.id = pe.page_id and pe.element_sort = (select min(e.element_sort) from page_element e where e.page_id = pe.page_id)
