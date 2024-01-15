@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `meta_description` varchar(320) NULL DEFAULT NULL,
   `published_date` date NULL DEFAULT NULL,
   `media_id` int NULL DEFAULT NULL,
+  `view_count` int NULL DEFAULT 0,
   `created_by` int NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL,
   `updated_by` int NOT NULL DEFAULT 1,
