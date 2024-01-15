@@ -138,7 +138,8 @@ For the summary display of either pages or collection detail pages
   <div class="list-item-page-item status {{ pageItem.getPublishedStatus() }}">
     {{ pageItem.getPublishedStatus()|capitalize }}</div>
   <div class="list-item-page-item template">{{ pageItem.template_name }}</div>
-  <div class="list-item-page-item collection">{{ pageItem.collection_title|default('Page') }} </div>
+  <div class="list-item-page-item collection">{{ pageItem.collection_title|default('Page') }}</div>
+  {# <div class="list-item-page-item views">{{ pageItem.view_count|default('') }}</div> #}
 </a>
 
 {% endmacro pageListItem %}
