@@ -392,7 +392,7 @@ HTML;
             $pageElement = $pageElementMapper->save($pageElement);
 
             // Save any element settings
-            if ($element['setting']) {
+            if (isset($element['setting'])) {
                 foreach ($element['setting'] as $row) {
                     $setting = $dataStoreMapper->make();
                     $setting->id = $row['id'];
