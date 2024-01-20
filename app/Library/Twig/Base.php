@@ -618,12 +618,13 @@ class Base extends AbstractExtension implements GlobalsInterface
         // Get dependencies
         $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
 
-        // Get current URL path to find currentPage in navigation
-        // And check if home page '/' and reset to match page slug
+        // Get requested navigation set
+        $navList = $navigationMapper->findNavigation($navigator);
+
+        // Get current URL path to find and set currentPage in navigation hierarchy
+        // Also check for home page '/' and reset to match page slug
         $url = $this->uri->getPath();
         $url = ($url === '/') ? 'home' : ltrim($url, '/');
-
-        $navList = $navigationMapper->findNavigation($navigator, $url);
 
         return $this->cache['navigator'][$navigator] = $navigationMapper->buildNavigation($navList, $url);
     }
@@ -637,11 +638,15 @@ class Base extends AbstractExtension implements GlobalsInterface
     public function getNavigationLink(PitonEntity $navLink): ?string
     {
         if (isset($navLink->url)) {
+            // A custom URL
             return $navLink->url;
+        } elseif (isset($navLink->page_slug)) {
+            // A page link of any kind
+            return $this->getPathForPage($navLink->page_slug, $navLink->collection_slug);
+        } else {
+            // otherwise return nothing
+            return null;
         }
-
-        return $this->getPathForPage($navLink->page_slug, $navLink->collection_slug);
-
     }
 
     // ---------------- Back End Functions ----------------
