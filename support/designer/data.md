@@ -528,6 +528,73 @@ Usage:
   {{ pagination() }}
 ```
 
+### getPublishedRankedCollectionPages()
+Returns a set of Published Collection Pages (no standard Pages included), across all Collections, ranked as the most recent, the most popular, or random. A limit can be included, and defaults to 10 is none is provided.
+
+This is useful to display a set of active content as links. The first argument must be one of three options:
+* `recent`
+* `popular`
+* `random`
+
+The optional second argument is the number of results to return.
+
+```php
+    /**
+     * Get Published Ranked Collection Pages
+     *
+     * Finds sorted multi collection published content, in a ranked order, with a limit.
+     * Rank Methods:
+     * - 'recent'  : Published date descending
+     * - 'popular' : View count descending
+     * - 'random'  : Random selection
+     *
+     * @param  string  $rankMethod
+     * @param  int     $limit, default 10
+     * @return array|null
+     */
+    public function getPublishedRankedCollectionPages(string $rankMethod, ?int $limit = 10): ?array;
+```
+
+Usage:
+```twig
+{% set results = getPublishedRankedCollectionPages('recent', 6) %}
+
+  <ul class="cards">
+    {% for link in results %}
+    <li>
+        <a href="{{ getPathForPage(link.page_slug, link.collection_slug) }}">{{ link.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+```
+
+### getSearchResultsWithPagination()
+Executes site search using provided terms in the query string (automatically). Only returns Published Pages and Collection Pages. The search includes page.title, page.sub_title, page.meta_description, page_element.title, page_element.content, and page and element settings.
+
+```php
+    /**
+     * Get Search Results With Pagination
+     *
+     * Executes site search and returns an array of search results for published pages
+     * @param  int|null   $resultsPerPage
+     * @return array|null
+     */
+    public function getSearchResultsWithPagination(int $resultsPerPage = null): array
+```
+
+Usage:
+```twig
+{% set results = getSearchResultsWithPagination(6) %}
+
+  <ul class="cards">
+    {% for link in results %}
+    <li>
+        <a href="{{ getPathForPage(link.page_slug, link.collection_slug) }}">{{ link.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+```
+
 ### getGallery()
 Display a Gallery of media images.
 

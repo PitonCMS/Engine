@@ -247,7 +247,7 @@ SQL;
      * Find Published Collection Pages by Collection ID
      *
      * Finds all related collection detail pages for summary
-     * @param  int   $collectionId
+     * @param  int  $collectionId
      * @param  int  $limit
      * @param  int  $offset
      * @return array|null
@@ -272,6 +272,53 @@ SQL;
             $this->sql .= ' offset ?';
             $this->bindValues[] = $offset;
         }
+
+        return $this->find();
+    }
+
+    /**
+     * Find Published Ranked Collection Pages
+     *
+     * Finds sorted multi collection published content, in a ranked order, with a limit.
+     * Rank Methods:
+     * - 'recent'  : Published date descending
+     * - 'popular' : View count descending
+     * - 'random'  : Random selection
+     *
+     * @param  string  $rankMethod
+     * @param  int     $limit, default 10
+     * @return array|null
+     */
+    public function findPublishedRankedCollectionPages(
+        string $rankMethod,
+        ?int $limit = 10
+    ): ?array {
+
+        // $rankMethod accepts one of three ranking strings. If a non-allowed value is provided throw an exception
+        if (!in_array($rankMethod, ['recent', 'popular', 'random'])) {
+            throw new \Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 1 to be one of: 'recent', 'popular', 'random'", 1);
+        }
+
+        $this->makeSelect();
+        $this->sql .= " and c.id is not null and p.published_date <= '{$this->today}'";
+
+        // Most recent collection pages sorted by published_date
+        if ($rankMethod === 'recent') {
+            $this->sql .= ' order by p.published_date desc';
+        }
+
+        // Most popular collection pages sorted by view count
+        if ($rankMethod === 'popular') {
+            $this->sql .= ' order by p.view_count desc';
+        }
+
+        // Random collection pages
+        if ($rankMethod === 'random') {
+            $this->sql .= ' order by rand()';
+        }
+
+        $this->sql .= ' limit ?';
+        $this->bindValues[] = $limit;
 
         return $this->find();
     }
