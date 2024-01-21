@@ -147,6 +147,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getElementHtml', [$this, 'getElementHtml'], ['is_safe' => ['html']]),
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
             new TwigFunction('getCollectionPagesWithPagination', [$this, 'getCollectionPagesWithPagination']),
+            new TwigFunction('getPublishedRankedCollectionPages', [$this, 'getPublishedRankedCollectionPages']),
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
             new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
@@ -537,7 +538,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get collection pages by collection ID
      * For use in page element as collection landing page
      * @param  int        $collectionId Collection ID
-     * @param  int|null   $resultsPerPage
+     * @param  int|null   $resultsPerPage Null value defaults to config: $config['pagination']['resultsPerPage']
      * @return array|null
      */
     public function getCollectionPagesWithPagination(?int $collectionId, int $resultsPerPage = null): ?array
@@ -557,6 +558,29 @@ class Base extends AbstractExtension implements GlobalsInterface
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
 
         return $collectionPages;
+    }
+
+    /**
+     * Get Published Ranked Collection Pages
+     *
+     * Finds sorted multi collection published content, in a ranked order, with a limit.
+     * Rank Methods:
+     * - 'recent'  : Published date descending
+     * - 'popular' : View count descending
+     * - 'random'  : Random selection
+     *
+     * @param  string  $rankMethod
+     * @param  int     $limit, default 10
+     * @return array|null
+     */
+    public function getPublishedRankedCollectionPages(
+        string $rankMethod,
+        ?int $limit = 10
+    ): ?array {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+
+        return $pageMapper->findPublishedRankedCollectionPages($rankMethod, $limit);
     }
 
     /**

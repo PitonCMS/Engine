@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   UNIQUE KEY `collection_id_page_slug_uq` (`collection_id`,`page_slug`),
   KEY `published_date_idx` (`published_date`),
   KEY `media_id_idx` (`media_id`),
+  KEY `view_count_idx` (`view_count`),
   FULLTEXT KEY `page_ft` (`title`,`sub_title`,`meta_description`),
   CONSTRAINT `page_media_id_fk` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL,
   CONSTRAINT `page_collection_id_fk` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`id`) ON DELETE RESTRICT
