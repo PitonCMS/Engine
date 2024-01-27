@@ -116,15 +116,22 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
         $this->bindValues[] = $terms;
 
-        // Include page elements in search
-        $this->sql .=<<<SQL
+        // Include page elements and data_store values in search
+        $this->sql .= <<<SQL
  or p.id in (
     select pes.page_id
     from page_element pes
-    where match(pes.title, pes.content) against(?)
+    where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
+)
+or p.id in (
+    select ds.page_id
+    from data_store ds
+    where match(ds.setting_value) against(? IN BOOLEAN MODE)
+    and ds.page_id is not null
 )
 SQL;
 
+        $this->bindValues[] = $terms;
         $this->bindValues[] = $terms;
         $this->sql .= ' order by p.created_date desc';
 
@@ -158,15 +165,22 @@ SQL;
         $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
         $this->bindValues[] = $terms;
 
-        // Include page elements in search
-        $this->sql .=<<<SQL
+        // Include page elements and data_store values in search
+        $this->sql .= <<<SQL
  or p.id in (
     select pes.page_id
     from page_element pes
-    where match(pes.title, pes.content) against(?)
+    where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
+)
+or p.id in (
+    select ds.page_id
+    from data_store ds
+    where match(ds.setting_value) against(? IN BOOLEAN MODE)
+    and ds.page_id is not null
 )
 SQL;
 
+        $this->bindValues[] = $terms;
         $this->bindValues[] = $terms;
         $this->sql .= ' order by p.created_date desc';
 
@@ -367,7 +381,7 @@ from page p
 join user u on p.created_by = u.id
 left join collection c on c.id = p.collection_id
 left join media m on m.id = p.media_id
-left join page_element pe on p.id = pe.page_id and pe.element_sort = (select min(e.element_sort) from page_element e where e.page_id = pe.page_id)
+left join page_element pe on p.id = pe.page_id and pe.element_sort = 1
 where 1=1
 SQL;
     }
