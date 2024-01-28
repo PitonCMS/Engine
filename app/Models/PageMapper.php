@@ -104,6 +104,7 @@ class PageMapper extends DataMapperAbstract
      * This query searches each of these fields for having all supplied terms:
      *  - page.title, page.sub_title page.meta_description
      *  - page_element.title, page_element.content
+     *  - data_store.setting_value
      * @param  string $terms                Search terms
      * @param  int    $limit                Limit
      * @param  int    $offset               Offset
@@ -112,27 +113,28 @@ class PageMapper extends DataMapperAbstract
     public function searchPublishedContent(string $terms, int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect();
-        $this->sql .= " and p.published_date <= '{$this->today}'";
-        $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
-        $this->bindValues[] = $terms;
-
-        // Include page elements and data_store values in search
         $this->sql .= <<<SQL
- or p.id in (
-    select pes.page_id
-    from page_element pes
-    where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
-)
-or p.id in (
-    select ds.page_id
-    from data_store ds
-    where match(ds.setting_value) against(? IN BOOLEAN MODE)
-    and ds.page_id is not null
+and p.published_date <= '{$this->today}'
+and (
+    match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)
+    or p.id in (
+        select pes.page_id
+        from page_element pes
+        where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
+    )
+    or p.id in (
+        select ds.page_id
+        from data_store ds
+        where match(ds.setting_value) against(? IN BOOLEAN MODE)
+        and ds.page_id is not null
+    )
 )
 SQL;
 
         $this->bindValues[] = $terms;
         $this->bindValues[] = $terms;
+        $this->bindValues[] = $terms;
+
         $this->sql .= ' order by p.created_date desc';
 
         if ($limit) {
@@ -154,6 +156,7 @@ SQL;
      * This query searches each of these fields for having all supplied terms:
      *  - page.title, page.sub_title page.meta_description
      *  - page_element.title, page_element.content
+     *  - data_store.setting_value
      * @param  string $terms                Search terms
      * @param  int    $limit                Limit
      * @param  int    $offset               Offset
@@ -162,12 +165,9 @@ SQL;
     public function searchContent(string $terms, int $limit = null, int $offset = null): ?array
     {
         $this->makeSelect();
-        $this->sql .= ' and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)';
-        $this->bindValues[] = $terms;
-
-        // Include page elements and data_store values in search
         $this->sql .= <<<SQL
- or p.id in (
+and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)
+or p.id in (
     select pes.page_id
     from page_element pes
     where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
@@ -182,6 +182,8 @@ SQL;
 
         $this->bindValues[] = $terms;
         $this->bindValues[] = $terms;
+        $this->bindValues[] = $terms;
+
         $this->sql .= ' order by p.created_date desc';
 
         if ($limit) {
@@ -382,7 +384,8 @@ join user u on p.created_by = u.id
 left join collection c on c.id = p.collection_id
 left join media m on m.id = p.media_id
 left join page_element pe on p.id = pe.page_id and pe.element_sort = 1
-where 1=1
+where 1=1 \n
 SQL;
+// The extra new line at the end is intentional, so any 'and' statements are not concatenated to the 1=1
     }
 }

@@ -604,7 +604,7 @@ class Base extends AbstractExtension implements GlobalsInterface
 
         // Get sanitized query string parameters and execute search
         $terms = htmlspecialchars($this->container->request->getQueryParam('terms', ''));
-        $results = $pageMapper->searchContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
+        $results = $pageMapper->searchPublishedContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Complete pagination setup
         $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
