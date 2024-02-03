@@ -14,6 +14,7 @@ namespace Piton\Models;
 
 use Piton\Models\Entities\PitonEntity;
 use Piton\ORM\DataMapperAbstract;
+use Exception;
 
 /**
  * Piton Page Mapper
@@ -301,22 +302,58 @@ SQL;
      * - 'popular' : View count descending
      * - 'random'  : Random selection
      *
+     * Argument 3 is an optional associative array with either an include key and/or an exclude key
+     * with a comma separated string of collection slugs to include or exclude. If a collection slug is listed in both include and exclude
+     * then exclude prevails. The $filter structure is:
+     *    [
+     *      'include' => 'slug1,slug2,slug3',
+     *      'exclude' => 'slug4,slug5,slug6'
+     *    ]
+     *
      * @param  string  $rankMethod
      * @param  int     $limit, default 10
+     * @param  array   $filter
      * @return array|null
      */
     public function findPublishedRankedCollectionPages(
         string $rankMethod,
-        ?int $limit = 10
+        ?int $limit = 10,
+        ?array $filter = []
     ): ?array {
-
         // $rankMethod accepts one of three ranking strings. If a non-allowed value is provided throw an exception
         if (!in_array($rankMethod, ['recent', 'popular', 'random'])) {
-            throw new \Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 1 to be one of: 'recent', 'popular', 'random'", 1);
+            throw new Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 1 to be one of: 'recent', 'popular', 'random'", 1);
+        }
+
+        // $filter, if provided, must be an associative array with 'exclude' and/or 'include' keys, with a comma separated string of collection slugs
+        if (!empty($filter) && (!array_key_exists('include', $filter) ?? !array_key_exists('exclude', $filter))) {
+            throw new Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 3 to be an array with either a 'include' key and/or a 'exclude' key.", 1);
         }
 
         $this->makeSelect();
         $this->sql .= " and c.id is not null and p.published_date <= '{$this->today}'";
+
+        // Apply collection filters. We are expecting collection slugs to be used for values
+        if (!empty($filter)) {
+            $filterClause = '';
+            $include = !empty($filter['include']) ? array_map('trim', explode(',', $filter['include'])) : [];
+            $exclude = !empty($filter['exclude']) ? array_map('trim', explode(',', $filter['exclude'])) : [];
+
+            // If the same value is in the include and exclude arrays, then remove from include as exclude will prevail
+            $include = array_diff($include, $exclude);
+
+            // Included collections.
+            if (!empty($include)) {
+                $filterClause .= ' and c.collection_slug in (\'' . implode('\',\'', $include) . '\')';
+            }
+
+            // Excluded collections
+            if (!empty($exclude)) {
+                $filterClause .= ' and c.collection_slug not in (\'' . implode('\',\'', $exclude) . '\')';
+            }
+
+            $this->sql .= $filterClause;
+        }
 
         // Most recent collection pages sorted by published_date
         if ($rankMethod === 'recent') {
@@ -386,6 +423,6 @@ left join media m on m.id = p.media_id
 left join page_element pe on p.id = pe.page_id and pe.element_sort = 1
 where 1=1 \n
 SQL;
-// The extra new line at the end is intentional, so any 'and' statements are not concatenated to the 1=1
+        // The extra new line at the end is intentional, so any 'and' statements are not concatenated to the 1=1
     }
 }

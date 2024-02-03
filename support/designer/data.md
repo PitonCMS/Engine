@@ -140,6 +140,7 @@ In addition, each `page` array contains these keys to use in your templates.
 | `meta_description` | Page meta description |
 | `published_date` | Page published date |
 | `media_id` | Featured media ID (if enabled) |
+| `view_count` | Number of public page views |
 | `created_by` | User ID who created the page |
 | `created_date` | Created date (which can be different from the published date) |
 | `updated_by` | User ID who last updated the page |
@@ -538,6 +539,19 @@ This is useful to display a set of active content as links. The first argument m
 
 The optional second argument is the number of results to return.
 
+You may also pass in a third argument, a list of collection slugs to specifically include, or exclude in the results. This is an associative array, with an 'include' key and/or an 'exclude' key, with a string of comma separated slugs for each. If you supply the same collection slug in both include and exclude, exclude will prevail and that collection will not be included.
+
+For example, to only return results from the Blog and Services collections, supply as a third argument a Twig hash of:
+
+```twig
+getPublishedRankedCollectionPages('recent', 6, {'include': 'blog,services'})
+```
+
+To exclude the Recipes collection:
+```twig
+getPublishedRankedCollectionPages('recent', 6, {'exclude': 'recipes'})
+```
+
 ```php
     /**
      * Get Published Ranked Collection Pages
@@ -548,16 +562,25 @@ The optional second argument is the number of results to return.
      * - 'popular' : View count descending
      * - 'random'  : Random selection
      *
+     * Argument 3 is an optional associative array with either an include key and/or an exclude key
+     * with a comma separated string of collection slugs to include or exclude. If a collection slug is listed in both include and exclude
+     * then exclude prevails. The $filter structure is:
+     *    [
+     *      'include' => 'slug1,slug2,slug3',
+     *      'exclude' => 'slug4,slug5,slug6'
+     *    ]
+     *
      * @param  string  $rankMethod
      * @param  int     $limit, default 10
+     * @param  array   $filter
      * @return array|null
      */
-    public function getPublishedRankedCollectionPages(string $rankMethod, ?int $limit = 10): ?array;
+    public function getPublishedRankedCollectionPages(string $rankMethod, ?int $limit = 10, ?$filter = []): ?array;
 ```
 
 Usage:
 ```twig
-{% set results = getPublishedRankedCollectionPages('recent', 6) %}
+{% set results = getPublishedRankedCollectionPages('recent', 6, {'include': 'blog'}) %}
 
   <ul class="cards">
     {% for link in results %}
