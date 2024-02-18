@@ -19,7 +19,7 @@
   {# Element Display Title Logic
     Set display title to:
     1) If saved (has element.id) and has a title, display the title
-    2) If saved (had element.id) and has NO title, display short excerpt of text
+    2) If saved (has element.id) and has NO title, display short excerpt of text
     3) If new (no element.id), then display "New Element"
   #}
   <div class="toggle-block__header toggle-block__header-secondary" data-drag-handle="true">
@@ -48,7 +48,7 @@
     {# Element Content Editor Area. Bool false in Twig is empty, so need this hack for actual bool false #}
     <div class="form-block {% if not element.definition.showContentTextarea %}d-none{% endif %}">
       <label class="form-block__title">Element Content</label>
-      <textarea {% if element.definition.enableEditor %}data-cke="true"{% endif %} rows="5" name="element[{{ arrayKey }}][content]">{{ element.content|escape }}</textarea>
+      <textarea {% if element.definition.enableEditor %}data-cke="true"{% endif %} rows="5" name="element[{{ arrayKey }}][content]">{{ element.content|default(element.definition.contentTextareaDefaultValue)|escape }}</textarea>
     </div>
 
     {# Embedded HTML #}

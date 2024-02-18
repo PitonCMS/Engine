@@ -93,11 +93,9 @@ You are welcome to add, delete, or modify Page and Element Templates (HTML and J
 ## HTML Layouts and JSON Definitions
 Each Page or Element HTML Layout file requires a matching JSON Definition file, and these two files **must** be in the same sub-directory, and must have the same case sensitive filename (except for the extension `.html` and `.json`).
 
->**Warning**: Once dynamic content has been saved using a Template do not change the Template name or directory location.
-
-At a minimum a Page Template consists of one HTML file and one JSON file with matching names (except for the extensions) in the same sub-directory.
-
 The HTML file can contain static HTML or can extend an optional layout file, and if you want the user to add dynamic content then you need at least one Block defined.
+
+>**Warning**: Once dynamic content has been saved using a Template do not change the Template name or directory location.
 
 ### Page Template Example
 The built in *Without Hero* content Page HTML Template `contentPage.html` is very simple. It extends the `_base_layout.html` and includes a single Block named `contentBlock`.
@@ -138,7 +136,7 @@ The matching `contentPage.json` JSON Definition file contains information about 
 }
 ```
 
-**Page Definition Properties**
+### Page Definition Properties
 
 | Key | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
@@ -149,7 +147,7 @@ The matching `contentPage.json` JSON Definition file contains information about 
 | `blocks` | Array | | | An array of objects that define Block areas of the Page layout |
 | `showSubTitle` | Boolean | | `true` | Whether the page should have a sub title field
 
-**Block Definition Properties**
+### Block Definition Properties
 
 | Key | Type | Required | Default | Description |
 | --- | --- | --- |
@@ -179,16 +177,17 @@ When the Element HTML Layout is loaded, the saved data is available in the `elem
 
 Element HTML files do not need to contain variables, it may consist of just boilerplate HTML and text.
 
-The matching JSON Definition file contains information about the Element and how it is used.
+The matching JSON Definition file contains information about the Element and how it is used. This example includes HTML to start an ordered list.
 
 ```json
 {
     "elementName": "Text",
-    "elementDescription": "Simple text content"
+    "elementDescription": "Simple text content",
+    "contentTextareaDefaultValue": "<ol><li></li></ol>"
 }
 ```
 
-**Element Definition Properties**
+### Element Definition Properties
 
 | Key | Type | Required | Default | Description |
 | --- | --- | --- |
@@ -197,6 +196,7 @@ The matching JSON Definition file contains information about the Element and how
 | `enableInput` | String | | | Display additional built-in input option for the type of element (just one option). Options are `"collection"`, `"embedded"`, `"image"`, and `"gallery"` |
 | `showTitle` | Boolean | | `true` | Boolean flag on whether to display the Element Title input.|
 | `showContentTextarea` | Boolean | | `true` | Boolean flag on whether to display the Element Content textarea (with or without the rich text editor) |
+| `contentTextareaDefaultValue` | String | | | Default text or HTML to display in a new Element |
 | `enableEditor` | Boolean | | `true` | Boolean flag on whether to enable the Element content textarea Rich Text Editor |
 | `settings` | Array | | | An array of [Custom Settings](/admin/support/designer/settings) objects. |
 

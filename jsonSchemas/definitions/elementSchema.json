@@ -26,6 +26,10 @@
             "type": "boolean",
             "default": true
         },
+        "contentTextareaDefaultValue": {
+            "description": "Default content text to display for new elements",
+            "type": "string"
+        },
         "enableEditor": {
             "description": "Enable content textarea editor controls, defaults to true",
             "type": "boolean",
