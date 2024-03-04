@@ -100,8 +100,8 @@ class AdminBaseController extends BaseController
             $setting->setting_key = $setting->key;
             $setting->input_type = $setting->inputType;
 
-            // Include select options array
-            if ($setting->inputType === 'select') {
+            // Include options array for select or checkbox
+            if ($setting->inputType === 'select' || $setting->inputType === 'checkbox') {
                 $setting->options = array_column($setting->options, 'name', 'value');
             }
 
