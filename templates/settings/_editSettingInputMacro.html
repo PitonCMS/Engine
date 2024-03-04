@@ -83,6 +83,7 @@
 {% macro checkboxHtml(setting, nameKey) %}
 {% import _self as settingMacro %}
 {% set arrayKey = setting.id ?? uniqueKey() %}
+{% set optionsList = setting.setting_value|split(',') %}
 
 <div class="form-block">
   <label class="form-block__title">{{ setting.label }}</label> {{ settingMacro.flag(setting.status, nameKey, arrayKey) }}
@@ -92,13 +93,12 @@
 
   {% for key, option in setting.options %}
   <div class="form-check">
-    <input class="form-check-input" id="{{ arrayKey }}-{{ key }}" type="checkbox" name="{{ nameKey }}[{{ arrayKey }}][setting_value][]" value="{{ key }}" {{ checked(key == setting.setting_value) }}>
+    <input class="form-check-input" id="{{ arrayKey }}-{{ key }}" type="checkbox" name="{{ nameKey }}[{{ arrayKey }}][setting_value][]" value="{{ key }}" {{ checked(key in optionsList) }}>
     <label class="form-check-label" for="{{ arrayKey }}-{{ key }}">{{ option }}</label>
   </div>
   {% endfor %}
 
   <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
-
 </div>
 
 {% endmacro checkboxHtml %}
