@@ -22,9 +22,9 @@
                     "$ref": "../validations/setting.json#/properties/setting_value"
                 },
                 "inputType": {
-                    "description": "HTML input type: text, select, textarea, color, date, email, number, tel, url.",
+                    "description": "HTML input type: text, select, checkbox, textarea, color, date, email, number, tel, url.",
                     "type": "string",
-                    "enum": ["text","select","textarea","color","date","email","number","tel","url"]
+                    "enum": ["text","select","checkbox","textarea","color","date","email","number","tel","url"]
                 },
                 "placeholder": {
                     "description": "Input placeholder text, optional.",
@@ -34,7 +34,7 @@
                     "description": "Form input help text, optional."
                 },
                 "options": {
-                    "description": "Only for select lists. List of values (saved) and names (readable).",
+                    "description": "Only for select lists and checkboxes. List of values (saved) and names (readable).",
                     "type": "array",
                     "items": {
                         "type": "object",
