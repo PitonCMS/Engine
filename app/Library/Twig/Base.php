@@ -605,7 +605,8 @@ class Base extends AbstractExtension implements GlobalsInterface
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->router->pathFor('submitSearch'));
+        // We are going to use the current URL from $_SERVER['REQUEST_URI'] for the path to this page
+        // No need to set pagination->setPagePath()
 
         // Set results per page, or default to Pagination config
         if ($resultsPerPage) {
