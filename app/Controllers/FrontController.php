@@ -65,6 +65,9 @@ class FrontController extends FrontBaseController
         // Increment page view_count
         $pageMapper->incrementPageViewCount($page->id);
 
+        // Before rendering the page, call an extension function to merge custom data properties into page object
+        $page = $this->mergeExtensionPageData($page);
+
         return $this->render("{$page->template}.html", $page);
     }
 
