@@ -1,6 +1,7 @@
   /* Modal background */
   .modal {
-    @include padding(calc(#{$nav-height} * 1.5) null null null);
+  
+    padding-block-start: calc(#{$nav-height} * 1.5);
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -16,9 +17,8 @@
 
   /* Modal Content */
   .modal-content {
-    @include padding(null null 1rem);
+    padding-block-end: 1rem;
     width: 70%;
-    // max-height: 100%;
     position: relative;
     background-color: $bg-light;
     border: 1px solid $border;
@@ -30,7 +30,7 @@
 
   .modal-header {
     height: $nav-height;
-    @include padding(null 1rem);
+    padding-inline: 1rem;
     background-color: $bg-grey;
     display: flex;
     justify-content: space-between;
@@ -48,7 +48,8 @@
   }
 
   .modal-body {
-    @include padding(1rem 1rem .5em);
+    padding-block: 1rem .5em;
+    padding-inline: 1rem;
 
     // Styles for Media Select Modal
     .media-wrapper {
@@ -56,7 +57,7 @@
 
       .media {
         height: 100%;
-        @include padding(.25rem);
+        padding: .25rem;
         display: flex;
         flex-flow: column nowrap;
       }
@@ -76,8 +77,7 @@
     }
 
     .mediaBlock {
-
-      @include padding(.25em);
+      padding: .25em;
     }
 
     .mediaCaption {
@@ -93,7 +93,7 @@
     }
 
     .form-group {
-      @include padding(1em null);
+      padding-block: 1em;
 
     }
 
@@ -102,16 +102,16 @@
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 
       .form-check {
-        @include padding(1em null);
+        padding-block: 1em;
       }
     }
 
     .modal-info {
-      @include padding(0 null);
+      padding-block: 0;
     }
 
     .btn-group {
-      @include margin(1rem null null null);
+      margin-block-start: 1rem;
     }
 
     .modal-form {

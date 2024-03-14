@@ -11,8 +11,8 @@ input:-webkit-autofill:active {
 
 /* Form blocks style */
 .form-block {
- @include padding(.5em 1em);
- @include margin(null null 1em null);
+ padding: .5em 1em;
+ margin-block-end: 1em;
  background   : $bg-white;
  border-radius: $border-radius;
  box-shadow   : $box-shadow-1;
@@ -32,7 +32,7 @@ input:-webkit-autofill:active {
  }
 
  &__elementWrapper {
-  @include padding(null 1rem);
+  padding-inline: 1rem;
  }
 
  &__flexLayout {
@@ -68,7 +68,7 @@ input:-webkit-autofill:active {
 }
 
 .form-check {
- @include padding(.5em);
+ padding: .5em;
  display              : grid;
  grid-template-columns: 10px 1fr;
  gap                  : 1em;
@@ -76,8 +76,8 @@ input:-webkit-autofill:active {
  justify-content      : center;
 
  &-label {
-  @include margin(0);
-  @include padding(0);
+  margin: 0;
+  padding: 0;
   font-weight: 400;
   font-size  : 1em;
  }
@@ -98,8 +98,9 @@ input[type="color"],
 input[type="date"],
 input[type="tel"],
 textarea {
- @include padding(.5em 3.5em .5em 1em);
- @include margin(0);
+ padding-block: .5em;
+ padding-inline: 1em 3.5em;
+ margin: 0;
  width             : 100%;
  border            : thin solid $border;
  border-radius     : $border-radius;
@@ -113,7 +114,7 @@ textarea {
 input[type="text"],
 input[type="email"],
 textarea {
- @include padding(.5em);
+ padding: .5em;
  color: $text-grey;
 }
 

@@ -11,8 +11,8 @@
     background: $bg-white;
     color: $text-accent;
     border: solid 1px $border;
-    @include padding(.25rem .75rem);
-    @include margin(.5rem null null null);
+    padding: .25rem .75rem;
+    margin-block-start: .5rem;
     border-radius: $border-radius;
 
     a {

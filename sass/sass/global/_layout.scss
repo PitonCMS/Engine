@@ -1,7 +1,7 @@
 /* Layout */
 /* Header, Logo */
 .top-header {
- @include padding(null null null 1em);
+ padding-inline-start: 1em;
  background-color: $bg-dark;
  color: $text-accent;
  height: $nav-height;
@@ -24,10 +24,11 @@
   display: flex;
   letter-spacing: 1.4px;
   justify-content: flex-start;
-  @include padding(0 0 0 4rem);
+  padding-inline: 4rem 0;
+  padding-block: 0;
 
   @media screen and (min-width: $breakpoint) {
-   @include padding(0);
+   padding: 0;
   }
 
   a {
@@ -59,13 +60,15 @@
 /* Full sidebar/content wrapper to create columns */
 .wrapper {
  min-height: 100%;
- @include padding(#{$nav-height} null null null);
+ padding-block-start: $nav-height;
  display: flex;
  flex-flow: row nowrap;
  position: relative;
 
  @media screen and (min-width: $breakpoint) {
-  @include padding(#{$nav-height} null null #{$nav-width});
+ 
+  padding-block-start: $nav-height;
+  padding-inline-start: $nav-width;
  }
 
  .sidebar {
@@ -106,7 +109,8 @@
 
 // Content Header Styles
 .content-header {
- @include padding(0 1em);
+ padding-inline: 1em;
+ padding-block: 0;
  background: $bg-light;
  min-height: $nav-height;
  width: 100%;
@@ -131,8 +135,7 @@
 
  .breadcrumb {
   font-weight: 300;
-  // font-size: 0.75rem;
-  @include padding(null 1em null null);
+  padding-inline-end: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -144,16 +147,17 @@
    }
   }
    *+*, .breadcrumb__indicator {
- 
-    @include margin(null null null .5rem);
+
+    margin-inline-start: .5rem;
 
   }
  }
 
  /* Section Title */
  .section-title {
-  @include margin(0 1rem 0 0);
-  @include padding(0);
+  margin-inline: 0 1rem;
+  margin-block: 0;
+  padding: 0;
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -167,9 +171,10 @@
 .container {
  width: 100%;
  max-width: $container-max;
- @include margin(0 auto);
+ margin-inline: auto;
 }
 
 .content {
- @include padding(calc(#{$nav-height} + 1em) 1em 1em 1em);
+ padding-block: calc(#{$nav-height} + 1em) 1em;
+ padding-inline: 1em;
 }

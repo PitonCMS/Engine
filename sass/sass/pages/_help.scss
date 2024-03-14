@@ -11,7 +11,7 @@
       display   : block;
       background: $clr-light;
       flex: .5;
-      @include padding(null 1.3em);
+      padding-inline: 1.3em;
       position: relative;
 
       a {
@@ -41,7 +41,7 @@
       }
 
       &__h3 {
-        @include margin(null null null 1em);
+        margin-inline-start: 1em;
         &::before {
           content    : "\f054 ";
           font-family: "Font Awesome 5 Free";
@@ -57,11 +57,12 @@
 
   .help-content {
     background: $bg-white;
-    @include padding(1rem 2rem 2rem 2rem);
+    padding-inline: 2rem;
+    padding-block: 1rem 2rem;
     flex: 1.25;
 
     *+* {
-      @include margin(1rem null null null);
+      margin-block-start: 1rem;
     }
 
     pre {
@@ -72,7 +73,7 @@
 
     blockquote {
       background: $bg-accent-1;
-      @include padding(.5em);
+      padding: .5em;
       border-left: solid .75em $bg-accent;
     }
 
@@ -88,11 +89,11 @@
     ul,
     ol {
 
-      @include margin(null null null 1em);
+      margin-inline-start: 1em;
 
       li {
-
-        @include margin(.15em 3rem null null);
+        margin-block-start: .15em;
+        margin-inline-end: 3rem;
 
       }
     }
@@ -127,8 +128,8 @@
 
     table th,
     table td {
-
-      @include padding(.75em 1em);
+      padding-block: .75em;
+      padding-inline: 1em;
     }
 
     table tbody tr {

@@ -7,9 +7,7 @@
 
 
     &__link {
-      @include padding(null .5em);
-      // @include margin(1px null);
-      // height: $nav-height;
+      padding-inline: .5em;
 
       display: grid;
       grid-template-columns: 1fr 20px;
@@ -53,7 +51,7 @@
     }
 
     &__icon {
-      @include margin(null .5em);
+      margin-inline: .5em;
       color: $text-grey;
     }
   }
