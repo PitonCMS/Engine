@@ -91,12 +91,14 @@
   <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][category]" value="{{ setting.category }}">
   <input type="hidden" name="{{ nameKey }}[{{ arrayKey }}][setting_key]" value="{{ setting.setting_key }}">
 
-  {% for key, option in setting.options %}
-  <div class="form-check">
-    <input class="form-check-input" id="{{ arrayKey }}-{{ key }}" type="checkbox" name="{{ nameKey }}[{{ arrayKey }}][setting_value][]" value="{{ key }}" {{ checked(key in optionsList) }}>
-    <label class="form-check-label" for="{{ arrayKey }}-{{ key }}">{{ option }}</label>
-  </div>
-  {% endfor %}
+ <div class="form-block__flexLayout">
+   {% for key, option in setting.options %}
+   <div class="form-check">
+     <input class="form-check-input" id="{{ arrayKey }}-{{ key }}" type="checkbox" name="{{ nameKey }}[{{ arrayKey }}][setting_value][]" value="{{ key }}" {{ checked(key in optionsList) }}>
+     <label class="form-check-label" for="{{ arrayKey }}-{{ key }}">{{ option }}</label>
+   </div>
+   {% endfor %}
+ </div>
 
   <small class="form-text text-muted">Key: <code>{{ setting.setting_key }}</code>. {{ setting.help }}</small>
 </div>
