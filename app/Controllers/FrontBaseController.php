@@ -44,6 +44,20 @@ class FrontBaseController extends BaseController
     }
 
     /**
+     * Set Extension Page Data
+     *
+     * Accepts key:value pairs that are saved to $this->pageDataExtension
+     * Can be called multiple times
+     * @param string $key   Key name
+     * @param mixed  $value Value to inject into page data
+     * @return void
+     */
+    public function setExtensionPageData(string $key, $value = null)
+    {
+        $this->pageDataExtension[$key] = $value;
+    }
+
+    /**
      * Merge Extension Data into Page Data
      *
      * If a key & value were set to $this->pageDataExtension property, then that key and value are merged
@@ -54,8 +68,11 @@ class FrontBaseController extends BaseController
     protected function mergeExtensionPageData(PitonEntity $page): PitonEntity
     {
         // If extension data was set, then add to object and return
-        if (isset($this->pageDataExtension['key'])) {
-            $page->{$this->pageDataExtension['key']} = $this->pageDataExtension['value'];
+        if (!empty($this->pageDataExtension)) {
+            foreach ($this->pageDataExtension as $key => $data) {
+                $page->{$key} = $data;
+            }
+
             return $page;
         }
 
