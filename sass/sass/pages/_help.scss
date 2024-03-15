@@ -28,7 +28,12 @@
         top     : 120px;
       }
 
+      &__h1 {
+       font-weight: 900;
+      }
+
       &__h2 {
+       font-weight: 600;
         &::before {
           content    : "\f054 ";
           font-family: "Font Awesome 5 Free";

@@ -1657,6 +1657,12 @@ select:-moz-focusring {
     position: sticky;
     top: 120px;
   }
+  #support .help-toc__h1 {
+    font-weight: 900;
+  }
+  #support .help-toc__h2 {
+    font-weight: 600;
+  }
   #support .help-toc__h2::before {
     content: "\f054";
     font-family: "Font Awesome 5 Free";
