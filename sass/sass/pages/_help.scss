@@ -1,149 +1,179 @@
-#support {
-  display  : flex;
-  flex-flow: row-reverse nowrap;
-  gap      : .5em;
-  position : relative;
-
-  .help-toc {
-    display: none;
-
-    @media screen and (min-width: $breakpoint) {
-      display   : block;
-      background: $clr-light;
-      flex: .5;
-      padding-inline: 1.3em;
-      position: relative;
-
-      a {
-        color      : $text-dark;
-        font-size  : .9em;
-        display    : block;
-        transition : opacity 250ms ease-in-out 125ms;
-        line-height: calc(#{$nav-height} / 2);
-      }
-
-
-      &__inner {
-        position: sticky;
-        top     : 120px;
-      }
-
-      &__h1 {
-       font-weight: 900;
-      }
-
-      &__h2 {
-       font-weight: 600;
-        &::before {
-          content    : "\f054 ";
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          font-size  : .5em;
-          position   : absolute;
-          left       : -1.5em;
-        }
-
-      }
-
-      &__h3 {
-        margin-inline-start: 1em;
-        &::before {
-          content    : "\f054 ";
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          font-size  : .5em;
-          position   : absolute;
-          left       : .5em;
-        }
-      }
-    }
-
-  }
-
-  .help-content {
-    background: $bg-white;
-    padding-inline: 2rem;
-    padding-block: 1rem 2rem;
-    flex: 1.25;
-
-    *+* {
-      margin-block-start: 1rem;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      word-wrap  : break-word;
-      text-align : justify;
-    }
-
-    blockquote {
-      background: $bg-accent-1;
-      padding: .5em;
-      border-left: solid .75em $bg-accent;
-    }
-
-    a {
-      color     : $text-accent;
-      transition: all 125ms ease-in;
-
-      &:hover {
-        outline: dashed 3px $text-accent;
-      }
-    }
-
-    ul,
-    ol {
-
-      margin-inline-start: 1em;
-
-      li {
-        margin-block-start: .15em;
-        margin-inline-end: 3rem;
-
-      }
-    }
-
-
-    li>ul li {
-      display    : block;
-      margin-left: 1em;
-      margin-top : .25em;
-    }
-
-    li>ul li::before {
-      position: absolute;
-      left    : 20px;
-    }
-
-    table {
-      border-collapse   : collapse;
-      margin            : 2em 0;
-      font-size         : 0.9em;
-      font-family       : sans-serif;
-      min-width         : 400px;
-      // box-shadow     : 0 0 20px rgba(0, 0, 0, 0.15);
-      box-shadow        : $box-shadow-2;
-    }
-
-    table thead tr {
-      background-color: $bg-accent;
-      color           : $bg-light;
-      text-align      : left;
-    }
-
-    table th,
-    table td {
-      padding-block: .75em;
-      padding-inline: 1em;
-    }
-
-    table tbody tr {
-      border-bottom: 1px solid $bg-grey;
-    }
-
-    table tbody tr:nth-of-type(even) {
-      background-color: $bg-light;
-    }
-
-  }
+.support-content {
+ display  : flex;
+ flex-flow: row-reverse nowrap;
+ gap      : 1rem;
 }
+
+.help-content {
+ flex-basis: 0;
+ flex-grow : 999;
+ min-width : 70%;
+}
+
+.help-content {
+ background      : $bg-white;
+ padding-inline  : 2rem;
+ // padding-block: 1rem 2rem;
+ flex: 1.25;
+
+ *+* {
+  margin-block-start: 1rem;
+ }
+
+ pre {
+  white-space: pre-wrap;
+  word-wrap  : break-word;
+  text-align : justify;
+ }
+
+ blockquote {
+  background : $bg-accent-1;
+  padding    : .5em;
+  border-left: solid .75em $bg-accent;
+ }
+
+ a {
+  color     : $text-accent;
+  color     : $text-dark;
+  font-size : .9rem;
+  display   : block;
+  transition: opacity 250ms ease-in-out 125ms;
+  transition: all 125ms ease-in;
+
+  &:hover {
+   // outline: solid 1px $text-accent;
+  }
+ }
+
+ ul,
+ ol {
+
+  margin-inline-start: 1em;
+
+  li {
+   margin-block-start: .15em;
+   margin-inline-end : 3rem;
+
+  }
+ }
+
+
+ li>ul li {
+  display    : block;
+  margin-left: 1em;
+  margin-top : .25em;
+ }
+
+ li>ul li::before {
+  position: absolute;
+  left    : 20px;
+ }
+
+ table {
+  border-collapse: collapse;
+  margin         : 2em 0;
+  font-size      : 0.9em;
+  font-family    : sans-serif;
+  min-width      : 400px;
+  box-shadow     : $box-shadow-2;
+ }
+
+ table thead tr {
+  background-color: $bg-accent;
+  color           : $bg-light;
+  text-align      : left;
+ }
+
+ table th,
+ table td {
+  padding-block : .75em;
+  padding-inline: 1em;
+ }
+
+ table tbody tr {
+  border-bottom: 1px solid $bg-grey;
+ }
+
+ table tbody tr:nth-of-type(even) {
+  background-color: $bg-light;
+ }
+
+}
+
+
+.help-toc {
+ flex-grow : 1;
+ flex-basis: 300px;
+ align-self: start;
+ position  : sticky;
+ top       : 120px;
+
+
+ &__h1 {
+  font-weight: 900;
+ }
+
+ &__h2 {
+  font-weight: 600;
+
+  // &::before {
+  //  content    : "\f054 ";
+  //  font-family: "Font Awesome 5 Free";
+  //  font-weight: 900;
+  //  font-size  : .5em;
+  //  position   : absolute;
+  //  left       : -1.5em;
+  // }
+
+ }
+
+ &__h3 {
+  margin-inline-start: 1em;
+  // &::before {
+  //   content    : "\f054 ";
+  //   font-family: "Font Awesome 5 Free";
+  //   font-weight: 900;
+  //   font-size  : .5em;
+  //   position   : absolute;
+  //   left       : .5em;
+
+  // }
+ }
+
+ a {
+  display: block;
+  word-break: break-all;
+  padding-inline: .5rem;
+  &:hover {
+   background-color: $clr-light-orange;
+   color: black;
+  }
+ }
+
+ &__footer,
+ &__header {
+  min-height : 1rem;
+  font-weight: 900;
+  font-size  : 1.25rem;
+  color      : $clr-accent;
+  font-weight: 500;
+ }
+}
+
+
+.help-toc__inner {
+ background-color: $clr-light;
+ display           : grid;
+ grid-template-rows: auto 1fr auto;
+ max-height        : calc(100vh - 120px);
+ padding-inline: .5rem;
+}
+
+.help-toc__content {
+ max-height: 100%;
+ overflow-y: auto;
+
+
+}
+
+// https://codepen.io/hexagoncircle/pen/oNLZmvV

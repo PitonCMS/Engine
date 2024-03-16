@@ -1385,10 +1385,6 @@ select:-moz-focusring {
 .media__link:hover {
   background: #5e6369;
 }
-.media__link:active {
-  outline: dashed #eb7119 3px;
-  outline-offset: 3px;
-}
 .media__link:visited {
   background: red;
 }
@@ -1629,105 +1625,63 @@ select:-moz-focusring {
   border-bottom: solid 1px #dee3e7;
 }
 
-#support {
+.support-content {
   display: flex;
   flex-flow: row-reverse nowrap;
-  gap: 0.5em;
-  position: relative;
+  gap: 1rem;
 }
-#support .help-toc {
-  display: none;
+
+.help-content {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: 70%;
 }
-@media screen and (min-width: 768px) {
-  #support .help-toc {
-    display: block;
-    background: #ffffff;
-    flex: 0.5;
-    padding-inline: 1.3em;
-    position: relative;
-  }
-  #support .help-toc a {
-    color: #3b3b3b;
-    font-size: 0.9em;
-    display: block;
-    transition: opacity 250ms ease-in-out 125ms;
-    line-height: calc(50px / 2);
-  }
-  #support .help-toc__inner {
-    position: sticky;
-    top: 120px;
-  }
-  #support .help-toc__h1 {
-    font-weight: 900;
-  }
-  #support .help-toc__h2 {
-    font-weight: 600;
-  }
-  #support .help-toc__h2::before {
-    content: "\f054";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 0.5em;
-    position: absolute;
-    left: -1.5em;
-  }
-  #support .help-toc__h3 {
-    margin-inline-start: 1em;
-  }
-  #support .help-toc__h3::before {
-    content: "\f054";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 0.5em;
-    position: absolute;
-    left: 0.5em;
-  }
-}
-#support .help-content {
+
+.help-content {
   background: #ffffff;
   padding-inline: 2rem;
-  padding-block: 1rem 2rem;
   flex: 1.25;
 }
-#support .help-content * + * {
+.help-content * + * {
   margin-block-start: 1rem;
 }
-#support .help-content pre {
+.help-content pre {
   white-space: pre-wrap;
   word-wrap: break-word;
   text-align: justify;
 }
-#support .help-content blockquote {
+.help-content blockquote {
   background: rgb(212, 239, 252);
   padding: 0.5em;
   border-left: solid 0.75em #3782c3;
 }
-#support .help-content a {
+.help-content a {
   color: #eb7119;
+  color: #3b3b3b;
+  font-size: 0.9rem;
+  display: block;
+  transition: opacity 250ms ease-in-out 125ms;
   transition: all 125ms ease-in;
 }
-#support .help-content a:hover {
-  outline: dashed 3px #eb7119;
-}
-#support .help-content ul,
-#support .help-content ol {
+.help-content ul,
+.help-content ol {
   margin-inline-start: 1em;
 }
-#support .help-content ul li,
-#support .help-content ol li {
+.help-content ul li,
+.help-content ol li {
   margin-block-start: 0.15em;
   margin-inline-end: 3rem;
 }
-#support .help-content li > ul li {
+.help-content li > ul li {
   display: block;
   margin-left: 1em;
   margin-top: 0.25em;
 }
-#support .help-content li > ul li::before {
+.help-content li > ul li::before {
   position: absolute;
   left: 20px;
 }
-#support .help-content table {
+.help-content table {
   border-collapse: collapse;
   margin: 2em 0;
   font-size: 0.9em;
@@ -1735,21 +1689,67 @@ select:-moz-focusring {
   min-width: 400px;
   box-shadow: 0 0 20px rgba(59, 59, 59, 0.15);
 }
-#support .help-content table thead tr {
+.help-content table thead tr {
   background-color: #3782c3;
   color: #f3f5f7;
   text-align: left;
 }
-#support .help-content table th,
-#support .help-content table td {
+.help-content table th,
+.help-content table td {
   padding-block: 0.75em;
   padding-inline: 1em;
 }
-#support .help-content table tbody tr {
+.help-content table tbody tr {
   border-bottom: 1px solid #dee3e7;
 }
-#support .help-content table tbody tr:nth-of-type(even) {
+.help-content table tbody tr:nth-of-type(even) {
   background-color: #f3f5f7;
+}
+
+.help-toc {
+  flex-grow: 1;
+  flex-basis: 300px;
+  align-self: start;
+  position: sticky;
+  top: 120px;
+}
+.help-toc__h1 {
+  font-weight: 900;
+}
+.help-toc__h2 {
+  font-weight: 600;
+}
+.help-toc__h3 {
+  margin-inline-start: 1em;
+}
+.help-toc a {
+  display: block;
+  word-break: break-all;
+  padding-inline: 0.5rem;
+}
+.help-toc a:hover {
+  background-color: #ffc46b;
+  color: black;
+}
+.help-toc__footer, .help-toc__header {
+  min-height: 1rem;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: #eb7119;
+  font-weight: 500;
+}
+
+.help-toc__inner {
+  background-color: #ffffff;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-height: calc(100vh - 120px);
+  padding-inline: 0.5rem;
+}
+
+.help-toc__content {
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 /* Page Listing */
