@@ -1,7 +1,8 @@
 // MESSAGES
 
 .message-block {
- @include padding(.75rem null);
+
+ padding-block: .75rem;
  .message-wrapper {
   width: 100%;
   display: grid;
@@ -10,7 +11,9 @@
  }
 
  .message-header {
-  @include padding(.5em 1rem .25em);
+ 
+  padding-block: .5em .25em;
+  padding-inline: 1rem;
   color: $text-secondary;
   border-bottom: solid 1px $border;
 
@@ -22,7 +25,9 @@
  }
 
  .message-content {
-  @include padding(.5rem 1rem);
+
+  padding-block: .5rem;
+  padding-inline: 1rem;
   background: $bg-white;
   border-bottom: solid 1px $border;
   p{
@@ -32,7 +37,8 @@
 
  .btn-group {
   background: $bg-white;
-  @include padding(1rem null);
+
+  padding-block: 1rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;

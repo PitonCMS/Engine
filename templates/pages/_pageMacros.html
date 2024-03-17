@@ -3,7 +3,6 @@
 {#
   Edit Element Form
 
-  Returns one element
   @param object element  Element object
 #}
 
@@ -16,16 +15,15 @@
   <input type="hidden" name="element[{{ arrayKey }}][block_key]" value="{{ element.block_key }}">
   <input type="hidden" name="element[{{ arrayKey }}][element_template]" value="{{ element.template }}">
 
-  {# Element Display Title Logic
-    Set display title to:
+  {# Element title display hierarchy:
     1) If saved (has element.id) and has a title, display the title
     2) If saved (has element.id) and has NO title, display short excerpt of text
     3) If new (no element.id), then display "New Element"
   #}
   <div class="toggle-block__header toggle-block__header-secondary" data-drag-handle="true">
-   <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title|default(element.excerpt) }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
-   <div class="small-text">{{ element.definition.elementName }}</div>
-   <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
+    <h4 class="toggle-block__title secondary-title">{% if element.id %}{{ element.title|default(element.excerpt) }} {% else %} New Element <span class="small-text">&nbsp;&nbsp;unsaved</span>{% endif %}</h4>
+    <div class="small-text">{{ element.definition.elementName }}</div>
+    <i class="fas fa-chevron-down toggle-block__toggle" data-collapse-toggle="pageElement-{{ arrayKey }}"></i>
   </div>
 
  <!-- Element Content -->
@@ -60,9 +58,9 @@
 
     {# Media Select Option
 
-    Allows user to select a saved media file to link with this block element.
-    This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
-    Selecting an image sets the media table ID in the element_media_id input.
+      Allows user to select a saved media file to link with this block element.
+      This media selector is displayed if the JSON block element definition file has "enableInput": "image" set.
+      Selecting an image sets the media table ID in the element_media_id input.
     #}
     <div class="form-block mediaInput {% if element.definition.enableInput != 'image' %}d-none{% endif %}"
       data-element-input-option="image" data-media-select="true">
@@ -82,8 +80,7 @@
     </div>
 
     {# Collection Select #}
-    <div class="form-block {% if element.definition.enableInput != 'collection' %}d-none{% endif %}"
-      data-element-input-option="collection">
+    <div class="form-block {% if element.definition.enableInput != 'collection' %}d-none{% endif %}" data-element-input-option="collection">
       <label class="form-block__title">Collection</label>
       <select class="minimal" name="element[{{ arrayKey }}][element_collection_id]"
         {% if element.definition.enableInput == 'collection' %}required{% endif %}>
@@ -97,8 +94,7 @@
     </div>
 
     {# Gallery Category Select #}
-    <div class="form-block {% if element.definition.enableInput != 'gallery' %}d-none{% endif %}"
-    data-element-input-option="gallery">
+    <div class="form-block {% if element.definition.enableInput != 'gallery' %}d-none{% endif %}" data-element-input-option="gallery">
       <label class="form-block__title">Gallery</label>
       <select class="minimal" name="element[{{ arrayKey }}][element_gallery_id]" {% if element.definition.enableInput == 'gallery' %}required{% endif %}>
         <option value="">- None -</option>
@@ -122,7 +118,6 @@
 {# Page List Item Row
 
 For the summary display of either pages or collection detail pages
-
 @param pageItem Page object
 #}
 {% macro pageListItem(pageItem) %}

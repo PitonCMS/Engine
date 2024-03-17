@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -80,7 +80,7 @@ class DataStoreMapper extends DataMapperAbstract
     /**
      * Find All Page and Element Settings
      *
-     * Get all page and page_element settings for all elements in this page in one query
+     * Get all page, and page_element settings for all elements in this page, in one query
      * @param int $pageId Page ID
      * @return array|null
      */

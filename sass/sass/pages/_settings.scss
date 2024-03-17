@@ -1,13 +1,13 @@
 .settings-block {
- @include margin(1rem);
+ margin: 1rem;
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
  gap: 1rem;
  .form-block {
-  @include margin(0);
+  margin: 0;
  }
  .form-group{
- @include padding(1rem);
+ padding: 1rem;
   background: $bg-white;
   border-radius: $border-radius;
   box-shadow: $box-shadow-1;
@@ -16,13 +16,14 @@
 
 /* Users */
 .user-list-item-header {
- @include padding(.5em 1em .25em);
+ padding-block: .5em .25em;
+ padding-inline: 1em;
  color: $text-secondary;
  border-bottom: solid 1px $border;
 }
 .user-list-item {
  background: $bg-white;
- @include padding(.5em);
+ padding: .5em;
  border-bottom: solid 1px $border;
  &:hover {
   background: $bg-grey; 
@@ -50,7 +51,7 @@
  gap: 1em;
  align-items: center;
  input, label {
-  @include margin(0);
+  margin: 0;
  }
 
  .user-block-item{
@@ -71,7 +72,7 @@
 /* Collection Groups */
 .list-item-collections__header,
 .list-item-collections {
- @include padding(.5em null .25em);
+ padding-block: .5em .25em;
  display: flex;
  flex-flow: row nowrap;
  justify-content: space-between;
@@ -90,12 +91,12 @@
 
 .list-item-collections__header {
  color: $text-secondary;
- @include padding(null null null .5em);
+ padding-inline-start: .5em;
 }
 
 .list-item-collections {
  background: $bg-white;
- @include padding(.5em);
+ padding: .5em;
 
  &:hover {
   background: lighten($bg-grey, 4%);
@@ -103,7 +104,7 @@
 }
 
 .sitemap-link {
- @include margin(1rem null);
- @include padding(null null 1rem null);
+ margin-block: 1rem;
+ padding-block-end: 1rem;
  border-bottom: solid 1px $border;
 }

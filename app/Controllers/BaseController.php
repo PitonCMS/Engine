@@ -94,9 +94,10 @@ class BaseController
      *
      * @param string $name Route name
      * @param array  $args Associative array of route arguments
+     * @param int    $status Response status code, defaults to 302 Temporary
      * @return Response
      */
-    protected function redirect(string $routeName, array $args = []): Response
+    protected function redirect(string $routeName, array $args = [], $status = 302): Response
     {
         // Save any alert messages to session flash data for next request
         if (isset($this->alert)) {
@@ -104,7 +105,7 @@ class BaseController
             $session->setFlashData('alert', $this->alert);
         }
 
-        return $this->response->withRedirect($this->container->router->pathFor($routeName, $args));
+        return $this->response->withRedirect($this->container->router->pathFor($routeName, $args), $status);
     }
 
     /**

@@ -50,7 +50,7 @@ class AdminPageController extends AdminBaseController
             $pages = $this->loadPages();
 
             // Make string template
-            $template =<<<HTML
+            $template = <<<HTML
             {% import '@admin/pages/_pageMacros.html' as pageMacro %}
             {% for p in pages %}
                 {{ pageMacro.pageListItem(p) }}
@@ -197,8 +197,11 @@ HTML;
 
     /**
      * Edit Load New Page
+     *
+     * @param void
+     * @return Response
      */
-    protected function editLoadNewPage()
+    protected function editLoadNewPage(): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -228,7 +231,6 @@ HTML;
         // OR - "collectionId" and "definition" should be exclusive options to create a page
 
         // Get collection details for collection pages. (Collection details for existing pages are returned with the findById() query above.)
-
         if (is_numeric($collectionId) && empty($templateParam)) {
             $collection = $collectionMapper->findById((int) $collectionId);
             $page->collection_id = $collectionId;
@@ -254,26 +256,27 @@ HTML;
      * Save Page
      *
      * Create or update page wrapper
+     * @param void
+     * @return Response
      */
-    public function savePage()
+    public function savePage(): Response
     {
         // Save settings and elements
         $pageEntity = $this->savePageHeader();
-        $this->savePageSettings($pageEntity->id);
         $this->savePageElements($pageEntity->id);
 
         return $this->redirect('adminPageEdit', ['id' => $pageEntity->id]);
     }
 
     /**
-     * Save Page
+     * Save Page Header
      *
      * Create new page, or update existing page
      * @param void
      * @return PitonEntity
      * @uses POST
      */
-    public function savePageHeader(): ?PitonEntity
+    public function savePageHeader(): PitonEntity
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -321,41 +324,17 @@ HTML;
             $page->published_date = null;
         }
 
-        // Save Page and return ID
-        return $pageMapper->save($page);
-    }
+        // Save Page
+        $page = $pageMapper->save($page);
 
-    /**
-     * Save Page Settings
-     *
-     * @param int $pageId
-     * @return void
-     * @uses POST
-     */
-    protected function savePageSettings(int $pageId)
-    {
-        // Save any custom page settings
-        if ($post = $this->request->getParsedBodyParam('setting')) {
-            // Get dependencies
-            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-
-            foreach ($post as $row) {
-                $setting = $dataStoreMapper->make();
-                $setting->id = $row['id'];
-
-                // Check for a page setting delete flag
-                if (isset($row['delete'])) {
-                    $dataStoreMapper->delete($setting);
-                    continue;
-                }
-
-                $setting->page_id = $pageId;
-                $setting->category = 'page';
-                $setting->setting_key = $row['setting_key'];
-                $setting->setting_value = $row['setting_value'];
-                $dataStoreMapper->save($setting);
-            }
+        // Save Page Settings
+        $settings = $this->request->getParsedBodyParam('setting');
+        foreach($settings as $setting) {
+            $this->saveSetting('page', $page->id, $setting);
         }
+
+        // Return page Entity
+        return $page;
     }
 
     /**
@@ -363,12 +342,11 @@ HTML;
      *
      * @param int $pageId
      * @return void
-     * @users POST
+     * @uses POST
      */
     protected function savePageElements(int $pageId)
     {
         $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
         $toolbox = $this->container->toolbox;
 
         // Save page elements by block
@@ -394,31 +372,71 @@ HTML;
             // Save any element settings
             if (isset($element['setting'])) {
                 foreach ($element['setting'] as $row) {
-                    $setting = $dataStoreMapper->make();
-                    $setting->id = $row['id'];
-
-                    // Check for a page setting delete flag
-                    if (isset($row['delete'])) {
-                        $dataStoreMapper->delete($setting);
-                        continue;
-                    }
-
-                    $setting->element_id = $pageElement->id;
-                    $setting->category = 'element';
-                    $setting->setting_key = $row['setting_key'];
-                    $setting->setting_value = $row['setting_value'];
-                    $dataStoreMapper->save($setting);
+                    $this->saveSetting('element', $pageElement->id, $row);
                 }
             }
         }
     }
 
     /**
+     * Save Setting
+     *
+     * Saves Page or Element settings
+     * @param string $category     Setting category, 'page' or 'element'
+     * @param int    $foreignKeyId Foreign Key ID to reference
+     * @param array  $setting      Array of setting values
+     * @return void
+     */
+    protected function saveSetting(string $category, int $foreignKeyId, array $setting)
+    {
+        // Validate category
+        if (!in_array($category, ['page','element'])) {
+            throw new Exception("PitonCMS: saveSetting expects \$category to be one of 'page' or 'element'.");
+        }
+
+        // Get dependency
+        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+
+        $settingEntity = $dataStoreMapper->make();
+        $settingEntity->id = $setting['id'];
+
+        // Check for a setting delete flag and end processing
+        if (isset($setting['delete'])) {
+            $dataStoreMapper->delete($settingEntity);
+            return;
+        }
+
+        // Set foreign key
+        if ($category === 'page') {
+            $settingEntity->page_id = $foreignKeyId;
+        } elseif ($category === 'elememnt') {
+            $settingEntity->element_id = $foreignKeyId;
+        }
+
+        // Implode checkbox settings
+        if (is_array($setting['setting_value'])) {
+            $value = implode(',', $setting['setting_value']);
+        } else {
+            $value = $setting['setting_value'];
+        }
+
+        $settingEntity->category = $category;
+        $settingEntity->setting_key = $setting['setting_key'];
+        $settingEntity->setting_value = $value;
+
+        // Save and return
+        $dataStoreMapper->save($settingEntity);
+        return;
+    }
+
+    /**
      * Delete Page
      *
      * Home page is restricted from being deleted
+     * @param void
+     * @return Response
      */
-    public function deletePage()
+    public function deletePage(): Response
     {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
@@ -497,7 +515,7 @@ HTML;
      * @uses elementId Element ID
      * @return Response
      */
-    public function deleteElement()
+    public function deleteElement(): Response
     {
         // Get dependencies
         $pageElement = ($this->container->dataMapper)('PageElementMapper');
@@ -531,7 +549,7 @@ HTML;
      * @param void
      * @return Response
      */
-    public function showCollectionGroups()
+    public function showCollectionGroups(): Response
     {
         $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
         $definition = $this->container->jsonDefinitionHandler;

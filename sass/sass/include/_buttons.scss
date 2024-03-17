@@ -1,8 +1,8 @@
 // Button html Element Styles
 button,
 .btn {
-  @include margin(null null null 1em);
-  @include padding(.5em .75em);
+  margin-inline-start: 1em;
+  padding: .5em .75em;
   border        : none;
   font-size     : .875rem;
   line-height   : 1;
@@ -141,14 +141,14 @@ button,
 }
 
 .btn-group-bottom {
-  @include margin(1rem null null null);
+  margin-block-start: 1rem;
 }
 
 .btn-group-pageEdit {
-  @include margin(1rem null null null);
+  margin-block-start: 1rem;
 
   @media screen and (min-width: $breakpoint) {
-    @include margin(0);
+    margin: 0;
     display: flex;
     flex-flow: column nowrap;
     gap: 1rem;

@@ -6,18 +6,24 @@
 
 {% block content %}
 
-<section id="support">
-        <div class="help-toc">
-           <div class="help-toc__inner"> {{ page.tableOfContents }}</div>
-        </div>
+<main id="support" class="support-content">
+ <aside class="help-toc">
+  <div class="help-toc__inner">
+   <div class="help-toc__header">Table of Contents</div>
+   <div class="help-toc__content">
+    {{ page.tableOfContents }}
+   </div>
+   <div class="help-toc__footer"></div>
+  </div>
+ </aside>
 
-        {# Load support File #}
-        <div class="help-content">
-            {% if page.supportContent %}
-                {{ page.supportContent }}
-            {% endif %}
-        </div>
-</section id="support">
+ {# Load support File #}
+ <div class="help-content">
+  {% if page.supportContent %}
+  {{ page.supportContent }}
+  {% endif %}
+ </div>
+</main>
 {% endblock content %}
 
 {% block foot %}

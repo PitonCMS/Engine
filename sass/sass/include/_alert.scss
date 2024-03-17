@@ -10,20 +10,21 @@
 }
 
 .alert {
- @include margin(1rem auto);
+ margin-block: 1rem;
+ margin-inline: auto;
  border-radius: $border-radius;
  box-shadow: $box-shadow-1;
  background: $bg-white !important;
 
  &-header {
-  @include padding(1rem);
+  padding: 1rem;
   display: grid;
   grid-template-columns: 1fr auto;
   background: $bg-grey;
  }
 
  &-body {
-  @include padding(1rem);
+  padding: 1rem;
  }
 
  &-danger {

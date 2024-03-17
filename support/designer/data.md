@@ -618,6 +618,10 @@ Usage:
   </ul>
 ```
 
+The form to execute the search is provided as an include in `structure/templates/includes/_search.html`, which you can reference in any template as `{{ include ("includes/_search.html") }}`.
+
+>**Note** Be sure to update the page URL for your search results page in `getPathForPage('search')` in `_search.html`. Or, create a Page named "Search" with the matching lower case URL.
+
 ### getGallery()
 Display a Gallery of media images.
 

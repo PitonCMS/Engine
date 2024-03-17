@@ -1,11 +1,11 @@
 /* Navigation Structure */
 .nav-wrapper {
- @include margin(1rem null null null);
+ margin-block-start: 1rem;
  font-size: 1em;
  display: flex;
 
  &__sidebar {
-  @include padding(null 1em null null);
+  padding-inline-end: 1em;
   flex: .75;
   display: flex;
   flex-flow: column nowrap;
@@ -17,16 +17,17 @@
    align-items: center;
   }
 .form-check{
- @include padding(0);
+ padding: 0;
 }
   .checkbox-block {
    grid-template-columns: 1fr;
    gap: 0;
 
    &__title {
-    @include margin(1rem null .5rem);
+
+    margin-block: 1rem .5rem;
     font-size: 1.4rem;
-    @include padding(0);
+    padding: 0;
     color: $text-secondary;
     font-weight: 300;
     line-height: 1;
@@ -36,7 +37,8 @@
  }
 
  &__form-group {
-  @include margin(0 null .5rem null);
+
+  margin-block: 0 .5rem;
 
   label {
    font-weight: 600;
@@ -54,7 +56,7 @@
 
   >* {
    border: solid 1px $border;
-   @include margin(null null .5rem null);
+   margin-block-end: .5rem;
   }
  }
 
@@ -75,14 +77,14 @@
   }
 
   &__content {
-   @include padding(null 1em);
+   padding-inline: 1em;
    color: $clr-dark-grey;
    font-weight: 300;
 
   }
 
   &__title {
-   @include padding(null 1em null .75em);
+   padding-inline: .75em 1em;
    flex: 1;
    color: $text-secondary;
    font-size: 1.3rem;
@@ -96,12 +98,14 @@
   }
 
   &__type {
-   @include padding(null 1rem);
+   padding-inline: 1rem;
   }
 
   &__toggle {
    font-size: .875rem;
-   @include padding(1rem 1em 1em 1em);
+
+   padding-block: 1rem 1em;
+   padding-inline: 1em;
    border-left: solid 1px darken($border, 10%);
 
    &:hover {
@@ -121,8 +125,9 @@
  }
 
  .btn-group-navigation {
-  @include padding(0);
-  @include margin(null null 1rem null);
+  padding: 0;
+
+  margin-block-end: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   grid-column: -2 / -1;
@@ -131,7 +136,7 @@
  }
 
  .btn-group-nav-sidebar {
-  @include margin(1rem null);
+  margin-block: 1rem;
      display: flex;
      width: 100%;
     }
