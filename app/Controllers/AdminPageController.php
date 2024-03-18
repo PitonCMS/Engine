@@ -409,7 +409,7 @@ HTML;
         // Set foreign key
         if ($category === 'page') {
             $settingEntity->page_id = $foreignKeyId;
-        } elseif ($category === 'elememnt') {
+        } elseif ($category === 'element') {
             $settingEntity->element_id = $foreignKeyId;
         }
 
@@ -426,6 +426,7 @@ HTML;
 
         // Save and return
         $dataStoreMapper->save($settingEntity);
+
         return;
     }
 
