@@ -354,7 +354,7 @@ HTML;
         foreach ($this->request->getParsedBodyParam('element') as $element) {
             // Save element
             $pageElement = $pageElementMapper->make();
-            $pageElement->id = $element['element_id'];
+            $pageElement->id = ($element['element_id']) ? (int) $element['element_id'] : null;
             $pageElement->page_id = $pageId;
             $pageElement->block_key = $element['block_key'];
             $pageElement->template = $element['element_template'];
