@@ -297,12 +297,12 @@ SQL;
      * Find Published Ranked Collection Pages
      *
      * Finds sorted multi collection published content, in a ranked order, with a limit.
-     * Rank Methods:
+     * Argument 1, Rank Methods:
      * - 'recent'  : Published date descending
      * - 'popular' : View count descending
      * - 'random'  : Random selection
      *
-     * Argument 3 is an optional associative array with either an include key and/or an exclude key
+     * Argument 2, is an associative array with either an include key and/or an exclude key
      * with a comma separated string of collection slugs to include or exclude. If a collection slug is listed in both include and exclude
      * then exclude prevails. The $filter structure is:
      *    [
@@ -311,24 +311,26 @@ SQL;
      *    ]
      *
      * @param  string  $rankMethod
-     * @param  int     $limit, default 10
      * @param  array   $filter
+     * @param  int     $limit
+     * @param  int     $offset
      * @return array|null
      */
     public function findPublishedRankedCollectionPages(
         string $rankMethod,
-        ?int $limit = 10,
-        ?array $filter = []
+        array $filter = [],
+        int $limit = null,
+        int $offset = null
     ): ?array {
         // $rankMethod accepts one of three ranking strings. If a non-allowed value is provided throw an exception
         if (!in_array($rankMethod, ['recent', 'popular', 'random'])) {
-            throw new Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 1 to be one of: 'recent', 'popular', 'random'", 1);
+            throw new Exception("PitonCMS PageMapper method findPublishedRankedCollectionPages expects argument 1 to be one of: 'recent', 'popular', 'random'", 1);
         }
 
-        // $filter, if provided, must be an associative array with 'exclude' and/or 'include' keys, with a comma separated string of collection slugs
-        if (!empty($filter) && (!array_key_exists('include', $filter) ?? !array_key_exists('exclude', $filter))) {
-            throw new Exception("PitonCMS Twig Method findPublishedRankedCollectionPages expects argument 3 to be an array with either a 'include' key and/or a 'exclude' key.", 1);
-        }
+        // $filter, must be an associative array with 'exclude' and/or 'include' keys, with a comma separated string of collection slugs
+        // if (!empty($filter) && (!array_key_exists('include', $filter) && !array_key_exists('exclude', $filter))) {
+        //     throw new Exception("PitonCMS PageMapper method findPublishedRankedCollectionPages expects argument 2 to be an array with either an 'include' key and/or an 'exclude' key.", 1);
+        // }
 
         $this->makeSelect();
         $this->sql .= " and c.id is not null and p.published_date <= '{$this->today}'";
@@ -370,8 +372,15 @@ SQL;
             $this->sql .= ' order by rand()';
         }
 
-        $this->sql .= ' limit ?';
-        $this->bindValues[] = $limit;
+        if ($limit) {
+            $this->sql .= ' limit ?';
+            $this->bindValues[] = $limit;
+        }
+
+        if ($offset) {
+            $this->sql .= ' offset ?';
+            $this->bindValues[] = $offset;
+        }
 
         return $this->find();
     }

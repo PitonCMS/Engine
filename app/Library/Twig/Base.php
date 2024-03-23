@@ -148,6 +148,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getCollectionPages', [$this, 'getCollectionPages']),
             new TwigFunction('getCollectionPagesWithPagination', [$this, 'getCollectionPagesWithPagination']),
             new TwigFunction('getPublishedRankedCollectionPages', [$this, 'getPublishedRankedCollectionPages']),
+            new TwigFunction('getPublishedRankedCollectionPagesWithPagination', [$this, 'getPublishedRankedCollectionPagesWithPagination']),
             new TwigFunction('getGallery', [$this, 'getGallery']),
             new TwigFunction('getNavigator', [$this, 'getNavigator']),
             new TwigFunction('getNavigationLink', [$this, 'getNavigationLink']),
@@ -578,19 +579,70 @@ class Base extends AbstractExtension implements GlobalsInterface
      *    ]
      *
      * @param  string  $rankMethod
-     * @param  int     $limit, default 10
+     * @param  int     $limit
      * @param  array   $filter
      * @return array|null
      */
     public function getPublishedRankedCollectionPages(
         string $rankMethod,
-        ?int $limit = 10,
-        ?array $filter = []
+        int $limit = null,
+        array $filter = []
     ): ?array {
         // Get dependencies
         $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
 
-        return $pageMapper->findPublishedRankedCollectionPages($rankMethod, $limit, $filter);
+        // Use provided limit, or pagination config default for limit
+        if ($limit) {
+            $pagination->setConfig(['resultsPerPage' => $limit]);
+        }
+
+        return $pageMapper->findPublishedRankedCollectionPages($rankMethod, $filter, $pagination->getLimit());
+    }
+
+    /**
+     * Get Published Ranked Collection Pages With Pagination
+     *
+     * Same as getPublishedRankedCollectionPages() but with Pagination loaded
+     * Finds sorted multi collection published content, in a ranked order, with a limit.
+     * Rank Methods:
+     * - 'recent'  : Published date descending
+     * - 'popular' : View count descending
+     * - 'random'  : Random selection
+     *
+     * Argument 3 is an optional associative array with either an include key and/or an exclude key
+     * with a comma separated string of collection slugs to include or exclude. If a collection slug is listed in both include and exclude
+     * then exclude prevails. The $filter structure is:
+     *    [
+     *      'include' => 'slug1,slug2,slug3',
+     *      'exclude' => 'slug4,slug5,slug6'
+     *    ]
+     *
+     * @param  string  $rankMethod
+     * @param  int     $limit
+     * @param  array   $filter
+     * @return array|null
+     */
+    public function getPublishedRankedCollectionPagesWithPagination(
+        string $rankMethod,
+        int $limit = null,
+        array $filter = []
+    ): ?array {
+        // Get dependencies
+        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pagination = $this->getPagination();
+
+        // Use provided limit, or pagination config default for limit
+        if ($limit) {
+            $pagination->setConfig(['resultsPerPage' => $limit]);
+        }
+
+        $results = $pageMapper->findPublishedRankedCollectionPages($rankMethod, $filter, $pagination->getLimit(), $pagination->getOffset());
+
+        // Complete pagination setup
+        $pagination->setTotalResultsFound($pageMapper->foundRows() ?? 0);
+
+        return $results;
     }
 
     /**
