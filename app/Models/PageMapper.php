@@ -418,7 +418,7 @@ select SQL_CALC_FOUND_ROWS
     u.first_name,
     u.last_name,
     concat(u.first_name, ' ', u.last_name) author,
-    pe.content first_element_content,
+    pe.excerpt first_element_content,
     m.id media_id,
     m.filename media_filename,
     m.width media_width,
