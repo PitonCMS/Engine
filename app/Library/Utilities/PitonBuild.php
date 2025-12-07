@@ -33,8 +33,8 @@ class PitonBuild
         static::updateApacheHost();
         static::copyConfig();
 
-        static::printOutput('> To build the Docker image, from the root of this project run \'docker-compose build\'.', 'info');
-        static::printOutput('> To start Docker run \'docker-compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
+        static::printOutput('> To build the Docker image, from the root of this project run \'docker compose build\'.', 'info');
+        static::printOutput('> To start Docker run \'docker compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
     }
 
     /**
@@ -165,7 +165,7 @@ class PitonBuild
 
             file_put_contents('docker-compose.yml', $lines);
         } else {
-            static::printOutput("Unable to read docker-compose.yml. Update manually to use docker-compose.", "error");
+            static::printOutput("Unable to read docker-compose.yml. Update manually to use docker compose.", "error");
         }
     }
 
@@ -196,7 +196,7 @@ class PitonBuild
 
             file_put_contents('docker/web/apache-host.conf', $lines);
         } else {
-            static::printOutput("Unable to read docker/web/apache-host.conf. Update manually to use docker-compose.", "error");
+            static::printOutput("Unable to read docker/web/apache-host.conf. Update manually to use docker compose.", "error");
         }
     }
 
