@@ -1,0 +1,2 @@
+# Do not export with project build
+package.json export-ignore
