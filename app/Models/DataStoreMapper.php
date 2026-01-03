@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -21,18 +21,19 @@ use Piton\ORM\DataMapperAbstract;
  */
 class DataStoreMapper extends DataMapperAbstract
 {
-    protected $inCategories = "('site','contact','social','piton')";
-    protected $table = 'data_store';
-    protected $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
+    protected string $inCategories = "('site','contact','social','piton')";
+    protected string $table = 'data_store';
+    protected array $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\DataStore';
 
     /**
      * Find Settings
      *
      * Find all settings, or a category of settings
-     * @param  $category site|contact|social|piton
+     * @param  string|array|null $category site|contact|social|piton
      * @return array|null
      */
-    public function findSiteSettings(string $category = null): ?array
+    public function findSiteSettings(?string $category = null): ?array
     {
         $this->makeSelect();
         if (null === $category) {
@@ -127,7 +128,7 @@ SQL;
         $alerts[] = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message]
+            'message' => (is_array($message)) ? $message : [$message],
         ];
 
         // Save alert messages

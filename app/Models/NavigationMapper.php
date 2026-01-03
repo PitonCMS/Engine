@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -19,8 +19,9 @@ use Piton\ORM\DataMapperAbstract;
  */
 class NavigationMapper extends DataMapperAbstract
 {
-    protected $table = 'navigation';
-    protected $modifiableColumns = ['navigator','parent_id','sort','page_id', 'collection_id', 'title', 'url'];
+    protected string $table = 'navigation';
+    protected array $modifiableColumns = ['navigator','parent_id','sort','page_id', 'collection_id', 'title', 'url'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\Navigation';
 
     /**
      * Find Navigation Structure
@@ -28,11 +29,11 @@ class NavigationMapper extends DataMapperAbstract
      * Selects all nav rows for this navigator, and returns in a flat array
      * Note: Similar to findNavigation but does not include all matching collection detail pages. Use to manage navigator.
      * @param string $navigator Navigator name
-     * @return array|null
+     * @return ?array
      */
     public function findNavigationStructure(string $navigator): ?array
     {
-        $this->sql =<<<SQL
+        $this->sql = <<<SQL
 select
     n.navigator,
     n.id,
@@ -46,7 +47,7 @@ select
     p.id page_id,
     p.title page_title,
     p.published_date,
-    p.page_slug page_slug
+    p.page_slug
 from navigation n
 left join page p on n.page_id = p.id
 left join collection c on n.collection_id = c.id
@@ -65,11 +66,11 @@ SQL;
      * Selects all nav rows for this navigator including all matching collection detail pages.
      * Note: Similar to findNavigationStructure but includes all matching collection pages. Use to display navigator.
      * @param string $navigator Navigator name
-     * @return array|null
+     * @return ?array
      */
     public function findNavigation(string $navigator): ?array
     {
-        $this->sql =<<<SQL
+        $this->sql = <<<SQL
     select
         n.navigator,
         n.id,
@@ -101,13 +102,13 @@ SQL;
      * Build Navigation
      *
      * Takes flat array of navigation links and builds multi-dimensional array of navigation items nested by parent ID
-     * @param array|null $navList      Array of navigation links
-     * @param string     $currentRoute Page slug
-     * @param bool       $isPublished  Flag to only return published pages
-     * @param int|null   $parentId
-     * @return array|null
+     * @param ?array $navList      Array of navigation links
+     * @param ?string     $currentRoute Page slug
+     * @param ?bool       $isPublished  Flag to only return published pages
+     * @param ?int   $parentId
+     * @return ?array
      */
-    public function buildNavigation(?array $navList, string $currentRoute = null, bool $isPublished = true, int $parentId = null): ?array
+    public function buildNavigation(?array $navList, ?string $currentRoute = null, ?bool $isPublished = true, ?int $parentId = null): ?array
     {
         if (empty($navList)) {
             return null;
@@ -155,7 +156,7 @@ SQL;
     public function deleteByPageId(int $pageId): bool
     {
         $this->sql = 'delete from `navigation` where `page_id` = ?;';
-        $this->bindValues[] =  $pageId;
+        $this->bindValues[] = $pageId;
 
         return $this->execute();
     }

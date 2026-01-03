@@ -4,71 +4,73 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
 declare(strict_types=1);
 
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-use Piton\Controllers\AdminController;
-use Piton\Controllers\AdminUserController;
-use Piton\Controllers\AdminPageController;
-use Piton\Controllers\AdminNavigationController;
-use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminAccessController;
+use Piton\Controllers\AdminController;
 use Piton\Controllers\AdminMediaController;
 use Piton\Controllers\AdminMessageController;
+use Piton\Controllers\AdminNavigationController;
+use Piton\Controllers\AdminPageController;
+use Piton\Controllers\AdminSettingController;
+use Piton\Controllers\AdminUserController;
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Routing\RouteCollectorProxy;
 
 //
 // Private secured routes
 //
-$app->group('/admin', function () {
+$app->group('/admin', function (RouteCollectorProxy $app) {
 
     // Admin home
-    $this->get('/home', function ($args) {
+    $app->get('/home', function ($args) {
         return (new AdminController($this))->home();
     })->setName('adminHome');
 
-    // Page route
-    $this->group('/page', function () {
+    // Page route group
+    $app->group('/page', function (RouteCollectorProxy $app) {
         // XHR: Get page list asynchronously
-        $this->get('/get', function ($args) {
+        $app->get('/get', function ($args) {
             return (new AdminPageController($this))->getPages();
         })->setName('adminPageGet');
 
         // Edit or add new page. Must provide ID or page layout argument
-        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
+        $app->get('/edit[/[{id:[0-9]+}]]', function ($args) {
             $args['type'] = 'page';
+
             return (new AdminPageController($this))->editPage($args);
         })->setName('adminPageEdit');
 
         // Save Page for Update or Insert
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminPageController($this))->savePage();
         })->add('csrfGuardHandler')->setName('adminPageSave');
 
         // Delete page
-        $this->post('/delete', function ($args) {
+        $app->post('/delete', function ($args) {
             return (new AdminPageController($this))->deletePage($args);
         })->add('csrfGuardHandler')->setName('adminPageDelete');
 
-        // Page elements
-        $this->group('/element', function () {
+        // Page elements group
+        $app->group('/element', function (RouteCollectorProxy $app) {
             // XHR: Get element
-            $this->get('/get', function ($args) {
+            $app->get('/get', function ($args) {
                 return (new AdminPageController($this))->getNewElement();
             })->setName('adminPageElementGet');
 
             // XHR: Delete ELement
-            $this->post('/delete', function ($args) {
+            $app->post('/delete', function ($args) {
                 return (new AdminPageController($this))->deleteElement();
             })->add('csrfGuardHandler')->setName('adminPageElementDelete');
         });
 
         // Show All Pages
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminPageController($this))->showPages();
         })->setName('adminPage');
 
@@ -76,208 +78,208 @@ $app->group('/admin', function () {
     });
     // End page routes
 
-    // Collection group routes
-    $this->group('/collection', function () {
-        // Edit group collection
-        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
+    // Collection route group
+    $app->group('/collection', function (RouteCollectorProxy $app) {
+        // Edit collection
+        $app->get('/edit[/[{id:[0-9]+}]]', function ($args) {
             return (new AdminPageController($this))->editCollection($args);
         })->setName('adminCollectionEdit');
 
-        // Save collection group
-        $this->post('/save', function ($args) {
+        // Save collection
+        $app->post('/save', function ($args) {
             return (new AdminPageController($this))->saveCollection();
         })->add('csrfGuardHandler')->setName('adminCollectionSave');
 
-        // Delete collection group
-        $this->post('/delete', function ($args) {
+        // Delete collection
+        $app->post('/delete', function ($args) {
             return (new AdminPageController($this))->deleteCollection();
         })->add('csrfGuardHandler')->setName('adminCollectionDelete');
 
-        // Show all collection groups, filtered optionally by collection
-        $this->get('[/]', function ($args) {
+        // Show all collection, filtered optionally by collection
+        $app->get('[/]', function ($args) {
             return (new AdminPageController($this))->showCollectionGroups();
         })->setName('adminCollection');
     });
     // End collection
 
-    // Navigation route
-    $this->group('/navigation', function () {
+    // Navigation route group
+    $app->group('/navigation', function (RouteCollectorProxy $app) {
         // Show Navigators
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminNavigationController($this))->showNavigators();
         })->setName('adminNavigation');
 
         // Save Navigation
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminNavigationController($this))->saveNavigation();
         })->add('csrfGuardHandler')->setName('adminNavigationSave');
 
         // Edit Navigator
-        $this->get('/edit/{navigator:[a-zA-Z0-9-]+}', function ($args) {
+        $app->get('/edit/{navigator:[a-zA-Z0-9-]+}', function ($args) {
             return (new AdminNavigationController($this))->editNavigator($args);
         })->setName('adminNavigationEdit');
 
         // XHR: Delete navigation
-        $this->post('/delete', function ($args) {
+        $app->post('/delete', function ($args) {
             return (new AdminNavigationController($this))->deleteNavigator();
         })->add('csrfGuardHandler')->setName('adminNavigationDelete');
     });
     // End Navigation
 
-    // Media
-    $this->group('/media', function () {
+    // Media route group
+    $app->group('/media', function (RouteCollectorProxy $app) {
         // XHR: Get media asynchronously
-        $this->get('/get/[{context:edit|static}]', function ($args) {
+        $app->get('/get/[{context:edit|static}]', function ($args) {
             return (new AdminMediaController($this))->getMedia($args);
         })->setName('adminMediaGet');
 
         // XHR: Get media controls asynchronously
-        $this->get('/getmediacontrols', function ($args) {
+        $app->get('/getmediacontrols', function ($args) {
             return (new AdminMediaController($this))->getMediaSearchControls();
         })->setName('adminMediaControlsGet');
 
         // XHR: Get media file upload form asynchronously
-        $this->get('/uploadform', function ($args) {
+        $app->get('/uploadform', function ($args) {
             return (new AdminMediaController($this))->getMediaUploadForm();
         })->setName('adminMediaUploadFormGet');
 
         // XHR: File upload
-        $this->post('/upload', function ($args) {
+        $app->post('/upload', function ($args) {
             return (new AdminMediaController($this))->uploadMedia();
         })->add('csrfGuardHandler')->setName('adminMediaUploadFile');
 
         // XHR: Media save
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminMediaController($this))->saveMedia();
         })->add('csrfGuardHandler')->setName('adminMediaSave');
 
         // XHR: Media delete
-        $this->post('/delete', function ($args) {
+        $app->post('/delete', function ($args) {
             return (new AdminMediaController($this))->deleteMedia();
         })->add('csrfGuardHandler')->setName('adminMediaDelete');
 
-        // Media categories
-        $this->group('/category', function () {
-            $this->get('/edit', function ($args) {
+        // Media route group
+        $app->group('/category', function (RouteCollectorProxy $app) {
+            $app->get('/edit', function ($args) {
                 return (new AdminMediaController($this))->editMediaCategories();
             })->setName('adminMediaCategoryEdit');
 
             // Save media category
-            $this->post('/save', function ($args) {
+            $app->post('/save', function ($args) {
                 return (new AdminMediaController($this))->saveMediaCategories();
             })->add('csrfGuardHandler')->setName('adminMediaCategorySave');
 
             // XHR Delete media category
-            $this->post('/delete', function ($args) {
+            $app->post('/delete', function ($args) {
                 return (new AdminMediaController($this))->deleteMediaCategory();
             })->add('csrfGuardHandler')->setName('adminMediaCategoryDelete');
 
             // XHR Save Category Sort Order
-            $this->post('/saveorder', function ($args) {
+            $app->post('/saveorder', function ($args) {
                 return (new AdminMediaController($this))->saveCategoryMediaOrder();
             })->add('csrfGuardHandler')->setName('adminMediaCategorySaveOrder');
         });
 
         // Show all media
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminMediaController($this))->showMedia();
         })->setName('adminMedia');
     });
     // End media
 
-    // Messages
-    $this->group('/message', function () {
+    // Messages route group
+    $app->group('/message', function (RouteCollectorProxy $app) {
         // Show message page
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminMessageController($this))->showMessages();
         })->setName('adminMessage');
 
         // XHR: Get filtered messages
-        $this->get('/get', function ($args) {
+        $app->get('/get', function ($args) {
             return (new AdminMessageController($this))->getMessages();
         })->setName('adminMessageGet');
 
         // XHR: Get new message count
-        $this->get('/getnewmessagecount', function ($args) {
+        $app->get('/getnewmessagecount', function ($args) {
             return (new AdminMessageController($this))->getNewMessageCount();
         })->setName('adminMessageCountGet');
 
         // XHR: Save message status changes, Archvie, Read, and Delete
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminMessageController($this))->updateStatus();
         })->add('csrfGuardHandler')->setName('adminMessageSave');
     });
     // End messages
 
-    // Settings
-    $this->group('/settings', function () {
+    // Settings route group
+    $app->group('/settings', function (RouteCollectorProxy $app) {
         // Show settings landing page
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminSettingController($this))->showSettings($args);
         })->setName('adminSetting');
 
         // Save settings
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminSettingController($this))->saveSettings();
         })->add('csrfGuardHandler')->setName('adminSettingSave');
 
         // Show sitemap submit page
-        $this->get('/sitemap', function ($args) {
+        $app->get('/sitemap', function ($args) {
             return (new AdminController($this))->sitemap();
         })->setName('adminSitemap');
 
         // Update sitemap
-        $this->post('/sitemap/update', function ($args) {
+        $app->post('/sitemap/update', function ($args) {
             return (new AdminController($this))->updateSitemap();
         })->add('csrfGuardHandler')->setName('adminSitemapUpdate');
 
         // Edit settings by category
-        $this->get('/{category:site|contact|social}/edit', function ($args) {
+        $app->get('/{category:site|contact|social}/edit', function ($args) {
             return (new AdminSettingController($this))->editSettings($args);
         })->setName('adminSettingEdit');
     });
     // End settings
 
-    // User routes
-    $this->group('/user', function () {
+    // User route group
+    $app->group('/user', function (RouteCollectorProxy $app) {
         // Show Users
-        $this->get('[/]', function ($args) {
+        $app->get('[/]', function ($args) {
             return (new AdminUserController($this))->showUsers();
         })->setName('adminUser');
 
         // Edit User
-        $this->get('/edit[/[{id:[0-9]+}]]', function ($args) {
+        $app->get('/edit[/[{id:[0-9]+}]]', function ($args) {
             return (new AdminUserController($this))->editUser($args);
         })->setName('adminUserEdit');
 
         // Save Users
-        $this->post('/save', function ($args) {
+        $app->post('/save', function ($args) {
             return (new AdminUserController($this))->saveUser();
         })->add('csrfGuardHandler')->setName('adminUserSave');
     });
     // End user routes
 
-    // Support content
-    $this->group('/support', function () {
+    // Support content route group
+    $app->group('/support', function (RouteCollectorProxy $app) {
         // About PitonCMS
-        $this->get('/about', function ($args) {
+        $app->get('/about', function ($args) {
             return (new AdminController($this))->aboutPiton($args);
         })->setName('adminSupportAbout');
 
         // Support index
-        $this->get('/{subject:client|designer}', function ($args) {
+        $app->get('/{subject:client|designer}', function ($args) {
             return (new AdminController($this))->showSupportIndex($args);
         })->setName('adminSupportIndex');
 
         // Support content page
-        $this->get('/{subject:client|designer}/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]', function ($args) {
+        $app->get('/{subject:client|designer}/{file:[a-zA-Z]+}[/{link:[a-zA-Z]+}]', function ($args) {
             return (new AdminController($this))->showSupportContent($args);
         })->setName('adminSupportContent');
     });
 
 
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
-    $this->get('[/]', function () {
+    $app->get('[/]', function () {
         return $this->response->withRedirect($this->router->pathFor('adminHome'));
     });
 })->add(function (Request $request, Response $response, callable $next) {
@@ -294,11 +296,11 @@ $app->group('/admin', function () {
     }
 
     // Otherwise run authentication
-    $security = $this->accessHandler;
+    $security = $this->container->get('accessHandler');
 
     if (!$security->isAuthenticated()) {
         // Failed authentication, redirect to login
-        return $response->withRedirect($this->router->pathFor('adminLoginForm'));
+        return $this->redirect($this->router->pathFor('adminLoginForm'));
     }
 
     // Next call
@@ -306,6 +308,7 @@ $app->group('/admin', function () {
 })->add(function (Request $request, Response $response, callable $next) {
     // Add http no-cache, no-store headers to prevent back button access to admin
     $response = $next($request, $response);
+
     return $response->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 });
 

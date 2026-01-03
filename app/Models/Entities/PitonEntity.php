@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -19,20 +19,42 @@ use Piton\ORM\DomainObject;
  */
 class PitonEntity extends DomainObject
 {
+    // Define common WHO properties that most tables have
+    protected ?int $created_by = null;
+    protected ?string $created_date = null;
+    protected ?int $updated_by = null;
+    protected ?string $updated_date = null;
+
+    /**
+     * Constructor
+     */
+    public function __construct(?array $row)
+    {
+        $this->created_by = isset($row['created_by']) ? (int) $row['created_by'] : null;
+        $this->created_date = isset($row['created_date']) ? $row['created_date'] : null;
+        $this->updated_by = isset($row['updated_by']) ? (int) $row['updated_by'] : null;
+        $this->updated_date = isset($row['updated_date']) ? $row['updated_date'] : null;
+
+        parent::__construct($row);
+    }
+
     /**
      * Get Object Property
      *
-     * The switch statement maps non-existent camelCase properties to real properties in database
+     * Returns class property. If there is no immediate match, then tries to convert camelCase $key to underscore to find a match
      * @param  string $key Property name to get
-     * @return mixed      Property value | null
+     * @return ?mixed Property value
      */
     public function __get($key)
     {
-        if ($this->getCamelCaseToUnderScores($key)) {
-            return $this->{$key};
+        $propertyValue = parent::__get($key);
+
+        if (!empty($propertyValue)) {
+            return $propertyValue;
         }
 
-        return parent::__get($key);
+        // Go to backup, and look for the key but using underscores
+        return $this->getCamelCaseToUnderScores($key);
     }
 
     /**
@@ -44,7 +66,8 @@ class PitonEntity extends DomainObject
      */
     public function __isset($key)
     {
-        return $this->getCamelCaseToUnderScores($key);
+        return true;
+        // return $this->getCamelCaseToUnderScores($key);
     }
 
     /**
@@ -53,20 +76,13 @@ class PitonEntity extends DomainObject
      * Converts camelCase property values to underscores and checks if property exists
      * If it does, then adds the camelCase property to this object with a pointer to the under score equivalent
      * @param string $key
-     * @return bool
+     * @return ?mixed
      */
-    private function getCamelCaseToUnderScores($key): bool
+    private function getCamelCaseToUnderScores($key)
     {
         // Split camelCase variables to underscores and see if there is a match to an existing property
-        $property = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+        $propertyKey = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
 
-        // Create object reference to actual property
-        if (property_exists($this, $property)) {
-            $this->{$key} = $this->{$property};
-
-            return true;
-        }
-
-        return false;
+        return parent::__get($propertyKey);
     }
 }

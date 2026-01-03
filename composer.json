@@ -22,7 +22,8 @@
         "tinify/tinify": "^1.5.2",
         "php-di/php-di": "^7.1",
         "slim/slim": "^4.15",
-        "slim/twig-view": "^3.4"
+        "slim/twig-view": "^3.4",
+        "slim/psr7": "^1.8"
         },
     "autoload": {
         "psr-4": {

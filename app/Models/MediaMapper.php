@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -19,8 +19,8 @@ use Piton\ORM\DataMapperAbstract;
  */
 class MediaMapper extends DataMapperAbstract
 {
-    protected $table = 'media';
-    protected $modifiableColumns = [
+    protected string $table = 'media';
+    protected array $modifiableColumns = [
         'filename',
         'width',
         'height',
@@ -29,25 +29,25 @@ class MediaMapper extends DataMapperAbstract
         'mime_type',
         'optimized',
     ];
-    protected $domainObjectClass = __NAMESPACE__ . '\Entities\Media';
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\Media';
 
     // Status codes for processing new images
-    protected $optimizedStatus = [
+    protected array $optimizedStatus = [
         'new' => 'new',
         'complete' => 'complete',
         'retry' => 'retry',
-        'exclude' => 'exclude'
+        'exclude' => 'exclude',
     ];
 
     /**
      * Find All Media
      *
      * Return all media records
-     * @param  int  $limit
-     * @param  int  $offset
+     * @param  ?int  $limit
+     * @param  ?int  $offset
      * @return array|null
      */
-    public function findAllMedia(int $limit = null, int $offset = null): ?array
+    public function findAllMedia(?int $limit = null, ?int $offset = null): ?array
     {
         $this->mediaSelectJoinCategory();
         $this->sql .= ' order by m.`created_date` desc';
@@ -69,12 +69,12 @@ class MediaMapper extends DataMapperAbstract
      * Find Media By Category ID
      *
      * Find media by category ID
-     * @param  int|null  $categoryId
-     * @param  int       $limit
-     * @param  int       $offset
+     * @param  ?int  $categoryId
+     * @param  ?int       $limit
+     * @param  ?int       $offset
      * @return array|null
      */
-    public function findMediaByCategoryId(?int $categoryId, int $limit = null, int $offset = null): ?array
+    public function findMediaByCategoryId(?int $categoryId, ?int $limit = null, ?int $offset = null): ?array
     {
         // If no category ID was provided just return
         if (null === $categoryId) {
@@ -119,13 +119,13 @@ SQL;
      *
      * Returns matching media records with all assigned categories
      * Category and Featured are the unique set (inclusive)
-     * @param  int|null     $categoryId
-     * @param  string|null  $featured Y|N
-     * @param  int          $limit
-     * @param  int          $offset
+     * @param  ?int     $categoryId
+     * @param  ?string  $featured Y|N
+     * @param  ?int     $limit
+     * @param  ?int     $offset
      * @return array|null
      */
-    public function findMediaByCategoryIdAndFeatured(?int $categoryId, ?string $featured, int $limit = null, int $offset = null): ?array
+    public function findMediaByCategoryIdAndFeatured(?int $categoryId, ?string $featured, ?int $limit = null, ?int $offset = null): ?array
     {
         // Build optional where clause
         $where = '';
@@ -184,11 +184,11 @@ SQL;
      * This query searches each of these fields for having all supplied terms:
      *  - media.caption
      * @param  string $terms  Search terms
-     * @param  int    $limit  Limit
-     * @param  int    $offset Offset
+     * @param  ?int    $limit  Limit
+     * @param  ?int    $offset Offset
      * @return array|null
      */
-    public function searchMedia(string $terms, int $limit = null, int $offset = null): ?array
+    public function searchMedia(string $terms, ?int $limit = null, ?int $offset = null): ?array
     {
         $where = ' and match(m.caption) against (? IN BOOLEAN MODE)';
         $this->bindValues[] = $terms;
@@ -214,10 +214,10 @@ SQL;
      *
      * Make select statement
      * Overrides and sets $this->sql.
-     * @param  string|null $where Optional where clause staring with "and..."
+     * @param  ?string $where Optional where clause staring with "and..."
      * @return void
      */
-    protected function mediaSelectJoinCategory(string $where = null): void
+    protected function mediaSelectJoinCategory(?string $where = null): void
     {
         $this->sql = <<<SQL
 select SQL_CALC_FOUND_ROWS

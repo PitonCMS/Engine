@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -20,15 +20,16 @@ use Piton\ORM\DataMapperAbstract;
  */
 class UserMapper extends DataMapperAbstract
 {
-    protected $table = 'user';
-    protected $modifiableColumns = ['first_name', 'last_name', 'email', 'role', 'active'];
+    protected string $table = 'user';
+    protected array $modifiableColumns = ['first_name', 'last_name', 'email', 'role', 'active'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\User';
 
     /**
      * Find All Users
      *
      * Sorts by active
      * @param void
-     * @return array|null
+     * @return ?array
      */
     public function findUsers(): ?array
     {
@@ -42,7 +43,7 @@ class UserMapper extends DataMapperAbstract
      * Find Active User by Email
      *
      * @param string $email
-     * @return array|null
+     * @return ?array
      */
     public function findActiveUserByEmail(string $email): ?PitonEntity
     {

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -19,8 +19,8 @@ use Piton\ORM\DataMapperAbstract;
  */
 class PageElementMapper extends DataMapperAbstract
 {
-    protected $table = 'page_element';
-    protected $modifiableColumns = [
+    protected string $table = 'page_element';
+    protected array $modifiableColumns = [
         'page_id',
         'block_key',
         'template',
@@ -31,15 +31,15 @@ class PageElementMapper extends DataMapperAbstract
         'collection_id',
         'gallery_id',
         'media_id',
-        'embedded'
+        'embedded',
     ];
-    protected $domainObjectClass = __NAMESPACE__ . '\Entities\PageElement';
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\PageElement';
 
     /**
      * Find Elements by Page ID
      *
      * @param int    $pageId Page ID
-     * @return array|null
+     * @return ?array
      */
     public function findElementsByPageId(int $pageId): ?array
     {

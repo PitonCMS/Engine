@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,17 +12,17 @@ declare(strict_types=1);
 
 namespace Piton\Models;
 
+use Exception;
 use Piton\Models\Entities\PitonEntity;
 use Piton\ORM\DataMapperAbstract;
-use Exception;
 
 /**
  * Piton Page Mapper
  */
 class PageMapper extends DataMapperAbstract
 {
-    protected $table = 'page';
-    protected $modifiableColumns = [
+    protected string $table = 'page';
+    protected array $modifiableColumns = [
         'collection_id',
         'page_slug',
         'template',
@@ -31,9 +31,9 @@ class PageMapper extends DataMapperAbstract
         'meta_description',
         'published_date',
         'media_id',
-        'view_count'
+        'view_count',
     ];
-    protected $domainObjectClass = __NAMESPACE__ . '\Entities\Page';
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\Page';
 
     /**
      * Find Page by ID
@@ -41,7 +41,7 @@ class PageMapper extends DataMapperAbstract
      * Override from parent class to allow use of table alias.
      * Find one table row using the primary key ID
      * @param  int   $id Primary key ID
-     * @return PitonEntity|null
+     * @return ?PitonEntity
      */
     public function findById(int $id): ?PitonEntity
     {
@@ -57,13 +57,13 @@ class PageMapper extends DataMapperAbstract
      * Find All Page Content
      *
      * Gets all pages and/or collection pages without elements
-     * @param  string $status 'draft'|'pending'|'published'|'all'
-     * @param  string $type   'all'|'pages'|{collection_slug}
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
+     * @param  ?string $status 'draft'|'pending'|'published'|'all'
+     * @param  ?string $type   'all'|'pages'|{collection_slug}
+     * @param  ?int  $limit
+     * @param  ?int  $offset
+     * @return ?array
      */
-    public function findContent(?string $status, ?string $type, int $limit = null, int $offset = null): ?array
+    public function findContent(?string $status, ?string $type, ?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect();
 
@@ -107,11 +107,11 @@ class PageMapper extends DataMapperAbstract
      *  - page_element.title, page_element.content
      *  - data_store.setting_value
      * @param  string $terms                Search terms
-     * @param  int    $limit                Limit
-     * @param  int    $offset               Offset
-     * @return array|null
+     * @param  ?int    $limit                Limit
+     * @param  ?int    $offset               Offset
+     * @return ?array
      */
-    public function searchPublishedContent(string $terms, int $limit = null, int $offset = null): ?array
+    public function searchPublishedContent(string $terms, ?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect();
         $this->sql .= <<<SQL
@@ -159,11 +159,11 @@ SQL;
      *  - page_element.title, page_element.content
      *  - data_store.setting_value
      * @param  string $terms                Search terms
-     * @param  int    $limit                Limit
-     * @param  int    $offset               Offset
-     * @return array|null
+     * @param  ?int    $limit                Limit
+     * @param  ?int    $offset               Offset
+     * @return ?array
      */
-    public function searchContent(string $terms, int $limit = null, int $offset = null): ?array
+    public function searchContent(string $terms, ?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect();
         $this->sql .= <<<SQL
@@ -204,11 +204,11 @@ SQL;
      * Find All Published Page Content
      *
      * Gets all pages and collection pages without elements
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
+     * @param  ?int  $limit
+     * @param  ?int  $offset
+     * @return ?array
      */
-    public function findPublishedContent(int $limit = null, int $offset = null): ?array
+    public function findPublishedContent(?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect();
         $this->sql .= " and p.published_date <= '{$this->today}'";
@@ -231,7 +231,7 @@ SQL;
      *
      * Finds published page by by slug
      * @param string  $pageSlug       Page slug
-     * @return PitonEntity|null
+     * @return ?PitonEntity
      */
     public function findPublishedPageBySlug(?string $pageSlug): ?PitonEntity
     {
@@ -246,9 +246,9 @@ SQL;
      * Find Published Collection Detail Page By Slug
      *
      * Finds published collection detail page
-     * @param string  $collectionSlug Collection slug
-     * @param string  $pageSlug       Page slug
-     * @return PitonEntity|null
+     * @param ?string  $collectionSlug Collection slug
+     * @param ?string  $pageSlug       Page slug
+     * @return ?PitonEntity
      */
     public function findPublishedCollectionPageBySlug(?string $collectionSlug, ?string $pageSlug): ?PitonEntity
     {
@@ -264,15 +264,15 @@ SQL;
      * Find Published Collection Pages by Collection ID
      *
      * Finds all related collection detail pages for summary
-     * @param  int  $collectionId
-     * @param  int  $limit
-     * @param  int  $offset
-     * @return array|null
+     * @param  ?int  $collectionId
+     * @param  ?int  $limit
+     * @param  ?int  $offset
+     * @return ?array
      */
     public function findPublishedCollectionPagesById(
         ?int $collectionId,
-        int $limit = null,
-        int $offset = null
+        ?int $limit = null,
+        ?int $offset = null
     ): ?array {
         $this->makeSelect();
         $this->sql .= " and c.id = ? and p.published_date <= '{$this->today}'";
@@ -312,15 +312,15 @@ SQL;
      *
      * @param  string  $rankMethod
      * @param  array   $filter
-     * @param  int     $limit
-     * @param  int     $offset
-     * @return array|null
+     * @param  ?int     $limit
+     * @param  ?int     $offset
+     * @return ?array
      */
     public function findPublishedRankedCollectionPages(
         string $rankMethod,
         array $filter = [],
-        int $limit = null,
-        int $offset = null
+        ?int $limit = null,
+        ?int $offset = null
     ): ?array {
         // $rankMethod accepts one of three ranking strings. If a non-allowed value is provided throw an exception
         if (!in_array($rankMethod, ['recent', 'popular', 'random'])) {
@@ -408,7 +408,7 @@ SQL;
      * @param bool $foundRows
      * @return void
      */
-    protected function makeSelect(bool $foundRows = false)
+    protected function makeSelect(bool $foundRows = false): void
     {
         $this->sql = <<<SQL
 select SQL_CALC_FOUND_ROWS

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -17,44 +17,65 @@ namespace Piton\Models\Entities;
  */
 class Page extends PitonEntity
 {
-    /**
-     * Block Elements Array
-     * @var array
-     */
-    public $blocks = [];
-
-    /**
-     * Page Settings Array
-     * @var array
-     */
-    public $settings = [];
-
-    /**
-     * Media Sub-Object
-     * @var PitonEntity
-     */
-    public $media;
+    // Class properties
+    protected ?int $collection_id = null;
+    protected ?string $collection_slug = null;
+    protected ?string $collection_title = null;
+    protected ?string $first_name = null;
+    protected ?string $last_name = null;
+    protected ?string $author = null;
+    protected ?string $first_element_content = null;
+    protected ?string $page_slug = null;
+    protected ?string $template = null;
+    protected ?string $title = null;
+    protected ?string $sub_title = null;
+    protected ?string $meta_description = null;
+    protected ?string $published_date = null;
+    protected ?int $view_count = null;
+    protected ?int $media_id = null;
+    protected ?string $media_filename;
+    protected ?string $media_width;
+    protected ?string $media_height;
+    protected ?string $media_feature;
+    protected ?string $media_caption;
+    protected ?Media $media = null;
+    protected array $blocks = [];
+    protected array $settings = [];
 
     /**
      * Constructor
      *
-     * Note: The class properties are set by PDO::FETCH_CLASS *before* the constructor is called.
+     * @param ?array $row Data array from query
      */
-    public function __construct()
+    public function __construct(?array $row)
     {
-        // This checks if a media file was joined in the query, and then builds a media sub-object.
-        // Media constructor sets additional calculated properties based on the image.
+        // Assign properties
+        $this->collection_id = isset($row['collection_id']) ? (int) $row['collection_id'] : null;
+        $this->collection_slug = isset($row['collection_slug']) ? $row['collection_slug'] : null;
+        $this->collection_title = isset($row['collection_title']) ? $row['collection_title'] : null;
+        $this->first_name = isset($row['first_name']) ? $row['first_name'] : null;
+        $this->last_name = isset($row['last_name']) ? $row['last_name'] : null;
+        $this->author = isset($row['author']) ? $row['author'] : null;
+        $this->first_element_content = isset($row['first_element_content']) ? $row['first_element_content'] : null;
+        $this->page_slug = isset($row['page_slug']) ? $row['page_slug'] : null;
+        $this->template = isset($row['template']) ? $row['template'] : null;
+        $this->title = isset($row['title']) ? $row['title'] : null;
+        $this->sub_title = isset($row['sub_title']) ? $row['sub_title'] : null;
+        $this->meta_description = isset($row['meta_description']) ? $row['meta_description'] : null;
+        $this->published_date = isset($row['published_date']) ? $row['published_date'] : null;
+        $this->view_count = isset($row['view_count']) ? (int) $row['view_count'] : null;
+
+        // Test if this includes a media reference, and create new Media object and assign as sub-object
         if (isset($this->media_filename)) {
-            // Create new Media object and assign as sub-object
-            $media = new Media();
-            $media->id = $this->media_id;
-            $media->filename = $this->media_filename;
-            $media->width = $this->media_width;
-            $media->height = $this->media_height;
-            $media->feature = $this->media_feature;
-            $media->caption = $this->media_caption;
-            $media->__construct();
-            $this->media = $media;
+            $mediaData = [];
+            $mediaData['id'] = $this->media_id;
+            $mediaData['filename'] = $this->media_filename;
+            $mediaData['width'] = $this->media_width;
+            $mediaData['height'] = $this->media_height;
+            $mediaData['feature'] = $this->media_feature;
+            $mediaData['caption'] = $this->media_caption;
+
+            $this->media = new Media($mediaData);
         }
 
         // Remove media properties from page element object

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -16,6 +16,19 @@ declare(strict_types=1);
  * Override any container entry in config/dependencies.php
  */
 
+use Piton\Library\Config;
+use Psr\Container\ContainerInterface;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
+use Twig\Extension\DebugExtension;
+
+/**
+ * Config Settings Value Object
+ */
+$container->set('settings', function (ContainerInterface $c) use ($config) {
+    return new Config($config);
+});
+
 /**
  * Twig HTML Templates
  *
@@ -26,14 +39,14 @@ declare(strict_types=1);
  * - Custom date format from site settings
  * @return Slim\Views\Twig
  */
-$container['view'] = function ($c) {
+$container->set('view', function (ContainerInterface $c) use ($app) {
     $settings = $c->get('settings');
 
     // Array of directories for templates
     $templatePaths[] = ROOT_DIR . 'structure/templates/';
     $templatePaths['admin'] = ROOT_DIR . 'vendor/pitoncms/engine/templates/';
 
-    $view = new Slim\Views\Twig($templatePaths, [
+    $view = Twig::create($templatePaths, [
         'cache' => ROOT_DIR . 'cache/twig',
         'debug' => !$settings['environment']['production'],
         'autoescape' => false,
@@ -47,11 +60,14 @@ $container['view'] = function ($c) {
 
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {
-        $view->addExtension(new Twig\Extension\DebugExtension());
+        $view->addExtension(new DebugExtension());
     }
 
+    // Add to $app per Slim 4
+    $app->add(TwigMiddleware::create($app, $view));
+
     return $view;
-};
+});
 
 /**
  * Monolog PSR3 Logger
@@ -68,20 +84,20 @@ $container['view'] = function ($c) {
  *  - EMERGENCY - emergency events
  * @return Monolog\Logger
  */
-$container['logger'] = function ($c) {
+$container->set('logger', function (ContainerInterface $c) {
     $level = ($c->get('settings')['environment']['production']) ? Monolog\Logger::ERROR : Monolog\Logger::DEBUG;
     $logger = new Monolog\Logger('app');
     $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_DIR . 'logs/' . date('Y-m-d') . '.log', $level));
 
     return $logger;
-};
+});
 
 /**
  * Database Connection
  *
  * @return PDO
  */
-$container['database'] = function ($c) {
+$container->set('database', function (ContainerInterface $c) {
     $dbConfig = $c->get('settings')['database'];
 
     // Extra database options
@@ -94,25 +110,25 @@ $container['database'] = function ($c) {
 
     // Return connection
     return new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
-};
+});
 
 /**
  * Error Exception Handler
  *
  * Runtime errors and exceptions are sent to this handler to log and display message.
  */
-$container['errorHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Error($c->get('settings')['displayErrorDetails'], $c['logger']);
-};
+$container->set('errorHandler', function (ContainerInterface $c) {
+    return new Piton\Library\Handlers\Error($c->get('settings')['displayErrorDetails'], $c->get('logger'));
+});
 
 /**
  * PHP Runtime Exception
  *
  * Directs all php7 runtime errors to the error exception handler
  */
-$container['phpErrorHandler'] = function ($c) {
-    return $c->errorHandler;
-};
+$container->set('phpErrorHandler', function (ContainerInterface $c) {
+    return $c->get('errorHandler');
+});
 
 /**
  * Session Handler
@@ -120,11 +136,12 @@ $container['phpErrorHandler'] = function ($c) {
  * Manages session state.
  * @return Piton\Library\Handlers\Session
  */
-$container['sessionHandler'] = function ($c) {
+$container->set('sessionHandler', function (ContainerInterface $c) {
     $session = $c->get('settings')['session'];
-    $session['log'] = $c->logger;
-    return new Piton\Library\Handlers\Session($c['database'], $session);
-};
+    $session['log'] = $c->get('logger');
+
+    return new Piton\Library\Handlers\Session($c->get('database'), $session);
+});
 
 /**
  * Access Handler
@@ -132,20 +149,9 @@ $container['sessionHandler'] = function ($c) {
  * Handler for user access control
  * @return Piton\Library\Handlers\Access
  */
-$container['accessHandler'] = function ($c) {
+$container->set('accessHandler', function (ContainerInterface $c) {
     return new Piton\Library\Handlers\Access($c->get('sessionHandler'));
-};
-
-/**
- * Route Strategy Handler
- *
- * PitonCMS route strategy handler for Slim
- * @link https://www.slimframework.com/docs/v3/objects/router.html#route-strategies
- * @return Piton\Library\Handlers\RouteArgumentStrategy
- */
-$container['foundHandler'] = function ($c) {
-    return new Piton\Library\Handlers\RouteArgumentStrategy();
-};
+});
 
 /**
  * Not Found (404)
@@ -153,22 +159,24 @@ $container['foundHandler'] = function ($c) {
  * Override the default Slim Not Found handler
  * @return Piton\Library\Handlers\NotFound
  */
-$container['notFoundHandler'] = function ($c) {
+$container->set('notFoundHandler', function (ContainerInterface $c) {
+    die('TODO: Dependencies notFoundHandler');
+
     return new Piton\Library\Handlers\NotFound($c->get('view'), $c->get('logger'));
-};
+});
 
 /**
  * Email Handler
  *
  * @return Piton\Library\Handlers\Email
  */
-$container['emailHandler'] = function ($c) {
+$container->set('emailHandler', function (ContainerInterface $c) {
     return new Piton\Library\Handlers\Email(
         new PHPMailer\PHPMailer\PHPMailer(true),
         $c->get('logger'),
         $c->get('settings')
     );
-};
+});
 
 /**
  * Data Mapper Closure
@@ -177,7 +185,7 @@ $container['emailHandler'] = function ($c) {
  * Returns closure to request DB table data mapper object
  * @return closure
  */
-$container['dataMapper'] = function ($c) {
+$container->set('dataMapper', function (ContainerInterface $c) {
     /**
      * Data Mapper
      *
@@ -187,17 +195,20 @@ $container['dataMapper'] = function ($c) {
      * @return object            Data mapper ORM
      */
     return function (string $mapper, string $namepace = 'Piton\\Models\\') use ($c) {
-        // Load session user ID to set update column, and provide PSR3 logger
-        $session = $c->sessionHandler;
-        $options['sessionUserId'] = (int) $session->getData('user_id') ?? 0;
-        $options['logger'] = $c['logger'];
-        $options['defaultDomainObjectClass'] = 'Piton\\Models\\Entities\\PitonEntity';
-
-        // Return instantiated mapper
+        // Construct fully qualified domain name class to instantiate
         $fqn = $namepace . $mapper;
-        return new $fqn($c['database'], $options);
+
+        // Load session user ID to set update column, and provide PSR3 logger
+        $session = $c->get('sessionHandler');
+        $options['sessionUserId'] = (int) $session->getData('user_id') ?? 0;
+
+        // Pass in logger and default value object class.
+        $options['logger'] = $c->get('logger');
+
+        // Return instantiated mapper with DB connection and options
+        return new $fqn($c->get('database'), $options);
     };
-};
+});
 
 /**
  * Markdown Parser
@@ -205,27 +216,27 @@ $container['dataMapper'] = function ($c) {
  * Markdown parser
  * @return Piton\Library\Utilities\MDParse
  */
-$container['markdownParser'] = function ($c) {
+$container->set('markdownParser', function (ContainerInterface $c) {
     return new Piton\Library\Utilities\MDParse();
-};
+});
 
 /**
  * JSON Definition Handler
  *
  * @return Piton\Library\Handlers\Definition
  */
-$container['jsonDefinitionHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Definition($c->jsonValidator);
-};
+$container->set('jsonDefinitionHandler', function (ContainerInterface $c) {
+    return new Piton\Library\Handlers\Definition($c->get('jsonValidator'));
+});
 
 /**
  * JSON Validation
  *
  * @return JsonSchema\Validator
  */
-$container['jsonValidator'] = function ($c) {
+$container->set('jsonValidator', function (ContainerInterface $c) {
     return new JsonSchema\Validator();
-};
+});
 
 /**
  * Misc Utility Toolbox
@@ -233,9 +244,9 @@ $container['jsonValidator'] = function ($c) {
  * Piton toolbox has various utility methods
  * @return Piton\Library\Utilities\Toolbox
  */
-$container['toolbox'] = function ($c) {
+$container->set('toolbox', function (ContainerInterface $c) {
     return new Piton\Library\Utilities\Toolbox();
-};
+});
 
 /**
  * CSRF Guard Handler
@@ -243,9 +254,9 @@ $container['toolbox'] = function ($c) {
  * Checks submitted CSRF token on POST requests
  * @return Piton\Library\Handlers\CsrfGuard
  */
-$container['csrfGuardHandler'] = function ($c) {
-    return new Piton\Library\Handlers\CsrfGuard($c->sessionHandler, $c->logger);
-};
+$container->set('csrfGuardHandler', function (ContainerInterface $c) {
+    return new Piton\Library\Handlers\CsrfGuard($c->get('sessionHandler'), $c->get('logger'));
+});
 
 /**
  * Sitemap Handler
@@ -253,9 +264,9 @@ $container['csrfGuardHandler'] = function ($c) {
  * Creates XML sitemap based on saved pages
  * @return Piton\Library\Handlers\Sitemap
  */
-$container['sitemapHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Sitemap($c['logger']);
-};
+$container->set('sitemapHandler', function (ContainerInterface $c) {
+    return new Piton\Library\Handlers\Sitemap($c->get('logger'));
+});
 
 /**
  * File Upload Handler
@@ -264,9 +275,10 @@ $container['sitemapHandler'] = function ($c) {
  * Renames uploaded files and places in the directory defined in the mediaPathHandler
  * @return Piton\Library\Handlers\FileUpload
  */
-$container['fileUploadHandler'] = function ($c) {
-    return new Piton\Library\Handlers\FileUpload($c['request']->getUploadedFiles(), $c['mediaPathHandler'], $c['filenameGenerator']);
-};
+$container->set('fileUploadHandler', function (ContainerInterface $c) {
+    // TODO Slim 4, request has been removed from container, need to inject?
+    return new Piton\Library\Handlers\FileUpload($c->get('request')->getUploadedFiles(), $c->get('mediaPathHandler'), $c->get('filenameGenerator'));
+});
 
 /**
  * Media File Path Pattern Handler
@@ -274,14 +286,14 @@ $container['fileUploadHandler'] = function ($c) {
  * Define upload media path under public/media/
  * @return string
  */
-$container['mediaPathHandler'] = function ($c) {
+$container->set('mediaPathHandler', function (ContainerInterface $c) {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = mb_substr($directory, 0, 2);
 
         return "/media/$dir/$directory/";
     };
-};
+});
 
 /**
  * Media Handler
@@ -289,9 +301,9 @@ $container['mediaPathHandler'] = function ($c) {
  * Resizes and optimizes media using a TinyJPG key
  * @return Piton\Library\Handlers\Media
  */
-$container['mediaHandler'] = function ($c) {
-    return new Piton\Library\Handlers\Media($c['mediaPathHandler'], $c['mediaSizes'], $c['settings']['site']['tinifyApiKey']);
-};
+$container->set('mediaHandler', function (ContainerInterface $c) {
+    return new Piton\Library\Handlers\Media($c->get('mediaPathHandler'), $c->get('mediaSizes'), $c->get('settings')['site']['tinifyApiKey']);
+});
 
 /**
  * Media Image Size List
@@ -300,9 +312,9 @@ $container['mediaHandler'] = function ($c) {
  * Used as validation and to construct alternate source sets.
  * @return array
  */
-$container['mediaSizeList'] = function ($c) {
+$container->set('mediaSizeList', function (ContainerInterface $c) {
     return ['xlarge', 'large', 'small', 'thumb'];
-};
+});
 
 /**
  * Media Size Constructor
@@ -311,17 +323,18 @@ $container['mediaSizeList'] = function ($c) {
  * desired filename with size.
  * @return string
  */
-$container['mediaSizes'] = function ($c) {
+$container->set('mediaSizes', function (ContainerInterface $c) {
     return function ($filename, $size = '') use ($c) {
-        if (in_array($size, $c->mediaSizeList)) {
+        if (in_array($size, $c->get('mediaSizeList'))) {
             $parts = pathinfo($filename);
+
             return "{$parts['filename']}-$size.{$parts['extension']}";
         }
 
         // If not a listed size, just return the filename as-is
         return $filename;
     };
-};
+});
 
 /**
  * Media Filename Generator
@@ -329,8 +342,8 @@ $container['mediaSizes'] = function ($c) {
  * Creates new filename for uploaded files
  * @return string
  */
-$container['filenameGenerator'] = function ($c) {
+$container->set('filenameGenerator', function (ContainerInterface $c) {
     return function () {
         return bin2hex(random_bytes(6));
     };
-};
+});
