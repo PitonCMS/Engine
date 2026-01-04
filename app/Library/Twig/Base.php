@@ -20,7 +20,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Uri;
-use Slim\Routing\RouteContext;
 use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -201,7 +200,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
-        $routeContext = RouteContext::fromRequest($request);
+        $router = $this->container->get('router');
 
         // The `pathfor('showPage', ['slug1' => 'home'])` route is an alias for `pathFor('home')`
         if ($name === 'showPage' && isset($data['slug1']) && $data['slug1'] === 'home') {
@@ -209,7 +208,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             unset($data['slug1']);
         }
 
-        return $routeContext->urlFor($name, $data, $queryParams);
+        return $router->urlFor($name, $data, $queryParams);
     }
 
     /**

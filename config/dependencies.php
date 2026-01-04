@@ -279,7 +279,6 @@ $container->set('sitemapHandler', function (ContainerInterface $c) {
  * @return Piton\Library\Handlers\FileUpload
  */
 $container->set('fileUploadHandler', function (ContainerInterface $c) {
-    // TODO Slim 4, request has been removed from container, need to inject?
     return new Piton\Library\Handlers\FileUpload($c->get('request')->getUploadedFiles(), $c->get('mediaPathHandler'), $c->get('filenameGenerator'));
 });
 
