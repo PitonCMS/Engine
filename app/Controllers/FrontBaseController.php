@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Piton\Models\Entities\PitonEntity;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Front End Base Controller
@@ -28,7 +28,7 @@ class FrontBaseController extends BaseController
      * Expects a 'key' and 'value' as values
      * @var array
      */
-    protected $pageDataExtension = [];
+    protected array $pageDataExtension = [];
 
     /**
      * Render Front End Template

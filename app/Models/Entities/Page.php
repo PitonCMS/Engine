@@ -33,11 +33,11 @@ class Page extends PitonEntity
     protected ?string $published_date = null;
     protected ?int $view_count = null;
     protected ?int $media_id = null;
-    protected ?string $media_filename;
-    protected ?string $media_width;
-    protected ?string $media_height;
-    protected ?string $media_feature;
-    protected ?string $media_caption;
+    protected ?string $media_filename = null;
+    protected ?string $media_width = null;
+    protected ?string $media_height = null;
+    protected ?string $media_feature = null;
+    protected ?string $media_caption = null;
     protected ?Media $media = null;
     protected array $blocks = [];
     protected array $settings = [];
@@ -85,6 +85,8 @@ class Page extends PitonEntity
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
+
+        parent::__construct($row);
     }
 
     /**

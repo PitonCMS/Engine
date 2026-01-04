@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
 use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
 /**
@@ -32,7 +32,7 @@ class AdminNavigationController extends AdminBaseController
     public function showNavigators(): Response
     {
         // Get dependencies
-        $navigators = ($this->container->jsonDefinitionHandler)->getNavigation();
+        $navigators = ($this->container->get('jsonDefinitionHandler'))->getNavigation();
         $navigators = $navigators->navigators ?? null;
 
         return $this->render('navigation/navigation.html', ['navigators' => $navigators]);
@@ -47,11 +47,11 @@ class AdminNavigationController extends AdminBaseController
     public function editNavigator($args): Response
     {
         // Get dependencies
-        $navMapper = ($this->container->dataMapper)('NavigationMapper');
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $collectioMapper = ($this->container->dataMapper)('CollectionMapper');
+        $navMapper = ($this->container->get('dataMapper'))('NavigationMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
+        $collectioMapper = ($this->container->get('dataMapper'))('CollectionMapper');
 
-        if (null === $navivation = ($this->container->jsonDefinitionHandler)->getNavigation()) {
+        if (null === $navivation = ($this->container->get('jsonDefinitionHandler'))->getNavigation()) {
             throw new Exception("Invalid navigator definition");
         }
 
@@ -77,7 +77,7 @@ class AdminNavigationController extends AdminBaseController
     public function saveNavigation(): Response
     {
         // Get dependencies
-        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+        $navigationMapper = ($this->container->get('dataMapper'))('NavigationMapper');
 
         // Get POST data
         $navigation = $this->request->getParsedBodyParam('nav');
@@ -133,11 +133,11 @@ class AdminNavigationController extends AdminBaseController
      * @return Response
      * @uses POST
      */
-    public function deleteNavigator()
+    public function deleteNavigator(): Response
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
-            $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+            $navigationMapper = ($this->container->get('dataMapper'))('NavigationMapper');
             $navIds = $this->request->getParsedBodyParam("navIds");
             $navigationIds = json_decode($navIds);
             $status = "success";
@@ -149,6 +149,7 @@ class AdminNavigationController extends AdminBaseController
                     // Check that we have an int or skip
                     if (!is_int($nav)) {
                         $text .= "Unable to delete: $nav\n";
+
                         continue;
                     }
                     $navItem = $navigationMapper->make();

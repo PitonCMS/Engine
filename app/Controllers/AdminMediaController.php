@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Slim\Http\Response;
 use Throwable;
-use Exception;
 
 /**
  * Piton Media Controller
@@ -34,6 +34,7 @@ class AdminMediaController extends AdminBaseController
     public function showMedia(): Response
     {
         $data = $this->loadMedia();
+
         return $this->render('media/media.html', $data);
     }
 
@@ -48,7 +49,7 @@ class AdminMediaController extends AdminBaseController
     public function getMediaSearchControls(): Response
     {
         try {
-            $template =<<<HTML
+            $template = <<<HTML
                 {{ include("@admin/media/_mediaSearchControls.html") }}
                 <div class="media-wrapper" data-query="content"></div>
 HTML;
@@ -77,7 +78,7 @@ HTML;
         try {
             $macro = ($args['context'] === "edit") ? "cardEdit" : "cardStatic";
             $data = $this->loadMedia();
-            $template =<<<HTML
+            $template = <<<HTML
                 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
                 {% for medium in media %}
                     {{ mediaMacro.$macro(medium, categories) }}

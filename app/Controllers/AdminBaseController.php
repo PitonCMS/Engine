@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
 use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Admin Base Controller
@@ -53,7 +53,7 @@ class AdminBaseController extends BaseController
         $this->alert[] = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message]
+            'message' => (is_array($message)) ? $message : [$message],
         ];
     }
 
@@ -76,6 +76,7 @@ class AdminBaseController extends BaseController
             // Check category filter and remove unrelated settings
             if (isset($category) && $category !== $setting->category) {
                 unset($definedSettings[$key]);
+
                 continue;
             }
 

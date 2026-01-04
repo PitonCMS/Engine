@@ -30,6 +30,15 @@ $container->set('settings', function (ContainerInterface $c) use ($config) {
 });
 
 /**
+ * Router
+ *
+ * This loads Slim route parser
+ */
+$container->set('router', function (ContainerInterface $c) use ($app) {
+    return $app->getRouteCollector()->getRouteParser();
+});
+
+/**
  * Twig HTML Templates
  *
  * Loads
@@ -51,12 +60,6 @@ $container->set('view', function (ContainerInterface $c) use ($app) {
         'debug' => !$settings['environment']['production'],
         'autoescape' => false,
     ]);
-
-    // Piton Twig Extension
-    $view->addExtension(new Piton\Library\Twig\Base($c));
-
-    // Load Pagination with default results per page setting
-    $view->addExtension(new Piton\Pagination\TwigPagination(['resultsPerPage' => $settings['pagination']['resultsPerPage']]));
 
     // Load Twig debugger if in development
     if (!$settings['environment']['production']) {

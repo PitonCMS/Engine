@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Admin Setting Controller
@@ -42,8 +42,8 @@ class AdminSettingController extends AdminBaseController
     public function editSettings($args): Response
     {
         // Get dependencies
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         // Validate we have one of the defined categories
         if (!in_array($args['category'], ['site', 'social', 'contact'])) {
@@ -86,7 +86,7 @@ class AdminSettingController extends AdminBaseController
     public function saveSettings(): Response
     {
         // Get dependencies
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
 
         // Get setting data POST array
         $settings = $this->request->getParsedBodyParam('setting');
@@ -100,6 +100,7 @@ class AdminSettingController extends AdminBaseController
             // Check for a setting delete flag
             if (isset($row['delete'])) {
                 $dataStoreMapper->delete($setting);
+
                 continue;
             }
 

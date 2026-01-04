@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Exception;
+use Piton\Library\Twig\Base;
 use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * Piton Base Controller
@@ -24,48 +26,30 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class BaseController
 {
-    /**
-     * Container
-     * @var Psr\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Request
-     * @var Psr\Http\Message\ServerRequestInterface
-     */
-    protected $request;
-
-    /**
-     * Response
-     * @var Psr\Http\Message\ResponseInterface
-     */
-    protected $response;
-
-    /**
-     * Page Alerts
-     * @var array
-     */
-    protected $alert = [];
-
-    /**
-     * Settings Array
-     * @var array
-     */
-    protected $settings = [];
+    // Controller properties
+    protected ContainerInterface $container;
+    protected Request $request;
+    protected Response $response;
+    protected $view;
+    protected array $alert = [];
+    protected array $settings = [];
 
     /**
      * Constructor
      *
+     * @param Request $request
+     * @param Response $response
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Request $request, Response $response, ContainerInterface $container)
     {
+        $this->request = $request;
+        $this->response = $response;
         $this->container = $container;
-        $this->request = $container->request;
-        $this->response = $container->response;
+        $this->view = $this->container->get('view');
         $this->settings['site'] = $container->get('settings')['site'];
         $this->settings['environment'] = $container->get('settings')['environment'];
+        $this->pitonViewExtensions();
     }
 
     /**
@@ -77,16 +61,16 @@ class BaseController
      */
     protected function render(string $template, $data = null): Response
     {
-        $twigView = $this->container->view;
+        // $twigView = $this->container->get('view');
 
         // By making page data a Twig Global, we can access page data in block elements which are loaded by a Twig function in the templates
-        $twigEnvironment = $twigView->getEnvironment();
+        $twigEnvironment = $this->view->getEnvironment();
         $twigEnvironment->addGlobal('page', $data);
 
         // Add application alert messages as a global to display in the template within this request
         $twigEnvironment->addGlobal('alert', $this->alert);
 
-        return $twigView->render($this->response, $template);
+        return $this->view->render($this->response, $template);
     }
 
     /**
@@ -101,11 +85,11 @@ class BaseController
     {
         // Save any alert messages to session flash data for next request
         if (isset($this->alert)) {
-            $session = $this->container->sessionHandler;
+            $session = $this->container->get('sessionHandler');
             $session->setFlashData('alert', $this->alert);
         }
 
-        return $this->response->withRedirect($this->container->router->pathFor($routeName, $args), $status);
+        return $this->response->withRedirect($this->container->get('router')->pathFor($routeName, $args), $status);
     }
 
     /**
@@ -127,7 +111,7 @@ class BaseController
      *
      * Returns asynchronous response as application/json
      * @param  string $status  Status code "success"|"error"
-     * @param  string|null $text    Document to sent
+     * @param  ?string $text    Document to sent
      * @return Response
      */
     protected function xhrResponse(string $status, ?string $text): Response
@@ -139,7 +123,7 @@ class BaseController
 
         $response = $this->response->withHeader('Content-Type', 'application/json');
 
-        return $response->write(json_encode([
+        return $this->response->write(json_encode([
             "status" => $status,
             "text" => $text,
         ]));
@@ -151,10 +135,22 @@ class BaseController
      * Returns Piton\Pagination\TwigPagination object from the Twig environment array of extensions
      * to allow update of runtime settings
      * @param void
-     * @return Piton\Pagination\TwigPagination
+     * @return TwigPagination
      */
     protected function getPagination(): TwigPagination
     {
-        return $this->container->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
+        return $this->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
+    }
+
+    /**
+     * Instantiate Piton View Extensions
+     */
+    private function pitonViewExtensions(): void
+    {
+        // Piton Twig Extension
+        $this->view->addExtension(new Base($this->request, $this->response, $this->container));
+
+        // Load Pagination with default results per page setting
+        $this->view->addExtension(new TwigPagination(['resultsPerPage' => $this->container->get('settings')['pagination']['resultsPerPage']]));
     }
 }

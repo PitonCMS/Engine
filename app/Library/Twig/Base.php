@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,15 +12,19 @@ declare(strict_types=1);
 
 namespace Piton\Library\Twig;
 
-use Piton\Pagination\TwigPagination;
+use Exception;
+use FilesystemIterator;
 use Piton\Models\Entities\PitonEntity;
+use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Uri;
+use Slim\Routing\RouteContext;
+use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
-use Twig\Error\LoaderError;
 use Twig\TwigFunction;
-use FilesystemIterator;
-use Exception;
 
 /**
  * Piton Twig Extension
@@ -29,23 +33,10 @@ use Exception;
  */
 class Base extends AbstractExtension implements GlobalsInterface
 {
-    /**
-     * Cache
-     * @var array
-     */
-    protected $cache = [];
-
-    /**
-     * URI Object
-     * @var Slim\Http\Uri
-     */
-    protected $uri;
-
-    /**
-     * Dependency Container
-     * @var Psr\Container\ContainerInterface
-     */
-    protected $container;
+    protected array $cache = [];
+    protected Uri $uri;
+    protected Request $request;
+    protected ContainerInterface $container;
 
     /**
      * Admin Site Hierarchy
@@ -62,7 +53,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         'adminNavigation' => null,
         'adminMessage' => null,
         'adminSetting' => null,
-        'adminSupportIndex' =>  null,
+        'adminSupportIndex' => null,
 
         // Level 1 pages
         'adminPageEdit' => 'adminPage',
@@ -83,12 +74,28 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Constructor
      *
-     * @param object Psr\Container\ContainerInterface
+     * @param Request $request
+     * @param Response $response
+     * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Request $request, Response $response, ContainerInterface $container)
     {
+        $this->request = $request;
         $this->container = $container;
-        $this->uri = $container->request->getUri();
+        $this->uri = $request->getUri();
+
+        // settings
+        // view
+        // pagination from view
+        // route pathFor
+        // mediaPathHandler
+        // mediaSizes
+        // logger
+        // toolbox
+        // dataMapper
+        // jsonDefinitionHandler
+        // sessionHandler
+        //
     }
 
     /**
@@ -101,8 +108,8 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         return [
             'site' => [
-                'settings' => $this->container['settings']['site'],
-                'environment' => $this->container['settings']['environment'],
+                'settings' => $this->container->get('settings')['site'],
+                'environment' => $this->container->get('settings')['environment'],
             ],
         ];
     }
@@ -130,7 +137,6 @@ class Base extends AbstractExtension implements GlobalsInterface
             // Base functions
             new TwigFunction('pathFor', [$this, 'pathFor']),
             new TwigFunction('baseUrl', [$this, 'baseUrl']),
-            new TwigFunction('basePath', [$this, 'basePath']),
             new TwigFunction('currentPath', [$this, 'currentPath']),
             new TwigFunction('currentUrl', [$this, 'currentUrl']),
             new TwigFunction('currentRoute', [$this, 'currentRoute']),
@@ -180,7 +186,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     protected function getPagination(): TwigPagination
     {
-        return $this->container->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
+        return $this->container->get('view')->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
     }
 
     /**
@@ -195,13 +201,15 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
+        $routeContext = RouteContext::fromRequest($request);
+
         // The `pathfor('showPage', ['slug1' => 'home'])` route is an alias for `pathFor('home')`
         if ($name === 'showPage' && isset($data['slug1']) && $data['slug1'] === 'home') {
             $name = 'home';
             unset($data['slug1']);
         }
 
-        return $this->container->router->pathFor($name, $data, $queryParams);
+        return $routeContext->urlFor($name, $data, $queryParams);
     }
 
     /**
@@ -213,21 +221,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function baseUrl(): string
     {
-        return $this->uri->getBaseUrl();
-    }
-
-    /**
-     * Base Path
-     *
-     * If the application is run from a directory below the project root
-     * this will return the subdirectory path.
-     * Use this instead of baseUrl to use relative URL's instead of absolute
-     * @param void
-     * @return string The base path segments
-     */
-    public function basePath(): string
-    {
-        return $this->uri->getBasePath();
+        return $this->uri->getScheme() . '://' . $this->uri->getAuthority() . $this->uri->getPath();
     }
 
     /**
@@ -242,7 +236,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             return $this->uri;
         }
 
-        $path = $this->uri->getBasePath() . '/' . ltrim($this->uri->getPath(), '/');
+        $path = $this->uri->getPath() . '/' . ltrim($this->uri->getPath(), '/');
 
         if ($withQueryString && '' !== $query = $this->uri->getQuery()) {
             $path .= '?' . $query;
@@ -273,7 +267,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
-        if ($routeName === $this->container->settings['environment']['currentRouteName']) {
+        if ($routeName === $this->container->get('settings')['environment']['currentRouteName']) {
             return $returnValue;
         }
 
@@ -284,11 +278,11 @@ class Base extends AbstractExtension implements GlobalsInterface
      * In URL
      *
      * Checks if the supplied string is one of the current URL segments
-     * @param string  $segment       URL segment to find
+     * @param ?string  $segment       URL segment to find
      * @param string  $valueToReturn Value to return if true
      * @return string|null           Returns $valueToReturn or null
      */
-    public function inUrl(string $segmentToTest = null, $valueToReturn = 'active'): ?string
+    public function inUrl(?string $segmentToTest = null, $valueToReturn = 'active'): ?string
     {
         // Verify we have a segment to find
         if ($segmentToTest === null) {
@@ -346,29 +340,29 @@ class Base extends AbstractExtension implements GlobalsInterface
 
         // If the original is requested, return path and filename
         if ($size === 'original') {
-            return ($this->container->mediaPathHandler)($filename) . $filename;
+            return ($this->container->get('mediaPathHandler'))($filename) . $filename;
         }
 
         // Construct path and requested file size, and if file exists then return
-        $media = ($this->container->mediaPathHandler)($filename) . ($this->container->mediaSizes)($filename, $size);
+        $media = ($this->container->get('mediaPathHandler'))($filename) . ($this->container->get('mediaSizes'))($filename, $size);
         if (file_exists(ROOT_DIR . 'public' . $media)) {
             return $media;
         }
 
         // Fall back to original file if other size not found
-        return ($this->container->mediaPathHandler)($filename) . $filename;
+        return ($this->container->get('mediaPathHandler'))($filename) . $filename;
     }
 
     /**
      * Get Media Source Set
      *
      * Creates list of available image files in source set format
-     * @param string $filename Media filename
-     * @param string $altText  Media caption to use as alt text
-     * @param array $options   Options array, includes "sizes", "style"
-     * @return string
+     * @param ?string $filename Media filename
+     * @param ?string $altText  Media caption to use as alt text
+     * @param ?array $options   Options array, includes "sizes", "style"
+     * @return ?string
      */
-    public function getMediaSrcSet(string $filename = null, string $altText = null, array $options = null): ?string
+    public function getMediaSrcSet(?string $filename = null, ?string $altText = null, ?array $options = null): ?string
     {
         // If filename is empty, just return nothing
         if (empty($filename)) {
@@ -381,10 +375,11 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         // Get image directory and scan for all sizes
-        $imageDir = ($this->container->mediaPathHandler)($filename);
+        $imageDir = ($this->container->get('mediaPathHandler'))($filename);
         if (!is_dir(ROOT_DIR . 'public' . $imageDir)) {
             // Something wrong here
-            $this->container->logger->warning("Twig Base getMediaSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
+            $this->container->get('logger')->warning("Twig Base getMediaSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
+
             return null;
         }
         $files = new FilesystemIterator(ROOT_DIR . 'public' . $imageDir);
@@ -419,12 +414,12 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Returns htmlspecialchars() escaped query param
      * Missing params and empty string values are returned as null
-     * @param string|null $param
-     * @return string|null
+     * @param ?string $param
+     * @return ?string
      */
-    public function getQueryParam(string $param = null): ?string
+    public function getQueryParam(?string $param = null): ?string
     {
-        $value = $this->container->request->getQueryParam($param);
+        $value = $this->container->get('request')->getQueryParam($param);
 
         if (!empty($value)) {
             return htmlspecialchars($value);
@@ -443,7 +438,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function truncateHtml(string $html, int $characters = 300): string
     {
-        return $this->container->toolbox->truncateHtmlText($html, $characters);
+        return $this->container->get('toolbox')->truncateHtmlText($html, $characters);
     }
 
     // ---------------- Front End Functions ----------------
@@ -476,7 +471,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Gets all Element's HTML within a Block, rendered with data
      * @param  array $block Array of Elements within a Block
-     * @return string|null
+     * @return ?string
      */
     public function getBlockElementsHtml(?array $block): ?string
     {
@@ -496,8 +491,8 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get HTML Element
      *
      * Gets Element HTML fragments rendered with data
-     * @param  PitonEntity  $element Element values
-     * @return string
+     * @param  ?PitonEntity  $element Element values
+     * @return ?string
      */
     public function getElementHtml(?PitonEntity $element): ?string
     {
@@ -507,10 +502,11 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         try {
-            return $this->container->view->fetch("elements/{$element->template}.html", ['element' => $element]);
+            return $this->container->get('view')->fetch("elements/{$element->template}.html", ['element' => $element]);
         } catch (LoaderError $e) {
             // If template name is malformed, just return null to fail gracefully
-            $this->container->logger->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+            $this->container->get('logger')->error('PitonCMS: Invalid element template name provided in Piton\Library\Twig\Front getElementHtml(): ' . $element->template);
+
             return null;
         }
     }
@@ -520,14 +516,14 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get collection pages by collection ID
      * For use in page element as collection landing page
-     * @param  int        $collectionId Collection ID
-     * @param  int|null   $limit
-     * @return array|null
+     * @param  ?int        $collectionId Collection ID
+     * @param  ?int   $limit
+     * @return ?array
      */
-    public function getCollectionPages(?int $collectionId, int $limit = null): ?array
+    public function getCollectionPages(?int $collectionId, ?int $limit = null): ?array
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
 
         // Get collection pages
         return $pageMapper->findPublishedCollectionPagesById($collectionId, $limit);
@@ -538,14 +534,14 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get collection pages by collection ID
      * For use in page element as collection landing page
-     * @param  int        $collectionId Collection ID
-     * @param  int|null   $resultsPerPage Null value defaults to config: $config['pagination']['resultsPerPage']
-     * @return array|null
+     * @param  ?int        $collectionId Collection ID
+     * @param  ?int   $resultsPerPage Null value defaults to config: $config['pagination']['resultsPerPage']
+     * @return ?array
      */
-    public function getCollectionPagesWithPagination(?int $collectionId, int $resultsPerPage = null): ?array
+    public function getCollectionPagesWithPagination(?int $collectionId, ?int $resultsPerPage = null): ?array
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
 
         if ($resultsPerPage) {
@@ -579,17 +575,17 @@ class Base extends AbstractExtension implements GlobalsInterface
      *    ]
      *
      * @param  string  $rankMethod
-     * @param  int     $limit
-     * @param  array   $filter
-     * @return array|null
+     * @param  ?int     $limit
+     * @param  ?array   $filter
+     * @return ?array
      */
     public function getPublishedRankedCollectionPages(
         string $rankMethod,
-        int $limit = null,
-        array $filter = []
+        ?int $limit = null,
+        ?array $filter = []
     ): ?array {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
 
         // Use provided limit, or pagination config default for limit
@@ -619,17 +615,17 @@ class Base extends AbstractExtension implements GlobalsInterface
      *    ]
      *
      * @param  string  $rankMethod
-     * @param  int     $limit
-     * @param  array   $filter
-     * @return array|null
+     * @param  ?int     $limit
+     * @param  ?array   $filter
+     * @return ?array
      */
     public function getPublishedRankedCollectionPagesWithPagination(
         string $rankMethod,
-        int $limit = null,
-        array $filter = []
+        ?int $limit = null,
+        ?array $filter = []
     ): ?array {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
 
         // Use provided limit, or pagination config default for limit
@@ -649,13 +645,13 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get Search Results With Pagination
      *
      * Executes site search and returns an array of search results for published pages
-     * @param  int|null   $resultsPerPage
-     * @return array|null
+     * @param  ?int   $resultsPerPage
+     * @return array
      */
-    public function getSearchResultsWithPagination(int $resultsPerPage = null): array
+    public function getSearchResultsWithPagination(?int $resultsPerPage = null): array
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
         // We are going to use the current URL from $_SERVER['REQUEST_URI'] for the path to this page
         // No need to set pagination->setPagePath()
@@ -666,7 +662,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         // Get sanitized query string parameters and execute search
-        $terms = htmlspecialchars($this->container->request->getQueryParam('terms', ''));
+        $terms = htmlspecialchars($this->container->get('request')->getQueryParam('terms', ''));
         $results = $pageMapper->searchPublishedContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Complete pagination setup
@@ -678,12 +674,12 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Gallery by ID
      *
-     * @param int $galleryId
-     * @return array|null
+     * @param ?int $galleryId
+     * @return ?array
      */
-    public function getGallery(int $galleryId = null): ?array
+    public function getGallery(?int $galleryId = null): ?array
     {
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
 
         return $mediaMapper->findMediaByCategoryId($galleryId);
     }
@@ -703,7 +699,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         // Get dependencies
-        $navigationMapper = ($this->container->dataMapper)('NavigationMapper');
+        $navigationMapper = ($this->container->get('dataMapper'))('NavigationMapper');
 
         // Get requested navigation set
         $navList = $navigationMapper->findNavigation($navigator);
@@ -720,7 +716,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get Navigation Link
      *
      * @param PitonEntity $navLink
-     * @return string|null
+     * @return ?string
      */
     public function getNavigationLink(PitonEntity $navLink): ?string
     {
@@ -747,7 +743,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function uniqueKey(int $length = 4): string
     {
-        return substr(base_convert(rand(1000000000, PHP_INT_MAX), 10, 36), 0, $length);
+        return substr(uniqid(), -$length);
     }
 
     /**
@@ -760,7 +756,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function getAlert(array $context): ?array
     {
-        $session = $this->container->sessionHandler;
+        $session = $this->container->get('sessionHandler');
 
         // If AdminBaseController render() is called then alert data is provided to Twig context for this request
         // But if AdminBaseController redirect() was called in last request the alert was saved to flash session data
@@ -771,14 +767,14 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         // Load any system messages (created outside of a session) from site settings (which is loaded from data_store in middleware)
-        if (isset($this->container->settings['environment']['appAlert'])) {
-            $appData = json_decode($this->container->settings['environment']['appAlert'], true);
+        if (isset($this->container->get('settings')['environment']['appAlert'])) {
+            $appData = json_decode($this->container->get('settings')['environment']['appAlert'], true);
             if (is_array($appData)) {
                 // Append to $alert array, if exists
                 $alert = array_merge($alert ?? [], $appData);
 
                 // Unset app alert data
-                $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+                $dataMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
                 $dataMapper->unsetAppAlert();
             }
         }
@@ -791,7 +787,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get list of collections
      * @param  void
-     * @return array|null
+     * @return ?array
      */
     public function getCollections(): ?array
     {
@@ -799,7 +795,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             return $this->cache['collections'];
         }
 
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
 
         // Return and cache
         return $this->cache['collections'] = $collectionMapper->find();
@@ -810,7 +806,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get list of page templates
      * @param  void
-     * @return array|null
+     * @return ?array
      */
     public function getPageTemplates(): ?array
     {
@@ -818,7 +814,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             return $this->cache['pageTemplates'];
         }
 
-        $definition = $this->container->jsonDefinitionHandler;
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         // Return and cache
         return $this->cache['pageTemplates'] = $definition->getPages();
@@ -829,7 +825,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get all media categories
      * @param  void
-     * @return array|null
+     * @return ?array
      */
     public function getMediaCategories(): ?array
     {
@@ -837,7 +833,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             return $this->cache['mediaCategories'];
         }
 
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
 
         // Get all media categories and create key: value pair array
         $categories = $mediaCategoryMapper->findCategories() ?? [];
@@ -850,15 +846,15 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get Elements
      *
      * Optionally filter list of elements
-     * @param  array|null $filter Return only listed elements
-     * @return array|null
+     * @param  ?array $filter Return only listed elements
+     * @return ?array
      */
-    public function getElements(array $filter = null): ?array
+    public function getElements(?array $filter = null): ?array
     {
         // Set cached elements, if not set
         if (!isset($this->cache['elements'])) {
             // Get dependencies
-            $definition = $this->container->jsonDefinitionHandler;
+            $definition = $this->container->get('jsonDefinitionHandler');
             $elements = $definition->getElements();
             $elements = array_combine(array_column($elements, 'filename'), $elements);
 
@@ -879,7 +875,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Gets count of unread messages
      * @param  void
-     * @return int|null
+     * @return ?int
      */
     public function getUnreadMessageCount(): ?int
     {
@@ -887,7 +883,7 @@ class Base extends AbstractExtension implements GlobalsInterface
             return $this->cache['unreadMessageCount'];
         }
 
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
+        $messageMapper = ($this->container->get('dataMapper'))('MessageMapper');
         $count = $messageMapper->findUnreadCount();
 
         return $this->cache['unreadMessageCount'] = ($count === 0) ? null : $count;
@@ -897,13 +893,13 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get Session Data
      *
      * Gets data from session handler
-     * @param string $key
-     * @param string $default
+     * @param ?string $key
+     * @param ?string $default
      * @return mixed
      */
-    public function getSessionData(string $key = null, string $default = null)
+    public function getSessionData(?string $key = null, ?string $default = null)
     {
-        return $this->container->sessionHandler->getData($key, $default);
+        return $this->container->get('sessionHandler')->getData($key, $default);
     }
 
     /**
@@ -918,20 +914,20 @@ class Base extends AbstractExtension implements GlobalsInterface
     {
         if ($file === 'ckeditor') {
             // First check if the request is for the ckeditor file, which does not depend on modules
-            $source = $this->baseUrl() . "/admin/ckeditor5/build/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
-        } elseif ($this->container['settings']['environment']['production'] || !$module) {
+            $source = $this->baseUrl() . "/admin/ckeditor5/build/$file.js?v=" . $this->container->get('settings')['environment']['assetVersion'];
+        } elseif ($this->container->get('settings')['environment']['production'] || !$module) {
             // Next, for other JS files, check the production and not a module flag to return the /dist version
-            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+            $source = $this->baseUrl() . "/admin/js/dist/$file.js?v=" . $this->container->get('settings')['environment']['assetVersion'];
         } else {
             // Finally return the module JS since this is a non-production or development environment
-            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container['settings']['environment']['assetVersion'];
+            $source = $this->baseUrl() . "/admin/js/$file.js?v=" . $this->container->get('settings')['environment']['assetVersion'];
         }
 
         // Set module attribute if requested
         $moduleType = ($module) ? 'type="module"' : '';
 
         // Set nonce
-        $nonce = $this->container['settings']['environment']['cspNonce'];
+        $nonce = $this->container->get('settings')['environment']['cspNonce'];
 
         return "<script nonce=\"$nonce\" src=\"$source\" $moduleType></script>";
     }
@@ -942,12 +938,12 @@ class Base extends AbstractExtension implements GlobalsInterface
      * If the supplied route name resolves as the parent in the navigation hierarcy, returns the returnValue string
      * @param  string $routeName   Name of the route to test
      * @param  string $returnValue Value to return
-     * @return string|null
+     * @return ?string
      */
     public function currentRouteParent(string $routeName, string $returnValue = 'active'): ?string
     {
         // Trace current page route name through AdminSiteHierarchy array to find parent with null value
-        $route = $this->container->settings['environment']['currentRouteName'];
+        $route = $this->container->get('settings')['environment']['currentRouteName'];
 
         while (self::AdminSiteHierarchy[$route] ?? false) {
             // Check for recursion in this while loop if the array is accidentally setup incorrectly
@@ -970,7 +966,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Returns the minimum of ini settings: post_max_size, upload_max_filesize, memory_limit
      * @param void
-     * @return int|null
+     * @return ?int
      */
     public function getMaxUploadSize(): ?int
     {
@@ -1002,14 +998,14 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get JS Custom Extensions
      *
      * Returns HTML script element to load custom JS extensions
-     * @param  string|null $scope 'site' for site wide extension, null for current path specific extension
-     * @return string|null
+     * @param  ?string $scope 'site' for site wide extension, null for current path specific extension
+     * @return ?string
      */
     public function getJsFileExtensions(?string $scope = null): ?string
     {
         // Get nonce and asset version
-        $nonce = $this->container['settings']['environment']['cspNonce'];
-        $assetVersion = '?v=' . $this->container['settings']['environment']['assetVersion'];
+        $nonce = $this->container->get('settings')['environment']['cspNonce'];
+        $assetVersion = '?v=' . $this->container->get('settings')['environment']['assetVersion'];
 
         // Check for site wide extension
         if ($scope === 'site') {
@@ -1032,6 +1028,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         // Check if file exists
         if (file_exists(ROOT_DIR . 'public' . $extensionSource)) {
             $extensionSource .= $assetVersion;
+
             return "<script nonce=\"$nonce\" src=\"$extensionSource\"></script>";
         }
 

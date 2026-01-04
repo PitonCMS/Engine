@@ -198,27 +198,6 @@ Usage:
 {{ baseUrl() }}
 ```
 
-### basePath()
-Prints the base path if the project is in a subfolder of your project root.
-
-```php
-    /**
-     * Base Path
-     *
-     * If the application is run from a directory below the project root
-     * this will return the subdirectory path.
-     * Use this instead of baseUrl to use relative URL's instead of absolute
-     * @param void
-     * @return string The base path segments
-     */
-    public function basePath(): string;
-```
-
-Usage:
-```twig
-{{ basePath() }}
-```
-
 ### getPathForPage()
 Given a Page Slug, and optionally a Collection Slug, will return the formatted link without without base path.
 

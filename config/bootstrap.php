@@ -71,10 +71,6 @@ return call_user_func(
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
-        // Load Piton Route Strategy
-        $routeCollector = $app->getRouteCollector();
-        $routeCollector->setDefaultInvocationStrategy(new Piton\Library\Handlers\RouteArgumentStrategy());
-
         // Load admin routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
 

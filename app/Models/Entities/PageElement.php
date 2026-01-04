@@ -21,7 +21,7 @@ class PageElement extends PitonEntity
     protected ?int $page_id = null;
     protected ?string $block_key = null;
     protected ?string $template = null;
-    protected ?string $element_sort = null;
+    protected ?int $element_sort = null;
     protected ?string $title = null;
     protected ?string $content = null;
     protected ?string $excerpt = null;
@@ -49,7 +49,7 @@ class PageElement extends PitonEntity
         $this->page_id = isset($row['page_id']) ? (int) $row['page_id'] : null;
         $this->block_key = isset($row['block_key']) ? $row['block_key'] : null;
         $this->template = isset($row['template']) ? $row['template'] : null;
-        $this->element_sort = isset($row['element_sort']) ? $row['element_sort'] : null;
+        $this->element_sort = isset($row['element_sort']) ? (int) $row['element_sort'] : null;
         $this->title = isset($row['title']) ? $row['title'] : null;
         $this->content = isset($row['content']) ? $row['content'] : null;
         $this->excerpt = isset($row['excerpt']) ? $row['excerpt'] : null;
@@ -78,6 +78,8 @@ class PageElement extends PitonEntity
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
+
+        parent::__construct($row);
     }
 
     /**

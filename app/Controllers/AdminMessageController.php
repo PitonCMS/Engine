@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 -2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
 /**
@@ -32,6 +32,7 @@ class AdminMessageController extends AdminBaseController
     public function showMessages(): Response
     {
         $data['messages'] = $this->loadMessages();
+
         return $this->render('messages/messages.html', $data);
     }
 
@@ -49,7 +50,7 @@ class AdminMessageController extends AdminBaseController
             $messages = $this->loadMessages();
 
             // Make string template
-            $template =<<<HTML
+            $template = <<<HTML
             {% import "@admin/messages/_messageMacros.html" as messageMacro %}
             {% for m in messages %}
                 {{ messageMacro.messageRow(m) }}

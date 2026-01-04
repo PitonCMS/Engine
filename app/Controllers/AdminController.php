@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
 use DOMDocument;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Admin Controller
@@ -74,7 +74,7 @@ class AdminController extends AdminBaseController
 
             $links[] = [
                 'link' => $link,
-                'date' => date('c', strtotime($page->updated_date))
+                'date' => date('c', strtotime($page->updated_date)),
             ];
         }
 
@@ -99,6 +99,7 @@ class AdminController extends AdminBaseController
     public function showSupportIndex($args): Response
     {
         $data['subject'] = $args['subject'];
+
         return $this->render("support/index.html", $data);
     }
 
@@ -142,7 +143,7 @@ class AdminController extends AdminBaseController
         // Start TOC list and loop through nodes
         $toc = '';
 
-        for ($i=0; $i < $nodes->length; $i++) {
+        for ($i = 0; $i < $nodes->length; $i++) {
             // Add id to heading
             $id = str_replace(' ', '-', strtolower($nodes->item($i)->nodeValue));
             $nodes->item($i)->setAttribute('id', $id);
@@ -183,7 +184,7 @@ class AdminController extends AdminBaseController
             curl_setopt_array($curl, [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_URL => $githubApi,
-                CURLOPT_USERAGENT => $this->request->getHeaderLine('HTTP_USER_AGENT')
+                CURLOPT_USERAGENT => $this->request->getHeaderLine('HTTP_USER_AGENT'),
             ]);
             $responseBody = curl_exec($curl);
             $responseStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -210,7 +211,7 @@ class AdminController extends AdminBaseController
 
         $data['breadcrumbTitle'] = 'About PitonCMS';
         // Not passing any supportContent through, but sending a flag to enable the breadcrumb
-        $data['supportContent'] =  true;
+        $data['supportContent'] = true;
 
         return $this->render('support/about.html', $data);
     }

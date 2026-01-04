@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Piton\Models\Entities\PitonEntity;
-use Slim\Http\Response;
-use Exception;
 use DateTime;
+use Exception;
+use Piton\Models\Entities\PitonEntity;
+use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
 /**
@@ -33,6 +33,7 @@ class AdminPageController extends AdminBaseController
     public function showPages(): Response
     {
         $data['pages'] = $this->loadPages();
+
         return $this->render('pages/pages.html', $data);
     }
 
@@ -60,7 +61,7 @@ class AdminPageController extends AdminBaseController
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['pages' => $pages]);
+            $text = $this->container->get('view')->fetchFromString($template, ['pages' => $pages]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting pages: ". $th->getMessage();
@@ -80,10 +81,10 @@ HTML;
     protected function loadPages(): array
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->router->pathFor('adminPage'));
-        $definition = $this->container->jsonDefinitionHandler;
+        $pagination->setPagePath($this->container->get('router')->pathFor('adminPage'));
+        $definition = $this->container->get('jsonDefinitionHandler');
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
         // Get filters or search if requested
@@ -142,10 +143,10 @@ HTML;
     protected function editLoadSavedPage(int $pageId): Response
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
+        $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         // Load existing page from database
         $page = $pageMapper->findById($pageId);
@@ -204,9 +205,9 @@ HTML;
     protected function editLoadNewPage(): Response
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         // Create new page object
         $page = $pageMapper->make();
@@ -279,8 +280,8 @@ HTML;
     public function savePageHeader(): PitonEntity
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $toolbox = $this->container->toolbox;
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
+        $toolbox = $this->container->get('toolbox');
 
         // Get page object
         $pageId = $this->request->getParsedBodyParam('page_id');
@@ -329,7 +330,7 @@ HTML;
 
         // Save Page Settings
         $settings = $this->request->getParsedBodyParam('setting');
-        foreach($settings as $setting) {
+        foreach ($settings as $setting) {
             $this->saveSetting('page', $page->id, $setting);
         }
 
@@ -344,10 +345,10 @@ HTML;
      * @return void
      * @uses POST
      */
-    protected function savePageElements(int $pageId)
+    protected function savePageElements(int $pageId): void
     {
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
-        $toolbox = $this->container->toolbox;
+        $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
+        $toolbox = $this->container->get('toolbox');
 
         // Save page elements by block
         $index = 1;
@@ -395,7 +396,7 @@ HTML;
         }
 
         // Get dependency
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
 
         $settingEntity = $dataStoreMapper->make();
         $settingEntity->id = $setting['id'];
@@ -403,6 +404,7 @@ HTML;
         // Check for a setting delete flag and end processing
         if (isset($setting['delete'])) {
             $dataStoreMapper->delete($settingEntity);
+
             return;
         }
 
@@ -440,7 +442,7 @@ HTML;
     public function deletePage(): Response
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
 
         $pageId = empty($this->request->getParsedBodyParam('page_id')) ? null : $this->request->getParsedBodyParam('page_id');
 
@@ -475,8 +477,8 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Get dependencies
-            $definition = $this->container->jsonDefinitionHandler;
-            $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+            $definition = $this->container->get('jsonDefinitionHandler');
+            $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
             $pageElement = $pageElementMapper->make();
 
             $pageElement->template = htmlspecialchars($this->request->getQueryParam('template'));
@@ -497,7 +499,7 @@ HTML;
             $template .= ' {{ pageMacro.elementForm(element, element.blockKey) }}';
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['element' => $pageElement]);
+            $text = $this->container->get('view')->fetchFromString($template, ['element' => $pageElement]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting new element: ". $th->getMessage();
@@ -519,7 +521,7 @@ HTML;
     public function deleteElement(): Response
     {
         // Get dependencies
-        $pageElement = ($this->container->dataMapper)('PageElementMapper');
+        $pageElement = ($this->container->get('dataMapper'))('PageElementMapper');
 
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
@@ -552,8 +554,8 @@ HTML;
      */
     public function showCollectionGroups(): Response
     {
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
         $templates = $definition->getCollections();
 
         $collections = $collectionMapper->find();
@@ -579,8 +581,8 @@ HTML;
     public function editCollection($args): Response
     {
         // Get dependencies
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         if (isset($args['id']) && is_numeric($args['id'])) {
             // If a collection ID was provided, load that collection
@@ -607,8 +609,8 @@ HTML;
     public function saveCollection(): Response
     {
         // Get dependencies
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
-        $toolbox = $this->container->toolbox;
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
+        $toolbox = $this->container->get('toolbox');
 
         $collectionId = $this->request->getParsedBodyParam('collection_id');
 
@@ -640,7 +642,7 @@ HTML;
     public function deleteCollection(): Response
     {
         // Get dependencies
-        $collectionMapper = ($this->container->dataMapper)('CollectionMapper');
+        $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
 
         // Get collection to delete
         $collectionId = $this->request->getParsedBodyParam('collection_id');
@@ -649,6 +651,7 @@ HTML;
         // Integrity checks before deleting
         if (empty($collection)) {
             $collectionId = $collectionId ?? 'null';
+
             throw new Exception("PitonCMS: Collection ID $collectionId not found for deletion");
         }
 
