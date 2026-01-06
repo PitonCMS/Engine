@@ -17,7 +17,6 @@ use FilesystemIterator;
 use Piton\Models\Entities\PitonEntity;
 use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Uri;
 use Twig\Error\LoaderError;
@@ -74,27 +73,13 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Constructor
      *
      * @param Request $request
-     * @param Response $response
      * @param ContainerInterface $container
      */
-    public function __construct(Request $request, Response $response, ContainerInterface $container)
+    public function __construct(Request $request, ContainerInterface $container)
     {
         $this->request = $request;
         $this->container = $container;
         $this->uri = $request->getUri();
-
-        // settings
-        // view
-        // pagination from view
-        // route pathFor
-        // mediaPathHandler
-        // mediaSizes
-        // logger
-        // toolbox
-        // dataMapper
-        // jsonDefinitionHandler
-        // sessionHandler
-        //
     }
 
     /**
@@ -173,19 +158,6 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getMaxUploadSize', [$this, 'getMaxUploadSize']),
             new TwigFunction('getJsFileExtensions', [$this, 'getJsFileExtensions']),
         ];
-    }
-
-    /**
-     * Get Pagination Object
-     *
-     * Returns Piton\Pagination\TwigPagination object from the Twig environment array of extensions
-     * to allow update of runtime settings
-     * @param void
-     * @return Piton\Pagination\TwigPagination
-     */
-    protected function getPagination(): TwigPagination
-    {
-        return $this->container->get('view')->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
     }
 
     /**
@@ -363,12 +335,17 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function getMediaSrcSet(?string $filename = null, ?string $altText = null, ?array $options = null): ?string
     {
-        // If filename is empty, just return nothing
+        //
+        // TODO allow passing of class or id in $options
+        //
+
+
+        // If filename is empty, just return null
         if (empty($filename)) {
             return null;
         }
 
-        // Get cached img source set for this file if available
+        // Get image source set for this file from cache if available
         if (isset($this->cache['mediaSrcSet'][$filename])) {
             return $this->cache['mediaSrcSet'][$filename];
         }
@@ -376,14 +353,15 @@ class Base extends AbstractExtension implements GlobalsInterface
         // Get image directory and scan for all sizes
         $imageDir = ($this->container->get('mediaPathHandler'))($filename);
         if (!is_dir(ROOT_DIR . 'public' . $imageDir)) {
-            // Something wrong here
             $this->container->get('logger')->warning("Twig Base getMediaSrcSet() directory not found. \$filename: $filename, Looking for: $imageDir");
 
+            // No image directory found, return null
             return null;
         }
+
         $files = new FilesystemIterator(ROOT_DIR . 'public' . $imageDir);
 
-        // Create array of available images with actual sizes, sorted by ascending size
+        // Create array of available images with actual sizes
         $sources = [];
         foreach ($files as $file) {
             // Include only image variants, not the original.
@@ -395,9 +373,12 @@ class Base extends AbstractExtension implements GlobalsInterface
                 }
             }
         }
-        ksort($sources);
 
+        // And sort
+        ksort($sources);
         $sourceSet = implode(",\n", $sources);
+
+        // If a sizes option was provided, use that
         $sizes = $options['sizes'] ?? '';
         $style = (isset($options['style'])) ? 'style="' . $options['style'] .'"' : '';
 
@@ -1032,5 +1013,20 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         return null;
+    }
+
+    /* ----------------------- Protected & Private Methods ----------------------- */
+
+    /**
+     * Get Pagination Object
+     *
+     * Returns Piton\Pagination\TwigPagination object from the Twig environment array of extensions
+     * to allow update of runtime settings
+     * @param void
+     * @return Piton\Pagination\TwigPagination
+     */
+    protected function getPagination(): TwigPagination
+    {
+        return $this->container->get('view')->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
     }
 }

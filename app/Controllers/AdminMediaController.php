@@ -55,7 +55,7 @@ class AdminMediaController extends AdminBaseController
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template);
+            $text = $this->view->fetchFromString($template);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting media controls: {$th->getMessage()}";
@@ -87,7 +87,7 @@ HTML;
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['media' => $data['media'], 'categories' => $data['categories']]);
+            $text = $this->view->fetchFromString($template, ['media' => $data['media'], 'categories' => $data['categories']]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
@@ -110,7 +110,7 @@ HTML;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
+        $pagination->setPagePath($this->container->get('router')->pathFor('adminMedia'));
 
         // Get filters or search if requested
         $category = htmlspecialchars($this->request->getQueryParam('category', '0'));
@@ -236,7 +236,7 @@ HTML;
             $template .= ' {{ mediaMacro.uploadForm() }}';
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template);
+            $text = $this->view->fetchFromString($template);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting media file upload form: ". $th->getMessage();

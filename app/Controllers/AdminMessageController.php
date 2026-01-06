@@ -60,7 +60,7 @@ class AdminMessageController extends AdminBaseController
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['messages' => $messages]);
+            $text = $this->view->fetchFromString($template, ['messages' => $messages]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting messages: ". $th->getMessage();

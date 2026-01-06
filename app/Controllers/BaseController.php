@@ -49,6 +49,8 @@ class BaseController
         $this->view = $this->container->get('view');
         $this->settings['site'] = $container->get('settings')['site'];
         $this->settings['environment'] = $container->get('settings')['environment'];
+
+        // Load Piton Twig files and Piton Pagination as Twig Extensions
         $this->pitonViewExtensions();
     }
 
@@ -76,7 +78,7 @@ class BaseController
     /**
      * Redirect
      *
-     * @param string $name Route name
+     * @param string $name Route name to redirect to
      * @param array  $args Associative array of route arguments
      * @param int    $status Response status code, defaults to 302 Temporary
      * @return Response
@@ -89,7 +91,7 @@ class BaseController
             $session->setFlashData('alert', $this->alert);
         }
 
-        return $this->response->withRedirect($this->container->get('router')->pathFor($routeName, $args), $status);
+        return $this->response->withHeader('Location', $this->container->get('router')->pathFor($routeName, $args))->withStatus($status);
     }
 
     /**
@@ -148,7 +150,7 @@ class BaseController
     private function pitonViewExtensions(): void
     {
         // Piton Twig Extension
-        $this->view->addExtension(new Base($this->request, $this->response, $this->container));
+        $this->view->addExtension(new Base($this->request, $this->container));
 
         // Load Pagination with default results per page setting
         $this->view->addExtension(new TwigPagination(['resultsPerPage' => $this->container->get('settings')['pagination']['resultsPerPage']]));

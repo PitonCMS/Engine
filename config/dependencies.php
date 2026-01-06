@@ -24,8 +24,11 @@ use Twig\Extension\DebugExtension;
 
 /**
  * Config Settings Value Object
+ *
+ * @uses array $config
+ * @returns Piton\Library\Config
  */
-$container->set('settings', function (ContainerInterface $c) use ($config) {
+$container->set('settings', function () use ($config) {
     return new Config($config);
 });
 
@@ -33,8 +36,10 @@ $container->set('settings', function (ContainerInterface $c) use ($config) {
  * Router
  *
  * This loads Slim route parser
+ * @uses Slim/App $app
+ * @return Slim\Routing\RouteParser
  */
-$container->set('router', function (ContainerInterface $c) use ($app) {
+$container->set('router', function () use ($app) {
     return $app->getRouteCollector()->getRouteParser();
 });
 
@@ -44,8 +49,13 @@ $container->set('router', function (ContainerInterface $c) use ($app) {
  * Loads
  * - Template directories
  * - Debug setting
- * - Front or Admin extensions
- * - Custom date format from site settings
+ * - Adds as middleware to Slim App
+ *
+ * Note: the Piton Twig packages (Base & Pagination) are loaded by the BaseController::pitonViewExtensions(),
+ * which are needed by the CMS
+ *
+ * @param ContainerInterface $c
+ * @uses Slim/App $app
  * @return Slim\Views\Twig
  */
 $container->set('view', function (ContainerInterface $c) use ($app) {
@@ -85,6 +95,8 @@ $container->set('view', function (ContainerInterface $c) use ($app) {
  *  - CRITICAL - critical conditions
  *  - ALERT - events for which action must be taken immediately
  *  - EMERGENCY - emergency events
+ *
+ * @param ContainerInterface $c
  * @return Monolog\Logger
  */
 $container->set('logger', function (ContainerInterface $c) {
@@ -98,6 +110,7 @@ $container->set('logger', function (ContainerInterface $c) {
 /**
  * Database Connection
  *
+ * @param ContainerInterface $c
  * @return PDO
  */
 $container->set('database', function (ContainerInterface $c) {
@@ -137,6 +150,7 @@ $container->set('phpErrorHandler', function (ContainerInterface $c) {
  * Session Handler
  *
  * Manages session state.
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Session
  */
 $container->set('sessionHandler', function (ContainerInterface $c) {
@@ -150,6 +164,7 @@ $container->set('sessionHandler', function (ContainerInterface $c) {
  * Access Handler
  *
  * Handler for user access control
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Access
  */
 $container->set('accessHandler', function (ContainerInterface $c) {
@@ -160,6 +175,7 @@ $container->set('accessHandler', function (ContainerInterface $c) {
  * Not Found (404)
  *
  * Override the default Slim Not Found handler
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\NotFound
  */
 $container->set('notFoundHandler', function (ContainerInterface $c) {
@@ -171,6 +187,7 @@ $container->set('notFoundHandler', function (ContainerInterface $c) {
 /**
  * Email Handler
  *
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Email
  */
 $container->set('emailHandler', function (ContainerInterface $c) {
@@ -186,6 +203,7 @@ $container->set('emailHandler', function (ContainerInterface $c) {
  *
  * Data mapper ORM to CRUD the database tables
  * Returns closure to request DB table data mapper object
+ * @param ContainerInterface $c
  * @return closure
  */
 $container->set('dataMapper', function (ContainerInterface $c) {
@@ -219,13 +237,14 @@ $container->set('dataMapper', function (ContainerInterface $c) {
  * Markdown parser
  * @return Piton\Library\Utilities\MDParse
  */
-$container->set('markdownParser', function (ContainerInterface $c) {
+$container->set('markdownParser', function () {
     return new Piton\Library\Utilities\MDParse();
 });
 
 /**
  * JSON Definition Handler
  *
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Definition
  */
 $container->set('jsonDefinitionHandler', function (ContainerInterface $c) {
@@ -237,7 +256,7 @@ $container->set('jsonDefinitionHandler', function (ContainerInterface $c) {
  *
  * @return JsonSchema\Validator
  */
-$container->set('jsonValidator', function (ContainerInterface $c) {
+$container->set('jsonValidator', function () {
     return new JsonSchema\Validator();
 });
 
@@ -247,7 +266,7 @@ $container->set('jsonValidator', function (ContainerInterface $c) {
  * Piton toolbox has various utility methods
  * @return Piton\Library\Utilities\Toolbox
  */
-$container->set('toolbox', function (ContainerInterface $c) {
+$container->set('toolbox', function () {
     return new Piton\Library\Utilities\Toolbox();
 });
 
@@ -255,6 +274,7 @@ $container->set('toolbox', function (ContainerInterface $c) {
  * CSRF Guard Handler
  *
  * Checks submitted CSRF token on POST requests
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\CsrfGuard
  */
 $container->set('csrfGuardHandler', function (ContainerInterface $c) {
@@ -265,6 +285,7 @@ $container->set('csrfGuardHandler', function (ContainerInterface $c) {
  * Sitemap Handler
  *
  * Creates XML sitemap based on saved pages
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Sitemap
  */
 $container->set('sitemapHandler', function (ContainerInterface $c) {
@@ -276,6 +297,7 @@ $container->set('sitemapHandler', function (ContainerInterface $c) {
  *
  * Manages file uploads.
  * Renames uploaded files and places in the directory defined in the mediaPathHandler
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\FileUpload
  */
 $container->set('fileUploadHandler', function (ContainerInterface $c) {
@@ -288,7 +310,7 @@ $container->set('fileUploadHandler', function (ContainerInterface $c) {
  * Define upload media path under public/media/
  * @return string
  */
-$container->set('mediaPathHandler', function (ContainerInterface $c) {
+$container->set('mediaPathHandler', function () {
     return function ($fileName) {
         $directory = pathinfo($fileName, PATHINFO_FILENAME);
         $dir = mb_substr($directory, 0, 2);
@@ -301,6 +323,7 @@ $container->set('mediaPathHandler', function (ContainerInterface $c) {
  * Media Handler
  *
  * Resizes and optimizes media using a TinyJPG key
+ * @param ContainerInterface $c
  * @return Piton\Library\Handlers\Media
  */
 $container->set('mediaHandler', function (ContainerInterface $c) {
@@ -314,7 +337,7 @@ $container->set('mediaHandler', function (ContainerInterface $c) {
  * Used as validation and to construct alternate source sets.
  * @return array
  */
-$container->set('mediaSizeList', function (ContainerInterface $c) {
+$container->set('mediaSizeList', function () {
     return ['xlarge', 'large', 'small', 'thumb'];
 });
 
@@ -323,6 +346,7 @@ $container->set('mediaSizeList', function (ContainerInterface $c) {
  *
  * Given a filename and a desired size, checks the size against mediaSizes and then returns
  * desired filename with size.
+ * @param ContainerInterface $c
  * @return string
  */
 $container->set('mediaSizes', function (ContainerInterface $c) {
@@ -344,7 +368,7 @@ $container->set('mediaSizes', function (ContainerInterface $c) {
  * Creates new filename for uploaded files
  * @return string
  */
-$container->set('filenameGenerator', function (ContainerInterface $c) {
+$container->set('filenameGenerator', function () {
     return function () {
         return bin2hex(random_bytes(6));
     };
