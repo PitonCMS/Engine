@@ -140,8 +140,8 @@ HTML;
         try {
             // Get dependencies
             $messageMapper = ($this->container->dataMapper)('MessageMapper');
-            $messageId = (int) $this->request->getParsedBodyParam('messageId');
-            $controlRequest = $this->request->getParsedBodyParam('control');
+            $messageId = (int) $this->getParsedBodyParam('messageId');
+            $controlRequest = $this->getParsedBodyParam('control');
 
             $message = $messageMapper->findById($messageId);
             if ($controlRequest === 'delete') {

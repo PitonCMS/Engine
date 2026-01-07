@@ -80,8 +80,8 @@ class AdminNavigationController extends AdminBaseController
         $navigationMapper = ($this->container->get('dataMapper'))('NavigationMapper');
 
         // Get POST data
-        $navigation = $this->request->getParsedBodyParam('nav');
-        $navigator = $this->request->getParsedBodyParam('navigator');
+        $navigation = $this->getParsedBodyParam('nav');
+        $navigator = $this->getParsedBodyParam('navigator');
 
         // Save each nav item. Array elements are updated by reference so new nav items get an ID assigned after insert to use parent ID's
         $index = 0;
@@ -138,7 +138,7 @@ class AdminNavigationController extends AdminBaseController
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             $navigationMapper = ($this->container->get('dataMapper'))('NavigationMapper');
-            $navIds = $this->request->getParsedBodyParam("navIds");
+            $navIds = $this->getParsedBodyParam("navIds");
             $navigationIds = json_decode($navIds);
             $status = "success";
             $text = "";

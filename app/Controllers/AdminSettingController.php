@@ -89,8 +89,8 @@ class AdminSettingController extends AdminBaseController
         $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
 
         // Get setting data POST array
-        $settings = $this->request->getParsedBodyParam('setting');
-        $category = $this->request->getParsedBodyParam('category');
+        $settings = $this->getParsedBodyParam('setting');
+        $category = $this->getParsedBodyParam('category');
 
         // Save each setting
         foreach ($settings as $row) {

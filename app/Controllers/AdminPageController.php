@@ -284,8 +284,8 @@ HTML;
         $toolbox = $this->container->get('toolbox');
 
         // Get page object
-        $pageId = $this->request->getParsedBodyParam('page_id');
-        $newSlug = $toolbox->cleanUrl($this->request->getParsedBodyParam('page_slug'));
+        $pageId = $this->getParsedBodyParam('page_id');
+        $newSlug = $toolbox->cleanUrl($this->getParsedBodyParam('page_slug'));
 
         // Try to get the original page from database for update
         if ($pageId) {
@@ -299,17 +299,17 @@ HTML;
             $page = $pageMapper->make();
         }
 
-        $page->collection_id = $this->request->getParsedBodyParam('collection_id');
-        $page->template = $this->request->getParsedBodyParam('template');
-        $page->title = trim($this->request->getParsedBodyParam('title'));
-        $page->sub_title = $this->request->getParsedBodyParam('sub_title');
+        $page->collection_id = $this->getParsedBodyParam('collection_id');
+        $page->template = $this->getParsedBodyParam('template');
+        $page->title = trim($this->getParsedBodyParam('title'));
+        $page->sub_title = $this->getParsedBodyParam('sub_title');
         $page->page_slug = $newSlug;
-        $page->meta_description = trim($this->request->getParsedBodyParam('meta_description'));
-        $page->media_id = $this->request->getParsedBodyParam('page_media_id');
+        $page->meta_description = trim($this->getParsedBodyParam('meta_description'));
+        $page->media_id = $this->getParsedBodyParam('page_media_id');
 
         // Process published date
-        $publishedDate = $this->request->getParsedBodyParam('published_date');
-        $publishNow = $this->request->getParsedBodyParam('publish_now');
+        $publishedDate = $this->getParsedBodyParam('published_date');
+        $publishNow = $this->getParsedBodyParam('publish_now');
 
         // Set publish date
         if (empty($publishedDate) && isset($publishNow)) {
@@ -329,7 +329,7 @@ HTML;
         $page = $pageMapper->save($page);
 
         // Save Page Settings
-        $settings = $this->request->getParsedBodyParam('setting');
+        $settings = $this->getParsedBodyParam('setting');
         foreach ($settings as $setting) {
             $this->saveSetting('page', $page->id, $setting);
         }
@@ -352,7 +352,7 @@ HTML;
 
         // Save page elements by block
         $index = 1;
-        foreach ($this->request->getParsedBodyParam('element') as $element) {
+        foreach ($this->getParsedBodyParam('element') as $element) {
             // Save element
             $pageElement = $pageElementMapper->make();
             $pageElement->id = ($element['element_id']) ? (int) $element['element_id'] : null;
@@ -444,7 +444,7 @@ HTML;
         // Get dependencies
         $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
 
-        $pageId = empty($this->request->getParsedBodyParam('page_id')) ? null : $this->request->getParsedBodyParam('page_id');
+        $pageId = empty($this->getParsedBodyParam('page_id')) ? null : $this->getParsedBodyParam('page_id');
 
         if (null !== $pageId) {
             // Ensure this is not the home page
@@ -526,7 +526,7 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Check that we received an ID
-            $id = htmlspecialchars($this->request->getParsedBodyParam('elementId', 'x'));
+            $id = htmlspecialchars($this->getParsedBodyParam('elementId', 'x'));
             if (!is_numeric($id)) {
                 throw new Exception("Invalid element ID");
             }
@@ -612,7 +612,7 @@ HTML;
         $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
         $toolbox = $this->container->get('toolbox');
 
-        $collectionId = $this->request->getParsedBodyParam('collection_id');
+        $collectionId = $this->getParsedBodyParam('collection_id');
 
         // Get saved collection or make one
         if ($collectionId) {
@@ -622,9 +622,9 @@ HTML;
         }
 
         $collection->id = $collectionId;
-        $collection->collection_title = trim($this->request->getParsedBodyParam('collection_title'));
-        $collection->collection_slug = $toolbox->cleanUrl($this->request->getParsedBodyParam('collection_slug'));
-        $collection->collection_definition = $this->request->getParsedBodyParam('collection_definition');
+        $collection->collection_title = trim($this->getParsedBodyParam('collection_title'));
+        $collection->collection_slug = $toolbox->cleanUrl($this->getParsedBodyParam('collection_slug'));
+        $collection->collection_definition = $this->getParsedBodyParam('collection_definition');
         $collectionMapper->save($collection);
 
         // Save collection and redirect back
@@ -645,7 +645,7 @@ HTML;
         $collectionMapper = ($this->container->get('dataMapper'))('CollectionMapper');
 
         // Get collection to delete
-        $collectionId = $this->request->getParsedBodyParam('collection_id');
+        $collectionId = $this->getParsedBodyParam('collection_id');
         $collection = $collectionMapper->findById((int) $collectionId);
 
         // Integrity checks before deleting

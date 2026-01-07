@@ -163,13 +163,13 @@ HTML;
             $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
 
             $media = $mediaMapper->make();
-            $media->id = (int) $this->request->getParsedBodyParam('media_id');
-            $media->caption = $this->request->getParsedBodyParam('caption');
-            $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+            $media->id = (int) $this->getParsedBodyParam('media_id');
+            $media->caption = $this->getParsedBodyParam('caption');
+            $media->feature = ($this->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
             $mediaMapper->save($media);
 
             // Save category mappings
-            $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->getParsedBodyParam('category'));
 
             $status = "success";
             $text = "Saved media";
@@ -196,7 +196,7 @@ HTML;
             $mediaMapper = ($this->container->dataMapper)('MediaMapper');
 
             // Get the media record
-            $id = (int) $this->request->getParsedBodyParam('media_id');
+            $id = (int) $this->getParsedBodyParam('media_id');
             $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {
@@ -268,7 +268,7 @@ HTML;
                 // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
                 $doOptimize = false;
                 if (
-                    $this->request->getParsedBodyParam('optimize', null) === 'on' &&
+                    $this->getParsedBodyParam('optimize') === 'on' &&
                     !empty($this->settings['site']['tinifyApiKey']) &&
                     in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
                 ) {
@@ -278,16 +278,16 @@ HTML;
                 // Save media record to database
                 $media = $mediaMapper->make();
                 $media->filename = $fileUpload->getFilename();
-                $media->caption = $this->request->getParsedBodyParam('caption');
+                $media->caption = $this->getParsedBodyParam('caption');
                 $media->width = ($fileUpload->width) ?: null;
                 $media->height = ($fileUpload->height) ?: null;
-                $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+                $media->feature = ($this->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
                 $media->mime_type = $fileUpload->mimeType;
                 $media->optimized = ($doOptimize) ? $mediaMapper->getOptimizedCode('new') : $mediaMapper->getOptimizedCode('exclude');
                 $mediaMapper->save($media);
 
                 // Save category assignments
-                $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+                $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->getParsedBodyParam('category'));
 
                 // Optimize media uploads
                 if ($doOptimize) {
@@ -332,7 +332,7 @@ HTML;
     public function saveMediaCategories(): Response
     {
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $categoriesPost = $this->request->getParsedBodyParam('category');
+        $categoriesPost = $this->getParsedBodyParam('category');
 
         foreach ($categoriesPost as $cat) {
             // Skip if category name is empty
@@ -364,8 +364,8 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
-            $categoryId = $this->request->getParsedBodyParam('categoryId');
-            $mediaIds = $this->request->getParsedBodyParam('mediaIds');
+            $categoryId = $this->getParsedBodyParam('categoryId');
+            $mediaIds = $this->getParsedBodyParam('mediaIds');
             $status = "success";
             $text = "";
 
@@ -394,7 +394,7 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-            $categoryId = $this->request->getParsedBodyParam('categoryId');
+            $categoryId = $this->getParsedBodyParam('categoryId');
             $status = "success";
             $text = "";
 

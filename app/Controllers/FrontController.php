@@ -96,14 +96,14 @@ class FrontController extends FrontBaseController
             $logger->debug('Trying to send contact email');
 
             // Check honepot before saving message
-            if ('alt@example.com' !== $this->request->getParsedBodyParam('alt-email')) {
+            if ('alt@example.com' !== $this->getParsedBodyParam('alt-email')) {
                 throw new Exception('Honeypot found a fly');
             }
 
             $logger->debug('...Passed honeypot test');
 
             // Check if there is a message to save
-            if (empty($this->request->getParsedBodyParam('email'))) {
+            if (empty($this->getParsedBodyParam('email'))) {
                 throw new Exception('Empty message submitted');
             }
 
@@ -111,7 +111,7 @@ class FrontController extends FrontBaseController
 
             // Check that we have the minimum number of message characters
             $minLength = $this->container->get('get')('settings')['site']['minMessageLength'] ?? 1;
-            if (mb_strlen($this->request->getParsedBodyParam('message')) < (int) $minLength) {
+            if (mb_strlen($this->getParsedBodyParam('message')) < (int) $minLength) {
                 throw new Exception('Message less than minimum length');
             }
 
@@ -120,10 +120,10 @@ class FrontController extends FrontBaseController
 
             // Save message
             $message = $messageMapper->make();
-            $message->name = $this->request->getParsedBodyParam('name');
-            $message->email = $this->request->getParsedBodyParam('email');
-            $message->message = $this->request->getParsedBodyParam('message');
-            $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
+            $message->name = $this->getParsedBodyParam('name');
+            $message->email = $this->getParsedBodyParam('email');
+            $message->message = $this->getParsedBodyParam('message');
+            $message->context = $this->getParsedBodyParam('context', 'Unknown');
             $message = $messageMapper->save($message);
 
             $logger->debug('...Saved message to DB');
@@ -138,18 +138,18 @@ class FrontController extends FrontBaseController
                 // Go through defined contact custom fields and match to POST array
                 foreach ($contactInputsDefinition as $field) {
                     // Check if there is matching input to save
-                    if (!$this->request->getParsedBodyParam($field->key)) {
+                    if (!$this->getParsedBodyParam($field->key)) {
                         continue;
                     }
 
                     // Create message text to append to email
-                    $appendMessageText .= "\n" . $field->name . ": " . $this->request->getParsedBodyParam($field->key);
+                    $appendMessageText .= "\n" . $field->name . ": " . $this->getParsedBodyParam($field->key);
 
                     // Save to data store
                     $dataStore = $messageDataMapper->make();
                     $dataStore->message_id = $message->id;
                     $dataStore->data_key = $field->key;
-                    $dataStore->data_value = $this->request->getParsedBodyParam($field->key);
+                    $dataStore->data_value = $this->getParsedBodyParam($field->key);
                     $messageDataMapper->save($dataStore);
                 }
             }

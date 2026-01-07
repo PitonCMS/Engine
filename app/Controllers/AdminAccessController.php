@@ -67,7 +67,7 @@ class AdminAccessController extends AdminBaseController
         $emailHandler = $this->container->emailHandler;
         $security = $this->container->accessHandler;
         $userMapper = ($this->container->dataMapper)('UserMapper');
-        $email = trim($this->request->getParsedBodyParam('email'));
+        $email = trim($this->getParsedBodyParam('email'));
 
         // Fetch users
         $user = $userMapper->findActiveUserByEmail($email);

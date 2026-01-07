@@ -33,6 +33,7 @@ class BaseController
     protected $view;
     protected array $alert = [];
     protected array $settings = [];
+    protected array $parsedBody = [];
 
     /**
      * Constructor
@@ -63,9 +64,7 @@ class BaseController
      */
     protected function render(string $template, $data = null): Response
     {
-        // $twigView = $this->container->get('view');
-
-        // By making page data a Twig Global, we can access page data in block elements which are loaded by a Twig function in the templates
+        // By making Page Data a Twig Global, we can access page data in block elements which are loaded by a Twig function in the templates
         $twigEnvironment = $this->view->getEnvironment();
         $twigEnvironment->addGlobal('page', $data);
 
@@ -125,10 +124,13 @@ class BaseController
 
         $response = $this->response->withHeader('Content-Type', 'application/json');
 
-        return $this->response->write(json_encode([
+        $body = $response->getBody();
+        $body->write(json_encode([
             "status" => $status,
             "text" => $text,
         ]));
+
+        return $response;
     }
 
     /**
@@ -142,6 +144,24 @@ class BaseController
     protected function getPagination(): TwigPagination
     {
         return $this->view->getEnvironment()->getExtensions()['Piton\Pagination\TwigPagination'];
+    }
+
+    /**
+     * Get Parsed Body Param
+     *
+     * Parses Request body and returns the requested key
+     * @param string $key
+     * @param ?mixed $default
+     * @return ?mixed
+     */
+    public function getParsedBodyParam(string $key, ?mixed $default = null): ?mixed
+    {
+        // Cache parsed body for future calls
+        if (empty($this->parsedBody)) {
+            $this->parsedBody = $this->request->getParsedBody();
+        }
+
+        return $this->parsedBody[$key] ?? $default;
     }
 
     /**
