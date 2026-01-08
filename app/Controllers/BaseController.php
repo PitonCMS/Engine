@@ -18,6 +18,7 @@ use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * Piton Base Controller
@@ -102,9 +103,7 @@ class BaseController
      */
     protected function notFound(): Response
     {
-        $notFound = $this->container->get('notFoundHandler');
-
-        return $notFound($this->request, $this->response);
+        throw new HttpNotFoundException($this->request);
     }
 
     /**

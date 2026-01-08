@@ -10,6 +10,9 @@
 
 declare(strict_types=1);
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
+
 /**
  * Load Middleware
  *
@@ -21,4 +24,14 @@ $app->add(new Piton\Middleware\LoadSiteSettings($container->get('settings'), $co
 $app->addRoutingMiddleware();
 
 // Keep as last loaded middleware in file
-$app->addErrorMiddleware($config['displayErrorDetails'], true, true);
+$errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], true, true);
+
+// Set custom 404 handler
+$errorMiddleware->setErrorHandler(
+    HttpNotFoundException::class,
+    function (Request $request, Throwable $exception) use ($container) {
+        $handler = $container->get('notFoundHandler');
+
+        return $handler($request, $exception, false, false, false);
+    }
+);

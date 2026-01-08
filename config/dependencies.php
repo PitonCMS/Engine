@@ -186,14 +186,12 @@ $container->set('accessHandler', function (ContainerInterface $c) {
 /**
  * Not Found (404)
  *
- * Override the default Slim Not Found handler
+ * Handles not found exceptions
  * @param ContainerInterface $c
  * @return Piton\Library\Handlers\NotFound
  */
 $container->set('notFoundHandler', function (ContainerInterface $c) {
-    die('TODO: Dependencies notFoundHandler');
-
-    return new Piton\Library\Handlers\NotFound($c->get('view'), $c->get('logger'));
+    return new Piton\Library\Handlers\NotFound($c->get('responseFactory'), $c->get('view'), $c->get('logger'));
 });
 
 /**

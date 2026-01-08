@@ -192,7 +192,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function baseUrl(): string
     {
-        return $this->uri->getScheme() . '://' . $this->uri->getAuthority() . $this->uri->getPath();
+        return $this->uri->getScheme() . '://' . $this->uri->getAuthority();
     }
 
     /**
@@ -225,7 +225,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      */
     public function currentUrl(bool $withQueryString = false): string
     {
-        return $this->uri->getBaseUrl() . $this->currentPath($withQueryString);
+        return $this->baseUrl() . $this->currentPath($withQueryString);
     }
 
     /**

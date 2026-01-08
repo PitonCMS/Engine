@@ -248,7 +248,7 @@ class CsrfGuard
                 throw new Exception('Cannot render unknown content type ' . $contentType);
         }
 
-        // Create response & response body
+        // Create response
         $response = $this->responseFactory->createResponse(403);
 
         return $response->getBody()->write($output)->withHeader('Content-type', $contentType);
