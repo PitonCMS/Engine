@@ -20,5 +20,5 @@ $app->add(new Piton\Middleware\ResponseHeaders($container->get('settings')));
 $app->add(new Piton\Middleware\LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler')));
 $app->addRoutingMiddleware();
 
-// Keep as last loaded middleware
+// Keep as last loaded middleware in file
 $app->addErrorMiddleware($config['displayErrorDetails'], true, true);

@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -26,20 +26,19 @@ class Access
      *
      * @var Piton\Library\Interfaces\SessionInterface
      */
-    protected $session;
+    protected SessionInterface $session;
 
     /**
     * Logged in Key Name
     *
     * @var string
     */
-    protected $loggedInKey = 'loggedIn';
+    protected string $loggedInKey = 'loggedIn';
 
     /**
      * Constructor
      *
      * @param SessionInterface
-     * @return void
      */
     public function __construct(SessionInterface $sessionHandler)
     {

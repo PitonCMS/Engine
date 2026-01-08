@@ -151,10 +151,10 @@ class BaseController
      *
      * Parses Request body and returns the requested key
      * @param string $key
-     * @param ?mixed $default
-     * @return ?mixed
+     * @param mixed $default
+     * @return mixed
      */
-    public function getParsedBodyParam(string $key, ?mixed $default = null): ?mixed
+    public function getParsedBodyParam(string $key, mixed $default = null): mixed
     {
         // Cache parsed body for future calls
         if (empty($this->parsedBody)) {

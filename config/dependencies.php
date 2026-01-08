@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 use Piton\Library\Config;
 use Psr\Container\ContainerInterface;
+use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Twig\Extension\DebugExtension;
@@ -41,6 +42,17 @@ $container->set('settings', function () use ($config) {
  */
 $container->set('router', function () use ($app) {
     return $app->getRouteCollector()->getRouteParser();
+});
+
+/**
+ * Get PSR Response Factory
+ *
+ * Used to create Response objects
+ * @param void
+ * @return ResponseFactory
+ */
+$container->set('responseFactory', function () {
+    return new ResponseFactory();
 });
 
 /**
@@ -278,7 +290,7 @@ $container->set('toolbox', function () {
  * @return Piton\Library\Handlers\CsrfGuard
  */
 $container->set('csrfGuardHandler', function (ContainerInterface $c) {
-    return new Piton\Library\Handlers\CsrfGuard($c->get('sessionHandler'), $c->get('logger'));
+    return new Piton\Library\Handlers\CsrfGuard($c->get('sessionHandler'), $c->get('responseFactory'), $c->get('logger'));
 });
 
 /**
