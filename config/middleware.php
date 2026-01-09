@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use Piton\Library\Handlers\ErrorRenderer;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
@@ -23,8 +24,10 @@ $app->add(new Piton\Middleware\ResponseHeaders($container->get('settings')));
 $app->add(new Piton\Middleware\LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler')));
 $app->addRoutingMiddleware();
 
-// Keep as last loaded middleware in file
-$errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], true, true);
+// Keep Error Middleware (below) as last in middleware file, Slim executes this first.
+$errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], true, true, $container->get('logger'));
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->registerErrorRenderer('text/html', ErrorRenderer::class);
 
 // Set custom 404 handler
 $errorMiddleware->setErrorHandler(

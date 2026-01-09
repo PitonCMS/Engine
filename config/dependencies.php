@@ -141,21 +141,14 @@ $container->set('database', function (ContainerInterface $c) {
 });
 
 /**
- * Error Exception Handler
+ * Exception HTML Renderer
  *
- * Runtime errors and exceptions are sent to this handler to log and display message.
+ * For 5xx Exceptions, displays PitonCMS error template
+ * @param void
+ * @return ErrorRenderer
  */
-$container->set('errorHandler', function (ContainerInterface $c) {
-    return new Piton\Library\Handlers\Error($c->get('settings')['displayErrorDetails'], $c->get('logger'));
-});
-
-/**
- * PHP Runtime Exception
- *
- * Directs all php7 runtime errors to the error exception handler
- */
-$container->set('phpErrorHandler', function (ContainerInterface $c) {
-    return $c->get('errorHandler');
+$container->set('ErrorRenderer', function () {
+    return new Piton\Library\Handlers\ErrorRenderer();
 });
 
 /**
