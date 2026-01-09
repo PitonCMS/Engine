@@ -393,19 +393,24 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get Query String Parameter
      *
      * Returns htmlspecialchars() escaped query param
-     * Missing params and empty string values are returned as null
+     * Missing params and empty param values are returned as null
      * @param ?string $param
      * @return ?string
      */
     public function getQueryParam(?string $param = null): ?string
     {
-        $value = $this->container->get('request')->getQueryParam($param);
+        if (!empty($param)) {
+            return null;
+        }
+
+        $queryParams = $this->container->get('request')->getQueryParams();
+        $value = $queryParams[$param] ?? null;
 
         if (!empty($value)) {
             return htmlspecialchars($value);
         }
 
-        return null;
+        return $value;
     }
 
     /**
@@ -642,7 +647,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         }
 
         // Get sanitized query string parameters and execute search
-        $terms = htmlspecialchars($this->container->get('request')->getQueryParam('terms', ''));
+        $terms = $this->getQueryParam('terms', '');
         $results = $pageMapper->searchPublishedContent($terms, $pagination->getLimit(), $pagination->getOffset()) ?? [];
 
         // Complete pagination setup

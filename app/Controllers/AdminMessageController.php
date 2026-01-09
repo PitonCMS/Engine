@@ -80,18 +80,18 @@ HTML;
     protected function loadMessages(): array
     {
         // Get dependencies
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
+        $messageMapper = ($this->container->get('dataMapper'))('MessageMapper');
+        $messageDataMapper = ($this->container->get('dataMapper'))('MessageDataMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->router->pathFor('adminMessage'));
-        $definition = $this->container->jsonDefinitionHandler;
+        $pagination->setPagePath($this->container->get('router')->urlFor('adminMessage'));
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         $contactInputsDefinition = $definition->getContactInputs() ?? [];
         $contactInputsDefinition = array_combine(array_column($contactInputsDefinition, 'key'), $contactInputsDefinition);
 
         // Get filters or search if requested
-        $option = htmlspecialchars($this->request->getQueryParam('status', 'unread'));
-        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
+        $option = htmlspecialchars($this->getQueryParam('status', 'unread'));
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
 
         if (!empty($terms)) {
             // This was a search request
@@ -139,7 +139,7 @@ HTML;
 
         try {
             // Get dependencies
-            $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $messageMapper = ($this->container->get('dataMapper'))('MessageMapper');
             $messageId = (int) $this->getParsedBodyParam('messageId');
             $controlRequest = $this->getParsedBodyParam('control');
 
@@ -177,7 +177,7 @@ HTML;
     public function getNewMessageCount(): Response
     {
         try {
-            $messageMapper = ($this->container->dataMapper)('MessageMapper');
+            $messageMapper = ($this->container->get('dataMapper'))('MessageMapper');
             $count = $messageMapper->findUnreadCount();
 
             $status = "success";

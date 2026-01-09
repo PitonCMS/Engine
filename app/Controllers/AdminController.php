@@ -79,7 +79,8 @@ class AdminController extends AdminBaseController
         }
 
         // Make sitemap
-        if ($sitemapHandler->make($links, $this->request->getUri()->getBaseUrl(), $this->settings['environment']['production'])) {
+        $uri = $this->request->getUri();
+        if ($sitemapHandler->make($links, $uri->getScheme() . '://' . $uri->getAuthority(), $this->settings['environment']['production'])) {
             if ($this->settings['environment']['production']) {
                 $this->setAlert('info', 'Sitemap updated and search engines alerted', $sitemapHandler->getMessages());
             }
@@ -123,7 +124,7 @@ class AdminController extends AdminBaseController
 
         // Send 404 if support file is not found
         if (!file_exists($supportFile)) {
-            return $this->notFound();
+            $this->notFound();
         }
 
         $supportContent = $markdown->text(file_get_contents($supportFile));
@@ -137,19 +138,24 @@ class AdminController extends AdminBaseController
         $document->loadHTML('<?xml encoding="utf-8" ?>' . $supportContent);
 
         // Use DOMXPath to find headings, but skip h1's
-        $xpath = new \DOMXpath($document);
+        $xpath = new \DOMXPath($document);
         $nodes = $xpath->query("//h1 | //h2 | //h3 | //h4 | //h5 | //h6");
 
         // Start TOC list and loop through nodes
         $toc = '';
 
-        for ($i = 0; $i < $nodes->length; $i++) {
+        foreach ($nodes as $node) {
+            // $node is automatically DOMElement here. This statement is only needed to convince Intelephense setAttribute is not missing...
+            // if (!$node instanceof \DOMElement) {
+            //     continue;
+            // }
+
             // Add id to heading
-            $id = str_replace(' ', '-', strtolower($nodes->item($i)->nodeValue));
-            $nodes->item($i)->setAttribute('id', $id);
+            $id = str_replace(' ', '-', strtolower($node->nodeValue));
+            $node->setAttribute('id', $id);
 
             // Add the TOC link
-            $toc .= "<a href=\"#$id\" class=\"help-toc__{$nodes[$i]->nodeName}\">{$nodes[$i]->nodeValue}</a>\n";
+            $toc .= "<a href=\"#$id\" class=\"help-toc__{$node->nodeName}\">{$node->nodeValue}</a>\n";
         }
 
         // Get breadcrumb title from first H1 in file and render HTML

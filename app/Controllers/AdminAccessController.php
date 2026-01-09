@@ -33,13 +33,13 @@ class AdminAccessController extends AdminBaseController
      * Login Token Key Name
      * @var string
      */
-    private $loginTokenKey = 'loginToken';
+    private string $loginTokenKey = 'loginToken';
 
     /**
      * Login Token Key Expires Name
      * @var string
      */
-    private $loginTokenExpiresKey = 'loginTokenExpires';
+    private string $loginTokenExpiresKey = 'loginTokenExpires';
 
     /**
      * Show Login Form
@@ -63,10 +63,10 @@ class AdminAccessController extends AdminBaseController
     public function requestLoginToken(): Response
     {
         // Get dependencies
-        $session = $this->container->sessionHandler;
-        $emailHandler = $this->container->emailHandler;
-        $security = $this->container->accessHandler;
-        $userMapper = ($this->container->dataMapper)('UserMapper');
+        $session = $this->container->get('sessionHandler');
+        $emailHandler = $this->container->get('emailHandler');
+        $security = $this->container->get('accessHandler');
+        $userMapper = ($this->container->get('dataMapper'))('UserMapper');
         $email = trim($this->getParsedBodyParam('email'));
 
         // Fetch users
@@ -75,7 +75,7 @@ class AdminAccessController extends AdminBaseController
         // Did we find a match?
         if ($user === null) {
             // No, log and silently redirect to home
-            $this->container->logger->info('PitonCMS: Failed login attempt: ' . $email);
+            $this->container->get('logger')->info('PitonCMS: Failed login attempt: ' . $email);
 
             return $this->redirect('home');
         }
@@ -95,8 +95,9 @@ class AdminAccessController extends AdminBaseController
             ]);
 
             // Get request details to create login link and email to user
-            $link = $this->request->getUri()->getBaseUrl();
-            $link .= $this->container->get('router')->pathFor('adminProcessLoginToken', ['token' => $token]);
+            $uri = $this->request->getUri();
+            $link = $uri->getScheme() . '://' . $uri->getAuthority();
+            $link .= $this->container->get('router')->urlFor('adminProcessLoginToken', ['token' => $token]);
 
             // Send message
             $emailHandler->setTo($user->email, '')
@@ -119,8 +120,8 @@ class AdminAccessController extends AdminBaseController
     public function processLoginToken(array $args): Response
     {
         // Get dependencies
-        $session = $this->container->sessionHandler;
-        $security = $this->container->accessHandler;
+        $session = $this->container->get('sessionHandler');
+        $security = $this->container->get('accessHandler');
         $savedToken = $session->getData($this->loginTokenKey);
         $tokenExpires = (int) $session->getData($this->loginTokenExpiresKey);
 
@@ -139,9 +140,9 @@ class AdminAccessController extends AdminBaseController
 
         // Not valid, direct home
         $message = $args['token'] . ' saved: ' . $savedToken . ' time: ' . time() . ' expires: ' . $tokenExpires;
-        $this->container->logger->info('PitonCMS: Invalid login token, supplied: ' . $message);
+        $this->container->get('logger')->info('PitonCMS: Invalid login token, supplied: ' . $message);
 
-        return $this->notFound();
+        return $this->redirect('home');
     }
 
     /**
@@ -154,11 +155,11 @@ class AdminAccessController extends AdminBaseController
     public function logout(): Response
     {
         // Unset authenticated session
-        $security = $this->container->accessHandler;
+        $security = $this->container->get('accessHandler');
         $security->endAuthenticatedSession();
 
         // Unset CSRF Token
-        $csrfGuard = $this->container->csrfGuardHandler;
+        $csrfGuard = $this->container->get('csrfGuardHandler');
         $csrfGuard->unsetToken();
 
         return $this->redirect('home');

@@ -46,7 +46,7 @@ class FrontController extends FrontBaseController
 
         // Return 404 if not found
         if (empty($page)) {
-            return $this->notFound();
+            $this->notFound();
         }
 
         // Get page elements

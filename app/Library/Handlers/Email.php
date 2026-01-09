@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,11 +12,10 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Psr\Log\LoggerInterface as Logger;
-use Piton\Library\Interfaces\EmailInterface;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use ArrayAccess;
+use Piton\Library\Config;
+use Piton\Library\Interfaces\EmailInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Piton Email Class
@@ -30,29 +29,28 @@ class Email implements EmailInterface
      * Mailer
      * @var object PHPMailer\PHPMailer\PHPMailer
      */
-    protected $mailer;
+    protected PHPMailer $mailer;
 
     /**
      * Logger Object
      * @var Logger
      */
-    protected $logger;
+    protected Logger $logger;
 
     /**
-     * Settings Array
-     * @var array
+     * Config Settings
+     * @var Config
      */
-    protected $settings;
+    protected Config $settings;
 
     /**
      * Constructor
      *
-     * @param  PHPMailer          $mailer   PHPMailer
-     * @param  Logger             $logger   Logging object
-     * @param  ArrayAccess $settings Array of configuration settings
-     * @return void
+     * @param  PHPMailer $mailer   PHPMailer
+     * @param  Logger    $logger   Logging object
+     * @param  Config    $settings Configuration settings
      */
-    public function __construct(PHPMailer $mailer, Logger $logger, ArrayAccess $settings)
+    public function __construct(PHPMailer $mailer, Logger $logger, Config $settings)
     {
         $this->mailer = $mailer;
         $this->logger = $logger;
@@ -69,10 +67,10 @@ class Email implements EmailInterface
      *
      * Set the Reply To email address, which is different from the server From address.
      * @param  string  $address Reply To email address
-     * @param  string  $name    Sender name, optional
+     * @param  ?string  $name    Sender name, optional
      * @return EmailInterface  $this
      */
-    public function setReplyTo(string $address, string $name = null): EmailInterface
+    public function setReplyTo(string $address, ?string $name = null): EmailInterface
     {
         $this->mailer->addReplyTo($address, $name);
 
@@ -84,10 +82,10 @@ class Email implements EmailInterface
      *
      * Can be called multiple times to add additional recipients
      * @param  string $address To email address
-     * @param  string $name    Recipient name, optiona
+     * @param  ?string $name    Recipient name, optiona
      * @return EmailInterface $this
      */
-    public function setTo(string $address, string $name = null): EmailInterface
+    public function setTo(string $address, ?string $name = null): EmailInterface
     {
         $this->mailer->addAddress($address, $name);
 
@@ -140,6 +138,7 @@ class Email implements EmailInterface
         } catch (\Throwable $e) {
             // Log for debugging and then rethrow
             $this->logger->error('PitonCMS: Failed to send mail: ' . $e->getMessage());
+
             throw new \Throwable($e->getMessage());
         }
     }

@@ -35,6 +35,7 @@ class BaseController
     protected array $alert = [];
     protected array $settings = [];
     protected array $parsedBody = [];
+    protected array $queryParams = [];
 
     /**
      * Constructor
@@ -91,7 +92,7 @@ class BaseController
             $session->setFlashData('alert', $this->alert);
         }
 
-        return $this->response->withHeader('Location', $this->container->get('router')->pathFor($routeName, $args))->withStatus($status);
+        return $this->response->withHeader('Location', $this->container->get('router')->urlFor($routeName, $args))->withStatus($status);
     }
 
     /**
@@ -162,6 +163,23 @@ class BaseController
         }
 
         return $this->parsedBody[$key] ?? $default;
+    }
+
+    /**
+     * Get a Single Query String Parameter Value
+     *
+     * @param string $key The query parameter name
+     * @param mixed  $default Default value if parameter doesn't exist
+     * @return mixed
+     */
+    protected function getQueryParam(string $key, $default = null): mixed
+    {
+        // Lazy load query params on first access
+        if ($this->queryParams === null) {
+            $this->queryParams = $this->request->getQueryParams();
+        }
+
+        return $this->queryParams[$key] ?? $default;
     }
 
     /**

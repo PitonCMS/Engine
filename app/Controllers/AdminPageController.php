@@ -83,14 +83,14 @@ HTML;
         // Get dependencies
         $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->get('router')->pathFor('adminPage'));
+        $pagination->setPagePath($this->container->get('router')->urlFor('adminPage'));
         $definition = $this->container->get('jsonDefinitionHandler');
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
         // Get filters or search if requested
-        $status = htmlspecialchars($this->request->getQueryParam('status', 'all'));
-        $type = htmlspecialchars($this->request->getQueryParam('type', 'all'));
-        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
+        $status = htmlspecialchars($this->getQueryParam('status', 'all'));
+        $type = htmlspecialchars($this->getQueryParam('type', 'all'));
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
 
         // Get data
         if (!empty($terms)) {
@@ -153,7 +153,7 @@ HTML;
 
         // Return 404 if not found
         if (empty($page)) {
-            return $this->notFound();
+            $this->notFound();
         }
 
         // Get page definition
@@ -213,8 +213,8 @@ HTML;
         $page = $pageMapper->make();
 
         // Get options
-        $templateParam = $this->request->getQueryParam('definition');
-        $collectionId = $this->request->getQueryParam('collectionId');
+        $templateParam = $this->getQueryParam('definition');
+        $collectionId = $this->getQueryParam('collectionId');
 
         // Get requested page template from query string
         if ($templateParam && empty($collectionId)) {
@@ -481,8 +481,8 @@ HTML;
             $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
             $pageElement = $pageElementMapper->make();
 
-            $pageElement->template = htmlspecialchars($this->request->getQueryParam('template'));
-            $pageElement->block_key = htmlspecialchars($this->request->getQueryParam('blockKey'));
+            $pageElement->template = htmlspecialchars($this->getQueryParam('template'));
+            $pageElement->block_key = htmlspecialchars($this->getQueryParam('blockKey'));
 
             // Get element definition
             if (null === $pageElement->definition = $definition->getElement($pageElement->template . '.json')) {

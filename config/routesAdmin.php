@@ -18,8 +18,8 @@ use Piton\Controllers\AdminNavigationController;
 use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
 use Piton\Controllers\AdminUserController;
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Routing\RouteCollectorProxy;
 
 //
@@ -282,7 +282,7 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
     $app->get('[/]', function () {
         return $this->response->withRedirect($this->router->pathFor('adminHome'));
     });
-})->add(function (Request $request, Response $response, callable $next) {
+})->add(function (Request $request, RequestHandler $handler) {
     // Authentication
 
     // To bypass authentication on a **NON-PRODUCTION** envornment only, see Support > Designer > Security > #bypass-authentication
@@ -292,22 +292,22 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
         && $this->get('settings')['session']['bypassAuthentication'] === true
     ) {
         // Bypassing authentication, just go to next call
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 
     // Otherwise run authentication
-    $security = $this->container->get('accessHandler');
+    $security = $this->get('accessHandler');
 
     if (!$security->isAuthenticated()) {
         // Failed authentication, redirect to login
-        return $this->redirect($app->router->pathFor('adminLoginForm'));
+        return $this->redirect($this->get('router')->urlFor('adminLoginForm'));
     }
 
     // Next call
-    return $next($request, $response);
-})->add(function (Request $request, Response $response, callable $next) {
+    return $handler->handle($request);
+})->add(function (Request $request, RequestHandler $handler) {
     // Add http no-cache, no-store headers to prevent back button access to admin
-    $response = $next($request, $response);
+    $response = $handler->handle($request);
 
     return $response->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 });

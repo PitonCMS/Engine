@@ -110,12 +110,12 @@ HTML;
         $mediaMapper = ($this->container->dataMapper)('MediaMapper');
         $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->get('router')->pathFor('adminMedia'));
+        $pagination->setPagePath($this->container->get('router')->urlFor('adminMedia'));
 
         // Get filters or search if requested
-        $category = htmlspecialchars($this->request->getQueryParam('category', '0'));
-        $featured = htmlspecialchars($this->request->getQueryParam('featured', 'all'));
-        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
+        $category = htmlspecialchars($this->getQueryParam('category', '0'));
+        $featured = htmlspecialchars($this->getQueryParam('featured', 'all'));
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
 
         // Get data
         if (!empty($terms)) {
