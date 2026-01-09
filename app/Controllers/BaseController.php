@@ -99,9 +99,10 @@ class BaseController
      *
      * Returns http status 404 Not Found and custom error template
      * @param void
-     * @return Response
+     * @throws HttpNotFoundException
+     * @return void
      */
-    protected function notFound(): Response
+    protected function notFound(): void
     {
         throw new HttpNotFoundException($this->request);
     }

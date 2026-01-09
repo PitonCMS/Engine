@@ -68,11 +68,11 @@ class NotFound
      * Determines public or admin facing 404 page template path
      * @param  Request  $request
      * @param  RequestHandler Middleware handler
+     * @param  bool $displayErrorDetails (Not used, set in bootstrap)
+     * @param  bool $logErrors (Not used, set in bootstrap)
+     * @param  bool $logErrorDetails (Not used, set in bootstrap)
      * @return Response
      */
-
-    // public function __invoke(Request $request, RequestHandler $handler): Response
-
     public function __invoke(
         Request $request,
         Throwable $exception,
@@ -116,12 +116,14 @@ class NotFound
      */
     protected function renderHtmlNotFoundOutput(): string
     {
+        $pageTitle = ['page' => ['title' => 'Not Found']];
+
         // Set theme notFound template path
         if (file_exists(ROOT_DIR . 'structure/templates/system/notFound.html')) {
-            return $this->view->fetch('system/notFound.html');
+            return $this->view->fetch('system/notFound.html', $pageTitle);
         }
 
         // Otherwise return default template
-        return $this->view->fetch('@admin/system/notFound.html');
+        return $this->view->fetch('@admin/system/notFound.html', $pageTitle);
     }
 }
