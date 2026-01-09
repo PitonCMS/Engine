@@ -82,7 +82,7 @@ class CsrfGuard
         $this->loadSessionToken();
 
         // Log instantiation
-        $this->logger->debug('CsrfGuard middleware loaded at ' . time());
+        $this->logger->debug('CsrfGuard middleware LOADED at ' . time());
     }
 
     /**
@@ -95,6 +95,9 @@ class CsrfGuard
      */
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('CsrfGuard middleware INVOKED at ' . time());
+
         // Validate this is a POST request
         if ($request->getMethod() === 'POST') {
             $token = $this->getRequestToken($request);

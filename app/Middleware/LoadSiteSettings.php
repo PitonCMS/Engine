@@ -20,6 +20,7 @@ use Piton\Library\Handlers\Session;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface as Logger;
 
 /*
  * Merge site settings from database into app settings in the Container
@@ -34,24 +35,30 @@ class LoadSiteSettings
     protected Session $sessionHandler;
     protected Config $appSettings;
     protected array $newSettings;
+    protected Logger $logger;
 
     /**
      * Constructor
      *
-     * @param Config $config Configuration settings from the container
-     * @param Closure $dataMapper Data mapper closure from the container
-     * @param CsrfGuard $csrfGuardHandler CSRF Handker from the container
-     * @param Session $sessionHandler Session handler from the container
+     * @param Config $config
+     * @param Closure $dataMapper
+     * @param CsrfGuard $csrfGuardHandler
+     * @param Session $sessionHandler
+     * @param Logger $logger
      */
-    public function __construct(Config $config, Closure $dataMapper, CsrfGuard $csrfGuardHandler, Session $sessionHandler)
+    public function __construct(Config $config, Closure $dataMapper, CsrfGuard $csrfGuardHandler, Session $sessionHandler, Logger $logger)
     {
         $this->appSettings = $config;
         $this->dataMapper = $dataMapper;
         $this->csrfGuardHandler = $csrfGuardHandler;
         $this->sessionHandler = $sessionHandler;
+        $this->logger = $logger;
 
         $this->newSettings['environment'] = [];
         $this->newSettings['site'] = [];
+
+        // Log instantiation
+        $this->logger->debug('LoadSiteSettings middleware LOADED at ' . time());
     }
 
     /**
@@ -63,6 +70,9 @@ class LoadSiteSettings
      */
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('LoadSiteSettings middleware INVOKED at ' . time());
+
         $this->loadDatabaseSettings();
         $this->loadConfigSettings($request);
 

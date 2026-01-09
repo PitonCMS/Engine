@@ -16,6 +16,7 @@ use Piton\Library\Config;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface as Logger;
 
 /*
  * Set Dynamic Response Headers
@@ -28,13 +29,24 @@ class ResponseHeaders
     protected Config $config;
 
     /**
+     * Logging Object
+     * @var Psr\Log\LoggerInterface
+     */
+    protected Logger $logger;
+
+    /**
      * Constructor
      *
      * @param Config $config Configuration settings from the container
+     * @param Logger $logger
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, Logger $logger)
     {
         $this->config = $config;
+        $this->logger = $logger;
+
+        // Log instantiation
+        $this->logger->debug('ResponseHeaders middleware LOADED at ' . time());
     }
 
     /**
@@ -46,6 +58,9 @@ class ResponseHeaders
      */
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('ResponseHeaders middleware INVOKED at ' . time());
+
         // This is an Exit middleware method so wait until exiting and get next request first
         $response = $handler->handle($request);
 
