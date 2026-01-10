@@ -277,12 +277,11 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
         })->setName('adminSupportContent');
     });
 
-
     // Fallback for when calling /admin to redirect to /admin/home (adminHome)
-    $app->get('[/]', function () {
-        return $this->response->withRedirect($this->router->pathFor('adminHome'));
+    $app->get('[/]', function ($request, $response, $args) {
+        return $response->withHeader('Location', $this->get('router')->urlFor('adminHome'))->withStatus(302);
     });
-})->add(function (Request $request, RequestHandler $handler) {
+})->add(function (Request $request, RequestHandler $handler) use ($app) {
     // Authentication
 
     // To bypass authentication on a **NON-PRODUCTION** envornment only, see Support > Designer > Security > #bypass-authentication
@@ -299,8 +298,10 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
     $security = $this->get('accessHandler');
 
     if (!$security->isAuthenticated()) {
-        // Failed authentication, redirect to login
-        return $this->redirect($this->get('router')->urlFor('adminLoginForm'));
+        // Failed authentication, redirect to login. First create a new Response object and then redirect
+        $response = $app->getResponseFactory()->createResponse();
+
+        return $response->withHeader('Location', $this->get('router')->urlFor('adminLoginForm'))->withStatus(302);
     }
 
     // Next call
