@@ -41,20 +41,47 @@ class PitonEntity extends DomainObject
     /**
      * Get Object Property
      *
-     * Returns class property. If there is no immediate match, then tries to convert camelCase $key to underscore to find a match
+     * Returns class property. If there is no immediate match, then tries to convert camelCase $key to underscore $key to find a match
      * @param  string $key Property name to get
-     * @return ?mixed Property value
+     * @return mixed Property value
      */
     public function __get($key)
     {
-        $propertyValue = parent::__get($key);
+        if (property_exists($this, $key)) {
+            return $this->$key;
+        } else {
+            $underScoreKey = $this->convertCamelCaseToUnderScores($key);
 
-        if (!empty($propertyValue)) {
-            return $propertyValue;
+            if (property_exists($this, $underScoreKey)) {
+                return $this->$underScoreKey;
+            }
         }
 
-        // Go to backup, and look for the key but using underscores
-        return $this->getCamelCaseToUnderScores($key);
+        return null;
+    }
+
+    /**
+     * Set Object Property
+     *
+     * Will throw an exception if property does not exist.
+     * @param  string $key   Property key
+     * @param  mixed  $value Property value to set
+     * @throws Throwable if property does not exist
+     */
+    public function __set(string $key, mixed $value = null)
+    {
+        if (property_exists($this, $key)) {
+            $this->$key = $value;
+        } else {
+            // Try converting camelCase to underscore to find property
+            $underScoreKey = $this->convertCamelCaseToUnderScores($key);
+
+            if (property_exists($this, $underScoreKey)) {
+                $this->$underScoreKey = $value;
+            } else {
+                throw new \RuntimeException("Piton Exception: Attempt to set value on non-existent property '{$key}' in " . get_class($this));
+            }
+        }
     }
 
     /**
@@ -62,27 +89,26 @@ class PitonEntity extends DomainObject
      *
      * This is allows Twig to use non-existent camelCase equivalents in templates
      * @param string $key
-     * @return mixed
+     * @return bool
      */
     public function __isset($key)
     {
-        return true;
-        // return $this->getCamelCaseToUnderScores($key);
+        if (property_exists($this, $key)) {
+            return true;
+        } else {
+            return property_exists($this, $this->convertCamelCaseToUnderScores($key));
+        }
     }
 
     /**
-     * Get Camel Case to Under Score Property Value
+     * Convert Camel Case to Under Score Property key
      *
-     * Converts camelCase property values to underscores and checks if property exists
-     * If it does, then adds the camelCase property to this object with a pointer to the under score equivalent
+     * Converts camelCase property values to underscores and returns the new string
      * @param string $key
-     * @return ?mixed
+     * @return string
      */
-    private function getCamelCaseToUnderScores($key)
+    private function convertCamelCaseToUnderScores($key): string
     {
-        // Split camelCase variables to underscores and see if there is a match to an existing property
-        $propertyKey = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
-
-        return parent::__get($propertyKey);
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
     }
 }

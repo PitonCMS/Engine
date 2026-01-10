@@ -22,6 +22,9 @@ class MessageData extends PitonEntity
     protected ?string $data_key = null;
     protected ?string $data_value = null;
 
+    // Derived Properties
+    protected ?string $inputs = null;
+
     /**
      * Constructor
      *
@@ -33,6 +36,7 @@ class MessageData extends PitonEntity
         $this->message_id = isset($row['message_id']) ? $row['message_id'] : null;
         $this->data_key = isset($row['data_key']) ? $row['data_key'] : null;
         $this->data_value = isset($row['data_value']) ? (int) $row['data_value'] : null;
+        $this->inputs = isset($row['inputs']) ? $row['inputs'] : null;
 
         parent::__construct($row);
     }
