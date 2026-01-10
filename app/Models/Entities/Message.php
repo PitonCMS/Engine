@@ -24,6 +24,9 @@ class Message extends PitonEntity
     protected ?string $is_read = null;
     protected ?string $context = null;
 
+    // Calculated Properties
+    protected ?int $unread = null;
+
     /**
      * Constructor
      *
@@ -37,6 +40,7 @@ class Message extends PitonEntity
         $this->message = isset($row['message']) ? $row['message'] : null;
         $this->is_read = isset($row['is_read']) ? $row['is_read'] : null;
         $this->context = isset($row['context']) ? $row['context'] : null;
+        $this->unread = isset($row['unread']) ? (int) $row['unread'] : null;
 
         parent::__construct($row);
     }
