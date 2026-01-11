@@ -23,7 +23,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * 1 Render login page form, which accepts an email address
  * 2 Submit (POST) the email, and validate the email string against a list of known users
  * 3 Generate a one-time use hash token, save the token to session data, and send token in query string to user's email account
- * 4 User opens email, and submits link with token
+ * 4 User opens email, and submits link with token (GET)
  * 5 The application validates the submitted token to the one in session data, and if not expired an authenticated
  *      session is started
  */
@@ -74,8 +74,8 @@ class AdminAccessController extends AdminBaseController
 
         // Did we find a match?
         if ($user === null) {
-            // No, log and silently redirect to home
-            $this->container->get('logger')->info('PitonCMS: Failed login attempt: ' . $email);
+            // If null, then log and silently redirect to home
+            $this->container->get('logger')->error('PitonCMS: Failed login attempt: ' . $email);
 
             return $this->redirect('home');
         }
