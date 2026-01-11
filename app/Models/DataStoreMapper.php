@@ -30,8 +30,8 @@ class DataStoreMapper extends DataMapperAbstract
      * Find Settings
      *
      * Find all settings, or a category of settings
-     * @param  string|array|null $category site|contact|social|piton
-     * @return array|null
+     * @param  ?string $category Null or one of site|contact|social|piton
+     * @return ?array
      */
     public function findSiteSettings(?string $category = null): ?array
     {
@@ -51,7 +51,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get page level settings
      * @param  int   $pageId  Page ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageSettings(int $pageId): ?array
     {
@@ -67,7 +67,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get page element level settings
      * @param  int   $elementId  Element ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageElementSettings(int $elementId): ?array
     {
@@ -83,7 +83,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get all page, and page_element settings for all elements in this page, in one query
      * @param int $pageId Page ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageAndElementSettingsByPageId(int $pageId): ?array
     {
@@ -110,11 +110,11 @@ SQL;
      *
      * Saves Piton alert notices for display in application that are not saved to session flash data.
      * Background scripts and processes should use this for messaging
-     * @param string        $severity Severity level color code
-     * @param string        $heading  Heading text
-     * @param string|array  $messge   Message or array of messages (Optional)
+     * @param string $severity Severity level color code
+     * @param string $heading  Heading text
+     * @param mixed  $messge   Message or array of messages (Optional)
      */
-    public function setAppAlert(string $severity, string $heading, $message = null): void
+    public function setAppAlert(string $severity, string $heading, mixed $message = null): void
     {
         // Get any existing alert messages
         $this->makeSelect();

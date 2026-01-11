@@ -24,6 +24,9 @@ class DataStore extends PitonEntity
     protected ?string $setting_key = null;
     protected ?string $setting_value = null;
 
+    // Derived Properties
+    protected ?string $status = null;
+
     /**
      * Constructor
      *
@@ -37,6 +40,7 @@ class DataStore extends PitonEntity
         $this->element_id = isset($row['element_id']) ? (int) $row['element_id'] : null;
         $this->setting_key = isset($row['setting_key']) ? $row['setting_key'] : null;
         $this->setting_value = isset($row['setting_value']) ? $row['setting_value'] : null;
+        $this->status = isset($row['status']) ? $row['status'] : null;
 
         parent::__construct($row);
     }
