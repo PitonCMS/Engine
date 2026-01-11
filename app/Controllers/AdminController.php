@@ -144,12 +144,8 @@ class AdminController extends AdminBaseController
         // Start TOC list and loop through nodes
         $toc = '';
 
+        /** @var \DOMElement $node */
         foreach ($nodes as $node) {
-            // $node is automatically DOMElement here. This statement is only needed to convince Intelephense setAttribute is not missing...
-            // if (!$node instanceof \DOMElement) {
-            //     continue;
-            // }
-
             // Add id to heading
             $id = str_replace(' ', '-', strtolower($node->nodeValue));
             $node->setAttribute('id', $id);
@@ -175,7 +171,7 @@ class AdminController extends AdminBaseController
      */
     public function aboutPiton(): Response
     {
-        $markdown = $this->container->get('');
+        $markdown = $this->container->get('markdownParser');
         $log = $this->container->get('logger');
 
         // Get list of releases from GitHub. First check that cURL is installed on the server
@@ -198,12 +194,12 @@ class AdminController extends AdminBaseController
 
             // Verify that we have a response
             if ($responseStatus == '200') {
-                $jsonReleases = json_decode($responseBody);
+                $jsonReleases = json_decode($responseBody, true);
                 $data['releases'] = array_slice($jsonReleases, 0, 3, true);
 
                 // Format Markdown
                 foreach ($data['releases'] as $key => $release) {
-                    $data['releases'][$key]->body = $markdown->text($release->body);
+                    $data['releases'][$key]['body'] = $markdown->convert($release['body']);
                 }
 
                 // TODO
