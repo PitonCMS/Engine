@@ -61,7 +61,7 @@ class AdminController extends AdminBaseController
     public function updateSitemap(): Response
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
         $sitemapHandler = $this->container->get('sitemapHandler');
 
         // Get all published content
@@ -113,7 +113,7 @@ class AdminController extends AdminBaseController
     public function showSupportContent($args): Response
     {
         // Load dependencies
-        $markdown = $this->container->markdownParser;
+        $markdown = $this->container->get('markdownParser');
 
         // Pass through reference to subject
         $data['subject'] = $args['subject'];
@@ -127,7 +127,7 @@ class AdminController extends AdminBaseController
             $this->notFound();
         }
 
-        $supportContent = $markdown->text(file_get_contents($supportFile));
+        $supportContent = $markdown->convert(file_get_contents($supportFile));
 
         // Parse support HTML to add heading ID's for links, and build Table of Contents
         // Start with a DOMDocument
@@ -175,8 +175,8 @@ class AdminController extends AdminBaseController
      */
     public function aboutPiton(): Response
     {
-        $markdown = $this->container->markdownParser;
-        $log = $this->container->logger;
+        $markdown = $this->container->get('');
+        $log = $this->container->get('logger');
 
         // Get list of releases from GitHub. First check that cURL is installed on the server
         if (!function_exists('curl_init')) {
@@ -194,7 +194,7 @@ class AdminController extends AdminBaseController
             ]);
             $responseBody = curl_exec($curl);
             $responseStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            curl_close($curl);
+            // curl_close($curl); // No longer needed in PHP 8+
 
             // Verify that we have a response
             if ($responseStatus == '200') {

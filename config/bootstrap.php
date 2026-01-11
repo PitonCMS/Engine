@@ -29,7 +29,6 @@ use Slim\Factory\AppFactory;
 // Wrap bootstraping code in an anonymous function to avoid unnecessary globals
 return call_user_func(
     function () {
-
         // Load default configuration settings
         require ROOT_DIR . 'vendor/pitoncms/engine/config/config.default.php';
 

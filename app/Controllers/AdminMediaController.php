@@ -107,8 +107,8 @@ HTML;
     protected function loadMedia(): array
     {
         // Load dependencies
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
         $pagination = $this->getPagination();
         $pagination->setPagePath($this->container->get('router')->urlFor('adminMedia'));
 
@@ -159,8 +159,8 @@ HTML;
     public function saveMedia(): Response
     {
         try {
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
 
             $media = $mediaMapper->make();
             $media->id = (int) $this->getParsedBodyParam('media_id');
@@ -193,7 +193,7 @@ HTML;
     public function deleteMedia(): Response
     {
         try {
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
 
             // Get the media record
             $id = (int) $this->getParsedBodyParam('media_id');
@@ -201,7 +201,7 @@ HTML;
 
             if (is_string($mediaFile->filename)) {
                 // Delete all related files and directory, then delete database record
-                $dirToDelete = ($this->container->mediaPathHandler)($mediaFile->filename);
+                $dirToDelete = ($this->container->get('mediaPathHandler'))($mediaFile->filename);
                 $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
             }
@@ -257,9 +257,9 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Get dependencies
-            $fileUpload = $this->container->fileUploadHandler;
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $fileUpload = $this->container->get('fileUploadHandler');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
             $status = "success";
             $text = "File upload succeeded";
 
@@ -316,7 +316,7 @@ HTML;
      */
     public function editMediaCategories(): Response
     {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
         $data = $mediaCategoryMapper->find();
 
         return $this->render('media/mediaCategories.html', ['categories' => $data]);
@@ -331,7 +331,7 @@ HTML;
      */
     public function saveMediaCategories(): Response
     {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
         $categoriesPost = $this->getParsedBodyParam('category');
 
         foreach ($categoriesPost as $cat) {
@@ -363,7 +363,7 @@ HTML;
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
             $categoryId = $this->getParsedBodyParam('categoryId');
             $mediaIds = $this->getParsedBodyParam('mediaIds');
             $status = "success";
@@ -393,7 +393,7 @@ HTML;
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
-            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+            $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
             $categoryId = $this->getParsedBodyParam('categoryId');
             $status = "success";
             $text = "";

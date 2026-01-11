@@ -11,6 +11,8 @@
 declare(strict_types=1);
 
 use Piton\Library\Handlers\ErrorRenderer;
+use Piton\Middleware\LoadSiteSettings;
+use Piton\Middleware\ResponseHeaders;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
@@ -20,8 +22,8 @@ use Slim\Exception\HttpNotFoundException;
  * Middleware is called by Slim in reverse order (bottom up)
  */
 
-$app->add(new Piton\Middleware\ResponseHeaders($container->get('settings'), $container->get('logger')));
-$app->add(new Piton\Middleware\LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler'), $container->get('logger')));
+$app->add(new ResponseHeaders($container->get('settings'), $container->get('logger')));
+$app->add(new LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler'), $container->get('logger')));
 $app->addRoutingMiddleware();
 
 // Keep Error Middleware (below) as last in middleware file, Slim executes this first.

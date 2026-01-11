@@ -12,18 +12,18 @@
     ],
     "require": {
         "php": ">=8.3",
-        "pitoncms/session": "^2.1.4",
-        "pitoncms/orm": "^0.3.6",
-        "pitoncms/pagination": "^0.4.0",
+        "pitoncms/session": "dev-develop",
+        "pitoncms/orm": "dev-develop",
+        "pitoncms/pagination": "dev-develop",
         "monolog/monolog": "^2.3.1",
-        "erusev/parsedown-extra": "^0.8.1",
         "phpmailer/phpmailer": "^6.5.0",
         "justinrainbow/json-schema": "^5.2.10",
         "tinify/tinify": "^1.5.2",
         "php-di/php-di": "^7.1",
         "slim/slim": "^4.15",
         "slim/twig-view": "^3.4",
-        "slim/psr7": "^1.8"
+        "slim/psr7": "^1.8",
+        "league/commonmark": "^2.8"
         },
     "autoload": {
         "psr-4": {

@@ -238,10 +238,10 @@ $container->set('dataMapper', function (ContainerInterface $c) {
  * Markdown Parser
  *
  * Markdown parser
- * @return Piton\Library\Utilities\MDParse
+ * @return League\CommonMark\GithubFlavoredMarkdownConverter
  */
 $container->set('markdownParser', function () {
-    return new Piton\Library\Utilities\MDParse();
+    return new \League\CommonMark\GithubFlavoredMarkdownConverter();
 });
 
 /**
