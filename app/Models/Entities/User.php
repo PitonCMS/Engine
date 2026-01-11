@@ -23,21 +23,4 @@ class User extends PitonEntity
     protected ?string $email = null;
     protected ?string $role = null;
     protected ?string $active = null;
-
-    /**
-     * Constructor
-     *
-     * @param ?array $row Data array from query
-     */
-    public function __construct(?array $row)
-    {
-        // Load properties
-        $this->first_name = isset($row['first_name']) ? $row['first_name'] : null;
-        $this->last_name = isset($row['last_name']) ? $row['last_name'] : null;
-        $this->email = isset($row['email']) ? $row['email'] : null;
-        $this->role = isset($row['role']) ? $row['role'] : null;
-        $this->active = isset($row['active']) ? $row['active'] : null;
-
-        parent::__construct($row);
-    }
 }

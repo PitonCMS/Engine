@@ -26,22 +26,4 @@ class DataStore extends PitonEntity
 
     // Derived Properties
     protected ?string $status = null;
-
-    /**
-     * Constructor
-     *
-     * @param ?array $row Data array from query
-     */
-    public function __construct(?array $row)
-    {
-        // Load properties
-        $this->category = isset($row['category']) ? $row['category'] : null;
-        $this->page_id = isset($row['page_id']) ? (int) $row['page_id'] : null;
-        $this->element_id = isset($row['element_id']) ? (int) $row['element_id'] : null;
-        $this->setting_key = isset($row['setting_key']) ? $row['setting_key'] : null;
-        $this->setting_value = isset($row['setting_value']) ? $row['setting_value'] : null;
-        $this->status = isset($row['status']) ? $row['status'] : null;
-
-        parent::__construct($row);
-    }
 }

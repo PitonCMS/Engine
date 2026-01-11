@@ -19,26 +19,32 @@ class Page extends PitonEntity
 {
     // Class properties
     protected ?int $collection_id = null;
-    protected ?string $collection_slug = null;
-    protected ?string $collection_title = null;
-    protected ?string $first_name = null;
-    protected ?string $last_name = null;
-    protected ?string $author = null;
-    protected ?string $first_element_content = null;
     protected ?string $page_slug = null;
     protected ?string $template = null;
     protected ?string $title = null;
     protected ?string $sub_title = null;
     protected ?string $meta_description = null;
     protected ?string $published_date = null;
-    protected ?int $view_count = null;
     protected ?int $media_id = null;
+    protected ?int $view_count = null;
+
+    // Derived properties
+    protected ?string $collection_slug = null;
+    protected ?string $collection_title = null;
+    protected ?string $first_name = null;
+    protected ?string $last_name = null;
+    protected ?string $author = null;
+    protected ?string $first_element_content = null;
+
+    // Media properties
     protected ?string $media_filename = null;
     protected ?string $media_width = null;
     protected ?string $media_height = null;
     protected ?string $media_feature = null;
     protected ?string $media_caption = null;
     protected ?Media $media = null;
+
+    // Sub elements
     protected array $blocks = [];
     protected array $settings = [];
 
@@ -49,23 +55,10 @@ class Page extends PitonEntity
      */
     public function __construct(?array $row)
     {
-        // Assign properties
-        $this->collection_id = isset($row['collection_id']) ? (int) $row['collection_id'] : null;
-        $this->collection_slug = isset($row['collection_slug']) ? $row['collection_slug'] : null;
-        $this->collection_title = isset($row['collection_title']) ? $row['collection_title'] : null;
-        $this->first_name = isset($row['first_name']) ? $row['first_name'] : null;
-        $this->last_name = isset($row['last_name']) ? $row['last_name'] : null;
-        $this->author = isset($row['author']) ? $row['author'] : null;
-        $this->first_element_content = isset($row['first_element_content']) ? $row['first_element_content'] : null;
-        $this->page_slug = isset($row['page_slug']) ? $row['page_slug'] : null;
-        $this->template = isset($row['template']) ? $row['template'] : null;
-        $this->title = isset($row['title']) ? $row['title'] : null;
-        $this->sub_title = isset($row['sub_title']) ? $row['sub_title'] : null;
-        $this->meta_description = isset($row['meta_description']) ? $row['meta_description'] : null;
-        $this->published_date = isset($row['published_date']) ? $row['published_date'] : null;
-        $this->view_count = isset($row['view_count']) ? (int) $row['view_count'] : null;
+        // Load properties
+        parent::__construct($row);
 
-        // Test if this includes a media reference, and create new Media object and assign as sub-object
+        // Test if this data set includes a valid media reference, and then create new Media object and assign as sub-object
         if (isset($this->media_filename)) {
             $mediaData = [];
             $mediaData['id'] = $this->media_id;
@@ -78,15 +71,15 @@ class Page extends PitonEntity
             $this->media = new Media($mediaData);
         }
 
-        // Remove media properties from page element object
-        // unset($this->media_id);
+        // Remove media properties from page element object to clean up
+        // Do not unset $this->media_id, needed to maintain foreign key reference
         unset($this->media_filename);
         unset($this->media_width);
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
 
-        parent::__construct($row);
+
     }
 
     /**

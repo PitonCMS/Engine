@@ -163,7 +163,7 @@ HTML;
             $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
 
             $media = $mediaMapper->make();
-            $media->id = (int) $this->getParsedBodyParam('media_id');
+            $media->id = $this->getParsedBodyParam('media_id');
             $media->caption = $this->getParsedBodyParam('caption');
             $media->feature = ($this->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
             $mediaMapper->save($media);
@@ -263,6 +263,9 @@ HTML;
             $status = "success";
             $text = "File upload succeeded";
 
+            // Upload the files from the POST Request
+            $fileUpload->setUploadedFiles($this->request->getUploadedFiles());
+
             // Try the upload
             if ($fileUpload->upload('media-file')) {
                 // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
@@ -294,13 +297,15 @@ HTML;
                     $this->optimizeNewMedia();
                 }
             } else {
-                // Failed to upload, so throw exception and return message to client
-                throw new Exception("File Upload Failed: " . $fileUpload->getErrorMessage());
+                // Failed to upload, throw exception and return message to client
+                throw new \RuntimeException("File Upload Failed: " . $fileUpload->getErrorMessage());
             }
 
             // Clear file upload
             $fileUpload->clear('media-file');
         } catch (Throwable $th) {
+            // Log exception
+            $this->container->get('logger')->error('Media file upload failed: ' . $th->getTraceAsString());
             $status = "error";
             $text = "Exception uploading file: ". $th->getMessage();
         }
@@ -400,8 +405,7 @@ HTML;
 
             if (is_numeric($categoryId)) {
                 // Delete category
-                $category = $mediaCategoryMapper->make();
-                $category->id = (int) $categoryId;
+                $category = $mediaCategoryMapper->make($categoryId);
                 $mediaCategoryMapper->delete($category);
 
                 // Foreign key constraints on media_category_map cascade delete to media associations

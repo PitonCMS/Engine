@@ -304,7 +304,7 @@ $container->set('sitemapHandler', function (ContainerInterface $c) {
  * @return Piton\Library\Handlers\FileUpload
  */
 $container->set('fileUploadHandler', function (ContainerInterface $c) {
-    return new Piton\Library\Handlers\FileUpload($c->get('request')->getUploadedFiles(), $c->get('mediaPathHandler'), $c->get('filenameGenerator'));
+    return new Piton\Library\Handlers\FileUpload($c->get('mediaPathHandler'), $c->get('filenameGenerator'));
 });
 
 /**

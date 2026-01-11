@@ -94,7 +94,11 @@ class AdminSettingController extends AdminBaseController
 
         // Save each setting
         foreach ($settings as $row) {
-            $setting = $dataStoreMapper->make($row);
+            $setting = $dataStoreMapper->make();
+            $setting->id = $row['id'];
+            $setting->category = $row['category'];
+            $setting->setting_key = $row['setting_key'];
+            $setting->setting_value = $row['setting_value'];
 
             // Check for a setting delete flag
             if (isset($row['delete'])) {

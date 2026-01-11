@@ -24,20 +24,4 @@ class MessageData extends PitonEntity
 
     // Derived Properties
     protected ?string $inputs = null;
-
-    /**
-     * Constructor
-     *
-     * @param ?array $row Data array from query
-     */
-    public function __construct(?array $row)
-    {
-        // Load properties
-        $this->message_id = isset($row['message_id']) ? $row['message_id'] : null;
-        $this->data_key = isset($row['data_key']) ? $row['data_key'] : null;
-        $this->data_value = isset($row['data_value']) ? (int) $row['data_value'] : null;
-        $this->inputs = isset($row['inputs']) ? $row['inputs'] : null;
-
-        parent::__construct($row);
-    }
 }

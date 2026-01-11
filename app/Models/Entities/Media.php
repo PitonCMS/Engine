@@ -17,7 +17,7 @@ namespace Piton\Models\Entities;
  */
 class Media extends PitonEntity
 {
-    // Assigned Properties
+    // Table Properties
     protected ?string $filename = null;
     protected ?int $width = null;
     protected ?int $height = null;
@@ -34,7 +34,7 @@ class Media extends PitonEntity
     protected ?float $aspectRatio = null;
     protected ?string $orientation = null;
     protected ?string $featured = null;
-
+    protected ?array $categories = null;
 
     /**
      * Constructor
@@ -44,29 +44,15 @@ class Media extends PitonEntity
     public function __construct(?array $row)
     {
         // Load properties
-        $this->filename = isset($row['filename']) ? $row['filename'] : null;
-        $this->width = isset($row['width']) ? (int) $row['width'] : null;
-        $this->height = isset($row['height']) ? (int) $row['height'] : null;
-        $this->feature = isset($row['feature']) ? $row['feature'] : null;
-        $this->caption = isset($row['caption']) ? $row['caption'] : null;
-        $this->mime_type = isset($row['mime_type']) ? $row['mime_type'] : null;
-        $this->optimized = isset($row['optimized']) ? $row['optimized'] : null;
-        $this->category_id_list = isset($row['category_id_list']) ? $row['category_id_list'] : null;
+        parent::__construct($row);
 
-        // Calculate and load derived properties
+        // Load derived properties
+        $this->featured = ($this->feature == 'Y') ? 'featured-img' : null;
+
+        // Load calculated media properties
         if (isset($this->height) && $this->height > 0) {
             $this->aspectRatio = round($this->width / $this->height, 2);
             $this->orientation = ($this->aspectRatio > 1) ? 'landscape' : 'portrait';
         }
-
-        $this->featured = ($this->feature == 'Y') ? 'featured-img' : null;
-
-        // If a "media_id" is passed in, then set that as the record $id before calling parent::__construct()
-        // TODO Test if needed
-        // if (isset($row['media_id'])) {
-        //     $row['id'] = (int) $row['media_id'];
-        // }
-
-        parent::__construct($row);
     }
 }

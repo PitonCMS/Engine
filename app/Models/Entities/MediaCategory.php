@@ -17,19 +17,6 @@ namespace Piton\Models\Entities;
  */
 class MediaCategory extends PitonEntity
 {
-    // Assigned Properties
+    // Class Properties
     protected ?string $category = null;
-
-    /**
-     * Constructor
-     *
-     * @param ?array $row Data array from query
-     */
-    public function __construct(?array $row)
-    {
-        // Load properties
-        $this->category = isset($row['category']) ? $row['category'] : null;
-
-        parent::__construct($row);
-    }
 }

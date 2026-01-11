@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Exception;
 use Closure;
+use Exception;
 
 /**
  * Piton File Upload Handler
@@ -23,64 +23,64 @@ use Closure;
 class FileUpload
 {
     /**
-     * Array of Slim\Http\UploadedFile
+     * Array of uploaded files
      * @var array
      */
-    protected $uploadedFiles;
+    protected array $uploadedFiles;
 
     /**
      * Public Root Directory
      * @var string
      */
-    protected $publicRoot = ROOT_DIR . 'public';
+    protected string $publicRoot = ROOT_DIR . 'public';
 
     /**
      * New File Name
      * @var string
      */
-    protected $filename;
+    protected ?string $filename = null;
 
     /**
      * Extension
      * @var string
      */
-    protected $extension;
+    protected ?string $extension = null;
 
     /**
      * Media File Width
      * @var int
      */
-    public $width;
+    public ?int $width = null;
 
     /**
      * Media File Height
      * @var int
      */
-    public $height;
+    public ?int $height = null;
 
     /**
      * Media File URI Closure
      * @var closure
      */
-    protected $mediaPathClosure;
+    protected Closure $mediaPathClosure;
 
     /**
      * Media New Filename Generator
      * @var closure
      */
-    protected $filenameGenerator;
+    protected Closure $filenameGenerator;
 
     /**
      * PHP Upload Error Code
      * @var int
      */
-    protected $error = UPLOAD_ERR_OK;
+    protected int $error = UPLOAD_ERR_OK;
 
     /**
      * Mime Type
      * @var string
      */
-    public $mimeType;
+    public ?string $mimeType = null;
 
     /**
      * Image Mime Types
@@ -99,16 +99,24 @@ class FileUpload
     /**
      * Constructor
      *
-     * @param  array   $uploadedfiles        Array of Slim\Http\UploadedFile objects
-     * @param  closure $mediaPathClosure     Function to derive file URI
-     * @param  closure $filenameGenerator Function to generate new filenames
-     * @return void
+     * @param  Closure $mediaPathClosure     Function to derive file URI
+     * @param  Closure $filenameGenerator Function to generate new filenames
      */
-    public function __construct(array $uploadedFiles, closure $mediaPathClosure, closure $filenameGenerator)
+    public function __construct(Closure $mediaPathClosure, Closure $filenameGenerator)
     {
-        $this->uploadedFiles = $uploadedFiles;
         $this->mediaPathClosure = $mediaPathClosure;
         $this->filenameGenerator = $filenameGenerator;
+    }
+
+    /** Set Uploaded Files
+     *
+     * Inject the array of uploaded files from the POST Request
+     * @param array $uploadedFiles
+     * @return void
+     */
+    public function setUploadedFiles(array $uploadedFiles)
+    {
+        $this->uploadedFiles = $uploadedFiles;
     }
 
     /**
@@ -220,7 +228,7 @@ class FileUpload
         $this->extension = null;
         $this->width = null;
         $this->height = null;
-        $this->error = null;
+        $this->error = UPLOAD_ERR_OK;
         $this->mimeType = null;
     }
 
@@ -236,24 +244,31 @@ class FileUpload
         switch ($this->error) {
             case UPLOAD_ERR_INI_SIZE:
                 $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+
                 break;
             case UPLOAD_ERR_FORM_SIZE:
                 $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+
                 break;
             case UPLOAD_ERR_PARTIAL:
                 $message = "The uploaded file was only partially uploaded";
+
                 break;
             case UPLOAD_ERR_NO_FILE:
                 $message = "No file was uploaded";
+
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
                 $message = "Missing a temporary folder";
+
                 break;
             case UPLOAD_ERR_CANT_WRITE:
                 $message = "Failed to write file to disk";
+
                 break;
             case UPLOAD_ERR_EXTENSION:
                 $message = "File upload stopped by extension";
+
                 break;
 
             default:

@@ -30,7 +30,7 @@ class PageElement extends PitonEntity
     protected ?int $media_id = null;
     protected ?string $embedded = null;
 
-    // Query properties
+    // Media properties
     protected ?string $media_filename = null;
     protected ?string $media_width = null;
     protected ?string $media_height = null;
@@ -46,19 +46,9 @@ class PageElement extends PitonEntity
     public function __construct(?array $row)
     {
         // Load properties
-        $this->page_id = isset($row['page_id']) ? (int) $row['page_id'] : null;
-        $this->block_key = isset($row['block_key']) ? $row['block_key'] : null;
-        $this->template = isset($row['template']) ? $row['template'] : null;
-        $this->element_sort = isset($row['element_sort']) ? (int) $row['element_sort'] : null;
-        $this->title = isset($row['title']) ? $row['title'] : null;
-        $this->content = isset($row['content']) ? $row['content'] : null;
-        $this->excerpt = isset($row['excerpt']) ? $row['excerpt'] : null;
-        $this->collection_id = isset($row['collection_id']) ? (int) $row['collection_id'] : null;
-        $this->gallery_id = isset($row['gallery_id']) ? (int) $row['gallery_id'] : null;
-        $this->media_id = isset($row['media_id']) ? (int) $row['media_id'] : null;
-        $this->embedded = isset($row['embedded']) ? $row['embedded'] : null;
+        parent::__construct($row);
 
-        // Test if this includes a media reference, and create new Media object and assign as sub-object
+        // Test if this includes a valid media reference, and create new Media object and assign as sub-object
         if (isset($this->media_filename)) {
             $mediaData = [];
             $mediaData['id'] = $this->media_id;
@@ -71,22 +61,20 @@ class PageElement extends PitonEntity
             $this->media = new Media($mediaData);
         }
 
-        // Remove media properties from page element object
-        // unset($this->media_id);
+        // Remove media properties from page element object to clean up
+        // Do not unset $this->media_id, needed to maintain foreign key reference
         unset($this->media_filename);
         unset($this->media_width);
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
-
-        parent::__construct($row);
     }
 
     /**
      * Set Page Element Settings
      *
      * Filters array of data_store settings on element category and creates key:value array on $this->settings
-     * @param array|null
+     * @param ?array
      * @return void
      */
     public function setElementSettings(?array $settings): void

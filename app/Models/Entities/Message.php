@@ -26,22 +26,4 @@ class Message extends PitonEntity
 
     // Calculated Properties
     protected ?int $unread = null;
-
-    /**
-     * Constructor
-     *
-     * @param ?array $row Data array from query
-     */
-    public function __construct(?array $row)
-    {
-        // Load properties
-        $this->name = isset($row['name']) ? $row['name'] : null;
-        $this->email = isset($row['email']) ? $row['email'] : null;
-        $this->message = isset($row['message']) ? $row['message'] : null;
-        $this->is_read = isset($row['is_read']) ? $row['is_read'] : null;
-        $this->context = isset($row['context']) ? $row['context'] : null;
-        $this->unread = isset($row['unread']) ? (int) $row['unread'] : null;
-
-        parent::__construct($row);
-    }
 }

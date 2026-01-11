@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Piton\Models\Entities;
 
 use Piton\ORM\DomainObject;
+use RuntimeException;
 
 /**
  * Piton Entity Value Object
@@ -26,38 +27,18 @@ class PitonEntity extends DomainObject
     protected ?string $updated_date = null;
 
     /**
-     * Constructor
-     */
-    public function __construct(?array $row)
-    {
-        $this->created_by = isset($row['created_by']) ? (int) $row['created_by'] : null;
-        $this->created_date = isset($row['created_date']) ? $row['created_date'] : null;
-        $this->updated_by = isset($row['updated_by']) ? (int) $row['updated_by'] : null;
-        $this->updated_date = isset($row['updated_date']) ? $row['updated_date'] : null;
-
-        parent::__construct($row);
-    }
-
-    /**
      * Get Object Property
      *
-     * Returns class property. If there is no immediate match, then tries to convert camelCase $key to underscore $key to find a match
-     * @param  string $key Property name to get
+     * Returns class property value.
+     * If there is no immediate match, then tries to convert camelCase $key to underscore $key to find a match
+     * @param string $key Property name to get
      * @return mixed Property value
      */
     public function __get($key)
     {
-        if (property_exists($this, $key)) {
-            return $this->$key;
-        } else {
-            $underScoreKey = $this->convertCamelCaseToUnderScores($key);
+        $propertyKey = property_exists($this, $key) ? $key : $this->convertCamelCaseToUnderScores($key);
 
-            if (property_exists($this, $underScoreKey)) {
-                return $this->$underScoreKey;
-            }
-        }
-
-        return null;
+        return $this->$propertyKey ?? null;
     }
 
     /**
@@ -66,22 +47,22 @@ class PitonEntity extends DomainObject
      * Will throw an exception if property does not exist.
      * @param  string $key   Property key
      * @param  mixed  $value Property value to set
-     * @throws Throwable if property does not exist
+     * @throws RuntimeException if property does not exist
      */
     public function __set(string $key, mixed $value = null)
     {
-        if (property_exists($this, $key)) {
-            $this->$key = $value;
-        } else {
-            // Try converting camelCase to underscore to find property
-            $underScoreKey = $this->convertCamelCaseToUnderScores($key);
+        // Try original key first, then snake_case version
+        $propertyKey = property_exists($this, $key) ? $key : $this->convertCamelCaseToUnderScores($key);
 
-            if (property_exists($this, $underScoreKey)) {
-                $this->$underScoreKey = $value;
-            } else {
-                throw new \RuntimeException("Piton Exception: Attempt to set value on non-existent property '{$key}' in " . get_class($this));
-            }
+        if (!property_exists($this, $propertyKey)) {
+            throw new RuntimeException("Piton Exception: Attempt to set value on non-existent property '{$key}' in " . get_class($this));
         }
+
+        // Cast value to property type
+        $value = $this->castValueToPropertyType($propertyKey, $value);
+
+        $this->$propertyKey = $value;
+        $this->modifiedProperties[$propertyKey] = true;
     }
 
     /**
@@ -93,11 +74,7 @@ class PitonEntity extends DomainObject
      */
     public function __isset($key)
     {
-        if (property_exists($this, $key)) {
-            return true;
-        } else {
-            return property_exists($this, $this->convertCamelCaseToUnderScores($key));
-        }
+        return property_exists($this, $key) || property_exists($this, $this->convertCamelCaseToUnderScores($key));
     }
 
     /**
