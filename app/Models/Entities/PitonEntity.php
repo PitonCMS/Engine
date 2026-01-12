@@ -62,7 +62,7 @@ class PitonEntity extends DomainObject
         $value = $this->castValueToPropertyType($propertyKey, $value);
 
         $this->$propertyKey = $value;
-        $this->modifiedProperties[$propertyKey] = true;
+        $this->setPropertyAsModified($propertyKey);
     }
 
     /**
