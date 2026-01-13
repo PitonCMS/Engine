@@ -5,7 +5,7 @@
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
