@@ -253,8 +253,10 @@ class CsrfGuard
 
         // Create response
         $response = $this->responseFactory->createResponse(403);
+        $body = $response->getBody();
+        $body->write($output);
 
-        return $response->getBody()->write($output)->withHeader('Content-type', $contentType);
+        return $response->withHeader('Content-type', $contentType);
     }
 
     /**
