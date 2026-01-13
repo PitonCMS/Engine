@@ -22,20 +22,20 @@ interface EmailInterface
      *
      * Set the Reply To email address, which is different from the server From address.
      * @param  string  $address From email address
-     * @param  string  $name    Sender name, optional
+     * @param  ?string  $name    Sender name, optional
      * @return object  $this    EmailInterface
      */
-    public function setReplyTo(string $address, string $name = null): EmailInterface;
+    public function setReplyTo(string $address, ?string $name = null): EmailInterface;
 
     /**
      * Add Recipient To Address
      *
      * Can be called multiple times to add additional recipients
      * @param  string $address To email address
-     * @param  string $name    Recipient name, optiona
+     * @param  ?string $name    Recipient name, optiona
      * @return object $this    EmailInterface
      */
-    public function setTo(string $address, string $name = null): EmailInterface;
+    public function setTo(string $address, ?string $name = null): EmailInterface;
 
     /**
      * Set Email Subject

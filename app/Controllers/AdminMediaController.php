@@ -452,9 +452,9 @@ HTML;
     {
         // Submit background process to optimize media
         $script = escapeshellarg(ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php');
-        $phpBinary = escapeshellcmd(PHP_BINARY);
         $rootDir = escapeshellarg(ROOT_DIR);
         $logFile = ROOT_DIR . 'logs/optimize-media-' . date('Y-m-d') . '.log';
-        exec("$phpBinary $script optimize-media $rootDir >> $logFile 2>&1 &");
+
+        exec("php $script optimize-media $rootDir >> $logFile 2>&1 &");
     }
 }
