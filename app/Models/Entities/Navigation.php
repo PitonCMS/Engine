@@ -28,8 +28,11 @@ class Navigation extends PitonEntity
 
     // Derived properties
     protected ?string $nav_title = null;
+    protected ?string $page_title = null;
     protected ?string $collection_title = null;
     protected ?string $collection_slug = null;
     protected ?string $published_date = null;
     protected ?string $page_slug = null;
+    protected ?bool $currentPage = null;
+    protected ?array $childNav = null;
 }

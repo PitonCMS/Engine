@@ -503,6 +503,9 @@ HTML;
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting new element: ". $th->getMessage();
+
+            // Log stack trace
+            $this->container->get('logger')->error('Piton Page Controller Error: Exception in getNewElement() ' . $th->getTraceAsString());
         }
 
         return $this->xhrResponse($status, $text);

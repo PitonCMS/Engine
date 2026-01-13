@@ -234,7 +234,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * If the supplied route name is the current route, returns the second parameter
      * @param  string $routeName   Name of the route to test
      * @param  string $returnValue Value to return
-     * @return string|null
+     * @return ?string
      */
     public function currentRoute(string $routeName, string $returnValue = 'active'): ?string
     {
@@ -250,8 +250,8 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Checks if the supplied string is one of the current URL segments
      * @param ?string  $segment       URL segment to find
-     * @param string  $valueToReturn Value to return if true
-     * @return string|null           Returns $valueToReturn or null
+     * @param string   $valueToReturn Value to return if true
+     * @return ?string
      */
     public function inUrl(?string $segmentToTest = null, $valueToReturn = 'active'): ?string
     {
@@ -282,7 +282,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * If the supplied value is truthy, 1, or 'Y' returns the checked string
      * @param mixed $value
-     * @return string|null
+     * @return ?string
      */
     public function checked($value = 0): ?string
     {
@@ -674,7 +674,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      *
      * Get navigation by name
      * @param  string $navigator
-     * @return array|null
+     * @return ?array
      */
     public function getNavigator(string $navigator): ?array
     {
@@ -737,7 +737,7 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Get flash and application alert notices to display.
      * @param  array  $context Twig context, includes controller 'alert' array
      * @param  string $key     Alert keys: severity|heading|message
-     * @return array|null
+     * @return ?array
      */
     public function getAlert(array $context): ?array
     {

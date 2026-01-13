@@ -30,6 +30,10 @@ class PageElement extends PitonEntity
     protected ?int $media_id = null;
     protected ?string $embedded = null;
 
+    // Derived properties
+    protected ?object $definition = null;
+    protected array $settings = [];
+
     // Media properties
     protected ?string $media_filename = null;
     protected ?string $media_width = null;

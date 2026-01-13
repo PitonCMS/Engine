@@ -175,7 +175,7 @@ class BaseController
     protected function getQueryParam(string $key, $default = null): mixed
     {
         // Lazy load query params on first access
-        if ($this->queryParams === null) {
+        if (empty($this->queryParams)) {
             $this->queryParams = $this->request->getQueryParams();
         }
 
