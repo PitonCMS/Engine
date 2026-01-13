@@ -12,9 +12,9 @@
     ],
     "require": {
         "php": ">=8.3",
-        "pitoncms/session": "dev-develop",
-        "pitoncms/orm": "dev-develop",
-        "pitoncms/pagination": "dev-develop",
+        "pitoncms/session": "^3.0.0",
+        "pitoncms/orm": "^1.0.0",
+        "pitoncms/pagination": "^1.0.0",
         "monolog/monolog": "^2.3.1",
         "phpmailer/phpmailer": "^6.5.0",
         "justinrainbow/json-schema": "^5.2.10",
