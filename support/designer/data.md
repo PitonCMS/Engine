@@ -198,27 +198,6 @@ Usage:
 {{ baseUrl() }}
 ```
 
-### basePath()
-Prints the base path if the project is in a subfolder of your project root.
-
-```php
-    /**
-     * Base Path
-     *
-     * If the application is run from a directory below the project root
-     * this will return the subdirectory path.
-     * Use this instead of baseUrl to use relative URL's instead of absolute
-     * @param void
-     * @return string The base path segments
-     */
-    public function basePath(): string;
-```
-
-Usage:
-```twig
-{{ basePath() }}
-```
-
 ### getPathForPage()
 Given a Page Slug, and optionally a Collection Slug, will return the formatted link without without base path.
 
@@ -334,15 +313,15 @@ Usage:
 Returns the requested Query String Paramter value, if present in the URL Query String. The returned value is escaped using the PHP function `htmlspecialchars()`. If the requested paramter is not present, then null is returned.
 
 ```php
-    /**
+   /**
      * Get Query String Parameter
      *
      * Returns htmlspecialchars() escaped query param
-     * Missing params and empty string values are returned as null
-     * @param string|null $param
-     * @return string|null
+     * Missing params and empty param values are returned as null
+     * @param ?string $param
+     * @return ?string
      */
-    public function getQueryParam(string $param = null): ?string;
+    public function getQueryParam(?string $param = null): ?string;
 ```
 
 Usage:

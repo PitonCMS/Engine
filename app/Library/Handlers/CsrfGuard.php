@@ -4,19 +4,21 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2019 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use Exception;
+use Piton\Library\Interfaces\SessionInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Log\LoggerInterface as Logger;
-use Piton\Library\Interfaces\SessionInterface;
-use Exception;
 
 /**
  * Piton CSRF Guard
@@ -30,45 +32,57 @@ class CsrfGuard
      * CSRF Token Name
      * @var string
      */
-    protected $csrfTokenName = 'pitonCsrfToken';
+    protected string $csrfTokenName = 'pitonCsrfToken';
 
     /**
      * CSRF Header Name
      * When updating the CSRF Request Header name, also update assets/js/modules/config.js object property
      * @var string
      */
-    protected $csrfHeaderName = 'Piton-CSRF-Token';
+    protected string $csrfHeaderName = 'Piton-CSRF-Token';
 
     /**
      * CSRF token from session
      * @var string
      */
-    protected $csrfTokenValue;
+    protected ?string $csrfTokenValue;
 
     /**
      * Session
      * @var Piton\Library\Interfaces\SessionInterface
      */
-    protected $session;
+    protected SessionInterface $session;
+
+    /**
+     * ResponseFactory
+     *
+     * @var Psr\Http\Message\ResponseFactoryInterface;
+     */
+    protected ResponseFactoryInterface $responseFactory;
 
     /**
      * Logging Object
      * @var Psr\Log\LoggerInterface
      */
-    protected $logger;
+    protected Logger $logger;
 
     /**
      * Constructor
      *
-     * @param  SessionInterface $session
-     * @param  Logger           $logger  Logging object
+     * @param SessionInterface $session
+     * @param ResponseFactoryInterface $responseFactory
+     * @param Logger $logger
      * @return void
      */
-    public function __construct(SessionInterface $session, Logger $logger)
+    public function __construct(SessionInterface $session, ResponseFactoryInterface $responseFactory, Logger $logger)
     {
         $this->session = $session;
+        $this->responseFactory = $responseFactory;
         $this->logger = $logger;
         $this->loadSessionToken();
+
+        // Log instantiation
+        $this->logger->debug('CsrfGuard middleware LOADED at ' . time());
     }
 
     /**
@@ -76,12 +90,14 @@ class CsrfGuard
      *
      * Invoked on designated POST routes
      * @param  Request  $request
-     * @param  Response $respose
-     * @param  callable Next middleware to run
+     * @param  RequestHandler Middleware handler
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, callable $next): Response
+    public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('CsrfGuard middleware INVOKED at ' . time());
+
         // Validate this is a POST request
         if ($request->getMethod() === 'POST') {
             $token = $this->getRequestToken($request);
@@ -92,11 +108,11 @@ class CsrfGuard
                 $this->loadSessionToken();
                 $this->logger->info('PitonCMS: 403 Forbidden request, CSRF token null or mismatch');
 
-                return $this->forbiddenResponse($request, $response);
+                return $this->forbiddenResponse($request);
             }
         }
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 
     /**
@@ -141,14 +157,19 @@ class CsrfGuard
      */
     public function getRequestToken(Request $request): ?string
     {
-        if (null !== $token = $request->getHeader($this->csrfHeaderName)[0] ?? null) {
-            // First check request header. Because there may be more than one header with the same name, pick the first one in the array
+        // First check request header for token. Because there may be more than one header with the same name, pick the first one in the array
+        $token = $request->getHeader($this->csrfHeaderName)[0] ?? null;
+        if ($token !== null) {
             return $token;
-        } elseif (null !== $token = $request->getParsedBodyParam($this->csrfTokenName)) {
-            // Then check the form input
+        } else {
+            // Then check the form input for a token
+            $body = $request->getParsedBody();
+            $token = $body[$this->csrfTokenName] ?? null;
+
             return $token;
         }
 
+        // Otherwise return null
         return null;
     }
 
@@ -210,29 +231,32 @@ class CsrfGuard
      * Code borrowed and modified from Slim Error
      * Respond with HTTP 403 Forbidden
      * @param Request  $request   The most recent Request object
-     * @param Response $response  The most recent Response object
      * @return Response
      */
-    public function forbiddenResponse(Request $request, Response $response): Response
+    public function forbiddenResponse(Request $request): Response
     {
         $contentType = $this->determineContentType($request);
         switch ($contentType) {
             case 'application/json':
                 $output = $this->renderJsonErrorMessage();
+
                 break;
 
             case 'text/html':
                 $output = $this->renderHtmlErrorMessage();
+
                 break;
 
             default:
                 throw new Exception('Cannot render unknown content type ' . $contentType);
         }
 
-        return $response
-                ->withStatus(403)
-                ->withHeader('Content-type', $contentType)
-                ->write($output);
+        // Create response
+        $response = $this->responseFactory->createResponse(403);
+        $body = $response->getBody();
+        $body->write($output);
+
+        return $response->withHeader('Content-type', $contentType);
     }
 
     /**

@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -19,15 +19,16 @@ use Piton\ORM\DataMapperAbstract;
  */
 class MediaCategoryMapper extends DataMapperAbstract
 {
-    protected $table = 'media_category';
-    protected $modifiableColumns = ['category'];
+    protected string $table = 'media_category';
+    protected array $modifiableColumns = ['category'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\MediaCategory';
 
     /**
      * Find Categories
      *
      * Find all categories sorted by category name
      * @param  void
-     * @return array|null
+     * @return ?array
      */
     public function findCategories(): ?array
     {

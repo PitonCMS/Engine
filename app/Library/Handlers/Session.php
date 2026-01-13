@@ -4,16 +4,16 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Piton\Session\SessionHandler;
 use Piton\Library\Interfaces\SessionInterface;
+use Piton\Session\SessionHandler;
 
 /**
  * Piton Session Class

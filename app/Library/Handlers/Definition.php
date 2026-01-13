@@ -4,18 +4,18 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use JsonSchema\Constraints\Constraint;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use JsonSchema\Constraints\Constraint;
 use Throwable;
 
 /**
@@ -27,13 +27,13 @@ class Definition
      * JSON Validator
      * @var object
      */
-    protected $validator;
+    protected Object $validator;
 
     /**
      * Definition File Paths
      * @var array
      */
-    protected $definition = [
+    protected array $definition = [
         'elements' => ROOT_DIR . 'structure/templates/elements/',
         'pages' => ROOT_DIR . 'structure/templates/pages/',
         'navigation' => ROOT_DIR . 'structure/definitions/navigation.json',
@@ -46,7 +46,7 @@ class Definition
      * Validation File Paths
      * @var array
      */
-    protected $validation = [
+    protected array $validation = [
         'element' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/elementSchema.json',
         'page' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/pageSchema.json',
         'navigation' => ROOT_DIR . 'vendor/pitoncms/engine/jsonSchemas/definitions/navigationSchema.json',
@@ -58,13 +58,12 @@ class Definition
      * Validation Errors
      * @var array
      */
-    protected $errors = [];
+    protected array $errors = [];
 
     /**
      * Constructor
      *
      * @param  object JSON Validator
-     * @return void
      */
     public function __construct(object $validator)
     {
@@ -78,7 +77,7 @@ class Definition
      * @param  void
      * @return mixed
      */
-    public function getSiteSettings()
+    public function getSiteSettings(): mixed
     {
         return $this->decodeValidJson($this->definition['siteSettings'], $this->validation['settings']);
     }
@@ -90,7 +89,7 @@ class Definition
      * @param  void
      * @return mixed
      */
-    public function getSeededSiteSettings()
+    public function getSeededSiteSettings(): mixed
     {
         return $this->decodeValidJson($this->definition['seededSettings'], $this->validation['settings']);
     }
@@ -101,7 +100,7 @@ class Definition
      * @param  void
      * @return mixed
      */
-    public function getNavigation()
+    public function getNavigation(): mixed
     {
         return $this->decodeValidJson($this->definition['navigation'], $this->validation['navigation']);
     }
@@ -113,7 +112,7 @@ class Definition
      * @param  string $pageDefinition
      * @return mixed
      */
-    public function getPage(string $pageDefinition)
+    public function getPage(string $pageDefinition): mixed
     {
         return $this->decodeValidJson($this->definition['pages'] . $pageDefinition, $this->validation['page']);
     }
@@ -125,7 +124,7 @@ class Definition
      * @param  void
      * @return mixed
      */
-    public function getPages()
+    public function getPages(): mixed
     {
         return $this->getPageDefinitions('page');
     }
@@ -137,7 +136,7 @@ class Definition
      * @param  void
      * @return mixed
      */
-    public function getCollections()
+    public function getCollections(): mixed
     {
         return $this->getPageDefinitions('collection');
     }
@@ -149,7 +148,7 @@ class Definition
      * @param  string $elementDefinition
      * @return mixed
      */
-    public function getElement(string $elementDefinition)
+    public function getElement(string $elementDefinition): mixed
     {
         return $this->decodeValidJson($this->definition['elements'] . $elementDefinition, $this->validation['element']);
     }
@@ -159,8 +158,9 @@ class Definition
      *
      * Custom contact field validation
      * @param void
+     * @return mixed
      */
-    public function getContactInputs()
+    public function getContactInputs(): mixed
     {
         return $this->decodeValidJson($this->definition['contact'], $this->validation['contact']);
     }
@@ -180,6 +180,7 @@ class Definition
             // Get definition file, but do not validate as we are only returning a list of available templates
             if (null === $definition = $this->decodeValidJson($this->definition['elements'] . $file)) {
                 $this->errors[] = "PitonCMS: Unable to read element definition file: $file";
+
                 break;
             }
 
@@ -208,6 +209,7 @@ class Definition
             // Get definition file, but do not validate as we are only returning a list of available templates
             if (null === $definition = $this->decodeValidJson($this->definition['pages'] . $file)) {
                 $this->errors[] = "PitonCMS: Unable to read page definition file: $file";
+
                 break;
             }
 
@@ -220,7 +222,7 @@ class Definition
             $templates[] = [
                 'filename' => mb_substr($file, 0, mb_stripos($file, '.json')),
                 'name' => $definition->templateName,
-                'description' => $definition->templateDescription
+                'description' => $definition->templateDescription,
             ];
         }
 
@@ -267,14 +269,15 @@ class Definition
      * Validation is optional, if validation $schema is provided
      * Validation errors available from getErrorMessages()
      * @param string $json   Path to page JSON file to decode
-     * @param string $schema Path to validation JSON Schema file
-     * @return mixed|null
+     * @param ?string $schema Path to validation JSON Schema file
+     * @return mixed
      */
-    protected function decodeValidJson(string $json, string $schema = null)
+    protected function decodeValidJson(string $json, ?string $schema = null): mixed
     {
         // Get and decode JSON to be validated
         if (!file_exists($json) || false === $contents = file_get_contents($json)) {
             $this->errors[] = "Unable to read file: $json";
+
             return null;
         }
 
@@ -288,7 +291,7 @@ class Definition
                 if (!$this->validator->isValid()) {
                     // If not valid, record error messages and return null
                     foreach ($this->validator->getErrors() as $error) {
-                        $this->errors[] =  sprintf("[%s] %s", $error['property'], $error['message']);
+                        $this->errors[] = sprintf("[%s] %s", $error['property'], $error['message']);
                     }
 
                     $jsonDecodedInput = null;
@@ -296,10 +299,12 @@ class Definition
             }
         } catch (Throwable $th) {
             $this->errors[] = "Error: {$th->getMessage()}";
+
             return null;
         }
 
         $this->validator->reset();
+
         return $jsonDecodedInput;
     }
 

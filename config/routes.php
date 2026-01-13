@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -16,18 +16,22 @@ use Piton\Controllers\FrontController;
  * Public Piton Application Routes
  */
 
-// XHR: Submit contact message
-$app->post('/submitmessage', function ($args) {
-    return (new FrontController($this))->submitMessage();
+// XHR: Submit contact message, do not override
+$app->post('/submitmessage', function ($request, $response, $args) {
+    return (new FrontController($request, $response, $this))->submitMessage();
 })->add('csrfGuardHandler')->setName('submitMessage');
 
+// TODO: Add test if named route exists to allow overrides in project routes
+
 // Load page by /page or /collection/page. Keep as second to last route
-$app->get('/{slug1}[/{slug2}]', function ($args) {
-    return (new FrontController($this))->showPage($args);
+$app->get('/{slug1}[/{slug2}]', function ($request, $response, $args) {
+    return (new FrontController($request, $response, $this))->showPage($args);
 })->setName('showPage');
 
+
 // Home page '/' is always the last route as default, and an alias for the 'home' route
-$app->get('/', function ($args) {
+$app->get('/', function ($request, $response, $args) {
     $args['slug1'] = 'home';
-    return (new FrontController($this))->showPage($args);
+
+    return (new FrontController($request, $response, $this))->showPage($args);
 })->setName('home');

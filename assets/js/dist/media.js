@@ -4,7 +4,7 @@
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const e="collapsed",t=Array.from(document.querySelectorAll('[data-collapse-toggle^="newElementButton"]')),a=function(e){let a=t.findIndex((t=>t.dataset.collapseToggle===e));if(-1!==a){t.slice(a+1).forEach((e=>{e.classList.toggle("d-none")}))}};document.addEventListener("click",(function(t){if(!t.target.closest("[data-collapse-toggle]"))return;let r=t.target.closest("[data-collapse-toggle]").dataset.collapseToggle;r.match(/^newElementButton/)&&a(r),document.querySelector(`[data-collapse-target="${r}"]`).classList.toggle(e)}),!1),document.addEventListener("click",(function(t){if(!t.target.closest("[data-collapse-auto]"))return;let r=t.target.closest("[data-collapse-auto]").dataset.collapseAuto;document.querySelector(`[data-collapse-target="${r}"]`).classList.add(e),r.match(/^newElementButton/)&&a(r)}),!1);
 /**
@@ -12,14 +12,14 @@ const e="collapsed",t=Array.from(document.querySelectorAll('[data-collapse-toggl
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2021 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 let r={csrfTokenRequestHeader:"Piton-CSRF-Token",routes:{adminPageGet:"/admin/page/get",adminPageElementGet:"/admin/page/element/get",adminPageElementDelete:"/admin/page/element/delete",adminMessageSave:"/admin/message/save",adminMessageGet:"/admin/message/get",adminMessageCountGet:"/admin/message/getnewmessagecount",adminMedia:"/admin/media/",adminMediaSave:"/admin/media/save",adminMediaGet:"/admin/media/get/",adminMediaControlsGet:"/admin/media/getmediacontrols",adminMediaCategorySaveOrder:"/admin/media/category/saveorder",adminMediaDelete:"/admin/media/delete",adminMediaCategoryDelete:"/admin/media/category/delete",adminMediaUploadFormGet:"/admin/media/uploadform",adminMediaUploadFile:"/admin/media/upload",adminCollection:"/admin/collection/",adminNavigationDelete:"/admin/navigation/delete",submitMessage:"/submitmessage"}};"object"==typeof config&&(r={...r,...config});const n=document.querySelector('[data-alert-modal="true"]'),o=function(e,t,a){if(a=Array.isArray(a)&&null!==a?a.join("<br>"):a instanceof Error?a.message:"object"==typeof a&&null!==a?Object.values(a).join("<br>"):String(a),n){let o=document.createElement("div");o.innerHTML=r.alertInlineHTML,o.querySelector('[data-alert="container"]').classList.add("alert-"+e),o.querySelector('[data-alert="heading"]').innerHTML=t,o.querySelector('[data-alert="content"]').innerHTML=a,n.insertAdjacentHTML("afterbegin",o.innerHTML),window.scrollTo(0,0)}else alert(a)};document.addEventListener("click",(function(e){"alert"===e.target.dataset.dismiss&&e.target.closest('[data-alert="container"]')?.remove()}),!1);
 /**
@@ -27,14 +27,14 @@ let r={csrfTokenRequestHeader:"Piton-CSRF-Token",routes:{adminPageGet:"/admin/pa
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const d=function(){document.body.insertAdjacentHTML("afterbegin",r.modalBackgroundHTML)},i=function(e,t){let a=document.createElement("div");a.insertAdjacentHTML("afterbegin",r.modalContentHTML),a.querySelector('[data-modal="header"]').insertAdjacentHTML("afterbegin",e),"string"==typeof t?a.querySelector('[data-modal="body"]').insertAdjacentHTML("afterbegin",t):"object"==typeof t&&t instanceof Node&&a.querySelector('[data-modal="body"]').append(t),null===document.querySelector('[data-modal="modal"]')&&d(),document.querySelector('[data-modal="modal"]').append(a.firstChild)},l=function(){document.querySelector('[data-modal="modal"]')?.remove()};document.addEventListener("click",(function(e){"modal"!==e.target.dataset.modal&&"dismiss"!==e.target.dataset.modal||l()}),!1);
 /**
@@ -42,7 +42,7 @@ const d=function(){document.body.insertAdjacentHTML("afterbegin",r.modalBackgrou
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const c=function(){document.body.insertAdjacentHTML("afterbegin",r.spinnerHTML)},s=function(){document.querySelector('[data-spinner="true"]')?.remove()},u=function(e,t,a){let n=new XMLHttpRequest;return new Promise(((o,d)=>{let i;n.onreadystatechange=()=>{if(n.readyState===XMLHttpRequest.DONE)try{if(200===n.status){if(i=JSON.parse(n.responseText),"success"===i.status)return o(i.text);throw new Error(`Application Error ${i.text}`)}throw new Error(`Server Error ${n.status} ${n.statusText}.`)}catch(e){if(!(e instanceof Error)){let e=new Error(e)}return d(e.message)}},n.open(e,t,!0),n.setRequestHeader("X-Requested-With","XMLHttpRequest"),"POST"===e&&r.csrfTokenValue&&n.setRequestHeader(r.csrfTokenRequestHeader,r.csrfTokenValue),n.send(a)}))},m=function(e,t){if(t){let a;if(t instanceof URLSearchParams)a=t;else{a=new URLSearchParams;for(let[e,r]of Object.entries(t))a.append(e,r)}e+="?"+a.toString()}return u("GET",e)},f=function(e,t){let a;if(t instanceof FormData)a=t;else{a=new FormData;for(let[e,r]of Object.entries(t))a.append(e,r)}return u("POST",e,a)},g=!!document.querySelector('[data-media-refresh="true"]'),p={fileTooLarge:`The selected file is too large. Max limit is ${function(e){const t=Math.floor(Math.log(e)/Math.log(1024));return parseFloat((e/Math.pow(1024,t)).toFixed(2))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][t]}(r.maxFileUploadSize)} bytes`,mimeTypeNotAllowed:"The file type is not supported for file uploads"},y=function(){d(),m(r.routes.adminMediaUploadFormGet).then((e=>{i("Upload Media",e)})).catch((e=>{l(),o("danger","Failed To Open Media Upload Modal",e)}))};
 /**
@@ -50,14 +50,14 @@ const c=function(){document.body.insertAdjacentHTML("afterbegin",r.spinnerHTML)}
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 let h;document.addEventListener("click",(function(e){if("button"!==e.target.dataset.mediaUpload)return;c();const t=document.querySelector('form[data-media-upload="form"]');f(r.routes.adminMediaUploadFile,new FormData(t)).then((()=>{g&&window.location.reload()})).then((()=>{l()})).then((()=>{s()})).catch((e=>{l(),s(),o("danger","Failed to Upload File",e)}))}),!1),document.querySelectorAll('[data-media-upload="open"]')?.forEach((e=>{e.addEventListener("click",y,!1)})),document.addEventListener("change",(function(e){if("file"!==e.target.type||!e.target.closest('[data-media-upload="form"]'))return;let t=e.target.files[0]??!1;const a=document.querySelector('[data-media-upload="message"]'),n=document.querySelector('[data-media-upload="button"]');t&&(t.size>r.maxFileUploadSize?(a.innerHTML=p.fileTooLarge,n.disabled=!0):(a.innerHTML="",n.disabled=!1))}),!1);const v=function(e='[data-query="content"]'){return document.querySelector(e)},E=function(e){return h||console.error("Module xhrQuery requestPath is not set."),c(),m(h,e).then((e=>(function(){if(v())for(;v().firstChild;)v().removeChild(v().lastChild)}(),e))).then((e=>{v().insertAdjacentHTML("afterbegin",e)})).then((()=>{s()})).catch((e=>{s(),o("danger","Failed to Get Results",e)}))};document.addEventListener("click",(function(e){if(e.target.closest(".pagination > div")){e.preventDefault();let t=e.target.closest(".pagination > div").querySelector("a").href,a=new URL(t),r=new URLSearchParams(a.search);return E(r)}}),!1);const S=function(){let e=document.querySelectorAll('[data-filter="options"] input'),t={};return e.forEach((e=>{e.checked&&(t.hasOwnProperty(e.name)?t[e.name]+=","+e.value:t[e.name]=e.value)})),E(t)},L=function(){let e={terms:document.querySelector('[data-filter="search"] input').value};return document.querySelectorAll('[data-filter="options"] input').forEach((e=>{e.checked&&(e.checked=!1)})),E(e)};
 /**
@@ -65,6 +65,6 @@ let h;document.addEventListener("click",(function(e){if("button"!==e.target.data
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 let M;document.addEventListener("click",(function(e){"apply"===e.target.dataset.filterControl&&S()}),!1),document.addEventListener("click",(function(e){if("clear"===e.target.dataset.filterControl){e.target.closest('[data-filter="options"]').querySelectorAll("input").forEach((e=>{e.checked=!1}))}}),!1),document.addEventListener("click",(e=>{e.target.closest('[data-filter-control="search"]')&&L()}),!1),document.addEventListener("keypress",(e=>{e.target.closest('[data-filter="search"]')&&"Enter"===e.key&&L()}),!1);const b=new Event("input",{bubbles:!0}),q=document.createElement("div");q.classList.add("drag-drop");const T=function(e){M=e.target,e.dataTransfer.setData("text/plain",null),e.dataTransfer.dropEffect="move",setTimeout((()=>{document.querySelectorAll('[draggable="true"]').forEach((e=>{e===M||e===M.nextElementSibling||M.contains(e)||e.parentElement.insertBefore(q.cloneNode(),e),e===e.parentElement.lastElementChild&&e!==M&&e.parentElement.appendChild(q.cloneNode())})),document.querySelectorAll('[data-drop-zone="1"]').forEach((e=>{M.contains(e)||e.parentElement.insertBefore(q.cloneNode(),e)}))}),0)},k=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move",e.target.matches(".drag-drop")&&e.target.classList.add("drag-hover")},w=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move"},A=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move",e.target.matches(".drag-drop")&&e.target.classList.remove("drag-hover")},H=function(e){e.preventDefault(),e.stopPropagation(),M!==e.target&&e.target.matches(".drag-drop")&&e.target.parentElement.insertBefore(M,e.target.nextSibling)};var C;C=r.routes.adminMediaGet+"edit",h=C;const P=document.querySelector('[data-drag-media-message="true"]'),D=function(){return document.querySelector('input[type="radio"][name="category"]:checked')?.value};new MutationObserver((function(){isNaN(D())||"all"!==document.querySelector('input[type="radio"][name="featured"]:checked')?.value?(P.style.display="none",document.querySelectorAll('[data-media-card="true"]')?.forEach((e=>{e.setAttribute("draggable",!1),e.style.cursor="default"}))):(P.style.display="inline",document.querySelectorAll('[data-media-card="true"]')?.forEach((e=>{e.setAttribute("draggable",!0),e.style.cursor="move"})))})).observe(document.querySelector('[data-query="content"]'),{childList:!0});const F=function(e){if(document.querySelectorAll(".drag-drop").forEach((e=>{e.remove()})),!isNaN(D())){c();let e=document.querySelectorAll('[data-draggable="children"] > [draggable="true"]'),t=[];e.forEach((e=>{t.push(e.dataset.mediaId)}));let a={categoryId:D(),mediaIds:t};f(r.routes.adminMediaCategorySaveOrder,a).then((()=>{s()})).catch((e=>{s(),o("danger","Failed to Save Media Order",e)}))}M.dispatchEvent(b)};document.addEventListener("keypress",(e=>{e.target.closest("form")&&"Enter"===e.key&&e.preventDefault()}),!1),document.querySelectorAll('[data-draggable="children"]').forEach((e=>{e.addEventListener("dragstart",T,!1),e.addEventListener("dragenter",k,!1),e.addEventListener("dragover",w,!1),e.addEventListener("dragleave",A,!1),e.addEventListener("drop",H,!1),e.addEventListener("dragend",F,!1)})),document.addEventListener("click",(function(e){if("save"!==e.target.dataset.formButton)return;const t=e.target.closest("form");f(r.routes.adminMediaSave,new FormData(t)).then((()=>{t.querySelectorAll('[data-form-button="save"], [data-form-button="cancel"]')?.forEach((e=>{e.disabled=!0}))})).then((()=>{s()})).catch((e=>{s(),o("danger","Failed to Save Media",e)}))}),!1),document.addEventListener("click",(function(e){if(!e.target.dataset.deleteMediaPrompt)return;if(!confirm(e.target.dataset.deleteMediaPrompt))return;let t=e.target.closest('[data-media-card="true"]'),a=e.target.dataset.deleteMediaId;c(),f(r.routes.adminMediaDelete,{media_id:a}).then((()=>{t.remove()})).then((()=>{s()})).catch((e=>{s(),o("danger","Failed to Delete Media",e)}))}),!1),document.addEventListener("click",(function(e){if(e.target.dataset.mediaClickCopy)try{if(!navigator.clipboard)throw"Your browser does not support click to copy.";let t=e.target.dataset.mediaClickCopy;navigator.clipboard.writeText(t)}catch(e){alert("Error in click to copy: "+e)}}),!1)})();

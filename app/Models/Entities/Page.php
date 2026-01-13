@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -17,53 +17,71 @@ namespace Piton\Models\Entities;
  */
 class Page extends PitonEntity
 {
-    /**
-     * Block Elements Array
-     * @var array
-     */
-    public $blocks = [];
+    // Class properties
+    protected ?int $collection_id = null;
+    protected ?string $page_slug = null;
+    protected ?string $template = null;
+    protected ?string $title = null;
+    protected ?string $sub_title = null;
+    protected ?string $meta_description = null;
+    protected ?string $published_date = null;
+    protected ?int $media_id = null;
+    protected ?int $view_count = null;
 
-    /**
-     * Page Settings Array
-     * @var array
-     */
-    public $settings = [];
+    // Derived properties
+    protected ?string $collection_slug = null;
+    protected ?string $collection_title = null;
+    protected ?string $first_name = null;
+    protected ?string $last_name = null;
+    protected ?string $author = null;
+    protected ?string $first_element_content = null;
+    protected ?string $template_name = null;
+    protected ?object $definition = null;
 
-    /**
-     * Media Sub-Object
-     * @var PitonEntity
-     */
-    public $media;
+    // Media properties
+    protected ?string $media_filename = null;
+    protected ?string $media_width = null;
+    protected ?string $media_height = null;
+    protected ?string $media_feature = null;
+    protected ?string $media_caption = null;
+    protected ?Media $media = null;
+
+    // Sub elements
+    protected array $blocks = [];
+    protected array $settings = [];
 
     /**
      * Constructor
      *
-     * Note: The class properties are set by PDO::FETCH_CLASS *before* the constructor is called.
+     * @param ?array $row Data array from query
      */
-    public function __construct()
+    public function __construct(?array $row)
     {
-        // This checks if a media file was joined in the query, and then builds a media sub-object.
-        // Media constructor sets additional calculated properties based on the image.
+        // Load properties
+        parent::__construct($row);
+
+        // Test if this data set includes a valid media reference, and then create new Media object and assign as sub-object
         if (isset($this->media_filename)) {
-            // Create new Media object and assign as sub-object
-            $media = new Media();
-            $media->id = $this->media_id;
-            $media->filename = $this->media_filename;
-            $media->width = $this->media_width;
-            $media->height = $this->media_height;
-            $media->feature = $this->media_feature;
-            $media->caption = $this->media_caption;
-            $media->__construct();
-            $this->media = $media;
+            $mediaData = [];
+            $mediaData['id'] = $this->media_id;
+            $mediaData['filename'] = $this->media_filename;
+            $mediaData['width'] = $this->media_width;
+            $mediaData['height'] = $this->media_height;
+            $mediaData['feature'] = $this->media_feature;
+            $mediaData['caption'] = $this->media_caption;
+
+            $this->media = new Media($mediaData);
         }
 
-        // Remove media properties from page element object
-        // unset($this->media_id);
+        // Remove media properties from page element object to clean up
+        // Do not unset $this->media_id, needed to maintain foreign key reference
         unset($this->media_filename);
         unset($this->media_width);
         unset($this->media_height);
         unset($this->media_feature);
         unset($this->media_caption);
+
+
     }
 
     /**

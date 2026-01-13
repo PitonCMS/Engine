@@ -4,7 +4,7 @@
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const e="collapsed",t=Array.from(document.querySelectorAll('[data-collapse-toggle^="newElementButton"]')),a=function(e){let a=t.findIndex((t=>t.dataset.collapseToggle===e));if(-1!==a){t.slice(a+1).forEach((e=>{e.classList.toggle("d-none")}))}};document.addEventListener("click",(function(t){if(!t.target.closest("[data-collapse-toggle]"))return;let n=t.target.closest("[data-collapse-toggle]").dataset.collapseToggle;n.match(/^newElementButton/)&&a(n),document.querySelector(`[data-collapse-target="${n}"]`).classList.toggle(e)}),!1),document.addEventListener("click",(function(t){if(!t.target.closest("[data-collapse-auto]"))return;let n=t.target.closest("[data-collapse-auto]").dataset.collapseAuto;document.querySelector(`[data-collapse-target="${n}"]`).classList.add(e),n.match(/^newElementButton/)&&a(n)}),!1);
 /**
@@ -12,14 +12,14 @@ const e="collapsed",t=Array.from(document.querySelectorAll('[data-collapse-toggl
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2021 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 let n={csrfTokenRequestHeader:"Piton-CSRF-Token",routes:{adminPageGet:"/admin/page/get",adminPageElementGet:"/admin/page/element/get",adminPageElementDelete:"/admin/page/element/delete",adminMessageSave:"/admin/message/save",adminMessageGet:"/admin/message/get",adminMessageCountGet:"/admin/message/getnewmessagecount",adminMedia:"/admin/media/",adminMediaSave:"/admin/media/save",adminMediaGet:"/admin/media/get/",adminMediaControlsGet:"/admin/media/getmediacontrols",adminMediaCategorySaveOrder:"/admin/media/category/saveorder",adminMediaDelete:"/admin/media/delete",adminMediaCategoryDelete:"/admin/media/category/delete",adminMediaUploadFormGet:"/admin/media/uploadform",adminMediaUploadFile:"/admin/media/upload",adminCollection:"/admin/collection/",adminNavigationDelete:"/admin/navigation/delete",submitMessage:"/submitmessage"}};"object"==typeof config&&(n={...n,...config});const r=document.querySelector('[data-alert-modal="true"]'),o=function(e,t,a){if(a=Array.isArray(a)&&null!==a?a.join("<br>"):a instanceof Error?a.message:"object"==typeof a&&null!==a?Object.values(a).join("<br>"):String(a),r){let o=document.createElement("div");o.innerHTML=n.alertInlineHTML,o.querySelector('[data-alert="container"]').classList.add("alert-"+e),o.querySelector('[data-alert="heading"]').innerHTML=t,o.querySelector('[data-alert="content"]').innerHTML=a,r.insertAdjacentHTML("afterbegin",o.innerHTML),window.scrollTo(0,0)}else alert(a)};document.addEventListener("click",(function(e){"alert"===e.target.dataset.dismiss&&e.target.closest('[data-alert="container"]')?.remove()}),!1);
 /**
@@ -27,28 +27,28 @@ let n={csrfTokenRequestHeader:"Piton-CSRF-Token",routes:{adminPageGet:"/admin/pa
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 /**
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const d=function(){document.body.insertAdjacentHTML("afterbegin",n.spinnerHTML)},l=function(){document.querySelector('[data-spinner="true"]')?.remove()},c=function(e,t,a){let r=new XMLHttpRequest;return new Promise(((o,d)=>{let l;r.onreadystatechange=()=>{if(r.readyState===XMLHttpRequest.DONE)try{if(200===r.status){if(l=JSON.parse(r.responseText),"success"===l.status)return o(l.text);throw new Error(`Application Error ${l.text}`)}throw new Error(`Server Error ${r.status} ${r.statusText}.`)}catch(e){if(!(e instanceof Error)){let e=new Error(e)}return d(e.message)}},r.open(e,t,!0),r.setRequestHeader("X-Requested-With","XMLHttpRequest"),"POST"===e&&n.csrfTokenValue&&r.setRequestHeader(n.csrfTokenRequestHeader,n.csrfTokenValue),r.send(a)}))},i=function(e,t){if(t){let a;if(t instanceof URLSearchParams)a=t;else{a=new URLSearchParams;for(let[e,n]of Object.entries(t))a.append(e,n)}e+="?"+a.toString()}return c("GET",e)},s=function(e,t){let a;if(t instanceof FormData)a=t;else{a=new FormData;for(let[e,n]of Object.entries(t))a.append(e,n)}return c("POST",e,a)};let u;const m=function(e='[data-query="content"]'){return document.querySelector(e)},g=function(e){return u||console.error("Module xhrQuery requestPath is not set."),d(),i(u,e).then((e=>(function(){if(m())for(;m().firstChild;)m().removeChild(m().lastChild)}(),e))).then((e=>{m().insertAdjacentHTML("afterbegin",e)})).then((()=>{l()})).catch((e=>{l(),o("danger","Failed to Get Results",e)}))};document.addEventListener("click",(function(e){if(e.target.closest(".pagination > div")){e.preventDefault();let t=e.target.closest(".pagination > div").querySelector("a").href,a=new URL(t),n=new URLSearchParams(a.search);return g(n)}}),!1);const f=function(){let e=document.querySelectorAll('[data-filter="options"] input'),t={};return e.forEach((e=>{e.checked&&(t.hasOwnProperty(e.name)?t[e.name]+=","+e.value:t[e.name]=e.value)})),g(t)},p=function(){let e={terms:document.querySelector('[data-filter="search"] input').value};return document.querySelectorAll('[data-filter="options"] input').forEach((e=>{e.checked&&(e.checked=!1)})),g(e)};document.addEventListener("click",(function(e){"apply"===e.target.dataset.filterControl&&f()}),!1),document.addEventListener("click",(function(e){if("clear"===e.target.dataset.filterControl){e.target.closest('[data-filter="options"]').querySelectorAll("input").forEach((e=>{e.checked=!1}))}}),!1),document.addEventListener("click",(e=>{e.target.closest('[data-filter-control="search"]')&&p()}),!1),document.addEventListener("keypress",(e=>{e.target.closest('[data-filter="search"]')&&"Enter"===e.key&&p()}),!1);
 /**
@@ -56,7 +56,7 @@ const d=function(){document.body.insertAdjacentHTML("afterbegin",n.spinnerHTML)}
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const v=function(){document.body.insertAdjacentHTML("afterbegin",n.modalBackgroundHTML)},E=function(e,t){let a=document.createElement("div");a.insertAdjacentHTML("afterbegin",n.modalContentHTML),a.querySelector('[data-modal="header"]').insertAdjacentHTML("afterbegin",e),"string"==typeof t?a.querySelector('[data-modal="body"]').insertAdjacentHTML("afterbegin",t):"object"==typeof t&&t instanceof Node&&a.querySelector('[data-modal="body"]').append(t),null===document.querySelector('[data-modal="modal"]')&&v(),document.querySelector('[data-modal="modal"]').append(a.firstChild)},h=function(){document.querySelector('[data-modal="modal"]')?.remove()};var L;document.addEventListener("click",(function(e){"modal"!==e.target.dataset.modal&&"dismiss"!==e.target.dataset.modal||h()}),!1),L=n.routes.adminMediaGet+"static",u=L;const y=new Event("input",{bubbles:!0});let S=null,b=!0;const q=function(){return S},M=function(){v(),i(n.routes.adminMediaGet+"static").then((e=>{i(n.routes.adminMediaControlsGet).then((t=>{let a=document.createElement("div");return a.classList.add("modal-container"),a.dataset.mediaSelectModal=!0,a.insertAdjacentHTML("afterbegin",t),a.querySelector('[data-query="content"]').insertAdjacentHTML("afterbegin",e),a})).then((e=>{E("Select Media",e)}))})).catch((e=>{h(),o("danger","Failed to Launch Media Modal",e)}))},k=function(){b=!1,M()},T=function(e){const t=function(a){if(a.target.closest('[data-media-card="true"]')&&a.target.closest("[data-media-select-modal]")&&!b){let n=a.target.closest('[data-media-card="true"]');if(b=!0,h(),!n.dataset)throw new Error("Piton: mediaCard.dataset not set.");e.model.change((a=>{const r=a.createElement("image",{src:n.dataset.mediaFilename,alt:n.dataset.mediaCaption});if(n.dataset.mediaCaption){const e=a.createElement("caption");a.appendText(n.dataset.mediaCaption,e),a.append(e,r)}e.model.insertContent(r,e.model.document.selection),document.removeEventListener("click",t,!1)}))}};return function(){document.addEventListener("click",t,!1)}};document.addEventListener("click",(function(e){var t;e.target.dataset.mediaModal&&(t=e.target.closest('[data-media-select="true"]'),S=t,M(),b=!0)}),!1),document.addEventListener("click",(function(e){if(e.target.dataset.mediaClear){let t=e.target.closest('[data-media-select="true"]').querySelector('input[name*="media_id"]'),a=e.target.closest('[data-media-select="true"]').querySelector("img");t.value="",a.src="",a.alt="",a.title="",a.classList.add("d-none"),t.dispatchEvent(y)}}),!1),document.addEventListener("click",(function(e){if(!e.target.closest('[data-media-card="true"]')||!e.target.closest("[data-media-select-modal]"))return;if(!b)return;let t=e.target.closest('[data-media-card="true"]'),a={id:t.dataset.mediaId,caption:t.dataset.mediaCaption,filename:t.dataset.mediaFilename},n=q().querySelector('input[name*="media_id"]'),r=q().querySelector("img");n.value=a.id,r.src=a.filename,r.alt=a.caption,r.title=a.caption,r.classList.remove("d-none"),n.dispatchEvent(y),h()}),!1);
 /**
@@ -64,7 +64,7 @@ const v=function(){document.body.insertAdjacentHTML("afterbegin",n.modalBackgrou
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 const w=document.querySelector('[data-url-slug="target"]'),A=function(e){if("home"===w.value)return void alert("You cannot change the home page slug.");if(e.target.classList&&e.target.classList.contains("fa-lock")){if(!confirm("Are you sure you want to change the URL Slug? This can impact links and search engine results."))return;e.target.classList.replace("fa-lock","fa-unlock"),w.readOnly=!1,w.dataset.urlSlugStatus="unlock"}};
 /**
@@ -72,6 +72,6 @@ const w=document.querySelector('[data-url-slug="target"]'),A=function(e){if("hom
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.. See LICENSE file for details.
  */
 let C;const H=new Event("input",{bubbles:!0}),P=document.createElement("div");P.classList.add("drag-drop");const D=function(e){C=e.target,e.dataTransfer.setData("text/plain",null),e.dataTransfer.dropEffect="move",setTimeout((()=>{document.querySelectorAll('[draggable="true"]').forEach((e=>{e===C||e===C.nextElementSibling||C.contains(e)||e.parentElement.insertBefore(P.cloneNode(),e),e===e.parentElement.lastElementChild&&e!==C&&e.parentElement.appendChild(P.cloneNode())})),document.querySelectorAll('[data-drop-zone="1"]').forEach((e=>{C.contains(e)||e.parentElement.insertBefore(P.cloneNode(),e)}))}),0)},j=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move",e.target.matches(".drag-drop")&&e.target.classList.add("drag-hover")},R=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move"},x=function(e){e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move",e.target.matches(".drag-drop")&&e.target.classList.remove("drag-hover")},G=function(e){e.preventDefault(),e.stopPropagation(),C!==e.target&&e.target.matches(".drag-drop")&&e.target.parentElement.insertBefore(C,e.target.nextSibling)},O=function(e){document.querySelectorAll(".drag-drop").forEach((e=>{e.remove()})),C.dispatchEvent(H)},B=function(e){e.plugins.get("PitonSelectMedia").setOpenMediaModal(k)},F=function(e){e.plugins.get("PitonSelectMedia").setMediaSelectListener(T(e))},I=function(e){ClassicEditor.create(e,{extraPlugins:[B,F]}).then((t=>{t.model.document.on("change:data",(t=>{e.dispatchEvent(new Event("input",{bubbles:!0}))}))})).catch((e=>{console.error(e)}))},N=function(e){e.target.closest('[data-drag-handle="true"]')||e.target.closest('[data-element="parent"]').setAttribute("draggable",!0)},U=function(e){e.target.closest('[data-drag-handle="true"]')||e.target.closest('[data-element="parent"]').setAttribute("draggable",!1)};document.querySelectorAll("[data-element-select-block]").forEach((e=>{let t=e.dataset.elementSelectBlock,a=parseInt(e.dataset.elementCount??0),r=parseInt(e.dataset.elementCountLimit),c=e.querySelector('[data-collapse-toggle*="newElementButton"]').parentElement;const u=function(e){a+=e,a>=r?c.classList.add("dropdown-disabled"):c.classList.remove("dropdown-disabled")};e.querySelectorAll('a[data-element="add"]').forEach((e=>{e.addEventListener("click",(c=>{if(c.preventDefault(),a>=r)return;d();let s={template:e.dataset.elementTemplate,blockKey:t};i(n.routes.adminPageElementGet,s).then((e=>{let a=document.createElement("div"),n=document.getElementById("block-"+t);a.innerHTML=e,u(1),n.parentElement.classList.contains("collapsed")&&n.parentElement.classList.remove("collapsed"),a.querySelector('[data-element="parent"]').classList.add("new-element"),n.insertAdjacentHTML("beforeend",a.innerHTML);const r=n.querySelectorAll('[data-element="parent"]');r[r.length-1].scrollIntoView(),n.dispatchEvent(new Event("input",{bubbles:!0}));let o=n.lastElementChild.querySelector('textarea[data-cke="true"]');I(o)})).then((()=>{l()})).catch((e=>{l(),o("danger","Failed to Add Element",e)}))}),!1)})),e.addEventListener("click",(e=>{if(!e.target.dataset.deleteElementPrompt)return;if(!confirm(e.target.dataset.deleteElementPrompt))return;let t=parseInt(e.target.dataset.elementId),a=e.target.closest('[data-element="parent"]');isNaN(t)?a.remove():(d(),s(n.routes.adminPageElementDelete,{elementId:t}).then((()=>{a.remove()})).then((()=>{l()})).catch((e=>{l(),o("danger","Failed to Delete Element",e)}))),u(-1)}),!1)})),document.querySelectorAll('textarea[data-cke="true"]').forEach((e=>{I(e)})),document.querySelector('[data-url-slug="source"]').addEventListener("input",(e=>{var t;t=e.target.value,"home"!==w.value&&"unlock"===w.dataset.urlSlugStatus&&(t=(t=(t=(t=(t=t.replace(/&/g,"and")).replace("'","")).replace(/[^a-z0-9]+/gi,"-")).replace(/-+$/gi,"")).toLowerCase(),w.value=t)}),!1),document.querySelector('[data-url-slug-lock="1"]').addEventListener("click",(e=>{A(e)}),!1),document.addEventListener("change",(function(e){if(!e.target.matches('input[name*="element_title"]'))return;let t=e.target.value;e.target.closest('[data-element="parent"]').querySelector(".secondary-title").innerHTML=t}),!1),document.querySelectorAll('[data-draggable="children"]').forEach((e=>{e.addEventListener("mousedown",U,!1),e.addEventListener("mouseup",N,!1),e.addEventListener("dragstart",D,!1),e.addEventListener("dragenter",j,!1),e.addEventListener("dragover",R,!1),e.addEventListener("dragleave",x,!1),e.addEventListener("drop",G,!1),e.addEventListener("dragend",O,!1)}))})();

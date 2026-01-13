@@ -4,75 +4,83 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Middleware;
 
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Closure;
 use PDOException;
+use Piton\Library\Config;
+use Piton\Library\Handlers\CsrfGuard;
+use Piton\Library\Handlers\Session;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface as Logger;
 
 /*
- * Load site settings from database into Container
+ * Merge site settings from database into app settings in the Container
  */
 class LoadSiteSettings
 {
     /**
-     * Container
-     * @var ContainerInterface
+     * Class Properties
      */
-    protected $container;
-
-    /**
-     * App Settings
-     * @var ArrayAccess
-     */
-    protected $appSettings;
-
-    /**
-     * New Settings
-     * @var array
-     */
-    protected $settings;
+    protected Closure $dataMapper;
+    protected CsrfGuard $csrfGuardHandler;
+    protected Session $sessionHandler;
+    protected Config $appSettings;
+    protected array $newSettings;
+    protected Logger $logger;
 
     /**
      * Constructor
      *
-     * @param  ContainerInterface
-     * @return void
+     * @param Config $config
+     * @param Closure $dataMapper
+     * @param CsrfGuard $csrfGuardHandler
+     * @param Session $sessionHandler
+     * @param Logger $logger
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Config $config, Closure $dataMapper, CsrfGuard $csrfGuardHandler, Session $sessionHandler, Logger $logger)
     {
-        $this->container = $container;
-        $this->appSettings = $container->settings;
+        $this->appSettings = $config;
+        $this->dataMapper = $dataMapper;
+        $this->csrfGuardHandler = $csrfGuardHandler;
+        $this->sessionHandler = $sessionHandler;
+        $this->logger = $logger;
 
-        $this->settings['environment'] = [];
-        $this->settings['site'] = [];
+        $this->newSettings['environment'] = [];
+        $this->newSettings['site'] = [];
+
+        // Log instantiation
+        $this->logger->debug('LoadSiteSettings middleware LOADED at ' . time());
     }
 
     /**
      * Callable
      *
      * @param  Request  $request  PSR7 request
-     * @param  Response $response PSR7 response
-     * @param  callable $next     Next middleware
+     * @param  RequestHandler $handler
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, callable $next): Response
+    public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('LoadSiteSettings middleware INVOKED at ' . time());
+
         $this->loadDatabaseSettings();
         $this->loadConfigSettings($request);
 
-        // Update app with new settings
-        $this->appSettings->replace($this->settings);
+        // Merge settings from database into application settings
+        $this->appSettings->merge($this->newSettings);
 
         // Next Middleware call
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 
     /**
@@ -87,7 +95,7 @@ class LoadSiteSettings
         // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
         // Otherwise rethrow to let the application handler deal with whatever happened.
         try {
-            $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+            $dataStoreMapper = (($this->dataMapper)('DataStoreMapper'));
         } catch (PDOException $th) {
             // SQLSTATE[42S02]
             if ($th->getCode() === '42S02') {
@@ -101,12 +109,14 @@ class LoadSiteSettings
 
         $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
+        // var_dump($siteSettings);
+
         // Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
         foreach ($siteSettings as $row) {
             if ($row->category === 'piton') {
-                $this->settings['environment'][$row->setting_key] = $row->setting_value;
+                $this->newSettings['environment'][$row->setting_key] = $row->setting_value;
             } else {
-                $this->settings['site'][$row->setting_key] = $row->setting_value;
+                $this->newSettings['site'][$row->setting_key] = $row->setting_value;
             }
         }
     }
@@ -121,39 +131,38 @@ class LoadSiteSettings
     protected function loadConfigSettings(Request $request): void
     {
         // Copy production flag from config file to keep it in the new settings array
-        $this->settings['environment']['production'] = $this->appSettings['environment']['production'];
+        $this->newSettings['environment']['production'] = $this->appSettings['environment']['production'];
 
         // Generate Content Security Policy nonce
-        $this->settings['environment']['cspNonce'] = base64_encode(random_bytes(16));
+        $this->newSettings['environment']['cspNonce'] = base64_encode(random_bytes(16));
 
         // Load piton engine version from composer.lock
         if (null !== $definition = json_decode(file_get_contents(ROOT_DIR . 'composer.lock'))) {
             $engineKey = array_search('pitoncms/engine', array_column($definition->packages, 'name'));
-            $this->settings['environment']['engine'] = $definition->packages[$engineKey]->version;
-            $this->settings['environment']['commit'] = $definition->packages[$engineKey]->source->reference;
+            $this->newSettings['environment']['engine'] = $definition->packages[$engineKey]->version;
+            $this->newSettings['environment']['commit'] = isset($definition->packages[$engineKey]->source) ? $definition->packages[$engineKey]->source->reference : null;
         }
 
-        // This is a bit of a Slim hack. The $request object passed into the __invoke() method that actually has a route object attribute
-        // Because of PSR7 immutability the $request object passed into the controller constructor is a stale copy
-        // and does not have the route object attribute
+        // This is a bit of a Slim hack. The $request object passed into the __invoke() method actually has the current route object attribute
+        // Because of PSR7 immutability the $request object passed into the controller constructor is a stale copy and does not have the route object attribute
         $route = $request->getAttribute('route');
-        $this->settings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
+        $this->newSettings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
 
         // This is used to break the cache by appending to asset files as a get param
-        $this->settings['environment']['assetVersion'] =
-            ($this->settings['environment']['production']) ? $this->settings['environment']['engine'] : date('U');
+        $this->newSettings['environment']['assetVersion'] =
+            ($this->newSettings['environment']['production']) ? $this->newSettings['environment']['engine'] : date('U');
 
         // Add CSRF Token and Value to environment array
-        $this->settings['environment']['csrfTokenName'] = $this->container->csrfGuardHandler->getTokenName();
-        $this->settings['environment']['csrfTokenValue'] = $this->container->csrfGuardHandler->getTokenValue();
-        // $this->settings['environment']['csrfHeaderName'] = $this->container->csrfGuardHandler->getHeaderName();
+        $this->newSettings['environment']['csrfTokenName'] = $this->csrfGuardHandler->getTokenName();
+        $this->newSettings['environment']['csrfTokenValue'] = $this->csrfGuardHandler->getTokenValue();
+        // $this->newSettings['environment']['csrfHeaderName'] = $this->csrfGuardHandler->getHeaderName();
 
         // Set current project directory
-        $this->settings['environment']['projectDir'] = basename(ROOT_DIR);
+        $this->newSettings['environment']['projectDir'] = basename(ROOT_DIR);
 
         // Set session user info
-        $this->settings['environment']['sessionUserId'] = $this->container->sessionHandler->getData('user_id');
-        $this->settings['environment']['sessionUserFirstName'] = $this->container->sessionHandler->getData('first_name');
-        $this->settings['environment']['sessionUserLastName'] = $this->container->sessionHandler->getData('last_name');
+        $this->newSettings['environment']['sessionUserId'] = $this->sessionHandler->getData('user_id');
+        $this->newSettings['environment']['sessionUserFirstName'] = $this->sessionHandler->getData('first_name');
+        $this->newSettings['environment']['sessionUserLastName'] = $this->sessionHandler->getData('last_name');
     }
 }

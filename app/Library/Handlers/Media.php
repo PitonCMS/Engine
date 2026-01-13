@@ -4,24 +4,30 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use function Tinify\setKey as setTinifyKey;
-use function Tinify\validate as validateTinifyKey;
-use function Tinify\fromFile as setTinifySource;
-use Tinify\Source as TinifySource;
+use Closure;
+use Exception;
 use Tinify\AccountException as TinifyAccountException;
 use Tinify\ClientException as TinifyClientException;
-use Tinify\ServerException as TinifyServerException;
+use Tinify\ConnectionException as TinifyConnectionException;
 use Tinify\Exception as TinifyException;
-use Exception;
-use Closure;
+
+use function Tinify\fromFile as setTinifySource;
+
+use Tinify\ServerException as TinifyServerException;
+
+use function Tinify\setKey as setTinifyKey;
+
+use Tinify\Source as TinifySource;
+
+use function Tinify\validate as validateTinifyKey;
 
 /**
  * Piton Media Handler
@@ -35,55 +41,55 @@ class Media
      * Provided File Name
      * @var string
      */
-    protected $filename;
+    protected string $filename;
 
     /**
      * Absolute File Path
      * @var string
      */
-    protected $mediaPath;
+    protected string $mediaPath;
 
     /**
      * Media File Width
      * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * Media File Height
      * @var int
      */
-    protected $height;
+    protected int $height;
 
     /**
      * Orientation
      * @var string
      */
-    protected $orientation;
+    protected string $orientation;
 
     /**
      * Tinify Source
      * @var \Tinify\Source
      */
-    protected $tinifySource;
+    protected \Tinify\Source $tinifySource;
 
     /**
      * Media File Path Closure
-     * @var closure
+     * @var Closure
      */
-    protected $mediaPathClosure;
+    protected Closure $mediaPathClosure;
 
     /**
      * Media Sizes Closure
-     * @var closure
+     * @var Closure
      */
-    protected $mediaSizesClosure;
+    protected Closure $mediaSizesClosure;
 
     /**
      * Error Messages
      * @var array
      */
-    protected $error = [];
+    protected array $error = [];
 
     /**
      * Constructor
@@ -91,8 +97,7 @@ class Media
      * @param  closure $mediaPath    Function to derive media file Path
      * @param  closure $mediaSizes   Function to derive media size suffix
      * @param  string  $tinifyApiKey TinyJPG API Key
-     * @return void
-     * @throws Exception
+     * @throws TinifyException
      */
     public function __construct(closure $mediaPath, closure $mediaSizes, string $tinifyApiKey)
     {
@@ -124,6 +129,7 @@ class Media
         // Ensure source file exists
         if (!file_exists($absoluteSourceMedia)) {
             $this->error[] = "Source file not found $absoluteSourceMedia";
+
             return false;
         }
 
@@ -139,6 +145,7 @@ class Media
         $this->tinifySource = setTinifySource($absoluteSourceMedia);
         if (!$this->tinifySource instanceof TinifySource) {
             $this->error[] = "Unable to set Tinify source file $sourceMedia.";
+
             return false;
         }
 
@@ -171,19 +178,19 @@ class Media
             $resize = [
                 'method' => 'fit',
                 'width' => 2000,
-                'height' => 2000
+                'height' => 2000,
             ];
         } elseif ($this->orientation === 'landscape') {
             $resize = [
                 'method' => 'fit',
                 'width' => 2000,
-                'height' => 1500
+                'height' => 1500,
             ];
         } else {
             $resize = [
                 'method' => 'fit',
                 'width' => 1500,
-                'height' => 2000
+                'height' => 2000,
             ];
         }
 
@@ -204,19 +211,19 @@ class Media
             $resize = [
                 'method' => 'fit',
                 'width' => 1024,
-                'height' => 1024
+                'height' => 1024,
             ];
         } elseif ($this->orientation === 'landscape') {
             $resize = [
                 'method' => 'fit',
                 'width' => 1024,
-                'height' => 768
+                'height' => 768,
             ];
         } else {
             $resize = [
                 'method' => 'fit',
                 'width' => 768,
-                'height' => 1024
+                'height' => 1024,
             ];
         }
 
@@ -235,7 +242,7 @@ class Media
         $resize = [
             'method' => 'thumb',
             'width' => 350,
-            'height' => 263
+            'height' => 263,
         ];
 
         return $this->resizeMedia($this->getAbsoluteFilenameBySize('thumb'), $resize);
@@ -246,10 +253,10 @@ class Media
      *
      * Wraps Tinify methods in try catch block with messages
      * @param string $newFilename
-     * @param array $resize
+     * @param ?array $resize
      * @return bool
      */
-    protected function resizeMedia(string $newFilename, array $resize = null): bool
+    protected function resizeMedia(string $newFilename, ?array $resize = null): bool
     {
         try {
             if ($resize) {
@@ -265,22 +272,27 @@ class Media
         } catch (TinifyAccountException $e) {
             // Verify your API key and account limit.
             $this->error[] = "There is an error with the Tinify account:  {$e->getMessage()}";
+
             return false;
         } catch (TinifyClientException $e) {
             // Check your source image and request options.
             $this->error[] = "There is an with the original media file:  {$e->getMessage()}";
+
             return false;
         } catch (TinifyServerException $e) {
             // Temporary issue with the Tinify API.
             $this->error[] = "There is an error with the Tinify server:  {$e->getMessage()}";
+
             return false;
         } catch (TinifyConnectionException $e) {
             // A network connection error occurred.
             $this->error[] = "There is an error with the Tinify connection:  {$e->getMessage()}";
+
             return false;
         } catch (Exception $e) {
             // Something else went wrong, unrelated to the Tinify API.
             $this->error[] = "Whoops! Something went wrong trying to optimize media:  {$e->getMessage()}";
+
             return false;
         }
     }

@@ -5,23 +5,24 @@
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Models;
 
-use Piton\ORM\DataMapperAbstract;
 use Piton\Models\Entities\PitonEntity;
+use Piton\ORM\DataMapperAbstract;
 
 /**
  * Piton Collection Mapper
  */
 class CollectionMapper extends DataMapperAbstract
 {
-    protected $table = 'collection';
-    protected $modifiableColumns = ['collection_slug', 'collection_title', 'collection_definition' ];
+    protected string $table = 'collection';
+    protected array $modifiableColumns = ['collection_slug', 'collection_title', 'collection_definition' ];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\Collection';
 
     /**
      * Find Collection by ID
@@ -42,10 +43,10 @@ class CollectionMapper extends DataMapperAbstract
     /**
      * Find Collection by Slug
      *
-     * @param string $collectionSlug
+     * @param ?string $collectionSlug
      * @return PitonEntity|null
      */
-    public function findCollectionBySlug(string $collectionSlug = null): ?PitonEntity
+    public function findCollectionBySlug(?string $collectionSlug = null): ?PitonEntity
     {
         $this->makeSelect(false, ' and c.collection_slug = ?');
         $this->bindValues[] = $collectionSlug;
@@ -63,7 +64,7 @@ class CollectionMapper extends DataMapperAbstract
      * @param  string $andClauses Optional conditions to include in query
      * @return void
      */
-    protected function makeSelect(bool $foundRows = false, string $andClauses = '')
+    protected function makeSelect(bool $foundRows = false, string $andClauses = ''): void
     {
         $this->sql = <<<SQL
 select

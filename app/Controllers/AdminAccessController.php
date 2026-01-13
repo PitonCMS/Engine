@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * 1 Render login page form, which accepts an email address
  * 2 Submit (POST) the email, and validate the email string against a list of known users
  * 3 Generate a one-time use hash token, save the token to session data, and send token in query string to user's email account
- * 4 User opens email, and submits link with token
+ * 4 User opens email, and submits link with token (GET)
  * 5 The application validates the submitted token to the one in session data, and if not expired an authenticated
  *      session is started
  */
@@ -33,13 +33,13 @@ class AdminAccessController extends AdminBaseController
      * Login Token Key Name
      * @var string
      */
-    private $loginTokenKey = 'loginToken';
+    private string $loginTokenKey = 'loginToken';
 
     /**
      * Login Token Key Expires Name
      * @var string
      */
-    private $loginTokenExpiresKey = 'loginTokenExpires';
+    private string $loginTokenExpiresKey = 'loginTokenExpires';
 
     /**
      * Show Login Form
@@ -63,19 +63,19 @@ class AdminAccessController extends AdminBaseController
     public function requestLoginToken(): Response
     {
         // Get dependencies
-        $session = $this->container->sessionHandler;
-        $emailHandler = $this->container->emailHandler;
-        $security = $this->container->accessHandler;
-        $userMapper = ($this->container->dataMapper)('UserMapper');
-        $email = trim($this->request->getParsedBodyParam('email'));
+        $session = $this->container->get('sessionHandler');
+        $emailHandler = $this->container->get('emailHandler');
+        $security = $this->container->get('accessHandler');
+        $userMapper = ($this->container->get('dataMapper'))('UserMapper');
+        $email = trim($this->getParsedBodyParam('email'));
 
         // Fetch users
         $user = $userMapper->findActiveUserByEmail($email);
 
         // Did we find a match?
         if ($user === null) {
-            // No, log and silently redirect to home
-            $this->container->logger->info('PitonCMS: Failed login attempt: ' . $email);
+            // If null, then log and silently redirect to home
+            $this->container->get('logger')->error('PitonCMS: Failed login attempt: ' . $email);
 
             return $this->redirect('home');
         }
@@ -86,7 +86,7 @@ class AdminAccessController extends AdminBaseController
             $token = $security->generateLoginToken();
             $session->setData([
                 $this->loginTokenKey => $token,
-                $this->loginTokenExpiresKey => time() + 15*60,
+                $this->loginTokenExpiresKey => time() + 15 * 60,
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'role' => $user->role,
@@ -95,8 +95,9 @@ class AdminAccessController extends AdminBaseController
             ]);
 
             // Get request details to create login link and email to user
-            $link = $this->request->getUri()->getBaseUrl();
-            $link .= $this->container->router->pathFor('adminProcessLoginToken', ['token' => $token]);
+            $uri = $this->request->getUri();
+            $link = $uri->getScheme() . '://' . $uri->getAuthority();
+            $link .= $this->container->get('router')->urlFor('adminProcessLoginToken', ['token' => $token]);
 
             // Send message
             $emailHandler->setTo($user->email, '')
@@ -119,8 +120,8 @@ class AdminAccessController extends AdminBaseController
     public function processLoginToken(array $args): Response
     {
         // Get dependencies
-        $session = $this->container->sessionHandler;
-        $security = $this->container->accessHandler;
+        $session = $this->container->get('sessionHandler');
+        $security = $this->container->get('accessHandler');
         $savedToken = $session->getData($this->loginTokenKey);
         $tokenExpires = (int) $session->getData($this->loginTokenExpiresKey);
 
@@ -139,9 +140,9 @@ class AdminAccessController extends AdminBaseController
 
         // Not valid, direct home
         $message = $args['token'] . ' saved: ' . $savedToken . ' time: ' . time() . ' expires: ' . $tokenExpires;
-        $this->container->logger->info('PitonCMS: Invalid login token, supplied: ' . $message);
+        $this->container->get('logger')->info('PitonCMS: Invalid login token, supplied: ' . $message);
 
-        return $this->notFound();
+        return $this->redirect('home');
     }
 
     /**
@@ -154,11 +155,11 @@ class AdminAccessController extends AdminBaseController
     public function logout(): Response
     {
         // Unset authenticated session
-        $security = $this->container->accessHandler;
+        $security = $this->container->get('accessHandler');
         $security->endAuthenticatedSession();
 
         // Unset CSRF Token
-        $csrfGuard = $this->container->csrfGuardHandler;
+        $csrfGuard = $this->container->get('csrfGuardHandler');
         $csrfGuard->unsetToken();
 
         return $this->redirect('home');

@@ -4,16 +4,16 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Admin Setting Controller
@@ -42,8 +42,8 @@ class AdminSettingController extends AdminBaseController
     public function editSettings($args): Response
     {
         // Get dependencies
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $definition = $this->container->jsonDefinitionHandler;
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
 
         // Validate we have one of the defined categories
         if (!in_array($args['category'], ['site', 'social', 'contact'])) {
@@ -86,26 +86,27 @@ class AdminSettingController extends AdminBaseController
     public function saveSettings(): Response
     {
         // Get dependencies
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
 
         // Get setting data POST array
-        $settings = $this->request->getParsedBodyParam('setting');
-        $category = $this->request->getParsedBodyParam('category');
+        $settings = $this->getParsedBodyParam('setting');
+        $category = $this->getParsedBodyParam('category');
 
         // Save each setting
         foreach ($settings as $row) {
             $setting = $dataStoreMapper->make();
-            $setting->id = (int) $row['id'];
+            $setting->id = $row['id'];
+            $setting->category = $row['category'];
+            $setting->setting_key = $row['setting_key'];
+            $setting->setting_value = $row['setting_value'];
 
             // Check for a setting delete flag
             if (isset($row['delete'])) {
                 $dataStoreMapper->delete($setting);
+
                 continue;
             }
 
-            $setting->category = $row['category'];
-            $setting->setting_key = $row['setting_key'];
-            $setting->setting_value = $row['setting_value'];
             $dataStoreMapper->save($setting);
         }
 

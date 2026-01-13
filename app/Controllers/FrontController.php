@@ -4,17 +4,17 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
-use Throwable;
 use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
+use Throwable;
 
 /**
  * Piton Front End Controller
@@ -32,9 +32,9 @@ class FrontController extends FrontBaseController
     public function showPage(array $args): Response
     {
         // Get dependencies
-        $pageMapper = ($this->container->dataMapper)('PageMapper');
-        $dataStoreMapper = ($this->container->dataMapper)('DataStoreMapper');
-        $pageElementMapper = ($this->container->dataMapper)('PageElementMapper');
+        $pageMapper = ($this->container->get('dataMapper'))('PageMapper');
+        $dataStoreMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
+        $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
 
         if (isset($args['slug2'])) {
             // This request is for a collection detail page
@@ -46,7 +46,7 @@ class FrontController extends FrontBaseController
 
         // Return 404 if not found
         if (empty($page)) {
-            return $this->notFound();
+            $this->notFound();
         }
 
         // Get page elements
@@ -82,82 +82,83 @@ class FrontController extends FrontBaseController
     public function submitMessage(): Response
     {
         // Get dependencies
-        $messageMapper = ($this->container->dataMapper)('MessageMapper');
-        $messageDataMapper = ($this->container->dataMapper)('MessageDataMapper');
-        $definition = $this->container->jsonDefinitionHandler;
-        $email = $this->container->emailHandler;
+        $messageMapper = ($this->container->get('dataMapper'))('MessageMapper');
+        $messageDataMapper = ($this->container->get('dataMapper'))('MessageDataMapper');
+        $definition = $this->container->get('jsonDefinitionHandler');
+        $email = $this->container->get('emailHandler');
+        $logger = $this->container->get('logger');
 
         // Get response message and status
         $status = "success";
         $text = $this->settings['site']['contactFormAcknowledgement'] ?? "Thank You";
 
         try {
-            $this->container->logger->debug('Trying to send contact email');
+            $logger->debug('Trying to send contact email');
 
             // Check honepot before saving message
-            if ('alt@example.com' !== $this->request->getParsedBodyParam('alt-email')) {
+            if ('alt@example.com' !== $this->getParsedBodyParam('alt-email')) {
                 throw new Exception('Honeypot found a fly');
             }
 
-            $this->container->logger->debug('...Passed honeypot test');
+            $logger->debug('...Passed honeypot test');
 
             // Check if there is a message to save
-            if (empty($this->request->getParsedBodyParam('email'))) {
+            if (empty($this->getParsedBodyParam('email'))) {
                 throw new Exception('Empty message submitted');
             }
 
-            $this->container->logger->debug('...Passed empty message test');
+            $logger->debug('...Passed empty message test');
 
             // Check that we have the minimum number of message characters
-            $minLength = $this->container->get('settings')['site']['minMessageLength'] ?? 1;
-            if (mb_strlen($this->request->getParsedBodyParam('message')) < (int) $minLength) {
+            $minLength = $this->container->get('get')('settings')['site']['minMessageLength'] ?? 1;
+            if (mb_strlen($this->getParsedBodyParam('message')) < (int) $minLength) {
                 throw new Exception('Message less than minimum length');
             }
 
-            $this->container->logger->debug('...Passed message length test');
-            $this->container->logger->debug('...Saving message to DB...');
+            $logger->debug('...Passed message length test');
+            $logger->debug('...Saving message to DB...');
 
             // Save message
             $message = $messageMapper->make();
-            $message->name = $this->request->getParsedBodyParam('name');
-            $message->email = $this->request->getParsedBodyParam('email');
-            $message->message = $this->request->getParsedBodyParam('message');
-            $message->context = $this->request->getParsedBodyParam('context', 'Unknown');
+            $message->name = $this->getParsedBodyParam('name');
+            $message->email = $this->getParsedBodyParam('email');
+            $message->message = $this->getParsedBodyParam('message');
+            $message->context = $this->getParsedBodyParam('context', 'Unknown');
             $message = $messageMapper->save($message);
 
-            $this->container->logger->debug('...Saved message to DB');
+            $logger->debug('...Saved message to DB');
 
             // Check if there are custom contact fields to save
             $contactInputsDefinition = $definition->getContactInputs();
 
             if ($contactInputsDefinition) {
                 $appendMessageText = "\n";
-                $this->container->logger->debug('...Appending extra contact fields');
+                $logger->debug('...Appending extra contact fields');
 
                 // Go through defined contact custom fields and match to POST array
                 foreach ($contactInputsDefinition as $field) {
                     // Check if there is matching input to save
-                    if (!$this->request->getParsedBodyParam($field->key)) {
+                    if (!$this->getParsedBodyParam($field->key)) {
                         continue;
                     }
 
                     // Create message text to append to email
-                    $appendMessageText .= "\n" . $field->name . ": " . $this->request->getParsedBodyParam($field->key);
+                    $appendMessageText .= "\n" . $field->name . ": " . $this->getParsedBodyParam($field->key);
 
                     // Save to data store
                     $dataStore = $messageDataMapper->make();
                     $dataStore->message_id = $message->id;
                     $dataStore->data_key = $field->key;
-                    $dataStore->data_value = $this->request->getParsedBodyParam($field->key);
+                    $dataStore->data_value = $this->getParsedBodyParam($field->key);
                     $messageDataMapper->save($dataStore);
                 }
             }
 
-            $this->container->logger->debug('...Ready to send email');
+            $logger->debug('...Ready to send email');
 
             // Send message to workflow email if an email address has been saved to settings
             if (!empty($this->settings['site']['contactFormEmail'])) {
-                $this->container->logger->debug('...Building Mailer Message');
+                $logger->debug('...Building Mailer Message');
                 $siteName = $this->settings['site']['siteName'] ?? 'PitonCMS';
 
                 $messageText = "{$message->name}\n{$message->email}\n{$message->context}\n\n{$message->message}";
@@ -166,7 +167,7 @@ class FrontController extends FrontBaseController
                     $messageText .= $appendMessageText;
                 }
 
-                $this->container->logger->debug('...Setting mail fields and sending');
+                $logger->debug('...Setting mail fields and sending');
 
                 $email->setReplyTo($message->email)
                         ->setTo($this->settings['site']['contactFormEmail'], '')
@@ -174,14 +175,14 @@ class FrontController extends FrontBaseController
                         ->setMessage($messageText)
                         ->send();
             } else {
-                $this->container->logger->error('...No contactFormEmail saved. Will not send email');
+                $logger->error('...No contactFormEmail saved. Will not send email');
             }
 
-            $this->container->logger->debug('...End send email');
+            $logger->debug('...End send email');
 
         } catch (Throwable $th) {
             // Log issue
-            $this->container->logger->error("PitonCMS: Exception submitting contact message: " . $th->getMessage());
+            $logger->error("PitonCMS: Exception submitting contact message: " . $th->getMessage());
             $status = "error";
             $text = 'There was an error submitting your message.';
         }

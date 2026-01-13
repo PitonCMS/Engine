@@ -4,17 +4,19 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2021 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2021 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Middleware;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Piton\Library\Config;
 use Psr\Http\Message\ResponseInterface as Response;
-use ArrayAccess;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface as Logger;
 
 /*
  * Set Dynamic Response Headers
@@ -22,36 +24,48 @@ use ArrayAccess;
 class ResponseHeaders
 {
     /**
-     * @var ArrayAccess
+     * @var Config
      */
-    protected $settings;
+    protected Config $config;
+
+    /**
+     * Logging Object
+     * @var Psr\Log\LoggerInterface
+     */
+    protected Logger $logger;
 
     /**
      * Constructor
      *
-     * @param  ArrayAccess
-     * @return void
+     * @param Config $config Configuration settings from the container
+     * @param Logger $logger
      */
-    public function __construct(ArrayAccess $settings)
+    public function __construct(Config $config, Logger $logger)
     {
-        $this->settings = $settings;
+        $this->config = $config;
+        $this->logger = $logger;
+
+        // Log instantiation
+        $this->logger->debug('ResponseHeaders middleware LOADED at ' . time());
     }
 
     /**
      * Callable
      *
-     * @param  Request  $request  PSR7 request
-     * @param  Response $response PSR7 response
-     * @param  callable $next     Next middleware
+     * @param  Request $request
+     * @param  RequestHandler $handler
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, callable $next): Response
+    public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        // Log invocation
+        $this->logger->debug('ResponseHeaders middleware INVOKED at ' . time());
+
         // This is an Exit middleware method so wait until exiting and get next request first
-        $response = $next($request, $response);
+        $response = $handler->handle($request);
 
         // Get headers from settings
-        $headers = $this->settings['header'] ?? [];
+        $headers = $this->config['header'] ?? [];
 
         foreach ($headers as $header => $value) {
             // If header value is empty or falsey do not set header and skip iteration
@@ -61,7 +75,7 @@ class ResponseHeaders
 
             // If the header value contains the string 'nonce' then expand to the current nonce base64 key
             if (mb_strpos($value, 'nonce') !== false) {
-                $value = str_replace('nonce', 'nonce-' . $this->settings['environment']['cspNonce'], $value);
+                $value = str_replace('nonce', 'nonce-' . $this->config['environment']['cspNonce'], $value);
             }
 
             // Set header, except for Strict-Transport-Security (STS)
