@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -12,26 +12,25 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Psr\Log\LoggerInterface as Logger;
 use Exception;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Piton Sitemap Handler
  */
 class Sitemap
 {
-    protected $sitemapFileName = 'sitemap.xml';
-    protected $sitemapFilePath;
-    protected $domain;
-    protected $logger;
-    protected $sitemapXML;
-    protected $messages = [];
+    protected string $sitemapFileName = 'sitemap.xml';
+    protected string $sitemapFilePath;
+    protected string $domain;
+    protected Logger $logger;
+    protected string $sitemapXML;
+    protected array $messages = [];
 
     /**
      *  Constructor
      *
      * @param  Logger $logger
-     * @return void
      */
     public function __construct(Logger $logger)
     {
@@ -48,11 +47,12 @@ class Sitemap
      * @param  bool $alertSearchEngines Set true in production to ping search engines
      * @return bool
      */
-    public function make(array $links = null, string $domain, bool $alertSearchEngines = null): bool
+    public function make(array $links, string $domain, bool $alertSearchEngines = true): bool
     {
         if (empty($links)) {
             $this->messages[] = 'No content links to create sitemap.';
-            return null;
+
+            return false;
         }
 
         $this->domain = $domain;
