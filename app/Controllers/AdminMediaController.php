@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -298,7 +298,7 @@ HTML;
                 }
             } else {
                 // Failed to upload, throw exception and return message to client
-                throw new \RuntimeException("File Upload Failed: " . $fileUpload->getErrorMessage());
+                throw new RuntimeException("File Upload Failed: " . $fileUpload->getErrorMessage());
             }
 
             // Clear file upload
@@ -347,7 +347,7 @@ HTML;
 
             // Make category object and save
             $category = $mediaCategoryMapper->make();
-            $category->id = $cat['id'];
+            $category->id = (int) $cat['id'];
             $category->category = trim($cat['name']);
             $mediaCategoryMapper->save($category);
         }
@@ -405,7 +405,7 @@ HTML;
 
             if (is_numeric($categoryId)) {
                 // Delete category
-                $category = $mediaCategoryMapper->make($categoryId);
+                $category = $mediaCategoryMapper->make(['id' => $categoryId]);
                 $mediaCategoryMapper->delete($category);
 
                 // Foreign key constraints on media_category_map cascade delete to media associations
@@ -450,8 +450,11 @@ HTML;
      */
     protected function optimizeNewMedia()
     {
-        // Submit background process to continue to run after this request returns
-        $script = ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php';
-        exec("php $script optimizeMedia  > /dev/null &");
+        // Submit background process to optimize media
+        $script = escapeshellarg(ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php');
+        $phpBinary = escapeshellcmd(PHP_BINARY);
+        $rootDir = escapeshellarg(ROOT_DIR);
+        $logFile = ROOT_DIR . 'logs/optimize-media-' . date('Y-m-d') . '.log';
+        exec("$phpBinary $script optimize-media $rootDir >> $logFile 2>&1 &");
     }
 }

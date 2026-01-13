@@ -4,24 +4,25 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
 declare(strict_types=1);
 
-use Slim\Container as SlimContainer;
+use DI\Container;
 use Piton\CLI\OptimizeMedia;
+use Psr\Container\ContainerInterface;
 
 /**
  * This script accepts PitonCMS command line requests
  *
- * The first argument should be the request to execute, the rest are request arguments.
+ * The first argument should be the request command to execute, the second is the ROOT_DIR path
  * Example:
- * 	$ php cli.php request arg1 arg2 arg3
+ * 	$ php cli.php command root-dir arg2 arg3
  */
 
- // Exit if not a Command Line Interface request
+// Exit if not a Command Line Interface request
 if (PHP_SAPI !== 'cli') {
     exit;
 }
@@ -29,12 +30,45 @@ if (PHP_SAPI !== 'cli') {
 // Show all errors
 error_reporting(-1);
 
- // Set encoding
+// Set encoding
 mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');
 
-// Define the application root directory
-define('ROOT_DIR', dirname(__DIR__, 4) . '/');
+// Verify that the CLI command has at least two arguments: Request and a ROOT_DIR path
+if ($argc < 3) {
+    fwrite(STDERR, "Error: Missing required arguments\n");
+    fwrite(STDERR, "Usage: php cli.php <command> <root_dir>\n");
+    fwrite(STDERR, "Available commands: optimize-media, clitest\n");
+    exit(1);
+}
+
+// Extract and validate command
+$command = $argv[1] ?? '';
+$validCommands = ['optimize-media', 'clitest'];
+
+if (!in_array($command, $validCommands, true)) {
+    fwrite(STDERR, "Error: Invalid command '$command'\n");
+    fwrite(STDERR, "Available commands: " . implode(', ', $validCommands) . "\n");
+    exit(1);
+}
+
+// Extract and validate root directory
+$rootDir = rtrim($argv[2] ?? '', '/') . '/';
+
+if (!is_dir($rootDir)) {
+    fwrite(STDERR, "Error: Root directory does not exist: $rootDir\n");
+    exit(1);
+}
+
+if (!file_exists($rootDir . 'composer.json')) {
+    fwrite(STDERR, "Error: Invalid root directory (composer.json not found): $rootDir\n");
+    exit(1);
+}
+
+// Now good to continue with script
+
+// Define ROOT_DIR constant
+define('ROOT_DIR', $rootDir);
 
 // Load the Composer Autoloader and add Piton\CLI namespace
 $loader = require ROOT_DIR . 'vendor/autoload.php';
@@ -46,24 +80,28 @@ require ROOT_DIR . 'vendor/pitoncms/engine/config/config.default.php';
 if (file_exists(ROOT_DIR . 'config/config.local.php')) {
     require ROOT_DIR . 'config/config.local.php';
 } else {
-    echo "PitonCMS: No local configuration file found";
+    fwrite(STDERR, "PitonCMS CLI: No local configuration file found");
     exit(1);
 }
 
 // Create container
-$container = new SlimContainer(['settings' => $config]);
+$container = new Container();
+
+// Create an instance of a Slim App, otherwise dependencies.php will throw errors
+\Slim\Factory\AppFactory::setContainer($container);
+$app = \Slim\Factory\AppFactory::create();
 
 // Load dependencies into container
 require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
 // Override some dependencies for the CLI environment
-$container['errorHandler'] = function ($c) {
-    echo "Error in Piton cli/cli.php\n";
+$container->set('errorHandler', function (ContainerInterface $c) {
+    fwrite(STDERR, "Error in Piton cli/cli.php. Exiting.\n");
     exit(1);
-};
+});
 
-$container['sessionHandler'] = function ($c) {
-    return new class {
+$container->set('sessionHandler', function (ContainerInterface $c) {
+    return new class () {
         // Spoof user ID
         public function getData(string $key)
         {
@@ -72,10 +110,10 @@ $container['sessionHandler'] = function ($c) {
             }
         }
     };
-};
+});
 
-// Load saved site settings from data_store and merge into $container['settings']['site']
-$dataStoreMapper = ($container->dataMapper)('DataStoreMapper');
+// Load saved site settings from data_store and merge into $container settings
+$dataStoreMapper = ($container->get('dataMapper'))('DataStoreMapper');
 $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
 // Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
@@ -88,16 +126,22 @@ foreach ($siteSettings as $row) {
     }
 }
 
-$container['settings']['site'] = array_merge($container['settings']['site'] ?? [], $loadSettings['site']);
-$container['settings']['environment'] = array_merge($container['settings']['environment'], $loadSettings['environment']);
+// Merge saved settings into setting Config
+$settings = $container->get('settings');
+$settings->merge($loadSettings);
 
-// Parse CLI request and ignore the filename
-$argv = $GLOBALS['argv'];
-array_shift($argv);
+// Execute the command at the end
+switch ($command) {
+    case 'optimize-media':
+        $optimizer = new OptimizeMedia($container);
+        $optimizer->run();
 
-if (isset($argv[0]) && $argv[0] === 'optimizeMedia') {
-    $optimizer = new OptimizeMedia($container);
-    $optimizer->run();
+        break;
+    case 'clitest':
+        fwrite(STDERR, "Piton CLI is working\n");
+        exit(0);
+
+        break;
 }
 
 exit(0);

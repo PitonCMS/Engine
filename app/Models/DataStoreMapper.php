@@ -119,10 +119,10 @@ SQL;
         // Get any existing alert messages
         $this->makeSelect();
         $this->sql .= " and `category` = 'piton' and `setting_key` = 'appAlert';";
-        $data = $this->findRow();
+        $data = $this->findRow() ?? [];
 
         // Decode to array
-        $alerts = is_string($data->setting_value) ? json_decode($data->setting_value, true) : [];
+        $alerts = (isset($data['setting_value']) && is_string($data['setting_value'])) ? json_decode($data['setting_value'], true) : [];
 
         // Append new alert to array
         $alerts[] = [

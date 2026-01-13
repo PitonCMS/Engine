@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -24,19 +24,19 @@ class CLIBase
      * Container
      * @var Psr\Container\ContainerInterface
      */
-    protected $container;
+    protected ContainerInterface $container;
 
     /**
      * Process ID
      * @var int
      */
-    protected $pid;
+    protected int $pid;
 
     /**
      * Application Alert Messages
      * @var array
      */
-    protected $alert = [];
+    protected array $alert = [];
 
     /**
      * Constructor
@@ -60,7 +60,7 @@ class CLIBase
     {
         // Save any alerts
         if (!empty($this->alert)) {
-            $dataMapper = ($this->container->dataMapper)('DataStoreMapper');
+            $dataMapper = ($this->container->get('dataMapper'))('DataStoreMapper');
 
             foreach ($this->alert as $notice) {
                 $dataMapper->setAppAlert($notice['severity'], $notice['heading'], $notice['message']);
@@ -77,7 +77,6 @@ class CLIBase
      * @param string        $heading  Heading text
      * @param string|array  $messge   Message or array of messages (Optional)
      * @return void
-     * @throws Exception
      */
     protected function setAlert(string $severity, string $heading, $message = null): void
     {
@@ -85,7 +84,7 @@ class CLIBase
         $this->alert[] = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message]
+            'message' => (is_array($message)) ? $message : [$message],
         ];
     }
 
@@ -98,7 +97,7 @@ class CLIBase
      */
     protected function print($message)
     {
-        echo $message, PHP_EOL;
+        fwrite(STDERR, "$message\n");
     }
 
     /**
@@ -106,17 +105,17 @@ class CLIBase
      *
      * Saves messages to log file
      * Also sends to print() for debugging
-     * @param string $message
+     * @param mixed $message
      * @param string $severity PSR-3 Log level, defaults to 'info'
      * @return void
      */
-    protected function log(string $message, string $severity = 'info'): void
+    protected function log(mixed $message, string $severity = 'info'): void
     {
         if (!is_string($message)) {
             $message = print_r($message, true);
         }
 
-        $this->container->logger->{$severity}("PitonCLI: PID: {$this->pid} $message");
+        $this->container->get('logger')->{$severity}("PitonCLI: PID: {$this->pid} $message");
         $this->print($message);
     }
 }

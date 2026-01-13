@@ -311,6 +311,7 @@ $container->set('fileUploadHandler', function (ContainerInterface $c) {
  * Media File Path Pattern Handler
  *
  * Define upload media path under public/media/
+ * Can be overriden with custom public path
  * @return string
  */
 $container->set('mediaPathHandler', function () {
