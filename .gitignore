@@ -1,5 +1,1 @@
 # Things to ignore
-vendor/*
-composer.lock
-package-lock.json
-.php-cs-fixer.dist.php

@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2019 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 namespace Piton\Library\Utilities;
@@ -32,6 +32,7 @@ class PitonBuild
         static::updateDockerYaml();
         static::updateApacheHost();
         static::copyConfig();
+        static::createEnvironmentFile();
 
         static::printOutput('> To build the Docker image, from the root of this project run \'docker compose build\'.', 'info');
         static::printOutput('> To start Docker run \'docker compose up -d\' and navigate to http://localhost to finish the installation.', 'info');
@@ -60,7 +61,7 @@ class PitonBuild
     {
         static::printOutput("...Creating config file for local development");
 
-        $projectDir = self::getProjectDir();
+        $projectName = self::getProjectDir();
         $salt = bin2hex(random_bytes(32));
         $lines = file('vendor/pitoncms/engine/config/config.default.php');
 
@@ -84,22 +85,22 @@ class PitonBuild
 
                 // Change database name to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'dbname') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectName . '\'', $line);
                 }
 
                 // Change database username to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'username') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectName . '\'', $line);
                 }
 
                 // Change database password to project name
                 if (strpos($line, 'database') !== false && strpos($line, 'password') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . '\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectName . '\'', $line);
                 }
 
                 // Change session cookie name to project name
                 if (strpos($line, 'session') !== false && strpos($line, 'cookieName') !== false) {
-                    $line = str_replace('\'\'', '\'' . $projectDir . 'session\'', $line);
+                    $line = str_replace('\'\'', '\'' . $projectName . 'session\'', $line);
                 }
 
                 // Set session salt to unique hash
@@ -133,33 +134,17 @@ class PitonBuild
     {
         static::printOutput("...Updating docker-compose.yml for project");
 
-        $projectDir = self::getProjectDir();
+        $projectName = self::getProjectDir();
         $lines = file('docker-compose.yml');
 
         if ($lines) {
             foreach ($lines as &$line) {
-                if (strpos($line, 'image') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
-                }
-
                 if (strpos($line, '/var/www/') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
+                    $line = str_replace('piton', $projectName, $line);
                 }
 
                 if (strpos($line, 'mysql-data') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
-                }
-
-                if (strpos($line, 'MYSQL_DATABASE') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
-                }
-
-                if (strpos($line, 'MYSQL_USER') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
-                }
-
-                if (strpos($line, 'MYSQL_PASSWORD') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
+                    $line = str_replace('piton', $projectName, $line);
                 }
             }
 
@@ -167,6 +152,29 @@ class PitonBuild
         } else {
             static::printOutput("Unable to read docker-compose.yml. Update manually to use docker compose.", "error");
         }
+    }
+
+    /**
+     * Create Environment File (.env)
+     *
+     * For local development only.
+     * @param  void
+     * @return void
+     */
+    protected static function createEnvironmentFile()
+    {
+        static::printOutput("...Creating .env file for project");
+
+        $projectName = self::getProjectDir();
+        $environment = <<<ENV
+        # Development local database credentials
+        MYSQL_ROOT_PASSWORD=root
+        MYSQL_DATABASE=$projectName
+        MYSQL_USER=$projectName
+        MYSQL_PASSWORD=$projectName
+        ENV;
+
+        file_put_contents('.env', $environment);
     }
 
     /**
@@ -180,17 +188,17 @@ class PitonBuild
     {
         static::printOutput("...Writing apache host file for project");
 
-        $projectDir = self::getProjectDir();
+        $projectName = self::getProjectDir();
         $lines = file('docker/web/apache-host.conf');
 
         if ($lines) {
             foreach ($lines as &$line) {
                 if (strpos($line, 'DocumentRoot') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
+                    $line = str_replace('piton', $projectName, $line);
                 }
 
                 if (strpos($line, '<Directory') !== false) {
-                    $line = str_replace('piton', $projectDir, $line);
+                    $line = str_replace('piton', $projectName, $line);
                 }
             }
 
@@ -207,7 +215,12 @@ class PitonBuild
     protected static function getProjectDir()
     {
         // This class is 6 levels deep from project root
-        return mb_strtolower(basename(dirname(__DIR__, 6)));
+        $dir = mb_strtolower(basename(dirname(__DIR__, 6)));
+
+        // Strip dashes and spaces
+        $dir = str_replace(['-', ' '], '', $dir);
+
+        return $dir;
     }
 
     /**

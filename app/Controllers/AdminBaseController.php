@@ -4,16 +4,15 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2019 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Controllers;
 
-use Slim\Http\Response;
-use Exception;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Piton Admin Base Controller
@@ -29,7 +28,7 @@ class AdminBaseController extends BaseController
      * @param string $layout Path to layout
      * @param mixed  $data   Data to echo, Domain object or array
      */
-    public function render(string $layout, $data = null): Response
+    public function render(string $layout, mixed $data = null): Response
     {
         return parent::render('@admin/' . $layout, $data);
     }
@@ -39,13 +38,12 @@ class AdminBaseController extends BaseController
      *
      * Set alert using flash data to session
      * Severity levels are one of: 'primary','secondary','success','danger','warning','info'
-     * @param string        $severity Severity level color code
-     * @param string        $heading  Heading text
-     * @param string|array  $messge   Message or array of messages (Optional)
+     * @param string  $severity Severity level color code
+     * @param string  $heading  Heading text
+     * @param ?string $messge   Message or array of messages (Optional)
      * @return void
-     * @throws Exception
      */
-    public function setAlert(string $severity, string $heading, $message = null): void
+    public function setAlert(string $severity, string $heading, ?string $message = null): void
     {
         // Alert message is displayed in the admin base template
         // If render() is called then alert data is provided to Twig context to display in this request
@@ -53,7 +51,7 @@ class AdminBaseController extends BaseController
         $this->alert[] = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message]
+            'message' => (is_array($message)) ? $message : [$message],
         ];
     }
 
@@ -61,12 +59,12 @@ class AdminBaseController extends BaseController
      * Merge Saved Settings with Defined Settings
      *
      * Merge saved settings with those from page JSON definition file
-     * @param  array  $savedSettings   Saved settings array
-     * @param  array  $definedSettings Defined settings in JSON definition file
-     * @param  string $category        Optional category to filter setting definitions
+     * @param  array   $savedSettings   Saved settings array
+     * @param  array   $definedSettings Defined settings in JSON definition file
+     * @param  ?string $category       Optional category to filter setting definitions
      * @return array
      */
-    public function mergeSettings(array $savedSettings, array $definedSettings, string $category = null): array
+    public function mergeSettings(array $savedSettings, array $definedSettings, ?string $category = null): array
     {
         // Make index of saved setting keys to setting array for easy lookup
         $settingIndex = array_combine(array_column($savedSettings, 'setting_key'), array_keys($savedSettings));
@@ -76,6 +74,7 @@ class AdminBaseController extends BaseController
             // Check category filter and remove unrelated settings
             if (isset($category) && $category !== $setting->category) {
                 unset($definedSettings[$key]);
+
                 continue;
             }
 

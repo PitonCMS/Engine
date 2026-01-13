@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -19,24 +19,25 @@ use Piton\ORM\DataMapperAbstract;
  */
 class MessageMapper extends DataMapperAbstract
 {
-    protected $table = 'message';
-    protected $modifiableColumns = [
+    protected string $table = 'message';
+    protected array $modifiableColumns = [
         'name',
         'email',
         'message',
         'is_read',
-        'context'
+        'context',
     ];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\Message';
 
     /**
      * Find Messages in Date Order
      *
-     * @param  string     $filter
-     * @param  int        $limit
-     * @param  int        $offset
-     * @return array|null
+     * @param  string $filter
+     * @param  ?int   $limit
+     * @param  ?int   $offset
+     * @return ?array
      */
-    public function findMessages(string $filter = 'read', int $limit = null, int $offset = null): ?array
+    public function findMessages(string $filter = 'read', ?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect(true);
 
@@ -75,14 +76,14 @@ class MessageMapper extends DataMapperAbstract
      *  - context
      *  - Custom message fields
      * @param  string $terms                Search terms
-     * @param  int    $limit                Limit
-     * @param  int    $offset               Offset
-     * @return array|null
+     * @param  ?int    $limit                Limit
+     * @param  ?int    $offset               Offset
+     * @return ?array
      */
-    public function textSearch(string $terms, int $limit = null, int $offset = null): ?array
+    public function textSearch(string $terms, ?int $limit = null, ?int $offset = null): ?array
     {
         $this->makeSelect(true);
-        $this->sql .=<<<SQL
+        $this->sql .= <<<SQL
 and (
     match(`name`, `email`, `message`, `context`) against (? IN BOOLEAN MODE)
     or `id` in (select `message_id` from `message_data` where match(`data_value`) against (? IN BOOLEAN MODE))

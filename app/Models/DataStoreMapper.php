@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -21,18 +21,19 @@ use Piton\ORM\DataMapperAbstract;
  */
 class DataStoreMapper extends DataMapperAbstract
 {
-    protected $inCategories = "('site','contact','social','piton')";
-    protected $table = 'data_store';
-    protected $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
+    protected string $inCategories = "('site','contact','social','piton')";
+    protected string $table = 'data_store';
+    protected array $modifiableColumns = ['category', 'page_id', 'element_id', 'setting_key', 'setting_value'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\DataStore';
 
     /**
      * Find Settings
      *
      * Find all settings, or a category of settings
-     * @param  $category site|contact|social|piton
-     * @return array|null
+     * @param  ?string $category Null or one of site|contact|social|piton
+     * @return ?array
      */
-    public function findSiteSettings(string $category = null): ?array
+    public function findSiteSettings(?string $category = null): ?array
     {
         $this->makeSelect();
         if (null === $category) {
@@ -50,7 +51,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get page level settings
      * @param  int   $pageId  Page ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageSettings(int $pageId): ?array
     {
@@ -66,7 +67,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get page element level settings
      * @param  int   $elementId  Element ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageElementSettings(int $elementId): ?array
     {
@@ -82,7 +83,7 @@ class DataStoreMapper extends DataMapperAbstract
      *
      * Get all page, and page_element settings for all elements in this page, in one query
      * @param int $pageId Page ID
-     * @return array|null
+     * @return ?array
      */
     public function findPageAndElementSettingsByPageId(int $pageId): ?array
     {
@@ -109,25 +110,25 @@ SQL;
      *
      * Saves Piton alert notices for display in application that are not saved to session flash data.
      * Background scripts and processes should use this for messaging
-     * @param string        $severity Severity level color code
-     * @param string        $heading  Heading text
-     * @param string|array  $messge   Message or array of messages (Optional)
+     * @param string $severity Severity level color code
+     * @param string $heading  Heading text
+     * @param mixed  $messge   Message or array of messages (Optional)
      */
-    public function setAppAlert(string $severity, string $heading, $message = null): void
+    public function setAppAlert(string $severity, string $heading, mixed $message = null): void
     {
         // Get any existing alert messages
         $this->makeSelect();
         $this->sql .= " and `category` = 'piton' and `setting_key` = 'appAlert';";
-        $data = $this->findRow();
+        $data = $this->findRow() ?? [];
 
         // Decode to array
-        $alerts = is_string($data->setting_value) ? json_decode($data->setting_value, true) : [];
+        $alerts = (isset($data['setting_value']) && is_string($data['setting_value'])) ? json_decode($data['setting_value'], true) : [];
 
         // Append new alert to array
         $alerts[] = [
             'severity' => $severity,
             'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message]
+            'message' => (is_array($message)) ? $message : [$message],
         ];
 
         // Save alert messages

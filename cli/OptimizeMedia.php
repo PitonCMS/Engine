@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ class OptimizeMedia extends CLIBase
      * Optimize Key
      * @var string
      */
-    public $key;
+    public string $key;
 
     /**
      * Run Optimizer
@@ -31,14 +31,14 @@ class OptimizeMedia extends CLIBase
      * @param void
      * @param void
      */
-    public function run()
+    public function run(): void
     {
         $this->log("OptimizeMedia run() started");
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+        $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
 
         // Although super unlikely, ensure the generated key is currently not in use by another process
         do {
-            $this->key = ($this->container->filenameGenerator)();
+            $this->key = ($this->container->get('filenameGenerator'))();
         } while ($mediaMapper->optimizeKeyExists($this->key));
 
         $this->log("Optimized media key: {$this->key}");
@@ -80,12 +80,13 @@ class OptimizeMedia extends CLIBase
 
         // Ensure there is a Tinify API key
         if (!empty($this->container->get('settings')['site']['tinifyApiKey'])) {
-            $mediaHandler = $this->container->mediaHandler;
+            $mediaHandler = $this->container->get('mediaHandler');
 
             // Check if there was an issue constructing the MediaHandler and setting the Tinify key
             if ($mediaHandler->getErrorMessages()) {
                 $this->setAlert('danger', 'Failed to set Tinify key to optimize media. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log($mediaHandler->getErrorMessages());
+
                 return false;
             }
 
@@ -93,6 +94,7 @@ class OptimizeMedia extends CLIBase
             if (!$mediaHandler->setSource($filename)) {
                 $this->setAlert('danger', 'Unable to load source media to optimize. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log("Unable to set Tinify source " . implode(' ', $mediaHandler->getErrorMessages()));
+
                 return false;
             }
             $this->log("Media source $filename set...");
@@ -100,6 +102,7 @@ class OptimizeMedia extends CLIBase
             if (!$mediaHandler->makeXLarge()) {
                 $this->setAlert('danger', 'Failed to make XLarge media file. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log("Failed to make XLarge media file. " . implode(' ', $mediaHandler->getErrorMessages()));
+
                 return false;
             }
             $this->log("Finished $filename XLarge...");
@@ -107,6 +110,7 @@ class OptimizeMedia extends CLIBase
             if (!$mediaHandler->makeLarge()) {
                 $this->setAlert('danger', 'Failed to make Large media file. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log("Failed to make Large media file. " . implode(' ', $mediaHandler->getErrorMessages()));
+
                 return false;
             }
             $this->log("Finished $filename Large...");
@@ -114,6 +118,7 @@ class OptimizeMedia extends CLIBase
             if (!$mediaHandler->makeSmall()) {
                 $this->setAlert('danger', 'Failed to make Small media file. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log("Failed to make Small media file. " . implode(' ', $mediaHandler->getErrorMessages()));
+
                 return false;
             }
             $this->log("Finished $filename Small...");
@@ -121,6 +126,7 @@ class OptimizeMedia extends CLIBase
             if (!$mediaHandler->makeThumb()) {
                 $this->setAlert('danger', 'Failed to make Thumbnail media file. ' . implode(' ', $mediaHandler->getErrorMessages()));
                 $this->log("Failed to make Thumbnail media file. " . implode(' ', $mediaHandler->getErrorMessages()));
+
                 return false;
             }
             $this->log("Finished $filename Thumb...");

@@ -4,19 +4,19 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Controllers;
 
+use Psr\Http\Message\ResponseInterface as Response;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Slim\Http\Response;
+use RuntimeException;
 use Throwable;
-use Exception;
 
 /**
  * Piton Media Controller
@@ -34,6 +34,7 @@ class AdminMediaController extends AdminBaseController
     public function showMedia(): Response
     {
         $data = $this->loadMedia();
+
         return $this->render('media/media.html', $data);
     }
 
@@ -48,13 +49,13 @@ class AdminMediaController extends AdminBaseController
     public function getMediaSearchControls(): Response
     {
         try {
-            $template =<<<HTML
+            $template = <<<HTML
                 {{ include("@admin/media/_mediaSearchControls.html") }}
                 <div class="media-wrapper" data-query="content"></div>
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template);
+            $text = $this->view->fetchFromString($template);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting media controls: {$th->getMessage()}";
@@ -77,7 +78,7 @@ HTML;
         try {
             $macro = ($args['context'] === "edit") ? "cardEdit" : "cardStatic";
             $data = $this->loadMedia();
-            $template =<<<HTML
+            $template = <<<HTML
                 {% import "@admin/media/_mediaMacros.html" as mediaMacro %}
                 {% for medium in media %}
                     {{ mediaMacro.$macro(medium, categories) }}
@@ -86,7 +87,7 @@ HTML;
 HTML;
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template, ['media' => $data['media'], 'categories' => $data['categories']]);
+            $text = $this->view->fetchFromString($template, ['media' => $data['media'], 'categories' => $data['categories']]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting data: {$th->getMessage()}";
@@ -106,15 +107,15 @@ HTML;
     protected function loadMedia(): array
     {
         // Load dependencies
-        $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
         $pagination = $this->getPagination();
-        $pagination->setPagePath($this->container->router->pathFor('adminMedia'));
+        $pagination->setPagePath($this->container->get('router')->urlFor('adminMedia'));
 
         // Get filters or search if requested
-        $category = htmlspecialchars($this->request->getQueryParam('category', '0'));
-        $featured = htmlspecialchars($this->request->getQueryParam('featured', 'all'));
-        $terms = htmlspecialchars($this->request->getQueryParam('terms', ''));
+        $category = htmlspecialchars($this->getQueryParam('category', '0'));
+        $featured = htmlspecialchars($this->getQueryParam('featured', 'all'));
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
 
         // Get data
         if (!empty($terms)) {
@@ -158,17 +159,17 @@ HTML;
     public function saveMedia(): Response
     {
         try {
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
 
             $media = $mediaMapper->make();
-            $media->id = (int) $this->request->getParsedBodyParam('media_id');
-            $media->caption = $this->request->getParsedBodyParam('caption');
-            $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+            $media->id = $this->getParsedBodyParam('media_id');
+            $media->caption = $this->getParsedBodyParam('caption');
+            $media->feature = ($this->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
             $mediaMapper->save($media);
 
             // Save category mappings
-            $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+            $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->getParsedBodyParam('category'));
 
             $status = "success";
             $text = "Saved media";
@@ -192,15 +193,15 @@ HTML;
     public function deleteMedia(): Response
     {
         try {
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
 
             // Get the media record
-            $id = (int) $this->request->getParsedBodyParam('media_id');
+            $id = (int) $this->getParsedBodyParam('media_id');
             $mediaFile = $mediaMapper->findById($id);
 
             if (is_string($mediaFile->filename)) {
                 // Delete all related files and directory, then delete database record
-                $dirToDelete = ($this->container->mediaPathHandler)($mediaFile->filename);
+                $dirToDelete = ($this->container->get('mediaPathHandler'))($mediaFile->filename);
                 $path = ROOT_DIR . 'public' . $dirToDelete;
                 $this->deleteRecursive($path);
             }
@@ -235,7 +236,7 @@ HTML;
             $template .= ' {{ mediaMacro.uploadForm() }}';
 
             $status = "success";
-            $text = $this->container->view->fetchFromString($template);
+            $text = $this->view->fetchFromString($template);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting media file upload form: ". $th->getMessage();
@@ -256,18 +257,21 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Get dependencies
-            $fileUpload = $this->container->fileUploadHandler;
-            $mediaMapper = ($this->container->dataMapper)('MediaMapper');
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
+            $fileUpload = $this->container->get('fileUploadHandler');
+            $mediaMapper = ($this->container->get('dataMapper'))('MediaMapper');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
             $status = "success";
             $text = "File upload succeeded";
+
+            // Upload the files from the POST Request
+            $fileUpload->setUploadedFiles($this->request->getUploadedFiles());
 
             // Try the upload
             if ($fileUpload->upload('media-file')) {
                 // Set image optimization flag by request, and if a Tinyfy key exists and is compressible by Tinyfy
                 $doOptimize = false;
                 if (
-                    $this->request->getParsedBodyParam('optimize', null) === 'on' &&
+                    $this->getParsedBodyParam('optimize') === 'on' &&
                     !empty($this->settings['site']['tinifyApiKey']) &&
                     in_array($fileUpload->mimeType, ['image/png', 'image/jpeg'])
                 ) {
@@ -277,29 +281,31 @@ HTML;
                 // Save media record to database
                 $media = $mediaMapper->make();
                 $media->filename = $fileUpload->getFilename();
-                $media->caption = $this->request->getParsedBodyParam('caption');
+                $media->caption = $this->getParsedBodyParam('caption');
                 $media->width = ($fileUpload->width) ?: null;
                 $media->height = ($fileUpload->height) ?: null;
-                $media->feature = ($this->request->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
+                $media->feature = ($this->getParsedBodyParam('feature', false)) ? 'Y' : 'N';
                 $media->mime_type = $fileUpload->mimeType;
                 $media->optimized = ($doOptimize) ? $mediaMapper->getOptimizedCode('new') : $mediaMapper->getOptimizedCode('exclude');
                 $mediaMapper->save($media);
 
                 // Save category assignments
-                $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->request->getParsedBodyParam('category'));
+                $mediaCategoryMapMapper->saveMediaCategoryAssignments($media->id, $this->getParsedBodyParam('category'));
 
                 // Optimize media uploads
                 if ($doOptimize) {
                     $this->optimizeNewMedia();
                 }
             } else {
-                // Failed to upload, so throw exception and return message to client
-                throw new Exception("File Upload Failed: " . $fileUpload->getErrorMessage());
+                // Failed to upload, throw exception and return message to client
+                throw new RuntimeException("File Upload Failed: " . $fileUpload->getErrorMessage());
             }
 
             // Clear file upload
             $fileUpload->clear('media-file');
         } catch (Throwable $th) {
+            // Log exception
+            $this->container->get('logger')->error('Media file upload failed: ' . $th->getTraceAsString());
             $status = "error";
             $text = "Exception uploading file: ". $th->getMessage();
         }
@@ -315,7 +321,7 @@ HTML;
      */
     public function editMediaCategories(): Response
     {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
         $data = $mediaCategoryMapper->find();
 
         return $this->render('media/mediaCategories.html', ['categories' => $data]);
@@ -330,8 +336,8 @@ HTML;
      */
     public function saveMediaCategories(): Response
     {
-        $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-        $categoriesPost = $this->request->getParsedBodyParam('category');
+        $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
+        $categoriesPost = $this->getParsedBodyParam('category');
 
         foreach ($categoriesPost as $cat) {
             // Skip if category name is empty
@@ -341,7 +347,7 @@ HTML;
 
             // Make category object and save
             $category = $mediaCategoryMapper->make();
-            $category->id = $cat['id'];
+            $category->id = (int) $cat['id'];
             $category->category = trim($cat['name']);
             $mediaCategoryMapper->save($category);
         }
@@ -362,9 +368,9 @@ HTML;
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
-            $mediaCategoryMapMapper = ($this->container->dataMapper)('MediaCategoryMapMapper');
-            $categoryId = $this->request->getParsedBodyParam('categoryId');
-            $mediaIds = $this->request->getParsedBodyParam('mediaIds');
+            $mediaCategoryMapMapper = ($this->container->get('dataMapper'))('MediaCategoryMapMapper');
+            $categoryId = $this->getParsedBodyParam('categoryId');
+            $mediaIds = $this->getParsedBodyParam('mediaIds');
             $status = "success";
             $text = "";
 
@@ -392,15 +398,14 @@ HTML;
     {
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
-            $mediaCategoryMapper = ($this->container->dataMapper)('MediaCategoryMapper');
-            $categoryId = $this->request->getParsedBodyParam('categoryId');
+            $mediaCategoryMapper = ($this->container->get('dataMapper'))('MediaCategoryMapper');
+            $categoryId = $this->getParsedBodyParam('categoryId');
             $status = "success";
             $text = "";
 
             if (is_numeric($categoryId)) {
                 // Delete category
-                $category = $mediaCategoryMapper->make();
-                $category->id = (int) $categoryId;
+                $category = $mediaCategoryMapper->make(['id' => $categoryId]);
                 $mediaCategoryMapper->delete($category);
 
                 // Foreign key constraints on media_category_map cascade delete to media associations
@@ -445,8 +450,11 @@ HTML;
      */
     protected function optimizeNewMedia()
     {
-        // Submit background process to continue to run after this request returns
-        $script = ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php';
-        exec("php $script optimizeMedia  > /dev/null &");
+        // Submit background process to optimize media
+        $script = escapeshellarg(ROOT_DIR . 'vendor/pitoncms/engine/cli/cli.php');
+        $rootDir = escapeshellarg(ROOT_DIR);
+        $logFile = ROOT_DIR . 'logs/optimize-media-' . date('Y-m-d') . '.log';
+
+        exec("php $script optimize-media $rootDir >> $logFile 2>&1 &");
     }
 }

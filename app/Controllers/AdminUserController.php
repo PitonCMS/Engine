@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright (c) 2015 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use PDOException;
 use Throwable;
 
 /**
@@ -32,7 +31,7 @@ class AdminUserController extends AdminBaseController
     public function showUsers(): Response
     {
         // Get dependencies
-        $userMapper = ($this->container->dataMapper)('UserMapper');
+        $userMapper = ($this->container->get('dataMapper'))('UserMapper');
 
         // Fetch users
         $data['users'] = $userMapper->findUsers();
@@ -58,7 +57,7 @@ class AdminUserController extends AdminBaseController
     public function editUser($args): Response
     {
         // Get dependencies
-        $userMapper = ($this->container->dataMapper)('UserMapper');
+        $userMapper = ($this->container->get('dataMapper'))('UserMapper');
 
         // Fetch user or make new user
         if (isset($args['id'])) {
@@ -80,8 +79,8 @@ class AdminUserController extends AdminBaseController
     public function saveUser(): Response
     {
         // Get dependencies
-        $userMapper = ($this->container->dataMapper)('UserMapper');
-        $session = $this->container->sessionHandler;
+        $userMapper = ($this->container->get('dataMapper'))('UserMapper');
+        $session = $this->container->get('sessionHandler');
 
         // Save user
         $params = $this->request->getParsedBody();
@@ -108,6 +107,7 @@ class AdminUserController extends AdminBaseController
 
                 // Redirect to users. If a new user failed to save the ID will be falsey (0)
                 $user->id = $user->id ?: null;
+
                 return $this->redirect('adminUserEdit', ['id' => $user->id]);
             }
 

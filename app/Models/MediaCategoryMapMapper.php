@@ -5,7 +5,7 @@
  *
  * @link      https://github.com/PitonCMS/Piton
  * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -19,21 +19,21 @@ use Piton\ORM\DataMapperAbstract;
  */
 class MediaCategoryMapMapper extends DataMapperAbstract
 {
-    protected $table = 'media_category_map';
-    protected $modifiableColumns = ['media_id', 'category_id', 'media_sort'];
+    protected string $table = 'media_category_map';
+    protected array $modifiableColumns = ['media_id', 'category_id', 'media_sort'];
+    protected string $domainValueObjectClass = __NAMESPACE__ . '\Entities\MediaCategoryMap';
 
     /**
      * Save Media Category Assignments
      *
      * For a media ID, save category array
      * @param int        $mediaId
-     * @param array|null $categoryIds
+     * @param ?array $categoryIds
      * @return void
      */
     public function saveMediaCategoryAssignments(int $mediaId, ?array $categoryIds): void
     {
         // If a null was passed for $categoryIds then assign an empty array so array_diff works
-        // In PHP7.4 we can shorten this to $categoryIds ??= [];
         $categoryIds = $categoryIds ?? [];
 
         // Get saved assigned categories
@@ -101,16 +101,12 @@ class MediaCategoryMapMapper extends DataMapperAbstract
      * Save Category Media Assignment Order
      *
      * For a category ID, save the order of media
-     * @param int        $categoryId
-     * @param array|null $mediaIds
+     * @param int    $categoryId
+     * @param ?array $mediaIds
      * @return void
      */
-    public function saveCategoryMediaAssignmentOrder(int $categoryId, ?array $mediaIds): void
+    public function saveCategoryMediaAssignmentOrder(int $categoryId, ?array $mediaIds = []): void
     {
-        // If a null was passed for $mediaIds then assign an empty array so array_diff works
-        // In PHP7.4 we can shorten this to $mediaIds ??= [];
-        $mediaIds = $mediaIds ?? [];
-
         if ($mediaIds) {
             $order = 0;
             $sql = "update {$this->table} set `media_sort` = ? where `media_id` = ? and `category_id` = ?;";

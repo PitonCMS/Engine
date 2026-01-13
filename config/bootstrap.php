@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2018 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2018 - 2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -23,10 +23,12 @@ declare(strict_types=1);
  * - Routes
  */
 
+use DI\Container;
+use Slim\Factory\AppFactory;
+
 // Wrap bootstraping code in an anonymous function to avoid unnecessary globals
 return call_user_func(
     function () {
-
         // Load default configuration settings
         require ROOT_DIR . 'vendor/pitoncms/engine/config/config.default.php';
 
@@ -34,29 +36,30 @@ return call_user_func(
         if (file_exists(ROOT_DIR . 'config/config.local.php')) {
             require ROOT_DIR . 'config/config.local.php';
         } else {
-            throw new \Exception("PitonCMS: No local configuration file found");
+            throw new Exception("PitonCMS: No local configuration file found");
         }
 
         // Set error reporting level based on environment
         if ($config['environment']['production'] === true) {
+            // Production
             ini_set('display_errors', 'Off');
             error_reporting(0);
             $config['displayErrorDetails'] = false;
-            $config['routerCacheFile'] = ROOT_DIR . 'cache/routerCache.php';
         } else {
             // Development
-            error_reporting(-1);
+            error_reporting(E_ALL);
             $config['displayErrorDetails'] = true;
         }
 
-        // This flag is needed in Slim 3 to get the current route name in LoadSiteSettings
-        $config['determineRouteBeforeAppMiddleware'] = true;
+        // Create the PHP-DI container and inject into AppFactory
+        // Note, the $container variable is referenced and scoped into in the dependencies.php file that is loaded below
+        $container = new Container();
+        AppFactory::setContainer($container);
 
-        // Create the Slim application and make container available to dependencies
-        $app = new Slim\App(['settings' => $config]);
-        $container = $app->getContainer();
+        // Create the Slim application and make the ontainer available to dependencies
+        $app = AppFactory::create();
 
-        // Load dependencies
+        // Load dependencies into container
         require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
 
         // Load overriding dependencies
@@ -67,16 +70,22 @@ return call_user_func(
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
 
-        // Load custom routes. These routes are prioritized over default routes.
+        // Load admin routes
+        require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
+
+        // Load custom project routes to override default frontend routes.
         if (file_exists(ROOT_DIR . 'config/routes.php')) {
             require ROOT_DIR . 'config/routes.php';
         }
 
-        // Load admin routes
-        require ROOT_DIR . 'vendor/pitoncms/engine/config/routesAdmin.php';
-
-        // Load front end routes
+        // Load frontend routes
         require ROOT_DIR . 'vendor/pitoncms/engine/config/routes.php';
+
+        // If in production, use router cache
+        if ($config['environment']['production'] === true) {
+            $routeCollector = $app->getRouteCollector();
+            $routeCollector->setCacheFile(ROOT_DIR . 'cache/routerCache.php');
+        }
 
         return $app;
     }
