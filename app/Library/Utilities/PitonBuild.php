@@ -65,14 +65,22 @@ class PitonBuild
         $salt = bin2hex(random_bytes(32));
         $lines = file('vendor/pitoncms/engine/config/config.default.php');
 
-        // Update docblock
-        $lines[2] = ' * Local Environment Configuration Settings' . PHP_EOL;
-        $lines[4] = ' * Define environment specific settings in this file.' . PHP_EOL;
-        $lines[5] = ' * DO NOT commit to VCS!' . PHP_EOL;
-
         // Set development configuration settings
         if ($lines) {
             foreach ($lines as &$line) {
+                // Update header docblock
+                if (strpos($line, 'Default Configuration Settings') !== false) {
+                    $line = str_replace('Default Configuration Settings', 'Local Environment Configuration Settings', $line);
+                }
+
+                if (strpos($line, 'DO NOT MODIFY THIS FILE') !== false) {
+                    $line = str_replace('DO NOT MODIFY THIS FILE', 'Define environment specific settings in this file.', $line);
+                }
+
+                if (strpos($line, 'Copy this file to') !== false) {
+                    $line = str_replace('Copy this file to <project>/config/config.local.php to define all environment specific settings.', 'DO NOT commit to VCS!', $line);
+                }
+
                 // Production environment to false
                 if (strpos($line, 'environment') !== false && strpos($line, 'production') !== false) {
                     $line = str_replace('true', 'false', $line);
