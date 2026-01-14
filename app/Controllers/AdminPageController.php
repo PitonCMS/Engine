@@ -329,7 +329,7 @@ HTML;
         $page = $pageMapper->save($page);
 
         // Save Page Settings
-        $settings = $this->getParsedBodyParam('setting');
+        $settings = $this->getParsedBodyParam('setting') ?? [];
         foreach ($settings as $setting) {
             $this->saveSetting('page', $page->id, $setting);
         }
@@ -352,7 +352,8 @@ HTML;
 
         // Save page elements by block
         $index = 1;
-        foreach ($this->getParsedBodyParam('element') as $element) {
+        $elements = $this->getParsedBodyParam('element') ?? [];
+        foreach ($elements as $element) {
             // Save element
             $pageElement = $pageElementMapper->make();
             $pageElement->id = ($element['element_id']) ? (int) $element['element_id'] : null;
