@@ -23,12 +23,16 @@ class Toolbox
      * Truncate HTML Text
      *
      * Accepts an HTML string, and returns just the unformatted text, truncated to the number of words
-     * @param string $text Input HTML string
+     * @param ?string $text Input HTML string
      * @param int, $characters Number of characters to return
      * @return string
      */
-    public function truncateHtmlText(string $text, int $characters = 300): string
+    public function truncateHtmlText(?string $text, int $characters = 300): ?string
     {
+        if ($text === null) {
+            return null;
+        }
+
         // Clean up html tags and special characters
         $text = preg_replace('/<[^>]*>/', ' ', $text);
         $text = str_replace("\r", '', $text); // replace with empty space

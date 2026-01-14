@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Piton\Middleware;
 
 use Closure;
-use PDOException;
 use Piton\Library\Config;
 use Piton\Library\Handlers\CsrfGuard;
 use Piton\Library\Handlers\Session;
@@ -91,22 +90,7 @@ class LoadSiteSettings
      */
     protected function loadDatabaseSettings(): void
     {
-        // This middleware data request is the first DB query in the application lifecycle.
-        // If the tables do not exist (SQLSTATE[42S02]) catch and redirect to install.php script.
-        // Otherwise rethrow to let the application handler deal with whatever happened.
-        try {
-            $dataStoreMapper = (($this->dataMapper)('DataStoreMapper'));
-        } catch (PDOException $th) {
-            // SQLSTATE[42S02]
-            if ($th->getCode() === '42S02') {
-                // Go to installer script
-                header('Location: /install.php', true, 302);
-                exit;
-            }
-
-            throw $th;
-        }
-
+        $dataStoreMapper = (($this->dataMapper)('DataStoreMapper'));
         $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
         // var_dump($siteSettings);

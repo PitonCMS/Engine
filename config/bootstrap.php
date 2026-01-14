@@ -24,6 +24,7 @@ declare(strict_types=1);
  */
 
 use DI\Container;
+use Piton\Library\Utilities\Installer;
 use Slim\Factory\AppFactory;
 
 // Wrap bootstraping code in an anonymous function to avoid unnecessary globals
@@ -66,6 +67,9 @@ return call_user_func(
         if (file_exists(ROOT_DIR . 'config/dependencies.php')) {
             require ROOT_DIR . 'config/dependencies.php';
         }
+
+        // Quick check if database tables have been installed
+        Installer::run($container->get('database'));
 
         // Load middleware
         require ROOT_DIR . 'vendor/pitoncms/engine/config/middleware.php';
