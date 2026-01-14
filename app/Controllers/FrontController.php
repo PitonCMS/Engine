@@ -110,7 +110,7 @@ class FrontController extends FrontBaseController
             $logger->debug('...Passed empty message test');
 
             // Check that we have the minimum number of message characters
-            $minLength = $this->container->get('get')('settings')['site']['minMessageLength'] ?? 1;
+            $minLength = $this->container->get('settings')['site']['minMessageLength'] ?? 1;
             if (mb_strlen($this->getParsedBodyParam('message')) < (int) $minLength) {
                 throw new Exception('Message less than minimum length');
             }
@@ -182,7 +182,8 @@ class FrontController extends FrontBaseController
 
         } catch (Throwable $th) {
             // Log issue
-            $logger->error("PitonCMS: Exception submitting contact message: " . $th->getMessage());
+            $logger->error("Exception submitting contact message: " . $th->getMessage());
+            $logger->error('...' . $th->getTraceAsString());
             $status = "error";
             $text = 'There was an error submitting your message.';
         }
