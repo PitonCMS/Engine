@@ -159,10 +159,11 @@ $container->set('ErrorRenderer', function () {
  * @return Piton\Library\Handlers\Session
  */
 $container->set('sessionHandler', function (ContainerInterface $c) {
-    $session = $c->get('settings')['session'];
-    $session['log'] = $c->get('logger');
+    $settings = $c->get('settings');
+    $sessionConfig = $settings['session'];
+    $sessionConfig['domain'] = $settings['environment']['domain'] ?? '';
 
-    return new Piton\Library\Handlers\Session($c->get('database'), $session);
+    return new Piton\Library\Handlers\Session($c->get('database'), $sessionConfig, $c->get('logger'));
 });
 
 /**

@@ -281,6 +281,15 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
     $app->get('[/]', function ($request, $response, $args) {
         return $response->withHeader('Location', $this->get('router')->urlFor('adminHome'))->withStatus(302);
     });
+})->add(function (Request $request, RequestHandler $handler) {
+    // Add http no-cache, no-store headers to prevent back button access to admin
+    $response = $handler->handle($request);
+    $response = $response
+        ->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0')
+        ->withAddedHeader('Pragma', 'no-cache')
+        ->withAddedHeader('Expires', '0');
+
+    return $response;
 })->add(function (Request $request, RequestHandler $handler) use ($app) {
     // Authentication
 
@@ -301,16 +310,17 @@ $app->group('/admin', function (RouteCollectorProxy $app) {
         // Failed authentication, redirect to login. First create a new Response object and then redirect
         $response = $app->getResponseFactory()->createResponse();
 
-        return $response->withHeader('Location', $this->get('router')->urlFor('adminLoginForm'))->withStatus(302);
+        $response = $response->withHeader('Location', $this->get('router')->urlFor('adminLoginForm'))->withStatus(302);
+        $response = $response
+            ->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0')
+            ->withAddedHeader('Pragma', 'no-cache')
+            ->withAddedHeader('Expires', '0');
+
+        return $response;
     }
 
     // Next call
     return $handler->handle($request);
-})->add(function (Request $request, RequestHandler $handler) {
-    // Add http no-cache, no-store headers to prevent back button access to admin
-    $response = $handler->handle($request);
-
-    return $response->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 });
 
 //
