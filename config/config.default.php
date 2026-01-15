@@ -14,7 +14,7 @@
  * - domain:     Set to domain name. Defaults to localhost for development, but for production set to web domain name.
  */
 $config['environment']['production'] = true;
-// $config['environment']['domain'] = 'localhost';
+$config['environment']['domain'] = 'localhost';
 
 /**
  * Database
