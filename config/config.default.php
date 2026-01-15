@@ -8,13 +8,13 @@
  */
 
 /**
- * Production Environment Flag
+ * Environment Flags
  *
- * Boolean variable controls debug and environment modes.
- * Always set to true in production.
- * Set to false in config.local.php for development.
+ * - production: Boolean variable controls debug and environment modes. Always set to true in production.
+ * - domain:     Set to domain name. Defaults to localhost for development, but for production set to web domain name.
  */
 $config['environment']['production'] = true;
+$config['environment']['domain'] = 'localhost';
 
 /**
  * Database

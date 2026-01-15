@@ -86,7 +86,7 @@ class NotFound
             $path = $request->getUri()->getPath();
 
             // Log 404 request
-            $this->logger->error("Not Found (404): {$request->getMethod()} $path");
+            // $this->logger->error("Not Found (404): {$request->getMethod()} $path");
 
             // Create response
             $response = $this->responseFactory->createResponse(404);

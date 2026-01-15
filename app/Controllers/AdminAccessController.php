@@ -162,6 +162,13 @@ class AdminAccessController extends AdminBaseController
         $csrfGuard = $this->container->get('csrfGuardHandler');
         $csrfGuard->unsetToken();
 
-        return $this->redirect('home');
+        // Set headers to pervent back butto access
+        $response = $this->response->withHeader('Location', $this->container->get('router')->urlFor('home'))->withStatus(302);
+        $response = $response
+            ->withAddedHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0')
+            ->withAddedHeader('Pragma', 'no-cache')
+            ->withAddedHeader('Expires', '0');
+
+        return $response;
     }
 }
