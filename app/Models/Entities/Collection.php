@@ -22,4 +22,5 @@ class Collection extends PitonEntity
     protected ?string $collection_title = null;
     protected ?string $collection_definition = null;
     protected ?int $page_count = null;
+    protected ?string $template_name = null;
 }
