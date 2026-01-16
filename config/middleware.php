@@ -27,7 +27,7 @@ $app->add(new LoadSiteSettings($container->get('settings'), $container->get('dat
 $app->addRoutingMiddleware();
 
 // Keep Error Middleware (below) as last in middleware file, Slim executes this first.
-$errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], true, true, $container->get('logger'));
+$errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], $config['displayErrorDetails'], $config['displayErrorDetails'], $container->get('logger'));
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', ErrorRenderer::class);
 
