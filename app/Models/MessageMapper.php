@@ -85,8 +85,8 @@ class MessageMapper extends DataMapperAbstract
         $this->makeSelect(true);
         $this->sql .= <<<SQL
 and (
-    match(`name`, `email`, `message`, `context`) against (? IN BOOLEAN MODE)
-    or `id` in (select `message_id` from `message_data` where match(`data_value`) against (? IN BOOLEAN MODE))
+    match(`name`, `email`, `message`, `context`) against(? IN NATURAL LANGUAGE MODE)
+    or `id` in (select `message_id` from `message_data` where match(`data_value`) against(? IN NATURAL LANGUAGE MODE))
     )
 order by `created_date` desc
 SQL;
