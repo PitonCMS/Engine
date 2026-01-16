@@ -117,16 +117,16 @@ class PageMapper extends DataMapperAbstract
         $this->sql .= <<<SQL
 and p.published_date <= '{$this->today}'
 and (
-    match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)
+    match(p.title, p.sub_title, p.meta_description) against(? IN NATURAL LANGUAGE MODE)
     or p.id in (
         select pes.page_id
         from page_element pes
-        where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
+        where match(pes.title, pes.content) against(? IN NATURAL LANGUAGE MODE)
     )
     or p.id in (
         select ds.page_id
         from data_store ds
-        where match(ds.setting_value) against(? IN BOOLEAN MODE)
+        where match(ds.setting_value) against(? IN NATURAL LANGUAGE MODE)
         and ds.page_id is not null
     )
 )
@@ -167,16 +167,16 @@ SQL;
     {
         $this->makeSelect();
         $this->sql .= <<<SQL
-and match(p.title, p.sub_title, p.meta_description) against (? IN BOOLEAN MODE)
+and match(p.title, p.sub_title, p.meta_description) against(? IN NATURAL LANGUAGE MODE)
 or p.id in (
     select pes.page_id
     from page_element pes
-    where match(pes.title, pes.content) against(? IN BOOLEAN MODE)
+    where match(pes.title, pes.content) against(? IN NATURAL LANGUAGE MODE)
 )
 or p.id in (
     select ds.page_id
     from data_store ds
-    where match(ds.setting_value) against(? IN BOOLEAN MODE)
+    where match(ds.setting_value) against(? IN NATURAL LANGUAGE MODE)
     and ds.page_id is not null
 )
 SQL;

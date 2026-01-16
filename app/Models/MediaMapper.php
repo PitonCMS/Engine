@@ -190,7 +190,7 @@ SQL;
      */
     public function searchMedia(string $terms, ?int $limit = null, ?int $offset = null): ?array
     {
-        $where = ' and match(m.caption) against (? IN BOOLEAN MODE)';
+        $where = ' and match(m.caption) against(? IN NATURAL LANGUAGE MODE)';
         $this->bindValues[] = $terms;
 
         $this->mediaSelectJoinCategory($where);
