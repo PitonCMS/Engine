@@ -102,10 +102,10 @@ SQL;
      * Build Navigation
      *
      * Takes flat array of navigation links and builds multi-dimensional array of navigation items nested by parent ID
-     * @param ?array $navList      Array of navigation links
-     * @param ?string     $currentRoute Page slug
-     * @param ?bool       $isPublished  Flag to only return published pages
-     * @param ?int   $parentId
+     * @param ?array  $navList      Array of navigation links
+     * @param ?string $currentRoute Page slug
+     * @param ?bool   $isPublished  Flag to only return published pages
+     * @param ?int    $parentId
      * @return ?array
      */
     public function buildNavigation(?array $navList, ?string $currentRoute = null, ?bool $isPublished = true, ?int $parentId = null): ?array
