@@ -74,7 +74,19 @@ class PitonEntity extends DomainObject
      */
     public function __isset($key)
     {
-        return property_exists($this, $key) || property_exists($this, $this->convertCamelCaseToUnderScores($key));
+        if (property_exists($this, $key)) {
+            return $this->$key !== null;
+        }
+
+        // If the literal key was not found, then try to convert to snake case and try again
+        $underscoreKey = $this->convertCamelCaseToUnderScores($key);
+
+        if (property_exists($this, $underscoreKey)) {
+            return $this->$underscoreKey !== null;
+        }
+
+        // Fall through
+        return false;
     }
 
     /**
