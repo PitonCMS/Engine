@@ -101,7 +101,7 @@ class Installer
      */
     public static function buildSchema(): void
     {
-        self::$pdo->exec(self::$schemaBuildScript);
+        self::$pdo->exec(file_get_contents(self::$schemaBuildScript));
     }
 
     public static function showSetupForm()
@@ -117,6 +117,6 @@ class Installer
      */
     public static function getLockFileName(): string
     {
-        return ROOT_DIR . self::$installedLockFile;
+        return self::$installedLockFile;
     }
 }
