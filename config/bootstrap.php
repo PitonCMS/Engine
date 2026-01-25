@@ -68,7 +68,7 @@ return call_user_func(
             require ROOT_DIR . 'config/dependencies.php';
         }
 
-        // Quick check if database tables have been installed
+        // Check if database tables have been installed
         Installer::run($container->get('database'));
 
         // Load middleware

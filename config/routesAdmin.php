@@ -17,7 +17,9 @@ use Piton\Controllers\AdminMessageController;
 use Piton\Controllers\AdminNavigationController;
 use Piton\Controllers\AdminPageController;
 use Piton\Controllers\AdminSettingController;
+use Piton\Controllers\AdminSetupController;
 use Piton\Controllers\AdminUserController;
+use Piton\Library\Utilities\Installer;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Routing\RouteCollectorProxy;
@@ -346,3 +348,10 @@ $app->get('/processLoginToken/{token:[a-zA-Z0-9]{64}}', function ($request, $res
 $app->get('/logout', function ($request, $response, $args) {
     return (new AdminAccessController($request, $response, $this))->logout();
 })->setName('adminLogout');
+
+// The setup route is only registered if the piton-installed lock file does NOT exist
+if (!file_exists(Installer::getLockFileName())) {
+    $app->post('/saveSetup', function ($request, $response, $args) {
+        return (new AdminSetupController($request, $response, $this))->saveSetup();
+    });
+}

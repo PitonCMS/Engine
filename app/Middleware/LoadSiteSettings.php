@@ -93,8 +93,6 @@ class LoadSiteSettings
         $dataStoreMapper = (($this->dataMapper)('DataStoreMapper'));
         $siteSettings = $dataStoreMapper->findSiteSettings() ?? [];
 
-        // var_dump($siteSettings);
-
         // Create new multi-dimensional array of 'environment' (piton) and 'site' (other category) settings
         foreach ($siteSettings as $row) {
             if ($row->category === 'piton') {

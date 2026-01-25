@@ -13,6 +13,7 @@ declare(strict_types=1);
 use DI\Container;
 use Piton\CLI\OptimizeMedia;
 use Psr\Container\ContainerInterface;
+use Slim\Factory\AppFactory;
 
 /**
  * This script accepts PitonCMS command line requests
@@ -34,17 +35,17 @@ error_reporting(-1);
 mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');
 
-// Verify that the CLI command has at least two arguments: Request and a ROOT_DIR path
+// Verify that the CLI command has at least two arguments: command and a root directory path
 if ($argc < 3) {
     fwrite(STDERR, "Error: Missing required arguments\n");
     fwrite(STDERR, "Usage: php cli.php <command> <root_dir>\n");
-    fwrite(STDERR, "Available commands: optimize-media, clitest\n");
+    fwrite(STDERR, "Available commands: optimize-media\n");
     exit(1);
 }
 
 // Extract and validate command
 $command = $argv[1] ?? '';
-$validCommands = ['optimize-media', 'clitest'];
+$validCommands = ['optimize-media'];
 
 if (!in_array($command, $validCommands, true)) {
     fwrite(STDERR, "Error: Invalid command '$command'\n");
@@ -88,8 +89,8 @@ if (file_exists(ROOT_DIR . 'config/config.local.php')) {
 $container = new Container();
 
 // Create an instance of a Slim App, otherwise dependencies.php will throw errors
-\Slim\Factory\AppFactory::setContainer($container);
-$app = \Slim\Factory\AppFactory::create();
+AppFactory::setContainer($container);
+$app = AppFactory::create();
 
 // Load dependencies into container
 require ROOT_DIR . 'vendor/pitoncms/engine/config/dependencies.php';
@@ -135,11 +136,6 @@ switch ($command) {
     case 'optimize-media':
         $optimizer = new OptimizeMedia($container);
         $optimizer->run();
-
-        break;
-    case 'clitest':
-        fwrite(STDERR, "Piton CLI is working\n");
-        exit(0);
 
         break;
 }

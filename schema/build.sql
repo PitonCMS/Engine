@@ -225,4 +225,5 @@ VALUES
   ('element', NULL, 1, 'overlay', '100', 1, now(), 1, now()),
   ('element', NULL, 1, 'overlayColor', '51, 102, 153', 1, now(), 1, now()),
   ('element', NULL, 1, 'placement', 'Center', 1, now(), 1, now()),
-  ('piton', NULL, NULL, 'appAlert', NULL, 1, now(), 1, now());
+  ('piton', NULL, NULL, 'appAlert', NULL, 1, now(), 1, now()),
+  ('piton', NULL, NULL, 'engine', 'unknown', 1, now(), 1, now());
