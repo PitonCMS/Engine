@@ -88,9 +88,9 @@ HTML;
         $pageTemplates = array_merge($definition->getPages(), $definition->getCollections());
 
         // Get filters or search if requested
-        $status = htmlspecialchars($this->getQueryParam('status', 'all'));
-        $type = htmlspecialchars($this->getQueryParam('type', 'all'));
-        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
+        $status = htmlspecialchars($this->getQueryParam('status', 'all'), ENT_QUOTES);
+        $type = htmlspecialchars($this->getQueryParam('type', 'all'), ENT_QUOTES);
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''), ENT_QUOTES);
 
         // Get data
         if (!empty($terms)) {
@@ -218,7 +218,7 @@ HTML;
 
         // Get requested page template from query string
         if ($templateParam && empty($collectionId)) {
-            $templateParam = htmlspecialchars($templateParam);
+            $templateParam = htmlspecialchars($templateParam, ENT_QUOTES);
 
             // Validate that we have a proper definition file name
             if (null === $templateParam || 1 !== preg_match('/^[a-zA-Z0-9\/]+$/', $templateParam)) {
@@ -482,8 +482,8 @@ HTML;
             $pageElementMapper = ($this->container->get('dataMapper'))('PageElementMapper');
             $pageElement = $pageElementMapper->make();
 
-            $pageElement->template = htmlspecialchars($this->getQueryParam('template'));
-            $pageElement->block_key = htmlspecialchars($this->getQueryParam('blockKey'));
+            $pageElement->template = htmlspecialchars($this->getQueryParam('template'), ENT_QUOTES);
+            $pageElement->block_key = htmlspecialchars($this->getQueryParam('blockKey'), ENT_QUOTES);
 
             // Get element definition
             if (null === $pageElement->definition = $definition->getElement($pageElement->template . '.json')) {
@@ -530,7 +530,7 @@ HTML;
         // Wrap in try catch to stop processing at any point and let the xhrResponse takeover
         try {
             // Check that we received an ID
-            $id = htmlspecialchars($this->getParsedBodyParam('elementId', 'x'));
+            $id = htmlspecialchars($this->getParsedBodyParam('elementId', 'x'), ENT_QUOTES);
             if (!is_numeric($id)) {
                 throw new Exception("Invalid element ID");
             }

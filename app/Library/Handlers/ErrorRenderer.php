@@ -76,7 +76,7 @@ class ErrorRenderer implements ErrorRendererInterface
         }
 
         if (($message = $exception->getMessage())) {
-            $html .= sprintf('<div><strong>Message:</strong> %s</div>', htmlentities($message));
+            $html .= sprintf('<div><strong>Message:</strong> %s</div>', htmlspecialchars($message, ENT_QUOTES));
         }
 
         if (($file = $exception->getFile())) {
@@ -89,7 +89,7 @@ class ErrorRenderer implements ErrorRendererInterface
 
         if (($trace = $exception->getTraceAsString())) {
             $html .= '<h2>Trace</h2>';
-            $html .= sprintf('<pre>%s</pre>', htmlentities($trace));
+            $html .= sprintf('<pre>%s</pre>', htmlspecialchars($trace, ENT_QUOTES));
         }
 
         return $html;

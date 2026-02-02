@@ -26,6 +26,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 //
 // Private secured routes
+// phpcs:disable PHPCompatibility.FunctionDeclarations.NewClosure.ThisFoundOutsideClass
 //
 $app->group('/admin', function (RouteCollectorProxy $app) {
 
