@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "pitoncms/session": "dev-develop",
         "pitoncms/orm": "dev-develop",
         "pitoncms/pagination": "dev-develop",
