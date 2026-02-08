@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Models;
 
+use Exception;
 use Piton\ORM\DataMapperAbstract;
 
 /**
@@ -119,22 +120,46 @@ SQL;
         // Get any existing alert messages
         $this->makeSelect();
         $this->sql .= " and `category` = 'piton' and `setting_key` = 'appAlert';";
-        $data = $this->findRow() ?? [];
 
-        // Decode to array
-        $alerts = (isset($data['setting_value']) && is_string($data['setting_value'])) ? json_decode($data['setting_value'], true) : [];
+        try {
+            // See if we found the piton appAlert row. If not, throw exception and insert missing row
+            $data = $this->findRow();
 
-        // Append new alert to array
-        $alerts[] = [
-            'severity' => $severity,
-            'heading' => $heading,
-            'message' => (is_array($message)) ? $message : [$message],
-        ];
+            if (!$data) {
+                throw new Exception("PitonCMS: Missing data_store row for piton appAlert.", 1);
+            }
 
-        // Save alert messages
-        $this->sql = "update {$this->table} set `setting_value` = ? where `category` = 'piton' and `setting_key` = 'appAlert';";
-        $this->bindValues[] = json_encode($alerts);
-        $this->execute();
+            // Decode current alert messages to array
+            $alerts = (isset($data->setting_value) && is_string($data->setting_value)) ? json_decode($data->setting_value, true) : [];
+
+            // Append new alert to message array
+            $alerts[] = [
+                'severity' => $severity,
+                'heading' => $heading,
+                'message' => (is_array($message)) ? $message : [$message],
+            ];
+
+            // Save alert messages
+            $data->setting_value = json_encode($alerts);
+            $this->save($data);
+
+            return;
+
+        } catch (Exception $th) {
+            if ($th->getCode() === 1) {
+                // Insert missing row
+                $row = $this->make(['category' => 'piton', 'setting_key' => 'appAlert']);
+                $this->save($row);
+
+                // Now try again
+                $this->setAppAlert($severity, $heading, $message);
+
+                return;
+            }
+
+            // Re-raise any other exceptions we caught
+            throw $th;
+        }
     }
 
     /**

@@ -148,6 +148,23 @@ class BaseController
     }
 
     /**
+     * Get Parsed Body
+     *
+     * Parses Request body and returns an array of POST body values
+     * @param void
+     * @return mixed
+     */
+    public function getParsedBody()
+    {
+        // Cache parsed body for future calls
+        if (empty($this->parsedBody)) {
+            $this->parsedBody = $this->request->getParsedBody();
+        }
+
+        return $this->parsedBody;
+    }
+
+    /**
      * Get Parsed Body Param
      *
      * Parses Request body and returns the requested key

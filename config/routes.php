@@ -16,6 +16,8 @@ use Piton\Controllers\FrontController;
  * Public Piton Application Routes
  */
 
+// phpcs:disable PHPCompatibility.FunctionDeclarations.NewClosure.ThisFoundOutsideClass
+
 // XHR: Submit contact message, do not override
 $app->post('/submitmessage', function ($request, $response, $args) {
     return (new FrontController($request, $response, $this))->submitMessage();

@@ -113,9 +113,9 @@ HTML;
         $pagination->setPagePath($this->container->get('router')->urlFor('adminMedia'));
 
         // Get filters or search if requested
-        $category = htmlspecialchars($this->getQueryParam('category', '0'));
-        $featured = htmlspecialchars($this->getQueryParam('featured', 'all'));
-        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
+        $category = htmlspecialchars($this->getQueryParam('category', '0'), ENT_QUOTES);
+        $featured = htmlspecialchars($this->getQueryParam('featured', 'all'), ENT_QUOTES);
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''), ENT_QUOTES);
 
         // Get data
         if (!empty($terms)) {

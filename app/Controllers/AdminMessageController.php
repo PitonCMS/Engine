@@ -90,8 +90,8 @@ HTML;
         $contactInputsDefinition = array_combine(array_column($contactInputsDefinition, 'key'), $contactInputsDefinition);
 
         // Get filters or search if requested
-        $option = htmlspecialchars($this->getQueryParam('status', 'unread'));
-        $terms = htmlspecialchars($this->getQueryParam('terms', ''));
+        $option = htmlspecialchars($this->getQueryParam('status', 'unread'), ENT_QUOTES);
+        $terms = htmlspecialchars($this->getQueryParam('terms', ''), ENT_QUOTES);
 
         if (!empty($terms)) {
             // This was a search request

@@ -407,7 +407,7 @@ class Base extends AbstractExtension implements GlobalsInterface
         $value = $queryParams[$param] ?? null;
 
         if (!empty($value)) {
-            return htmlspecialchars($value);
+            return htmlspecialchars($value, ENT_QUOTES);
         }
 
         return $value;
