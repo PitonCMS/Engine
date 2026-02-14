@@ -26,6 +26,9 @@ class PitonEntity extends DomainObject
     protected ?int $updated_by = null;
     protected ?string $updated_date = null;
 
+    // Custom extension data
+    protected array $extension = [];
+
     /**
      * Get Object Property
      *
