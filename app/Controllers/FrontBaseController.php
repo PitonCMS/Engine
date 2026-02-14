@@ -58,20 +58,17 @@ class FrontBaseController extends BaseController
     }
 
     /**
-     * Merge Extension Data into Page Data
+     * Load Extension Data into Page Data
      *
-     * If a key & value were set to $this->pageDataExtension property, then that key and value are merged
-     * into the provided $page object.
+     * If a key & value were set to $this->pageDataExtension property, then that key and value are loaded into the provided $page object.
      * @param PitonEntity $page Page object
      * @return PitonEntity
      */
-    protected function mergeExtensionPageData(PitonEntity $page): PitonEntity
+    protected function loadExtensionPageData(PitonEntity $page): PitonEntity
     {
-        // If extension data was set, then add to object and return
+        // If extension data was set, then add to PitonEntity object and return
         if (!empty($this->pageDataExtension)) {
-            foreach ($this->pageDataExtension as $key => $data) {
-                $page->{$key} = $data;
-            }
+            $page->extension = $this->pageDataExtension;
 
             return $page;
         }
