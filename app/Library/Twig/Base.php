@@ -397,12 +397,12 @@ class Base extends AbstractExtension implements GlobalsInterface
      * Missing keys and empty values are returned as null unless a default is provided
      * @param ?string $key
      * @param mixed   $default Default value if key doesn't exist
-     * @return ?string
+     * @return mixed
      */
-    public function getQueryParam(?string $key = null, mixed $default = null): ?string
+    public function getQueryParam(?string $key = null, mixed $default = null): mixed
     {
         // If no key was provided, just return null
-        if (!empty($key)) {
+        if (empty($key)) {
             return null;
         }
 
