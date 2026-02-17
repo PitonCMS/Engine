@@ -313,15 +313,16 @@ Usage:
 Returns the requested Query String Paramter value, if present in the URL Query String. The returned value is escaped using the PHP function `htmlspecialchars()`. If the requested paramter is not present, then null is returned.
 
 ```php
-   /**
+    /**
      * Get Query String Parameter
      *
-     * Returns htmlspecialchars() escaped query param
-     * Missing params and empty param values are returned as null
-     * @param ?string $param
+     * Returns htmlspecialchars() escaped query parameter
+     * Missing keys and empty values are returned as null unless a default is provided
+     * @param ?string $key
+     * @param mixed   $default Default value if key doesn't exist
      * @return ?string
      */
-    public function getQueryParam(?string $param = null): ?string;
+    public function getQueryParam(?string $key = null, mixed $default = null): ?string
 ```
 
 Usage:

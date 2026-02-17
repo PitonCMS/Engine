@@ -35,6 +35,7 @@ class Base extends AbstractExtension implements GlobalsInterface
     protected Uri $uri;
     protected Request $request;
     protected ContainerInterface $container;
+    protected array $queryParams = [];
 
     /**
      * Admin Site Hierarchy
@@ -392,25 +393,25 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Get Query String Parameter
      *
-     * Returns htmlspecialchars() escaped query param
-     * Missing params and empty param values are returned as null
-     * @param ?string $param
+     * Returns htmlspecialchars() escaped query parameter
+     * Missing keys and empty values are returned as null unless a default is provided
+     * @param ?string $key
+     * @param mixed   $default Default value if key doesn't exist
      * @return ?string
      */
-    public function getQueryParam(?string $param = null): ?string
+    public function getQueryParam(?string $key = null, mixed $default = null): ?string
     {
-        if (!empty($param)) {
+        // If no key was provided, just return null
+        if (!empty($key)) {
             return null;
         }
 
-        $queryParams = $this->container->get('request')->getQueryParams();
-        $value = $queryParams[$param] ?? null;
-
-        if (!empty($value)) {
-            return htmlspecialchars($value, ENT_QUOTES);
+        // Lazy load query params on first access
+        if (empty($this->queryParams)) {
+            $this->queryParams = $this->request->getQueryParams();
         }
 
-        return $value;
+        return htmlspecialchars($this->queryParams[$key], ENT_QUOTES) ?? $default;
     }
 
     /**
