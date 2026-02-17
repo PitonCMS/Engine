@@ -189,7 +189,7 @@ class BaseController
      * @param mixed  $default Default value if parameter doesn't exist
      * @return mixed
      */
-    protected function getQueryParam(string $key, $default = null): mixed
+    protected function getQueryParam(string $key, mixed $default = null): mixed
     {
         // Lazy load query params on first access
         if (empty($this->queryParams)) {
