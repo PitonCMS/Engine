@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use Piton\Library\Twig\Base;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Psr\log\LoggerInterface as Logger;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Views\Twig;
 use Throwable;
 
 /**
@@ -34,6 +34,13 @@ class NotFound
     protected ResponseFactoryInterface $responseFactory;
 
     /**
+     * Container
+     *
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Twig View Handler
      *
      * @var \Slim\Views\Twig
@@ -41,24 +48,16 @@ class NotFound
     protected $view;
 
     /**
-     * Monolog Logger
-     *
-     * @var Logger
-     */
-    protected Logger $logger;
-
-    /**
      * Constructor
      *
      * @param ResponseFactoryInterface $responseFactory
-     * @param Twig   $view   Slim Twig view handler
-     * @param Logger $logger Logging
+     * @param ContainerInterface       $container PSR Container
      */
-    public function __construct(ResponseFactoryInterface $responseFactory, Twig $view, Logger $logger)
+    public function __construct(ResponseFactoryInterface $responseFactory, ContainerInterface $container)
     {
         $this->responseFactory = $responseFactory;
-        $this->view = $view;
-        $this->logger = $logger;
+        $this->container = $container;
+        $this->view = $container->get('view');
     }
 
     /**
@@ -85,9 +84,6 @@ class NotFound
             // Get request URL to determine if this was thrown in /admin or on the public site
             $path = $request->getUri()->getPath();
 
-            // Log 404 request
-            // $this->logger->error("Not Found (404): {$request->getMethod()} $path");
-
             // Create response
             $response = $this->responseFactory->createResponse(404);
 
@@ -95,6 +91,9 @@ class NotFound
             if (preg_match('/^.*\.(jpe?g|png|gif|css|js|map|ico|txt|svg)$/i', $path)) {
                 return $response;
             }
+
+            // Load Piton Twig Extension
+            $this->view->addExtension(new Base($request, $this->container));
 
             // Render not found template and return
             $templateString = $this->renderHtmlNotFoundOutput();

@@ -37,6 +37,7 @@ class Page extends PitonEntity
     protected ?string $first_element_content = null;
     protected ?string $template_name = null;
     protected ?object $definition = null;
+    protected ?string $collection_definition = null;
 
     // Media properties
     protected ?string $media_filename = null;

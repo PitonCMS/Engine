@@ -185,7 +185,7 @@ $container->set('accessHandler', function (ContainerInterface $c) {
  * @return Piton\Library\Handlers\NotFound
  */
 $container->set('notFoundHandler', function (ContainerInterface $c) {
-    return new Piton\Library\Handlers\NotFound($c->get('responseFactory'), $c->get('view'), $c->get('logger'));
+    return new Piton\Library\Handlers\NotFound($c->get('responseFactory'), $c);
 });
 
 /**
