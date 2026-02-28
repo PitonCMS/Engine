@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace Piton\Controllers;
 
 use Exception;
-use Piton\Library\Twig\Base;
 use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Views\Twig as View;
 
 /**
  * Piton Base Controller
@@ -31,7 +31,7 @@ class BaseController
     protected ContainerInterface $container;
     protected Request $request;
     protected Response $response;
-    protected $view;
+    protected View $view;
     protected array $alert = [];
     protected array $settings = [];
     protected array $parsedBody = [];
@@ -52,9 +52,6 @@ class BaseController
         $this->view = $this->container->get('view');
         $this->settings['site'] = $container->get('settings')['site'];
         $this->settings['environment'] = $container->get('settings')['environment'];
-
-        // Load Piton Twig files and Piton Pagination as Twig Extensions
-        $this->pitonViewExtensions();
     }
 
     /**
@@ -98,12 +95,12 @@ class BaseController
     /**
      * Show Page Not Found (404)
      *
-     * Returns http status 404 Not Found and custom error template
+     * Response will return http status Not Found (404) using custom or default error template
      * @param void
      * @throws HttpNotFoundException
-     * @return void
+     * @return never
      */
-    protected function notFound(): void
+    protected function notFound(): never
     {
         throw new HttpNotFoundException($this->request);
     }
@@ -197,17 +194,5 @@ class BaseController
         }
 
         return $this->queryParams[$key] ?? $default;
-    }
-
-    /**
-     * Instantiate Piton View Extensions
-     */
-    private function pitonViewExtensions(): void
-    {
-        // Piton Twig Extension
-        $this->view->addExtension(new Base($this->request, $this->container));
-
-        // Load Pagination with default results per page setting
-        $this->view->addExtension(new TwigPagination(['resultsPerPage' => $this->container->get('settings')['pagination']['resultsPerPage']]));
     }
 }

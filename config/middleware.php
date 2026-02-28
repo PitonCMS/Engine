@@ -14,6 +14,7 @@ use Piton\Library\Handlers\ErrorRenderer;
 use Piton\Middleware\LoadSiteSettings;
 use Piton\Middleware\ResponseHeaders;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpNotFoundException;
 
 /**
@@ -25,6 +26,16 @@ use Slim\Exception\HttpNotFoundException;
 $app->add(new ResponseHeaders($container->get('settings'), $container->get('logger')));
 $app->add(new LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler'), $container->get('logger')));
 $app->addRoutingMiddleware();
+
+// Hydrate Twig Base Extension with request URI data
+$app->add(function (Request $request, RequestHandler $handler) use ($container) {
+    $container->get('TwigBaseExtension')->setRequestData(
+        $request->getUri(),
+        $request->getQueryParams()
+    );
+
+    return $handler->handle($request);
+});
 
 // Keep Error Middleware (below) as last in middleware file, Slim executes this first.
 $errorMiddleware = $app->addErrorMiddleware($config['displayErrorDetails'], $config['displayErrorDetails'], $config['displayErrorDetails'], $container->get('logger'));

@@ -17,6 +17,8 @@ declare(strict_types=1);
  */
 
 use Piton\Library\Config;
+use Piton\Library\Twig\Base;
+use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
@@ -27,7 +29,7 @@ use Twig\Extension\DebugExtension;
  * Config Settings Value Object
  *
  * @uses array $config
- * @returns Piton\Library\Config
+ * @return Piton\Library\Config
  */
 $container->set('settings', function () use ($config) {
     return new Config($config);
@@ -88,10 +90,26 @@ $container->set('view', function (ContainerInterface $c) use ($app) {
         $view->addExtension(new DebugExtension());
     }
 
+    // Piton Twig Extension
+    $view->addExtension($c->get('TwigBaseExtension'));
+
+    // Load Pagination with default results per page setting
+    $view->addExtension(new TwigPagination(['resultsPerPage' => $c->get('settings')['pagination']['resultsPerPage']]));
+
     // Add to $app per Slim 4
     $app->add(TwigMiddleware::create($app, $view));
 
     return $view;
+});
+
+/**
+ * Twig Base Extension
+ *
+ * Registers the custom twig extension Base, so that we can hydrate it in an early middleware call with Request URI primitive data
+ * @return Base
+ */
+$container->set('TwigBaseExtension', function (ContainerInterface $c) {
+    return new Base($c);
 });
 
 /**
@@ -185,7 +203,7 @@ $container->set('accessHandler', function (ContainerInterface $c) {
  * @return Piton\Library\Handlers\NotFound
  */
 $container->set('notFoundHandler', function (ContainerInterface $c) {
-    return new Piton\Library\Handlers\NotFound($c->get('responseFactory'), $c->get('view'), $c->get('logger'));
+    return new Piton\Library\Handlers\NotFound($c->get('responseFactory'), $c->get('view'));
 });
 
 /**
@@ -238,7 +256,7 @@ $container->set('dataMapper', function (ContainerInterface $c) {
 /**
  * Markdown Parser
  *
- * Markdown parser
+ * @param void
  * @return League\CommonMark\GithubFlavoredMarkdownConverter
  */
 $container->set('markdownParser', function () {
@@ -258,6 +276,7 @@ $container->set('jsonDefinitionHandler', function (ContainerInterface $c) {
 /**
  * JSON Validation
  *
+ * @param void
  * @return JsonSchema\Validator
  */
 $container->set('jsonValidator', function () {
@@ -268,6 +287,7 @@ $container->set('jsonValidator', function () {
  * Misc Utility Toolbox
  *
  * Piton toolbox has various utility methods
+ * @param void
  * @return Piton\Library\Utilities\Toolbox
  */
 $container->set('toolbox', function () {
@@ -313,6 +333,7 @@ $container->set('fileUploadHandler', function (ContainerInterface $c) {
  *
  * Define upload media path under public/media/
  * Can be overriden with custom public path
+ * @param void
  * @return string
  */
 $container->set('mediaPathHandler', function () {
@@ -340,6 +361,7 @@ $container->set('mediaHandler', function (ContainerInterface $c) {
  *
  * List of image size suffixes.
  * Used as validation and to construct alternate source sets.
+ * @param void
  * @return array
  */
 $container->set('mediaSizeList', function () {
@@ -371,6 +393,7 @@ $container->set('mediaSizes', function (ContainerInterface $c) {
  * Media Filename Generator
  *
  * Creates new filename for uploaded files
+ * @param void
  * @return string
  */
 $container->set('filenameGenerator', function () {

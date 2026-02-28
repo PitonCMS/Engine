@@ -61,7 +61,7 @@ class AdminPageController extends AdminBaseController
 HTML;
 
             $status = "success";
-            $text = $this->container->get('view')->fetchFromString($template, ['pages' => $pages]);
+            $text = $this->view->fetchFromString($template, ['pages' => $pages]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting pages: ". $th->getMessage();
@@ -500,7 +500,7 @@ HTML;
             $template .= ' {{ pageMacro.elementForm(element, element.blockKey) }}';
 
             $status = "success";
-            $text = $this->container->get('view')->fetchFromString($template, ['element' => $pageElement]);
+            $text = $this->view->fetchFromString($template, ['element' => $pageElement]);
         } catch (Throwable $th) {
             $status = "error";
             $text = "Exception getting new element: ". $th->getMessage();

@@ -16,9 +16,8 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Psr\log\LoggerInterface as Logger;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Views\Twig;
+use Slim\Views\Twig as View;
 use Throwable;
 
 /**
@@ -34,6 +33,13 @@ class NotFound
     protected ResponseFactoryInterface $responseFactory;
 
     /**
+     * Container
+     *
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Twig View Handler
      *
      * @var \Slim\Views\Twig
@@ -41,24 +47,15 @@ class NotFound
     protected $view;
 
     /**
-     * Monolog Logger
-     *
-     * @var Logger
-     */
-    protected Logger $logger;
-
-    /**
      * Constructor
      *
      * @param ResponseFactoryInterface $responseFactory
-     * @param Twig   $view   Slim Twig view handler
-     * @param Logger $logger Logging
+     * @param View                     $view Slim\Views\Twig
      */
-    public function __construct(ResponseFactoryInterface $responseFactory, Twig $view, Logger $logger)
+    public function __construct(ResponseFactoryInterface $responseFactory, View $view)
     {
         $this->responseFactory = $responseFactory;
         $this->view = $view;
-        $this->logger = $logger;
     }
 
     /**
@@ -84,9 +81,6 @@ class NotFound
         if ($exception instanceof HttpNotFoundException) {
             // Get request URL to determine if this was thrown in /admin or on the public site
             $path = $request->getUri()->getPath();
-
-            // Log 404 request
-            // $this->logger->error("Not Found (404): {$request->getMethod()} $path");
 
             // Create response
             $response = $this->responseFactory->createResponse(404);

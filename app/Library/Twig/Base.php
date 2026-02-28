@@ -18,7 +18,7 @@ use Piton\Models\Entities\PitonEntity;
 use Piton\Pagination\TwigPagination;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Psr7\Uri;
+use Psr\Http\Message\UriInterface as Uri;
 use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -73,14 +73,11 @@ class Base extends AbstractExtension implements GlobalsInterface
     /**
      * Constructor
      *
-     * @param Request $request
      * @param ContainerInterface $container
      */
-    public function __construct(Request $request, ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->request = $request;
         $this->container = $container;
-        $this->uri = $request->getUri();
     }
 
     /**
@@ -160,6 +157,24 @@ class Base extends AbstractExtension implements GlobalsInterface
             new TwigFunction('getJsFileExtensions', [$this, 'getJsFileExtensions']),
         ];
     }
+
+    /* --------------------------- Setter Methdos -------------------------- */
+
+    /**
+     * Set Request Data
+     *
+     * Set PSR Request primitive data in object through entry middleware
+     * MUST be set prior to using the view
+     * @param Uri   $uri         The request->getUri() object
+     * @param array $queryParams The Query string array
+     */
+    public function setRequestData(Uri $uri, array $queryParams): void
+    {
+        $this->uri = $uri;
+        $this->queryParams = $queryParams;
+    }
+
+    /* ----------------------- Twig Public Functions ----------------------- */
 
     /**
      * Path for Named Route
@@ -404,11 +419,6 @@ class Base extends AbstractExtension implements GlobalsInterface
         // If no key was provided, just return null
         if (empty($key)) {
             return null;
-        }
-
-        // Lazy load query params on first access
-        if (empty($this->queryParams)) {
-            $this->queryParams = $this->request->getQueryParams();
         }
 
         return htmlspecialchars($this->queryParams[$key], ENT_QUOTES) ?? $default;
