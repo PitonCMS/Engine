@@ -12,13 +12,12 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
-use Piton\Library\Twig\Base;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Views\Twig as View;
 use Throwable;
 
 /**
@@ -51,13 +50,12 @@ class NotFound
      * Constructor
      *
      * @param ResponseFactoryInterface $responseFactory
-     * @param ContainerInterface       $container PSR Container
+     * @param View                     $view Slim\Views\Twig
      */
-    public function __construct(ResponseFactoryInterface $responseFactory, ContainerInterface $container)
+    public function __construct(ResponseFactoryInterface $responseFactory, View $view)
     {
         $this->responseFactory = $responseFactory;
-        $this->container = $container;
-        $this->view = $container->get('view');
+        $this->view = $view;
     }
 
     /**
@@ -91,9 +89,6 @@ class NotFound
             if (preg_match('/^.*\.(jpe?g|png|gif|css|js|map|ico|txt|svg)$/i', $path)) {
                 return $response;
             }
-
-            // Load Piton Twig Extension
-            $this->view->addExtension(new Base($request, $this->container));
 
             // Render not found template and return
             $templateString = $this->renderHtmlNotFoundOutput();

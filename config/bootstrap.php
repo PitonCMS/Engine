@@ -14,11 +14,12 @@ declare(strict_types=1);
  * Load Base Files and Return Application
  *
  * Set:
- * - Constants
  * - Composer autoloader
- * - Configuration
- * - Load App
- * - Dependencies
+ * - Configuration files
+ * - Error reporting
+ * - Load Container and Dependencies
+ * - Create App
+ * - Run DB schema check
  * - Middleware
  * - Routes
  */
