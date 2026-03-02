@@ -24,8 +24,16 @@ use Slim\Exception\HttpNotFoundException;
  */
 
 $app->add(new ResponseHeaders($container->get('settings'), $container->get('logger')));
-$app->add(new LoadSiteSettings($container->get('settings'), $container->get('dataMapper'), $container->get('csrfGuardHandler'), $container->get('sessionHandler'), $container->get('logger')));
 $app->addRoutingMiddleware();
+$app->add(new LoadSiteSettings(
+    $container->get('settings'),
+    $container->get('dataMapper'),
+    $container->get('csrfGuardHandler'),
+    $container->get('sessionHandler'),
+    $app->getRouteResolver(),
+    $app->getRouteCollector(),
+    $container->get('logger')
+));
 
 // Hydrate Twig Base Extension with request URI data
 $app->add(function (Request $request, RequestHandler $handler) use ($container) {

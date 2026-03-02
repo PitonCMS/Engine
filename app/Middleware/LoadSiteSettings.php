@@ -20,6 +20,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Log\LoggerInterface as Logger;
+use Slim\Interfaces\RouteCollectorInterface;
+use Slim\Interfaces\RouteResolverInterface;
 
 /*
  * Merge site settings from database into app settings in the Container
@@ -35,6 +37,8 @@ class LoadSiteSettings
     protected Config $appSettings;
     protected array $newSettings;
     protected Logger $logger;
+    private RouteResolverInterface $routeResolver;
+    private RouteCollectorInterface $routeCollector;
 
     /**
      * Constructor
@@ -43,14 +47,25 @@ class LoadSiteSettings
      * @param Closure $dataMapper
      * @param CsrfGuard $csrfGuardHandler
      * @param Session $sessionHandler
+     * @param RouteResolverInterface $routeResolver
+     * @param RouteCollectorInterface $routeCollector
      * @param Logger $logger
      */
-    public function __construct(Config $config, Closure $dataMapper, CsrfGuard $csrfGuardHandler, Session $sessionHandler, Logger $logger)
-    {
+    public function __construct(
+        Config $config,
+        Closure $dataMapper,
+        CsrfGuard $csrfGuardHandler,
+        Session $sessionHandler,
+        RouteResolverInterface $routeResolver,
+        RouteCollectorInterface $routeCollector,
+        Logger $logger
+    ) {
         $this->appSettings = $config;
         $this->dataMapper = $dataMapper;
         $this->csrfGuardHandler = $csrfGuardHandler;
         $this->sessionHandler = $sessionHandler;
+        $this->routeResolver = $routeResolver;
+        $this->routeCollector = $routeCollector;
         $this->logger = $logger;
 
         $this->newSettings['environment'] = [];
@@ -125,10 +140,21 @@ class LoadSiteSettings
             $this->newSettings['environment']['commit'] = isset($definition->packages[$engineKey]->source) ? $definition->packages[$engineKey]->source->reference : null;
         }
 
-        // This is a bit of a Slim hack. The $request object passed into the __invoke() method actually has the current route object attribute
-        // Because of PSR7 immutability the $request object passed into the controller constructor is a stale copy and does not have the route object attribute
-        $route = $request->getAttribute('route');
-        $this->newSettings['environment']['currentRouteName'] = ($route !== null) ? $route->getName() : null;
+        // Get current route name. This is a bit hacky, as we are trying to get the route context very early before routing has loaded
+        $routingResults = $this->routeResolver->computeRoutingResults(
+            $request->getUri()->getPath(),
+            $request->getMethod()
+        );
+
+        $routeIdentifier = $routingResults->getRouteIdentifier();
+        $routeName = null;
+
+        if ($routeIdentifier !== null) {
+            $route = $this->routeCollector->lookupRoute($routeIdentifier);
+            $routeName = $route->getName();
+        }
+
+        $this->newSettings['environment']['currentRouteName'] = $routeName;
 
         // This is used to break the cache by appending to asset files as a get param
         $this->newSettings['environment']['assetVersion'] =
