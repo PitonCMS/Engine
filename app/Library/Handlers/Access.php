@@ -77,6 +77,7 @@ class Access
     public function endAuthenticatedSession(): void
     {
         $this->session->unsetData($this->loggedInKey);
+        $this->session->destroy();
     }
 
     /**
