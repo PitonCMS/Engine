@@ -94,7 +94,7 @@ $container->set('view', function (ContainerInterface $c) use ($app) {
     $view->addExtension($c->get('TwigBaseExtension'));
 
     // Load Pagination with default
-    $view->addExtension(new TwigPagination($c->get('settings')['pagination']['resultsPerPage']));
+    $view->addExtension(new TwigPagination($c->get('settings')['pagination']));
 
     // Add to $app per Slim 4
     $app->add(TwigMiddleware::create($app, $view));
