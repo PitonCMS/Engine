@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Piton\Library\Handlers;
 
+use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Piton\Library\Config;
 use Piton\Library\Interfaces\EmailInterface;
@@ -139,7 +140,7 @@ class Email implements EmailInterface
             // Log for debugging and then rethrow
             $this->logger->error('PitonCMS: Failed to send mail: ' . $e->getMessage());
 
-            throw new \Throwable($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 

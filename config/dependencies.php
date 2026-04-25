@@ -93,8 +93,8 @@ $container->set('view', function (ContainerInterface $c) use ($app) {
     // Piton Twig Extension
     $view->addExtension($c->get('TwigBaseExtension'));
 
-    // Load Pagination with default results per page setting
-    $view->addExtension(new TwigPagination(['resultsPerPage' => $c->get('settings')['pagination']['resultsPerPage']]));
+    // Load Pagination with default
+    $view->addExtension(new TwigPagination($c->get('settings')['pagination']));
 
     // Add to $app per Slim 4
     $app->add(TwigMiddleware::create($app, $view));
