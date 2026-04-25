@@ -14,7 +14,7 @@
         "php": "^8.2",
         "pitoncms/session": "^3.1.1",
         "pitoncms/orm": "^1.0.1",
-        "pitoncms/pagination": "^1.0.3",
+        "pitoncms/pagination": "^1.1.0",
         "monolog/monolog": "^2.3.1",
         "phpmailer/phpmailer": "^6.5.0",
         "justinrainbow/json-schema": "^5.2.10",
