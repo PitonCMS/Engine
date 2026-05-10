@@ -29,5 +29,10 @@
         "psr-4": {
             "Piton\\": "app/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        }
     }
 }
