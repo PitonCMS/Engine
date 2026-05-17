@@ -568,7 +568,7 @@ HTML;
         $templates = array_combine(array_column($templates, 'filename'), $templates);
 
         // Set template name in result set
-        foreach ($collections as &$page) {
+        foreach ($collections ?? [] as &$page) {
             $page->template_name = $templates[$page->collection_definition]['name'] ?? null;
         }
 
